@@ -139,7 +139,7 @@
 <script type="text/javascript" src="<?php echo $this->getWebViewPath()."javascript/products.js";?>"></script>
 
 <?php $breadGuide = goods_class::catRecursion($category);?>
-<div class="position"><span>您当前的位置：</span><a href="<?php echo IUrl::creatUrl("");?>">首页</a><?php foreach($breadGuide as $key => $item){?> » <a href="<?php echo IUrl::creatUrl("/site/pro_list/cat/".$item['id']."");?>"><?php echo isset($item['name'])?$item['name']:"";?></a><?php }?> » <?php echo isset($name)?$name:"";?></div>
+<div class="position"><span>您当前的位置111：</span><a href="<?php echo IUrl::creatUrl("");?>">首页</a><?php foreach($breadGuide as $key => $item){?> » <a href="<?php echo IUrl::creatUrl("/site/pro_list/cat/".$item['id']."");?>"><?php echo isset($item['name'])?$item['name']:"";?></a><?php }?> » <?php echo isset($name)?$name:"";?></div>
 <div class="wrapper clearfix">
 	<div class="summary">
 		<h2><?php echo isset($name)?$name:"";?></h2>
@@ -147,8 +147,8 @@
 		<!--基本信息区域-->
 		<ul>
 			<li>
-				<span class="f_r light_gray">商品编号：<label id="data_goodsNo"><?php echo $goods_no?$goods_no:$id;?></label></span>
-				<?php if(isset($brand)){?>品牌：<?php echo isset($brand)?$brand:"";?><?php }?>
+				<span class="f_r light_gray">商品编号1111：<label id="data_goodsNo"><?php echo $goods_no?$goods_no:$id;?></label></span>
+				<?php if(isset($brand)){?>品牌111：<?php echo isset($brand)?$brand:"";?><?php }?>
 			</li>
 
 			<!--抢购活动,引入 "_products_time"模板-->

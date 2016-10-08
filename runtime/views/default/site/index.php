@@ -139,7 +139,7 @@
 
 		<!--cms新闻展示-->
 		<div class="box m_10">
-			<div class="title"><h2>Shop资讯</h2><a class="more" href="<?php echo IUrl::creatUrl("/site/article");?>">更多...</a></div>
+			<div class="title"><h2>Shop资讯sadas</h2><a class="more" href="<?php echo IUrl::creatUrl("/site/article");?>">更多...</a></div>
 			<div class="cont">
 				<ul class="list">
 				<?php foreach(Api::run('getArtList',5) as $key => $item){?>
