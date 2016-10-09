@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title><?php echo $this->_siteConfig->name;?></title>
+	<title>{hilujhklj</title>
 	<link type="image/x-icon" href="<?php echo IUrl::creatUrl("")."favicon.ico";?>" rel="icon">
 	<link rel="stylesheet" href="<?php echo $this->getWebSkinPath()."css/index.css";?>" />
 	<script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/jquery/jquery-1.12.4.min.js"></script>
@@ -133,11 +133,9 @@
 	</div>
 	<?php echo Ad::show(1);?>
 
-	<script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artTemplate/artTemplate.js"></script><script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artTemplate/artTemplate-plugin.js"></script>
-<script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/jqueryZoom/jquery.imagezoom.min.js"></script><link rel="stylesheet" type="text/css" href="/runtime/_systemjs/jqueryZoom/imagezoom.css" />
-<script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/jquerySlider/jquery.bxslider.min.js"></script><link rel="stylesheet" type="text/css" href="/runtime/_systemjs/jquerySlider/jquery.bxslider.css" />
+	
 <script type="text/javascript" src="<?php echo $this->getWebViewPath()."javascript/products.js";?>"></script>
-
+<link rel="stylesheet" href="/views/default/skin/default/css/www.css">
 <?php $breadGuide = goods_class::catRecursion($category);?>
 <div class="position"><span>您当前的位置111：</span><a href="<?php echo IUrl::creatUrl("");?>">首页</a><?php foreach($breadGuide as $key => $item){?> » <a href="<?php echo IUrl::creatUrl("/site/pro_list/cat/".$item['id']."");?>"><?php echo isset($item['name'])?$item['name']:"";?></a><?php }?> » <?php echo isset($name)?$name:"";?></div>
 <div class="wrapper clearfix">
