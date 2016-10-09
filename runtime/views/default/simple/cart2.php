@@ -131,7 +131,8 @@ jQuery(function(){
 								<td>
 									<span id="deliveryShow<?php echo isset($item['id'])?$item['id']:"";?>"></span>
 									<?php echo isset($item['description'])?$item['description']:"";?>
-									<?php if($item['type'] == 2){?><a href="javascript:orderFormInstance.selectTakeself(<?php echo isset($item['id'])?$item['id']:"";?>);"><span class="red">选择自提点</span></a>
+									<?php if($item['type'] == 2){?>
+									<a href="javascript:orderFormInstance.selectTakeself(<?php echo isset($item['id'])?$item['id']:"";?>);"><span class="red">选择自提点</span></a>
 									<span id="takeself<?php echo isset($item['id'])?$item['id']:"";?>"></span>
 									<?php }?>
 								</td>

@@ -34,9 +34,118 @@ class Apic extends IController
         if(is_string($result))
         {
 //            IError::show($result,403);
-            $this->log->addError('msg', $result);
+            $this->log->addError('$result变量错误');
         }
         echo json_encode($result);
+        exit();
+    }
+
+    /**
+     * @return string
+     */
+    public function cart2()
+    {
+        $id        = IFilter::act(IReq::get('id'),'int');
+        $type      = IFilter::act(IReq::get('type'));//goods,product
+        $promo     = IFilter::act(IReq::get('promo'));
+        $active_id = IFilter::act(IReq::get('active_id'),'int');
+        $buy_num   = IReq::get('num') ? IFilter::act(IReq::get('num'),'int') : 1;
+        $tourist   = IReq::get('tourist');//游客方式购物
+
+        //必须为登录用户
+        if($tourist === null && $this->user['user_id'] == null)
+        {
+            if($id == 0 || $type == '')
+            {
+//                $this->redirect('/simple/login?tourist&callback=/simple/cart2');
+                $this->log->addError('必须为登录用户');
+            }
+            else
+            {
+                $url  = '/simple/login?tourist&callback=/simple/cart2/id/'.$id.'/type/'.$type.'/num/'.$buy_num;
+                $url .= $promo     ? '/promo/'.$promo         : '';
+                $url .= $active_id ? '/active_id/'.$active_id : '';
+                $this->redirect($url);
+            }
+        }
+
+        //游客的user_id默认为0
+        $user_id = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
+
+        //计算商品
+        $countSumObj = new CountSum($user_id);
+        $result = $countSumObj->cart_count($id,$type,$buy_num,$promo,$active_id);
+
+        if($countSumObj->error)
+        {
+//            IError::show(403,$countSumObj->error);
+            $this->log->addError($countSumObj->error);
+        }
+
+        //获取收货地址
+        $addressObj  = new IModel('address');
+        $addressList = $addressObj->query('user_id = '.$user_id,"*","is_default desc");
+
+        //更新$addressList数据
+        foreach($addressList as $key => $val)
+        {
+            $temp = area::name($val['province'],$val['city'],$val['area']);
+            if(isset($temp[$val['province']]) && isset($temp[$val['city']]) && isset($temp[$val['area']]))
+            {
+                $addressList[$key]['province_val'] = $temp[$val['province']];
+                $addressList[$key]['city_val']     = $temp[$val['city']];
+                $addressList[$key]['area_val']     = $temp[$val['area']];
+            }
+        }
+
+        //获取习惯方式
+        $memberObj = new IModel('member');
+        $memberRow = $memberObj->getObj('user_id = '.$user_id,'custom');
+        if(isset($memberRow['custom']) && $memberRow['custom'])
+        {
+            $this->custom = unserialize($memberRow['custom']);
+        }
+        else
+        {
+            $this->custom = array(
+                'payment'  => '',
+                'delivery' => '',
+            );
+        }
+
+        //返回值
+        $data['gid']= $id;
+        $data['type']= $type;
+        $data['num']= $buy_num;
+        $data['promo']= $promo;
+        $data['active_id']= $active_id;
+        $data['final_sum']= $result['final_sum'];
+        $data['promotion']= $result['promotion'];
+        $data['proReduce']= $result['proReduce'];
+        $data['sum']= $result['sum'];
+        $data['goodsList']= $result['goodsList'];
+        $data['count']= $result['count'];
+        $data['reduce']= $result['reduce'];
+        $data['weight']= $result['weight'];
+        $data['freeFreight']= $result['freeFreight'];
+        $data['seller']= $result['seller'];
+        $data['addressList']= $addressList;
+        $data['goodsTax']= $result['tax'];
+
+        //配送方式
+        $data['delivery'] = Api::run('getDeliveryList');
+        //付款方式
+        $data['payment'] = Api::run('getPaymentList');
+        foreach ($data['payment'] as $key=>$value){
+            $data['payment'][$key]['paymentprice'] = CountSum::getGoodsPaymentPrice($value['id'],$data['sum']);
+        }
+        //商品展示
+        foreach ($data['goodsList'] as $key => $value){
+            if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
+        }
+
+        header("Content-type: application/json");
+        echo json_encode($data);
         exit();
     }
     /**
