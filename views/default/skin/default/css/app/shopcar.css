@@ -1,0 +1,212 @@
+/*购物车页面样式*/
+.mui-action-back{
+	color:#e53e42;
+}
+.delall{
+	color:#e53e42;
+	font-size:1.2rem;
+	line-height: 44px;
+}
+.empty{
+	padding-top:2rem;
+	display:-webkit-flex;
+	-webkit-align-items: center;
+	-webkit-justify-content: center;
+	-webkit-flex-direction:column ;
+	font-size: 1.2rem;
+}
+.empty img{
+	width:24%;
+}
+.empty p{
+	font-size:1.2rem;
+	color:#959595;
+}
+.empty-state{
+	display:none;
+}
+.mui-checkbox{
+	display:-webkit-flex;
+	height:10rem;
+}
+.mui-input-group{
+	display:-webkit-flex;
+	-webkit-align-items: center;
+	-webkit-justify-content: center;
+	-webkit-flex-wrap: wrap;
+}
+.mui-input-group .shopcar-list{
+	width:100%;
+	border-bottom: 1px solid #eee;
+	height:auto !important;
+	display:-webkit-flex;
+	-webkit-flex-wrap:nowrap;
+	position:relative;
+	}
+.shopcar-list input{
+	-webkit-flex:2;
+	text-align:center;
+	margin-top:5rem
+}
+.shopcar-list .ware-list{
+	margin-left:2rem;
+	width:75%;
+}
+.shopcar-list .shop-action{
+	-webkit-flex:2;
+	text-align: right;
+}
+.shopcar-list .ware-list-title{
+	margin-top:1rem;
+	line-height: 1.6rem;
+    text-align: left;
+    font-size: 1.2rem;
+}
+.ware-list-body{
+	display:-webkit-inline-flex;
+	-webkit-align-items: center;
+}
+.ware-content span{
+	display:block;
+	font-size:1.2rem;
+	color:#959595;
+}
+.ware-content .price{
+	font-size:1.3rem;
+	color:#e53e42;
+}
+.shop-action span{
+	margin-top:0.7rem;
+	padding:0 0.5rem;
+	border-left:0.2rem solid #eee;
+}
+.mui-numbox{
+	position:absolute;
+	bottom:2rem;
+	right:0.5rem;
+}
+#shopcar{
+	position: relative;
+}
+/*三角下标*/
+#shopcar:after /*div:after*/{
+  content:"";
+  position:absolute;
+  bottom:-0.8rem;
+  left:3rem;
+  width:0px;
+  height:0px;
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-top: 1rem solid #fff;
+  z-index:10 
+}
+#shopcar:before{
+	content:"";
+  position:absolute;
+  bottom:-1rem;
+  left:2.9rem;
+  width:0px;
+  height:0px;
+  border-left: 0.6rem solid transparent;
+  border-right: 0.6rem solid transparent;
+  border-top: 1.2rem solid #ccc;
+  z-index:9;	
+}
+#shopcar-cal li{
+	display:-webkit-flex;
+	-webkit-align-items: center;
+}
+#shopcar-cal li div{
+	
+}
+#shopcar-cal li div:nth-child(1){
+	-webkit-flex:1;
+	color: #959595;
+    font-size: 1.3rem;
+}
+#shopcar-cal li div:nth-child(2){
+	-webkit-flex:2;
+	color: #959595;
+    font-size: 1.2rem;
+    text-align: right;
+}
+#shopcar-cal li div p:nth-child(2){
+	border: 0.1rem solid transparent;
+    background-color: #faf6a6;
+    border-radius: 0.2rem;
+    color: #f69c3d;
+    padding: 0.4rem 0.8rem;
+    position: relative;
+    display: inline-block;
+    margin-top: 0.8rem;
+    width: initial;
+}
+#shopcar-cal li div p:nth-child(2) a{
+	color:#f69c3d;
+}
+#shopcar-cal li:last-child{
+	height:5rem
+}
+/*订单确认样式*/
+#address{
+	display:-webkit-flex;
+	-webkit-align-items: center;
+	-webkit-flex-wrap:wrap;
+	width: 100%;
+    height: 6rem;
+    background: url(https://img.bolo.me/shopping/app/images/detail/bg_addr.png) repeat-x;
+    margin-top: 1rem;
+    background-size: auto 100%;
+    position: relative;
+}
+#address span{
+	margin-top:0.5rem;
+	margin-left:1rem;
+	line-height: 1.4rem;
+    font-size: 1.3rem;
+}
+#address .phone{
+	margin-left:2rem;
+}
+#address .addr{
+	margin-top:-1rem;
+	white-space: nowrap;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.2rem;
+    width: 80%;
+    color: #959595;
+}
+#address:after{
+	position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    width: 4rem;
+    height: 4rem;
+    content: '';
+    display: block;
+    background: url(https://img.bolo.me/shopping/app/images/user/addr_edit.png) no-repeat;
+    background-size: 4rem 4rem;
+}
+#address .addAddr{
+	height: 5rem;
+    line-height: 5rem;
+    color: #959595;
+    display: block;
+    padding-left: 6rem;
+    font-size: 1.3rem;
+    position: relative;
+}
+#address .addAddr:before{
+	position: absolute;
+    top: 1rem;
+    left: 2rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    content: '';
+    display: block;
+    background: url(https://img.bolo.me/shopping/app/images/detail/icon_addradd.png) no-repeat;
+    background-size: 3rem 3rem;
+}
