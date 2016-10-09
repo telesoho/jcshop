@@ -177,7 +177,7 @@
 				if (e.index == 1) {
 					var goods_id   = elem.getAttribute("data2") > 0 ? elem.getAttribute("data2") : elem.getAttribute("data1");
 					var goods_type = elem.getAttribute("data2") > 0 ? "product"      : "goods";
-					$.getJSON("{url:/simple/removeCart}",{"goods_id":goods_id,"type":goods_type,"random":Math.random()},function()
+					$.getJSON("<?php echo IUrl::creatUrl("/simple/removeCart");?>",{"goods_id":goods_id,"type":goods_type,"random":Math.random()},function()
 					{
 						window.location.reload();
 					});
@@ -222,7 +222,7 @@
 			var goods_type = obj.product_id > 0 ? "product"      : "goods";
 
 			//更新购物车中此商品的数量
-			$.getJSON("{url:/simple/joinCart}",{"goods_id":goods_id,"type":goods_type,"goods_num":diff,"random":Math.random()},function(content){
+			$.getJSON("<?php echo IUrl::creatUrl("/simple/joinCart");?>",{"goods_id":goods_id,"type":goods_type,"goods_num":diff,"random":Math.random()},function(content){
 				if(content.isError == true)
 				{
 					alert(content.message);
@@ -244,7 +244,7 @@
 						num.push(this.value);
 					});
 					countInput.data('oldNum',countInputVal);
-					$.getJSON("{url:/simple/promotionRuleAjax}",{"goodsId":goodsId,"productId":productId,"num":num,"random":Math.random()},function(content){
+					$.getJSON("<?php echo IUrl::creatUrl("/simple/promotionRuleAjax");?>",{"goodsId":goodsId,"productId":productId,"num":num,"random":Math.random()},function(content){
 						if(content.promotion.length > 0)
 						{
 							$('#cart_prompt .indent').remove();

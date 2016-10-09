@@ -1,147 +1,238 @@
-<!--头部-->
-<header class="homeHeader mui-content">
-    <div class="nav-header ">
-        <div class="logo"><img dataimg="img/blm/bolome_logo1.png" alt="该图片无法显示" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif"> </div>
-        <div class="mui-input-row mui-search">
-            <input type="search" class="mui-input-clear" placeholder="搜索品牌">
-        </div>
-        <div class="modal"><span class="mui-icon mui-icon-bars"></span></div>
-    </div>
-    <div class="nav-body">
-        <ul class="nav-menu">
-            <li class="nev-menu-item"><a href="#" class="nav-body-active">首页</a></li>
-            <li class="nev-menu-item"><a href="#">新人享</a></li>
-            <li class="nev-menu-item"><a href="#">热销榜</a></li>
-            <li class="nev-menu-item"><a href="#">新品购</a></li>
-        </ul>
-    </div>
-</header>
-<!--下拉刷新容器-->
-<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="margin-top:8rem;margin-bottom:30px">
-    <div class="mui-scroll">
-        <!--数据列表-->
-        <ul class="mui-table-view mui-table-view-chevron" style="background:#eee">
-            <!--轮播图开始-->
-            <div id="slider" class="mui-slider" >
-                <div class="mui-slider-group mui-slider-loop">
-                    <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-                    <div class="mui-slider-item mui-slider-item-duplicate">
-                        <a href="#">
-                            <img dataimg="skin/default/images/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                    <!-- 第一张 -->
-                    <div class="mui-slider-item">
-                        <a href="#">
-                            <img dataimg="skin/default/images/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                    <!-- 第二张 -->
-                    <div class="mui-slider-item">
-                        <a href="#">
-                            <img dataimg="skin/default/images/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                    <!-- 第三张 -->
-                    <div class="mui-slider-item">
-                        <a href="#">
-                            <img dataimg="skin/default/images/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                    <!-- 第四张 -->
-                    <div class="mui-slider-item">
-                        <a href="#">
-                            <img dataimg="skin/default/images/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                    <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
-                    <div class="mui-slider-item mui-slider-item-duplicate">
-                        <a href="#">
-                            <img dataimg="skin/default/images/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                </div>
-                <div class="mui-slider-indicator">
-                    <div class="mui-indicator mui-active"></div>
-                    <div class="mui-indicator"></div>
-                    <div class="mui-indicator"></div>
-                    <div class="mui-indicator"></div>
-                </div>
-            </div>
-            <!--轮播图结束-->
-            <!--第一轮商品-->
-            <div id="wareItem1">
-                <div class="wareItem1-title">
-                    <div class="wareItem1-title-1">
-                        <span class="mui-icon-extra mui-icon-extra-outline" style="color:red;font-size:1.5rem;margin-left:0.5rem"></span>
-                        <span>限时购</span>
-                    </div>
-                    <div class="wareItem1-title-panel">
-                        <div id="timer" data-timer="20161028140203" style="font-size:1rem">
-                            <span style="color:#999">距离本场结束还有</span>
-                            <span id="timer_h">0</span>:
-                            <span id="timer_m">0</span>:
-                            <span id="timer_s">0</span>
-                        </div>
-                    </div>
-                    <div class="wareItem1-title-2">
-                        <a href="#"><span style="color:#999">更多</span><span style="color:red">></span></a>
-                    </div>
-                </div>
-                <div class="wareItem1-body">
-                    <div class="wareItem1-body-item wareItem1-body-1">
-                        <div class="wareItem1-body-item-img">
-                            <img dataimg="img/blm/w1-1.jpg" alt="" width="100%" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </div>
-                        <div class="wareItem1-body-item-c-1">@SHISEIDO资生堂</div>
-                        <div class="wareItem1-body-item-c-2">
-                            <span class="item1">限时价</span>
-                            <span class="item2">￥48</span>
-                        </div>
-                        <div class="wareItem1-body-item-c-3"><s>￥105</s></div>
-                    </div>
-                    <div class="wareItem1-body-item wareItem1-body-2">
-                        <div class="wareItem1-body-item-img">
-                            <img dataimg="img/blm/w1-2.jpg" alt="" width="100%" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif"/>
-                        </div>
-                        <div class="wareItem1-body-item-c-1">@SHISEIDO资生堂</div>
-                        <div class="wareItem1-body-item-c-2">
-                            <span class="item1">限时价</span>
-                            <span class="item2">￥48</span>
-                        </div>
-                        <div class="wareItem1-body-item-c-3"><s>￥105</s></div>
-                    </div>
-                    <div class="wareItem1-body-item wareItem1-body-3">
-                        <div class="wareItem1-body-item-img">
-                            <img dataimg="img/blm/w1-3.jpg" alt="" width="100%" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif"/>
-                        </div>
-                        <div class="wareItem1-body-item-c-1">@SHISEIDO资生堂</div>
-                        <div class="wareItem1-body-item-c-2">
-                            <span class="item1">限时价</span>
-                            <span class="item2">￥48</span>
-                        </div>
-                        <div class="wareItem1-body-item-c-3"><s>￥105</s></div>
-                    </div>
-                </div>
-            </div>
-            <!--第二轮商品-->
-            <div id="wareItem1">
-                <div class="wareItem1-title">
-                    <div class="wareItem1-title-1">
-                        <span class="mui-icon-extra mui-icon-extra mui-icon-extra-like" style="color:red;font-size:1.5rem;margin-left:0.5rem;line-height:1.5rem;"></span>
-                        <span>畅销商品</span>
-                    </div>
-                    <div class="wareItem1-title-2">
-                        <a href="#"><span style="color:#999">更多</span><span style="color:red">></span></a>
-                    </div>
-                </div>
-                <div class="wareItem1-body">
-                    <div class="wareItem1-body-item wareItem1-body-1">
-                        <div class="wareItem1-body-item-img">
-                            <img dataimg="img/blm/w2-1.jpg" alt="" width="100%" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif"/>
-                        </div>
-                        <div class="wareItem1-body-item-c-1">收缩毛孔能手</div>
-                        <div class="wareItem1-body-item-c-2">
+{js:bxSlider}
+<div class="wrapper clearfix">
+	<div class="sidebar f_r">
+
+		<!--cms新闻展示-->
+		<div class="box m_10">
+			<div class="title"><h2>Shop资讯sadas</h2><a class="more" href="{url:/site/article}">更多...</a></div>
+			<div class="cont">
+				<ul class="list">
+				{foreach:items=Api::run('getArtList',5)}
+				{set:$tmpId=$item['id'];}
+				<li><a href="{url:/site/article_detail/id/$tmpId}">{echo:Article::showTitle($item['title'],$item['color'],$item['style'])}</a></li>
+				{/foreach}
+				</ul>
+			</div>
+		</div>
+		<!--cms新闻展示-->
+		{echo:Ad::show(7)}
+	</div>
+
+	<!--幻灯片 开始-->
+	<div class="main f_l">
+		{if:$this->index_slide}
+		<ul class="bxslider">
+			{foreach:items=$this->index_slide}
+			<li title="{$item['name']}"><a href="{url:$item[url]}" target="_blank"><img src="{url:/pic/thumb/img/$item['img']}" width="750px" title="{$item['name']}" /></a></li>
+			{/foreach}
+		</ul>
+		{/if}
+	</div>
+	<!--幻灯片 结束-->
+</div>
+
+{echo:Ad::show(6)}
+
+<div class="wrapper clearfix">
+	<div class="sidebar f_r">
+
+		<!--团购-->
+		<div class="group_on box m_10">
+			<div class="title"><h2>团购商品</h2><a class="more" href="{url:/site/groupon}">更多...</a></div>
+			<div class="cont">
+				<ul class="ranklist">
+
+					{foreach:items=Api::run('getRegimentList',5)}
+					<li class="current">
+						{set:$tmpId=$item['id'];}
+						<a href="{url:/site/groupon/id/$tmpId}"><img width="60px" height="60px" alt="{$item['title']}" src="{webroot:$item[img]}"></a>
+						<a class="p_name" title="{$item['title']}" href="{url:/site/groupon/id/$tmpId}">{$item['title']}</a><p class="light_gray">团购价：<em>￥{$item['regiment_price']}</em></p>
+					</li>
+					{/foreach}
+
+				</ul>
+			</div>
+		</div>
+		<!--团购-->
+
+		<!--限时抢购-->
+		<div class="buying box m_10">
+			<div class="title"><h2>限时抢购</h2></div>
+			<div class="cont clearfix">
+				<ul class="prolist">
+					{foreach:items=Api::run('getPromotionList',5)}
+					{set:$free_time = ITime::getDiffSec($item['end_time'])}
+					{set:$countNumsItem[] = $item['p_id'];}
+					<li>
+						<p class="countdown">倒计时:<br /><b id='cd_hour_{$item['p_id']}'>{echo:floor($free_time/3600);}</b>时<b id='cd_minute_{$item['p_id']}'>{echo:floor(($free_time%3600)/60);}</b>分<b id='cd_second_{$item['p_id']}'>{echo:$free_time%60;}</b>秒</p>
+						{set:$tmpGoodsId=$item['goods_id'];$tmpPId=$item['p_id'];}
+						<a href="{url:/site/products/id/$tmpGoodsId/promo/time/active_id/$tmpPId}"><img src="{url:/pic/thumb/img/$item[img]/w/175/h/175}" width="175" height="175" alt="{$item['name']}" title="{$item['name']}" /></a>
+						<p class="pro_title"><a href="{url:/site/products/id/$tmpGoodsId/promo/time/active_id/$tmpPId}">{$item['name']}</a></p>
+						<p class="light_gray">抢购价：<b>￥{$item['award_value']}</b></p>
+						<div></div>
+					</li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+		<!--限时抢购-->
+
+		<!--热卖商品-->
+		<div class="hot box m_10">
+			<div class="title"><h2>热卖商品</h2></div>
+			<div class="cont clearfix">
+				<ul class="prolist">
+					{foreach:items=Api::run('getCommendHot',8)}
+					{set:$tmpId=$item['id']}
+					<li>
+						<a href="{url:/site/products/id/$tmpId}"><img src="{url:/pic/thumb/img/$item[img]/w/85/h/85}" width="85" height="85" alt="{$item['name']}" /></a>
+						<p class="pro_title"><a href="{url:/site/products/id/$tmpId}">{$item['name']}</a></p>
+						<p class="brown"><b>￥{$item['sell_price']}</b></p>
+					</li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+		<!--热卖商品-->
+
+		<!--公告通知-->
+		<div class="box m_10">
+			<div class="title"><h2>公告通知</h2><a class="more" href="{url:/site/notice}">更多...</a></div>
+			<div class="cont">
+				<ul class="list">
+					{foreach:items=Api::run('getAnnouncementList',5)}
+					{set:$tmpId=$item['id'];}
+					<li><a href="{url:/site/notice_detail/id/$tmpId}">{$item['title']}</a></li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+		<!--公告通知-->
+
+		<!--促销规则-->
+		<div class="box m_10">
+			<div class="title"><h2>促销活动</h2></div>
+			<div class="cont">
+				<ul class="list">
+				{foreach:items=Api::run('getProrule')}
+				<li>{$item['info']}</li>
+				{/foreach}
+				</ul>
+			</div>
+		</div>
+		<!--促销规则-->
+
+		<!--关键词-->
+		<div class="box m_10">
+			<div class="title"><h2>关键词</h2><a class="more" href="{url:/site/tags}">更多...</a></div>
+			<div class="tag cont t_l">
+				{foreach:items=Api::run('getKeywordList',5)}
+				{set:$searchWord =urlencode($item['word']);}
+				<a href="{url:/site/search_list/word/$searchWord}" class="orange">{$item['word']}</a>
+				{/foreach}
+			</div>
+		</div>
+		<!--关键词-->
+
+		<!--电子订阅-->
+		<div class="book box m_10">
+			<div class="title"><h2>电子订阅</h2></div>
+			<div class="cont">
+				<p>我们会将最新的资讯发到您的Email</p>
+				<input type="text" class="gray_m light_gray f_l" name='orderinfo' placeholder="输入您的电子邮箱地址" />
+				<label class="btn_orange"><input type="button" onclick="orderinfo();" value="订阅" /></label>
+			</div>
+		</div>
+		<!--电子订阅-->
+	</div>
+
+	<div class="main f_l">
+		<!--商品分类展示-->
+		<div class="category box">
+			<div class="title2">
+				<h2><img src="{skin:images/front/category.gif}" alt="商品分类" width="155" height="36" /></h2>
+				<a class="more" href="{url:/site/sitemap}">全部商品分类</a>
+			</div>
+		</div>
+
+		<table id="index_category" class="sort_table m_10" width="100%">
+			<col width="100px" />
+			<col />
+			{foreach:items=Api::run('getCategoryListTop') item=$first}
+			<tr>
+				<th><a href="{url:/site/pro_list/cat/$first[id]}">{$first['name']}</a></th>
+				<td>
+					{foreach:items=Api::run('getCategoryByParentid',array('#parent_id#',$first['id'])) item=$second}
+					<a href="{url:/site/pro_list/cat/$second[id]}">{$second['name']}</a>
+					{/foreach}
+				</td>
+			</tr>
+			{/foreach}
+		</table>
+		<!--商品分类展示-->
+
+		<!--最新商品-->
+		<div class="box yellow m_10">
+			<div class="title2">
+				<h2><img src="{skin:images/front/new_product.gif}" alt="最新商品" width="160" height="36" /></h2>
+			</div>
+			<div class="cont clearfix">
+				<ul class="prolist">
+					{foreach:items=Api::run('getCommendNew',8)}
+					{set:$tmpId=$item['id'];}
+					<li style="overflow:hidden">
+						<a href="{url:/site/products/id/$tmpId}"><img src="{url:/pic/thumb/img/$item[img]/w/175/h/175}" width="175" height="175" alt="{$item['name']}" /></a>
+						<p class="pro_title"><a title="{$item['name']}" href="{url:/site/products/id/$tmpId}">{$item['name']}</a></p>
+						<p class="brown">惊喜价：<b>￥{$item['sell_price']}</b></p>
+						<p class="light_gray">市场价：<s>￥{$item['market_price']}</s></p>
+					</li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+		<!--最新商品-->
+
+		<!--首页推荐商品-->
+		{foreach:items=Api::run('getCategoryListTop')  item=$first }
+		<div class="box m_10" name="showGoods">
+			<div class="title title3">
+				<h2><a href="{url:/site/pro_list/cat/$first[id]}"><strong>{$first['name']}</strong></a></h2>
+				<a class="more" href="{url:/site/pro_list/cat/$first[id]}">更多商品...</a>
+				<ul class="category">
+					{foreach:items=Api::run('getCategoryByParentid',array('#parent_id#',$first['id']))  item=$second}
+					<li><a href="{url:/site/pro_list/cat/$second[id]}">{$second['name']}</a><span></span></li>
+					{/foreach}
+				</ul>
+			</div>
+
+			<div class="cont clearfix">
+				<ul class="prolist">
+					{foreach:items=Api::run('getCategoryExtendList',array('#categroy_id#',$first['id']),8)}
+					<li style="overflow:hidden">
+						<a href="{url:/site/products/id/$item[id]}"><img src="{url:/pic/thumb/img/$item[img]/w/175/h/175}" width="175" height="175" alt="{$item['name']}" title="{$item['name']}" /></a>
+						<p class="pro_title"><a title="{$item['name']}" href="{url:/site/products/id/$item[id]}">{$item['name']}</a></p>
+						<p class="brown">惊喜价：<b>￥{$item['sell_price']}</b></p>
+						<p class="light_gray">市场价：<s>￥{$item['market_price']}</s></p>
+					</li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+		{/foreach}
+
+		<!--品牌列表-->
+		<div class="brand box m_10">
+			<div class="title2"><h2><img src="{skin:images/front/brand.gif}" alt="品牌列表" width="155" height="36" /></h2><a class="more" href="{url:/site/brand}">&lt;<span>全部品牌</span>&gt;</a></div>
+			<div class="cont clearfix">
+				<ul>
+					{foreach:items=Api::run('getBrandList',6)}
+					{set:$tmpId=$item['id'];}
+					<li><a href="{url:/site/brand_zone/id/$tmpId}"><img src="{webroot:$item[logo]}"  width="110" height="50"/>{$item['name']}</a></li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+		<!--品牌列表-->
 
                             <span class="item2">￥48</span>
                         </div>
