@@ -96,8 +96,7 @@ jQuery(function(){
 								<td>
 									<span id="deliveryShow{$item['id']}"></span>
 									{$item['description']}
-									{if:$item['type'] == 2}
-									<a href="javascript:orderFormInstance.selectTakeself({$item['id']});"><span class="red">选择自提点</span></a>
+									{if:$item['type'] == 2}<a href="javascript:orderFormInstance.selectTakeself({$item['id']});"><span class="red">选择自提点</span></a>
 									<span id="takeself{$item['id']}"></span>
 									{/if}
 								</td>
