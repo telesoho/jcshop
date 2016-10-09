@@ -623,8 +623,8 @@ class goods_class
 			{
 				if(!in_array($val['id'],$result))
 				{
-//					$result[] = $val['id'];
-                    $result[] = $val['name'];
+					$result[] = $val['id'];
+//                    $result[] = $val['name'];
 				}
 			}
 			next($result);
