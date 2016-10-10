@@ -217,3 +217,52 @@
     background: url(https://img.bolo.me/shopping/app/images/detail/icon_addradd.png) no-repeat;
     background-size: 3rem 3rem;
 }
+/*订单确认页面*/
+#wareListShop{
+	font-size:1.1rem;
+}
+#wareListShop .activity{
+	height: 1.6rem;
+	line-height: 1.6rem;
+	color: #e53e42;
+	background-color: #f8dfdf;
+	font-size: 1rem;
+	text-align: center;
+}
+#wareListShop img{
+	width:6rem !important;
+}
+#collapse-wareList .collapse{
+	text-align:center;
+}
+ .title-list{
+	 display:block;
+	white-space: nowrap;
+	width:100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.user-book textarea{
+	height: 4.5rem;
+	line-height: 1.5rem;
+	display: block;
+	width: 100%;
+	font-size: 1.3rem;
+	-webkit-appearance: none;
+	border-radius: 0.6rem;
+
+}
+#footer-fixed{
+	font-size:1.1rem;
+	position:fixed;
+	width:100%;
+	bottom:0;
+}
+#footer-fixed li{
+	background:#efeff4;
+}
+.payWare{
+	display:block;
+	width:60% !important;
+	margin:0 auto !important;
+}
