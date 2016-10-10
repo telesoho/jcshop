@@ -23,7 +23,7 @@ class Apic extends IController
     /**
      * ---------------------------------------------------购物车---------------------------------------------------*
      */
-    //购物车页面及商品价格计算
+    //购物车商品列表页面
     public function cart()
     {
         header("Content-type: application/json");
@@ -41,7 +41,7 @@ class Apic extends IController
     }
 
     /**
-     * @return string
+     * 购物车结算页面
      */
     public function cart2()
     {
@@ -65,7 +65,8 @@ class Apic extends IController
                 $url  = '/simple/login?tourist&callback=/simple/cart2/id/'.$id.'/type/'.$type.'/num/'.$buy_num;
                 $url .= $promo     ? '/promo/'.$promo         : '';
                 $url .= $active_id ? '/active_id/'.$active_id : '';
-                $this->redirect($url);
+//                $this->redirect($url);
+                $this->log->addError('跳转URL'.$url);
             }
         }
 
@@ -146,6 +147,21 @@ class Apic extends IController
 
         header("Content-type: application/json");
         echo json_encode($data);
+        exit();
+    }
+
+    /**
+     * @return string
+     */
+    public function getaddresslist()
+    {
+        //游客的user_id默认为0
+        $user_id = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
+        //获取收货地址
+        $addressObj  = new IModel('address');
+        $addressList = $addressObj->query('user_id = '.$user_id,"*","is_default desc");
+        header("Content-type: application/json");
+        echo json_encode($addressList);
         exit();
     }
     /**
