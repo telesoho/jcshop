@@ -232,7 +232,7 @@
 #wareListShop img{
 	width:6rem !important;
 }
-#collapse-wareList .collapse{
+#collapse-wareList {
 	text-align:center;
 }
  .title-list{
@@ -261,8 +261,10 @@
 #footer-fixed li{
 	background:#efeff4;
 }
+.payware{
+	height:4rem;
+}
 .payWare{
 	display:block;
-	width:60% !important;
-	margin:0 auto !important;
+	width:60%;
 }

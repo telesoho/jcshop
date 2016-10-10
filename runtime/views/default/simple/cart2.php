@@ -50,7 +50,6 @@
 </div>
 <footer>
 		<div id="footer-fixed">
-
 		</div>
 </footer>
 <script src="/views/default/javascript/jquery.min.js"></script>
@@ -103,9 +102,9 @@
 				<%}%>
 				</div>
 					<li class="mui-table-view-cell" id="collapse-wareList" >
-						<p class="collapse" >另外显示<%=goodsList.length-1%>(共<%=goodsList.length%>件)
+						<span class="collapse" >另外显示<%=goodsList.length-1%>(共<%=goodsList.length%>件)
 							<span class="mui-icon  mui-icon-arrowdown icon-sign"></span>
-						</p>
+						</span>
 					</li>
 			<%}else{%>
 			<%}%>
@@ -149,12 +148,21 @@
 			共<span style="color:#e53e42"><%=count%></span>件商品
 			<span class="mui-pull-right">应付金额：<span style="color:#e53e42">￥<%=final_sum%></span></span>
 		</li>
-		<li class="mui-table-view-cell ">
-			<a href="<?php echo IUrl::creatUrl("/simple/cart1");?>"  class="mui-btn mui-btn-danger payWare">确认支付</a>
+		<%if(addressList.length==0){%>
+		<!--如果没有收货地址-->
+		<li class="mui-table-view-cell payware">
+			<a href="<?php echo IUrl::creatUrl("/simple/cart1");?>" type="button" class="mui-btn mui-btn-danger payWare">添加收货地址</a>
 		</li>
+		<%}else{%>
+		<li class="mui-table-view-cell payware">
+			<!--要跳到支付页面-->
+			<a href="" type="button" class="mui-btn mui-btn-danger payWare">确认支付</a>
+		</li>
+		<%}%>
 	</ul>
 </script>
 <script>
+	var addr=true;//判断用户是否提供地址
 	mui.ajax('index.php?controller=apic&action=cart2',{
 		dataType:'json',//服务器返回json格式数据
 		type:'get',//HTTP请求类型
@@ -165,6 +173,9 @@
             console.log(data);
 			console.log(data.addressList.accept_name)
 			var data=data;
+			if(data.addressList.length==0){
+				addr=false;
+			}
 			data.addressList[0].telphone=data.addressList[0].telphone?addressList[0].telphone:'1768978455';
 			var html1 = template('test',data);
 			document.getElementById("address").innerHTML = html1;
@@ -185,7 +196,9 @@
 	})
 	var turn=true;
 	//解决tab选项卡a标签无法跳转的问题
-	mui('body').on('tap','.payWare',function(){document.location.href=this.href;});
+	mui('body').on('tap','.payWare',function(){
+			document.location.href=this.href;
+	});
 	mui('body').on('tap','#collapse-wareList',function(){
 		if(turn){
 			turn=false;
