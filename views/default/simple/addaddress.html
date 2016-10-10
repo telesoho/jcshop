@@ -1,10 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>九猫首页</title>
+    <link rel="stylesheet" href="/views/default/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/default/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/default/skin/default/css/icons-extra.css" />
+    <link rel="stylesheet" href="/views/default/skin/default/css/app/shopcar.css" />
+    <link rel="stylesheet" href="/views/default/skin/default/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="/views/default/skin/default/css/mui.poppicker.css" />
+
 </head>
 <body>
+<!--loading页开始-->
+<div id="loading">
+    <div class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
+</div>
+<!--loading页结束-->
+<!--购物车界面-->
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">添加新地址</h1>
+</header>
+<div class="mui-content" style="padding-bottom:61px">
+    <div id="addressNew">
+        <div class="title">请填写你的真实姓名，否则订单无法发出</div>
+        <div class="mui-input-row">
+            <input type="text" class="mui-input-clear" placeholder="请填写真实姓名" id="username">
+        </div>
+        <div class="mui-input-row">
+            <input type="text" class="mui-input-clear" placeholder="手机号" style="margin-bottom:2px;" id="userphone">
+            <input type="text" class="mui-input-clear" placeholder="选择城市" style="margin-bottom:2px;" id="usercity">
+            <input type="text" class="mui-input-clear" placeholder="详细地址（最长26个字符）" style="margin-bottom:2px;" id="useraddr">
+            <input type="text" class="mui-input-clear" placeholder="邮编" style="margin-bottom:2px;" id="useryoubian">
+        </div>
+    </div>
+        <div class="newAddrSub" style="text-align:center">
+            <button id="submitaddr">完成</button>
+        </div>
+</div>
+<footer>
+    <div id="footer-fixed">
+    </div>
+</footer>
+<script src="/views/default/javascript/jquery.min.js"></script>
+<script src="/views/default/javascript/template-native.js"></script>
+<script src="/views/default/javascript/mui.js"></script>
+<script src="/views/default/javascript/lazyload.js"></script>
+<script src="/views/default/javascript/mui.picker.min.js"></script>
+<script src="/views/default/javascript/mui.poppicker.js"></script>
+<script src="/views/default/javascript/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var pro,cit,are;
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
 
+    })
+    mui.init();
+
+    var cityPicker3 = new mui.PopPicker({
+        layer: 3
+    });
+    cityPicker3.setData(cityData3);
+    var showCityPickerInput = document.getElementById('usercity');
+    showCityPickerInput.onfocus=function(event) {
+        cityPicker3.show(function(items) {
+            showCityPickerInput.value = (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;
+            //返回 false 可以阻止选择框的关闭
+            pro=(items[0] || {}).value;
+            cit=(items[1] || {}).value;
+            are=(items[2] || {}).value;
+            //return false;
+            console.log(pro);
+        });
+    }
+    //  获取登录的表单信息
+    var name=document.getElementById("username");
+    var phone=document.getElementById("userphone");
+    var address=document.getElementById("useraddr");
+    var useryoubian=document.getElementById("useryoubian");
+    var submitaddr=document.getElementById("submitaddr");
+    submitaddr.addEventListener('tap',function(){
+        var addaddressInfo={
+            accept_name:name.value,
+            province:pro,
+            city:cit,
+            area:are,
+            address:address.value,
+            mobile:phone.value,
+            zip:useryoubian.value
+        };
+        console.log(addaddressInfo);
+            mui.ajax('index.php?controller=apic&action=addressadd',{
+                data:addaddressInfo,
+                dataType:'json',	// 服务器返回json格式数据
+                type:'post',		// HTTP请求类型
+                timeout:10000,		// 超时时间设置为10秒；
+                success:function(data){
+
+                },
+                error:function(xhr,type,errorThrown){
+                    //异常处理；
+                    console.log(type);
+                    alert("failed");
+                }
+            });
+
+    });
+    
+</script>
 </body>
 </html>

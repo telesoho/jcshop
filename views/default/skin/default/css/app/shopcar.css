@@ -167,6 +167,10 @@
     background-size: auto 100%;
     position: relative;
 }
+#address .editAddr{
+	display:-webkit-flex;
+	-webkit-flex-wrap:wrap;
+}
 #address span{
 	margin-top:0.5rem;
 	margin-left:1rem;
@@ -177,7 +181,6 @@
 	margin-left:2rem;
 }
 #address .addr{
-	margin-top:-1rem;
 	white-space: nowrap;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -267,4 +270,12 @@
 .payWare{
 	display:block;
 	width:60%;
+}
+/*地址界面*/
+#addressNew .title{
+	font-size: 1.2rem;
+	display: block;
+	text-align: left;
+	color: #e53e42;
+	padding: 1rem 1.2rem 0.7rem;
 }

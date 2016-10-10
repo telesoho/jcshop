@@ -1,10 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>九猫首页</title>
+    <link rel="stylesheet" href="/views/default/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/default/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/default/skin/default/css/icons-extra.css" />
+    <link rel="stylesheet" href="/views/default/skin/default/css/app/shopcar.css" />
+
 </head>
 <body>
+<!--loading页开始-->
+<div id="loading">
+    <div class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
+</div>
+<!--loading页结束-->
+<!--购物车界面-->
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">收货地址</h1>
+</header>
+<div class="mui-content" style="padding-bottom:61px">
+    <div id="address">
+    </div>
+    <div id="wareListShop" style="margin-top:1rem">
+    </div>
+</div>
+<footer>
+    <div id="footer-fixed">
+    </div>
+</footer>
+<script src="/views/default/javascript/jquery.min.js"></script>
+<script src="/views/default/javascript/template-native.js"></script>
+<script src="/views/default/javascript/mui.js"></script>
+<script src="/views/default/javascript/lazyload.js"></script>
+<script>
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
+    })
 
+</script>
 </body>
 </html>
