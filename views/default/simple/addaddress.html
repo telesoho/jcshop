@@ -97,14 +97,14 @@
         });
     }
     //  获取登录的表单信息
-    var name=document.getElementById("username");
+    var username=document.getElementById("username");
     var phone=document.getElementById("userphone");
     var address=document.getElementById("useraddr");
     var useryoubian=document.getElementById("useryoubian");
     var submitaddr=document.getElementById("submitaddr");
     submitaddr.addEventListener('tap',function(){
         var addaddressInfo={
-            accept_name:name.value,
+            accept_name:username.value,
             province:pro,
             city:cit,
             area:are,
@@ -129,7 +129,7 @@
             });
 
     });
-    
+
 </script>
 </body>
 </html>
