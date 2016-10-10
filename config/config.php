@@ -8,11 +8,11 @@ return array(
 		'type'=>'mysqli',
         'tablePre'=>'iwebshop_',
 		'read'=>array(
-			array('host'=>'192.168.10.174:3306','user'=>'root','passwd'=>'123456','name'=>'test'),
+			array('host'=>'192.168.10.180:32772','user'=>'root','passwd'=>'123456','name'=>'jmj_dev'),
 		),
 
 		'write'=>array(
-			'host'=>'192.168.10.174:3306','user'=>'root','passwd'=>'123456','name'=>'test',
+			'host'=>'192.168.10.180:32772','user'=>'root','passwd'=>'123456','name'=>'jmj_dev',
 		),
 	),
 	'interceptor' => array('themeroute@onCreateController','layoutroute@onCreateView','plugin'),
