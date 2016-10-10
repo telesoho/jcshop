@@ -174,7 +174,7 @@ class Apic extends IController
         $area        = IFilter::act(IReq::get('area'),'int');
         $address     = IFilter::act(IReq::get('address'));
         $zip         = IFilter::act(IReq::get('zip'));
-        $telphone    = IFilter::act(IReq::get('telphone'));
+//        $telphone    = IFilter::act(IReq::get('telphone'));
         $mobile      = IFilter::act(IReq::get('mobile'));
         $user_id     = $this->user['user_id'];
 
@@ -227,8 +227,36 @@ class Apic extends IController
         $sqlData['city_val']     = $areaList[$city];
         $sqlData['area_val']     = $areaList[$area];
         $result = array('data' => $sqlData);
-        die(JSON::encode($result));
+
+        $model = new IModel('address');
+        $model->setData(array('is_default' => 0));
+        $model->update("user_id = ".$this->user['user_id']);
+        $model->setData(array('is_default' => '1'));
+        $id = $result['data']['id'];
+        $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
+
+        header("Content-type: application/json");
+        echo json_encode($result);
+        exit();
     }
+
+    public function addressdefault()
+    {
+        $id = IFilter::act( IReq::get('id'),'int' );
+        $default = IFilter::act(IReq::get('is_default'));
+        $model = new IModel('address');
+        if($default == 1)
+        {
+            $model->setData(array('is_default' => 0));
+            $model->update("user_id = ".$this->user['user_id']);
+        }
+        $model->setData(array('is_default' => $default));
+        $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
+        header("Content-type: application/json");
+        echo json_encode(array('ret'=>true));
+        exit();
+    }
+
     /**
      * ---------------------------------------------------订单---------------------------------------------------*
      */
