@@ -1369,4 +1369,20 @@ class Simple extends IController
 		$result = array('data' => $sqlData);
 		die(JSON::encode($result));
 	}
+
+    /**
+     * @return string
+     */
+    public function addaddress()
+    {
+        $this->redirect('addaddress');
+    }
+    public function editaddress()
+    {
+        $this->redirect('editaddress');
+    }
+    public function addresslist()
+    {
+        $this->redirect('addresslist');
+    }
 }

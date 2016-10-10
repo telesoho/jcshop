@@ -151,7 +151,7 @@ class Apic extends IController
     }
 
     /**
-     * @return string
+     * 获取用户收货地址数据
      */
     public function getaddresslist()
     {
@@ -163,6 +163,71 @@ class Apic extends IController
         header("Content-type: application/json");
         echo json_encode($addressList);
         exit();
+    }
+    //添加地址ajax
+    function addressadd()
+    {
+        $id          = IFilter::act(IReq::get('id'),'int');
+        $accept_name = IFilter::act(IReq::get('accept_name'));
+        $province    = IFilter::act(IReq::get('province'),'int');
+        $city        = IFilter::act(IReq::get('city'),'int');
+        $area        = IFilter::act(IReq::get('area'),'int');
+        $address     = IFilter::act(IReq::get('address'));
+        $zip         = IFilter::act(IReq::get('zip'));
+        $telphone    = IFilter::act(IReq::get('telphone'));
+        $mobile      = IFilter::act(IReq::get('mobile'));
+        $user_id     = $this->user['user_id'];
+
+        //整合的数据
+        $sqlData = array(
+            'user_id'     => $user_id,
+            'accept_name' => $accept_name,
+            'zip'         => $zip,
+            'telphone'    => $telphone,
+            'province'    => $province,
+            'city'        => $city,
+            'area'        => $area,
+            'address'     => $address,
+            'mobile'      => $mobile,
+        );
+
+        $checkArray = $sqlData;
+        unset($checkArray['telphone'],$checkArray['zip'],$checkArray['user_id']);
+        foreach($checkArray as $key => $val)
+        {
+            if(!$val)
+            {
+                $result = array('result' => false,'msg' => '请仔细填写收货地址');
+                die(JSON::encode($result));
+            }
+        }
+
+        if($user_id)
+        {
+            $model = new IModel('address');
+            $model->setData($sqlData);
+            if($id)
+            {
+                $model->update("id = ".$id." and user_id = ".$user_id);
+            }
+            else
+            {
+                $id = $model->add();
+            }
+            $sqlData['id'] = $id;
+        }
+        //访客地址保存
+        else
+        {
+            ISafe::set("address",$sqlData);
+        }
+
+        $areaList = area::name($province,$city,$area);
+        $sqlData['province_val'] = $areaList[$province];
+        $sqlData['city_val']     = $areaList[$city];
+        $sqlData['area_val']     = $areaList[$area];
+        $result = array('data' => $sqlData);
+        die(JSON::encode($result));
     }
     /**
      * ---------------------------------------------------订单---------------------------------------------------*
