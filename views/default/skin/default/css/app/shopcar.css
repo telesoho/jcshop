@@ -260,6 +260,7 @@
 	position:fixed;
 	width:100%;
 	bottom:0;
+	background:#fff;
 }
 #footer-fixed li{
 	background:#efeff4;
@@ -278,4 +279,70 @@
 	text-align: left;
 	color: #e53e42;
 	padding: 1rem 1.2rem 0.7rem;
+}
+#submitaddr{
+	width:80%;
+	height:2rem;
+	line-height:1rem;
+	border-radius:2rem;
+	background:#f54545;
+	color:#fff;
+	font-size:1.3rem;
+	margin:0.5rem;
+}
+/*购物车地址*/
+.addressListMenu{
+
+}
+.addressListMenu-content{
+	color:#1d1d1d;
+	font-size:1.3rem;
+	display:block;
+	width:90%;
+	margin:1rem auto;
+	height:5.5rem;
+	background:#fff;
+	border-radius:1rem;
+}
+.addressListMenuEdit{
+	width:90%;
+	margin:1rem auto;
+	font-size:1.3rem;
+	padding-bottom:0.5rem;
+	border-bottom:0.1rem solid #dcdcdc;
+}
+.addressListMenuEdit a{
+	color:#1d1d1d;
+}
+.addressListMenu-t{
+	padding-top:1rem;
+}
+.addressListMenu-content .content1{
+	margin-left:5%;
+
+}
+.addressListMenu-content .content2{
+	margin-right:5%;
+}
+.addressListMenu-content .content3{
+	display:block;
+	width:80%;
+	margin-left:5%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-top:0.5rem;
+}
+.addressListMenu-content.menu-active{
+	border:2px solid #e53e42!important;
+}
+.mui-icon-person.act{
+	color:#e53e42;
+}
+.addressListMenuEdit .del{
+	color:#e53e42;
+	margin-right:5%;
+}
+.addressListMenuEdit .edit{
+	margin-right:5%;
 }

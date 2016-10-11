@@ -48,21 +48,22 @@
     <div id="addressNew">
         <div class="title">请填写你的真实姓名，否则订单无法发出</div>
         <div class="mui-input-row">
-            <input type="text" class="mui-input-clear" placeholder="请填写真实姓名" id="username">
+            <input type="text" class="mui-input-clear" placeholder="请填写真实姓名" id="username" onblur=check()>
         </div>
         <div class="mui-input-row">
-            <input type="text" class="mui-input-clear" placeholder="手机号" style="margin-bottom:2px;" id="userphone">
+            <input type="text" class="mui-input-clear" placeholder="手机号" style="margin-bottom:2px;" id="userphone" onblur=checkPhone()>
             <input type="text" class="mui-input-clear" placeholder="选择城市" style="margin-bottom:2px;" id="usercity">
-            <input type="text" class="mui-input-clear" placeholder="详细地址（最长26个字符）" style="margin-bottom:2px;" id="useraddr">
-            <input type="text" class="mui-input-clear" placeholder="邮编" style="margin-bottom:2px;" id="useryoubian">
+            <input type="text" class="mui-input-clear" placeholder="详细地址（最长26个字符）" style="margin-bottom:2px;" id="useraddr" onblur=check()>
+            <input type="text" class="mui-input-clear" placeholder="邮编" style="margin-bottom:2px;" id="useryoubian" onblur=check()>
         </div>
     </div>
-        <div class="newAddrSub" style="text-align:center">
-            <button id="submitaddr">完成</button>
-        </div>
+
 </div>
 <footer>
     <div id="footer-fixed">
+        <div class="newAddrSub" style="text-align:center">
+            <button id="submitaddr" disabled="disabled">完成</button>
+        </div>
     </div>
 </footer>
 <script src="/views/default/javascript/jquery.min.js"></script>
@@ -112,14 +113,14 @@
             mobile:phone.value,
             zip:useryoubian.value
         };
-        console.log(addaddressInfo);
+            var self=this;
             mui.ajax('index.php?controller=apic&action=addressadd',{
                 data:addaddressInfo,
                 dataType:'json',	// 服务器返回json格式数据
                 type:'post',		// HTTP请求类型
                 timeout:10000,		// 超时时间设置为10秒；
                 success:function(data){
-
+                    document.location.href="{url:/simple/addresslist}";
                 },
                 error:function(xhr,type,errorThrown){
                     //异常处理；
@@ -129,7 +130,22 @@
             });
 
     });
-
+    function checkPhone(){
+        var phone = document.getElementById('userphone').value;
+        if(!(/^1[34578]\d{9}$/.test(phone))){
+            alert("手机号码有误，请重填");
+            document.getElementById('userphone').value="";
+            document.getElementById('userphone').focus();
+            return false;
+        }
+    }
+    function check(){
+        if(username.value&&address.value&&phone.value&&showCityPickerInput.value){
+            submitaddr.disabled='';
+        }else{
+            submitaddr.disabled='disabled';
+        }
+    }
 </script>
 </body>
 </html>

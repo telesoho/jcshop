@@ -43,24 +43,78 @@
     <h1 class="mui-title">收货地址</h1>
 </header>
 <div class="mui-content" style="padding-bottom:61px">
-    <div id="address">
-    </div>
-    <div id="wareListShop" style="margin-top:1rem">
+    <div id="addressList">
+
     </div>
 </div>
 <footer>
     <div id="footer-fixed">
+        <div class="newAddrSub" style="text-align:center">
+            <button id="submitaddr">新增收货地址</button>
+        </div>
     </div>
 </footer>
 <script src="/views/default/javascript/jquery.min.js"></script>
 <script src="/views/default/javascript/template-native.js"></script>
 <script src="/views/default/javascript/mui.js"></script>
 <script src="/views/default/javascript/lazyload.js"></script>
+<script id="test" type="text/html">
+    <div class="addressListMenu">
+        <% for(var i=0; i<data.length; i++){%>
+        <%if(data[i].is_default==1){%>
+        <a class="addressListMenu-content menu-active">
+        <%}else{%>
+            <a class="addressListMenu-content">
+        <%}%>
+            <div class="addressListMenu-t">
+                <span class="content1"><%=data[i].accept_name%></span>
+                <span class="mui-pull-right content2"><%=data[i].mobile%></span>
+            </div>
+            <div>
+                <span class="content3"><%=data[i].address%></span>
+            </div>
+        </a>
+        <div class="addressListMenuEdit">
+            <%if(data[i].is_default==1){%>
+                 <span><span class="mui-icon mui-icon-person act"></span>默认地址</span>
+            <%}else{%>
+                <span><span class="mui-icon mui-icon-person"></span>默认地址</span>
+                <a href="" class="mui-pull-right del" ><span class="mui-icon mui-icon-trash"></span>删除</a>
+            <%}%>
+            <span href="{url:/simple/editaddress}" class="mui-pull-right edit"  onclick=changeAddr()><span class="mui-icon mui-icon-compose"></span>编辑</span>
+        </div>
+    </div>
+    <%}%>
+</script>
 <script>
     $(window).load(function(){
         $("#loading").fadeOut(300);
     })
-
+    mui.ajax('index.php?controller=apic&action=getaddresslist',{
+        dataType:'json',//服务器返回json格式数据
+        type:'get',//HTTP请求类型
+        timeout:10000,//超时时间设置为10秒；
+        headers:{'Content-Type':'application/json'},
+        success:function(data){
+            //服务器返回响应，根据响应结果，分析是否登录成功；
+            var dat={};
+            dat.data=data;
+            var html1 = template('test',dat);
+            document.getElementById("addressList").innerHTML = html1;
+        },
+        error:function(xhr,type,errorThrown){
+            //异常处理；
+            console.log(type);
+        }
+    });
+//    跳转到新增收货地址页面
+    var submitaddr=document.getElementById("submitaddr");
+    submitaddr.addEventListener('tap',function(){
+        document.location.href="{url:/simple/addaddress}";
+    })
+   function changeAddr(){
+        alert(111);
+   }
 </script>
 </body>
 </html>
