@@ -55,10 +55,10 @@
 <!-- 首页菜单 -->
 <nav class="home_nav">
     <ul>
-        <li class="map"><a href="<?php echo IUrl::creatUrl("site/sitemap");?>"><i class="icon-th-list"></i><span>全部分类1</span></a></li>
-        <li class="cart"><a href="<?php echo IUrl::creatUrl("simple/cart");?>"><i class="icon-shopping-cart"></i><span>购物车2</span></a></li>
-        <li class="groupon"><a href="<?php echo IUrl::creatUrl("site/groupon");?>"><i class="icon-legal"></i><span>今日团购3</span></a></li>
-        <li class="favorite"><a href="<?php echo IUrl::creatUrl("ucenter/favorite");?>"><i class="icon-star"></i><span>我的收藏4</span></a></li>
+        <li class="map"><a href="<?php echo IUrl::creatUrl("site/sitemap");?>"><i class="icon-th-list"></i><span>全部分类</span></a></li>
+        <li class="cart"><a href="<?php echo IUrl::creatUrl("simple/cart");?>"><i class="icon-shopping-cart"></i><span>购物车</span></a></li>
+        <li class="groupon"><a href="<?php echo IUrl::creatUrl("site/groupon");?>"><i class="icon-legal"></i><span>今日团购</span></a></li>
+        <li class="favorite"><a href="<?php echo IUrl::creatUrl("ucenter/favorite");?>"><i class="icon-star"></i><span>我的收藏</span></a></li>
     </ul>
 </nav>
 <?php echo Ad::show("首页顶部通栏100%*120(mobile)");?>

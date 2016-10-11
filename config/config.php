@@ -8,11 +8,11 @@ return array(
 		'type'=>'mysqli',
         'tablePre'=>'iwebshop_',
 		'read'=>array(
-			array('host'=>'192.168.10.180:32772','user'=>'root','passwd'=>'123456','name'=>'jmj_dev4.5'),
+			array('host'=>'192.168.10.180:32772','user'=>'root','passwd'=>'123456','name'=>'jmj_dev'),
 		),
 
 		'write'=>array(
-			'host'=>'192.168.10.180:32772','user'=>'root','passwd'=>'123456','name'=>'jmj_dev4.5',
+			'host'=>'192.168.10.180:32772','user'=>'root','passwd'=>'123456','name'=>'jmj_dev',
 		),
 	),
 	'interceptor' => array('themeroute@onCreateController','layoutroute@onCreateView','plugin'),
@@ -29,7 +29,7 @@ return array(
 	'lang' => 'zh_sc',
 	'debug'=> '0',
 	'configExt'=> array('site_config'=>'config/site_config.php'),
-	'encryptKey'=>'3ca30c534c29eccff83a3e43d0ba9562',
+	'encryptKey'=>'693db335771319c04d195cca4f907fa9',
 	'authorizeCode' => '201610093145',
 );
 ?>
