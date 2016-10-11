@@ -1,4 +1,5 @@
 <ERROR_BLOCK>
+<<<<<<< HEAD
 errorInfo: mysqli::mysqli(): (HY000/1049): Unknown database 'jmj_dev4.5'
 errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
 errorLine: 30
@@ -985,6 +986,36 @@ excepTime: 2016-10-11 10:19:43
 #4 : plugin::onCreateApp()
 #5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
 #6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+=======
+errorInfo: require(D:\wamp\www\jcshop\controllers/../plugins/vendor/autoload.php): failed to open stream: No such file or directory
+errorFile: IWEB_PATH/controllers/apic.php
+errorLine: 2
+errorCode: 2
+errorTime: 2016-10-11 10:25:23
+#0 IWEB_PATH/controllers/apic.php(2): require
+#1 IWEB_PATH/lib/iweb.php(98): include(IWEB_PATH/controllers/apic.php)
+#2 : IWeb::autoload(apic)
+#3 : spl_autoload_call(apic)
+#4 IWEB_PATH/lib/core/webapplication_class.php(90): class_exists(apic)
+#5 IWEB_PATH/lib/core/webapplication_class.php(74): IWebApplication->createController(apic)
+#6 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: require(D:\wamp\www\jcshop\controllers/../plugins/vendor/autoload.php): failed to open stream: No such file or directory
+errorFile: IWEB_PATH/controllers/apic.php
+errorLine: 2
+errorCode: 2
+errorTime: 2016-10-11 10:25:29
+#0 IWEB_PATH/controllers/apic.php(2): require
+#1 IWEB_PATH/lib/iweb.php(98): include(IWEB_PATH/controllers/apic.php)
+#2 : IWeb::autoload(apic)
+#3 : spl_autoload_call(apic)
+#4 IWEB_PATH/lib/core/webapplication_class.php(90): class_exists(apic)
+#5 IWEB_PATH/lib/core/webapplication_class.php(74): IWebApplication->createController(apic)
+#6 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+>>>>>>> d17b691ce61a141026077c926b596744b1e69e7b
 #7 IWEB_PATH/index.php(5): IApplication->run()
 </ERROR_BLOCK>
 
