@@ -5,10 +5,10 @@
 <section class="nodata">购物车中空空如也哦~</section>
 {else:}
 <!-- 优惠信息 -->
-<section class="cart_prompt" style="display:none" id="cart_prompt">
-	<h4>恭喜，您的订单已经满足了以下优惠活动！</h4>
-	<ol></ol>
-</section>
+<!--<section class="cart_prompt" style="display:none" id="cart_prompt">-->
+	<!--<h4>恭喜，您的订单已经满足了以下优惠活动！</h4>-->
+	<!--<ol></ol>-->
+<!--</section>-->
 
 <!--促销模板-->
 <script type="text/html" id="promotionTemplate">
@@ -87,12 +87,12 @@ $(function(){
 	// 隐藏底部导航
 	hideNav();
 
-	{if:$this->promotion}
-	{foreach:items = $this->promotion}
-	$('#cart_prompt ol').append( template.render('promotionTemplate',{"item":{echo:JSON::encode($item)}}) );
-	{/foreach}
-	$('#cart_prompt').show();
-	{/if}
+//	{if:$this->promotion}
+//	{foreach:items = $this->promotion}
+//	$('#cart_prompt ol').append( template.render('promotionTemplate',{"item":{echo:JSON::encode($item)}}) );
+//	{/foreach}
+//	$('#cart_prompt').show();
+//	{/if}
 
 })
 //购物车数量改动计算

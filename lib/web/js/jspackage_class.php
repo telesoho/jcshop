@@ -49,7 +49,8 @@ class IJSPackage
 		'artTemplate' => array(
 			'js' => array(
 				'artTemplate/artTemplate.js',
-				'artTemplate/artTemplate-plugin.js'
+				'artTemplate/artTemplate-plugin.js',
+				 'artTemplate/template-native.js'
 			)
 		),
 		'cookie' => array('js' => 'cookie/jquery.cookie.js'),
