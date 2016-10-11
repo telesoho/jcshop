@@ -166,11 +166,6 @@ class Menu
             	'/tools/seo_sitemaps' => '网站搜索地图',
 			)
 		),
-        '文章'=>array(
-            '文章管理'=>array(
-                '/articles/articles_list' 	=> '文章列表',
-            )
-        ),
 		'插件' => array(
        		'插件管理' => array(
        			'/plugins/plugin_list' => '插件列表',
@@ -299,7 +294,7 @@ class Menu
 			{
 				if(strpos($key,$info) !== false)
 				{
-					return self::menuValue($menu,$val);
+					return self::menuInfo($menu,$val);
 				}
 			}
 		}

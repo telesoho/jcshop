@@ -1,0 +1,66 @@
+
+<div class="place fz12 wrapper" style="padding-left:0px;">
+    您现在的位置：<a href="{url:}"> 首页</a> <code>&gt;</code>  <a href="{url:/site/article}">资讯列表</a> <code>&gt;</code>{$this->articleRow['title']}
+ </div>
+<div class="wrapper clearfix container_2">
+	<div class="sidebar f_l">
+
+	<div class="help_c sidebar f_l box m_10">
+	<div class="hc_title"><strong>资讯分类</strong></div>
+		<ul class="list m_10">
+			{foreach:items=Api::run('getArticleCategoryList',10)}
+			<li><a title="{$item['name']}" href="{url:/site/article/id/$item[id]}">{$item['name']}</a></li>
+			{/foreach}
+		</ul>
+	</div>
+
+		<div class="clear"></div>
+		<div class="box m_10 ">
+			<div class="title">热卖商品</div>
+			<div class="content">
+				<ul class="ranklist">
+					{foreach:items=Api::run('getCommendHot',5)}
+					<li class='current'><a href="{url:/site/products/id/$item[id]}">
+                        <img src="{url:/pic/thumb/img/$item[img]/w/200/h/200}" width="200px" height="200px" alt="{$item['name']}" /></a><a title="{$item['name']}"  href="{url:/site/products/id/$item[id]}">{$item['name']}</a><b>￥{$item['sell_price']}</b>
+                    </li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+
+	</div>
+	<div class="main f_r">
+		<div class="box m_10">
+			<div class="title2" style="background:#fff;">商城资讯</div>
+			<div class="cont">
+				<div class="c_box">
+					<h2>{$this->articleRow['title']}</h2>
+					<div class="partake_bar clearfix">
+						<span class="f_r"></span>发布日期：{$this->articleRow['create_time']}
+					</div>
+					<hr class="m_10" />
+					<div class="textcontent">
+						<p>{$this->articleRow['content']}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{if:!empty($this->relationList)}
+		<div class="box m_10">
+			<div class="title2 m_10">相关商品</div>
+			<div class="parts clearfix">
+				<ul class="prolist">
+					{foreach:items = $this->relationList}
+					<li>
+						<a href="{url:/site/products/id/$item['goods_id']}"><img width="98" height="106" src="{url:/pic/thumb/img/$item[img]/w/98/h/106}" alt="{$item['name']}"></a>
+						<p class="pro_title"><a href="{url:/site/products/id/$item['goods_id']}">{$item['name']}</a></p>
+						<p class="brown"><b>￥{$item['sell_price']}</b></p>
+					</li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+		{/if}
+	</div>
+</div>

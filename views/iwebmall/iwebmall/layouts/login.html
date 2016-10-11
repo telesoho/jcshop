@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>{echo:$this->_siteConfig->name}</title>
+	<link type="image/x-icon" href="{webroot:favicon.ico}" rel="icon">
+	<link rel="stylesheet" href="{skin:css/bootstrap.css}" />
+	<link rel="stylesheet" href="{skin:css/webmall.css}" />
+	<link rel="stylesheet" href="{skin:css/index.css}" />
+	{js:jquery}
+	{js:form}
+	{js:validate}
+	{js:dialog}
+	{js:artTemplate}
+	<script type='text/javascript' src="{theme:javascript/common.js}"></script>
+	<script type='text/javascript' src='{theme:javascript/site.js}'></script>
+
+	<script type="text/javascript" src="{skin:js/bootstrap.min.js}"></script>
+	<script type="text/javascript" src="{skin:js/jquery.lazyload.js}"></script>
+	<script type="text/javascript">
+	        $(function(){
+	            $('img[data-original]').lazyload({effect:"fadeIn"});
+	        })
+	</script>
+
+
+</head>
+<body>
+<!--header-->
+<div class="head fl wfs">
+	<div class="cover-page-wrapper">
+		<a class="fl" href="{url:site/index}"><img src="{if:$this->_siteConfig->logo}{webroot:$this->_siteConfig->logo}{else:}{skin:images/front/logo.gif}{/if}"></a>
+		<form id="searchForm" name="searchForm" method="get" action="search.php" onsubmit="return checkSearchForm()" class="search-product fl">
+			<input name="k_template" type="hidden" class="k_value" value="0">
+			<input autocomplete="off" name="keywords" onfocus="lookup(this.value);" onkeypress="search_history_hide()" onclick="javascript:this.value=''" type="text" id="keyword" value="" class="form-control search-box">
+			<input class="submit" type="submit" style="border:none; cursor:pointer;">
+		</form>
+		<font id="ECS_MEMBERZONE">
+		<p class="head-operates-logined fr">
+            {if:$this->user}
+            <a href="{url:/ucenter/index}" class="login">个人中心</a>
+            <a href="{url:/ucenter/order}" class="watch">我的订单</a>
+            {else:}
+            <a href="{url:/simple/login}" class="login">登录</a>
+            <a href="{url:/simple/reg}" class="watch">注册</a>
+            {/if}
+			<a href="{url:/site/help_list}" class="quest">帮助</a>
+			<a href="{url:/simple/seller}" class="quest">申请开店</a>
+			<a href="{url:/seller/index}" class="quest">商家管理</a>
+		</p>
+		</font>
+	</div>
+</div>
+<!--header-->
+
+<div class="clear"></div>
+{viewcontent}
+
+<div class="cover-page-foot fl wfs">
+	{echo:IFilter::stripSlash($this->_siteConfig->site_footer_code)}
+</div>
+
+<script type='text/javascript'>
+$(function()
+{
+
+});
+</script>
+</body>
+</html>

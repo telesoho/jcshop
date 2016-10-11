@@ -15,7 +15,6 @@
 class IFile
 {
 	private $resource = null; //文件资源句柄
-	public static $except = array('.','..','.svn'); //无效文件或目录名
 
 	/**
 	 * @brief 构造函数，打开资源流，并独占锁定
@@ -75,12 +74,12 @@ class IFile
 	 */
 	public static function clearDir($dir)
 	{
-		if(!in_array($dir,self::$except) && is_dir($dir) && is_writable($dir))
+		if($dir[0] != '.' && is_dir($dir) && is_writable($dir))
 		{
 			$dirRes = opendir($dir);
-			while($fileName = readdir($dirRes))
+			while( false !== ($fileName = readdir($dirRes)) )
 			{
-				if(!in_array($fileName,self::$except))
+				if($fileName[0] !== '.')
 				{
 					$fullpath = $dir.'/'.$fileName;
 					if(is_file($fullpath))
@@ -292,7 +291,7 @@ class IFile
 		{
 			$isEmpty = true;
 			$dirRes  = opendir($dir);
-			while($fileName = readdir($dirRes))
+			while(false !== ($fileName = readdir($dirRes)))
 			{
 				if($fileName!='.' && $fileName!='..')
 				{
@@ -340,10 +339,16 @@ class IFile
 	 * @param  String $source   源地址
 	 * @param  String $dest     目标地址
 	 * @param  String $oncemore 是否支持子目录拷贝
+	 * @param  String $code     编码格式转换
 	 * @return bool true:成功; false:失败;
 	 */
-	public static function xcopy($source, $dest ,$oncemore = true)
+	public static function xcopy($source, $dest ,$oncemore = true,$code = '')
 	{
+		if($code && IString::isUTF8($dest) == false)
+		{
+			$dest = IString::converEncode($dest,'UTF-8',$code);
+		}
+
 		if(!file_exists($source))
 		{
 			return "error: $source is not exist!";
@@ -360,13 +365,13 @@ class IFile
 				self::mkdir($dest,0777);
 			}
 			$od = opendir($source);
-			while($one = readdir($od))
+			while(false !== ($one = readdir($od)))
 			{
-				if(in_array($one,self::$except))
+				if($one[0] == '.')
 				{
 					continue;
 				}
-				$result = self::xcopy($source.DIRECTORY_SEPARATOR.$one, $dest.DIRECTORY_SEPARATOR.$one, $oncemore);
+				$result = self::xcopy($source.DIRECTORY_SEPARATOR.$one, $dest.DIRECTORY_SEPARATOR.$one, $oncemore,$code);
 				if($result !== true)
 				{
 					return $result;
@@ -382,7 +387,7 @@ class IFile
 				{
 					return "error: $dest is a dir!";
 				}
-				$result = self::xcopy($source, $dest.DIRECTORY_SEPARATOR.basename($source), $oncemore);
+				$result = self::xcopy($source, $dest.DIRECTORY_SEPARATOR.basename($source), $oncemore,$code);
 				if( $result !== true )
 				{
 					return $result;

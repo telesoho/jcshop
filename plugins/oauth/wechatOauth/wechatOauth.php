@@ -70,28 +70,22 @@ class wechatOauth extends OauthBase
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		$result = curl_exec($ch);
 		$tokenInfo = JSON::decode($result);
-		if(!$tokenInfo)
+		if(!$tokenInfo || !isset($tokenInfo['access_token']))
 		{
 			die(var_export($result));
 		}
 
-		if(!isset($tokenInfo['access_token']))
-		{
-			die(var_export($tokenInfo));
-		}
-
 		//获取用户信息
 		$unid = $tokenInfo['openid'];
+		//$unid = isset($tokenInfo['unionid']) ? $tokenInfo['unionid'] : $tokenInfo['openid'];
 		$name = substr($unid,-8);
-		if(strpos($tokenInfo['scope'],"snsapi_userinfo") === false)
-		{
 
-		}
-		else
+		//获取微信用户信息
+		$wechatUser = $this->apiUserInfo($tokenInfo);
+		if($wechatUser && isset($wechatUser['nickname']))
 		{
-			//$unid       = isset($tokenInfo['unionid']) ? $tokenInfo['unionid'] : $tokenInfo['openid'];
-			$wechatName = trim(preg_replace('/[\x{10000}-\x{10FFFF}]/u',"",$tokenInfo['nickname']));
-			$name       = $wechatName ? $wechatName : substr($unid,-8);
+			$wechatName = trim(preg_replace('/[\x{10000}-\x{10FFFF}]/u',"",$wechatUser['nickname']));
+			$name = $wechatName ? $wechatName : $name;
 		}
 		ISession::set('wechat_user_nick',$name);
 		ISession::set('wechat_user_id',$unid);
@@ -117,5 +111,37 @@ class wechatOauth extends OauthBase
 		{
 			return true;
 		}
+	}
+
+	/**
+	 * @brief 获取用户的基本信息
+	 * @param array $userData
+	 * {
+			"access_token": "****",
+			"expires_in": 7200,
+			"refresh_token": "****",
+			"openid": "****",
+			"scope": "snsapi_userinfo"
+	 * }
+	 * @return array
+	 */
+	public function apiUserInfo($oauthAccess)
+	{
+		$openid      = $oauthAccess['openid'];
+		$accessToken = $oauthAccess['access_token'];
+		$scope       = $oauthAccess['scope'];
+		$urlparam    = array(
+			'access_token='.$accessToken,
+			'openid='.$openid,
+		);
+		//根据不同的授权类型运行不同的接口
+		$apiUrl = "https://api.weixin.qq.com/sns/userinfo?";
+		$apiUrl .= join("&",$urlparam);
+		$json    = file_get_contents($apiUrl);
+		if(stripos($json,"errcode") !== false)
+		{
+			return null;
+		}
+		return JSON::decode($json);
 	}
 }

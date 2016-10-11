@@ -46,7 +46,7 @@ echo <<< OEF
 		<script type="text/javascript">
 		window.onload = function()
 		{
-			new SWFUpload({
+			new SWFUploadGoods({
 				// Backend Settings
 				upload_url: "{$uploadUrl}",
 				post_params: {"{$sessionName}": "{$sessionId}","admin_name":"{$admin_name}","admin_pwd":"{$admin_pwd}"},

@@ -159,7 +159,7 @@ CREATE TABLE `{pre}announcement` (
   `content` text COMMENT '公告内容',
   `time` datetime NOT NULL COMMENT '发布时间',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='公告消息表';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='公告消息表';
 
 -- --------------------------------------------------------
 
@@ -176,7 +176,7 @@ CREATE TABLE `{pre}areas` (
   PRIMARY KEY  (`area_id`),
   index (`parent_id`),
   index (`sort`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='地区信息';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='地区信息';
 
 -- --------------------------------------------------------
 
@@ -270,7 +270,7 @@ CREATE TABLE `{pre}search` (
   `num` int(11) unsigned NOT NULL default '0' COMMENT '搜索次数',
   PRIMARY KEY  (`id`),
   index (`keyword`(12))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='搜索关键字';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='搜索关键字';
 
 
 --
@@ -632,7 +632,7 @@ CREATE TABLE `{pre}guide` (
   `name` varchar(255) NOT NULL COMMENT '导航名字',
   `link` varchar(255) NOT NULL COMMENT '链接地址',
   PRIMARY KEY  (`order`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='首页导航栏';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='首页导航栏';
 
 
 INSERT INTO `{pre}guide` (`order`, `name`, `link`) VALUES
@@ -709,7 +709,7 @@ CREATE TABLE `{pre}log_error` (
   `content` varchar(255) NOT NULL COMMENT '内容',
   `datetime` datetime NOT NULL COMMENT '时间',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='错误日志表';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='错误日志表';
 
 -- --------------------------------------------------------
 
@@ -725,7 +725,7 @@ CREATE TABLE `{pre}log_operation` (
   `content` text COMMENT '内容',
   `datetime` datetime NOT NULL COMMENT '时间',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='日志操作记录';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='日志操作记录';
 
 -- --------------------------------------------------------
 
@@ -740,7 +740,7 @@ CREATE TABLE `{pre}log_sql` (
   `runtime` decimal(15,2) unsigned NOT NULL COMMENT '语句执行时间(秒)',
   `datetime` datetime NOT NULL COMMENT '发生的时间',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='SQL日志记录';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='SQL日志记录';
 
 -- --------------------------------------------------------
 
@@ -755,7 +755,7 @@ CREATE TABLE IF NOT EXISTS `{pre}marketing_sms` (
   `send_nums` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '发送成功数',
   `time` datetime NOT NULL COMMENT '发送时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='营销短信';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='营销短信';
 
 -- --------------------------------------------------------
 
@@ -834,7 +834,7 @@ CREATE TABLE `{pre}message` (
   `content` text COMMENT '内容',
   `time` datetime NOT NULL COMMENT '发送时间',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='会员消息';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='会员消息';
 
 -- --------------------------------------------------------
 
@@ -924,7 +924,7 @@ CREATE TABLE `{pre}payment` (
   `config_param` text COMMENT '配置参数,json数据对象',
   `client_type` tinyint(1) NOT NULL default '1' COMMENT '1:PC端 2:移动端 3:通用',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='支付方式表';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='支付方式表';
 
 -- --------------------------------------------------------
 
@@ -988,7 +988,7 @@ CREATE TABLE `{pre}promotion` (
   PRIMARY KEY  (`id`),
   index (`type`,`seller_id`),
   index (`start_time`,`end_time`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='记录促销活动的表';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='记录促销活动的表';
 
 -- --------------------------------------------------------
 
@@ -1091,7 +1091,7 @@ CREATE TABLE `{pre}quick_naviga` (
   `is_del` tinyint(1) NOT NULL default '0' COMMENT '是否删除1为删除',
   PRIMARY KEY  (`id`),
   index (`admin_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='管理员快速导航';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='管理员快速导航';
 
 -- --------------------------------------------------------
 
@@ -1188,7 +1188,7 @@ CREATE TABLE `{pre}right` (
   `right` text COMMENT '权限码(控制器+动作)',
   `is_del` tinyint(1) NOT NULL default '0' COMMENT '删除状态 1删除,0正常',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='权限资源码';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='权限资源码';
 
 -- --------------------------------------------------------
 
@@ -1208,7 +1208,7 @@ CREATE TABLE `{pre}spec` (
   PRIMARY KEY  (`id`),
   index (`is_del`),
   index (`seller_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='规格表';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='规格表';
 
 -- --------------------------------------------------------
 
@@ -1223,7 +1223,7 @@ CREATE TABLE `{pre}spec_photo` (
   `name` varchar(100) default NULL COMMENT '图片名称',
   `create_time` datetime default NULL COMMENT '创建时间',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='规格图片表';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='规格图片表';
 
 -- --------------------------------------------------------
 
@@ -1262,7 +1262,7 @@ CREATE TABLE `{pre}ticket` (
   `seller_id` int(11) unsigned default '0' COMMENT '卖家ID',
   PRIMARY KEY  (`id`),
   index (`start_time`,`end_time`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='代金券类型表';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='代金券类型表';
 
 
 -- --------------------------------------------------------
@@ -1356,7 +1356,7 @@ CREATE TABLE `{pre}expresswaybill` (
   `height` smallint(5) UNSIGNED default 600 COMMENT '背景图片路径',
   `is_close` tinyint(1) NOT NULL default '0' COMMENT '状态 1关闭,0正常',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='快递单模板';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='快递单模板';
 
 -- --------------------------------------------------------
 
@@ -1409,7 +1409,7 @@ CREATE TABLE `{pre}admin_role` (
   `rights` text COMMENT '权限',
   `is_del` tinyint(1) NOT NULL default '0' COMMENT '删除状态 1删除,0正常',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='后台角色分组表';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='后台角色分组表';
 
 --
 -- 导出表中的数据 `{pre}seller`
@@ -1468,7 +1468,7 @@ CREATE TABLE IF NOT EXISTS `{pre}seller_message` (
   `content` text COMMENT '内容',
   `time` datetime NOT NULL COMMENT '发送时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='商家消息';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='商家消息';
 
 -- --------------------------------------------------------
 --
@@ -1542,7 +1542,7 @@ CREATE TABLE `{pre}order` (
   `user_id` int(11) unsigned NOT NULL COMMENT '用户ID',
   `pay_type` int(11) NOT NULL COMMENT '用户支付方式ID,当为0时表示货到付款',
   `distribution` int(11) default NULL COMMENT '用户选择的配送ID',
-  `status` tinyint(1) default '1' COMMENT '订单状态 1生成订单,2支付订单,3取消订单(客户触发),4作废订单(管理员触发),5完成订单,6退款,7部分退款',
+  `status` tinyint(1) default '1' COMMENT '订单状态 1生成订单,2支付订单,3取消订单(客户触发),4作废订单(管理员触发),5完成订单,6退款(订单完成后),7部分退款(订单完成后)',
   `pay_status` tinyint(1) default '0' COMMENT '支付状态 0：未支付; 1：已支付;',
   `distribution_status` tinyint(1) default '0' COMMENT '配送状态 0：未发送,1：已发送,2：部分发送',
   `accept_name` varchar(20) NOT NULL COMMENT '收货人姓名',
@@ -1652,7 +1652,7 @@ CREATE TABLE `{pre}plugin` (
   `sort` smallint(5) NOT NULL default '99' COMMENT '排序',
   PRIMARY KEY  (`id`),
   UNIQUE KEY (`class_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='插件表';
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='插件表';
 
 -- --------------------------------------------------------
 

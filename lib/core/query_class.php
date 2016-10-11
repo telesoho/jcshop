@@ -164,7 +164,7 @@ class IQuery
 	}
 	/**
 	 * @brief 分页展示
-	 * @param string $url   URL地址
+	 * @param string $url   点击分页按钮要跳转的URL地址，如果为空表示当前URL地址
 	 * @param string $attrs URL后接参数
 	 * @return string pageBar的对应HTML代码
 	 */
@@ -173,6 +173,10 @@ class IQuery
         return $this->paging->getPageBar($url,$attrs);
     }
 
+	/**
+	 * @brief 获取原生态的SQL
+	 * @return sql语句
+	 */
     public function getSql()
     {
     	return "select $this->fields from $this->table $this->join $this->where $this->group $this->having $this->order";

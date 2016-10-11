@@ -452,7 +452,7 @@ return array(
 	'getMemberTongJi' => array(
 		'file' => 'ucenter.php','class' => 'APIUcenter'
 	),
-	//用户中心-个人主页统计
+	//用户中心-代金券统计
 	'getPropTongJi' => array(
 		'file' => 'ucenter.php','class' => 'APIUcenter'
 	),

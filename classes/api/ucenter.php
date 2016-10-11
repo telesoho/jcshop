@@ -85,7 +85,7 @@ class APIUcenter
 
 		return $result;
 	}
-	//用户中心-个人主页统计
+	//用户中心-代金券统计
 	public function getPropTongJi($propIds){
 		$query = new IQuery('prop');
 		$query->fields = "count(id) as prop_num";
@@ -157,7 +157,7 @@ class APIUcenter
 
 		$favoriteObj = new IQuery("favorite as f");
 		$favoriteObj->join  = "left join goods as go on go.id = f.rid";
-		$favoriteObj->fields= " f.*,go.name,go.id as goods_id,go.img,go.store_nums,go.sell_price";
+		$favoriteObj->fields= " f.*,go.name,go.id as goods_id,go.img,go.store_nums,go.sell_price,go.market_price";
 
 		$where = 'user_id = '.$userid;
 		$where.= $cat_id ? ' and cat_id = '.$cat_id : "";

@@ -1412,7 +1412,6 @@ class Order extends IController implements adminAuthorization
 	{
 		$this->layout = 'print';
 		$seller_id    = IFilter::act(IReq::get('seller_id'),'int');
-    	$data = array();
 
     	//获得order_id的值
 		$order_id = IFilter::act(IReq::get('id'),'int');
@@ -1426,7 +1425,6 @@ class Order extends IController implements adminAuthorization
 
 		$ord_class       = new Order_Class();
  		$this->orderInfo = $ord_class->getOrderInfo($order_id,$seller_id);
-
 		$this->redirect('expresswaybill_template');
 	}
 

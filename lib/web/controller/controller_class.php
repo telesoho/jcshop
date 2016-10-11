@@ -116,7 +116,7 @@ class IController extends IControllerBase
 		IInterceptor::run("onFinishAction",$this,$actionObj);
 
 		//处理缓冲区
-		die(trim(ob_get_clean()));
+		ob_end_flush();
 	}
 
 	/**

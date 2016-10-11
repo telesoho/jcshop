@@ -323,8 +323,15 @@ class Seller extends IController implements sellerAuthorization
 	 		die('请选择要发货的商品');
 	 	}
 
-	 	Order_Class::sendDeliveryGoods($order_id,$sendgoods,$this->seller['seller_id'],'seller');
-	 	$this->redirect('order_list');
+	 	$result = Order_Class::sendDeliveryGoods($order_id,$sendgoods,$this->seller['seller_id'],'seller');
+	 	if($result === true)
+	 	{
+	 		$this->redirect('order_list');
+	 	}
+	 	else
+	 	{
+	 		IError::show($result);
+	 	}
 	}
 	/**
 	 * @brief 订单列表

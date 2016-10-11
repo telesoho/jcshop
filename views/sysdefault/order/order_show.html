@@ -224,7 +224,7 @@
 					<th>订单号:</th><td>{$order_no}</td>
 				</tr>
 				<tr>
-					<th>当前状态:</th><td>{echo:order_class::orderStatusText(order_class::getOrderStatus($orderRow))}</td>
+					<th>当前状态:</th><td class="red">{echo:order_class::orderStatusText(order_class::getOrderStatus($orderRow))}</td>
 				</tr>
 				<tr>
 					<th>支付状态:</th><td>{echo:order_class::getOrderPayStatusText($orderRow)}</td>

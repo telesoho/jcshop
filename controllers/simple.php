@@ -693,11 +693,10 @@ class Simple extends IController
 		$this->delivery    = $deliveryRow['name'];
 		$this->tax_title   = $tax_title;
 		$this->deliveryType= $deliveryRow['type'];
-
+		plugin::trigger('setCallback','/ucenter/order');
 		//订单金额为0时，订单自动完成
 		if($this->final_sum <= 0)
 		{
-			plugin::trigger('setCallback','/ucenter/order');
 			$this->redirect('/site/success/message/'.urlencode("订单确认成功，等待发货"));
 		}
 		else
@@ -1369,20 +1368,4 @@ class Simple extends IController
 		$result = array('data' => $sqlData);
 		die(JSON::encode($result));
 	}
-
-    /**
-     * @return string
-     */
-    public function addaddress()
-    {
-        $this->redirect('addaddress');
-    }
-    public function editaddress()
-    {
-        $this->redirect('editaddress');
-    }
-    public function addresslist()
-    {
-        $this->redirect('addresslist');
-    }
 }

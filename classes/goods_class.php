@@ -163,6 +163,7 @@ class goods_class
 
 			if($goodsDB->update($where) === false)
 			{
+				$goodsDB->rollback();
 				die("更新商品错误");
 			}
 		}
@@ -171,6 +172,11 @@ class goods_class
 			$goodsUpdateData['create_time'] = $nowDataTime;
 			$goodsDB->setData($goodsUpdateData);
 			$id = $goodsDB->add();
+			if(!$id)
+			{
+				$goodsDB->rollback();
+				die("添加商品失败");
+			}
 		}
 
 		//处理商品属性
@@ -624,7 +630,6 @@ class goods_class
 				if(!in_array($val['id'],$result))
 				{
 					$result[] = $val['id'];
-//                    $result[] = $val['name'];
 				}
 			}
 			next($result);

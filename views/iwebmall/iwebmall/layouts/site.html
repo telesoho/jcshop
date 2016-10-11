@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>{echo:$this->_siteConfig->name}</title>
+	<link type="image/x-icon" href="{webroot:favicon.ico}" rel="icon">
+	<link rel="stylesheet" href="{skin:css/bootstrap.css}" />
+	<link rel="stylesheet" href="{skin:css/webmall.css}" />
+
+	{js:jquery}
+	{js:form}
+	{js:validate}
+	{js:dialog}
+	{js:artTemplate}
+	<script type='text/javascript' src="{theme:javascript/common.js}"></script>
+	<script type='text/javascript' src='{theme:javascript/site.js}'></script>
+
+	<script type="text/javascript" src="{skin:js/bootstrap.min.js}"></script>
+	<script type="text/javascript" src="{skin:js/jquery.lazyload.js}"></script>
+	<script type="text/javascript">
+	        $(function(){
+	            $('img[data-original]').lazyload({effect:"fadeIn"});
+	        })
+	</script>
+	<link rel="stylesheet" href="{skin:css/index.css}" />
+
+
+</head>
+<body>
+<!--header-->
+<div class="head fl wfs">
+	<div class="cover-page-wrapper">
+		<a class="fl" href="{url:site/index}"><img src="{if:$this->_siteConfig->logo}{webroot:$this->_siteConfig->logo}{else:}{skin:images/front/logo.gif}{/if}"></a>
+
+        <form method='get' action='{url:/}' class="search-product fl">
+            <input type='hidden' name='controller' value='site' />
+            <input type='hidden' name='action' value='search_list' />
+            <input class="form-control search-box" type="text" name='word' autocomplete="off" placeholder="请输入关键词..." />
+            <input class="submit" type="submit" value="商品搜索"  />
+        </form>
+
+
+		<font id="ECS_MEMBERZONE">
+            {if:$this->user}
+                {set:$user_ico = $this->user['head_ico']}
+                <div class="head-operates-logined fr" style="width:280px">
+                    <div class="j-user-img" style="width: 54px; height: 45px; float: left; position: relative;">
+                        <a href="{url:ucenter}">
+                            <img class="user-img" style="margin-top: -3px;" src="{url:/pic/thumb/img/$user_ico/w/100/h/100}" width="45" height="45" onerror="this.src='{skin:images/front/user_ico.gif}'" alt="">
+                        </a>
+                        <div class="logined j-logined" style="height: 0px; opacity: 0; display: none; overflow: hidden;">
+                            <div style="border: 1px solid #ddd;background-color: #fff;position: absolute;">
+                                <em class="trangle"></em>
+                                <p class="logined-user">
+                                    <b class="fl">{echo:$this->user['username']}</b>
+                                    <img class="user-img" style="margin-top: -3px; float:right;" src="{url:/pic/thumb/img/$user_ico/w/100/h/100}" onerror="this.src='{skin:images/front/user_ico.gif}'" width="45" height="45">
+                                </p>
+                                <ul class="logined-item">
+                                    <li class="order"><i></i><a href="{url:ucenter/order}">订单中心</a></li>
+                                    <li class="member"><i></i><a href="{url:ucenter}">会员中心</a></li>
+                                    <li class="account"><i></i><a href="{url:ucenter/info}">帐户中心</a></li>
+                                    <li class="service"><i></i><a href="{url:ucenter/account_log}">账户余额</a></li>
+                                </ul>
+                                <p class="logined-operate fl wfs">
+                                    <a class="modify-pwd" href="{url:ucenter/password}">修改密码</a>
+                                    <a class="quit" href="{url:simple/logout}">退出</a>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <a href="{url:/site/help_list}" class="quest">帮助</a>
+                    <a href="{url:/simple/seller}" class="quest">申请开店</a>
+                    <a href="{url:/seller/index}" class="quest">商家管理</a>
+                </div>
+            {else:}
+                <p class="head-operates-logined fr">
+                    <a href="{url:/simple/login}" class="login">登录</a>
+                    <a href="{url:/simple/reg}" class="watch">注册</a>
+                    <a href="{url:/site/help_list}" class="quest">帮助</a>
+                    <a href="{url:/simple/seller}" class="quest">申请开店</a>
+                    <a href="{url:/seller/index}" class="quest">商家管理</a>
+                </p>
+            {/if}
+
+
+		</font>
+	</div>
+</div>
+<!--header-->
+
+<!--menu-->
+<div style="height: 48px;background-color: #323231;" class="fl wfs">
+	<div class="nav fl wfs j-nav" style="position: static; top: 0px;">
+		<div class="cover-page-wrapper cover-page-wrapper2 clearfix" style="position: relative;">
+			<div class="nav-menus j-nav-menus fl" style="position: relative;">
+				<a class="handle" href="#"><i></i>所有商品</a>
+				<div class="categorys j-categorys" style="height: 425px; opacity: 0; display: none; overflow: hidden;">
+					<i class="category-trangle-bg"></i>
+					{foreach:items=Api::run('getCategoryListTop')  item=$first }
+                    <div class="categorys-box fl wfs">
+						<h4 class="title fl wfs">
+						<a href="{url:/site/pro_list/cat/$first[id]}" style=" font-size: 16px;">{$first['name']}</a>
+						</h4>
+						<dl class="dl-categorys-item fl wfs">
+						{foreach:items=Api::run('getCategoryByParentid',array('#parent_id#',$first['id']))  item=$second}
+							<dt class="dt-categorys-item">
+							<a href="{url:/site/pro_list/cat/$second[id]}">{$second['name']}</a>
+							</dt>
+							<dd class="dd-categorys-item">
+							{foreach:items=Api::run('getCategoryByParentid',array('#parent_id#',$second['id']))  item=$third}
+							<a href="{url:/site/pro_list/cat/$third[id]}">{$third['name']}</a>
+							{/foreach}
+							</dd>
+						{/foreach}
+						</dl>
+					</div>
+                    {/foreach}
+
+					<div class="categorys-concact">
+						<b>服务热线&nbsp;:</b>
+						<strong>xxxxx</strong>
+						<a href="#"><img src="{skin:images/cover-page-service-2.png}">在线客服</a>
+					</div>
+				</div>
+			</div>
+			<a class="channel channel-now " href="{url:/site/index}">首页<span></span></a>
+			{foreach:items=Api::run('getGuideList')}
+			<a class="channel channel-now" href="{url:$item[link]}">{$item['name']}<span></span></a>
+			{/foreach}
+            <a class="channel channel-now " href="{url:/site/groupon}">团购<span></span></a>
+
+            <div class="cart" name="mycart"  style="position: relative; z-index: 15;">
+                <a href="{url:simple/cart}" title="查看购物车"><i></i><span>购物车</span><strong name="mycart_count">0</strong></a>
+                <ul class="car_ul" id="div_mycart" style="padding:0px; position: absolute; top: 47px; text-align: center; width: 405px; right: -1px; border: 1px solid rgb(221, 221, 221); height: auto;  overflow: hidden; display: none; background: rgb(255, 255, 255);">
+                    <img src="{skin:images/cart_car.png}">
+                    <a href="{url:site/index}" style="color:#ccc;">您的购物车还没有加入任何商品哦~</a>
+                </ul>
+
+                <!--购物车模板 开始-->
+                <script type='text/html' id='cartTemplete'>
+
+                    <%if(goodsCount){%>
+                    <ul style="max-height:338px;overflow: auto;padding:10px;">
+                        <%for(var item in goodsData){%>
+                        <%var data = goodsData[item]%>
+
+                        <li id="site_cart_dd_<%=item%>" class="clearfix" style="padding:3px; padding-bottom: 15px; ">
+                            <div class="fl">
+                                <div style="float:left; padding:3px; border:1px solid #ccc;">
+                                    <a title="<%=data['name']%>" href="{url:/site/products/id/<%=data['goods_id']%>}" target="_blank">
+                                        <img src="{webroot:<%=data['img']%>}" alt="<%=data['name']%>" style="width:78px; height:78px;" >
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="fl title" style="padding-left:15px; text-align:left; width: 258px;">
+                                <a class="cart-title-name" href="{url:/site/products/id/<%=data['goods_id']%>}" title="<%=data['name']%>">
+                                    <%=data['name']%>
+                                </a>
+                                <font style="color:#ef353d;float: left;">￥<%=data['sell_price']%> x <%=data['count']%></font>
+                                <a class="del" href="javascript:" onclick="removeCart('<%=data['id']%>','<%=data['type']%>');$(this).parent().parent().hide('slow');" >删除</a>
+                            </div>
+                        </li>
+
+                        <%}%>
+
+                    </ul>
+
+                    <div class="car_bottom" style="height: 100px;background: #eee;padding-right: 30px;text-align: right;margin-left: -15px;*margin-bottom: -15px;">
+                        <div style=" font-size:14px;">共<font style="color:#ef353d;"><%=goodsCount%></font>个商品，共计
+                            <font style="color:#ef353d;" name="mycart_sum">￥<%=goodsSum%>元</font></div>
+                        <div style="margin-top:-10px;"><a href="{url:/simple/cart}" style="display:initial;"><font title="点击查看购物车">进入购物车</font></a></div>
+                    </div>
+                    <%}else{%>
+                    <img src="{skin:images/cart_car.png}">
+                    <a href="{url:site/index}" style="color:#ccc;">您的购物车还没有加入任何商品哦~</a>
+                    <%}%>
+
+                </script>
+                <!--购物车模板 结束-->
+
+            </div>
+
+		</div>
+	</div>
+</div>
+<!--menu-->
+<div class="clear"></div>
+{viewcontent}
+
+<div class="cover-page-foot fl wfs">
+    {echo:IFilter::stripSlash($this->_siteConfig->site_footer_code)}
+</div>
+
+<script type="text/javascript" src="{skin:js/nav.js}"></script>
+</body>
+</html>

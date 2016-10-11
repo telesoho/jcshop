@@ -32,7 +32,6 @@ class Site extends IController
 	function search_list()
 	{
 		$this->word = IFilter::act(IReq::get('word'),'text');
-		$this->word = urldecode($this->word);
 		$cat_id     = IFilter::act(IReq::get('cat'),'int');
 
 		if(preg_match("|^[\w\x7f\s*-\xff*]+$|",$this->word))
@@ -659,7 +658,6 @@ class Site extends IController
 			IError::show(403,"未登录用户不能评论");
 		}
 
-		$id   = IFilter::act(IReq::get('id'),'int');
 		$data = array(
 			'point'        => IFilter::act(IReq::get('point'),'float'),
 			'contents'     => $content,
@@ -790,7 +788,7 @@ class Site extends IController
 	{
 		$id   = IFilter::act(IReq::get('id'),'int');
 		$name = IFilter::act(IReq::get('name'));
-		$this->setRenderData(array('id' => $id,'name' => urldecode($name)));
+		$this->setRenderData(array('id' => $id,'name' => $name));
 		$this->redirect('brand');
 	}
 

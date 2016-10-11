@@ -463,6 +463,10 @@ class Order_Class
 	{
 		$takeselfObj = new IModel('takeself');
 		$takeselfRow = $takeselfObj->getObj('id = '.$id);
+		if(!$takeselfRow)
+		{
+			return '';
+		}
 
 		$temp = area::name($takeselfRow['province'],$takeselfRow['city'],$takeselfRow['area']);
 		$takeselfRow['province_str'] = $temp[$takeselfRow['province']];
@@ -553,7 +557,7 @@ class Order_Class
 	/**
 	 * 获取订单状态
 	 * @param $orderRow array('status' => '订单状态','pay_type' => '支付方式ID','distribution_status' => '配送状态','pay_status' => '支付状态')
-	 * @return int 订单状态值 0:未知; 1:未付款等待发货(货到付款); 2:等待付款(线上支付); 3:已发货(已付款); 4:已付款等待发货; 5:已取消; 6:已完成(已付款,已收货); 7:已退款; 8:部分发货(不需要付款); 9:部分退款(未发货+部分发货); 10:部分退款(已发货); 11:已发货(未付款);
+	 * @return int 订单状态值 0:未知; 1:未付款等待发货(货到付款); 2:等待付款(线上支付); 3:已发货(已付款); 4:已付款等待发货; 5:已取消; 6:已完成(已付款,已收货); 7:全部退款; 8:部分发货(货到付款+已经付款); 9:部分退款(未发货+部分发货); 10:部分退款(全部发货); 11:已发货(货到付款); 12:未处理的退款申请
 	 */
 	public static function getOrderStatus($orderRow)
 	{
@@ -724,7 +728,7 @@ class Order_Class
 			6 => '已完成',
 			7 => '已退款',
 			8 => '部分发货',
-			9 => '部分发货',
+			9 => '部分退款',
 			10=> '部分退款',
 			11=> '已发货',
 			12=> '申请退款',
@@ -875,11 +879,18 @@ class Order_Class
 	 	}
 
 	 	//更新发货状态
-	 	$tb_order->setData(array
-	 	(
+	 	$orderUpdate = array(
 	 		'distribution_status' => $sendStatus,
 	 		'send_time'           => ITime::getDateTime(),
-	 	));
+	 	);
+
+ 		//如果全部发货之前已存在 "部分退款" 那么更新订单状态以允许“确认收货”按钮可用
+ 		if($tbOrderRow['status'] == 7 && $sendStatus == 1)
+ 		{
+ 			$orderUpdate['status'] = 2;
+ 		}
+
+	 	$tb_order->setData($orderUpdate);
 	 	$tb_order->update('id='.$order_id);
 
 	 	//生成订单日志
@@ -925,7 +936,7 @@ class Order_Class
 	{
 		/* 1,已经完全发货
 		 * 2,非货到付款，并且没有支付*/
-		if($orderRow['distribution_status'] == 1 || ($orderRow['pay_type'] != 0 && $orderRow['pay_status'] == 0))
+		if($orderRow['distribution_status'] == 1 || ($orderRow['pay_type'] != 0 && $orderRow['pay_status'] == 0) || self::getOrderStatus($orderRow) == 12)
 		{
 			return false;
 		}
@@ -1210,8 +1221,8 @@ class Order_Class
 		}
 		else
 		{
-			//已经付款
-			if($orderRow['pay_status'] == 1 && $orderRow['status'] != 6)
+			//已经付款,并且未全部退款，未正在发货中
+			if($orderRow['pay_status'] == 1 && $orderRow['status'] != 6 && self::getOrderStatus($orderRow) != 3)
 			{
 				return true;
 			}

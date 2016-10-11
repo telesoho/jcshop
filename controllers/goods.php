@@ -145,6 +145,7 @@ class Goods extends IController implements adminAuthorization
 		$goods_id = IFilter::act(IReq::get('goods_id'),'int');
 		$specId   = '';
 
+		//1,获取商品的规格数据
 		if($goods_id)
 		{
 			$tb_goods = new IModel('goods');
@@ -158,7 +159,9 @@ class Goods extends IController implements adminAuthorization
 				}
 			}
 		}
-		else if($model_id)
+
+		//2,获取模型的规格数据
+		if(!$specId && $model_id)
 		{
 			$modelObj  = new IModel('model');
 			$modelInfo = $modelObj->getObj('id = '.$model_id,'spec_ids');

@@ -1,0 +1,167 @@
+
+{set:$breadGuide = goods_class::catRecursion($this->catId)}
+{set:$goodsObj = search_goods::find(array('category_extend' => $this->childId));$resultData = $goodsObj->find()}
+<div class="cover-page-list fl wfs bcf2">
+    <div class="place fz12 " style="padding-left:20px;">
+        您现在的位置：
+        <a href="#"> 首页</a> {foreach:items=$breadGuide} <code>&gt;</code><a href="#">{$item['name']}</a>{/foreach}
+    </div>
+    <div class="fl" style="width:300px;float:left;">
+        <div class="left j-left wfs fz12" style="left: 0px;">
+            <h3 class="template">{$this->catRow['name']}</h3>
+            <div class="templates-items j-template-items wfs" style="display:block;">
+				<!--商品条件筛选-->
+				{include:_goods_list_filter}
+            </div>
+            <!--推荐商品-->
+            {set:$pro_list = Api::run('getCategoryExtendByCommendid',array('#childId#',$this->childId))} {if:$pro_list}
+            <div class="also-like wfs mt20">
+                <h4>商品推荐</h4>
+                <ul class="likes">
+                    {foreach:items=$pro_list}
+                    <li class="likes-li wfs">
+                        <span class="commend">新品</span>
+                        <a target="_blank" href="{url:/site/products/id/$item[id]}" title="{$item['name']}">
+                            <img src="{url:/pic/thumb/img/$item[img]/w/165/h/165}" title="{$item['name']}" alt="{$item['name']}"></a>
+                        <strong class="fl wfs" style="text-align: center;">
+                            <a title="{$item['name']}" target="_blank" href="{url:/site/products/id/$item[id]}">{$item['name']}</a></strong>
+                        <i class="fl wfs">
+                            ￥{$item['sell_price']}元
+                        </i>
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+            {/if}
+            <!--推荐商品-->
+        </div>
+    </div>
+    <div class="right j-right" style="margin-left: 300px; left: 0px; width: auto;">
+        <div class="sort wfs">
+            <div style="float:left;">
+                <span style="margin-left:45px; float:left; padding-top:5px; font-size:12px;">排序：</span>
+                <span class="sort-icons j-sort-icons">
+                {foreach:items=search_goods::getOrderType()}
+
+                    <a id="order_{$key}" href="{echo:search_goods::searchUrl(array('order','by'),array($key,search_goods::getOrderBy($key)))}">
+                        {$item}
+                    </a>
+				{/foreach}
+				</span>
+            </div>
+            <div class="totals" style="padding-top:20px;margin-top:0px;text-align:right;">
+            </div>
+        </div>
+        <div class="boutique">
+            {if:$resultData}
+            <ul class="items wfs">
+                {foreach:items=$resultData}
+                <li class="items-li j-items-li">
+                    <a title="{$item['name']}" href="{url:/site/products/id/$item[id]}">
+                        <img src="{url:/pic/thumb/img/$item[img]/w/294/h/294}" width="294" height="294" alt="{$item['name']}" title="{$item['name']}" />
+                    </a>
+                    <div class="wrap_div">
+                        <div>
+                            <b class="title">
+                                <a href="{url:/site/products/id/$item[id]}" title="{$item['name']}" target="_blank">
+                                    {echo:IString::substr($item['name'],40)}
+                                </a>
+                            </b>
+                        </div>
+                    </div>
+                    <p class="price-attente">
+                        <span class="price">
+                            ￥{$item['sell_price']}元
+						</span>
+                        <span class="attente" title="浏览量">{$item['visit']}</span>
+                    </p>
+                </li>
+                {/foreach}
+            </ul>
+            {$goodsObj->getPageBar()} {else:}
+            <p class="display_list mt_10" style='margin-top:50px;margin-bottom:50px'>
+                <strong class="gray f14">对不起，没有找到相关商品</strong>
+            </p>
+            {/if}
+        </div>
+        <div style="clear:both;">
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript'>
+//价格跳转
+function priceLink()
+{
+	var minVal = $('input[name="min_price"]').val();
+	var maxVal = $('input[name="max_price"]').val();
+	if(isNaN(minVal) || isNaN(maxVal))
+	{
+		alert('价格填写不正确');
+		return '';
+	}
+	var searchUrl = "{echo:search_goods::searchUrl(array('min_price','max_price'),array('__min_price__','__max_price__'))}";
+	searchUrl     = searchUrl.replace("__min_price__",minVal).replace("__max_price__",maxVal);
+	window.location.href = searchUrl;
+}
+
+//筛选条件按钮高亮
+jQuery(function(){
+	//品牌模块高亮和预填充
+	{set:$brand = IFilter::act(IReq::get('brand'),'int');}
+	{if:$brand}
+	$('#brand_dd>*').removeClass('now');
+	$('#brand_{$brand}').addClass('now');
+	{/if}
+
+	//属性模块高亮和预填充
+	{set:$tempArray = IFilter::act(IReq::get('attr'))}
+	{if:$tempArray}
+		{set:$json = JSON::encode(array_map('md5',$tempArray))}
+		var attrArray = {$json};
+		for(val in attrArray)
+		{
+			if(attrArray[val])
+			{
+				$('#attr_dd_'+val+'>*').removeClass('now');
+				$('#attr_'+val+'_'+attrArray[val]).addClass('now');
+			}
+		}
+	{/if}
+
+	//价格模块高亮和预填充
+	{if:IReq::get('min_price') || IReq::get('max_price')}
+	{set:$priceId = IFilter::act(IReq::get('min_price'))."-".IFilter::act(IReq::get('max_price'))}
+	$('#price_dd>*').removeClass('now');
+	$('#{$priceId}').addClass('now');
+	$('input[name="min_price"]').val("{echo:IFilter::act(IReq::get('min_price'))}");
+	$('input[name="max_price"]').val("{echo:IFilter::act(IReq::get('max_price'))}");
+	{/if}
+
+	//排序字段
+	{set:$orderValue = IFilter::act(IReq::get('order'))}
+	{if:$orderValue}
+	$('#order_{$orderValue}').addClass('now');
+	{/if}
+
+	//顺序
+	{set:$byValue = IReq::get('by')}
+	{if:$byValue == "desc"}
+	$('#by_{$orderValue}').addClass('desc');
+	{else:}
+	$('#by_{$orderValue}').addClass('asc');
+	{/if}
+
+	//显示方式
+	{set:$showType = IReq::get('show_type');}
+	{if:$showType == "win"}
+	$('[name="goodsItems"]').attr({"class":"clearfix win"});
+	$('[name="goodsImage"]').css({"width":200,"height":200});
+	$('#winButton').addClass('now');
+	{elseif:$showType == "list"}
+	$('[name="goodsItems"]').attr({"class":"clearfix list"});
+	$('[name="goodsImage"]').css({"width":115,"height":115});
+	$('#listButton').addClass('now');
+	{/if}
+});
+</script>

@@ -30,6 +30,6 @@ return array(
 	'debug'=> '0',
 	'configExt'=> array('site_config'=>'config/site_config.php'),
 	'encryptKey'=>'{ENCRYPTKEY}',
-	'authorizeCode' => '',
+	'authorizeCode' => '201610093145',
 );
 ?>

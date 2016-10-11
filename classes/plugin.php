@@ -39,6 +39,7 @@ class plugin extends IInterceptorBase
 				$pluginObj->reg();
 			}
 		}
+		unset($pluginList);
 	}
 
 	/**

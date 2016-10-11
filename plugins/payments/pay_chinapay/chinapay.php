@@ -75,6 +75,7 @@ class chinapay extends paymentPlugin
 			if ($status == '1001')
 			{
 				$orderNo = $callbackData['Priv1'];//订单号,参考getSendData();
+				$money   = $amount/100;
 				//记录回执流水号
 				if(isset($callbackData['orderno']) && $callbackData['orderno'])
 				{

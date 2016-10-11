@@ -1,0 +1,50 @@
+
+
+<link rel="stylesheet" href="{skin:css/group.css}" />
+<div class="cover-page-list fl wfs bcf2">
+    <div class="ju-itemlist">
+        <ul class="clearfix">
+
+            {set:$countNumItems = array();}
+            {foreach:items=$this->regiment_list}
+            {set:$countNumItems[] = $item['id'];}
+            <li class="item-small-v3">
+                <div class="status-avil">
+                    <a href="{url:/site/products/promo/groupon/id/$item[goods_id]/active_id/$item[id]}" class="link-box hover-avil" target="_blank" >
+                        <img class="item-pic" data-type="item" src="{url:/pic/thumb/img/$item[img]/w/390/h/260}">
+                        <h4>
+                            <span class="desc">
+                                {$item['title']}
+                            </span>
+                        </h4>
+                        <div class="item-prices">
+                            <div class="item-info">
+                                <div class="price">
+                                    <i>¥</i><em class="J_actPrice">{$item['regiment_price']}</em>
+                                </div>
+                                <div class="dock">
+                                    <div class="dock-price">
+                                        <del class="orig-price">¥{$item['sell_price']}</del>
+                                    </div>
+                                    <div class="prompt">
+                                        <div class="sold-num">
+                                            <em>{$item['sum_count']}</em>   件已售
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item-link">
+                                <span class="txt">马上抢!</span><span class="abbr">抢!</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </li>
+
+            {/foreach}
+
+
+        </ul>
+
+    </div>
+</div>

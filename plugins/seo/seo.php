@@ -220,7 +220,8 @@ class seo extends pluginBase
 	 */
 	public static function set($config)
 	{
-		$html = ob_get_clean();
+		$html = ob_get_contents();
+		ob_clean();
 		preg_match("!<head>(.*?)</head>!ius",$html,$m);
 
 		//如果页面本来就没有head头，则直接返回

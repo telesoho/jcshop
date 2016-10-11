@@ -49,9 +49,10 @@ class Expresswaybill
 		//获取订单信息
 		$id       = intval($order_id);
 		$orderObj = new IModel('order');
-		$orderRow = $orderObj->getObj('id = '.$id.' and seller_id = '.$seller_id);
+		$where    = $seller_id ? 'id='.$id.' and seller_id = '.$seller_id : 'id='.$id;
+		$orderRow = $orderObj->getObj($where);
 
-		if(empty($orderRow))
+		if(!$orderRow)
 		{
 			return null;
 		}

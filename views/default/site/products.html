@@ -4,7 +4,7 @@
 <script type="text/javascript" src="{theme:javascript/products.js}"></script>
 
 {set:$breadGuide = goods_class::catRecursion($category);}
-<div class="position"><span>您当前的位置111：</span><a href="{url:}">首页</a>{foreach:items=$breadGuide} » <a href="{url:/site/pro_list/cat/$item[id]}">{$item['name']}</a>{/foreach} » {$name}</div>
+<div class="position"><span>您当前的位置：</span><a href="{url:}">首页</a>{foreach:items=$breadGuide} » <a href="{url:/site/pro_list/cat/$item[id]}">{$item['name']}</a>{/foreach} » {$name}</div>
 <div class="wrapper clearfix">
 	<div class="summary">
 		<h2>{$name}</h2>
@@ -12,8 +12,8 @@
 		<!--基本信息区域-->
 		<ul>
 			<li>
-				<span class="f_r light_gray">商品编号1111：<label id="data_goodsNo">{echo:$goods_no?$goods_no:$id}</label></span>
-				{if:isset($brand)}品牌111：{$brand}{/if}
+				<span class="f_r light_gray">商品编号：<label id="data_goodsNo">{echo:$goods_no?$goods_no:$id}</label></span>
+				{if:isset($brand)}品牌：{$brand}{/if}
 			</li>
 
 			<!--抢购活动,引入 "_products_time"模板-->
@@ -388,7 +388,7 @@
 						</td>
 						<td style="border:none;" class="t_r gray discussion_td"><%=time%></td>
 					</tr>
-					<tr><td class="t_l" colspan="2" style="padding:0 7px 0 13px;"><%=contents%></td></tr>
+					<tr><td class="t_l" colspan="2"><%=contents%></td></tr>
 					</script>
 
 					<!--讨论内容输入框-->

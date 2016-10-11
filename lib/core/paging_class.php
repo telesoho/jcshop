@@ -36,7 +36,7 @@ class IPaging
 		$this->pagesize  = $pagesize;
 		$this->pagelength= $pagelength;
 		$this->dbo       = $dbo ? $dbo : IDBFactory::getDB();
-		if($sql!="")
+		if($sql)
 		{
 			$this->setSql($sql);
 		}
@@ -163,70 +163,92 @@ class IPaging
 		return $this->lastpage;
 	}
     /**
+     * @brief 获取处理后的分页URL
+     * @return string URL地址
+     */
+	public function getPageBarUrl()
+	{
+		$url   = IUrl::getUri();
+		$parse = parse_url($url);
+		if(isset($parse['query']))
+		{
+			//把url字符串解析为数组
+			parse_str($parse['query'],$params);
+
+			//删除数组下标为page的值
+			unset($params['page']);
+
+			//再次构建url
+			$url = $parse['path'].'?'.http_build_query($params);
+		}
+		$url .= strpos($url,"?") === false ? "?page=" : "&page=";
+		return $url;
+	}
+
+    /**
      * @brief 取得pageBar
-     * @param string $url URL地址，一般为空！
+     * @param string $url 点击分页按钮跳转的URL地址，为空表示当前URL
      * @param string $attrs URL后接参数
      * @return string pageBar的对应HTML代码
      */
 	public function getPageBar($url='', $attrs='')
 	{
-        $attr = '';
-        if($attrs != '')
-        {
-            $ajax_attr = " {$attrs} ";
-        }
-        $flag = false;
-        if($url=='')
-        {
-            $flag = true;
-            $url = IUrl::getUri();
-            $url = preg_replace('/page=\d?&/','',$url);
-            $url = preg_replace('/(\?|&|\/)page(\/|=).*/i','',$url);
-            $mark = '=';
-            if(strpos($url,'?') !== false)
-                $index = '&page';
-            else
-                $index = '?page';
-        }
-        else
-        {
-            $flag = false;
-            $index='';
-            $mark='';
-        }
+		//数据不存在直接返回空
+		if($this->totalpage == 0)
+		{
+			return;
+		}
 
-        $baseUrl = "{$url}{$index}{$mark}";
-        $baseUrl = IFilter::act($baseUrl,'text');
+		//URL参数是否存在
+		$baseUrl = $url ? $url  : $this->getPageBarUrl();
+		$baseUrl = IFilter::act($baseUrl,'text');
+		$flag    = $url ? false : true;
 
-        $attr = str_replace('[page]',1,$attrs);
-        $href = $baseUrl.($flag?1:'');
-		$tem="<div class='pages_bar'><a href='{$href}' {$attr}>首页</a>";
+		//HTML内容拼接开始
+		//1,首页
+		$attr   = str_replace('[page]',1,$attrs);
+		$href   = $baseUrl.($flag ? 1 : "");
+		$result = "<div class='pages_bar'><a href='{$href}' {$attr}>首页</a>";
 
-        $attr = str_replace('[page]',$this->getIndex()-1,$attrs);
-        $href = $baseUrl.($flag?$this->getIndex()-1:'');
-		if($this->firstpage>1)$tem.="<a href='{$href}' {$attr}>上一页</a>";
+		//2,上一页
+		if($this->firstpage > 1)
+		{
+	        $attr = str_replace('[page]',$this->getIndex()-1,$attrs);
+	        $href = $baseUrl.($flag ? $this->getIndex()-1 : "");
+			$result .= "<a href='{$href}' {$attr}>上一页</a>";
+		}
 
-		for($i=$this->firstpage;$i<=$this->lastpage;$i++)
+		//3,中间循环分页
+		for($i = $this->firstpage; $i <= $this->lastpage; $i++)
 		{
             $attr = str_replace('[page]',$i,$attrs);
-            $href = $baseUrl.($flag?$i:'');
+            $href = $baseUrl.($flag ? $i : "");
 			if($i==$this->index)
 			{
-				$tem.="<a class='current_page' href='{$href}' {$attr}>{$i}</a>";
+				$result .= "<a class='current_page' href='{$href}' {$attr}>{$i}</a>";
 			}
 			else
 			{
-				$tem.="<a href='{$href}' {$attr}>{$i}</a>";
+				$result .= "<a href='{$href}' {$attr}>{$i}</a>";
 			}
 		}
 
-        $attr = str_replace('[page]',$this->getIndex()+1,$attrs);
-        $href = $baseUrl.($flag?$this->getIndex()+1:'');
-		if($this->lastpage<$this->totalpage)$tem.="<a href='{$href}' {$attr}>下一页</a>";
+		//4,下一页
+		if($this->lastpage < $this->totalpage)
+		{
+	        $attr    = str_replace('[page]',$this->getIndex()+1,$attrs);
+	        $href    = $baseUrl.($flag ? $this->getIndex()+1 : "");
+			$result .= "<a href='{$href}' {$attr}>下一页</a>";
+		}
 
-		if($this->totalpage==0)$this->index=1;
+		//5,尾页
 		$attr = str_replace('[page]',$this->totalpage,$attrs);
-		$href = $baseUrl.($flag?$this->totalpage:'');
-		return $tem."<a href='{$href}' {$attr}>尾页</a><span>当前第{$this->index}页/共{$this->totalpage}页</span></div>";
+		$href = $baseUrl.($flag ? $this->totalpage : "");
+		$result .= "<a href='{$href}' {$attr}>尾页</a>";
+
+		//6,统计数据
+		$result .= "<span>当前第{$this->index}页/共{$this->totalpage}页</span></div>";
+
+		return $result;
 	}
 }

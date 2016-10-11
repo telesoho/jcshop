@@ -73,7 +73,7 @@ class Comment_Class
 		$data['average_point']=0;
 		if($data['point_total']>0)
 		{
-			$data['average_point'] = round($data['point_total'] / $data['comment_total'],1);
+			$data['average_point'] = round($data['point_total'] / $data['comment_total']);
 		}
 		return $data;
 	}

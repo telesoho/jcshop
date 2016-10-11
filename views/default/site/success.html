@@ -12,7 +12,7 @@
 						<th><img src="{skin:images/front/right.gif}" width="48px" height="51px" /></th>
 						<td>
 							<strong class="f14">
-							{echo:IReq::get('message') ? IFilter::act(urldecode(IReq::get('message')),'text') : '操作成功！'}
+							{echo:IReq::get('message') ? IFilter::act(IReq::get('message'),'text') : '操作成功！'}
 							</strong>
 						</td>
 					</tr>

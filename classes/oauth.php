@@ -78,7 +78,7 @@ class Oauth
 	//引入平台接口文件
 	private function requireFile($fileName)
 	{
-		$classFile = 'plugins/oauth/'.$fileName.'/'.$fileName.'.php';
+		$classFile = IWeb::$app->getBasePath().'plugins/oauth/'.$fileName.'/'.$fileName.'.php';
 		if(file_exists($classFile))
 		{
 			include_once($classFile);
