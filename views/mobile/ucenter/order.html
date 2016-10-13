@@ -68,21 +68,6 @@
 				<div id="scroll1" class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<div class="mui-table-view" id="main_panel0">
-							<div class="mui-table-view-cell order-menu">
-								<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
-									<div class="order-top">
-										<span class="top1">订单编号：1222344455555544554</span>
-										<span class="mui-pull-right Qorder">已取消</span>
-									</div>
-									<div class="order-img">
-										<img src="/views/mobile/skin/default/image/ware1.jpg" alt="">
-										<img src="/views/mobile/skin/default/image/ware2.jpg" alt="">
-									</div>
-								</a>
-								<div class="order-bottom">
-									<span>订单金额：<span style="color:#e53e42">388元</span></span>
-								</div>
-							</div>
 						</div>
 						<div class="noOrder">
 							<img src="/views/mobile/skin/default/image/havenomore.png" alt="">
@@ -94,22 +79,7 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<div class="mui-table-view" id="main_panel1">
-							<div class="mui-table-view-cell order-menu">
-								<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
-								<div class="order-top">
-									<span class="top1">订单编号：1222344455555544554</span>
-									<span class="mui-pull-right Qorder">待支付</span>
-								</div>
-								<div class="order-img">
-									<img src="/views/mobile/skin/default/image/ware1.jpg" alt="">
-									<img src="/views/mobile/skin/default/image/ware2.jpg" alt="">
-								</div>
-								</a>
-								<div class="order-bottom">
-									<span>订单金额：<span style="color:#e53e42">388元</span></span>
-									<span class="mui-pull-right orderToDo">去支付</span>
-								</div>
-							</div>
+
 						</div>
 					</div>
 				</div>
@@ -118,22 +88,6 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<div class="mui-table-view" id="main_panel2">
-							<div class="mui-table-view-cell order-menu" >
-								<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
-								<div class="order-top">
-									<span class="top1">订单编号：1222344455555544554</span>
-									<span class="mui-pull-right Qorder">待发货</span>
-								</div>
-								<div class="order-img">
-									<img src="/views/mobile/skin/default/image/ware1.jpg" alt="">
-									<img src="/views/mobile/skin/default/image/ware2.jpg" alt="">
-								</div>
-								</a>
-								<div class="order-bottom">
-									<span>订单金额：<span style="color:#e53e42">388元</span></span>
-									<span class="mui-pull-right orderToDo">申请退款</span>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -167,6 +121,8 @@
 	</div>
 </div>
 <script id="order-detail" type="text/html">
+	<% for(var i=0; i<state.length; i++){%>
+	<% var order =state[i] %>
 	<div class="mui-table-view-cell order-menu">
 		<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
 			<div class="order-top">
@@ -183,6 +139,7 @@
 			<span class="mui-pull-right orderToDo">查看物流</span>
 		</div>
 	</div>
+	<%}%>
 </script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
@@ -208,8 +165,11 @@
 		type:'get',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
 		success:function(data){
+			var dat={}
 			for(var i=0;i<5;i++){
-				$('#main_panel'+i).html(template('order-detail', data));
+				 dat[i]={};
+				dat[i]['state']=data['state'+i];
+				$('#main_panel'+i).html(template('order-detail', dat[i]));
 			}
 		},
 		error:function(xhr,type,errorThrown){
@@ -223,8 +183,8 @@
 	mui('body').on('tap','.orderToDetaile',function(){
 		document.location.href=this.href;
 	});
-	mui('body').on('tap','.orderToPay',function(){
-		alert(111)
+	mui('body').on('tap','.orderToDo',function(){
+		alert("奔跑吧，少年")
 	});
 
 	(function($) {
@@ -260,7 +220,6 @@
 							setTimeout(function(){
 								var div = self.element.querySelector('.mui-table-view');
 								var num=++pageNum['pageNum'+index];
-								div.appendChild(createFragment(div, index, 5));
 								self.endPullUpToRefresh();
 							}, 1000);
 						}

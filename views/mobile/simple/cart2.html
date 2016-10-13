@@ -175,8 +175,6 @@
 		headers:{'Content-Type':'application/json'},
 		success:function(data){
 			//服务器返回响应，根据响应结果，分析是否登录成功；
-            console.log(data);
-			console.log(data.addressList.accept_name)
 			var data=data;
 			if(data.addressList.length==0){
 				addr=false;
