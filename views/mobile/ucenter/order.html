@@ -107,7 +107,7 @@
 								</a>
 								<div class="order-bottom">
 									<span>订单金额：<span style="color:#e53e42">388元</span></span>
-									<span class="mui-pull-right orderToPay">去支付</span>
+									<span class="mui-pull-right orderToDo">去支付</span>
 								</div>
 							</div>
 						</div>
@@ -131,7 +131,7 @@
 								</a>
 								<div class="order-bottom">
 									<span>订单金额：<span style="color:#e53e42">388元</span></span>
-									<span class="mui-pull-right orderToPay">申请退款</span>
+									<span class="mui-pull-right orderToDo">申请退款</span>
 								</div>
 							</div>
 						</div>
@@ -142,22 +142,7 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<div class="mui-table-view">
-							<div class="mui-table-view-cell order-menu">
-								<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
-								<div class="order-top">
-									<span class="top1">订单编号：1222344455555544554</span>
-									<span class="mui-pull-right Qorder">待收货</span>
-								</div>
-								<div class="order-img">
-									<img src="/views/mobile/skin/default/image/ware1.jpg" alt="">
-									<img src="/views/mobile/skin/default/image/ware2.jpg" alt="">
-								</div>
-								</a>
-								<div class="order-bottom">
-									<span>订单金额：<span style="color:#e53e42">388元</span></span>
-									<span class="mui-pull-right orderToPay">查看物流</span>
-								</div>
-							</div>
+
 						</div>
 					</div>
 				</div>
@@ -181,7 +166,24 @@
 		</div>
 	</div>
 </div>
-
+<script id="order-detail" type="text/html">
+	<div class="mui-table-view-cell order-menu">
+		<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
+			<div class="order-top">
+				<span class="top1">订单编号：1222344455555544554</span>
+				<span class="mui-pull-right Qorder">待收货</span>
+			</div>
+			<div class="order-img">
+				<img src="/views/mobile/skin/default/image/ware1.jpg" alt="">
+				<img src="/views/mobile/skin/default/image/ware2.jpg" alt="">
+			</div>
+		</a>
+		<div class="order-bottom">
+			<span>订单金额：<span style="color:#e53e42">388元</span></span>
+			<span class="mui-pull-right orderToDo">查看物流</span>
+		</div>
+	</div>
+</script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
@@ -248,7 +250,7 @@
 							var self = this;
 							setTimeout(function(){
 								var div = self.element.querySelector('.mui-table-view');
-								alert(++pageNum['pageNum'+index]);
+								var num=++pageNum['pageNum'+index];
 								div.appendChild(createFragment(div, index, 5));
 								self.endPullUpToRefresh();
 							}, 1000);
@@ -256,16 +258,10 @@
 					}
 				});
 			});
-			var createFragment = function(index, index, count, reverse) {
+			var createFragment = function(div, pageNum) {
 				var length = div.querySelectorAll('li').length;
 				var fragment = document.createDocumentFragment();
-				var li;
-				for (var i = 0; i < count; i++) {
-					li = document.createElement('li');
-					li.className = 'mui-table-view-cell';
-					li.innerHTML = '第' + (index + 1) + '个选项卡子项-' + (length + (reverse ? (count - i) : (i + 1)));
-					fragment.appendChild(li);
-				}
+				
 				return fragment;
 			};
 		});
