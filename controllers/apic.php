@@ -161,6 +161,13 @@ class Apic extends IController
         //获取收货地址
         $addressObj  = new IModel('address');
         $addressList = $addressObj->query('user_id = '.$user_id,"*","is_default desc");
+        foreach ($addressList as $key => $data){
+            $temp = area::name($data['province'],$data['city'],$data['area']);
+            $addressList[$key]['province_val'] =$temp[$data['province']];
+            $addressList[$key]['city_val'] =$temp[$data['city']];
+            $addressList[$key]['area_val'] =$temp[$data['area']];
+        }
+
         header("Content-type: application/json");
         echo json_encode($addressList);
         exit();
@@ -299,12 +306,12 @@ class Apic extends IController
     /**
      * 获取订单列表
      */
-    public function getOrderList()
+    public function order_list()
     {
-        $data = [];
+//        $data = [];
         $ret = Api::run('getOrderList',$this->user['user_id']);
-        $data['data'] = $ret->find();
-        $data['pagebar'] = $ret->getPageBar();
+        $data = $ret->find();
+//        $data['pagebar'] = $ret->getPageBar();
         $payment = new IQuery('payment');
         $payment->fields = 'id,name,type';
         $payments = $payment->find();
@@ -314,42 +321,54 @@ class Apic extends IController
             $items[$pay['id']]['name'] = $pay['name'];
             $items[$pay['id']]['type'] = $pay['type'];
         }
-        foreach ($data['data'] as $key => $value){
-            $data['data'][$key]['pay_type'] = $items[$value['pay_type']]['name'];
-            $data['data'][$key]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
+        $temp = [];
+        foreach ($data as $key => $value){
+            $data[$key]['pay_type'] = $items[$value['pay_type']]['name'];
+            $data[$key]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
+//            $data[$key]['orderStatusVal'] = Order_Class::getOrderStatus($value);
+            switch (Order_Class::getOrderStatus($value)){
+                case 0: //全部
+                    $temp[0][] = $data[$key];
+                case 2: //待支付
+                    $temp[1][] = $data[$key];
+                case 1: //待发货
+                    $temp[2][] = $data[$key];
+                case 3: //待收货
+                    $temp[3][] = $data[$key];
+            }
+            $temp2 = area::name($value['province'],$value['city'],$value['area']);
+            $data[$key]['province_val'] =$temp2[$value['province']];
+            $data[$key]['city_val'] =$temp2[$value['city']];
+            $data[$key]['area_val'] =$temp2[$value['area']];
         }
+        foreach ($addressList as $key => $data){
+            $temp = area::name($data['province'],$data['city'],$data['area']);
+            $addressList[$key]['province_val'] =$temp[$data['province']];
+            $addressList[$key]['city_val'] =$temp[$data['city']];
+            $addressList[$key]['area_val'] =$temp[$data['area']];
+        }
+//        var_dump($temp);
+//        $result = array(
+//            0 => '未知',
+//            1 => '等待发货',
+//            2 => '等待付款',
+//            3 => '已发货',
+//            4 => '等待发货',
+//            5 => '已取消',
+//            6 => '已完成',
+//            7 => '已退款',
+//            8 => '部分发货',
+//            9 => '部分退款',
+//            10=> '部分退款',
+//            11=> '已发货',
+//            12=> '申请退款',
+//        );
 
         header("Content-type: application/json");
         echo json_encode($data);
         exit();
     }
 
-    /**
-     * @brief 订单列表
-     */
-    public function orderlist()
-    {
-
-        //搜索条件
-        $search = IReq::get('search');
-
-        $page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
-        //条件筛选处理
-        list($join,$where) = order_class::getSearchCondition($search);
-        var_dump($where);
-        //拼接sql
-        $orderHandle = new IQuery('order as o');
-        $orderHandle->order  = "o.id desc";
-        $orderHandle->fields = "o.*,d.name as distribute_name,p.name as payment_name";
-        $orderHandle->page   = $page;
-        $orderHandle->where  = $where;
-        $orderHandle->join   = $join;
-
-        $this->search      = $search;
-        $this->orderHandle = $orderHandle;
-
-//        $this->redirect("order_list");
-    }
     /**
      * ---------------------------------------------------物流---------------------------------------------------*
      */

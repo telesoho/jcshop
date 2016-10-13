@@ -1006,3 +1006,87 @@ errorTime: 2016-10-13 11:41:12
 #5 IWEB_PATH/index.php(5): IApplication->run()
 </ERROR_BLOCK>
 
+<ERROR_BLOCK>
+errorInfo: Undefined index: data
+errorFile: IWEB_PATH/controllers/apic.php
+errorLine: 317
+errorCode: 8
+errorTime: 2016-10-13 13:54:53
+#0 : Apic->order_list()
+#1 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#2 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#3 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(order_list)
+#4 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#5 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Invalid argument supplied for foreach()
+errorFile: IWEB_PATH/controllers/apic.php
+errorLine: 317
+errorCode: 2
+errorTime: 2016-10-13 13:54:53
+#0 : Apic->order_list()
+#1 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#2 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#3 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(order_list)
+#4 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#5 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: addressList
+errorFile: IWEB_PATH/controllers/apic.php
+errorLine: 344
+errorCode: 8
+errorTime: 2016-10-13 14:11:11
+#0 : Apic->order_list()
+#1 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#2 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#3 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(order_list)
+#4 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#5 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Invalid argument supplied for foreach()
+errorFile: IWEB_PATH/controllers/apic.php
+errorLine: 344
+errorCode: 2
+errorTime: 2016-10-13 14:11:11
+#0 : Apic->order_list()
+#1 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#2 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#3 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(order_list)
+#4 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#5 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: addressList
+errorFile: IWEB_PATH/controllers/apic.php
+errorLine: 344
+errorCode: 8
+errorTime: 2016-10-13 14:11:12
+#0 : Apic->order_list()
+#1 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#2 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#3 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(order_list)
+#4 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#5 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Invalid argument supplied for foreach()
+errorFile: IWEB_PATH/controllers/apic.php
+errorLine: 344
+errorCode: 2
+errorTime: 2016-10-13 14:11:12
+#0 : Apic->order_list()
+#1 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#2 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#3 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(order_list)
+#4 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#5 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
