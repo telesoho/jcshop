@@ -113,11 +113,16 @@ class APIUcenter
 		return $query;
 	}
 	//用户中心-订单列表
-	public function getOrderList($userid){
+	public function getOrderList($userid, $where = NULL){
 		$page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
 		$query = new IQuery('order');
-		$query->where = "user_id =".$userid." and if_del= 0";
-		$query->order = "id desc";
+        if (!empty($where)){
+            $query->where = "user_id =".$userid." and if_del= 0 and " . $where;
+        } else {
+            $query->where = "user_id =".$userid." and if_del= 0";
+        }
+
+		$query->order = "create_time desc";
 		$query->page  = $page;
 		return $query;
 	}

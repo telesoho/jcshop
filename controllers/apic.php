@@ -309,8 +309,17 @@ class Apic extends IController
     public function order_list()
     {
 //        $data = [];
-        $ret = Api::run('getOrderList',$this->user['user_id']);
-        $data = $ret->find();
+        $ret1 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 1 and pay_type != 0'); // 待支付
+        $ret2 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
+        $ret3 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 1'); // 待收货
+        $ret4 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 5 '); // 已完成
+        $ret5 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 '); // 待收货
+//        $data[0] = $ret0->find();
+        $data[1] = $ret1->find();
+        $data[2] = $ret2->find();
+        $data[3] = $ret3->find();
+        $data[4] = $ret4->find();
+        $data[5] = $ret5->find();
 //        $data['pagebar'] = $ret->getPageBar();
         $payment = new IQuery('payment');
         $payment->fields = 'id,name,type';
@@ -322,48 +331,18 @@ class Apic extends IController
             $items[$pay['id']]['type'] = $pay['type'];
         }
         $temp = [];
-        foreach ($data as $key => $value){
-            $data[$key]['pay_type'] = $items[$value['pay_type']]['name'];
-            $data[$key]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
-//            $data[$key]['orderStatusVal'] = Order_Class::getOrderStatus($value);
-            switch (Order_Class::getOrderStatus($value)){
-                case 0: //全部
-                    $temp[0][] = $data[$key];
-                case 2: //待支付
-                    $temp[1][] = $data[$key];
-                case 1: //待发货
-                    $temp[2][] = $data[$key];
-                case 3: //待收货
-                    $temp[3][] = $data[$key];
+        foreach ($data as $k => $v){
+            foreach ($v as $key => $value ){
+                $data[$k][$key]['pay_type'] = $items[$value['pay_type']]['name'];
+                $data[$k][$key]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
+                $data[$k][$key]['orderStatusVal'] = Order_Class::getOrderStatus($value);
+                $temp2 = area::name($value['province'],$value['city'],$value['area']);
+                $data[$k][$key]['province_val'] =$temp2[$value['province']];
+                $data[$k][$key]['city_val'] =$temp2[$value['city']];
+                $data[$k][$key]['area_val'] =$temp2[$value['area']];
             }
-            $temp2 = area::name($value['province'],$value['city'],$value['area']);
-            $data[$key]['province_val'] =$temp2[$value['province']];
-            $data[$key]['city_val'] =$temp2[$value['city']];
-            $data[$key]['area_val'] =$temp2[$value['area']];
         }
-        foreach ($addressList as $key => $data){
-            $temp = area::name($data['province'],$data['city'],$data['area']);
-            $addressList[$key]['province_val'] =$temp[$data['province']];
-            $addressList[$key]['city_val'] =$temp[$data['city']];
-            $addressList[$key]['area_val'] =$temp[$data['area']];
-        }
-//        var_dump($temp);
-//        $result = array(
-//            0 => '未知',
-//            1 => '等待发货',
-//            2 => '等待付款',
-//            3 => '已发货',
-//            4 => '等待发货',
-//            5 => '已取消',
-//            6 => '已完成',
-//            7 => '已退款',
-//            8 => '部分发货',
-//            9 => '部分退款',
-//            10=> '部分退款',
-//            11=> '已发货',
-//            12=> '申请退款',
-//        );
-
+//        var_dump($data);
         header("Content-type: application/json");
         echo json_encode($data);
         exit();

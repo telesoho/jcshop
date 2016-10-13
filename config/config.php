@@ -27,7 +27,7 @@ return array(
 	'dbbackup' => 'backup/database',
 	'safe' => 'cookie',
 	'lang' => 'zh_sc',
-	'debug'=> '0',
+	'debug'=> '1',
 	'configExt'=> array('site_config'=>'config/site_config.php'),
 	'encryptKey'=>'693db335771319c04d195cca4f907fa9',
 	'authorizeCode' => '201610093145',
