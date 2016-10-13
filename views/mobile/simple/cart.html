@@ -1,92 +1,108 @@
 
 <div id="pageInfo" data-title="购物车"></div>
-{if:$this->count == 0}
+<div id="shopcarContainer">
+
+</div>
+
 <!-- 无商品显示 -->
-<section class="nodata">购物车中空空如也哦~</section>
-{else:}
+
+
 <!-- 优惠信息 -->
 <!--<section class="cart_prompt" style="display:none" id="cart_prompt">-->
 	<!--<h4>恭喜，您的订单已经满足了以下优惠活动！</h4>-->
 	<!--<ol></ol>-->
 <!--</section>-->
 
-<!--促销模板-->
-<script type="text/html" id="promotionTemplate">
-	<li><%=item['plan']%>，<%=item['info']%></li>
+
+<script type="text/html" id="shopCarTemplate">
+	<%if(goodsList.length==0){%>
+	<!--如果没有收货地址-->
+	<section class="nodata">购物车中空空如也哦~</section>
+	<%}else{%>
+	<!-- 商品列表 -->
+	<section class="cart_list">
+		<ul>
+			<% for(var i=0; i<goodsList.length; i++){%>
+			<% var product =JSONstringify(goodsList[i]) %>
+			<li>
+				<div class="cart_list_goods">
+					<div class="cart_list_photo" onclick="gourl('{url:/site/products/id/$item['goods_id']}')">
+						<img src="<%=goodsList[i].img%>" alt="{$item['name']}">
+					</div>
+					<div class="cart_list_info">
+						<h3 class="cart_list_info_title"><%=goodsList[i].name%></h3>
+						<p class="cart_list_info_info">
+						</p>
+						<em class="cart_list_info_price">单价：￥<%=goodsList[i].sell_price%></em>
+					</div>
+				</div>
+				<del class="del" onclick='javascript:removeCartByJSON(<%=product%>);'>删除</del>
+				<div class="goods_num_adjust">
+					<span onclick='cart_reduce(<%=product%>);'>-</span>
+					<input type="text" onchange='cartCount(<%=product%>);' id="count_<%=goodsList[i].goods_id%>_<%=goodsList[i].product_id%>" value="<%=goodsList[i].count%>">
+					<span onclick='cart_increase(<%=product%>);'>+</span>
+				</div>
+				<div class="count">小结：￥<span id="sum_<%=goodsList[i].goods_id%>_<%=goodsList[i].product_id%"><%=goodsList[i].sum%></span></div>
+			</li>
+			<%}%>
+		</ul>
+	</section>
+	<!-- 统计信息 -->
+	<section class="cart_count">
+		<h4>购物车统计</h4>
+		<table>
+			<tr>
+				<th>总重量</th>
+				<th>总金额</th>
+				<th>商品优惠</th>
+				<th>促销优惠</th>
+			</tr>
+			<tr>
+				<td><span id='weight'><%=weight%></span>g</td>
+				<td>￥<span id='origin_price'><%=sum%></span></td>
+				<td>￥<span id='discount_price'><%=reduce%></span></td>
+				<td>￥<span id='promotion_price'><%=proReduce%></span></td>
+			</tr>
+		</table>
+	</section>
+
+	<footer class="cart_footer">
+		<div class="cart_footer_fixed">
+			<div class="buy btn_pay" id="btn_pay" onclick="gourl('{url:/simple/cart2}')">
+				去结算
+			</div>
+			<div class="count">
+				<span>合计:</span>
+				<em>￥<i id='sum_price'><%=final_sum%></i></em>
+				<u>不含运费</u>
+			</div>
+		</div>
+	</footer>
+	<%}%>
 </script>
-
-<!-- 商品列表 -->
-<section class="cart_list">
-	<ul>
-		{foreach:items = $this->goodsList}
-		<li>
-			<div class="cart_list_goods">
-				<div class="cart_list_photo" onclick="gourl('{url:/site/products/id/$item['goods_id']}')">
-					<img src="{url:/pic/thumb/img/$item[img]/w/80/h/80}" alt="{$item['name']}">
-				</div>
-				<div class="cart_list_info">
-					<h3 class="cart_list_info_title">{$item['name']}</h3>
-					<p class="cart_list_info_info">
-						{if:isset($item['spec_array'])} {set:$spec_array=Block::show_spec($item['spec_array']);}
-						{foreach:items=$spec_array item=$specValue key=$specName}
-						{$specName}：{$specValue}&nbsp;
-						{/foreach}
-						{else:}
-						祝您购物愉快!
-						{/if}
-					</p>
-					<em class="cart_list_info_price">单价：￥{$item['sell_price']}</em>
-				</div>
-			</div>
-			{set:$item_json = JSON::encode($item)}
-			<del class="del" onclick='javascript:removeCartByJSON({$item_json});'>删除</del>
-			<div class="goods_num_adjust">
-				<span onclick='cart_reduce({$item_json});'>-</span>
-				<input type='text' onchange='cartCount({$item_json});' id="count_{$item['goods_id']}_{$item['product_id']}" value="{$item['count']}">
-				<span onclick='cart_increase({$item_json});'>+</span>
-			</div>
-			<div class="count">小结：￥<span id="sum_{$item['goods_id']}_{$item['product_id']}">{$item['sum']}</span></div>
-		</li>
-		{/foreach}
-	</ul>
-</section>
-<!-- 统计信息 -->
-<section class="cart_count">
-	<h4>购物车统计</h4>
-	<table>
-		<tr>
-			<th>总重量</th>
-			<th>总金额</th>
-			<th>商品优惠</th>
-			<th>促销优惠</th>
-		</tr>
-		<tr>
-			<td><span id='weight'>{$this->weight}</span>g</td>
-			<td>￥<span id='origin_price'>{$this->sum}</span></td>
-			<td>￥<span id='discount_price'>{$this->reduce}</span></td>
-			<td>￥<span id='promotion_price'>{$this->proReduce}</span></td>
-		</tr>
-	</table>
-</section>
-
-<footer class="cart_footer">
-	<div class="cart_footer_fixed">
-		<div class="buy btn_pay" id="btn_pay" onclick="gourl('{url:/simple/cart2}')">
-			去结算
-		</div>
-		<div class="count">
-			<span>合计:</span>
-			<em>￥<i id='sum_price'>{$this->final_sum}</i></em>
-			<u>不含运费</u>
-		</div>
-	</div>
-</footer>
-{/if}
 <script>
+	//定义template方法
+	template.helper('JSONstringify', function(obj){
+		return JSON.stringify(obj);
+	});
+	mui.init();
+	mui.ajax('index.php?controller=apic&action=cart',{
+		dataType:'json',//服务器返回json格式数据
+		type:'post',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		headers:{'Content-Type':'application/json'},
+		success:function(data){
+			var html = template('shopCarTemplate',data);
+			document.getElementById("shopcarContainer").innerHTML = html;
+		},
+		error:function(xhr,type,errorThrown){
+			//异常处理；
+			console.log(type);
+		}
+	});
 $(function(){
 	// 隐藏底部导航
 	hideNav();
-
 //	{if:$this->promotion}
 //	{foreach:items = $this->promotion}
 //	$('#cart_prompt ol').append( template.render('promotionTemplate',{"item":{echo:JSON::encode($item)}}) );

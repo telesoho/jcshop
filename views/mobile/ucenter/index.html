@@ -1,45 +1,171 @@
-<div id="pageInfo" data-title="个人中心"></div>
-<section class="user_main_info">
-    <ol>
-        <li>用户名：{$this->user['username']}</li>
-        <li>余额：<em>￥{$user['balance']}</em></li>
-        <li>积分：<em>{$user['point']}</em></li>
-        <li>代金券：<em>{$propData['prop_num']} 张</em></li>
-    </ol>
-</section>
-{set:$icoConfig = array(
-    "我的订单"   => "icon-pencil",
-    "我的积分"   => "icon-github-alt",
-    "我的代金券" => "icon-tag",
-    "退款申请"   => "icon-file",
-    "站点建议"   => "icon-book",
-    "商品咨询"   => "icon-comment",
-    "商品评价"   => "icon-thumbs-up",
-    "短信息"     => "icon-file",
-    "收藏夹"     => "icon-flag",
-    "帐户余额"   => "icon-jpy",
-    "在线充值"   => "icon-money",
-    "地址管理"   => "icon-map-marker",
-    "个人资料"   => "icon-file-alt",
-    "修改密码"   => "icon-lock",
-)}
-<nav class="user_main_nav">
-    <h3>
-        <i class="icon-user"></i>
-        个人中心
-    </h3>
-    <ul>
-        {foreach:items=menuUcenter::init()}
-        {foreach:items=$item key=$moreKey item=$moreValue}
-        <li><a href="{url:$moreKey}"><i class="{echo:$icoConfig[$moreValue]}"></i>{$moreValue}<u class="icon-chevron-right"></u></a></li>
-        {/foreach}
-        {/foreach}
-    </ul>
-</nav>
-<a href="{url:/simple/logout}" class="home_main_logout">退出登录</a>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>九猫首页</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/shopcar.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
+
+</head>
+<body>
+<div id="loading">
+    <div class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
+</div>
+<!--loading页结束-->
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">个人中心</h1>
+    </header>
+    <section id="section-user-info0" class="mui-content">
+        <div class="title">
+            <img src="https://img.bolo.me/shopping/app/images/user/mypage_appbg.jpg" alt="">
+        </div>
+        <div class="content">
+            <div class="content1">
+                <span class="name">王枫wx-chat5005</span>
+                <span class="mui-badge mui-badge-danger">v0</span>
+            </div>
+            <div class="content2">
+                <span class="jifen">100积分</span>
+                <span class="youhui">1优惠券</span>
+            </div>
+        </div>
+    </section>
+    <section id="section-user-info">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a class="" href="{url:/ucenter/order}&status=0">
+                        我的订单<span class="mui-pull-right ico-pull">查看全部订单
+                        <span class="mui-icon mui-icon-arrowright"></span></span>
+                    </a>
+                </li>
+            </ul>
+            <div class=" order">
+                <div class="mui-row">
+                    <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
+                        <a  href="{url:/ucenter/order}&status=1">
+                        <span class="mui-icon mui-icon-home ico-order"></span>
+                        <div class="mui-media-body">待付款</div></a>
+                    </div>
+                    <div class="mui-col-xs-3 mui-col-sm-3" style="text-align:center">
+                        <a  href="{url:/ucenter/order}&status=2">
+                        <span class="mui-icon mui-icon-email ico-order"></span>
+                        <div class="mui-media-body">待发货</div></a>
+                    </div>
+                    <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
+                        <a  href="{url:/ucenter/order}&status=3">
+                        <span class="mui-icon mui-icon-chatbubble ico-order"></span>
+                        <div class="mui-media-body">待收货</div></a>
+                    </div>
+                    <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
+                        <a href="{url:/ucenter/order}&status=4">
+                        <span class="mui-icon mui-icon-location ico-order"></span>
+                        <div class="mui-media-body">交易完成</div></a>
+                    </div>
+                </div>
+            </div>
+            <ul class="mui-table-view" style="margin-top:0.1rem">
+                <li class="mui-table-view-cell">
+                    <a class="mui-navigate-right">
+                        我的积分
+                    </a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a class="mui-navigate-right">
+                        积分商城
+                    </a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a class="mui-navigate-right">
+                        我的优惠券
+                    </a>
+                </li>
+            </ul>
+            <ul class="mui-table-view" style="margin-top:0.1rem">
+                <li class="mui-table-view-cell">
+                    <a class="mui-navigate-right" href="{url:/simple/addresslist}">
+                        收货地址
+                    </a>
+                </li>
+            </ul>
+            <ul class="mui-table-view" style="margin-top: 25px;margin-bottom:0.7rem;">
+                <li class="mui-table-view-cell">
+                    <a class="mui-navigate-right">
+                        身份证信息
+                    </a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a class="mui-navigate-right">
+                        客服中心
+                    </a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a class="mui-navigate-right">
+                        九猫微信号
+                    </a>
+                </li>
+            </ul>
+
+    </section>
+
+<footer>
+    <nav class="mui-bar mui-bar-tab">
+        <div class="mui-content">
+            <a id="defaultTab" class="mui-tab-item " href="index.html">
+                <span class="mui-icon mui-icon-home"></span>
+                <span class="mui-tab-label">首页</span>
+            </a>
+            <a class="mui-tab-item" href="#">
+                <span class="mui-icon mui-icon-list"></span>
+                <span class="mui-tab-label">分类</span>
+            </a>
+            <a class="mui-tab-item" href="shopcar.html">
+						<span class="mui-icon mui-icon-extra mui-icon-extra-cart">
+							<span class="mui-badge">0</span>
+							</span>
+                <span class="mui-tab-label">购物车</span>
+            </a>
+            <a class="mui-tab-item mui-active" href="#">
+                <span class="mui-icon mui-icon-contact"></span>
+                <span class="mui-tab-label">个人中心</span>
+            </a>
+        </div>
+    </nav>
+</footer>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/template-native.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
 <script>
-$(function() {
-    // 设置首页导航为当前
-    $(".nav_user").addClass('on');
-})
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
+        //    跳转到新增收货地址页面
+    })
 </script>
+</body>
+</html>

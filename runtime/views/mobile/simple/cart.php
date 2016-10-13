@@ -10,11 +10,14 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="apple-touch-icon-precomposed" href="<?php echo $this->getWebSkinPath()."image/logo.gif";?>">
     <script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/jquery/jquery-1.12.4.min.js"></script> <script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/form/form.js"></script> <script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/autovalidate/validate.js"></script><link rel="stylesheet" type="text/css" href="/runtime/_systemjs/autovalidate/style.css" /> <script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artdialog/artDialog.js"></script><script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artdialog/plugins/iframeTools.js"></script><link rel="stylesheet" type="text/css" href="/runtime/_systemjs/artdialog/skins/aero.css" /> <script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artTemplate/artTemplate.js"></script><script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artTemplate/artTemplate-plugin.js"></script><script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artTemplate/template-native.js"></script>
+    <script src="<?php echo $this->getWebViewPath()."javascript/mui.js";?>"></script>
     <script src="<?php echo $this->getWebViewPath()."javascript/common.js";?>"></script>
     <script src='<?php echo $this->getWebViewPath()."javascript/site.js";?>'></script>
     <script src='<?php echo $this->getWebViewPath()."javascript/mobile.js";?>'></script>
     <link rel="stylesheet" href="<?php echo $this->getWebSkinPath()."style/style.css";?>">
+    <!--<link rel="stylesheet" href="<?php echo $this->getWebSkinPath()."css/mui.css";?>">-->
 </head>
+
 
 <body>
     <!-- 顶部通栏 -->
@@ -41,93 +44,109 @@
     <!-- 引入内页 -->
     
 <div id="pageInfo" data-title="购物车"></div>
-<?php if($this->count == 0){?>
+<div id="shopcarContainer">
+
+</div>
+
 <!-- 无商品显示 -->
-<section class="nodata">购物车中空空如也哦~</section>
-<?php }else{?>
+
+
 <!-- 优惠信息 -->
 <!--<section class="cart_prompt" style="display:none" id="cart_prompt">-->
 	<!--<h4>恭喜，您的订单已经满足了以下优惠活动！</h4>-->
 	<!--<ol></ol>-->
 <!--</section>-->
 
-<!--促销模板-->
-<script type="text/html" id="promotionTemplate">
-	<li><%=item['plan']%>，<%=item['info']%></li>
+
+<script type="text/html" id="shopCarTemplate">
+	<%if(goodsList.length==0){%>
+	<!--如果没有收货地址-->
+	<section class="nodata">购物车中空空如也哦~</section>
+	<%}else{%>
+	<!-- 商品列表 -->
+	<section class="cart_list">
+		<ul>
+			<% for(var i=0; i<goodsList.length; i++){%>
+			<% var product =JSONstringify(goodsList[i]) %>
+			<li>
+				<div class="cart_list_goods">
+					<div class="cart_list_photo" onclick="gourl('<?php echo IUrl::creatUrl("/site/products/id/".$item['goods_id']."");?>')">
+						<img src="<%=goodsList[i].img%>" alt="<?php echo isset($item['name'])?$item['name']:"";?>">
+					</div>
+					<div class="cart_list_info">
+						<h3 class="cart_list_info_title"><%=goodsList[i].name%></h3>
+						<p class="cart_list_info_info">
+						</p>
+						<em class="cart_list_info_price">单价：￥<%=goodsList[i].sell_price%></em>
+					</div>
+				</div>
+				<del class="del" onclick='javascript:removeCartByJSON(<%=product%>);'>删除</del>
+				<div class="goods_num_adjust">
+					<span onclick='cart_reduce(<%=product%>);'>-</span>
+					<input type="text" onchange='cartCount(<%=product%>);' id="count_<%=goodsList[i].goods_id%>_<%=goodsList[i].product_id%>" value="<%=goodsList[i].count%>">
+					<span onclick='cart_increase(<%=product%>);'>+</span>
+				</div>
+				<div class="count">小结：￥<span id="sum_<%=goodsList[i].goods_id%>_<%=goodsList[i].product_id%"><%=goodsList[i].sum%></span></div>
+			</li>
+			<%}%>
+		</ul>
+	</section>
+	<!-- 统计信息 -->
+	<section class="cart_count">
+		<h4>购物车统计</h4>
+		<table>
+			<tr>
+				<th>总重量</th>
+				<th>总金额</th>
+				<th>商品优惠</th>
+				<th>促销优惠</th>
+			</tr>
+			<tr>
+				<td><span id='weight'><%=weight%></span>g</td>
+				<td>￥<span id='origin_price'><%=sum%></span></td>
+				<td>￥<span id='discount_price'><%=reduce%></span></td>
+				<td>￥<span id='promotion_price'><%=proReduce%></span></td>
+			</tr>
+		</table>
+	</section>
+
+	<footer class="cart_footer">
+		<div class="cart_footer_fixed">
+			<div class="buy btn_pay" id="btn_pay" onclick="gourl('<?php echo IUrl::creatUrl("/simple/cart2");?>')">
+				去结算
+			</div>
+			<div class="count">
+				<span>合计:</span>
+				<em>￥<i id='sum_price'><%=final_sum%></i></em>
+				<u>不含运费</u>
+			</div>
+		</div>
+	</footer>
+	<%}%>
 </script>
-
-<!-- 商品列表 -->
-<section class="cart_list">
-	<ul>
-		<?php foreach($this->goodsList as $key => $item){?>
-		<li>
-			<div class="cart_list_goods">
-				<div class="cart_list_photo" onclick="gourl('<?php echo IUrl::creatUrl("/site/products/id/".$item['goods_id']."");?>')">
-					<img src="<?php echo IUrl::creatUrl("/pic/thumb/img/".$item['img']."/w/80/h/80");?>" alt="<?php echo isset($item['name'])?$item['name']:"";?>">
-				</div>
-				<div class="cart_list_info">
-					<h3 class="cart_list_info_title"><?php echo isset($item['name'])?$item['name']:"";?></h3>
-					<p class="cart_list_info_info">
-						<?php if(isset($item['spec_array'])){?> <?php $spec_array=Block::show_spec($item['spec_array']);?>
-						<?php foreach($spec_array as $specName => $specValue){?>
-						<?php echo isset($specName)?$specName:"";?>：<?php echo isset($specValue)?$specValue:"";?>&nbsp;
-						<?php }?>
-						<?php }else{?>
-						祝您购物愉快!
-						<?php }?>
-					</p>
-					<em class="cart_list_info_price">单价：￥<?php echo isset($item['sell_price'])?$item['sell_price']:"";?></em>
-				</div>
-			</div>
-			<?php $item_json = JSON::encode($item)?>
-			<del class="del" onclick='javascript:removeCartByJSON(<?php echo isset($item_json)?$item_json:"";?>);'>删除</del>
-			<div class="goods_num_adjust">
-				<span onclick='cart_reduce(<?php echo isset($item_json)?$item_json:"";?>);'>-</span>
-				<input type='text' onchange='cartCount(<?php echo isset($item_json)?$item_json:"";?>);' id="count_<?php echo isset($item['goods_id'])?$item['goods_id']:"";?>_<?php echo isset($item['product_id'])?$item['product_id']:"";?>" value="<?php echo isset($item['count'])?$item['count']:"";?>">
-				<span onclick='cart_increase(<?php echo isset($item_json)?$item_json:"";?>);'>+</span>
-			</div>
-			<div class="count">小结：￥<span id="sum_<?php echo isset($item['goods_id'])?$item['goods_id']:"";?>_<?php echo isset($item['product_id'])?$item['product_id']:"";?>"><?php echo isset($item['sum'])?$item['sum']:"";?></span></div>
-		</li>
-		<?php }?>
-	</ul>
-</section>
-<!-- 统计信息 -->
-<section class="cart_count">
-	<h4>购物车统计</h4>
-	<table>
-		<tr>
-			<th>总重量</th>
-			<th>总金额</th>
-			<th>商品优惠</th>
-			<th>促销优惠</th>
-		</tr>
-		<tr>
-			<td><span id='weight'><?php echo $this->weight;?></span>g</td>
-			<td>￥<span id='origin_price'><?php echo $this->sum;?></span></td>
-			<td>￥<span id='discount_price'><?php echo $this->reduce;?></span></td>
-			<td>￥<span id='promotion_price'><?php echo $this->proReduce;?></span></td>
-		</tr>
-	</table>
-</section>
-
-<footer class="cart_footer">
-	<div class="cart_footer_fixed">
-		<div class="buy btn_pay" id="btn_pay" onclick="gourl('<?php echo IUrl::creatUrl("/simple/cart2");?>')">
-			去结算
-		</div>
-		<div class="count">
-			<span>合计:</span>
-			<em>￥<i id='sum_price'><?php echo $this->final_sum;?></i></em>
-			<u>不含运费</u>
-		</div>
-	</div>
-</footer>
-<?php }?>
 <script>
+	//定义template方法
+	template.helper('JSONstringify', function(obj){
+		return JSON.stringify(obj);
+	});
+	mui.init();
+	mui.ajax('index.php?controller=apic&action=cart',{
+		dataType:'json',//服务器返回json格式数据
+		type:'post',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		headers:{'Content-Type':'application/json'},
+		success:function(data){
+			var html = template('shopCarTemplate',data);
+			document.getElementById("shopcarContainer").innerHTML = html;
+		},
+		error:function(xhr,type,errorThrown){
+			//异常处理；
+			console.log(type);
+		}
+	});
 $(function(){
 	// 隐藏底部导航
 	hideNav();
-
 //	<?php if($this->promotion){?>
 //	<?php foreach($this->promotion as $key => $item){?>
 //	$('#cart_prompt ol').append( template.render('promotionTemplate',{"item":<?php echo JSON::encode($item);?>}) );

@@ -279,7 +279,7 @@ function productClass(goods_id,user_id,promo,active_id)
 					specJSON.push({
 						"id":$(this).attr('specId'),
 						"type":$(this).attr('specData').split("/").length > 3 ? 2 : 1,
-						"value":encodeURIComponent($(this).attr('specData')),
+						"value":$(this).attr('specData'),
 						"name":$(this).attr('specName')
 					});
 				});

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>九猫首页</title>
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/shopcar.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
+</head>
+<body>
+<div id="loading">
+	<div class="spinner">
+		<div class="spinner-container container1">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container2">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container3">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+	</div>
+</div>
+<!--loading页结束-->
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">订单详情</h1>
+</header>
+<div class="mui-content">
+	<div class="orderdetailitem">
+		<span class="state">已取消</span>
+		<span class="mark">订单编号:147626831772281</span>
+		<span class="price">实付金额 <span>￥31.33</span></span>
+		<span class="time">下单时间：2016-10-12 18:31:58</span>
+	</div>
+	<div class="orderdetailitem">
+		<div class="address">
+			<div class="user">
+				<span>哈哈哈</span>
+				<span>18823608940</span>
+			</div>
+			<span class="addr">浙江省杭州市渔船正老地方反复反复</span>
+		</div>
+	</div>
+	<div class="orderdetailitem"></div>
+	<div class="orderdetailitem"></div>
+	<div class="orderdetailitem"></div>
+	<div class="orderdetailitem"></div>
+	<div class="orderdetailitem"></div>
+	<div class="orderdetailitem"></div>
+	<div class="orderdetailitem"></div>
+	<div class="orderdetailitem"></div>
+	<div class="orderdetailitem"></div>
+	<div class="orderdetailitem"></div>
+
+</div>
+
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/template-native.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/javascript/mui.pullToRefresh.js"></script>
+<script src="/views/mobile/javascript/mui.pullToRefresh.material.js"></script>
+<script>
+	$(window).load(function(){
+		$("#loading").fadeOut(300);
+	})
+	//	接收页面传过来的状态值
+	var Request = new Object();
+	Request = GetRequest();
+	var statusOrder=Request["status"];
+	//	模拟高亮画面
+
+	//	获取url传递过来的参数
+	function GetRequest() {
+		var url = location.search; //获取url中"?"符后的字串
+		var theRequest = new Object();
+		if (url.indexOf("?") != -1) {
+			var str = url.substr(1);
+			strs = str.split("&");
+			for(var i = 0; i < strs.length; i ++) {
+				theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+			}
+		}
+		return theRequest;
+	}
+</script>
+</body>
+</html>

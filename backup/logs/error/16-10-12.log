@@ -1,0 +1,1473 @@
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½È·ï¿½ğ¸´»ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ·ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ê§ï¿½Ü¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 08:45:57
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»úÃ»ÓĞ·´Ó¦£¬Á¬½Ó³¢ÊÔÊ§°Ü¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 08:45:57
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½È·ï¿½ğ¸´»ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ·ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ê§ï¿½Ü¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 08:46:11
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»úÃ»ÓĞ·´Ó¦£¬Á¬½Ó³¢ÊÔÊ§°Ü¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 08:46:11
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½È·ï¿½ğ¸´»ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ·ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ê§ï¿½Ü¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 08:48:01
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»úÃ»ÓĞ·´Ó¦£¬Á¬½Ó³¢ÊÔÊ§°Ü¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 08:48:01
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½È·ï¿½ğ¸´»ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ·ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ê§ï¿½Ü¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 08:48:03
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»úÃ»ÓĞ·´Ó¦£¬Á¬½Ó³¢ÊÔÊ§°Ü¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 08:48:03
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½È·ï¿½ğ¸´»ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ·ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ê§ï¿½Ü¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 08:48:04
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»úÃ»ÓĞ·´Ó¦£¬Á¬½Ó³¢ÊÔÊ§°Ü¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 08:48:04
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½È·ï¿½ğ¸´»ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ·ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ê§ï¿½Ü¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 08:50:06
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»úÃ»ÓĞ·´Ó¦£¬Á¬½Ó³¢ÊÔÊ§°Ü¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 08:50:06
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½È·ï¿½ğ¸´»ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ·ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ê§ï¿½Ü¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 08:50:07
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»úÃ»ÓĞ·´Ó¦£¬Á¬½Ó³¢ÊÔÊ§°Ü¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 08:50:07
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½È·ï¿½ğ¸´»ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ·ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ê§ï¿½Ü¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 08:50:10
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»úÃ»ÓĞ·´Ó¦£¬Á¬½Ó³¢ÊÔÊ§°Ü¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 08:50:10
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½È·ï¿½ğ¸´»ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ·ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ê§ï¿½Ü¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 08:54:30
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»úÃ»ÓĞ·´Ó¦£¬Á¬½Ó³¢ÊÔÊ§°Ü¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 08:54:30
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½È·ï¿½ğ¸´»ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ·ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ê§ï¿½Ü¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 08:54:32
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»úÃ»ÓĞ·´Ó¦£¬Á¬½Ó³¢ÊÔÊ§°Ü¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 08:54:32
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½È·ï¿½ğ¸´»ï¿½Óµï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ·ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ê§ï¿½Ü¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 08:54:34
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»úÃ»ÓĞ·´Ó¦£¬Á¬½Ó³¢ÊÔÊ§°Ü¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 08:54:34
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:14:19
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:14:19
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:14:41
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:14:41
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:14:42
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:14:42
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:14:43
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:14:43
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:15:04
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:15:04
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:16:17
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:16:17
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:16:19
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:16:19
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:16:33
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:16:33
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:16:36
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:16:36
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:16:39
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:16:39
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:16:52
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:16:52
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:20:17
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:20:17
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:20:17
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:20:17
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:23:44
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:23:44
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:29:28
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:29:28
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:29:37
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:29:37
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:29:40
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:29:40
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:29:43
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:29:43
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:29:58
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:29:58
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:36:30
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:36:30
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:36:37
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:36:37
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:38:22
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:38:22
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:38:25
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:38:25
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: mysqli::mysqli(): (HY000/2002): ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½Ş·ï¿½ï¿½ï¿½ï¿½Ó¡ï¿½
+
+errorFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+errorLine: 30
+errorCode: 2
+errorTime: 2016-10-12 09:38:28
+#0 IWEB_PATH/lib/db/driver/mysqli_class.php(30): mysqli->mysqli(192.168.10.180,root,123456,jmj_dev,32772)
+#1 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#2 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#3 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#4 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#5 : plugin::onCreateApp()
+#6 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#7 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#8 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+excepInfo: ÓÉÓÚÄ¿±ê¼ÆËã»ú»ı¼«¾Ü¾ø£¬ÎŞ·¨Á¬½Ó¡£
+
+excepFile: IWEB_PATH/lib/db/driver/mysqli_class.php
+excepLine: 33
+excepCode: 1000
+excepTime: 2016-10-12 09:38:28
+#0 IWEB_PATH/lib/db/db_class.php(107): IMysqli->connect()
+#1 IWEB_PATH/lib/web/model/model_class.php(200): IDB->query(SELECT class_name FROM iwebshop_plugin WHERE is_open = 1 ORDER BY sort asc limit 50000)
+#2 IWEB_PATH/classes/plugin.php(23): IModel->query(is_open = 1,class_name,sort asc)
+#3 IWEB_PATH/classes/plugin.php(196): plugin::init()
+#4 : plugin::onCreateApp()
+#5 IWEB_PATH/lib/core/interceptor_class.php(114): call_user_func()
+#6 IWEB_PATH/lib/core/application_class.php(93): IInterceptor::run(onCreateApp)
+#7 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-12 09:55:51
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: telphone
+errorFile: IWEB_PATH/controllers/apic.php
+errorLine: 185
+errorCode: 8
+errorTime: 2016-10-12 09:56:53
+#0 : Apic->addressadd()
+#1 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#2 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#3 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(addressadd)
+#4 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#5 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: telphone
+errorFile: IWEB_PATH/controllers/apic.php
+errorLine: 185
+errorCode: 8
+errorTime: 2016-10-12 09:57:14
+#0 : Apic->addressadd()
+#1 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#2 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#3 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(addressadd)
+#4 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#5 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-12 09:58:38
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-12 09:58:42
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-12 13:33:33
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-12 13:34:41
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-12 13:34:43
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-12 13:34:52
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-12 13:37:36
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-12 13:43:19
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-12 13:48:55
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-12 13:52:06
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+

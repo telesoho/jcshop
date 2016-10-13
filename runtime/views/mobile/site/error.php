@@ -10,11 +10,14 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="apple-touch-icon-precomposed" href="<?php echo $this->getWebSkinPath()."image/logo.gif";?>">
     <script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/jquery/jquery-1.12.4.min.js"></script> <script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/form/form.js"></script> <script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/autovalidate/validate.js"></script><link rel="stylesheet" type="text/css" href="/runtime/_systemjs/autovalidate/style.css" /> <script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artdialog/artDialog.js"></script><script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artdialog/plugins/iframeTools.js"></script><link rel="stylesheet" type="text/css" href="/runtime/_systemjs/artdialog/skins/aero.css" /> <script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artTemplate/artTemplate.js"></script><script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artTemplate/artTemplate-plugin.js"></script><script type="text/javascript" charset="UTF-8" src="/runtime/_systemjs/artTemplate/template-native.js"></script>
+    <script src="<?php echo $this->getWebViewPath()."javascript/mui.js";?>"></script>
     <script src="<?php echo $this->getWebViewPath()."javascript/common.js";?>"></script>
     <script src='<?php echo $this->getWebViewPath()."javascript/site.js";?>'></script>
     <script src='<?php echo $this->getWebViewPath()."javascript/mobile.js";?>'></script>
     <link rel="stylesheet" href="<?php echo $this->getWebSkinPath()."style/style.css";?>">
+    <!--<link rel="stylesheet" href="<?php echo $this->getWebSkinPath()."css/mui.css";?>">-->
 </head>
+
 
 <body>
     <!-- 顶部通栏 -->

@@ -1,25 +1,282 @@
-<div id="pageInfo" data-title="我的订单"></div>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>九猫首页</title>
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/shopcar.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
+</head>
+<body>
+<div id="loading">
+	<div class="spinner">
+		<div class="spinner-container container1">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container2">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container3">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+	</div>
+</div>
+<!--loading页结束-->
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">订单一览</h1>
+</header>
+<!--订单详情页面-->
+<div class="mui-content" style="margin-top:51px">
+	<div id="slider" class="mui-slider mui-fullscreen">
+		<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+			<div class="mui-scroll">
+				<a class="mui-control-item  mui-control-item0 mui-active" href="#itemmobile0">
+					全部订单
+				</a>
+				<a class="mui-control-item mui-control-item1" href="#itemmobile1">
+					待付款
+				</a>
+				<a class="mui-control-item mui-control-item2" href="#itemmobile2">
+					待发货
+				</a>
+				<a class="mui-control-item mui-control-item3" href="#itemmobile3">
+					待收货
+				</a>
+				<a class="mui-control-item mui-control-item4" href="#itemmobile4">
+					已完成订单
+				</a>
+			</div>
+		</div>
+		<div class="mui-slider-group">
+			<div id="itemmobile0" class="mui-slider-item mui-control-content mui-active">
+				<div id="scroll1" class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<div class="mui-table-view">
+							<div class="mui-table-view-cell order-menu">
+								<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
+									<div class="order-top">
+										<span class="top1">订单编号：1222344455555544554</span>
+										<span class="mui-pull-right Qorder">已取消</span>
+									</div>
+									<div class="order-img">
+										<img src="/views/mobile/skin/default/image/ware1.jpg" alt="">
+										<img src="/views/mobile/skin/default/image/ware2.jpg" alt="">
+									</div>
+								</a>
+								<div class="order-bottom">
+									<span>订单金额：<span style="color:#e53e42">388元</span></span>
+								</div>
+							</div>
+						</div>
+						<div class="noOrder">
+							<img src="/views/mobile/skin/default/image/havenomore.png" alt="">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="itemmobile1" class="mui-slider-item mui-control-content ">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<div class="mui-table-view">
+							<div class="mui-table-view-cell order-menu">
+								<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
+								<div class="order-top">
+									<span class="top1">订单编号：1222344455555544554</span>
+									<span class="mui-pull-right Qorder">待支付</span>
+								</div>
+								<div class="order-img">
+									<img src="/views/mobile/skin/default/image/ware1.jpg" alt="">
+									<img src="/views/mobile/skin/default/image/ware2.jpg" alt="">
+								</div>
+								</a>
+								<div class="order-bottom">
+									<span>订单金额：<span style="color:#e53e42">388元</span></span>
+									<span class="mui-pull-right orderToPay">去支付</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="itemmobile2" class="mui-slider-item mui-control-content">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<div class="mui-table-view">
+							<div class="mui-table-view-cell order-menu">
+								<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
+								<div class="order-top">
+									<span class="top1">订单编号：1222344455555544554</span>
+									<span class="mui-pull-right Qorder">待发货</span>
+								</div>
+								<div class="order-img">
+									<img src="/views/mobile/skin/default/image/ware1.jpg" alt="">
+									<img src="/views/mobile/skin/default/image/ware2.jpg" alt="">
+								</div>
+								</a>
+								<div class="order-bottom">
+									<span>订单金额：<span style="color:#e53e42">388元</span></span>
+									<span class="mui-pull-right orderToPay">申请退款</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="itemmobile3" class="mui-slider-item mui-control-content">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<div class="mui-table-view">
+							<div class="mui-table-view-cell order-menu">
+								<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
+								<div class="order-top">
+									<span class="top1">订单编号：1222344455555544554</span>
+									<span class="mui-pull-right Qorder">待收货</span>
+								</div>
+								<div class="order-img">
+									<img src="/views/mobile/skin/default/image/ware1.jpg" alt="">
+									<img src="/views/mobile/skin/default/image/ware2.jpg" alt="">
+								</div>
+								</a>
+								<div class="order-bottom">
+									<span>订单金额：<span style="color:#e53e42">388元</span></span>
+									<span class="mui-pull-right orderToPay">查看物流</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="itemmobile4" class="mui-slider-item mui-control-content">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<div class="mui-table-view">
+							<!--<div class="mui-table-view-cell">-->
+							<!--</div>-->
+						</div>
+						<div class="haveNoOrder">
+							<div>
+								<img src="/views/mobile/skin/default/image/bolo_none.jpg" alt="">
+								<div>没有已完成订单</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
-<section class="user_order">
-	{set:$user_id = $this->user['user_id']}
-    {set:$queryOrderList = Api::run('getOrderList',$user_id)}
-    {set:$orderList = $queryOrderList->find()}
-    {if:$orderList}
-	<ul class="user_list">
-		{foreach:items = $orderList}
-        <li>
-			<i class="icon-chevron-right"></i>
-			<a href="{url:/ucenter/order_detail/id/$item[id]}">订单号：{$item['order_no']}</a>
-		</li>
-        {/foreach}
-	</ul>
-	{$queryOrderList->getPageBar()}
-	{else:}
-    <div class="nodata">当前暂无数据</div>
-    {/if}
-</section>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/template-native.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/javascript/mui.pullToRefresh.js"></script>
+<script src="/views/mobile/javascript/mui.pullToRefresh.material.js"></script>
 <script>
-$(function(){
-	hideNav()
-})
+	$(window).load(function(){
+		$("#loading").fadeOut(300);
+	})
+//	接收页面传过来的状态值
+	var Request = new Object();
+	Request = GetRequest();
+	var statusOrder=Request["status"];
+//	模拟高亮画面
+	$('.mui-control-item').removeClass('mui-active')
+	$('.mui-control-item'+statusOrder).addClass('mui-active');
+	$('.mui-slider-item').removeClass('mui-active')
+	$('#itemmobile'+statusOrder).addClass('mui-active');
+//	template.helper('act', function(states) {
+//		if(statusOrder==states){
+//				return 'mui-active';
+//		}else{
+//				return '';
+//		}
+//	});
+
+	mui.init();
+	mui('body').on('tap','.orderToDetaile',function(){
+		document.location.href=this.href;
+	});
+	mui('body').on('tap','.orderToPay',function(){
+		alert(111)
+	});
+
+	(function($) {
+		//阻尼系数
+		var deceleration = mui.os.ios?0.003:0.0009;
+		$('.mui-scroll-wrapper').scroll({
+			bounce: false,
+			indicators: true, //是否显示滚动条
+			deceleration:deceleration
+		});
+		$.ready(function() {
+			//循环初始化所有下拉刷新，上拉加载。
+			$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+				$(pullRefreshEl).pullToRefresh({
+					down: {
+						callback: function() {
+							var self = this;
+							setTimeout(function() {
+								var ul = self.element.querySelector('.mui-table-view');
+								ul.insertBefore(createFragment(ul, index, 10, true), ul.firstChild);
+								self.endPullDownToRefresh();
+							}, 1000);
+						}
+					},
+					up: {
+						callback: function() {
+							var self = this;
+							setTimeout(function(){
+								var div = self.element.querySelector('.mui-table-view');
+								div.appendChild(createFragment(div, index, 5));
+								self.endPullUpToRefresh();
+							}, 1000);
+						}
+					}
+				});
+			});
+			var createFragment = function(div, index, count, reverse) {
+				var length = div.querySelectorAll('li').length;
+				var fragment = document.createDocumentFragment();
+				var li;
+				for (var i = 0; i < count; i++) {
+					li = document.createElement('li');
+					li.className = 'mui-table-view-cell';
+					li.innerHTML = '第' + (index + 1) + '个选项卡子项-' + (length + (reverse ? (count - i) : (i + 1)));
+					fragment.appendChild(li);
+				}
+				return fragment;
+			};
+		});
+	})(mui)
+//	获取url传递过来的参数
+	function GetRequest() {
+		var url = location.search; //获取url中"?"符后的字串
+		var theRequest = new Object();
+		if (url.indexOf("?") != -1) {
+			var str = url.substr(1);
+			strs = str.split("&");
+			for(var i = 0; i < strs.length; i ++) {
+				theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+			}
+		}
+		return theRequest;
+	}
 </script>
+</body>
+</html>
