@@ -297,7 +297,7 @@
 	display:block;
 	width:90%;
 	margin:0.1rem auto;
-	height:0.55rem;
+	height:0.7rem;
 	background:#fff;
 	border-radius:0.1rem;
 }
@@ -305,7 +305,7 @@
 	width:90%;
 	margin:0.1rem auto;
 	font-size:0.13rem;
-	padding-bottom:0.5rem;
+	padding-bottom:0.2rem;
 	border-bottom:0.01rem solid #dcdcdc;
 }
 .addressListMenuEdit a{

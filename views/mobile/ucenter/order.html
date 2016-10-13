@@ -217,6 +217,13 @@
 	});
 
 	(function($) {
+		var pageNum={
+			pageNum0:0,
+			pageNum1:0,
+			pageNum2:0,
+			pageNum3:0,
+			pageNum4:0
+		}
 		//阻尼系数
 		var deceleration = mui.os.ios?0.003:0.0009;
 		$('.mui-scroll-wrapper').scroll({
@@ -232,8 +239,6 @@
 						callback: function() {
 							var self = this;
 							setTimeout(function() {
-								var ul = self.element.querySelector('.mui-table-view');
-								ul.insertBefore(createFragment(ul, index, 10, true), ul.firstChild);
 								self.endPullDownToRefresh();
 							}, 1000);
 						}
@@ -243,6 +248,7 @@
 							var self = this;
 							setTimeout(function(){
 								var div = self.element.querySelector('.mui-table-view');
+								alert(++pageNum['pageNum'+index]);
 								div.appendChild(createFragment(div, index, 5));
 								self.endPullUpToRefresh();
 							}, 1000);
@@ -250,7 +256,7 @@
 					}
 				});
 			});
-			var createFragment = function(div, index, count, reverse) {
+			var createFragment = function(index, index, count, reverse) {
 				var length = div.querySelectorAll('li').length;
 				var fragment = document.createDocumentFragment();
 				var li;
