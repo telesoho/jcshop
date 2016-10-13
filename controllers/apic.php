@@ -346,13 +346,13 @@ class Apic extends IController
 //                case 'state0':
 //                    $data[$k][$key]['text'] = '';
                 case 'state1':
-                    $data[$k][$key]['text'] = '取消订单';
-                case 'state2':
-                    $data[$k][$key]['text'] = '查看物流';
-                case 'state3':
-                    $data[$k][$key]['text'] = '删除订单';
-                case 'state4':
                     $data[$k][$key]['text'] = '去支付';
+                case 'state2':
+                    $data[$k][$key]['text'] = '取消订单';
+                case 'state3':
+                    $data[$k][$key]['text'] = '查看物流';
+                case 'state4':
+                    $data[$k][$key]['text'] = '删除订单';
             }
         }
         $relation = array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流');
