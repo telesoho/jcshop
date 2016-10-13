@@ -64,7 +64,7 @@
 	<!--如果没有收货地址-->
 	<a href="{url:/simple/addaddress}" class="addAddr">添加收货地址</a>
 	<%}else{%>
-	<a href="{url:/simple/addresslist}" class="editAddr">
+	<a href="{url:/simple/addresslist}&rev=cart_order" class="editAddr">
 	<span class="name"><%=addressList[0].accept_name%></span>
 	<span class="phone"><%=addressList[0].mobile%></span>
 	<span class="addr"><%=addressList[0].address%></span>

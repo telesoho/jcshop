@@ -60,18 +60,18 @@
     <div class="addressListMenu">
         <% for(var i=0; i<data.length; i++){%>
         <%if(data[i].is_default==1){%>
-        <a class="addressListMenu-content menu-active">
+        <div class="addressListMenu-content menu-active" onclick=changeDefault1(<%=data[i].id%>)>
             <%}else{%>
-            <a class="addressListMenu-content">
+            <div class="addressListMenu-content" onclick=changeDefault1(<%=data[i].id%>)>
                 <%}%>
                 <div class="addressListMenu-t">
                     <span class="content1"><%=data[i].accept_name%></span>
                     <span class="mui-pull-right content2"><%=data[i].mobile%></span>
                 </div>
                 <div>
-                    <span class="content3"><%=data[i].address%></span>
+                    <span class="content3"><%=data[i].province_val%><%=data[i].city_val%><%=data[i].area_val%><%=data[i].address%></span>
                 </div>
-            </a>
+            </div>
             <div class="addressListMenuEdit">
                 <%if(data[i].is_default==1){%>
                 <span><span class="mui-icon mui-icon-person act"></span>默认地址</span>
@@ -124,6 +124,10 @@
 
 
 <script>
+    var Request = new Object();
+    Request = GetRequest();
+    var statusOrder=Request["rev"];
+    //	模拟高亮画面
     var submitaddr1,pro,cit,are;
     $(window).load(function(){
         $("#loading").fadeOut(300);
@@ -235,16 +239,52 @@
             dataType:'json',//服务器返回json格式数据
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
-//            headers:{'Content-Type':'application/json'},
             success:function(data){
                 console.log(data);
-//                window.location.reload();
+                window.location.reload();
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
                 console.log(type);
             }
         });
+    }
+    function changeDefault1(id){
+        var data1=id;
+        mui.ajax('index.php?controller=apic&action=addressadd',{
+            data:{
+                id:data1,
+                is_default:1
+            },
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+                if(statusOrder){
+                    window.location.href="{url:/simple/cart2}";
+                }else{
+                    window.location.reload();
+                }
+
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+    //	获取url传递过来的参数
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
     }
 </script>
 </body>
