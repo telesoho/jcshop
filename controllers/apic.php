@@ -163,7 +163,7 @@ class Apic extends IController
         echo json_encode($addressList);
         exit();
     }
-    //添加地址ajax
+    //添加和编辑地址
     function addressadd()
     {
         $id          = IFilter::act(IReq::get('id'),'int');
@@ -177,12 +177,31 @@ class Apic extends IController
         $mobile      = IFilter::act(IReq::get('mobile'));
         $user_id     = $this->user['user_id'];
 
+
+        //编辑默认地址
+        $is_default = IFilter::act(IReq::get('is_default'),'int');
+        if (isset($is_default) && !empty($is_default)){
+            if (empty($this->user['user_id'])){
+                header("Content-type: application/json");
+                echo json_encode(array('msg'=>$this->user['user_id'] . '用户未登录'));
+                exit();
+            }
+            
+            $model = new IModel('address');
+            $model->setData(array('is_default' => 0));
+            $model->update("user_id = ".$this->user['user_id']);
+            $model->setData(array('is_default' => '1'));
+            $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
+            die(JSON::encode( array('ret'=> true) ));
+        }
+
+
         //整合的数据
         $sqlData = array(
             'user_id'     => $user_id,
             'accept_name' => $accept_name,
             'zip'         => $zip,
-            'telphone'    => $telphone,
+//            'telphone'    => $telphone,
             'province'    => $province,
             'city'        => $city,
             'area'        => $area,
@@ -218,7 +237,7 @@ class Apic extends IController
         //访客地址保存
         else
         {
-            ISafe::set("address",$sqlData);
+//            ISafe::set("address",$sqlData);
         }
 
         $areaList = area::name($province,$city,$area);
@@ -227,12 +246,7 @@ class Apic extends IController
         $sqlData['area_val']     = $areaList[$area];
         $result = array('data' => $sqlData);
 
-        $model = new IModel('address');
-        $model->setData(array('is_default' => 0));
-        $model->update("user_id = ".$this->user['user_id']);
-        $model->setData(array('is_default' => '1'));
-        $id = $result['data']['id'];
-        $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
+
 
         header("Content-type: application/json");
         echo json_encode($result);
