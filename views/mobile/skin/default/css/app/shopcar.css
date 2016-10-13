@@ -467,7 +467,7 @@
 .haveNoOrder img{
 	width:1rem !important;
 }
-.orderToPay{
+.orderToDo{
 	display:inline-block;
 	width:1rem;
 	margin-top:0.1rem;
