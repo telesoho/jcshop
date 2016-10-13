@@ -126,17 +126,18 @@
 	<div class="mui-table-view-cell order-menu">
 		<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
 			<div class="order-top">
-				<span class="top1">订单编号：1222344455555544554</span>
-				<span class="mui-pull-right Qorder">待收货</span>
+				<span class="top1">订单编号：<%=order.order_no%></span>
+				<span class="mui-pull-right Qorder"><%=order.orderStatusText%></span>
 			</div>
 			<div class="order-img">
-				<img src="/views/mobile/skin/default/image/ware1.jpg" alt="">
-				<img src="/views/mobile/skin/default/image/ware2.jpg" alt="">
+				<% for(var j=0; j<order.goodslist.length; j++){%>
+				<img src="<%=order.goodslist[j].img%>" alt="">
+				<%}%>
 			</div>
 		</a>
 		<div class="order-bottom">
-			<span>订单金额：<span style="color:#e53e42">388元</span></span>
-			<span class="mui-pull-right orderToDo">查看物流</span>
+			<span>订单金额：<span style="color:#e53e42"><%=order.order_amount%>元</span></span>
+			<span class="mui-pull-right orderToDo"><%=order.text%></span>
 		</div>
 	</div>
 	<%}%>
