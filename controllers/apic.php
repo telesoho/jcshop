@@ -343,7 +343,11 @@ class Apic extends IController
                 $data[$k][$key]['goodslist'] = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
             }
         }
-
+        $data['state0']['text'] = '去支付';
+        $data['state1']['text'] = '取消订单';
+        $data['state2']['text'] = '查看物流';
+        $data['state3']['text'] = '删除订单';
+        $data['state4']['text'] = '去支付';
 //        var_dump($data);
         header("Content-type: application/json");
         echo json_encode($data);
