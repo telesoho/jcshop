@@ -67,7 +67,7 @@
 			<div id="itemmobile0" class="mui-slider-item mui-control-content mui-active">
 				<div id="scroll1" class="mui-scroll-wrapper">
 					<div class="mui-scroll">
-						<div class="mui-table-view">
+						<div class="mui-table-view" id="main_panel0">
 							<div class="mui-table-view-cell order-menu">
 								<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
 									<div class="order-top">
@@ -93,7 +93,7 @@
 			<div id="itemmobile1" class="mui-slider-item mui-control-content ">
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
-						<div class="mui-table-view">
+						<div class="mui-table-view" id="main_panel1">
 							<div class="mui-table-view-cell order-menu">
 								<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
 								<div class="order-top">
@@ -117,8 +117,8 @@
 			<div id="itemmobile2" class="mui-slider-item mui-control-content">
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
-						<div class="mui-table-view">
-							<div class="mui-table-view-cell order-menu">
+						<div class="mui-table-view" id="main_panel2">
+							<div class="mui-table-view-cell order-menu" >
 								<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
 								<div class="order-top">
 									<span class="top1">订单编号：1222344455555544554</span>
@@ -141,7 +141,7 @@
 			<div id="itemmobile3" class="mui-slider-item mui-control-content">
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
-						<div class="mui-table-view">
+						<div class="mui-table-view" id="main_panel3">
 
 						</div>
 					</div>
@@ -150,7 +150,7 @@
 			<div id="itemmobile4" class="mui-slider-item mui-control-content">
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
-						<div class="mui-table-view">
+						<div class="mui-table-view" id="main_panel4">
 							<!--<div class="mui-table-view-cell">-->
 							<!--</div>-->
 						</div>
@@ -202,13 +202,22 @@
 	$('.mui-control-item'+statusOrder).addClass('mui-active');
 	$('.mui-slider-item').removeClass('mui-active')
 	$('#itemmobile'+statusOrder).addClass('mui-active');
-//	template.helper('act', function(states) {
-//		if(statusOrder==states){
-//				return 'mui-active';
-//		}else{
-//				return '';
-//		}
-//	});
+//	ajax 请求
+	mui.ajax('index.php?controller=apic&action=order_list',{
+		dataType:'json',//服务器返回json格式数据
+		type:'get',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		success:function(data){
+			for(var i=0;i<5;i++){
+				$('#main_panel'+i).html(template('order-detail', data));
+			}
+		},
+		error:function(xhr,type,errorThrown){
+			//异常处理；
+			console.log(type);
+		}
+	});
+
 
 	mui.init();
 	mui('body').on('tap','.orderToDetaile',function(){
@@ -259,10 +268,23 @@
 				});
 			});
 			var createFragment = function(div, pageNum) {
-				var length = div.querySelectorAll('li').length;
 				var fragment = document.createDocumentFragment();
-				
-				return fragment;
+				//	ajax 请求
+				mui.ajax('index.php?controller=apic&action=order_list',{
+					dataType:'json',//服务器返回json格式数据
+					type:'get',//HTTP请求类型
+					timeout:10000,//超时时间设置为10秒；
+					success:function(data){
+						var html1 = template('test',data);
+						fragment.innerHTML = html1;
+						return fragment;
+					},
+					error:function(xhr,type,errorThrown){
+						//异常处理；
+						console.log(type);
+					}
+				});
+
 			};
 		});
 	})(mui)
