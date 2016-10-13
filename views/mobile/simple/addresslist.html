@@ -77,40 +77,42 @@
                 <span><span class="mui-icon mui-icon-person act"></span>默认地址</span>
                 <%}else{%>
                 <span onclick=changeDefault(<%=data[i].id%>)><span class="mui-icon mui-icon-person" ></span>默认地址</span>
-                <a href="" class="mui-pull-right del" ><span class="mui-icon mui-icon-trash"></span>删除</a>
+                <span href="" class="mui-pull-right  del" onclick=addressDel(<%=data[i].id%>) ><span class="mui-icon mui-icon-trash"></span>删除</span>
                 <%}%>
                 <a href="#modalid<%=data[i].id%>" class="mui-pull-right edit"><span class="mui-icon mui-icon-compose"></span>编辑</a>
-                <div id="modalid<%=data[i].id%>" class="mui-modal">
-                    <header class="mui-bar mui-bar-nav">
-                        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-                        <h1 class="mui-title">编辑地址</h1>
-                    </header>
-                    <div class="mui-content" style="height: 100%;">
-                        <div id="addressNew">
-                            <div class="title">请填写你的真实姓名，否则订单无法发出</div>
-                            <div class="mui-input-row">
-                                <input type="text" class="mui-input-clear" value="<%=data[i].accept_name%>" id="username" onblur=check()>
-                            </div>
-                            <div class="mui-input-row">
-                                <input type="hidden" class="mui-input-clear" value="<%=data[i].id%>" style="margin-bottom:2px;" id="addressid">
-                                <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" style="margin-bottom:2px;" id="userphone" onblur=checkPhone()>
-                                <input type="text" class="mui-input-clear" value="<%=data[i].province%>" style="margin-bottom:2px;" id="usercity" onfocus=checkcity()>
-                                <input type="text" class="mui-input-clear" value="<%=data[i].address%>" style="margin-bottom:2px;" id="useraddr" onblur=check()>
-                                <input type="text" class="mui-input-clear" value="<%=data[i].zip%>" style="margin-bottom:2px;" id="useryoubian" onblur=check()>
-                            </div>
-                        </div>
-
-                    </div>
-                    <footer>
-                        <div id="footer-fixed1">
-                            <div class="newAddrSub" style="text-align:center">
-                                <button id="submitaddr1" onclick="changeAddr();">完成</button>
-                            </div>
-                        </div>
-                    </footer>
-                </div>
             </div>
     </div>
+    </div>
+    <!--模态框-->
+    <div id="modalid<%=data[i].id%>" class="mui-modal">
+        <header class="mui-bar mui-bar-nav">
+            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+            <h1 class="mui-title">编辑地址</h1>
+        </header>
+        <div class="mui-content" style="height: 100%;">
+            <div id="addressNew">
+                <div class="title">请填写你的真实姓名，否则订单无法发出</div>
+                <div class="mui-input-row">
+                    <input type="text" class="mui-input-clear" value="<%=data[i].accept_name%>" id="username" onblur=check()>
+                </div>
+                <div class="mui-input-row">
+                    <input type="hidden" class="mui-input-clear" value="<%=data[i].id%>" style="margin-bottom:2px;" id="addressid">
+                    <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" style="margin-bottom:2px;" id="userphone" onblur=checkPhone()>
+                    <input type="text" class="mui-input-clear" value="<%=data[i].province_val%> <%=data[i].city_val%> <%=data[i].area_val%>"
+                           style="margin-bottom:2px;" id="usercity" onfocus=checkcity()>
+                    <input type="text" class="mui-input-clear" value="<%=data[i].address%>" style="margin-bottom:2px;" id="useraddr" onblur=check()>
+                    <input type="text" class="mui-input-clear" value="<%=data[i].zip%>" style="margin-bottom:2px;" id="useryoubian" onblur=check()>
+                </div>
+            </div>
+
+        </div>
+        <footer>
+            <div id="footer-fixed1">
+                <div class="newAddrSub" style="text-align:center">
+                    <button id="submitaddr1" onclick="changeAddr();">完成</button>
+                </div>
+            </div>
+        </footer>
     </div>
     <%}%>
 </script>
@@ -134,7 +136,7 @@
         //    跳转到新增收货地址页面
 
     })
-    mui.ajax('index.php?controller=apic&action=getaddresslist',{
+    mui.ajax('index.php?controller=apic&action=address_list',{
         dataType:'json',//服务器返回json格式数据
         type:'get',//HTTP请求类型
         timeout:10000,//超时时间设置为10秒；
@@ -197,7 +199,7 @@
             zip:useryoubian.value
         };
         var self=this;
-        mui.ajax('index.php?controller=apic&action=addressadd',{
+        mui.ajax('index.php?controller=apic&action=address_add',{
             data:addaddressInfo,
             dataType:'json',	// 服务器返回json格式数据
             type:'post',		// HTTP请求类型
@@ -231,7 +233,7 @@
     }
     function changeDefault(id){
         var data1=id;
-        mui.ajax('index.php?controller=apic&action=addressadd',{
+        mui.ajax('index.php?controller=apic&action=address_default',{
             data:{
                 id:data1,
                 is_default:1
@@ -251,7 +253,7 @@
     }
     function changeDefault1(id){
         var data1=id;
-        mui.ajax('index.php?controller=apic&action=addressadd',{
+        mui.ajax('index.php?controller=apic&action=address_default',{
             data:{
                 id:data1,
                 is_default:1
@@ -266,6 +268,24 @@
                     window.location.reload();
                 }
 
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+    function addressDel(id){
+        var data1=id;
+        mui.ajax('index.php?controller=apic&action=address_del',{
+            data:{
+                id:data1
+            },
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+                    window.location.reload();
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；

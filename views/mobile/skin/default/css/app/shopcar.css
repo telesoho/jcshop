@@ -269,8 +269,10 @@
 	height:0.4rem;
 }
 .payWare{
+
 	display:block;
 	width:60%;
+	margin-right:16%;
 }
 /*地址界面*/
 #addressNew .title{
