@@ -308,18 +308,16 @@ class Apic extends IController
      */
     public function order_list()
     {
-//        $data = [];
-        $ret1 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 1 and pay_type != 0'); // 待支付
-        $ret2 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
-        $ret3 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 1'); // 待收货
-        $ret4 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 5 '); // 已完成
-        $ret5 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 '); // 待收货
-//        $data[0] = $ret0->find();
-        $data[1] = $ret1->find();
-        $data[2] = $ret2->find();
-        $data[3] = $ret3->find();
-        $data[4] = $ret4->find();
-        $data[5] = $ret5->find();
+        $ret0 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 1 and pay_type != 0'); // 待支付
+        $ret1 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
+        $ret2 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 1'); // 待收货
+        $ret3 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 5 '); // 已完成
+        $ret4 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 '); // 待收货
+        $data['state0'] = $ret0->find();
+        $data['state1'] = $ret1->find();
+        $data['state2'] = $ret2->find();
+        $data['state3'] = $ret3->find();
+        $data['state4'] = $ret4->find();
 //        $data['pagebar'] = $ret->getPageBar();
         $payment = new IQuery('payment');
         $payment->fields = 'id,name,type';
@@ -340,8 +338,12 @@ class Apic extends IController
                 $data[$k][$key]['province_val'] =$temp2[$value['province']];
                 $data[$k][$key]['city_val'] =$temp2[$value['city']];
                 $data[$k][$key]['area_val'] =$temp2[$value['area']];
+//                $orderObj = new order_class();
+//                $data[$k][$key]['order_info'] = $orderObj->getOrderShow($value['id'],$this->user['user_id']);
+                $data[$k][$key]['goodslist'] = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
             }
         }
+
 //        var_dump($data);
         header("Content-type: application/json");
         echo json_encode($data);
