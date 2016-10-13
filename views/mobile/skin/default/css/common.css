@@ -122,3 +122,12 @@ color:#ef4145 !important;}
     -webkit-transform: scale(1.0);
   }
 }
+/*做小于1px下划线*/
+.underline:after{
+  display: block;
+  content: '';
+  margin-top:0.03rem;
+  height: 1px;
+  background-color: black;
+  transform:scaleY(0.1);
+}

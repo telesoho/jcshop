@@ -199,7 +199,6 @@
             type:'post',		// HTTP请求类型
             timeout:10000,		// 超时时间设置为10秒；
             success:function(data){
-                alert('修改成功');
                 document.location.href="{url:/simple/addresslist}";
             },
             error:function(xhr,type,errorThrown){
@@ -227,16 +226,19 @@
         }
     }
     function changeDefault(id){
-        alert(id);
         var data1=id;
-        mui.ajax('index.php?controller=apic&action=addressdefault&id=data1&is_default=0',{
+        mui.ajax('index.php?controller=apic&action=addressadd',{
+            data:{
+                id:data1,
+                is_default:1
+            },
             dataType:'json',//服务器返回json格式数据
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
-            headers:{'Content-Type':'application/json'},
+//            headers:{'Content-Type':'application/json'},
             success:function(data){
                 console.log(data);
-                window.location.reload();
+//                window.location.reload();
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；

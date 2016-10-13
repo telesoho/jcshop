@@ -482,6 +482,7 @@
 margin-bottom:0.1rem;
 background:#fff;
 border:0.01rem solid #eee;
+font-size: .12rem;
 }
 .orderdetailitem >span{
 	display:block;
@@ -520,3 +521,50 @@ border:0.01rem solid #eee;
 	width: 85%;
 	color: #959595;
 }
+.orderdetailitem .namead{
+	padding: .1rem 5%;
+	position: relative;
+	font-size: .12rem;
+	line-height: .18rem;
+}
+.orderdetailitem .namead .name,.orderdetailitem .namead .nameid{
+	color: #959595;
+	font-size: .11rem;
+	line-height: .18rem;
+}
+ .orderToast{
+	padding: .01rem 5%;
+	position: relative;
+	font-size: .12rem;
+	line-height: .18rem;
+    color: #959595;
+}
+.orderdetailitem  .warelist{
+	padding: .1rem 5% 0;
+	font-size: .12rem;
+	line-height: .18rem;
+	color:#000;
+}
+.warelist .pic{
+	width: 16%;
+	overflow: hidden;
+	float: left;
+}
+.warelist .pic img{
+	width: 100%;
+}
+.warelist .text{
+	width: 80%;
+	font-size: .11rem;
+	float: right;
+}
+.warelist .text .size{
+	color:#959595;
+}
+.wareToast{
+	border-bottom:0.01rem solid #dcdcdc;
+	padding:.1rem 5%;
+	line-height: .16rem;
+}
+
+
