@@ -342,15 +342,26 @@ class Apic extends IController
 //                $data[$k][$key]['order_info'] = $orderObj->getOrderShow($value['id'],$this->user['user_id']);
                 $data[$k][$key]['goodslist'] = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
             }
+            if (!empty($v)) switch ($k) {
+//                case 'state0':
+//                    $data[$k][$key]['text'] = '';
+                case 'state1':
+                    $data[$k][$key]['text'] = '取消订单';
+                case 'state2':
+                    $data[$k][$key]['text'] = '查看物流';
+                case 'state3':
+                    $data[$k][$key]['text'] = '删除订单';
+                case 'state4':
+                    $data[$k][$key]['text'] = '去支付';
+            }
         }
-        $data['state0']['text'] = '去支付';
-        $data['state1']['text'] = '取消订单';
-        $data['state2']['text'] = '查看物流';
-        $data['state3']['text'] = '删除订单';
-        $data['state4']['text'] = '去支付';
+        $relation = array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流');
+        foreach ($data['state0'] as $key => $value){
+            $data['state0'][$key]['text'] = $relation[$value['orderStatusText']];
+        }
 //        var_dump($data);
         header("Content-type: application/json");
-        echo json_encode($data);
+        echo json_encode($data, true);
         exit();
     }
 
