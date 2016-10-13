@@ -148,11 +148,13 @@ class Apic extends IController
         echo json_encode($data);
         exit();
     }
-
+    /**
+     * ---------------------------------------------------购物车-收货地址---------------------------------------------------*
+     */
     /**
      * 获取用户收货地址数据
      */
-    public function getaddresslist()
+    public function address_list()
     {
         //游客的user_id默认为0
         $user_id = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
@@ -164,7 +166,7 @@ class Apic extends IController
         exit();
     }
     //添加和编辑地址
-    function addressadd()
+    function address_add()
     {
         $id          = IFilter::act(IReq::get('id'),'int');
         $accept_name = IFilter::act(IReq::get('accept_name'));
@@ -186,7 +188,7 @@ class Apic extends IController
                 echo json_encode(array('msg'=>$this->user['user_id'] . '用户未登录'));
                 exit();
             }
-            
+
             $model = new IModel('address');
             $model->setData(array('is_default' => 0));
             $model->update("user_id = ".$this->user['user_id']);
@@ -252,8 +254,28 @@ class Apic extends IController
         echo json_encode($result);
         exit();
     }
-
-    public function addressdefault()
+    /**
+     * @brief 收货地址删除处理
+     */
+    public function address_del()
+    {
+        $id = IFilter::act( IReq::get('id'),'int' );
+        $model = new IModel('address');
+        $data = $model->query('id = '.$id.' and user_id = '.$this->user['user_id']);
+        if ($data[0]['is_default'] == 1){
+            $ret = false;
+        } else {
+            $model->del('id = '.$id.' and user_id = '.$this->user['user_id']);
+            $ret = true;
+        }
+        header("Content-type: application/json");
+        echo json_encode(array('ret'=>$ret));
+        exit();
+    }
+    /**
+     * @brief 设置默认的收货地址
+     */
+    public function address_default()
     {
         $id = IFilter::act( IReq::get('id'),'int' );
         $default = IFilter::act(IReq::get('is_default'));
@@ -264,6 +286,7 @@ class Apic extends IController
             $model->update("user_id = ".$this->user['user_id']);
         }
         $model->setData(array('is_default' => $default));
+        $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
         $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
         header("Content-type: application/json");
         echo json_encode(array('ret'=>true));
@@ -299,6 +322,33 @@ class Apic extends IController
         header("Content-type: application/json");
         echo json_encode($data);
         exit();
+    }
+
+    /**
+     * @brief 订单列表
+     */
+    public function orderlist()
+    {
+
+        //搜索条件
+        $search = IReq::get('search');
+
+        $page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+        //条件筛选处理
+        list($join,$where) = order_class::getSearchCondition($search);
+        var_dump($where);
+        //拼接sql
+        $orderHandle = new IQuery('order as o');
+        $orderHandle->order  = "o.id desc";
+        $orderHandle->fields = "o.*,d.name as distribute_name,p.name as payment_name";
+        $orderHandle->page   = $page;
+        $orderHandle->where  = $where;
+        $orderHandle->join   = $join;
+
+        $this->search      = $search;
+        $this->orderHandle = $orderHandle;
+
+//        $this->redirect("order_list");
     }
     /**
      * ---------------------------------------------------物流---------------------------------------------------*
