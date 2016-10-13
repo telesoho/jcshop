@@ -1026,3 +1026,43 @@ errorTime: 2016-10-13 12:51:38
 #11 IWEB_PATH/index.php(5): IApplication->run()
 </ERROR_BLOCK>
 
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-13 14:12:31
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
+<ERROR_BLOCK>
+errorInfo: Undefined variable: item
+errorFile: IWEB_PATH/runtime/views/mobile/simple/cart.php
+errorLine: 73
+errorCode: 8
+errorTime: 2016-10-13 14:12:48
+#0 IWEB_PATH/lib/web/controller/controllerbase_class.php(115): require(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#1 IWEB_PATH/lib/web/controller/controllerbase_class.php(81): IControllerBase->requireFile(IWEB_PATH/runtime/views/mobile/simple/cart.php)
+#2 IWEB_PATH/lib/web/controller/controller_class.php(166): IControllerBase->renderView(IWEB_PATH/views/mobile/simple/cart)
+#3 IWEB_PATH/lib/web/action/view_action.php(32): IController->render(IWEB_PATH/views/mobile/simple/cart)
+#4 IWEB_PATH/lib/web/controller/controller_class.php(367): IViewAction->run()
+#5 IWEB_PATH/controllers/simple.php(243): IController->redirect(cart)
+#6 : Simple->cart()
+#7 IWEB_PATH/lib/web/action/inline_action.php(24): call_user_func()
+#8 IWEB_PATH/lib/web/controller/controller_class.php(115): IInlineAction->run()
+#9 IWEB_PATH/lib/core/webapplication_class.php(76): IController->run(cart)
+#10 IWEB_PATH/lib/core/application_class.php(94): IWebApplication->execRequest()
+#11 IWEB_PATH/index.php(5): IApplication->run()
+</ERROR_BLOCK>
+
