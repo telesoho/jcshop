@@ -3664,12 +3664,9 @@ select:focus
 }
 .mui-popover.mui-popover-action .mui-table-view
 {
-    margin: 8px;
-
     text-align: center;
-
     color: #007aff;
-    border-radius: 4px;
+
 }
 .mui-popover.mui-popover-action .mui-table-view .mui-table-view-cell:after
 {
@@ -3780,11 +3777,8 @@ select:focus
 .mui-popover .mui-table-view
 {
     overflow: auto;
-
     max-height: 300px;
     margin-bottom: 0;
-
-    border-radius: 7px;
     background-color: #f7f7f7;
     background-image: none;
 

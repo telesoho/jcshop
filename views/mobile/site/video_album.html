@@ -49,7 +49,7 @@
     <div id="pullrefresh" class="mui-scroll-wrapper">
         <div class="mui-scroll">
             <!--数据列表-->
-            <div class="mui-table-view">
+            <div class="mui-table-vie">
                 <section id="vedio">
                     <div id="liveVideo" class="liveVideo">
                         <video class="player" src="http://dianbo2.bolo.me/video/147462477410762.mp4" poster="https://img.bolo.me/9219147521963258398@!largeJpegLQ"
@@ -87,9 +87,51 @@
                                     <span class="small">店头价：26950원</span>
                                 </div>
                             </a>
-                            <a href=""><div class="addshop mui-pull-right">
+                            <a href="#product_mask"><div class="addshop mui-pull-right">
                                 加入购物
                             </div></a>
+                        </div>
+                    </div>
+                    <div class="ware_album_item">
+                        <div class="img">
+                            <a href=""><img src="/views/mobile/skin/default/image/blm/w7-1.jpg" alt=""></a>
+                        </div>
+                        <div class="discription">
+                            <a href=""><div class="pname">
+                                KLAIRS蔻徕氏 午夜美肌粉蓝修护霜 30ml
+                            </div>
+                                <div class="pprice">
+                                    <span class="big">￥174.5</span>
+                                    <span class="line-through">￥270</span>
+                                    <span class="small">店头价：26950원</span>
+                                </div>
+                            </a>
+                            <a href="#product_mask"><div class="addshop mui-pull-right">
+                                加入购物
+                            </div></a>
+                        </div>
+                    </div>
+
+                    <div class="ware_album_item">
+                        <div class="img">
+                            <a href=""><img src="/views/mobile/skin/default/image/blm/w7-1.jpg" alt=""></a>
+                        </div>
+                        <div class="discription">
+                            <a href=""><div class="pname">
+                                KLAIRS蔻徕氏 午夜美肌粉蓝修护霜 30ml
+                            </div>
+                                <div class="pprice">
+                                    <span class="big">￥174.5</span>
+                                    <span class="line-through">
+                         ￥270
+                    </span>
+                                    <span class="small">店头价：26950원</span>
+                                </div>
+                            </a>
+                            <a href="#product_mask"><div class="addshop mui-pull-right">
+                                加入购物
+                            </div></a>
+                            <input type="hidden" value="dddd">
                         </div>
                     </div>
                     <div class="ware_album_item">
@@ -108,61 +150,35 @@
                                     <span class="small">店头价：26950원</span>
                                 </div>
                             </a>
-                            <a href=""><div class="addshop mui-pull-right">
+                            <a href="#product_mask"><div class="addshop mui-pull-right">
                                 加入购物
                             </div></a>
-                        </div>
-                    </div>
-                    <div class="ware_album_item">
-                        <div class="img">
-                            <a href=""><img src="/views/mobile/skin/default/image/blm/w7-1.jpg" alt=""></a>
-                        </div>
-                        <div class="discription">
-                            <a href=""><div class="pname">
-                                KLAIRS蔻徕氏 午夜美肌粉蓝修护霜 30ml
-                            </div>
-                                <div class="pprice">
-                                    <span class="big">￥174.5</span>
-                                    <span class="line-through">
-                         ￥270
-                    </span>
-                                    <span class="small">店头价：26950원</span>
-                                </div>
-                            </a>
-                            <a href=""><div class="addshop mui-pull-right">
-                                加入购物
-                            </div></a>
-                        </div>
-                    </div>
-                    <div class="ware_album_item">
-                        <div class="img">
-                            <a href=""><img src="/views/mobile/skin/default/image/blm/w7-1.jpg" alt=""></a>
-                        </div>
-                        <div class="discription">
-                            <a href=""><div class="pname">
-                                KLAIRS蔻徕氏 午夜美肌粉蓝修护霜 30ml
-                            </div>
-                                <div class="pprice">
-                                    <span class="big">￥174.5</span>
-                                    <span class="line-through">
-                         ￥270
-                    </span>
-                                    <span class="small">店头价：26950원</span>
-                                </div>
-                            </a>
-                            <a href=""><div class="addshop mui-pull-right">
-                                加入购物
-                            </div></a>
+                            <input type="hidden" value="dddd">
                         </div>
                     </div>
                 </section>
 
             </div>
         </div>
-
     </div>
-
-
+<!--弹窗开始-->
+<div id="product_mask" class="mui-popover mui-popover-action mui-popover-bottom">
+    <div class="mui-table-view">
+        <li class="mui-table-view-cell">
+            <a href="#product_mask" class="mui-pull-right">x</a>
+            <a href="#">这里填写title 商品价格 以及删除按钮</a>
+        </li>
+        <li class="mui-table-view-cell">
+            <a href="#">这里填写商品类别</a>
+        </li>
+        <li class="mui-table-view-cell">
+            <div class="submitWare">
+                确定
+            </div>
+        </li>
+    </div>
+</div>
+<!--弹窗结束-->
 <!--loading页结束-->
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
@@ -188,6 +204,8 @@
             }
         }
     });
+
+
 
 </script>
 </body>
