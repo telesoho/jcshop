@@ -414,6 +414,8 @@
 /*订单详情界面*/
 .order-menu{
 	color:#000;
+	background:#fff;
+	margin-bottom:0.1rem;
 }
 .order-menu .top1{
 	line-height: .25rem;

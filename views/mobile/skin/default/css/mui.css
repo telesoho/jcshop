@@ -2067,10 +2067,7 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     margin-top: 0;
     margin-bottom: 0;
     padding-left: 0;
-
     list-style: none;
-
-    background-color: #fff;
 }
 .mui-table-view:after
 {
