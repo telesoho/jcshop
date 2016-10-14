@@ -1,90 +1,379 @@
-<script src="{theme:javascript/jquery.slider.js}"></script>
-<!--幻灯片 开始-->
-<div class="home_banner">
-    {if:$this->index_slide}
-    <ul>
-        {foreach:items=$this->index_slide}
-        <li>
-            <a href="{$item['url']}"><img src="{url:/pic/thumb/img/$item[img]}" alt="{$item['name']}"></a>
-        </li>
-        {/foreach}
-    </ul>
-    {/if}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title></title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
+</head>
+<body>
+<!--loading页开始-->
+<div id="loading">
+    <div class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
 </div>
-<!-- 首页菜单 -->
-<nav class="home_nav">
-    <ul>
-        <li class="map"><a href="{url:site/sitemap}"><i class="icon-th-list"></i><span>全部分类</span></a></li>
-        <li class="cart"><a href="{url:simple/cart}"><i class="icon-shopping-cart"></i><span>购物车</span></a></li>
-        <li class="groupon"><a href="{url:site/groupon}"><i class="icon-legal"></i><span>今日团购</span></a></li>
-        <li class="favorite"><a href="{url:ucenter/favorite}"><i class="icon-star"></i><span>我的收藏</span></a></li>
-    </ul>
-</nav>
-{echo:Ad::show("首页顶部通栏100%*120(mobile)")}
-<!-- 首页推荐商品列表 -->
-<h2 class="home_title"><i class="icon-gift"></i><strong>商品推荐</strong></h2>
-<section class="home_goods">
-    <ul>
-        {foreach:items = Api::run('getCommendRecom')}
-        <li>
-            <a href="{url:/site/products/id/$item[id]}">
-                <img src="{url:/pic/thumb/img/$item[img]/w/300/h/300}" alt="{$item['name']}">
-                <span>{$item['name']}</span>
-            </a>
-        </li>
-        {/foreach}
-    </ul>
-</section>
+<!--loading页结束-->
+<!--头信息-->
+<header class="homeHeader">
+    <div class="nav-header">
+        <div class="logo"><img src="img/blm/bolome_logo1.png" alt="该图片无法显示"> </div>
+        <div class="mui-input-row mui-search">
+            <input type="search" class="mui-input-clear" placeholder="搜索品牌">
+        </div>
+        <div class="modal"><span class="mui-icon mui-icon-bars"></span></div>
+    </div>
+    <div class="nav-body">
+        <ul class="nav-menu">
+            <li class="nev-menu-item"><a href="#" class="nav-body-active">首页</a></li>
+            <li class="nev-menu-item"><a href="#">新人享</a></li>
+            <li class="nev-menu-item"><a href="#">热销榜</a></li>
+            <li class="nev-menu-item"><a href="#">新品购</a></li>
+        </ul>
+    </div>
+</header>
+<!--下拉刷新容器-->
+<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+    <div class="mui-scroll">
+        <!--数据列表-->
+        <ul class="mui-table-view mui-table-view-chevron" style="background:#eee">
+            <!--轮播图开始-->
+            <div id="slider" class="mui-slider" >
+                <div class="mui-slider-group mui-slider-loop">
+                    <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+                    <div class="mui-slider-item mui-slider-item-duplicate">
+                        <a href="#">
+                            <img src="img/blm/lunbo2.jpg">
+                        </a>
+                    </div>
+                    <!-- 第一张 -->
+                    <div class="mui-slider-item">
+                        <a href="#">
+                            <img src="img/blm/lunbo1.jpg">
+                        </a>
+                    </div>
+                    <!-- 第二张 -->
+                    <div class="mui-slider-item">
+                        <a href="#">
+                            <img src="img/blm/lunbo2.jpg">
+                        </a>
+                    </div>
+                    <!-- 第三张 -->
+                    <div class="mui-slider-item">
+                        <a href="#">
+                            <img src="img/blm/lunbo1.jpg">
+                        </a>
+                    </div>
+                    <!-- 第四张 -->
+                    <div class="mui-slider-item">
+                        <a href="#">
+                            <img src="img/blm/lunbo2.jpg">
+                        </a>
+                    </div>
+                    <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+                    <div class="mui-slider-item mui-slider-item-duplicate">
+                        <a href="#">
+                            <img src="img/blm/lunbo2.jpg">
+                        </a>
+                    </div>
+                </div>
+                <div class="mui-slider-indicator">
+                    <div class="mui-indicator mui-active"></div>
+                    <div class="mui-indicator"></div>
+                    <div class="mui-indicator"></div>
+                    <div class="mui-indicator"></div>
+                </div>
+            </div>
+            <!--轮播图结束-->
+            <!--第一轮商品-->
+            <div id="wareItem1">
+                <div class="wareItem1-title">
+                    <div class="wareItem1-title-1">
+                        <span class="mui-icon-extra mui-icon-extra-outline" style="color:red;font-size:1.5rem;margin-left:0.5rem"></span>
+                        <span>限时购</span>
+                    </div>
+                    <div class="wareItem1-title-panel">
+                        <div id="timer" data-timer="20161028140203" style="font-size:1rem">
+                            <span style="color:#999">距离本场结束还有</span>
+                            <span id="timer_h">0</span>:
+                            <span id="timer_m">0</span>:
+                            <span id="timer_s">0</span>
+                        </div>
+                    </div>
+                    <div class="wareItem1-title-2">
+                        <a href="#"><span style="color:#999">更多</span><span style="color:red">></span></a>
+                    </div>
+                </div>
+                <div class="wareItem1-body">
+                    <div class="wareItem1-body-item wareItem1-body-1">
+                        <div class="wareItem1-body-item-img">
+                            <img src="img/blm/w1-1.jpg" alt="" width="100%"/>
+                        </div>
+                        <div class="wareItem1-body-item-c-1">@SHISEIDO资生堂</div>
+                        <div class="wareItem1-body-item-c-2">
+                            <span class="item1">限时价</span>
+                            <span class="item2">￥48</span>
+                        </div>
+                        <div class="wareItem1-body-item-c-3"><s>￥105</s></div>
+                    </div>
+                    <div class="wareItem1-body-item wareItem1-body-2">
+                        <div class="wareItem1-body-item-img">
+                            <img src="img/blm/w1-2.jpg" alt="" width="100%"/>
+                        </div>
+                        <div class="wareItem1-body-item-c-1">@SHISEIDO资生堂</div>
+                        <div class="wareItem1-body-item-c-2">
+                            <span class="item1">限时价</span>
+                            <span class="item2">￥48</span>
+                        </div>
+                        <div class="wareItem1-body-item-c-3"><s>￥105</s></div>
+                    </div>
+                    <div class="wareItem1-body-item wareItem1-body-3">
+                        <div class="wareItem1-body-item-img">
+                            <img src="img/blm/w1-3.jpg" alt="" width="100%"/>
+                        </div>
+                        <div class="wareItem1-body-item-c-1">@SHISEIDO资生堂</div>
+                        <div class="wareItem1-body-item-c-2">
+                            <span class="item1">限时价</span>
+                            <span class="item2">￥48</span>
+                        </div>
+                        <div class="wareItem1-body-item-c-3"><s>￥105</s></div>
+                    </div>
+                </div>
+            </div>
+            <!--第二轮商品-->
+            <div id="wareItem1">
+                <div class="wareItem1-title">
+                    <div class="wareItem1-title-1">
+                        <span class="mui-icon-extra mui-icon-extra mui-icon-extra-like" style="color:red;font-size:1.5rem;margin-left:0.5rem;line-height:1.5rem;"></span>
+                        <span>畅销商品</span>
+                    </div>
+                    <div class="wareItem1-title-2">
+                        <a href="#"><span style="color:#999">更多</span><span style="color:red">></span></a>
+                    </div>
+                </div>
+                <div class="wareItem1-body">
+                    <div class="wareItem1-body-item wareItem1-body-1">
+                        <div class="wareItem1-body-item-img">
+                            <img src="img/blm/w2-1.jpg" alt="" width="100%"/>
+                        </div>
+                        <div class="wareItem1-body-item-c-1">收缩毛孔能手</div>
+                        <div class="wareItem1-body-item-c-2">
 
-{echo:Ad::show("首页中部通栏100%*200(mobile)")}
+                            <span class="item2">￥48</span>
+                        </div>
+                        <div class="wareItem1-body-item-c-3">国内参考价：￥105</div>
+                    </div>
+                    <div class="wareItem1-body-item wareItem1-body-2">
+                        <div class="wareItem1-body-item-img">
+                            <img src="img/blm/w2-2.jpg" alt="" width="100%"/>
+                        </div>
+                        <div class="wareItem1-body-item-c-1">吃再多也不会胖</div>
+                        <div class="wareItem1-body-item-c-2">
 
-<!-- 首页顶级栏目分类 -->
-<h2 class="home_title"><i class="icon-list"></i><strong>畅销商品分类</strong></h2>
-<nav class="home_goods_nav">
-    <ul>
-        {foreach:items=Api::run('getCategoryListTop') item=$first }
-        <li><a href="{url:/site/pro_list/cat/$first[id]}">{$first['name']}</a><i class="icon-chevron-right"></i></li>
-        {/foreach}
-    </ul>
-</nav>
+                            <span class="item2">￥48</span>
+                        </div>
+                        <div class="wareItem1-body-item-c-3">国内参考价：￥105</div>
+                    </div>
+                    <div class="wareItem1-body-item wareItem1-body-3">
+                        <div class="wareItem1-body-item-img">
+                            <img src="img/blm/w2-2.jpg" alt="" width="100%"/>
+                        </div>
+                        <div class="wareItem1-body-item-c-1">吃太多也不会胖</div>
+                        <div class="wareItem1-body-item-c-2">
+                            <span class="item2">￥48</span>
+                        </div>
+                        <div class="wareItem1-body-item-c-3">国内参考价：￥105</div>
+                    </div>
+                </div>
+            </div>
+            <!--第三轮商品-->
+            <div class="wareItem3">
+                <div class="title-img">
+                    <img src="img/blm/w3-1.jpg" alt="" / width="100%">
+                </div>
+                <div class="ware">
+                    <div class="ware-item">
+                        <div class="ware-img">
+                            <img src="img/blm/w3-2.jpg" alt="" / width="100%">
+                        </div>
+                        <div class="ware-name">AQUAAQUA 有机散粉迷你装＆唇蜜套装【一元换购】</div>
+                        <div class="ware-price">￥1</div>
+                    </div>
+                    <div class="ware-item">
+                        <div class="ware-img">
+                            <img src="img/blm/w3-3.jpg" alt="" / width="100%">
+                            <span class="buget">库存紧张</span>
+                        </div>
+                        <div class="ware-name">AQUAAQUA 有机散粉迷你装＆唇蜜套装【一元换购】</div>
+                        <div class="ware-price">￥202</div>
+                    </div>
+                    <div class="ware-item">
+                        <div class="ware-img">
+                            <img src="img/blm/w3-4.jpg" alt="" / width="100%">
+                        </div>
+                        <div class="ware-name">AQUAAQUA 有机散粉迷你装＆唇蜜套装【一元换购】</div>
+                        <div class="ware-price">￥19</div>
+                    </div>
 
-<section class="home_slogan">
-    <ol>
-        <li>
-            <i class="icon-truck"></i>
-            <p>
-                <strong>免费送货与退货</strong>
-                <br>
-                <span>所有订单超过200免费送货。</span>
-            </p>
-        </li>
-        <li>
-            <i class="icon-jpy"></i>
-            <p>
-                <strong>退款保证</strong>
-                <br>
-                <span>100%退款保证。</span>
-            </p>
-        </li>
-        <li>
-            <i class="icon-phone"></i>
-            <p>
-                <strong>在线支持 24/7</strong>
-                <br>
-                <span>客服7*24小时在线。</span>
-            </p>
-        </li>
-    </ol>
-</section>
+                </div>
+            </div>
+            <!--第三轮商品-->
+            <div class="wareItem3">
+                <div class="title-img">
+                    <img src="img/blm/w4-1.jpg" alt="" / width="100%">
+                </div>
+                <div class="ware">
+                    <div class="ware-item">
+                        <div class="ware-img">
+                            <img src="img/blm/w4-2.jpg" alt="" / width="100%">
+                            <span class="buget">库存紧张</span>
+                        </div>
+                        <div class="ware-name">AQUAAQUA 有机散粉迷你装＆唇蜜套装【一元换购】</div>
+                        <div class="ware-price">￥1</div>
+                    </div>
+                    <div class="ware-item">
+                        <div class="ware-img">
+                            <img src="img/blm/w4-3.jpg" alt="" / width="100%">
+                            <span class="buget">库存紧张</span>
+                        </div>
+                        <div class="ware-name">AQUAAQUA 有机散粉迷你装＆唇蜜套装【一元换购】</div>
+                        <div class="ware-price">￥202</div>
+                    </div>
+                    <div class="ware-item">
+                        <div class="ware-img">
+                            <img src="img/blm/w4-4.jpg" alt="" / width="100%">
+                        </div>
+                        <div class="ware-name">AQUAAQUA 有机散粉迷你装＆唇蜜套装【一元换购】</div>
+                        <div class="ware-price">￥19</div>
+                    </div>
 
+                </div>
+            </div>
+            <!--第三轮商品-->
+            <div class="wareItem3">
+                <div class="title-img">
+                    <img src="img/blm/w5-1.jpg" alt="" / width="100%">
+                </div>
+                <div class="ware">
+                    <div class="ware-item">
+                        <div class="ware-img">
+                            <img src="img/blm/w5-2.jpg" alt="" / width="100%">
+                        </div>
+                        <div class="ware-name">AQUAAQUA 有机散粉迷你装＆唇蜜套装【一元换购】</div>
+                        <div class="ware-price">￥1</div>
+                    </div>
+                    <div class="ware-item">
+                        <div class="ware-img">
+                            <img src="img/blm/w5-3.jpg" alt="" / width="100%">
+                            <span class="buget">库存紧张</span>
+                        </div>
+                        <div class="ware-name">AQUAAQUA 有机散粉迷你装＆唇蜜套装【一元换购】</div>
+                        <div class="ware-price">￥202</div>
+                    </div>
+                    <div class="ware-item">
+                        <div class="ware-img">
+                            <img src="img/blm/w5-4.jpg" alt="" / width="100%">
+                        </div>
+                        <div class="ware-name">AQUAAQUA 有机散粉迷你装＆唇蜜套装【一元换购】</div>
+                        <div class="ware-price">￥19</div>
+                    </div>
+
+                </div>
+            </div>
+        </ul>
+    </div>
+</div>
+
+<!--头信息结束-->
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/javascript/lazyload.js"></script>
+<script src="/views/mobile/javascript/time.js"></script>
 <script>
-$(function() {
-    // 设置首页导航为当前
-    $(".nav_home").addClass('on');
-    // 设置焦点图
-    $(".home_banner").MobileSlider({
-        width: 720,
-        height: 360
+    //页面加载动画的调用
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
+        timer('timer');
+
+    })
+    //页面预加载
+
+    mui.init({
+        pullRefresh: {
+            container: '#pullrefresh',
+            down: {
+                callback: pulldownRefresh
+            },
+            up: {
+                contentrefresh: '正在加载...',
+                callback: pullupRefresh
+            }
+        }
     });
-})
+
+    //图片轮播功能
+    var gallery = mui('.mui-slider');
+    gallery.slider({
+        interval:5000//自动轮播周期，若为0则不自动播放，默认为0；
+    });
+    /**
+     * 下拉刷新具体业务实现
+     */
+    function pulldownRefresh() {
+        //到时候替换为alax
+        setTimeout(function() {
+            var table = document.body.querySelector('.mui-table-view');
+            var cells = document.body.querySelectorAll('.mui-table-view-cell');
+            var li = document.createElement('li');
+            li.innerHTML = '';
+            //下拉刷新，新纪录插到最前面；
+            table.insertBefore(li, table.firstChild);
+            mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+        }, 1500);
+    }
+    var count = 0;
+    /**
+     * 上拉加载具体业务实现
+     */
+    function pullupRefresh() {
+        setTimeout(function() {
+            mui('#pullrefresh').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。
+        }, 1500);
+    }
+    if (mui.os.plus) {
+        mui.plusReady(function() {
+            setTimeout(function() {
+                mui('#pullrefresh').pullRefresh().pullupLoading();
+            }, 1000);
+
+        });
+    } else {
+        mui.ready(function() {
+            mui('#pullrefresh').pullRefresh().pullupLoading();
+        });
+    }
 </script>
+</body>
+</html>
