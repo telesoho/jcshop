@@ -218,7 +218,7 @@ abstract class IDB
 	/**
 	 * @brief 获取缓存实例对象
 	 * @param $type string 缓存类型file,memcache
-	 & @return cache 缓存对象
+	 * @return cache 缓存对象
 	 */
     public function getCacheTarget($type)
     {

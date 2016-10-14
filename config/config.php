@@ -25,6 +25,8 @@ return array(
 	'timezone'	=> 'Etc/GMT-8',
 	'upload' => 'upload',
 	'dbbackup' => 'backup/database',
+	'sqlLog' => '1', /*是否开启sql日志*/
+	'sqlDebug' => '0', /*是否把SQL显示到页面上*/
 	'safe' => 'cookie',
 	'lang' => 'zh_sc',
 	'debug'=> '1',
