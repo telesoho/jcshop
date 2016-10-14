@@ -67,7 +67,7 @@ input.mui-input-clear{
 	border-bottom:0.02rem solid #fff;
 }
 /*限时购专辑*/
-#wareItem1{
+.wareItem1{
 	width:100%;
 	background:#fff;
 	border-top:0.01rem solid #eee;
@@ -88,7 +88,7 @@ input.mui-input-clear{
 	bottom:-1.5rem;*/
 	width:60%;
 	margin-bottom:-0.5rem;
-	border:0.1rem solid #ccc;
+	border:0.01rem solid #ccc;
 	height:0.3rem;
 	border-radius:0.15rem;
 	background:#fff;
@@ -156,34 +156,34 @@ input.mui-input-clear{
 .wareItem1-body-item-c-2 .item2{
 	color:red;
 }
-.wareItem3{
+.wareItem{
 	margin-top:.1rem;
 	background:#fff;
 }
-.wareItem3 .ware{
+.wareItem .ware{
 	margin-top:0.05rem;
 	display:-webkit-flex;
 	-webkit-justify-content: space-around;
 }
-.wareItem3 .ware-item{
+.wareItem .ware-item{
 	width:30%;
 	-webkit-flex-direction: column;
 }
-.wareItem3 .ware-img{
+.wareItem .ware-img{
 	border:0.01rem solid #ccc;
 	position:relative;
 }
-.wareItem3 .buget{
+.wareItem .buget{
 	position:absolute;
 	display: block;
 	bottom:0;
-	font-size:1rem;
+	font-size:0.1rem;
 	width:100%;
 	text-align:center;
 	background: red;
 	color:#fff;
 }
-.wareItem3 .ware-name{
+.wareItem .ware-name{
 	margin-left:0.02rem;
 	white-space:nowrap;
     overflow:hidden;
@@ -191,12 +191,12 @@ input.mui-input-clear{
     font-size:0.1rem;
     line-height: 0.2rem;
 }
-.wareItem3 .ware-price{
+.wareItem .ware-price{
 	color:red;
 	 font-size:0.1rem;
     line-height: 0.2rem;
 }
-.wareItem4{
+.wareItem{
 	margin-top:0.1rem;
 	background:#fff;
 }
@@ -240,7 +240,7 @@ input.mui-input-clear{
 	line-height:0.2rem ;
 }
 .ware-content-body span{
-	font-size:1rem;
+	font-size:0.1rem;
 	display:block;
 	text-align: left;
 	
