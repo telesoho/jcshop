@@ -9,13 +9,14 @@ html{font-size:625%;
 /*css reset*/
 .mui-content{
 	width:100% !important;
-	margin:0 auto;
 	}
 #pullrefresh{
 	padding-bottom: 0.4rem;
 }
 body{
 	font-family: "微软雅黑";
+    max-width: 480px;
+    margin: 0 auto;
 }
 .mui-active{
 color:#ef4145 !important;}

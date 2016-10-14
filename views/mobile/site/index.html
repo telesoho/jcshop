@@ -64,37 +64,37 @@
                 <div class="mui-slider-group mui-slider-loop">
                     <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
                     <div class="mui-slider-item mui-slider-item-duplicate">
-                        <a href="#">
+                        <a href="{url:/site/video_album}">
                             <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
                         </a>
                     </div>
                     <!-- 第一张 -->
                     <div class="mui-slider-item">
-                        <a href="#">
+                        <a href="{url:/site/video_album}">
                             <img dataimg="/views/mobile/skin/default/image/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
                         </a>
                     </div>
                     <!-- 第二张 -->
                     <div class="mui-slider-item">
-                        <a href="#">
+                        <a href="{url:/site/video_album}">
                             <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
                         </a>
                     </div>
                     <!-- 第三张 -->
                     <div class="mui-slider-item">
-                        <a href="#">
+                        <a href="{url:/site/video_album}">
                             <img dataimg="/views/mobile/skin/default/image/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
                         </a>
                     </div>
                     <!-- 第四张 -->
                     <div class="mui-slider-item">
-                        <a href="#">
+                        <a href="{url:/site/video_album}">
                             <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
                         </a>
                     </div>
                     <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
                     <div class="mui-slider-item mui-slider-item-duplicate">
-                        <a href="#">
+                        <a href="{url:/site/video_album}">
                             <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
                         </a>
                     </div>
@@ -360,7 +360,7 @@
 <footer>
     <nav class="mui-bar mui-bar-tab">
         <div class="mui-content">
-            <a id="defaultTab" class="mui-tab-item " href="index.html">
+            <a id="defaultTab" class="mui-tab-item mui-active" href="#">
                 <span class="mui-icon mui-icon-home"></span>
                 <span class="mui-tab-label">首页</span>
             </a>
@@ -374,7 +374,7 @@
 							</span>
                 <span class="mui-tab-label">购物车</span>
             </a>
-            <a class="mui-tab-item mui-active" href="#">
+            <a class="mui-tab-item" href="#">
                 <span class="mui-icon mui-icon-contact"></span>
                 <span class="mui-tab-label">个人中心</span>
             </a>
@@ -390,11 +390,12 @@
 <script>
     //页面加载动画的调用
     $(window).load(function(){
-        $("#loading").fadeOut(2000);
+        $("#loading").fadeOut(300);
         timer('timer');
     })
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
+    mui('body').on('tap','a',function(){document.location.href=this.href;});
     //图片轮播功能
     var gallery = mui('.mui-slider');
     gallery.slider({
