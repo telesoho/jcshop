@@ -1,19 +1,135 @@
 /*视频专辑*/
+.ico-car{
+	position:relative;
+}
+#album{
+	width:100%;
+	height:3rem;
+}
+.ico-badge{
+	position: absolute;
+	top: .05rem;
+	right: -.01rem;
+	display: block;
+	border-radius: .06rem;
+	height: .12rem;
+	line-height: .12rem;
+	min-width: .12rem;
+	font-size: .1rem;
+	background-color: #e53e42;
+	color: #fff;
+	box-sizing: border-box;
+	z-index: 1000;
+	text-indent: 0;
+	text-align: center;
+}
 .liveVideo{
 	display:block;
-	position: relative;
-	background-color: #000;
+	background-color: #eee;
 	width: 100%;
-	height:2.6rem;
+	height:100%;
 	overflow: hidden;
 }
 .liveVideo .player {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height:100%;
 	background-size: cover;
 	z-index: 0;
 	-webkit-transform-style: preserve-3d;
 }
+.album a{
+	color: #e53e42;
+}
+.textVedio{
+	background: #fff;
+	height:0.4rem;
+	width:100%;
+	border-bottom:0 solid #dcdcdc;
+	padding: 0 .1rem;
+	border-bottom-width: 0.01rem !important;
+}
+.textVedio .img{
+	margin-top:0.05rem;
+	display: inline-block;
+	vertical-align: top;
+}
+.textVedio .content{
+	margin:0.05rem 0.05rem 0;
+	display: inline-block;
+}
+.textVedio .content div{
+	font-size: .1rem;
+	line-height: .16rem;
+}
+.textVedio img{
+	width: .32rem;
+	height: .32rem;
+	display: inline;
+	border-radius: 50%;
+	border:0.01rem solid #dcdcdc;
+}
+.ware_album_item{
+	background:#fff;
+	border-bottom:0.01rem solid #dcdcdc;
+	width:100%;
+	display:-webkit-flex;
+	-webkit-align-items: stretch;
+	-webkit-justify-content: center;
+}
+.ware_album_item .img{
+	-webkit-flex:3;
+	box-sizing: border-box;
+	display:-webkit-flex;
+	-webkit-align-items: center;
+}
+.ware_album_item .img img{
+	width:60%;
+	margin-left:20%;
+}
+.ware_album_item .discription{
+	-webkit-flex:5;
+}
+.ware_album_item .discription .pname{
+	width:80%;
+	height: .36rem;
+	line-height: .18rem;
+	font-size: .11rem;
+	margin-top: .06rem;
+	margin-bottom: .06rem;
+	color: #313131;
+	word-wrap: break-word;
+	overflow: hidden;
+	text-decoration: none;
+}
+.ware_album_item .discription .pprice .big{
+	font-size: .16rem;
+	letter-spacing: 0;
+	color: #e53e42;
+}
+.ware_album_item .discription .pprice .small{
+	display:block;
+	font-size: .09rem;
+	letter-spacing: 0;
+	color: #959595;
+	padding: .06rem 0;
+}
+.ware_album_item .discription .pprice .line-through{
+	padding-left: .06rem;
+	font-size: .09rem;
+	text-decoration: line-through;
+	color: #959595;
+}
+.ware_album_item .discription .addshop{
+	position:relative;
+	right:5%;
+	bottom:0.2rem;
+	text-align: center;
+	color: #ffffff;
+	-webkit-border-radius: 0.16rem;
+	border-radius: 0.16rem;
+	font-size:0.1rem;
+	background-color: #f54545;
+	padding: 0 .08rem;
+	width: .7rem;
+	height: .22rem;
+	line-height: .22rem;
+}
+
