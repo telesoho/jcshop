@@ -143,4 +143,45 @@
 	margin-left:19%;
 	background-color: #e53e42;
 }
+/*新人专辑页面*/
+.bonus, .part_title, .top_banner{
+	width: 100%;
+	border:0;
+}
+.bonus{
+	margin-top:-0.04rem;
+	margin-bottom:-0.04rem;
+}
+.segmentedControls{
+	display: block;
+	position: static;
+	background: #fff;
+	padding: .05rem 0.02rem;
+	text-align:center;
+}
+#segmentedControls a{
+	color: #2b2b2b;
+	font-size: .12rem;
+	height: .4rem;
+	line-height: .4rem;
+}
+#segmentedControls a span{
+	display: none;
+	height: .03rem;
+	border-radius: .1rem;
+	background: #F96293;
+}
+#segmentedControls .mui-active span{
+	display:block;
+}
+.segmentedControls_fixd{
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	z-index:99999;
+	transform: translate3d(0, 0, 0);
+
+}
+
 
