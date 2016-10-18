@@ -9,6 +9,15 @@ return array(
 			'type'   => 'row',
 		)
 	),
+    //取商品数据通过
+    'getGoodsInfoByGoodsNO' => array(
+        'query' => array(
+            'name'   => 'goods as go',
+            'where'  => 'go.goods_no = #goods_no# and go.is_del = 0',
+            'fields' => 'go.name,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id',
+            'type'   => 'row',
+        )
+    ),
 	//取货品数据
 	'getProductInfo' => array(
 		'query' => array(
@@ -567,7 +576,7 @@ return array(
 			'name'   => 'relation as r',
 			'join'   => 'left join goods as go on r.goods_id = go.id',
 			'where'  => 'r.article_id in (#article_id#) and go.id is not null',
-			'fields' => 'go.id as goods_id,go.img,go.name,go.sell_price',
+			'fields' => 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price',
 		)
 	),
 	//获取全部特价商品活动

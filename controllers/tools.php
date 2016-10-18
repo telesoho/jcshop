@@ -244,6 +244,8 @@ class Tools extends IController implements adminAuthorization
 			//获取文章信息
 			$articleObj       = new IModel('article');
 			$this->articleRow = $articleObj->getObj('id = '.$id);
+//            var_dump($this->articleRow);
+            $goodsList = Api::run("getArticleGoods",array("#article_id#",$this->articleRow['id']));
 			if(!$this->articleRow)
 			{
 				IError::show(403,"文章信息不存在");
@@ -271,8 +273,16 @@ class Tools extends IController implements adminAuthorization
 			'style'       => IFilter::act(IReq::get('style','post')),
 			'color'       => IFilter::act(IReq::get('color','post')),
 		);
+        $x = explode('{{', $dataArray['content']);
+        $y = explode('}}', $x[1]);
+        $goods_no = $y[0];
+        $goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
+        $dataArray['content'] = $x[0] . $goods_no_data['name'] . $y[1];
+//        var_dump($goods_no_data);
+//        var_dump($dataArray);
+//        die();
 
-		//检查catid是否为空
+        //检查catid是否为空
 		if($dataArray['category_id'] == 0)
 		{
 			$this->articleRow = $dataArray;
