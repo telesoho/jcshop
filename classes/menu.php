@@ -30,7 +30,7 @@ class Menu
 				'/goods/spec_photo'=>'规格图库'
 			),
 			'搜索'=>array(
-				'/tools/keyword_list' => '关键词列表',
+				'/tools/keyword_list' => '标签列表',
 				'/tools/search_list' => '搜索统计'
 			)
 		),

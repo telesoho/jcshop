@@ -258,11 +258,11 @@ class Tools extends IController implements adminAuthorization
 	function article_edit_act()
 	{
 		$id = IFilter::act(IReq::get('id'),'int');
-
 		$articleObj = new IModel('article');
 		$dataArray  = array(
 			'title'       => IFilter::act(IReq::get('title','post')),
-			'content'     => IFilter::act(IReq::get('content','post'),'text'),
+//			'content'     => IFilter::act(IReq::get('content','post'), 'text'),
+			'content'     => IFilter::act(IReq::get('content','post')),
 			'category_id' => IFilter::act(IReq::get('category_id','post'),'int'),
 			'create_time' => ITime::getDateTime(),
 			'keywords'    => IFilter::act(IReq::get('keywords','post')),
@@ -273,14 +273,6 @@ class Tools extends IController implements adminAuthorization
 			'style'       => IFilter::act(IReq::get('style','post')),
 			'color'       => IFilter::act(IReq::get('color','post')),
 		);
-        $x = explode('{{', $dataArray['content']);
-        $y = explode('}}', $x[1]);
-        $goods_no = $y[0];
-        $goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
-        $dataArray['content'] = $x[0] . $goods_no_data['name'] . $y[1];
-//        var_dump($goods_no_data);
-//        var_dump($dataArray);
-//        die();
 
         //检查catid是否为空
 		if($dataArray['category_id'] == 0)
@@ -966,6 +958,22 @@ class Tools extends IController implements adminAuthorization
 		}
 		echo JSON::encode($result);
 	}
+
+    /**
+     * @return string
+     */
+    public function keyword_rel()
+    {
+        if ($_POST){
+            $keyword = IFilter::act(IReq::get('keyword'),'string');
+            $keyword_model = new IModel('keyword');
+            $this->rel_data = $keyword_model->query(' word like "%' . $keyword . '%"');
+        }
+        $word = IFilter::act(IReq::get('word'),'string');
+        $data['word'] = $word;
+        $this->data = $data;
+        $this->redirect('keyword_rel');
+    }
 
 	/**
 	 * 查询删除
