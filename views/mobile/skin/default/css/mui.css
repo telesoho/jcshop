@@ -1443,8 +1443,9 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 
     border-bottom: 0;
     background-color: #f7f7f7;
-    -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, .85);
-            box-shadow: 0 0 1px rgba(0, 0, 0, .85);
+    /*设置上边框样式*/
+    -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, .2);
+            box-shadow: 0 0 1px rgba(0, 0, 0, .2);
 
     -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
@@ -4508,7 +4509,7 @@ body > .mui-progressbar
 
     border-radius: 50%;
     background:#ffffff;
-    border:0.01rem solid #979797;
+    border:0.02rem solid #979797;
     /*background: #aaa;*/
     /*-webkit-box-shadow: 0 0 1px 1px rgba(130, 130, 130, .7);*/
             /*box-shadow: 0 0 1px 1px rgba(130, 130, 130, .7);*/
@@ -4516,7 +4517,7 @@ body > .mui-progressbar
 .mui-slider-indicator .mui-active.mui-indicator
 {
     background:#040404;
-    border:0.01rem solid #979797;
+    border:0.02rem solid #979797;
 }
 .mui-slider-indicator .mui-icon
 {

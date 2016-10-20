@@ -6,7 +6,7 @@
   font-family: 'HelveticaNeueLt';
   src:url('../font/HelveticaNeueLt.ttf')  format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
 }
-html, body, div, span, object,li,ul,img iframe, h1, h2, h3, h4, h5, h6, p, pre, a, em, img, strong, sub, sup, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header,  menu, nav, output, ruby, section, summary, time, mark, audio, video {
+html, body, span, object,li,ul,img iframe, h1, h2, h3, h4, h5, h6, p, pre, a, em, img, strong, sub, sup, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header,  menu, nav, output, ruby, section, summary, time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
@@ -14,19 +14,11 @@ html, body, div, span, object,li,ul,img iframe, h1, h2, h3, h4, h5, h6, p, pre, 
   font-family: 'AdobeHeitiStd-Regular','HelveticaNeueLt' ;
   color: #000000;
 }
-html{font-size:625%;
+html{font-size:13.35vw;
+      height: 100%;
 }
-@media (-webkit-min-device-pixel-ratio: 2) and (max-device-width: 667px) and (min-device-width: 376px){
-  html {
-    font-size: 745%;
-    height: 100%;
-  }
-}
-@media (-webkit-min-device-pixel-ratio: 3) and (max-device-width: 750px) and (min-device-width: 414px){
-  html {
-    font-size: 800%;
-    height: 100%;
-  }
+body{
+  font-size:0.24rem;
 }
 .mui-content{
 	width:100% !important;
@@ -161,4 +153,25 @@ color:#ef4145 !important;}
   height: 1px;
   background-color: #ccc;
   transform:scaleY(0.3);
+}
+.line{position:relative;}
+.line:after{
+  width:200%;
+  height:200%;
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:0;
+  content:"";
+  -webkit-transform:scale(0.5);
+  -webkit-transform-origin:0 0;
+  transform:scale(0.5);
+  transform-origin:0 0;
+  border:1px solid #ccc;
+}
+.hide{
+  display:none;
+}
+.show{
+  display:block;
 }

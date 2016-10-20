@@ -1,5 +1,5 @@
 .nav-header{
-	padding:0.06rem 0;
+	padding:6px 0;
 	width:100%;
 	background:#fff !important;
 }
@@ -10,11 +10,18 @@
 .mui-search.mui-active{
 	width:70%;
 	margin-left:15%;
+
 }
-.mui-input-clear{
-	border-radius:0.02rem !important;
-	background:#eeeeee !important;
+input[type='search']{
+	background:#eee !important;
 }
+.mui-icon-search:before{
+	color:#ccc;
+}
+/*.mui-input-clear{*/
+	/*border-radius:0.02rem !important;*/
+	/*background:#eeeeee !important;*/
+/*}*/
 .mui-input-row.mui-active {
 	color:#bbbbbb !important;
 }
@@ -23,21 +30,20 @@
 
 }
 .mui-search span:nth-child(2){
-	font-size:0.12rem;
 	color:#bbbbbb;
 }
 .mui-control-item{
-	font-size:0.13rem;
+	font-size:0.26rem;
 	position:relative;
 	color:#979797 !important;
 }
 .mui-control-item span{
 	display:none;
 	width:80%;
-	height:0.025rem;
+	height:0.05rem;
 	background:#ff2525;
 	position:absolute;
-	bottom:0.02rem;
+	bottom:0.04rem;
 	left:10%;
 }
 .mui-scroll-wrapper{
@@ -58,46 +64,44 @@
 }
 /*专辑样式*/
 .timePurchase{
-	margin-top:0.05rem;
+	margin-top:0.1rem;
 }
 .timePurchase_title{
 
-	height:0.32rem;
-	line-height:0.32rem;
-	margin:0.08rem 0;
+	height:0.52rem;
+	line-height:0.64rem;
+	margin:0.16rem 0 0.30rem;
 }
 .timePurchase_title span{
-	font-size:0.13rem;
+	font-size:0.26rem;
 	color:#bbbbbb;
 }
 #timer_h, #timer_m, #timer_s{
 	font-family:'HelveticaNeueLt';
 }
 .mui-icon-forward{
-	line-height:0.32rem;
+	line-height:0.64rem;
 	color:#bbbbbb;
-	font-size:0.12rem;
 }
 .timePurchase_body{
 	width:100%;
+	margin:1.3% 0;
 	display:flex;
 	align-items: stretch;
-	justify-content: space-around;
+	justify-content: flex-start;
 	flex-wrap:wrap;
 
 }
 .timePurchase_body .item{
 	margin-left:1.3%;
-	margin-bottom:0.05rem;
+	margin-bottom:0.1rem;
 	width:31.5%;
-	border:1px solid #ccc;
-	overflow-x: hidden;
 }
 .timePurchase_body .item .img{
 	display:flex;
 	-webkit-justify-content: center;
 	-webkit-align-items: center;
-	margin:0.07rem 0;
+	margin:0.14rem 0;
 }
 .timePurchase_body .item .text{
 	position:relative;
@@ -107,8 +111,6 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-size:0.12rem;
-
 }
 .timePurchase_body .item:nth-child(3){
 	margin-right:1.3%;
@@ -119,7 +121,7 @@
 /*搜索页面*/
 #modalid-searth{
 	position:fixed;
-	top:84px;
+	top:46px;
 	left:0;
 	width:100%;
 	height:100%;
@@ -127,11 +129,102 @@
 	z-index:999;
 }
 #modalid-searth .title{
-	background:#eee;
+	background-color: #eee;
+	color: #65657b;
+	height: .48rem;
+	line-height: .48rem;
+	padding: 0 5%;
+}
+#modalid-searth .searth-content{
+	width:100%;
+	padding: 0 5%;
+	display:flex;
+	flex-flow: wrap;
+	justify-content: flex-start;
+}
+#modalid-searth .searth-content a{
+	display:block;
+	width:auto;
+	padding:0.1rem;
+	text-align:center;
+	border:1px solid #dcdcdc;
+	margin:0.2rem 0.2rem 0 0;
+	color:rgb(62, 187, 91);
+	border-radius:0.2rem;
+	font-size:0.26rem;
+}
+#button-submit{
+	display:block;
+	width:80%;
+	border-radius:33px ;
+	border:1px solid #e53e42;
+	margin:0.24rem auto;
+	color:#e53e42;
+}
+#button-cancel{
+	display:block;
+	width:80%;
+	margin:0 auto;
+	border-radius:33px ;
+}
+/*视频专辑*/
+.vedio{
+	position:relative;
+}
+#vedioStyle span{
+	position:absolute;
+	top:0;
+	right:0;
 }
 
+/*nav*/
+.nav-icon{
+	margin-bottom:-0.2rem;
+	text-align:center;
+	display:inline-block;
+	width:50%;
+	height:0.7rem;
 
-
+}
+.icon-home{
+	background:url('../../image/jmj/icon/14.png') no-repeat 100%;
+	background-size:100% 100%;
+}
+.icon-classification{
+	background:url('../../image/jmj/icon/12.png') no-repeat 100% ;
+	background-size:100% 100%;
+}
+.icon-vedio{
+	background:url('../../image/jmj/icon/05.png') no-repeat 100% ;
+	background-size:100% 100%;
+}
+.icon-shopcar{
+	 background:url('../../image/jmj/icon/11.png') no-repeat 100% ;
+	background-size:100% 100%;
+ }
+.icon-my{
+	background:url('../../image/jmj/icon/10.png') no-repeat 100% ;
+	background-size:100% 100%;
+}
+.mui-tab-item.mui-active .icon-home{
+	background:url('../../image/jmj/icon/05.png') no-repeat 100%;
+	background-size:100% 100%;
+}
+.mui-tab-item.mui-active .icon-classification{
+	background:url('../../image/jmj/icon/13.png') no-repeat 100%;
+	background-size:100% 100%;
+}
+.mui-tab-item.mui-active .icon-shopcar{
+	background:url('../../image/jmj/icon/06.png') no-repeat 100%;
+	background-size:100% 100%;
+}
+.mui-tab-item.mui-active .icon-my{
+	background:url('../../image/jmj/icon/07.png') no-repeat 100%;
+	background-size:100% 100%;
+}
+.mui-tab-item.mui-active{
+	color:#ff2525 !important;
+}
 
 
 
