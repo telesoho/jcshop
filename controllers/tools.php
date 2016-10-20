@@ -846,7 +846,7 @@ class Tools extends IController implements adminAuthorization
 
 		if($re['flag']==true)
 		{
-			$this->redirect('keyword_list');
+            $this->redirect('keyword_list');
 		}
 		else
 		{
@@ -876,7 +876,6 @@ class Tools extends IController implements adminAuthorization
 		{
 			$message = '请选择要删除的关键词';
 		}
-
 		if(isset($message))
 		{
 			$this->redirect('keyword_list',false);
@@ -964,15 +963,62 @@ class Tools extends IController implements adminAuthorization
      */
     public function keyword_rel()
     {
+        $keyword_model = new IModel('keyword');
+        $keyword_rel_model = new IModel('keyword_rel');
         if ($_POST){
-            $keyword = IFilter::act(IReq::get('keyword'),'string');
-            $keyword_model = new IModel('keyword');
-            $this->rel_data = $keyword_model->query(' word like "%' . $keyword . '%"');
+            if (isset($_POST['do'])){ //保存标签关联
+                $rel_word_ids = IFilter::act(IReq::get('ids'),'string');
+                $id = IFilter::act(IReq::get('id'),'int');
+                $data = array();
+                foreach ($rel_word_ids as $key => $value){
+                    $keyword_rel_model->setData(array('id'=>$id,'rel_id'=>$value));
+                    $word_data = $keyword_rel_model->getObj('id = ' . $id . ' and rel_id = ' . $value);
+                    if (empty($word_data)){
+                        $keyword_rel_model->add();
+                    } else {
+                        $keyword_rel_model->del('id='.$id);
+                        $keyword_rel_model->add();
+                    }
+                }
+            } else { //查询标签
+                $this->keyword = IFilter::act(IReq::get('keyword'),'string');
+                $id = IFilter::act(IReq::get('id'),'int');
+                $rel_word_ids = $keyword_rel_model->query('id = "' . $id . '"');
+                $temp = '';
+                foreach ($rel_word_ids as $key=>$value){
+                    $temp = $temp . ' and id !=' . $value['rel_id'];
+                }
+                $this->rel_data = $keyword_model->query(' word like "%' . $this->keyword . '%" and id != "'.$id.'"' . $temp);
+            }
         }
         $word = IFilter::act(IReq::get('word'),'string');
-        $data['word'] = $word;
-        $this->data = $data;
+        $id = IFilter::act(IReq::get('id'),'int');
+        $word_data = $keyword_model->getObj('id = "' . $id . '"');
+        $rel_word_ids = $keyword_rel_model->query('id = "' . $id . '"');
+        foreach ($rel_word_ids as $key=>$value){
+            $word_data['rel_word_data'][] = $keyword_model->getObj('id = "' . $value['rel_id'] . '"');
+        }
+        $this->data = $word_data;
         $this->redirect('keyword_rel');
+    }
+
+    public function keyword_list(){
+        if ($_POST){
+            $keyword_model = new IModel('keyword');
+            $this->keyword = IFilter::act(IReq::get('keyword'),'string');
+            $this->data = $keyword_model->query(' word like "%' . $this->keyword . '%"');
+        }
+        $this->redirect('keyword_list');
+    }
+
+    /**
+     * @return string
+     */
+    public function keyword_list_art()
+    {
+        $this->layout = '';
+//        echo '';
+        $this->redirect('keyword_list_art');
     }
 
 	/**
