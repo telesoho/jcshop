@@ -35,7 +35,18 @@
 					</div>
 					<hr class="m_10" />
 					<div class="textcontent">
-						<p>{$this->articleRow['content']}</p>
+						<p><?php
+							$content = htmlspecialchars_decode($this->articleRow['content']);
+							$x = explode('{{', $content);
+							$y = explode('}}', $x[1]);
+							$goods_no = $y[0];
+							if (!empty($goods_no)){
+								$goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
+								echo $x[0] . $goods_no_data['name'] . $y[1];
+							} else {
+								echo $content;
+							}
+							?></p>
 					</div>
 				</div>
 			</div>

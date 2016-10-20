@@ -219,7 +219,8 @@ class Apic extends IController
         );
 
         $checkArray = $sqlData;
-        unset($checkArray['telphone'],$checkArray['zip'],$checkArray['user_id']);
+        unset($checkArray['zip'],$checkArray['user_id']);
+//        unset($checkArray['telphone'],$checkArray['zip'],$checkArray['user_id']);
         foreach($checkArray as $key => $val)
         {
             if(!$val)
@@ -405,43 +406,20 @@ class Apic extends IController
      */
 
     /**
-     *商品的分类数据
+     *一级分类的数据信息
      */
-    public function getCategoryListTop()
+    public function category_top()
     {
         $data = Api::run('getCategoryListTop');
         header("Content-type: application/json");
         echo json_encode($data);
         exit();
     }
+
     /**
-     * 通过分类ID返回分类信息（包括其子类）
+     * 获取其子类数据信息
      */
-    public function pro_list()
-    {
-        $this->catId = IFilter::act(IReq::get('cat'),'int');//分类id
-        if($this->catId == 0)
-        {
-//            IError::show(403,'缺少分类ID');
-            $this->log->addError('缺少分类ID');
-        }
-        //查找分类信息
-        $catObj       = new IModel('category');
-        $this->catRow = $catObj->getObj('id = '.$this->catId);
-        if($this->catRow == null)
-        {
-//            IError::show(403,'此分类不存在');
-            $this->log->addError('此分类不存在');
-        }
-        //获取子分类
-        $this->childId = goods_class::catChild($this->catId);
-        $data = array($this->catId, $this->catRow, $this->childId);
-        header("Content-type: application/json");
-        echo json_encode($data);
-        exit();
-    }
-    //获取分类下的分类数据
-    public function getCategoryByParentid()
+    public function category_child()
     {
         $first_id = IFilter::act(IReq::get('id'),'int');
         $data = Api::run('getCategoryByParentid',array('#parent_id#',$first_id));
@@ -455,7 +433,7 @@ class Apic extends IController
     /**
      * 返回品牌信息
      */
-    public function getBrandList()
+    public function brand_list()
     {
         $data = Api::run('getBrandList');
         header("Content-type: application/json");

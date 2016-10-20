@@ -67,7 +67,7 @@
 					<th>关联相关商品：</th>
 					<td>
 						<table class='border_table' style='width:70%;margin-bottom:10px;'>
-							<thead><tr><th>商品名称</th><th>操作</th></tr></thead>
+							<thead><tr><th>商品货号</th><th>商品名称</th><th>操作</th></tr></thead>
 							<tbody id="goodsListBox"></tbody>
 						</table>
 						<button class='btn' type='button' onclick="searchGoods('{url:/block/search_goods/type/checkbox}',searchGoodsCallback);"><span>选择商品</span></button>
@@ -95,6 +95,9 @@
 <!--商品模板-->
 <script type="text/html" id="goodsItemTemplate">
 <tr>
+	<td>
+		<input value="{{<%=templateData['goods_no']%>}}">
+	</td>
 	<td>
 		<input type='hidden' name='goods_id[]' value='<%=templateData['goods_id']%>' />
 		<img src="{webroot:<%=templateData['img']%>}" style="width:80px;" />
