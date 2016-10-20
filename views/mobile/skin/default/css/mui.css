@@ -7,15 +7,11 @@
 /*! normalize.css v3.0.1 | MIT License | git.io/normalize */
 html
 {
-    font-family: sans-serif;
 
     -webkit-text-size-adjust: 100%;
 }
 
-body
-{
-    margin: 0;
-}
+
 
 article,
 aside,
@@ -2831,7 +2827,7 @@ input[type='color']
 
     width: 100%;
     height: 40px;
-    margin-bottom: 15px;
+    /*margin-bottom: 15px;*/
     padding: 10px 15px;
 
     -webkit-user-select: text;
@@ -3332,10 +3328,8 @@ select:focus
     padding-left: 30px;
 }
 .mui-search .mui-placeholder
-{
-    font-size: 16px;
+{   font-size: 16px;
     line-height: 34px;
-
     position: absolute;
     z-index: 1;
     top: 0;
@@ -3372,7 +3366,7 @@ select:focus
 
     display: none;
 
-    margin-top: -18px;
+    margin-top: -10px;
     margin-right: 31px;
 
     content: '\e466';
@@ -3438,8 +3432,8 @@ select:focus
 .mui-segmented-control.mui-scroll-wrapper .mui-scroll
 {
     width: auto;
-    height: 40px;
-
+    height: 0.4rem;
+    background:#fff;
     white-space: nowrap;
 }
 .mui-segmented-control.mui-scroll-wrapper .mui-control-item
@@ -4506,21 +4500,23 @@ body > .mui-progressbar
 .mui-slider-indicator .mui-indicator
 {
     display: inline-block;
-
-    width: 6px;
-    height: 6px;
-    margin: 1px 6px;
+    width: 6.5px;
+    height: 6.5px;
+    margin: 0.01rem 0.03rem;
 
     cursor: pointer;
 
     border-radius: 50%;
-    background: #aaa;
-    -webkit-box-shadow: 0 0 1px 1px rgba(130, 130, 130, .7);
-            box-shadow: 0 0 1px 1px rgba(130, 130, 130, .7);
+    background:#ffffff;
+    border:0.01rem solid #979797;
+    /*background: #aaa;*/
+    /*-webkit-box-shadow: 0 0 1px 1px rgba(130, 130, 130, .7);*/
+            /*box-shadow: 0 0 1px 1px rgba(130, 130, 130, .7);*/
 }
 .mui-slider-indicator .mui-active.mui-indicator
 {
-    background: #fff;
+    background:#040404;
+    border:0.01rem solid #979797;
 }
 .mui-slider-indicator .mui-icon
 {
