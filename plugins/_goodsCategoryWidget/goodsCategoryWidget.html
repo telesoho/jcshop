@@ -15,7 +15,7 @@ jQuery(function()
 	//绑定UI按钮入口
 	$(document).on("click","[name='_goodsCategoryButton']",selectGoodsCategory);
 	$(document).on("click","[name='_goodsKeywordButton']",selectGoodsKeyword);
-
+	art.dialog.data('aa',{echo:JSON::encode($categoryData)});
 	//完整分类数据
 	{query:name=category order=sort asc items=$categoryData}{/query}
 	art.dialog.data('categoryWhole',{echo:JSON::encode($categoryData)});
@@ -66,6 +66,7 @@ function selectGoodsCategory()
 				}
 			}
 			createGoodsCategory(categoryObject);
+
 		},
 		cancel:function()
 		{
@@ -83,25 +84,23 @@ function createGoodsCategory(categoryObj)
 	}
 
 	$('#__categoryBox').empty();
-	for(var item in categoryObj)
-	{
+	for(var item in categoryObj) {
 		item = categoryObj[item];
-		var goodsCategoryHtml = template.render('categoryButtonTemplate',{'templateData':item});
+		var goodsCategoryHtml = template.render('categoryButtonTemplate', {'templateData': item});
 		$('#__categoryBox').append(goodsCategoryHtml);
 	}
+
 }
 
 
 function selectGoodsKeyword()
 {
-	//根据表单里面的name值生成分类ID数据
-	var categoryName = "{$name}";
 	var result = [];
-	$('[name="'+categoryName+'"]').each(function()
+	$('[name="search_words"]').each(function()
 	{
 		result.push(this.value);
 	});
-	art.dialog.data('categoryValue',result);
+	art.dialog.data('selectIds',result);
 
 	//URL地址
 //	{if:isset($type) && $type == "checkbox"}
@@ -117,8 +116,17 @@ function selectGoodsKeyword()
 		okVal:'确定',
 		ok:function(iframeWin, topWin)
 		{
-			var chenbo  = art.dialog.data('chenbo');
-			console.log(chenbo);
+			var selectIds  = JSON.parse(art.dialog.data('selectIds'));
+			var tempKeyword = '';
+			for (var x=0;x < selectIds.length;x++){
+				if (x == (selectIds.length-1)){
+					tempKeyword += selectIds[x];
+				} else {
+					tempKeyword += selectIds[x] + ',';
+				}
+			}
+			$('input[name=search_words]').val(tempKeyword);
+//			$('input[name=search_words]').attr('readonly',true);
 		},
 		cancel:function()
 		{
