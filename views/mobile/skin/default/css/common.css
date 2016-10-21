@@ -1,17 +1,29 @@
 @font-face {
-  font-family: 'AdobeHeitiStd-Regular';
-  src:url('../font/AdobeHeitiStd-Regular.otf') format('woff'); /* chrome、firefox */
+  font-family: 'ArialUnicodeMS';
+  src:url('../font/arialunicodems.ttf') format('truetype'); /* chrome、firefox */
 }
 @font-face {
   font-family: 'HelveticaNeueLt';
   src:url('../font/HelveticaNeueLt.ttf')  format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+}
+@font-face {
+  font-family: 'Impact';
+  src:url('../font/Impact.TTF')  format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+}
+@font-face {
+  font-family: 'WickedMouseDemo';
+  src:url('../font/WickedMouseDemo.otf')  format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+}
+@font-face {
+  font-family: 'petangueDEMO';
+  src:url('../font/petangueDEMO.otf')  format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
 }
 html, body, span, object,li,ul,img iframe, h1, h2, h3, h4, h5, h6, p, pre, a, em, img, strong, sub, sup, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header,  menu, nav, output, ruby, section, summary, time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
   outline: none;
-  font-family: 'AdobeHeitiStd-Regular','HelveticaNeueLt' ;
+  font-family: 'ArialUnicodeMS','HelveticaNeueLt' ;
   color: #000000;
 }
 html{font-size:13.35vw;
@@ -174,4 +186,23 @@ color:#ef4145 !important;}
 }
 .show{
   display:block;
+}
+/*图标大小设定*/
+.img-hot{
+  width:0.28rem;
+}
+.img-share{
+  width:0.34rem;
+}
+.img-like{
+  width:0.39rem;
+}
+.img-paper{
+  width:0.35rem;
+}
+.img-pan1{
+  width:0.56rem;
+}
+.img-pan2{
+  width:0.37rem;
 }
