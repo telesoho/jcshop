@@ -6,6 +6,14 @@
 		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
 		<a href="javascript:void(0)" onclick="window.document.forms[0].action='{url:/tools/keyword_account}';delModel({msg:'是否批量同步？'});"><button class="operating_btn" type="button"><span class="refresh">批量同步</span></button></a>
 	</div>
+	<div class="searchbar">
+		<form action="{url:/tools/keyword_list}" method="post" name="searchListForm">
+			<input class="small" name="keyword" type="text" value="{$this->keyword}">
+			<!--<input name="word" type="hidden" value="{$this->keyword}">-->
+			<!--<button class="submit" type="submit" onclick="return checkForm()"><span>查询</span></button>-->
+			<button class="btn" type="submit"><span class="sel">查  询</span></button>
+		</form>
+	</div>
 </div>
 <div class="content">
 	<form action="{url:/tools/keyword_del}" method="post">
@@ -31,27 +39,50 @@
 			</thead>
 
 			<tbody>
-				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
-				{query: name=keyword page=$page order=`order` asc}
-				<tr>
-					<td><input type="checkbox" name="id[]" value="{$item['word']}" /></td>
-					<td>{$item['word']}</td>
-					<td>{$item['goods_nums']}</td>
-					<td>
-						{if:$item['hot']==1}
-						<a class='red2' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>是</a>
-						{else:}
-						<a class='blue' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>否</a>
-						{/if}
-					</td>
-					<td>
-						<input type='text' maxlength='6' onblur='set_order("{$item['word']}",this,"{$item['order']}");' class='tiny' value='{$item['order']}' />
-					</td>
-					<td>
-						<a href="{url:/tools/keyword_rel/word/$item['word']}" class="btn-block">关联标签</a>
-					</td>
-				</tr>
-				{/query}
+				{if:!$this->data}
+					{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+					{query: name=keyword page=$page order=`order` asc}
+					<tr>
+						<td><input type="checkbox" name="id[]" value="{$item['word']}" /></td>
+						<td>{$item['word']}</td>
+						<td>{$item['goods_nums']}</td>
+						<td>
+							{if:$item['hot']==1}
+							<a class='red2' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>是</a>
+							{else:}
+							<a class='blue' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>否</a>
+							{/if}
+						</td>
+						<td>
+							<input type='text' maxlength='6' onblur='set_order("{$item['word']}",this,"{$item['order']}");' class='tiny' value='{$item['order']}' />
+						</td>
+						<td>
+							<a href="{url:/tools/keyword_rel/id/$item['id']}" class="btn-block">关联标签</a>
+						</td>
+					</tr>
+					{/query}
+				{else:}
+					{foreach:$items=$this->data}
+						<tr>
+							<td><input type="checkbox" name="id[]" value="{$item['word']}" /></td>
+							<td>{$item['word']}</td>
+							<td>{$item['goods_nums']}</td>
+							<td>
+								{if:$item['hot']==1}
+								<a class='red2' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>是</a>
+								{else:}
+								<a class='blue' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>否</a>
+								{/if}
+							</td>
+							<td>
+								<input type='text' maxlength='6' onblur='set_order("{$item['word']}",this,"{$item['order']}");' class='tiny' value='{$item['order']}' />
+							</td>
+							<td>
+								<a href="{url:/tools/keyword_rel/id/$item['id']}" class="btn-block">关联标签</a>
+							</td>
+						</tr>
+					{/foreach}
+				{/if}
 			</tbody>
 		</table>
 	</form>
