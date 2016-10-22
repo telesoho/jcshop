@@ -370,7 +370,7 @@ input[type='search']{
 /*搜索页面*/
 #modalid-searth{
 	position:fixed;
-	top:46px;
+	top:0.9rem;
 	left:0;
 	width:100%;
 	height:100%;
@@ -475,7 +475,6 @@ input[type='search']{
 }
 .icon-vedio{
 	display:inline-block;
-	z-index:199;
 	position:absolute;
 	bottom:0;
 	left:0;
@@ -483,8 +482,21 @@ input[type='search']{
 	height:1.31rem;
 	border-radius:50%;
 	background:#fff;
+	box-shadow: 0 0 0.01rem rgba(0, 0, 0, .2);
+}
+.tab-mark{
+	display:inline-block;
+	position:absolute;
+	height:0.98rem;
+	width:1.4rem;
+	z-index:3;
+	left:0;
+	bottom:0;
+	background:#fff;
 }
 .img-move02{
+	position:relative;
+	z-index:24;
 	width:1.06rem;
 	margin-top:0.125rem;
 }
@@ -505,7 +517,7 @@ input[type='search']{
 	background-size:100% 100%;
 }
 .mui-tab-item.mui-active{
-	color:#ff2525 !important;
+	color:#ff4aa0 !important;
 }
 
 

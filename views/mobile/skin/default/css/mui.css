@@ -3411,7 +3411,6 @@ select:focus
 .mui-segmented-control.mui-segmented-control-vertical .mui-control-item
 {
     display: block;
-
     border-bottom: 1px solid #c8c7cc;
     border-left-width: 0;
 }
