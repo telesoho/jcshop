@@ -1,22 +1,457 @@
-
-<div id="pageInfo" data-title="分类浏览"></div>
-<!--分类信息 开始-->
-
-<section class="map_list">
-	{foreach:items=Api::run('getCategoryListTop') item=$first }
-	<dl>
-		<dt><a href="{url:/site/pro_list/cat/$first[id]}">{$first['name']}</a></dt>
-		<dd>
-			{foreach:items=Api::run('getCategoryByParentid',array('#parent_id#',$first['id'])) item=$second}
-			<a href="{url:/site/pro_list/cat/$second[id]}">{$second['name']}</a>
-			{/foreach}
-		</dd>
-	</dl>
-	{/foreach}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>九猫商城</title>
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
+</head>
+<body>
+<!--loading页开始-->
+<div id="loading">
+	<div class="spinner">
+		<div class="spinner-container container1">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container2">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container3">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+	</div>
+</div>
+<!--loading页结束-->
+<!--头部-->
+<section class="homeHeader">
+	<div class="nav-header">
+		<div class="mui-input-row mui-search">
+			<input type="search" id="searth"  placeholder="搜索你想要的品牌">
+		</div>
+	</div>
+	<img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon">
+	<img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon">
 </section>
+<section id="nav-slider">
+	<div  class="mui-slider">
+		<div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+			<div class="mui-scroll">
+				<a class="mui-control-item " href="#">
+					<span class="text">推荐</span><span class="bg">
+                    <img src="" alt="">
+                </span>
+				</a>
+				<a class="mui-control-item" href="#">
+					<span class="text">限时购</span><span class="bg"></span>
+				</a>
+				<a class="mui-control-item" href="#">
+					<span class="text">逛</span><span class="bg"></span>
+				</a>
+				<a class="mui-control-item " href="#">
+					<span class="text">药妆</span><span class="bg"></span>
+				</a>
+				<a class="mui-control-item" href="#">
+					<span class="text">个护</span><span class="bg"></span>
+				</a>
+				<a class="mui-control-item mui-active" href="#">
+					<span class="text">宠物</span><span class="bg"></span>
+				</a>
+				<a class="mui-control-item " href="#">
+					<span class="text">健康</span><span class="bg"></span>
+				</a>
+			</div>
+		</div>
+	</div>
+</section>
+<!--轮播图-->
+<section>
+	<div id="slider1" class="mui-slider" >
+		<div class="mui-slider-group mui-slider-loop">
+			<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+			<div class="mui-slider-item mui-slider-item-duplicate">
+				<a href="{url:/site/video_album}">
+					<img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+				</a>
+			</div>
+			<!-- 第一张 -->
+			<div class="mui-slider-item">
+				<a href="{url:/site/video_album}">
+					<img dataimg="/views/mobile/skin/default/image/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+				</a>
+			</div>
+			<!-- 第二张 -->
+			<div class="mui-slider-item">
+				<a href="{url:/site/video_album}">
+					<img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+				</a>
+			</div>
+			<!-- 第三张 -->
+			<div class="mui-slider-item">
+				<a href="{url:/site/video_album}">
+					<img dataimg="/views/mobile/skin/default/image/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+				</a>
+			</div>
+			<!-- 第四张 -->
+			<div class="mui-slider-item">
+				<a href="{url:/site/video_album}">
+					<img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+				</a>
+			</div>
+			<!-- 第四张 -->
+			<div class="mui-slider-item">
+				<a href="{url:/site/video_album}">
+					<img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+				</a>
+			</div>
+			<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+			<div class="mui-slider-item mui-slider-item-duplicate">
+				<a href="{url:/site/video_album}">
+					<img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+				</a>
+			</div>
+		</div>
+		<div class="mui-slider-indicator">
+			<div class="mui-indicator mui-active"></div>
+			<div class="mui-indicator"></div>
+			<div class="mui-indicator"></div>
+			<div class="mui-indicator"></div>
+			<div class="mui-indicator"></div>
+		</div>
+	</div>
+	<!--轮播图结束-->
+</section>
+<!--专辑-->
+<section class="timePurchase line">
+	<div class="timePurchase_title">
+		<div class="logo">
+			<img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying01.png" alt="" class="img-pan1">
+			<span>限时抢购</span>
+			<img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying02.png" alt="" class="img-pan2">
+		</div>
+		<div id="timer" data-timer="20161028140203" class="timer">
+			<span id="timer_h">0</span>
+			<span id="timer_m">0</span>
+			<span id="timer_s">0</span>
 
+		</div>
+		<div class="right">
+			<span class="mui-icon mui-icon-forward mui-pull-right"></span>
+			<span class=" mui-pull-right">更多</span>
+		</div>
+	</div>
+	<div class="timePurchase_body">
+		<div class="item">
+			<div class="img  line">
+				<img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+				<span>199.49</span>
+			</div>
+			<div class="text">
+				<div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+				<div class="price"><s><span>￥</span>199.49</s></div>
+			</div>
+		</div>
+		<div class="item ">
+			<div class="img line">
+				<img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+				<span>199.49</span>
+			</div>
+			<div class="text">
+				<div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+				<div class="price"><s><span>￥</span>199.49</s></div>
+			</div>
+		</div>
+		<div class="item ">
+			<div class="img line">
+				<img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+				<span>199.49</span>
+			</div>
+			<div class="text">
+				<div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+				<div class="price"><s><span>￥</span>199.49</s></div>
+			</div>
+		</div>
+		<div class="item ">
+			<div class="img line">
+				<img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+				<span>199.49</span>
+			</div>
+			<div class="text">
+				<div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+				<div class="price"><s><span>￥</span>199.49</s></div>
+			</div>
+		</div>
+		<div class="item ">
+			<div class="img line">
+				<img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+				<span>199.49</span>
+			</div>
+			<div class="text">
+				<div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+				<div class="price"><s><span>￥</span>199.49</s></div>
+			</div>
+		</div>
+		<div class="item">
+			<div class="img line">
+				<img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+				<span>199.49</span>
+			</div>
+			<div class="text">
+				<div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+				<div class="price"><s><span>￥</span>199.49</s></div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--专辑-->
+<section class="recommended line albumn_index">
+	<div class="title">
+        <span class="logo">
+            <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
+        </span>
+		<span class="name">
+            特別推薦
+        </span>
+		<span class="num mui-pull-right">
+            999+
+        </span>
+		<span class="like mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+        </span>
+		<span class="share mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+        </span>
+	</div>
+	<div class="content">
+		<div class="img">
+			<img src="/views/mobile/skin/default/image/jmj/img/banner01.png" alt="" width="100%">
+		</div>
+		<div class="mark1">23件商品</div>
+		<div class="mark2">
+			<img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
+			25万次</div>
+	</div>
+</section>
+<section class="recommended line albumn_index">
+	<div class="title">
+        <span class="paper">
+            <img src="/views/mobile/skin/default/image/jmj/icon/paper.png" alt="" class="img-paper">
+        </span>
+		<span class="name">
+             人気雑誌
+        </span>
+		<span class="num mui-pull-right">
+            102
+        </span>
+		<span class="like mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+        </span>
+		<span class="share mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+        </span>
+	</div>
+	<div class="content">
+		<div class="img">
+			<img src="/views/mobile/skin/default/image/jmj/img/banner02.png" alt="" width="100%">
+		</div>
+		<div class="mark1">23件商品</div>
+		<div class="mark2">
+			<img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
+			25万次</div>
+	</div>
+</section>
+<!--视频专题-->
+<section class="vedio_album albumn_index">
+	<div class="title">
+        <span class="logo">
+            <img src="/views/mobile/skin/default/image/jmj/icon/move.png" alt="" class="img-vedio">
+        </span>
+		<span class="vedio_name">
+            動画のビデオ
+            <span><img src="/views/mobile/skin/default/image/jmj/icon/address.png" alt="" class="img-address">日本东京</span>
+        </span>
+		<span class="num mui-pull-right">
+            999+
+        </span>
+		<span class="like mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+        </span>
+		<span class="share mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+        </span>
+	</div>
+	<div class="vedio">
+		<video class="player" src="http://dianbo2.bolo.me/video/1474624774.mp4" poster="/views/mobile/skin/default/image/jmj/img/banner03.png"
+			   webkit-playsinline=""   width="100%">
+		</video>
+		<div class="vedioStyle" id="vedioStyle">
+			<div class="top">
+				<img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="" class="img-read">1.53万次</div>
+			<div class="middle">
+				<img src="/views/mobile/skin/default/image/jmj/icon/click.png" alt="" class="img-click">
+			</div>
+			<div class="bottom">
+				<span class="name">视频名称视频名称</span>
+				<!--<span class="time">09:13</span>-->
+			</div>
+			<span class="time">09:13</span>
+		</div>
+
+	</div>
+</section>
+<!--底部空隙-->
+<div style="padding-bottom:2.42rem;background:#f8f8f8"></div>
+<footer>
+	<nav class="mui-bar mui-bar-tab">
+		<a id="defaultTab" class="mui-tab-item mui-active home" href="#">
+			<span class="mui-icon nav-icon icon-home"></span>
+			<div class="mui-tab-label">首页</div>
+		</a>
+		<a class="mui-tab-item" href="#">
+			<span class="mui-icon nav-icon icon-classification"></span>
+			<div class="mui-tab-label">分类</div>
+		</a>
+		<a class="mui-tab-item" href="shopcar.html">
+                <span class="nav-icon icon-vedio">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/move02.png" alt="" class="img-move02">
+                    <span class="tab-mark"></span>
+                </span>
+		</a>
+		<a class="mui-tab-item" href="#">
+			<span class="mui-icon nav-icon icon-shopcar"></span>
+			<div class="mui-tab-label">购物车</div>
+		</a>
+		<a class="mui-tab-item" href="#">
+			<span class="mui-icon nav-icon icon-my"></span>
+			<div class="mui-tab-label">我的</div>
+		</a>
+	</nav>
+</footer>
+<!--模态框-->
+<div id="modalid-searth" class="hide">
+	<div class="title">
+		大家都在搜
+	</div>
+	<div class="searth-content">
+		<a href="#">万圣节</a>
+		<a href="#">爱丽小屋</a>
+		<a href="#">吃饱撑着</a>
+		<a href="#">哈哈哈</a>
+		<a href="#">英文</a>
+		<a href="#">数字</a>
+		<a href="#">万圣节</a>
+		<a href="#">万圣节</a>
+		<a href="#">万圣节</a>
+		<a href="#">万圣节</a>
+		<a href="#">万圣节</a>
+	</div>
+	<button type="button" id="button-submit" class="mui-btn  mui-btn-outlined buttom-submit" onclick="searthSubmit();">确定</button>
+	<button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
+</div>
+<!--<span class="mui-icon-extra mui-icon-extra-top" id="pagetop"></span>-->
+<!--头信息结束-->
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/javascript/lazyload.js"></script>
+<script src="/views/mobile/javascript/time.js"></script>
 <script>
-$(function(){
-	$(".nav_map").addClass('on')
-})
+	//页面加载动画的调用
+	$(window).load(function(){
+		$("#loading").fadeOut(300);
+		timer('timer');
+	})
+	//解决tab选项卡a标签无法跳转的问题
+	mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
+	mui('body').on('tap','a',function(){document.location.href=this.href;});
+	mui('body').on('tap','video',function(){
+		if(this.paused){
+			this.setAttribute("controls",'controls');
+			document.getElementById("vedioStyle").className="hide";
+			this.play();
+
+		}else{
+			this.pause();
+			this.setAttribute("controls",false);
+		}
+	});
+	document.getElementById("searth").addEventListener('focus',function(){
+		document.getElementById("modalid-searth").className="show";
+		document.body.style.overflow = 'hidden';
+	});
+	//图片轮播功能
+	var gallery = mui('.mui-slider');
+	gallery.slider({
+		interval:4000//自动轮播周期，若为0则不自动播放，默认为0；
+	});
+	mui.init({
+		pullRefresh: {
+			container: '#pullrefresh',
+//				取消下拉刷新
+			down: {
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
+	/**
+	 * 下拉刷新具体业务实现
+	 */
+	function pulldownRefresh() {
+		setTimeout(function() {
+			mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+		}, 1500);
+	}
+	var count = 0;
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh() {
+		setTimeout(function() {
+			mui('#pullrefresh').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。
+
+		}, 1500);
+	}
+	if (mui.os.plus) {
+		mui.plusReady(function() {
+			setTimeout(function() {
+				mui('#pullrefresh').pullRefresh().pullupLoading();
+			}, 1000);
+
+		});
+	} else {
+		mui.ready(function() {
+//					mui('#pullrefresh').pullRefresh().pullupLoading();
+		});
+	}
+	function searthCancel(){
+		document.getElementById("modalid-searth").className="hide";
+		document.body.style.overflow = 'auto';
+	}
+	function searthSubmit(){
+		var subContent=document.getElementById("searth").value;
+		if(subContent==""){
+			searthCancel();
+		}else{
+			window.location.href="home.html?item="+subContent;
+		}
+	}
 </script>
+</body>
+</html>
+
