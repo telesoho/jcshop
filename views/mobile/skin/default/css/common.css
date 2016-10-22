@@ -25,12 +25,15 @@ html, body, span, object,li,ul,img iframe, h1, h2, h3, h4, h5, h6, p, pre, a, em
   outline: none;
   font-family: 'ArialUnicodeMS','HelveticaNeueLt' ;
   color: #000000;
+  -webkit-box-sizing:border-box;
 }
 html{font-size:13.35vw;
       height: 100%;
 }
 body{
   font-size:0.24rem;
+  width:100%;
+  over-flow:hidden;
 }
 .mui-content{
 	width:100% !important;

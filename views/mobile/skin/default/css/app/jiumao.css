@@ -462,7 +462,7 @@ input[type='search']{
 	background-size:100% 100%;
 }
 .icon-classification{
-	background:url('../../image/jmj/icon/classify.png') no-repeat 100% ;
+	background:url('../../image/jmj/icon/mune.png') no-repeat 100% ;
 	background-size:100% 100%;
 }
 .icon-shopcar{
@@ -505,7 +505,7 @@ input[type='search']{
 	background-size:100% 100%;
 }
 .mui-tab-item.mui-active .icon-classification{
-	background:url('../../image/jmj/icon/classify-ed.png') no-repeat 100%;
+	background:url('../../image/jmj/icon/mune-ed.png') no-repeat 100%;
 	background-size:100% 100%;
 }
 .mui-tab-item.mui-active .icon-shopcar{
