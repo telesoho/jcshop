@@ -3538,7 +3538,6 @@ select:focus
 .mui-control-content
 {
     position: relative;
-
     display: none;
 }
 .mui-control-content.mui-active
