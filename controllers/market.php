@@ -317,7 +317,7 @@ class Market extends IController implements adminAuthorization
 	//[促销活动] 添加修改 [动作]
 	function pro_rule_edit_act()
 	{
-		$id           = IFilter::act(IReq::get('id'),'int');
+        $id           = IFilter::act(IReq::get('id'),'int');
 		$user_group   = IFilter::act(IReq::get('user_group','post'));
 		$promotionObj = new IModel('promotion');
 		if(is_string($user_group))
@@ -385,44 +385,106 @@ class Market extends IController implements adminAuthorization
 	//[限时抢购]添加,修改[单页]
 	function pro_speed_edit()
 	{
-		$id = IFilter::act(IReq::get('id'),'int');
-		if($id)
+		$name = IFilter::act(IReq::get('name'),'string');
+//		$id = IFilter::act(IReq::get('id'),'int');
+		if($name)
 		{
 			$promotionObj = new IModel('promotion');
-			$where = 'id = '.$id;
-			$promotionRow = $promotionObj->getObj($where);
-			if(empty($promotionRow))
+			$where = 'name = "'.$name . '"';
+//			$where = 'id = '.$id;
+            $promotionQuery = $promotionObj->query($where);
+//			$promotionRow = $promotionObj->getObj($where);
+			if(empty($promotionQuery))
 			{
 				$this->redirect('pro_speed_list');
 			}
 
-			//促销商品
-			$goodsObj = new IModel('goods');
-			$goodsRow = $goodsObj->getObj('id = '.$promotionRow['condition'],'id,name,sell_price,img');
-			if($goodsRow)
-			{
-				$result = array(
-					'isError' => false,
-					'data'    => $goodsRow,
-				);
-			}
-			else
-			{
-				$result = array(
-					'isError' => true,
-					'message' => '关联商品被删除，请重新选择要抢购的商品',
-				);
-			}
+            for ($i=0;$i<count($promotionQuery);$i++){
 
-			$promotionRow['goodsRow'] = JSON::encode($result);
-			$this->promotionRow = $promotionRow;
+                //促销商品
+                $goodsObj = new IModel('goods');
+                $goodsRow = $goodsObj->getObj('id = '.$promotionQuery[$i]['condition'],'id,name,sell_price,img');
+                if($goodsRow)
+                {
+                    $result[] = array(
+                        'isError' => false,
+                        'data'    => $goodsRow,
+                    );
+                }
+                else
+                {
+                    $result[] = array(
+                        'isError' => true,
+                        'message' => '关联商品被删除，请重新选择要抢购的商品',
+                    );
+                }
+            }
+
+            $promotionQuery['goodsRow'] = JSON::encode($result);
+			$this->promotionRow = $promotionQuery;
 		}
+//		var_dump($this->promotionRow);
 		$this->redirect('pro_speed_edit');
 	}
 
 	//[限时抢购]添加,修改[动作]
-	function pro_speed_edit_act()
+    function pro_speed_edit_act(){
+        $id = IFilter::act(IReq::get('id'),'int');
+
+        $condition_new   = IFilter::act(IReq::get('condition','post'));
+        $award_value = IFilter::act(IReq::get('award_value','post'));
+        $user_group  = IFilter::act(IReq::get('user_group','post'));
+
+        for ($i=0;$i<count($condition_new);$i++){
+            $condition = $condition_new[$i];
+            if(is_string($user_group))
+            {
+                $user_group_str = $user_group;
+            }
+            else
+            {
+                $user_group_str = ",".join(',',$user_group).",";
+            }
+
+            $dataArray = array(
+                'id'         => $id,
+                'name'       => IFilter::act(IReq::get('name','post')),
+                'condition'  => $condition,
+                'award_value'=> $award_value,
+                'is_close'   => IFilter::act(IReq::get('is_close','post')),
+                'start_time' => IFilter::act(IReq::get('start_time','post')),
+                'end_time'   => IFilter::act(IReq::get('end_time','post')),
+                'intro'      => IFilter::act(IReq::get('intro','post')),
+                'type'       => 1,
+                'award_type' => 0,
+                'user_group' => $user_group_str,
+            );
+
+            if(!$condition || !$award_value)
+            {
+                $this->promotionRow = $dataArray;
+                $this->redirect('pro_speed_edit',false);
+                Util::showMessage('请添加促销的商品，并为商品填写价格');
+            }
+
+            $proObj = new IModel('promotion');
+            $proObj->setData($dataArray);
+            if($id)
+            {
+                $where = 'id = '.$id;
+                $proObj->update($where);
+            }
+            else
+            {
+                $proObj->add();
+            }
+        }
+        $this->redirect('pro_speed_list');
+    }
+	function pro_speed_edit_act_a()
 	{
+        var_dump($_POST);
+        exit();
 		$id = IFilter::act(IReq::get('id'),'int');
 
 		$condition   = IFilter::act(IReq::get('condition','post'));

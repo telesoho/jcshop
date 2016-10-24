@@ -32,7 +32,7 @@
 				{query:name=promotion as p join = left join goods as go on p.condition eq go.id fields=p.*,go.id as goods_id,go.is_del where=p.type eq 1 and p.seller_id eq 0  page=$page}
 				<tr>
 					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
-					<td><a href='{url:/site/products/id/$item[condition]/promo/time/active_id/$item[id]}' target='_blank'>{$item['name']}</a></td>
+					<td><a href='{url:/site/products/id/$item[condition]/promo/time/active_id/$item[name]}' target='_blank'>{$item['name']}</a></td>
 					<td>{$item['start_time']} ～ {$item['end_time']}</td>
 					<td>
 						{if:$item['is_del'] == null || $item['is_del'] == 1}
@@ -42,7 +42,7 @@
 						{/if}
 					</td>
 					<td>
-						<a href='{url:/market/pro_speed_edit/id/$item[id]}'>
+						<a href='{url:/market/pro_speed_edit/name/$item[name]}'>
 							<img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" title="修改" />
 						</a>
 

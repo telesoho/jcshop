@@ -401,7 +401,7 @@ class Apic extends IController
     public function pro_speed_list(){
         $query = new IQuery("promotion as p");
         $query->join = "left join goods as go on p.condition = go.id";
-        $query->fields = "p.*,go.id as goods_id,go.is_del";
+        $query->fields = "p.*,go.id as goods_id,go.is_del,go.name,go.sell_price";
         $query->where = "p.type = 1 and p.seller_id = 0";
 //        $query->page = "$page";
         $items = $query->find();
@@ -457,6 +457,10 @@ class Apic extends IController
     public function article_list(){
         $type = IFilter::act(IReq::get('type'),'int');
         $query = new IQuery("article as ar");
+//        $page = 1;
+        $page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 3;
+        $query->page = $page;
+        $query->pagesize = 3;
         $query->join = "left join article_category as ac on ac.id = ar.category_id";
         switch ($type){
             case 1:

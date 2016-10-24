@@ -25,4 +25,5 @@
   'commission' => '',
   'store_num_warning' => '1',
   'reg_option' => '0',
-);
+  'index_slide' => 'a:5:{i:0;a:3:{s:4:"name";s:2:"aa";s:3:"url";s:71:"http://192.168.10.174:8080/index.php?controller=system&action=conf_base";s:3:"img";s:39:"upload/2016/10/24/20161024011020209.jpg";}i:1;a:3:{s:4:"name";s:2:"bb";s:3:"url";s:71:"http://192.168.10.174:8080/index.php?controller=system&action=conf_base";s:3:"img";s:39:"upload/2016/10/24/20161024011020568.jpg";}i:2;a:3:{s:4:"name";s:2:"cc";s:3:"url";s:71:"http://192.168.10.174:8080/index.php?controller=system&action=conf_base";s:3:"img";s:39:"upload/2016/10/24/20161024011050518.jpg";}i:3;a:3:{s:4:"name";s:2:"dd";s:3:"url";s:71:"http://192.168.10.174:8080/index.php?controller=system&action=conf_base";s:3:"img";s:39:"upload/2016/10/24/20161024011050819.jpg";}i:4;a:3:{s:4:"name";s:2:"ee";s:3:"url";s:71:"http://192.168.10.174:8080/index.php?controller=system&action=conf_base";s:3:"img";s:39:"upload/2016/10/24/20161024011050911.jpg";}}',
+)?>
