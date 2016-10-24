@@ -36,186 +36,191 @@
     </div>
 </div>
 <!--loading页结束-->
-<!--头部-->
-<section class="homeHeader">
-    <div class="nav-header">
-        <div class="mui-input-row mui-search">
-            <input type="search" id="searth"  placeholder="搜索你想要的品牌">
-        </div>
-    </div>
-        <img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon">
-        <img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon">
-</section>
-<section id="nav-slider">
-    <div  class="mui-slider">
-        <div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-            <div class="mui-scroll">
-                <a class="mui-control-item mui-active" href="#">
-                    <span class="text">推荐</span><span class="bg">
+<!--下拉刷新容器-->
+<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+    <div class="mui-scroll">
+        <!--头部-->
+        <section class="homeHeader">
+            <div class="nav-header">
+                <div class="mui-input-row mui-search">
+                    <input type="search" id="searth"  placeholder="搜索你想要的品牌">
+                </div>
+            </div>
+            <img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon">
+            <img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon">
+        </section>
+        <section id="nav-slider">
+            <div  class="mui-slider">
+                <div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+                    <div class="mui-scroll">
+                        <a class="mui-control-item mui-active" href="#">
+                            <span class="text">推荐</span><span class="bg">
                     <img src="" alt="">
                 </span>
-                </a>
-                <a class="mui-control-item" href="#">
-                    <span class="text">限时购</span><span class="bg"></span>
-                </a>
-                <a class="mui-control-item" href="#">
-                    <span class="text">逛</span><span class="bg"></span>
-                </a>
-                <a class="mui-control-item " href="#">
-                    <span class="text">药妆</span><span class="bg"></span>
-                </a>
-                <a class="mui-control-item" href="#">
-                    <span class="text">个护</span><span class="bg"></span>
-                </a>
-                <a class="mui-control-item" href="#">
-                    <span class="text">宠物</span><span class="bg"></span>
-                </a>
-                <a class="mui-control-item " href="#">
-                    <span class="text">健康</span><span class="bg"></span>
-                </a>
+                        </a>
+                        <a class="mui-control-item" href="#">
+                            <span class="text">限时购</span><span class="bg"></span>
+                        </a>
+                        <a class="mui-control-item" href="#">
+                            <span class="text">逛</span><span class="bg"></span>
+                        </a>
+                        <a class="mui-control-item " href="#">
+                            <span class="text">药妆</span><span class="bg"></span>
+                        </a>
+                        <a class="mui-control-item" href="#">
+                            <span class="text">个护</span><span class="bg"></span>
+                        </a>
+                        <a class="mui-control-item" href="#">
+                            <span class="text">宠物</span><span class="bg"></span>
+                        </a>
+                        <a class="mui-control-item " href="#">
+                            <span class="text">健康</span><span class="bg"></span>
+                        </a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</section>
-<!--轮播图-->
-<section>
-    <div id="slider1" class="mui-slider" >
-        <div class="mui-slider-group mui-slider-loop">
-            <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-            <div class="mui-slider-item mui-slider-item-duplicate">
-                <a href="{url:/site/video_album}">
-                    <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                </a>
+        </section>
+        <!--轮播图-->
+        <section>
+            <div id="slider1" class="mui-slider" >
+                <div class="mui-slider-group mui-slider-loop">
+                    <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+                    <div class="mui-slider-item mui-slider-item-duplicate">
+                        <a href="{url:/site/video_album}">
+                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                        </a>
+                    </div>
+                    <!-- 第一张 -->
+                    <div class="mui-slider-item">
+                        <a href="{url:/site/video_album}">
+                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                        </a>
+                    </div>
+                    <!-- 第二张 -->
+                    <div class="mui-slider-item">
+                        <a href="{url:/site/video_album}">
+                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                        </a>
+                    </div>
+                    <!-- 第三张 -->
+                    <div class="mui-slider-item">
+                        <a href="{url:/site/video_album}">
+                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                        </a>
+                    </div>
+                    <!-- 第四张 -->
+                    <div class="mui-slider-item">
+                        <a href="{url:/site/video_album}">
+                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                        </a>
+                    </div>
+                    <!-- 第四张 -->
+                    <div class="mui-slider-item">
+                        <a href="{url:/site/video_album}">
+                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                        </a>
+                    </div>
+                    <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+                    <div class="mui-slider-item mui-slider-item-duplicate">
+                        <a href="{url:/site/video_album}">
+                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                        </a>
+                    </div>
+                </div>
+                <div class="mui-slider-indicator">
+                    <div class="mui-indicator mui-active"></div>
+                    <div class="mui-indicator"></div>
+                    <div class="mui-indicator"></div>
+                    <div class="mui-indicator"></div>
+                    <div class="mui-indicator"></div>
+                </div>
             </div>
-            <!-- 第一张 -->
-            <div class="mui-slider-item">
-                <a href="{url:/site/video_album}">
-                    <img dataimg="/views/mobile/skin/default/image/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                </a>
-            </div>
-            <!-- 第二张 -->
-            <div class="mui-slider-item">
-                <a href="{url:/site/video_album}">
-                    <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                </a>
-            </div>
-            <!-- 第三张 -->
-            <div class="mui-slider-item">
-                <a href="{url:/site/video_album}">
-                    <img dataimg="/views/mobile/skin/default/image/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                </a>
-            </div>
-            <!-- 第四张 -->
-            <div class="mui-slider-item">
-                <a href="{url:/site/video_album}">
-                    <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                </a>
-            </div>
-            <!-- 第四张 -->
-            <div class="mui-slider-item">
-                <a href="{url:/site/video_album}">
-                    <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                </a>
-            </div>
-            <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
-            <div class="mui-slider-item mui-slider-item-duplicate">
-                <a href="{url:/site/video_album}">
-                    <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                </a>
-            </div>
-        </div>
-        <div class="mui-slider-indicator">
-            <div class="mui-indicator mui-active"></div>
-            <div class="mui-indicator"></div>
-            <div class="mui-indicator"></div>
-            <div class="mui-indicator"></div>
-            <div class="mui-indicator"></div>
-        </div>
-    </div>
-    <!--轮播图结束-->
-</section>
-<!--专辑-->
-<section class="timePurchase line">
-    <div class="timePurchase_title">
-        <div class="logo">
-            <img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying01.png" alt="" class="img-pan1">
-            <span>限时抢购</span>
-            <img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying02.png" alt="" class="img-pan2">
-        </div>
-        <div id="timer" data-timer="20161028140203" class="timer">
-            <span id="timer_h">0</span>
-            <span id="timer_m">0</span>
-            <span id="timer_s">0</span>
+            <!--轮播图结束-->
+        </section>
+        <!--专辑-->
+        <section class="timePurchase line">
+            <div class="timePurchase_title">
+                <div class="logo">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying01.png" alt="" class="img-pan1">
+                    <span>限时抢购</span>
+                    <img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying02.png" alt="" class="img-pan2">
+                </div>
+                <div id="timer" data-timer="20161028140203" class="timer">
+                    <span id="timer_h">0</span>
+                    <span id="timer_m">0</span>
+                    <span id="timer_s">0</span>
 
-        </div>
-        <div class="right">
-            <span class="mui-icon mui-icon-forward mui-pull-right"></span>
-            <span class=" mui-pull-right">更多</span>
-        </div>
+                </div>
+                <div class="right">
+                    <span class="mui-icon mui-icon-forward mui-pull-right"></span>
+                    <span class=" mui-pull-right">更多</span>
+                </div>
+            </div>
+            <div class="timePurchase_body">
+                <div class="item">
+                    <div class="img  line">
+                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+                        <span>199.49</span>
+                    </div>
+                    <div class="text">
+                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+                        <div class="price"><s><span>￥</span>199.49</s></div>
+                    </div>
+                </div>
+                <div class="item ">
+                    <div class="img line">
+                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+                        <span>199.49</span>
+                    </div>
+                    <div class="text">
+                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+                        <div class="price"><s><span>￥</span>199.49</s></div>
+                    </div>
+                </div>
+                <div class="item ">
+                    <div class="img line">
+                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+                        <span>199.49</span>
+                    </div>
+                    <div class="text">
+                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+                        <div class="price"><s><span>￥</span>199.49</s></div>
+                    </div>
+                </div>
+                <div class="item ">
+                    <div class="img line">
+                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+                        <span>199.49</span>
+                    </div>
+                    <div class="text">
+                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+                        <div class="price"><s><span>￥</span>199.49</s></div>
+                    </div>
+                </div>
+                <div class="item ">
+                    <div class="img line">
+                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+                        <span>199.49</span>
+                    </div>
+                    <div class="text">
+                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+                        <div class="price"><s><span>￥</span>199.49</s></div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="img line">
+                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+                        <span>199.49</span>
+                    </div>
+                    <div class="text">
+                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
+                        <div class="price"><s><span>￥</span>199.49</s></div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-    <div class="timePurchase_body">
-        <div class="item">
-            <div class="img  line">
-                <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                <span>199.49</span>
-            </div>
-            <div class="text">
-                <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                <div class="price"><s><span>￥</span>199.49</s></div>
-            </div>
-        </div>
-        <div class="item ">
-            <div class="img line">
-                <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                <span>199.49</span>
-            </div>
-            <div class="text">
-                <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                <div class="price"><s><span>￥</span>199.49</s></div>
-            </div>
-        </div>
-        <div class="item ">
-            <div class="img line">
-                <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                <span>199.49</span>
-            </div>
-            <div class="text">
-                <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                <div class="price"><s><span>￥</span>199.49</s></div>
-            </div>
-        </div>
-        <div class="item ">
-            <div class="img line">
-                <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                <span>199.49</span>
-            </div>
-            <div class="text">
-                <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                <div class="price"><s><span>￥</span>199.49</s></div>
-            </div>
-        </div>
-        <div class="item ">
-            <div class="img line">
-                <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                <span>199.49</span>
-            </div>
-            <div class="text">
-                <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                <div class="price"><s><span>￥</span>199.49</s></div>
-            </div>
-        </div>
-        <div class="item">
-            <div class="img line">
-                <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                <span>199.49</span>
-            </div>
-            <div class="text">
-                <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                <div class="price"><s><span>￥</span>199.49</s></div>
-            </div>
-        </div>
-    </div>
-</section>
+</div>
 <!--专辑-->
 <section class="recommended line albumn_index">
     <div class="title">
@@ -407,24 +412,12 @@
     mui.init({
         pullRefresh: {
             container: '#pullrefresh',
-//				取消下拉刷新
-            down: {
-                callback: pulldownRefresh
-            },
             up: {
                 contentrefresh: '正在加载...',
                 callback: pullupRefresh
             }
         }
     });
-    /**
-     * 下拉刷新具体业务实现
-     */
-    function pulldownRefresh() {
-        setTimeout(function() {
-            mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
-        }, 1500);
-    }
     var count = 0;
     /**
      * 上拉加载具体业务实现
@@ -435,24 +428,6 @@
 
         }, 1500);
     }
-    if (mui.os.plus) {
-        mui.plusReady(function() {
-            setTimeout(function() {
-                mui('#pullrefresh').pullRefresh().pullupLoading();
-            }, 1000);
-
-        });
-    } else {
-        mui.ready(function() {
-//					mui('#pullrefresh').pullRefresh().pullupLoading();
-        });
-    }
-   //点击事件直达顶部
-//    document.getElementById("pagetop").addEventListener("tap",function () {
-//
-//        mui('.mui-scroll-wrapper').pullRefresh().scrollTo(0,0,100);//100毫秒滚动到顶
-//
-//    },false);
     function searthCancel(){
         document.getElementById("modalid-searth").className="hide";
         document.body.style.overflow = 'auto';
@@ -464,6 +439,26 @@
         }else{
             window.location.href="home.html?item="+subContent;
         }
+    }
+    function MuIAjax(url,data){
+        mui.ajax(url,{
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+                //服务器返回响应，根据响应结果，分析是否登录成功；
+                var dat={};
+                dat.data=data;
+                return dat;
+//                var html1 = template('test',dat);
+//                document.getElementById("addressList").innerHTML = html1;
+//                submitaddr1=document.getElementById("submitaddr");
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
     }
 </script>
 </body>

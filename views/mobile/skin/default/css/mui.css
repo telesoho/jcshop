@@ -3538,11 +3538,12 @@ select:focus
 .mui-control-content
 {
     position: relative;
-    display: none;
+    /*display: none;*/
 }
 .mui-control-content.mui-active
 {
     display: block;
+    position: relative;
 }
 
 .mui-popover

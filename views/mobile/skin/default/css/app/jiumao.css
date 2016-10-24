@@ -521,6 +521,8 @@ input[type='search']{
 }
 /*分类页面*/
 .siteMap{
+	width:100%;
+	/*height:100%;*/
 	margin:0.9rem 0 1rem;
 	display:flex;
 	display:-webkit-flex;
