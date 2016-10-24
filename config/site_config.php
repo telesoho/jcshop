@@ -25,9 +25,6 @@
   'commission' => '',
   'store_num_warning' => '1',
   'reg_option' => '0',
-<<<<<<< HEAD
-  'index_slide' => 'a:5:{i:0;a:3:{s:4:"name";s:2:"qq";s:3:"url";s:4:"1111";s:3:"img";s:39:"upload/2016/10/24/20161024015843590.jpg";}i:1;a:3:{s:4:"name";s:3:"wwe";s:3:"url";s:4:"2222";s:3:"img";s:39:"upload/2016/10/24/20161024015843975.jpg";}i:2;a:3:{s:4:"name";s:2:"ee";s:3:"url";s:3:"yyy";s:3:"img";s:39:"upload/2016/10/24/20161024015843279.jpg";}i:3;a:3:{s:4:"name";s:3:"rrr";s:3:"url";s:3:"yyy";s:3:"img";s:39:"upload/2016/10/24/20161024015843176.jpg";}i:4;a:3:{s:4:"name";s:3:"ttt";s:3:"url";s:3:"ttt";s:3:"img";s:39:"upload/2016/10/24/20161024015843102.jpg";}}',
-=======
+
   'index_slide' => 'a:5:{i:0;a:3:{s:4:"name";s:2:"aa";s:3:"url";s:71:"http://192.168.10.174:8080/index.php?controller=system&action=conf_base";s:3:"img";s:39:"upload/2016/10/24/20161024011020209.jpg";}i:1;a:3:{s:4:"name";s:2:"bb";s:3:"url";s:71:"http://192.168.10.174:8080/index.php?controller=system&action=conf_base";s:3:"img";s:39:"upload/2016/10/24/20161024011020568.jpg";}i:2;a:3:{s:4:"name";s:2:"cc";s:3:"url";s:71:"http://192.168.10.174:8080/index.php?controller=system&action=conf_base";s:3:"img";s:39:"upload/2016/10/24/20161024011050518.jpg";}i:3;a:3:{s:4:"name";s:2:"dd";s:3:"url";s:71:"http://192.168.10.174:8080/index.php?controller=system&action=conf_base";s:3:"img";s:39:"upload/2016/10/24/20161024011050819.jpg";}i:4;a:3:{s:4:"name";s:2:"ee";s:3:"url";s:71:"http://192.168.10.174:8080/index.php?controller=system&action=conf_base";s:3:"img";s:39:"upload/2016/10/24/20161024011050911.jpg";}}',
->>>>>>> bb2b245373f70ea4d85e437a3e2f083237be90da
 )?>

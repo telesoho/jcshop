@@ -186,7 +186,7 @@
         </span>
             </div>
             <div class="vedio">
-                <video class="player" src="http://dianbo2.bolo.me/video/1474624774.mp4" poster="/views/mobile/skin/default/image/jmj/img/banner03.png"
+                <video class="player" src="http://f02.v1.cn/transcode/14410292MOBILET2.mp4" poster="/views/mobile/skin/default/image/jmj/img/banner03.png"
                        webkit-playsinline=""   width="100%">
                 </video>
                 <div class="vedioStyle" id="vedioStyle">
@@ -334,6 +334,7 @@
     mui('body').on('tap','a',function(){document.location.href=this.href;});
     mui('body').on('tap','video',function(){
         if(this.paused){
+            console.log(this.duration);
             this.setAttribute("controls",'controls');
             document.getElementById("vedioStyle").className="hide";
             this.play();
@@ -359,15 +360,26 @@
     /**
      * 上拉加载具体业务实现
      */
+    var pageData = {
+        page:1
+    };
     function pullupRefresh() {
-        var count = 0;
-
-
-
-        setTimeout(function() {
-            mui('#pullrefresh').pullRefresh().endPullupToRefresh();
-
-        }, 1500);
+        mui.ajax('index.php?controller=apic&action=article_list',{
+            data:pageData,
+            dataType:'json',	// 服务器返回json格式数据
+            type:'post',		// HTTP请求类型
+            timeout:10000,		// 超时时间设置为10秒；
+            success:function(data){
+                pageData.page++;
+                console.log(data);
+                mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+                alert("failed");
+            }
+        });
     }
     function searthCancel(){
         document.getElementById("modalid-searth").className="hide";
