@@ -2,3 +2,5 @@ runtime/
 .idea/
 backup/
 upload/
+.idea/
+.DS_Store
