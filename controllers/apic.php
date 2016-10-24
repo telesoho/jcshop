@@ -476,8 +476,11 @@ class Apic extends IController
                 break;
         }
         $query->order = "ar.sort asc,ar.id desc";
-        $query->fields = "ar.id,ar.title,ar.content,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ac.name";
+        $query->fields = "ar.id,ar.title,ar.content,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ar.category_id,ac.name";
         $items = $query->find();
+        foreach ($items as $key => $value){
+            $items[$key]['nums'] = count(Api::run('getArticleGoods',array("#article_id#",$value['id'])));
+        }
         header("Content-type: application/json");
         echo json_encode($items);
         exit();
