@@ -398,6 +398,17 @@ class Apic extends IController
         echo json_encode($data);
         exit();
     }
+    public function pro_speed_list(){
+        $query = new IQuery("promotion as p");
+        $query->join = "left join goods as go on p.condition = go.id";
+        $query->fields = "p.*,go.id as goods_id,go.is_del";
+        $query->where = "p.type = 1 and p.seller_id = 0";
+//        $query->page = "$page";
+        $items = $query->find();
+        header("Content-type: application/json");
+        echo json_encode($items);
+        exit();
+    }
     /**
      * ---------------------------------------------------专辑---------------------------------------------------*
      */
@@ -443,4 +454,38 @@ class Apic extends IController
     /**
      * ---------------------------------------------------搜索---------------------------------------------------*
      */
+    public function article_list(){
+        $type = IFilter::act(IReq::get('type'),'int');
+        $query = new IQuery("article as ar");
+        $query->join = "left join article_category as ac on ac.id = ar.category_id";
+        switch ($type){
+            case 1:
+                $query->where = "ar.category_id = " . $type;
+                break;
+            case 2:
+                $query->where = "ar.category_id = " . $type;
+                break;
+            case 3:
+                $query->where = "ar.category_id = " . $type;
+                break;
+            default:
+                break;
+        }
+        $query->order = "ar.sort asc,ar.id desc";
+        $query->fields = "ar.id,ar.title,ar.content,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ac.name";
+        $items = $query->find();
+        header("Content-type: application/json");
+        echo json_encode($items);
+        exit();
+    }
+
+    /**
+     * ---------------------------------------------------幻灯片---------------------------------------------------*
+     */
+    public function banner_list(){
+        $banner = Api::run('getBannerList');
+        header("Content-type: application/json");
+        echo json_encode($banner);
+        exit();
+    }
 }
