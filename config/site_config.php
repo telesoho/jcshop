@@ -25,4 +25,5 @@
   'commission' => '',
   'store_num_warning' => '1',
   'reg_option' => '0',
-);
+  'index_slide' => 'a:5:{i:0;a:3:{s:4:"name";s:2:"qq";s:3:"url";s:4:"1111";s:3:"img";s:39:"upload/2016/10/24/20161024015843590.jpg";}i:1;a:3:{s:4:"name";s:3:"wwe";s:3:"url";s:4:"2222";s:3:"img";s:39:"upload/2016/10/24/20161024015843975.jpg";}i:2;a:3:{s:4:"name";s:2:"ee";s:3:"url";s:3:"yyy";s:3:"img";s:39:"upload/2016/10/24/20161024015843279.jpg";}i:3;a:3:{s:4:"name";s:3:"rrr";s:3:"url";s:3:"yyy";s:3:"img";s:39:"upload/2016/10/24/20161024015843176.jpg";}i:4;a:3:{s:4:"name";s:3:"ttt";s:3:"url";s:3:"ttt";s:3:"img";s:39:"upload/2016/10/24/20161024015843102.jpg";}}',
+)?>

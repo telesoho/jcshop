@@ -47,7 +47,7 @@
 	<img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon">
 </section>
 <!--分类页面-->
-<section class="siteMap mui-fullscreen">
+<section class="siteMap">
     <div class="left">
         <div id="segmentedControls" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-vertical">
             <a class="site-control-item mui-active" data-index="0" href="#content1">最新流行</a>
@@ -1503,7 +1503,7 @@
             for (var i = 0; i < length; i++) {
                 var offsetTop = contentTops[i];
                 var offset = Math.abs(offsetTop - scrollTop);
-                if (scrollTop < offsetTop) {
+                if (scrollTop< offsetTop) {
                     if (scrollTop >= maxScroll) {
                         onScroll(length - 1);
                     } else {
@@ -1542,6 +1542,7 @@
             contentsElem.scrollTop = contentTops[index];
         };
         mui(controlsElem).on('tap', '.site-control-item', function(e) {
+            window.location.href=this.href;
             scrollTo(this.getAttribute('data-index'));
             return false;
         });
