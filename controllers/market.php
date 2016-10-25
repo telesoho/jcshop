@@ -400,12 +400,15 @@ class Market extends IController implements adminAuthorization
 			}
 
             for ($i=0;$i<count($promotionQuery);$i++){
+                //id集合
+                $temp_ids[] = $promotionQuery[$i]['id'];
 
                 //促销商品
                 $goodsObj = new IModel('goods');
                 $goodsRow = $goodsObj->getObj('id = '.$promotionQuery[$i]['condition'],'id,name,sell_price,img');
                 if($goodsRow)
                 {
+                    $goodsRow['award_value'] = $promotionQuery[$i]['award_value'];
                     $result[] = array(
                         'isError' => false,
                         'data'    => $goodsRow,
@@ -422,6 +425,7 @@ class Market extends IController implements adminAuthorization
 
             $promotionQuery['goodsRow'] = JSON::encode($result);
 			$this->promotionRow = $promotionQuery;
+			$this->temp_ids = $temp_ids;
 		}
 //		var_dump($this->promotionRow);
 		$this->redirect('pro_speed_edit');
@@ -430,13 +434,13 @@ class Market extends IController implements adminAuthorization
 	//[限时抢购]添加,修改[动作]
     function pro_speed_edit_act(){
         $id = IFilter::act(IReq::get('id'),'int');
-
         $condition_new   = IFilter::act(IReq::get('condition','post'));
-        $award_value = IFilter::act(IReq::get('award_value','post'));
+        $award_value_new = IFilter::act(IReq::get('award_value','post'));
         $user_group  = IFilter::act(IReq::get('user_group','post'));
-
+        $temp_ids  = IFilter::act(IReq::get('temp_ids','post'));
         for ($i=0;$i<count($condition_new);$i++){
             $condition = $condition_new[$i];
+            $award_value = $award_value_new[$i];
             if(is_string($user_group))
             {
                 $user_group_str = $user_group;
@@ -447,7 +451,7 @@ class Market extends IController implements adminAuthorization
             }
 
             $dataArray = array(
-                'id'         => $id,
+//                'id'         => $id,
                 'name'       => IFilter::act(IReq::get('name','post')),
                 'condition'  => $condition,
                 'award_value'=> $award_value,
@@ -469,9 +473,9 @@ class Market extends IController implements adminAuthorization
 
             $proObj = new IModel('promotion');
             $proObj->setData($dataArray);
-            if($id)
+            if($temp_ids[$i])
             {
-                $where = 'id = '.$id;
+                $where = 'id = '.$temp_ids[$i];
                 $proObj->update($where);
             }
             else
@@ -552,7 +556,10 @@ class Market extends IController implements adminAuthorization
 				$where = 'id = '.$id;
 			}
 			$where .= ' and type = 1';
+			$data = $propObj->getObj($where);
+            $where = 'type=1 and name="' . $data['name'] . '"';
 			$propObj->del($where);
+
 			$this->redirect('pro_speed_list');
 		}
 		else

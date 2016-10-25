@@ -172,6 +172,9 @@ class IQuery
     {
         return $this->paging->getPageBar($url,$attrs);
     }
+    public function getTotalPage(){
+        return $this->paging->totalpage;
+    }
 
 	/**
 	 * @brief 获取原生态的SQL

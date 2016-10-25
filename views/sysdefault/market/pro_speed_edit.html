@@ -7,6 +7,9 @@
 	<div class="content form_content">
 		<form action="{url:/market/pro_speed_edit_act}"  method="post" name='pro_edit'>
 			<input type='hidden' name='id' />
+			{if:$this->temp_ids}{foreach:$items=$this->temp_ids}
+			<input type='hidden' name='temp_ids[]' value="{$item}" />
+			{/foreach}{/if}
 			<table class="form_table">
 				<col width="150px" />
 				<col />
@@ -104,6 +107,27 @@
 	//关联商品回调处理函数
 	function relationCallBack(content)
 	{
+		if (content){
+
+			var imgUrl = "{webroot:@url@}";
+			imgUrl     = imgUrl.replace("@url@",content['data']['img']);
+			var html =   '<td><img src="'+imgUrl+'" title="'+content['data']['name']+'" style="max-width:140px;" /></td>'
+						+'<td>'+content['data']['name']+'</td>'
+						+'<td>'+content['data']['sell_price']+'</td>'
+						+'<td><input text="text" class="small" name="award_value[]" pattern="float" alt="请填写一个数字" />元 </td>';
+
+			if ($('#speed_goods').html() == ''){
+				$('[name="condition[]"]').val(content['data']['id']);
+				$('#speed_goods').html(html);
+			} else {
+				$('#speed_goods').after("<tr class='td_c'><input type='hidden' name='condition[]' value='"+content['data']['id']+"' />"+html+"</tr>");
+			}
+		}
+
+	}
+	//关联商品回调处理函数
+	function relationCallBackNew(content)
+	{
 		if(content)
 		{
 			for (var i=0;i<content.length;i++){
@@ -112,7 +136,7 @@
 				var html =   '<td><img src="'+imgUrl+'" title="'+content[i]['data']['name']+'" style="max-width:140px;" /></td>'
 							+'<td>'+content[i]['data']['name']+'</td>'
 							+'<td>'+content[i]['data']['sell_price']+'</td>'
-							+'<td><input text="text" class="small" name="award_value" pattern="float" alt="请填写一个数字" />元 </td>';
+							+'<td><input text="text" class="small" name="award_value[]" pattern="float" alt="请填写一个数字" value="'+content[i]['data']['award_value']+'" />元 </td>';
 
 				if ($('#speed_goods').html() == ''){
 					$('[name="condition[]"]').val(content[i]['data']['id']);
@@ -122,8 +146,8 @@
 				}
 			}
 		}
-	}
 
+	}
 	//选择参与人群
 	function select_all()
 	{
@@ -149,9 +173,9 @@
 	}
 
 	//预定义商品绑定
-	relationCallBack({$this->promotionRow['goodsRow']});
+	relationCallBackNew({$this->promotionRow['goodsRow']});
 
 	//表单回填
 	var formObj = new Form('pro_edit');
-	formObj.init({echo:JSON::encode($this->promotionRow)});
+	formObj.init({echo:JSON::encode($this->promotionRow[0])});
 </script>
