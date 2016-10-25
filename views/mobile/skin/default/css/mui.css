@@ -3538,12 +3538,11 @@ select:focus
 .mui-control-content
 {
     position: relative;
-    /*display: none;*/
+    display: none;
 }
 .mui-control-content.mui-active
 {
     display: block;
-    position: relative;
 }
 
 .mui-popover
@@ -4799,7 +4798,7 @@ body > .mui-progressbar
 
 .mui-pull-caption
 {
-    font-size: 15px;
+    font-size: 0.26rem;
     line-height: 24px;
 
     position: relative;

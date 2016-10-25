@@ -38,7 +38,7 @@
 <!--loading页结束-->
 <!--下拉刷新容器-->
 <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
-    <div class="mui-scroll">
+    <div class="mui-scroll" id="muiScroll">
         <!--头部-->
         <section class="homeHeader">
             <div class="nav-header">
@@ -108,105 +108,9 @@
 
             </div>
         </section>
-        <!--专辑-->
-        <section class="recommended line albumn_index">
-            <div class="title">
-        <span class="logo">
-            <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
-        </span>
-                <span class="name">
-            特別推薦
-        </span>
-                <span class="num mui-pull-right">
-            999+
-        </span>
-                <span class="like mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
-        </span>
-                <span class="share mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
-        </span>
-            </div>
-            <div class="content">
-                <div class="img">
-                    <img src="/views/mobile/skin/default/image/jmj/img/banner01.png" alt="" width="100%">
-                </div>
-                <div class="mark1">23件商品</div>
-                <div class="mark2">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-                    25万次</div>
-            </div>
-        </section>
-        <section class="recommended line albumn_index">
-            <div class="title">
-        <span class="paper">
-            <img src="/views/mobile/skin/default/image/jmj/icon/paper.png" alt="" class="img-paper">
-        </span>
-                <span class="name">
-             人気雑誌
-        </span>
-                <span class="num mui-pull-right">
-            102
-        </span>
-                <span class="like mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
-        </span>
-                <span class="share mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
-        </span>
-            </div>
-            <div class="content">
-                <div class="img">
-                    <img src="/views/mobile/skin/default/image/jmj/img/banner02.png" alt="" width="100%">
-                </div>
-                <div class="mark1">23件商品</div>
-                <div class="mark2">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-                    25万次</div>
-            </div>
-        </section>
-        <!--视频专题-->
-        <section class="vedio_album albumn_index">
-            <div class="title">
-        <span class="logo">
-            <img src="/views/mobile/skin/default/image/jmj/icon/move.png" alt="" class="img-vedio">
-        </span>
-                <span class="vedio_name">
-            動画のビデオ
-            <span><img src="/views/mobile/skin/default/image/jmj/icon/address.png" alt="" class="img-address">日本东京</span>
-        </span>
-                <span class="num mui-pull-right">
-            999+
-        </span>
-                <span class="like mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
-        </span>
-                <span class="share mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
-        </span>
-            </div>
-            <div class="vedio">
-                <video class="player" src="http://f02.v1.cn/transcode/14410292MOBILET2.mp4" poster="/views/mobile/skin/default/image/jmj/img/banner03.png"
-                       webkit-playsinline=""   width="100%">
-                </video>
-                <div class="vedioStyle" id="vedioStyle">
-                    <div class="top">
-                        <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="" class="img-read">1.53万次</div>
-                    <div class="middle">
-                        <img src="/views/mobile/skin/default/image/jmj/icon/click.png" alt="" class="img-click">
-                    </div>
-                    <div class="bottom">
-                        <span class="name">视频名称视频名称</span>
-                        <!--<span class="time">09:13</span>-->
-                    </div>
-                    <span class="time">09:13</span>
-                </div>
-
-            </div>
-        </section>
+        <div id="pullContainer"></div>
     </div>
 </div>
-
 <!--底部空隙-->
 <div style="padding-bottom:2.42rem;background:#f8f8f8"></div>
 <div class="fix-nav">
@@ -310,6 +214,113 @@
             </div>
         <%}%>
 </script>
+<!--专辑分页模板-->
+<script id="albumPage" type="text/html">
+    <% for(var i=0; i<data.length; i++){%>
+    <% var dat =data[i] %>
+    <%if(dat.category_id==3){%>
+    <!--视频专题-->
+    <section class="vedio_album albumn_index">
+        <div class="title">
+        <span class="logo">
+            <img src="/views/mobile/skin/default/image/jmj/icon/move.png" alt="" class="img-vedio">
+        </span>
+            <span class="vedio_name">
+            動画のビデオ
+            <span><img src="/views/mobile/skin/default/image/jmj/icon/address.png" alt="" class="img-address">日本东京</span>
+        </span>
+            <span class="num mui-pull-right">
+            999+
+        </span>
+            <span class="like mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+        </span>
+            <span class="share mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+        </span>
+        </div>
+        <div class="vedio">
+            <video class="player" src="http://f02.v1.cn/transcode/14410292MOBILET2.mp4" poster="/views/mobile/skin/default/image/jmj/img/banner03.png"
+                   webkit-playsinline=""   width="100%" onpause="checkPause(this);" onplaying="checkPlay(this);">
+            </video>
+            <div class="vedioStyle">
+                <div class="top">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="" class="img-read">1.53万次</div>
+                <div class="bottom">
+                    <span class="name">视频名称视频名称</span>
+                    <!--<span class="time">09:13</span>-->
+                </div>
+                <span class="time">09:13</span>
+            </div>
+            <div class="middle">
+                <img src="/views/mobile/skin/default/image/jmj/icon/click.png" alt="" class="img-click">
+            </div>
+        </div>
+    </section>
+    <%}else{%>
+    <%if(dat.category_id==2){%>
+    <section class="recommended line albumn_index">
+        <div class="title">
+        <span class="logo">
+            <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
+        </span>
+            <span class="name">
+            特別推薦
+        </span>
+            <span class="num mui-pull-right">
+            999+
+        </span>
+            <span class="like mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+        </span>
+            <span class="share mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+        </span>
+        </div>
+        <div class="content">
+            <div class="img">
+                <img src="/views/mobile/skin/default/image/jmj/img/banner01.png" alt="" width="100%">
+            </div>
+            <div class="mark1">23件商品</div>
+            <div class="mark2">
+                <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
+                25万次</div>
+        </div>
+    </section>
+    <%}else{%>
+    <!--专辑-->
+    <section class="recommended line albumn_index">
+        <div class="title">
+        <span class="logo">
+            <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
+        </span>
+            <span class="name">
+            特別推薦
+        </span>
+            <span class="num mui-pull-right">
+            999+
+        </span>
+            <span class="like mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+        </span>
+            <span class="share mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+        </span>
+        </div>
+        <div class="content">
+            <div class="img">
+                <img src="/views/mobile/skin/default/image/jmj/img/banner01.png" alt="" width="100%">
+            </div>
+            <div class="mark1">23件商品</div>
+            <div class="mark2">
+                <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
+                25万次</div>
+        </div>
+    </section>
+    <%}%>
+    <%}%>
+    <%}%>
+</script>
 <!--头信息结束-->
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
@@ -333,16 +344,24 @@
     mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
     mui('body').on('tap','a',function(){document.location.href=this.href;});
     mui('body').on('tap','video',function(){
+        var self=this;
         if(this.paused){
-            console.log(this.duration);
-            this.setAttribute("controls",'controls');
-            document.getElementById("vedioStyle").className="hide";
-            this.play();
-
+            self.setAttribute("controls",'controls');
+            $(self).next().addClass('hide');
+            self.play();
         }else{
-            this.pause();
-            this.setAttribute("controls",false);
+            self.setAttribute("controls",false);
+            self.pause();
         }
+    });
+    mui('body').on('tap','.img-click',function(){
+        var self=this;
+        var self_Aid=self.parentNode;
+//        self_Aid.previousSiblingNode.play();
+        $(self_Aid).prev().addClass("hide");
+        $(self_Aid).prev().prev()[0].play();
+
+
     });
     document.getElementById("searth").addEventListener('focus',function(){
         document.getElementById("modalid-searth").className="show";
@@ -371,8 +390,13 @@
             timeout:10000,		// 超时时间设置为10秒；
             success:function(data){
                 pageData.page++;
-                console.log(data);
-                mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+                var pageAlbum={};
+                pageAlbum.data=data;
+                var html3=template('albumPage',pageAlbum);
+                var div = document.createElement('div');
+                div.innerHTML=html3;
+                document.getElementById("pullContainer").appendChild(div);
+//                mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==5);
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
@@ -399,7 +423,6 @@
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
-                console.log(data);
                 //服务器返回响应，根据响应结果，分析是否登录成功；
                 var dat={};
                 dat.data=data;
@@ -431,6 +454,14 @@
                 console.log(type);
             }
         });
+    }
+    function checkPause(obj){
+        var self=obj;
+        $(self).next().next().removeClass("hide");
+    }
+    function checkPlay(obj){
+        var self=obj;
+        $(self).next().next().addClass("hide");
     }
 </script>
 </body>
