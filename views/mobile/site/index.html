@@ -114,7 +114,7 @@
 <!--底部空隙-->
 <div style="padding-bottom:2.42rem;background:#f8f8f8"></div>
 <div class="fix-nav">
-    <div class="img"><img src="/views/mobile/skin/default/image/jmj/icon/rmb.png" alt="" class="img-rmb">
+    <div class="img"><img src="/views/mobile/skin/default/image/jmj/icon/rmb.png" alt="" class="img-rmb"/>
         <div class="content">
             <span>19.32</span>
         </div>
@@ -396,7 +396,7 @@
                 var div = document.createElement('div');
                 div.innerHTML=html3;
                 document.getElementById("pullContainer").appendChild(div);
-//                mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==5);
+                mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==5);
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
