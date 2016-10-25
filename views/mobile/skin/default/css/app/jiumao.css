@@ -83,7 +83,7 @@ input[type='search']{
 	left:0;
 }
 .mui-scroll-wrapper{
-	background:#fff !important;
+	background:#f8f8f8 !important;
 }
 .mui-control-item.mui-active .text{
 	color:#fff !important;
@@ -441,6 +441,12 @@ input[type='search']{
 	left:43.2%;
 	top:36.5%;
 }
+.middle{
+	position:absolute;
+	bottom:0.3rem;
+	left:43.2%;
+	top:36.5%;
+}
 .vedioStyle .time{
 	position:absolute;
 	bottom:0.24rem;
@@ -521,8 +527,6 @@ input[type='search']{
 }
 /*分类页面*/
 .siteMap{
-	width:100%;
-	/*height:100%;*/
 	margin:0.9rem 0 1rem;
 	display:flex;
 	display:-webkit-flex;

@@ -38,7 +38,7 @@
 <!--loading页结束-->
 <!--下拉刷新容器-->
 <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
-    <div class="mui-scroll">
+    <div class="mui-scroll" id="muiScroll">
         <!--头部-->
         <section class="homeHeader">
             <div class="nav-header">
@@ -83,57 +83,6 @@
         <!--轮播图-->
         <section>
             <div id="slider1" class="mui-slider" >
-                <div class="mui-slider-group mui-slider-loop">
-                    <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-                    <div class="mui-slider-item mui-slider-item-duplicate">
-                        <a href="{url:/site/video_album}">
-                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                    <!-- 第一张 -->
-                    <div class="mui-slider-item">
-                        <a href="{url:/site/video_album}">
-                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                    <!-- 第二张 -->
-                    <div class="mui-slider-item">
-                        <a href="{url:/site/video_album}">
-                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                    <!-- 第三张 -->
-                    <div class="mui-slider-item">
-                        <a href="{url:/site/video_album}">
-                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo1.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                    <!-- 第四张 -->
-                    <div class="mui-slider-item">
-                        <a href="{url:/site/video_album}">
-                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                    <!-- 第四张 -->
-                    <div class="mui-slider-item">
-                        <a href="{url:/site/video_album}">
-                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                    <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
-                    <div class="mui-slider-item mui-slider-item-duplicate">
-                        <a href="{url:/site/video_album}">
-                            <img dataimg="/views/mobile/skin/default/image/blm/lunbo2.jpg" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
-                        </a>
-                    </div>
-                </div>
-                <div class="mui-slider-indicator">
-                    <div class="mui-indicator mui-active"></div>
-                    <div class="mui-indicator"></div>
-                    <div class="mui-indicator"></div>
-                    <div class="mui-indicator"></div>
-                    <div class="mui-indicator"></div>
-                </div>
             </div>
             <!--轮播图结束-->
         </section>
@@ -145,178 +94,23 @@
                     <span>限时抢购</span>
                     <img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying02.png" alt="" class="img-pan2">
                 </div>
-                <div id="timer" data-timer="20161028140203" class="timer">
-                    <span id="timer_h">0</span>
-                    <span id="timer_m">0</span>
-                    <span id="timer_s">0</span>
-
+                <div id="timer" data_timer="0000000000" class="timer">
+                    <span id="timer_h">00</span>
+                    <span id="timer_m">00</span>
+                    <span id="timer_s">00</span>
                 </div>
                 <div class="right">
                     <span class="mui-icon mui-icon-forward mui-pull-right"></span>
-                    <span class=" mui-pull-right">更多</span>
+                    <a href=""><span class=" mui-pull-right">更多</span></a>
                 </div>
             </div>
-            <div class="timePurchase_body">
-                <div class="item">
-                    <div class="img  line">
-                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                        <span>199.49</span>
-                    </div>
-                    <div class="text">
-                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                        <div class="price"><s><span>￥</span>199.49</s></div>
-                    </div>
-                </div>
-                <div class="item ">
-                    <div class="img line">
-                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                        <span>199.49</span>
-                    </div>
-                    <div class="text">
-                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                        <div class="price"><s><span>￥</span>199.49</s></div>
-                    </div>
-                </div>
-                <div class="item ">
-                    <div class="img line">
-                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                        <span>199.49</span>
-                    </div>
-                    <div class="text">
-                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                        <div class="price"><s><span>￥</span>199.49</s></div>
-                    </div>
-                </div>
-                <div class="item ">
-                    <div class="img line">
-                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                        <span>199.49</span>
-                    </div>
-                    <div class="text">
-                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                        <div class="price"><s><span>￥</span>199.49</s></div>
-                    </div>
-                </div>
-                <div class="item ">
-                    <div class="img line">
-                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                        <span>199.49</span>
-                    </div>
-                    <div class="text">
-                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                        <div class="price"><s><span>￥</span>199.49</s></div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="img line">
-                        <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
-                        <span>199.49</span>
-                    </div>
-                    <div class="text">
-                        <div class="title">免税区弟弟顶顶顶顶顶顶顶顶顶顶</div>
-                        <div class="price"><s><span>￥</span>199.49</s></div>
-                    </div>
-                </div>
+            <div class="timePurchase_body" id="timePurchase_body">
+
             </div>
         </section>
+        <div id="pullContainer"></div>
     </div>
 </div>
-<!--专辑-->
-<section class="recommended line albumn_index">
-    <div class="title">
-        <span class="logo">
-            <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
-        </span>
-        <span class="name">
-            特別推薦
-        </span>
-        <span class="num mui-pull-right">
-            999+
-        </span>
-        <span class="like mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
-        </span>
-        <span class="share mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
-        </span>
-    </div>
-    <div class="content">
-        <div class="img">
-            <img src="/views/mobile/skin/default/image/jmj/img/banner01.png" alt="" width="100%">
-        </div>
-        <div class="mark1">23件商品</div>
-        <div class="mark2">
-            <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-            25万次</div>
-    </div>
-</section>
-<section class="recommended line albumn_index">
-    <div class="title">
-        <span class="paper">
-            <img src="/views/mobile/skin/default/image/jmj/icon/paper.png" alt="" class="img-paper">
-        </span>
-        <span class="name">
-             人気雑誌
-        </span>
-        <span class="num mui-pull-right">
-            102
-        </span>
-        <span class="like mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
-        </span>
-        <span class="share mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
-        </span>
-    </div>
-    <div class="content">
-        <div class="img">
-            <img src="/views/mobile/skin/default/image/jmj/img/banner02.png" alt="" width="100%">
-        </div>
-        <div class="mark1">23件商品</div>
-        <div class="mark2">
-            <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-            25万次</div>
-    </div>
-</section>
-<!--视频专题-->
-<section class="vedio_album albumn_index">
-    <div class="title">
-        <span class="logo">
-            <img src="/views/mobile/skin/default/image/jmj/icon/move.png" alt="" class="img-vedio">
-        </span>
-        <span class="vedio_name">
-            動画のビデオ
-            <span><img src="/views/mobile/skin/default/image/jmj/icon/address.png" alt="" class="img-address">日本东京</span>
-        </span>
-        <span class="num mui-pull-right">
-            999+
-        </span>
-        <span class="like mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
-        </span>
-        <span class="share mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
-        </span>
-    </div>
-    <div class="vedio">
-        <video class="player" src="http://dianbo2.bolo.me/video/1474624774.mp4" poster="/views/mobile/skin/default/image/jmj/img/banner03.png"
-               webkit-playsinline=""   width="100%">
-        </video>
-        <div class="vedioStyle" id="vedioStyle">
-            <div class="top">
-                <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="" class="img-read">1.53万次</div>
-            <div class="middle">
-                <img src="/views/mobile/skin/default/image/jmj/icon/click.png" alt="" class="img-click">
-            </div>
-            <div class="bottom">
-                <span class="name">视频名称视频名称</span>
-                <!--<span class="time">09:13</span>-->
-            </div>
-            <span class="time">09:13</span>
-        </div>
-
-    </div>
-</section>
 <!--底部空隙-->
 <div style="padding-bottom:2.42rem;background:#f8f8f8"></div>
 <div class="fix-nav">
@@ -374,40 +168,204 @@
     <button type="button" id="button-submit" class="mui-btn  mui-btn-outlined buttom-submit" onclick="searthSubmit();">确定</button>
     <button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
 </div>
-<!--<span class="mui-icon-extra mui-icon-extra-top" id="pagetop"></span>-->
+<!--轮播图模板引擎-->
+<script id="C_slider" type="text/html">
+    <div class="mui-slider-group mui-slider-loop">
+        <div class="mui-slider-item mui-slider-item-duplicate">
+            <a href="<%=data[0].url %>">
+                <img dataimg="<%=data[0].img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+            </a>
+        </div>
+        <% for(var i=0; i<data.length; i++){%>
+        <% var dat =data[i] %>
+        <div class="mui-slider-item">
+            <a href="<%=dat.url %>">
+                <img dataimg="<%=dat.img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+            </a>
+        </div>
+        <%}%>
+        <div class="mui-slider-item mui-slider-item-duplicate">
+            <a href="<%=data[data.length-1].url %>">
+                <img dataimg="<%=data[data.length-1].img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+            </a>
+        </div>
+    </div>
+    <div class="mui-slider-indicator">
+        <div class="mui-indicator mui-active"></div>
+        <div class="mui-indicator"></div>
+        <div class="mui-indicator"></div>
+        <div class="mui-indicator"></div>
+        <div class="mui-indicator"></div>
+    </div>
+</script>
+<!--限时购模板引擎-->
+<script id="timeWare" type="text/html">
+        <% for(var i=0; i<5; i++){%>
+        <% var dat =data1[i] %>
+            <div class="item">
+                <div class="img line">
+                    <img src="/views/mobile/skin/default/image/jmj/img/5.png" alt="" width="100%">
+                    <span><%=dat.award_value %></span>
+                </div>
+                <div class="text">
+                    <div class="title"><%=dat.name %></div>
+                    <div class="price"><s><span>￥</span><%=dat.condition %>11</s></div>
+                </div>
+            </div>
+        <%}%>
+</script>
+<!--专辑分页模板-->
+<script id="albumPage" type="text/html">
+    <% for(var i=0; i<data.length; i++){%>
+    <% var dat =data[i] %>
+    <%if(dat.category_id==3){%>
+    <!--视频专题-->
+    <section class="vedio_album albumn_index">
+        <div class="title">
+        <span class="logo">
+            <img src="/views/mobile/skin/default/image/jmj/icon/move.png" alt="" class="img-vedio">
+        </span>
+            <span class="vedio_name">
+            動画のビデオ
+            <span><img src="/views/mobile/skin/default/image/jmj/icon/address.png" alt="" class="img-address">日本东京</span>
+        </span>
+            <span class="num mui-pull-right">
+            999+
+        </span>
+            <span class="like mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+        </span>
+            <span class="share mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+        </span>
+        </div>
+        <div class="vedio">
+            <video class="player" src="http://f02.v1.cn/transcode/14410292MOBILET2.mp4" poster="/views/mobile/skin/default/image/jmj/img/banner03.png"
+                   webkit-playsinline=""   width="100%" onpause="checkPause(this);" onplaying="checkPlay(this);">
+            </video>
+            <div class="vedioStyle">
+                <div class="top">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="" class="img-read">1.53万次</div>
+                <div class="bottom">
+                    <span class="name">视频名称视频名称</span>
+                    <!--<span class="time">09:13</span>-->
+                </div>
+                <span class="time">09:13</span>
+            </div>
+            <div class="middle">
+                <img src="/views/mobile/skin/default/image/jmj/icon/click.png" alt="" class="img-click">
+            </div>
+        </div>
+    </section>
+    <%}else{%>
+    <%if(dat.category_id==2){%>
+    <section class="recommended line albumn_index">
+        <div class="title">
+        <span class="logo">
+            <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
+        </span>
+            <span class="name">
+            特別推薦
+        </span>
+            <span class="num mui-pull-right">
+            999+
+        </span>
+            <span class="like mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+        </span>
+            <span class="share mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+        </span>
+        </div>
+        <div class="content">
+            <div class="img">
+                <img src="/views/mobile/skin/default/image/jmj/img/banner01.png" alt="" width="100%">
+            </div>
+            <div class="mark1">23件商品</div>
+            <div class="mark2">
+                <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
+                25万次</div>
+        </div>
+    </section>
+    <%}else{%>
+    <!--专辑-->
+    <section class="recommended line albumn_index">
+        <div class="title">
+        <span class="logo">
+            <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
+        </span>
+            <span class="name">
+            特別推薦
+        </span>
+            <span class="num mui-pull-right">
+            999+
+        </span>
+            <span class="like mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+        </span>
+            <span class="share mui-pull-right">
+            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+        </span>
+        </div>
+        <div class="content">
+            <div class="img">
+                <img src="/views/mobile/skin/default/image/jmj/img/banner01.png" alt="" width="100%">
+            </div>
+            <div class="mark1">23件商品</div>
+            <div class="mark2">
+                <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
+                25万次</div>
+        </div>
+    </section>
+    <%}%>
+    <%}%>
+    <%}%>
+</script>
 <!--头信息结束-->
+<script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/time.js"></script>
 <script>
-    //页面加载动画的调用
+    //aiax获取轮播图和限时购内容；
+    getIndex();
+    //页面加载完成后调用的功能
     $(window).load(function(){
         $("#loading").fadeOut(300);
         timer('timer');
+        //图片轮播功能
+        var gallery = mui('.mui-slider');
+        gallery.slider({
+            interval:4000//自动轮播周期，若为0则不自动播放，默认为0；
+        });
     })
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
     mui('body').on('tap','a',function(){document.location.href=this.href;});
     mui('body').on('tap','video',function(){
+        var self=this;
         if(this.paused){
-            this.setAttribute("controls",'controls');
-            document.getElementById("vedioStyle").className="hide";
-            this.play();
-
+            self.setAttribute("controls",'controls');
+            $(self).next().addClass('hide');
+            self.play();
         }else{
-            this.pause();
-            this.setAttribute("controls",false);
+            self.setAttribute("controls",false);
+            self.pause();
         }
+    });
+    mui('body').on('tap','.img-click',function(){
+        var self=this;
+        var self_Aid=self.parentNode;
+//        self_Aid.previousSiblingNode.play();
+        $(self_Aid).prev().addClass("hide");
+        $(self_Aid).prev().prev()[0].play();
+
+
     });
     document.getElementById("searth").addEventListener('focus',function(){
         document.getElementById("modalid-searth").className="show";
         document.body.style.overflow = 'hidden';
-    });
-    //图片轮播功能
-    var gallery = mui('.mui-slider');
-    gallery.slider({
-        interval:4000//自动轮播周期，若为0则不自动播放，默认为0；
     });
     mui.init({
         pullRefresh: {
@@ -418,15 +376,34 @@
             }
         }
     });
-    var count = 0;
     /**
      * 上拉加载具体业务实现
      */
+    var pageData = {
+        page:1
+    };
     function pullupRefresh() {
-        setTimeout(function() {
-            mui('#pullrefresh').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。
-
-        }, 1500);
+        mui.ajax('index.php?controller=apic&action=article_list',{
+            data:pageData,
+            dataType:'json',	// 服务器返回json格式数据
+            type:'post',		// HTTP请求类型
+            timeout:10000,		// 超时时间设置为10秒；
+            success:function(data){
+                pageData.page++;
+                var pageAlbum={};
+                pageAlbum.data=data;
+                var html3=template('albumPage',pageAlbum);
+                var div = document.createElement('div');
+                div.innerHTML=html3;
+                document.getElementById("pullContainer").appendChild(div);
+//                mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==5);
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+                alert("failed");
+            }
+        });
     }
     function searthCancel(){
         document.getElementById("modalid-searth").className="hide";
@@ -440,8 +417,8 @@
             window.location.href="home.html?item="+subContent;
         }
     }
-    function MuIAjax(url,data){
-        mui.ajax(url,{
+    function getIndex(){
+        mui.ajax('index.php?controller=apic&action=banner_list',{
             dataType:'json',//服务器返回json格式数据
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
@@ -449,16 +426,42 @@
                 //服务器返回响应，根据响应结果，分析是否登录成功；
                 var dat={};
                 dat.data=data;
-                return dat;
-//                var html1 = template('test',dat);
-//                document.getElementById("addressList").innerHTML = html1;
-//                submitaddr1=document.getElementById("submitaddr");
+                var html = template('C_slider',dat);
+                document.getElementById("slider1").innerHTML = html;
+                getTimePurchase(dat);
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
                 console.log(type);
             }
         });
+    }
+    function getTimePurchase(dat){
+        var url1='index.php?controller=apic&action=pro_speed_list';
+        mui.ajax(url1,{
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data1){
+                //服务器返回响应，根据响应结果，分析是否登录成功；
+                dat.data1=data1;
+                document.getElementById("timer").setAttribute("data_timer","20161028140203");
+                var html2=template('timeWare',dat);
+                document.getElementById("timePurchase_body").innerHTML = html2;
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+    function checkPause(obj){
+        var self=obj;
+        $(self).next().next().removeClass("hide");
+    }
+    function checkPlay(obj){
+        var self=obj;
+        $(self).next().next().addClass("hide");
     }
 </script>
 </body>
