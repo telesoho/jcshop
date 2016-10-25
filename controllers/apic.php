@@ -458,8 +458,7 @@ class Apic extends IController
         $type = IFilter::act(IReq::get('type'),'int');
         $query = new IQuery("article as ar");
 //        $page = 1;
-        $page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 3;
-        $query->page = $page;
+        $query->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
         $query->pagesize = 3;
         $query->join = "left join article_category as ac on ac.id = ar.category_id";
         switch ($type){
@@ -480,6 +479,7 @@ class Apic extends IController
         $items = $query->find();
         foreach ($items as $key => $value){
             $items[$key]['nums'] = count(Api::run('getArticleGoods',array("#article_id#",$value['id'])));
+            $items[$key]['totalpage'] = $query->getTotalPage();
         }
         header("Content-type: application/json");
         echo json_encode($items);
