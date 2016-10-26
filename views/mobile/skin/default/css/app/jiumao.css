@@ -589,12 +589,12 @@ input[type='search']{
 	background:#fff;
 	padding-bottom:0.86rem;
 }
-.article_body h2{
+.article_body h1,.article_body h2,.article_body h3,.article_body h4,.article_body h5{
 	font-size:0.32rem;
 	color:#ff0000;
 	letter-spacing:0.006rem;
 	line-height:0.35rem;
-	text-align:center;
+	text-align:center !important;
 	padding:0.61rem 0;
 }
 .article_body p{
@@ -603,11 +603,17 @@ input[type='search']{
 	color:#3d4245;
 	letter-spacing:0.0107rem;
 	line-height:0.38rem;
-	text-align:justify;
+	text-align:justify !important;
 }
 .article_body p img{
 	padding:0 3.33%;
 	margin:0.5rem 0;
+	width:100%;
+}
+.article_body>img{
+	padding:0 7.33%;
+	margin:0.5rem 0;
+	width:100%;
 }
 .article_body .content_ware{
 	display:flex;
