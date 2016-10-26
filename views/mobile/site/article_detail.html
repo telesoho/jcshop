@@ -87,7 +87,7 @@
         <div class="item">
             <a href="index.php?controller=site&action=products&id=<%=dat.id %>"><div class="img underline"><img src="<%=dat.img %>" alt=""/></div>
                 <div class="name"><%=dat.name %></div>
-                <div class="flexbox">
+                <div class="box">
                     <div class="price"><%=dat.sell_price %></div>
                     <div class="buy">立即购买</div>
                 </div></a>
@@ -139,7 +139,7 @@
                 var html=template('articleItem',pageArticle);
                 articleItemStr+=html;
                 document.getElementById("getArticleWare").innerHTML=articleItemStr;
-                mui('#pullrefresh').pullRefresh().endPullupToRefresh(articlePageData.page==5);
+                mui('#pullrefresh').pullRefresh().endPullupToRefresh(data==false);
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
