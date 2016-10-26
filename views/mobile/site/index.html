@@ -219,24 +219,26 @@
     <% var dat =data[i] %>
     <%if(dat.category_id==3){%>
     <!--视频专题-->
-    <div class="vedio_album albumn_index">
+    <section class="vedio_album albumn_index">
         <div class="title">
-        <span class="logo">
-            <img src="/views/mobile/skin/default/image/jmj/icon/move.png" alt="" class="img-vedio">
-        </span>
+            <span class="logo">
+                <img src="/views/mobile/skin/default/image/jmj/icon/move.png" alt="" class="img-vedio">
+            </span>
             <span class="vedio_name">
             <%=dat.name %>
-            <span><img src="/views/mobile/skin/default/image/jmj/icon/address.png" alt="" class="img-address">日本东京</span>
+                <span>
+                    <img src="/views/mobile/skin/default/image/jmj/icon/address.png" alt="" class="img-address">日本东京
+                </span>
             </span>
             <span class="num mui-pull-right">
-            999+
+                999+
             </span>
             <span class="like mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
             </span>
             <span class="share mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
-        </span>
+                <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+            </span>
         </div>
         <div class="vedio">
             <video class="player" src="http://f02.v1.cn/transcode/14410292MOBILET2.mp4"
@@ -244,69 +246,73 @@
             </video>
             <div class="vedioStyle">
                 <div class="top">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="" class="img-read">1.53万次</div>
+                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="" class="img-read">1.53万次
+                </div>
                 <div class="bottom">
-                    <span class="name">视频名称视频名称</span>
+                    <span class="name">视频名称视频名称
+                    </span>
                     <!--<span class="time">09:13</span>-->
                 </div>
-                <span class="time">09:13</span>
+                <span class="time">09:13
+                </span>
             </div>
             <div class="middle">
                 <img src="/views/mobile/skin/default/image/jmj/icon/click.png" alt="" class="img-click">
             </div>
         </div>
-    </div>
+    </section>
     <%}else{%>
     <%if(dat.category_id==1){%>
-    <div class="recommended line albumn_index">
+    <section class="recommended line albumn_index">
         <div class="title">
-        <span class="logo">
-            <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
-        </span>
+            <span class="logo">
+                <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
+            </span>
             <span class="name">
             <%=dat.title %>
-        </span>
+            </span>
             <span class="num mui-pull-right">
             999+
-        </span>
+            </span>
             <span class="like mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
-        </span>
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+            </span>
             <span class="share mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
-        </span>
+                <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+            </span>
         </div>
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
             <div class="content">
                 <div class="img">
                     <img src="<%=dat.image %>" alt="" width="100%">
                 </div>
-                <div class="mark1"><%=dat.nums %>件商品</div>
+                <div class="mark1"><%=dat.nums %>件商品
+                </div>
                 <div class="mark2">
                     <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
                     25万次</div>
             </div>
         </a>
-    </div>
+    </section>
     <%}else{%>
     <!--专辑-->
-    <div class="recommended line albumn_index">
+    <section class="recommended line albumn_index">
         <div class="title">
-        <span class="logo">
-            <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
-        </span>
+            <span class="logo">
+                <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
+            </span>
             <span class="name">
             <%=dat.title %>
-        </span>
+            </span>
             <span class="num mui-pull-right">
-            999+
-        </span>
+                999+
+            </span>
             <span class="like mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
-        </span>
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+            </span>
             <span class="share mui-pull-right">
-            <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
-        </span>
+                <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+            </span>
         </div>
         <a href="index.php?controller=apic&action=article_list&id=<%=dat.id %>">
             <div class="content">
@@ -319,7 +325,7 @@
                     25万次</div>
             </div>
         </a>
-    </div>
+    </section>
     <%}%>
     <%}%>
     <%}%>
