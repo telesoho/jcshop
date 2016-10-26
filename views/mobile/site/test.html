@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Title</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
+    <style>
+        .mui-scroll-wrapper{
+            width:20%;
+            border:1px solid red;
+        }
+        .mui-scroll-wrapper li{
+            height:3rem;
+            line-height:3rem;
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+<div class="mui-scroll-wrapper">
+    <div class="mui-scroll">
+        <ul>
+            <li>1</li>
+            <li>1</li>
+            <li>1</li>
+            <li>1</li>
+            <li>1</li>
+            <li>1</li>
+            <li>1</li>
+            <li>1</li>
+            <li>1</li>
+            <li>1</li>
+            <li>1</li>
+        </ul>
+    </div>
+</div>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/javascript/lazyload.js"></script>
+<script src="/views/mobile/javascript/time.js"></script>
+<script>
+    mui('.mui-scroll-wrapper').scroll({
+        deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+    });
+</script>
+</body>
+</html>
