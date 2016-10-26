@@ -402,7 +402,7 @@ class Apic extends IController
     public function pro_speed_list(){
         $query = new IQuery("promotion as p");
         $query->join = "left join goods as go on p.condition = go.id";
-        $query->fields = "date_format(p.start_time,'%Y%m%d%H%i%s') as start_time,go.is_del,p.name";
+        $query->fields = "date_format(p.end_time,'%Y%m%d%H%i%s') as end_time,go.is_del,p.name";
         $query->where = "p.type = 1 and p.seller_id = 0 and p.start_time > NOW() group by p.name order by start_time";
         $query->limit = 1;
         $items = $query->find();
