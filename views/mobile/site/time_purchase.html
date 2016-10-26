@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>九猫商城</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
+</head>
+<body>
+<!--loading页开始-->
+<div id="loading">
+    <div class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
+</div>
+<!--loading页结束-->
+<section class="timePurchasePage">
+    <div class="top flexbox">
+        <div class="item  active">
+            <div class="time">11:00</div>
+            <div class="state">明日再来</div>
+        </div>
+        <div class="item">
+            <div class="time">16:00</div>
+            <div class="state">抢购中</div>
+        </div>
+        <div class="item">
+            <div class="time">22:00</div>
+            <div class="state">准备开抢</div>
+        </div>
+    </div>
+</section>
+<!--底部空隙-->
+<script src="/views/mobile/javascript/template-native.js"></script>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/javascript/lazyload.js"></script>
+<script src="/views/mobile/javascript/time.js"></script>
+<script>
+    //页面加载完成后调用的功能
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
+    })
+
+</script>
+</body>
+</html>

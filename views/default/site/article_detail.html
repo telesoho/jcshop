@@ -42,7 +42,25 @@
 							$goods_no = $y[0];
 							if (!empty($goods_no)){
 								$goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
-								echo $x[0] . $goods_no_data['name'] . $y[1];
+								echo $x[0];
+
+							?>
+							<div class="content_ware">
+								<div class="img">
+									<a href="#"><img src="{$goods_no_data['image']}" alt="" style="width:2rem;"></a>
+								</div>
+								<div class="ware">
+									<div class="title">{$goods_no_data['name']}</div>
+									<div class="price">
+										<span class="price1">{$goods_no_data['sell_price']}</span>
+										<span class="art">日本售价:</span>
+										<span class="price2">{$goods_no_data['sell_price']}</span>
+									</div>
+									<a href="#"><div class="buy">立即购买</div></a>
+								</div>
+							</div>
+							<?php
+							echo $y[1];
 							} else {
 								echo $content;
 							}

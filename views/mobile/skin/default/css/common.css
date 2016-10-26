@@ -43,6 +43,9 @@ body{
 }
 .mui-active{
 color:#ef4145 !important;}
+.flexbox{
+  display:flex;
+}
 *{margin:0;padding:0;}
 /*页面加载动画*/
 #loading {

@@ -1,4 +1,5 @@
 {js:kindeditor}
+{set:$swfloadObject = new Swfupload();$swfloadObject->show($this->admin['admin_name'],$this->admin['admin_pwd']);}
 <div class="headbar">
 	<div class="position"><span>工具</span><span>></span><span>文章管理</span><span>></span><span>{if:isset($this->articleRow['id'])}编辑{else:}添加{/if}文章</span></div>
 </div>
@@ -79,6 +80,37 @@
 					<th valign="top">内容：</th><td><textarea id="content" name='content' style='width:700px;height:300px' pattern='required' alt='内容不能为空'>{echo:htmlspecialchars($this->articleRow['content'])}</textarea></td>
 				</tr>
 				<tr>
+					<th>专辑封面：</th>
+					<td>
+						<input class="middle" type="text" disabled />
+						<div class="upload_btn">
+							<span id="uploadButton"></span>
+						</div>
+						<label>可以上传多张图片，分辨率3000px以下，大小不得超过{echo:IUpload::getMaxSize()}</label>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td id="divFileProgressContainer"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td id="thumbnails"></td>
+
+					<!--图片模板-->
+					<script type='text/html' id='picTemplate'>
+						<span class='pic'>
+							<input type="hidden" name="image" value="{webroot:<%=picRoot%>}">
+							<img name="picThumb" onclick="" style="margin:5px; opacity:1;width:100px;height:100px" src="{webroot:<%=picRoot%>}" alt="<%=picRoot%>" />
+							<p>
+								<!--<a class='orange' href='javascript:void(0)' onclick="$(this).parents('.pic').insertBefore($(this).parents('.pic').prev());"><img src="{skin:images/admin/arrow_left.png}" title="左移动" alt="左移动" /></a>-->
+								<a class='orange' href='javascript:void(0)' onclick="$(this).parents('.pic').remove();"><img src="{skin:images/admin/sign_cacel.png}" title="删除" alt="删除" /></a>
+								<!--<a class='orange' href='javascript:void(0)' onclick="$(this).parents('.pic').insertAfter($(this).parents('.pic').next());"><img src="{skin:images/admin/arrow_right.png}" title="右移动" alt="右移动" /></a>-->
+							</p>
+						</span>
+					</script>
+				</tr>
+				<tr>
 					<th>关键词(SEO)：</th><td><input type='text' class='normal' name='keywords' value='' /></td>
 				</tr>
 				<tr>
@@ -127,7 +159,11 @@ jQuery(function(){
 	{if:$this->articleRow}
 	{set:$goodsList = Api::run("getArticleGoods",array("#article_id#",$this->articleRow['id']))}
 	createGoodsList({echo:JSON::encode($goodsList)});
+	var a = {echo:JSON::encode($this->articleRow['image'])};
+	var picHtml = template.render('picTemplate', {'picRoot': a});
+	$('#thumbnails').append(picHtml);
 	{/if}
+
 });
 
 //弹出调色板
@@ -170,6 +206,25 @@ function createGoodsList(goodsList)
 	{
 		var templateHTML = template.render('goodsItemTemplate',{"templateData":goodsList[i]});
 		$('#goodsListBox').append(templateHTML);
+	}
+}
+
+/**
+ * 图片上传回调,handers.js回调
+ * @param picJson => {'flag','img','list','show'}
+ */
+function uploadPicCallback(picJson)
+{
+	var picHtml = template.render('picTemplate',{'picRoot':picJson.img});
+	if ($('#thumbnails').html()){
+		$('#thumbnails').html('');
+	}
+	$('#thumbnails').append(picHtml);
+
+	//默认设置第一个为默认图片
+	if($('#thumbnails img[name="picThumb"][class="current"]').length == 0)
+	{
+//		$('#thumbnails img[name="picThumb"]:first').addClass('current');
 	}
 }
 </script>

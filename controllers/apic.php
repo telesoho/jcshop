@@ -398,6 +398,7 @@ class Apic extends IController
         echo json_encode($data);
         exit();
     }
+    //限时购
     public function pro_speed_list(){
         $query = new IQuery("promotion as p");
         $query->join = "left join goods as go on p.condition = go.id";
@@ -412,6 +413,57 @@ class Apic extends IController
     /**
      * ---------------------------------------------------专辑---------------------------------------------------*
      */
+    //显示专辑列表（首页）
+    public function article_list(){
+        $type = IFilter::act(IReq::get('type'),'int');
+        $query = new IQuery("article as ar");
+//        $page = 1;
+        $query->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+        $query->pagesize = 3;
+        $query->join = "left join article_category as ac on ac.id = ar.category_id";
+        switch ($type){
+            case 1:
+                $query->where = "ar.category_id = " . $type;
+                break;
+            case 2:
+                $query->where = "ar.category_id = " . $type;
+                break;
+            case 3:
+                $query->where = "ar.category_id = " . $type;
+                break;
+            default:
+                break;
+        }
+        $query->order = "ar.sort asc,ar.id desc";
+        $query->fields = "ar.id,ar.title,ar.content,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ar.category_id,ar.image,ac.name";
+        $items = $query->find();
+        foreach ($items as $key => $value){
+            $items[$key]['nums'] = count(Api::run('getArticleGoods',array("#article_id#",$value['id'])));
+            $items[$key]['totalpage'] = $query->getTotalPage();
+        }
+        header("Content-type: application/json");
+        echo json_encode($items);
+        exit();
+    }
+    //通过专辑获取相关商品
+    public function article_rel_goods()
+    {
+        $article_id = IFilter::act(IReq::get('id'),'int');
+        $article = new IQuery('relation as r');
+        $article->join = 'left join goods as go on r.goods_id = go.id';
+        $article->where = sprintf('r.article_id = %s and go.id is not null', $article_id);
+        $article->filds = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price';
+        $article->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+        $article->pagesize = 4;
+        $relationList = $article->find();
+        $total_page = $article->getTotalPage();
+        if ($article->page > $total_page){
+            $relationList = [];
+        }
+        header("Content-type: application/json");
+        echo json_encode($relationList);
+        exit();
+    }
     /**
      * ---------------------------------------------------分类---------------------------------------------------*
      */
@@ -454,37 +506,7 @@ class Apic extends IController
     /**
      * ---------------------------------------------------搜索---------------------------------------------------*
      */
-    public function article_list(){
-        $type = IFilter::act(IReq::get('type'),'int');
-        $query = new IQuery("article as ar");
-//        $page = 1;
-        $page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 3;
-        $query->page = $page;
-        $query->pagesize = 3;
-        $query->join = "left join article_category as ac on ac.id = ar.category_id";
-        switch ($type){
-            case 1:
-                $query->where = "ar.category_id = " . $type;
-                break;
-            case 2:
-                $query->where = "ar.category_id = " . $type;
-                break;
-            case 3:
-                $query->where = "ar.category_id = " . $type;
-                break;
-            default:
-                break;
-        }
-        $query->order = "ar.sort asc,ar.id desc";
-        $query->fields = "ar.id,ar.title,ar.content,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ar.category_id,ac.name";
-        $items = $query->find();
-        foreach ($items as $key => $value){
-            $items[$key]['nums'] = count(Api::run('getArticleGoods',array("#article_id#",$value['id'])));
-        }
-        header("Content-type: application/json");
-        echo json_encode($items);
-        exit();
-    }
+
 
     /**
      * ---------------------------------------------------幻灯片---------------------------------------------------*
