@@ -394,7 +394,6 @@
             type:'post',		// HTTP请求类型
             timeout:10000,		// 超时时间设置为10秒；
             success:function(data){
-                pageData.page++;
                 var pageAlbum={};
                 pageAlbum.data=data;
                 var html3=template('albumPage',pageAlbum);
@@ -402,6 +401,7 @@
                 div.innerHTML=html3;
                 document.getElementById("pullContainer").appendChild(div);
                mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
+                pageData.page++;
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
