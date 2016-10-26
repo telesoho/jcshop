@@ -50,7 +50,7 @@ header span{color:#fff;float:left;margin-top:0.1rem;}
 .concreteContent div p:first-child{height:0.6rem;line-height:0.6rem;}
 .concreteContent div p:first-child img{width:0.6rem;height:0.6rem;vertical-align:middle;margin-right:0.2rem;}
 .concreteContent div p:first-child span{float:right;color:#bbb;font-size:0.26rem;margin-right:0.3rem;}
-.concreteContent div p:last-child{margin-top:0.2rem;color:#3d4245;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+.concreteContent div p:last-child{margin-top:0.2rem;color:#3d4245;font-size:0.26rem;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
 .graphicDetailsBox{background:#fff;margin-top:0.2rem;border-top: 1px solid #eee;border-bottom: 1px solid #eee;padding:0 0.13rem 0.2rem;}
 .graphicDetailsBox .title01{font-size:0.3rem;color:#3d4245;padding:0.1rem 0 0.2rem;border-bottom: 1px solid #eee;}
 .graphicDetailsBox .title01 div{font-size:0.24rem;color:#bbb;float:right;}
