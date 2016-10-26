@@ -626,6 +626,9 @@ input[type='search']{
 	width:2rem;
 	height:2rem;
 }
+.article_body .content_ware .img img{
+	width:2rem;
+}
 .article_body .content_ware .ware .title{
 	font-size:0.32rem;
 	color:#3d4245;
@@ -778,9 +781,10 @@ input[type='search']{
 .timePurchasePage .top .item.active:after{
 	position:absolute;
 	content:'';
+	left:1rem;
 	width: 0;
 	height: 0;
-	border-left: 0.3rem solid transparent;
-	border-right: 0.3rem solid transparent;
-	border-top: 0.3rem solid #f70a7f;
+	border-left: 0.25rem solid transparent;
+	border-right: 0.25rem solid transparent;
+	border-top: 0.25rem solid #f70a7f;
 }
