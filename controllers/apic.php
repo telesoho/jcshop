@@ -398,6 +398,7 @@ class Apic extends IController
         echo json_encode($data);
         exit();
     }
+    //限时购
     public function pro_speed_list(){
         $query = new IQuery("promotion as p");
         $query->join = "left join goods as go on p.condition = go.id";
@@ -455,6 +456,10 @@ class Apic extends IController
         $article->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
         $article->pagesize = 4;
         $relationList = $article->find();
+        $total_page = $article->getTotalPage();
+        if ($article->page > $total_page){
+            $relationList = [];
+        }
         header("Content-type: application/json");
         echo json_encode($relationList);
         exit();

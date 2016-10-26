@@ -41,19 +41,17 @@
         </div>
         <div class="article_body">
             <?php
-							$content = htmlspecialchars_decode($this->articleRow['content']);
-            $x = explode('{{', $content);
-            $y = explode('}}', $x[1]);
-            $goods_no = $y[0];
-            if (!empty($goods_no)){
-            $goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
-            echo $x[0];
-
+                $content = htmlspecialchars_decode($this->articleRow['content']);
+                $x = explode('{{', $content);
+                $y = explode('}}', $x[1]);
+                $goods_no = $y[0];
+                if (!empty($goods_no)){
+                    $goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
+                    echo $x[0];
             ?>
-            <?php $goods_no_data['name'] ?>
             <div class="content_ware">
                 <div class="img">
-                    <a href="#"><img src="{webroot:$this->articleRow['image']}" alt="" style="width:2rem;"></a>
+                    <a href="#"><img src="{$goods_no_data['img']}" alt="" style="width:2rem;"></a>
                 </div>
                 <div class="ware">
                     <div class="title">{$goods_no_data['name']}</div>
@@ -65,11 +63,12 @@
                     <a href="#"><div class="buy">立即购买</div></a>
                 </div>
             </div>
+
             <?php
-            echo $y[1];
-            } else {
-                echo $content;
-            }
+                    echo $y[1];
+                } else {
+                    echo $content;
+                }
             ?>
         </div>
         <div class="articledetail_ware">
