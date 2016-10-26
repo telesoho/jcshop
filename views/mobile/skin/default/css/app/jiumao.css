@@ -656,14 +656,14 @@ input[type='search']{
 	font-size:0.24rem;
 	color:#bbbbbb;
 	letter-spacing:0;
-	padding-left:0.46rem;
+	padding-left:0.28rem;
 }
 .article_body .content_ware .ware .price .price2{
 	font-family:'HelveticaNeueLt';
 	font-size:0.3rem;
 	color:#bbbbbb;
 	letter-spacing:0;
-	padding-left:0.16rem;
+	padding-left:0.11rem;
 }
 .article_body .content_ware .ware .buy{
 	background:#ff4aa0;
@@ -736,8 +736,15 @@ input[type='search']{
 	padding:0.21rem 0.15rem 0.15rem 0.2rem;
 
 }
+.articledetail_ware .content .item .box{
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+}
 .articledetail_ware .content .item .buy{
-	margin:0.16rem 0.16rem 0.17rem 0.25rem;
+	margin-top:0.16rem;
+	margin-right:0.16rem;
+	/*margin:0.16rem 0.16rem 0.17rem 0.25rem;*/
 	background:#ff4aa0;
 	box-shadow:0 0.02rem 0.04rem 0 rgba(255,73,160,0.50);
 	border-radius:0.04rem;

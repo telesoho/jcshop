@@ -396,6 +396,7 @@
                 var div = document.createElement('div');
                 div.innerHTML=html3;
                 document.getElementById("pullContainer").appendChild(div);
+               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==5);
                 mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==5);
             },
             error:function(xhr,type,errorThrown){
