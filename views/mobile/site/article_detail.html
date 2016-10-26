@@ -36,6 +36,9 @@
     </div>
 </div>
 <!--loading页结束-->
+<!--下拉刷新容器-->
+<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+    <div class="mui-scroll" id="muiScroll">
         <div class="article_title">
             <img src="{webroot:$this->articleRow['image']}" alt="" width="100%" />
         </div>
@@ -73,50 +76,24 @@
         </div>
         <div class="articledetail_ware">
             <div class="title"><span>~</span><span>推荐商品</span>~</div>
-            <div class="content">
-                <div class="item">
-                    <div class="img underline"><img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""/></div>
-                    <div class="name">资生堂商品标题商品标题哈哈哈哈资生堂商品标题商品标题哈哈哈哈资生堂商品标题商品标题哈哈哈哈</div>
-                    <div class="flexbox">
-                        <div class="price">432.40</div>
-                        <div class="buy">立即购买</div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="img underline"><img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" /></div>
-                    <div class="name">资生堂商品标题商品标题哈哈哈哈</div>
-                    <div class="flexbox">
-                        <div class="price">432.40</div>
-                        <div class="buy">立即购买</div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="img underline"><img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""/></div>
-                    <div class="name">资生堂商品标题商品标题哈哈哈哈</div>
-                    <div class="flexbox">
-                        <div class="price">432.40</div>
-                        <div class="buy">立即购买</div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="img underline"><img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""/></div>
-                    <div class="name">资生堂商品标题商品标题哈哈哈哈</div>
-                    <div class="flexbox">
-                        <div class="price">432.40</div>
-                        <div class="buy">立即购买</div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="img underline"><img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""/></div>
-                    <div class="name">资生堂商品标题商品标题哈哈哈哈</div>
-                    <div class="flexbox">
-                        <div class="price">432.40</div>
-                        <div class="buy">立即购买</div>
-                    </div>
-                </div>
+            <div class="content" id="getArticleWare">
             </div>
         </div>
-<!--底部空隙-->
+    </div>
+</div>
+<script id="articleItem" type="text/html">
+    <% for(var i=0; i<data.length; i++){%>
+    <% var dat =data[i] %>
+        <div class="item">
+            <a href="index.php?controller=site&action=products&id=<%=dat.id %>"><div class="img underline"><img src="<%=dat.img %>" alt=""/></div>
+                <div class="name"><%=dat.name %></div>
+                <div class="flexbox">
+                    <div class="price"><%=dat.sell_price %></div>
+                    <div class="buy">立即购买</div>
+                </div></a>
+        </div>
+    <%}%>
+</script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
@@ -131,15 +108,60 @@
         pullRefresh: {
             container: '#pullrefresh',
             up: {
+                auto:true,
                 contentrefresh: '正在加载...',
                 callback: pullupRefresh
             }
         }
     });
+    mui('body').on('tap','a',function(){document.location.href=this.href;});
+     //获取url的商品id
+    var Request = new Object();
+    Request = GetRequest();
+    var getId=Request["id"];
+    //文章商品分类
+    var articlePageData ={
+        page:1,
+        id:getId
+    };
+    var articleItemStr="";
     function pullupRefresh() {
-
+        mui.ajax('index.php?controller=apic&action=article_rel_goods',{
+            data:articlePageData,
+            dataType:'json',	// 服务器返回json格式数据
+            type:'get',		// HTTP请求类型
+            timeout:10000,		// 超时时间设置为10秒；
+            success:function(data){
+                console.log(data);
+                articlePageData.page++;
+                var pageArticle={};
+                pageArticle.data=data;
+                var html=template('articleItem',pageArticle);
+                articleItemStr+=html;
+                document.getElementById("getArticleWare").innerHTML=articleItemStr;
+                mui('#pullrefresh').pullRefresh().endPullupToRefresh(articlePageData.page==5);
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+                alert("failed");
+            }
+        });
     }
 
+    //	获取url传递过来的参数
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
 </script>
 </body>
 </html>
