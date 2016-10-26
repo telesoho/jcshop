@@ -707,6 +707,7 @@ input[type='search']{
 	width:100%;
 	display:flex;
 	justify-content: center;
+	align-items: center;
 	border-bottom:1px solid #eee;
 }
 .articledetail_ware .content .item .img img{
@@ -732,11 +733,11 @@ input[type='search']{
 	text-shadow: 0.03rem 0.03rem 0 #0104f0, 0.03rem -0.03rem 0 #0104f0, -0.03rem -0.03rem 0 #0104f0, -0.03rem 0.03rem 0 #0104f0, 0.03rem 0.02rem 0 #0104f0, 0.03rem -0.02rem 0 #0104f0, -0.03rem -0.02rem 0 #0104f0, -0.03rem 0.02rem 0 #0104f0, 0.03rem 0.01rem 0 #0104f0, 0.03rem -0.01rem 0 #0104f0, -0.03rem -0.01rem 0 #0104f0, -0.03rem 0.01rem 0 #0104f0, 0.03rem 0px 0 #0104f0, 0.03rem 0px 0 #0104f0, -0.03rem 0px 0 #0104f0, -0.03rem 0px 0 #0104f0, 0.02rem 0.03rem 0 #0104f0, 0.02rem -0.03rem 0 #0104f0, -0.02rem -0.03rem 0 #0104f0, -0.02rem 0.03rem 0 #0104f0, 0.02rem 0.02rem 0 #0104f0, 0.02rem -0.02rem 0 #0104f0, -0.02rem -0.02rem 0 #0104f0, -0.02rem 0.02rem 0 #0104f0, 0.02rem 0.01rem 0 #0104f0, 0.02rem -0.01rem 0 #0104f0, -0.02rem -0.01rem 0 #0104f0, -0.02rem 0.01rem 0 #0104f0, 0.02rem 0px 0 #0104f0, 0.02rem 0px 0 #0104f0, -0.02rem 0px 0 #0104f0, -0.02rem 0px 0 #0104f0, 0.01rem 0.03rem 0 #0104f0, 0.01rem -0.03rem 0 #0104f0, -0.01rem -0.03rem 0 #0104f0, -0.01rem 0.03rem 0 #0104f0, 0.01rem 0.02rem 0 #0104f0, 0.01rem -0.02rem 0 #0104f0, -0.01rem -0.02rem 0 #0104f0, -0.01rem 0.02rem 0 #0104f0, 0.01rem 0.01rem 0 #0104f0, 0.01rem -0.01rem 0 #0104f0, -0.01rem -0.01rem 0 #0104f0, -0.01rem 0.01rem 0 #0104f0, 0.01rem 0px 0 #0104f0, 0.01rem 0px 0 #0104f0, -0.01rem 0px 0 #0104f0, -0.01rem 0px 0 #0104f0, 0px 0.03rem 0 #0104f0, 0px -0.03rem 0 #0104f0, 0px -0.03rem 0 #0104f0, 0px 0.03rem 0 #0104f0, 0px 0.02rem 0 #0104f0, 0px -0.02rem 0 #0104f0, 0px -0.02rem 0 #0104f0, 0px 0.02rem 0 #0104f0, 0px 0.01rem 0 #0104f0, 0px -0.01rem 0 #0104f0, 0px -0.01rem 0 #0104f0, 0px 0.01rem 0 #0104f0, 0px 0px 0 #0104f0, 0px 0px 0 #0104f0, 0px 0px 0 #0104f0, 0px 0px 0 #0104f0, 0 0 0 #0104f0;
 	font-size:0.3rem;
 	color:#fff900;
-	padding:0.21rem 0.15rem 0.3rem 0.2rem;
+	padding:0.21rem 0.15rem 0.15rem 0.2rem;
 
 }
 .articledetail_ware .content .item .buy{
-	margin:0.16rem 0.16rem 0.17rem 0.55rem;
+	margin:0.16rem 0.16rem 0.17rem 0.25rem;
 	background:#ff4aa0;
 	box-shadow:0 0.02rem 0.04rem 0 rgba(255,73,160,0.50);
 	border-radius:0.04rem;
