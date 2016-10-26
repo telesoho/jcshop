@@ -402,12 +402,19 @@ class Apic extends IController
     public function pro_speed_list(){
         $query = new IQuery("promotion as p");
         $query->join = "left join goods as go on p.condition = go.id";
-        $query->fields = "p.*,go.id as goods_id,go.is_del,go.name,go.sell_price";
-        $query->where = "p.type = 1 and p.seller_id = 0";
-//        $query->page = "$page";
+        $query->fields = "p.*,go.id as goods_id,go.is_del,p.name";
+        $query->where = "p.type = 1 and p.seller_id = 0 and p.start_time > NOW() group by p.name order by start_time";
+        $query->limit = 1;
         $items = $query->find();
+        $query2 = new IQuery("promotion as p");
+        $query2->join = "left join goods as go on p.condition = go.id";
+        $query2->fields = "p.*,go.id as goods_id,go.is_del,p.name as pname,p.award_value, go.name,go.sell_price,go.img";
+        $query2->where = sprintf("p.type = 1 and p.seller_id = 0 and p.name = '%s'", $items[0]['name']);
+        $query2->limit = 6;
+        $items2 = $query2->find();
+        $items[0]['child'] = $items2;
         header("Content-type: application/json");
-        echo json_encode($items);
+        echo json_encode($items[0]);
         exit();
     }
     /**
