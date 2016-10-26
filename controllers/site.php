@@ -291,7 +291,6 @@ class Site extends IController
 		{
 			$articleObj       = new IModel('article');
 			$this->articleRow = $articleObj->getObj('id = '.$this->article_id);
-            var_dump($this->articleRow);
 			if(empty($this->articleRow))
 			{
 				IError::show(403,'资讯文章不存在');
