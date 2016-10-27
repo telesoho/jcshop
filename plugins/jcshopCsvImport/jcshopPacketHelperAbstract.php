@@ -16,7 +16,14 @@ abstract class jcshopPacketHelperAbstract
 	protected $dataLine;
 
 	//csv separator
-	protected $separator = ",";
+	protected $separator = "\t";
+
+	protected $version;
+
+	protected $titleArrayEn;
+
+	protected $titleArrayCn;
+
 
 	/**
 	 * constructor,open the csv packet date file
@@ -48,6 +55,7 @@ abstract class jcshopPacketHelperAbstract
 		//read csv file into dataLine array
 		setlocale(LC_ALL, 'en_US.UTF-8');
 		$fileHandle = fopen($csvFile,'r');
+
 		while($tempRow = fgetcsv($fileHandle,0,$this->separator))
 		{
 			$this->dataLine[] = $tempRow;
@@ -61,48 +69,33 @@ abstract class jcshopPacketHelperAbstract
 			throw new Exception('the csv file is empty!');
 		}
 		$this->dataLine[0][0] = IString::clearBom($this->dataLine[0][0]);
-	}
-	/**
-	 * delete useless line until csv title position
-	 * @param array $dataLine csv line array
-	 * @param array $title csv title
-	 * @return array
-	 */
-	protected function seekStartLine(&$dataLine,$title)
-	{
-		foreach($dataLine as $lineNum => $lineContent)
-		{
-			unset($dataLine[$lineNum]);
-			if(in_array(current($title),$lineContent))
-			{
-				break;
-			}
+
+		// CSV版本判断
+		$this->version = $this->dataLine[0][0];
+		if($this->version == "version 1.00") {
+			$this->titleArrayEn = $this->dataLine[1];
+			$this->titleArrayCn = $this->dataLine[2];
+			unset($this->dataLine[2]);
+			unset($this->dataLine[1]);
+			unset($this->dataLine[0]);
 		}
-		return $dataLine;
 	}
+
 	/**
 	 * the mapping with column's num
 	 * @param array $dataLine csv line array
 	 * @param array $titleArray csv title
 	 * @return array key and cols mapping
 	 */
-	protected function getColumnNum(&$dataLine,$titleArray)
+	protected function getColumnNum($titleArray)
 	{
 		$titleMapping  = array();
-		foreach($dataLine as $key => $colsArray)
-		{
-			//find the csv title line
-			if(in_array(current($titleArray),$colsArray))
+		foreach($titleArray as $name)
+		{			
+			$findKey = array_search($name,$this->titleArrayCn);
+			if($findKey !== false)
 			{
-				foreach($titleArray as $name)
-				{
-					$findKey = array_search($name,$colsArray);
-					if($findKey !== false)
-					{
-						$titleMapping[$findKey] = $name;
-					}
-				}
-				break;
+				$titleMapping[$findKey] = $name;
 			}
 		}
 		if(!$titleMapping)
@@ -117,14 +110,14 @@ abstract class jcshopPacketHelperAbstract
 	 */
 	public function collect()
 	{
-		$mapping  = $this->getColumnNum($this->dataLine,$this->getDataTitle());
-		$dataLine = $this->seekStartLine($this->dataLine,$this->getDataTitle());
+		$mapping  = $this->getColumnNum($this->getDataTitle());
 
 		$result    = array();
 		$temp      = array();
 
-		foreach($dataLine as $lineNum => $lineContent)
+		foreach($this->dataLine as $lineNum => $lineContent)
 		{
+			// var_dump($lineContent);
 			foreach($mapping as $key => $title)
 			{
 				$temp[$title] = $this->runCallback($lineContent[$key],$title);
@@ -133,19 +126,32 @@ abstract class jcshopPacketHelperAbstract
 		}
 		return $result;
 	}
+
 	/**
 	 * run title callback function
-	 * @return mix
+	 * 回调函数示例：
+	 * 
+	 *	public function getTitleCallback()
+	 * {
+	*		// 设置回调函数
+	*		return array("品牌" =>"brandCallback");
+	*	}
+	*	protected function brandCallback($content) {
+	*		var_dump("品牌回调函数：", $content);
+	*	}	 
+	* @return mix
 	 */
 	public function runCallback($content,$title)
 	{
 		$configCallback = $this->getTitleCallback();
+
 		if(isset($configCallback[$title]))
 		{
 			return call_user_func(array($this,$configCallback[$title]),$content);
 		}
 		return $content;
 	}
+
 	/**
 	 * get data image path
 	 * @return string

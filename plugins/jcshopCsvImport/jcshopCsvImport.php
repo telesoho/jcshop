@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief CSV商品导入插件
  * @author nswe
@@ -6,22 +7,10 @@
  */
 class jcshopCsvImport extends pluginBase
 {
-	//注册事件
-	public function reg()
-	{
-		//后台管理
-		plugin::reg("onSystemMenuCreate",function(){
-			$link = "/plugins/jcshopCsvImport";
-			Menu::$menu["插件"]["插件管理"][$link] = $this->name();
-		});
-
-		plugin::reg("onBeforeCreateAction@plugins@jcshopCsvImport",function(){
-			self::controller()->jcshopCsvImport = function(){$this->redirect("jcshopCsvImport");};
-		});
-		plugin::reg("onBeforeCreateAction@plugins@csvImport",function(){
-			self::controller()->csvImport = function(){$this->csvImport("jcshopCsvImport");};
-		});
-	}
+	private $seller_id;
+	private $csvType;
+	private $category;
+	private $pluginDir;
 
 	/**
 	 * @brief 开始运行
@@ -30,11 +19,11 @@ class jcshopCsvImport extends pluginBase
 	{
 		set_time_limit(0);
 		ini_set("max_execution_time",0);
-		$seller_id = self::controller()->seller ? self::controller()->seller['seller_id'] : 0;
+		$this->seller_id = self::controller()->seller ? self::controller()->seller['seller_id'] : 0;
 
-		$csvType  = IReq::get('csvType');
-		$category = IFilter::act(IReq::get('category'),'int');
-		$pluginDir= $this->path();
+		$this->csvType  = IReq::get('csvType');
+		$this->category = IFilter::act(IReq::get('category'),'int');
+		$this->pluginDir= $this->path();
 
 		if(!class_exists('ZipArchive'))
 		{
@@ -63,6 +52,7 @@ class jcshopCsvImport extends pluginBase
 			die($message);
 		}
 
+
 		$zipPath = $packetData['fileSrc'];
 		$zipDir  = dirname($zipPath);
 		$imageDir= IWeb::$app->config['upload'].'/'.date('Y/m/d');
@@ -80,165 +70,153 @@ class jcshopCsvImport extends pluginBase
 			die($message);
 		}
 
+		if($this->csvType !== "jcshop") {
+			die("请选择九猫商品数据包");
+		}
+
+		$this->goodsCsvImport($zipDir, $imageDir);
+
+		// $this->productsCsvImport($zipDir, $imageDir);
+		
+		//清理csv文件数据
+		IFile::rmdir($uploadCsvDir,true);
+		$this->redirect($returnUrl);
+	}
+
+	//注册事件
+	public function reg()
+	{
+		//后台管理
+		plugin::reg("onSystemMenuCreate",function(){
+			$link = "/plugins/jcshopCsvImport";
+			Menu::$menu["插件"]["插件管理"][$link] = $this->name();
+		});
+
+		plugin::reg("onBeforeCreateAction@plugins@jcshopCsvImport",function(){
+			self::controller()->jcshopCsvImport = function(){$this->redirect("jcshopCsvImport");};
+		});
+		plugin::reg("onBeforeCreateAction@plugins@csvImport",function(){
+			self::controller()->csvImport = function(){$this->csvImport("jcshopCsvImport");};
+		});
+	}
+
+	
+	private function goodsCsvImport($zipDir, $imageDir) {
+
+
+		$goodsFilename = $zipDir . "/goods.csv";
+
+		if(!file_exists($goodsFilename)) {
+			return false;
+		}
+
+		/* goods.csv */
+		include_once($pluginDir.'jcshopGoodsCsvHelper.php');
+		$goodsCsvHelper = new jcshopGoodsCsvHelper($goodsFilename ,$imageDir);
+
+		//从csv中解析数据
+		$collectData = $goodsCsvHelper->collect();
+
+
+		$this->processGoodsData($collectData);
+
+	}
+
+	// 将商品数据插入数据库
+	private function processGoodsData($collectData) {
+
+		$titleToCols = array(
+			'name'       => '商品名称',
+			'goods_no'	 => '商品JAN编码',
+			'sell_price' => '销售价格',
+			'store_nums' => '库存数量',
+			'content'    => '商品详情',
+			'img'        => '图片',
+			'spec_array' => '销售属性',
+			'weight'     => '物流重量',
+		);		
+
 		//实例化商品
 		$goodsObject     = new IModel('goods');
 		$photoRelationDB = new IModel('goods_photo_relation');
 		$photoDB         = new IModel('goods_photo');
 		$cateExtendDB    = new IModel('category_extend');
 
-		$dirHandle = opendir($zipDir);
-		while(false !== ($fileName = readdir($dirHandle)))
+		//插入商品表
+		foreach($collectData as $key => $val)
 		{
-			if(strpos($fileName,'.csv') !== false)
+			//插入GOODS表数据
+			$insertData = array(
+				'name'         => IFilter::act(trim($val[$titleToCols['name']],'"\'')),
+				'goods_no'     => IFilter::act(trim($val[$titleToCols['goods_no']])),
+				'sell_price'   => IFilter::act($val[$titleToCols['sell_price']],'float'),
+				'market_price' => IFilter::act($val[$titleToCols['sell_price']],'float'),
+				'is_del'       => '3',  /* 1：删除 2：下架 3:待审*/
+				'up_time'      => ITime::getDateTime('0000-00-00 00:00:00'),
+				'down_time'    => ITime::getDateTime(),
+				'create_time'  => ITime::getDateTime(),
+				'store_nums'   => IFilter::act($val[$titleToCols['store_nums']],'int'),
+				'content'      => IFilter::addSlash(trim($val[$titleToCols['content']])),
+				'img'          => isset($val['mainPic']) ? current($val['mainPic']) : '',
+				'seller_id'    => $this->seller_id,
+				'weight'       => $val[$titleToCols['weight']],
+			);
+
+			// var_dump($insertData);
+
+			$goodsObject->setData($insertData);
+			$goods_id = $goodsObject->add();
+
+
+			//处理商品分类
+			if($this->category)
 			{
-				//创建解析对象
-				switch($csvType)
+				foreach($this->category as $catId)
 				{
-					case "jcshop":
-					{
-						include_once($pluginDir.'jcshopPacketHelper.php');
-						$helperInstance = new jcshopPacketHelper($zipDir.'/'.$fileName,$imageDir);
-						$titleToCols    = jcshopTitleToColsMapping::$mapping;
-					}
-					break;
-
-					default:
-					{
-						$message = "请选择csv数据包的格式";
-						die($message);
-					}
+					$cateExtendDB->setData(array('goods_id' => $goods_id,'category_id' => $catId));
+					$cateExtendDB->add();
 				}
-				//从csv中解析数据
-				$collectData = $helperInstance->collect();
+			}
 
-				//插入商品表
-				foreach($collectData as $key => $val)
+			//处理商品图片
+			if(isset($val['mainPic']) && $val['mainPic'])
+			{
+				foreach($val['mainPic'] as $photoFile)
 				{
-					$collectImage = isset($val[$titleToCols['img']]) ? $val[$titleToCols['img']] : '';
-
-					//有图片处理
-					if($collectImage)
+					if(!is_file($photoFile))
 					{
-						//图片拷贝
-						foreach($collectImage as $from => $to)
-						{
-							$from = str_replace("\\","/",$from);
-							$to   = str_replace("\\","/",$to);
-							if(!is_file($from))
-							{
-								continue;
-							}
-							IFile::xcopy($from,$to);
-						}
+						continue;
 					}
-
-					//处理商品详情图片
-					$toDir = IUrl::creatUrl().dirname($to);
-					$goodsContent = preg_replace("|src=\".*?(?=/contentPic/)|","src=\"$toDir",trim($val[$titleToCols['content']],"'\""));
-
-					//插入GOODS表数据
-					$insertData = array(
-						'name'         => IFilter::act(trim($val[$titleToCols['name']],'"\'')),
-						'goods_no'     => goods_class::createGoodsNo(),
-						'sell_price'   => IFilter::act($val[$titleToCols['sell_price']],'float'),
-						'market_price' => IFilter::act($val[$titleToCols['sell_price']],'float'),
-						'up_time'      => ITime::getDateTime(),
-						'create_time'  => ITime::getDateTime(),
-						'store_nums'   => IFilter::act($val[$titleToCols['store_nums']],'int'),
-						'content'      => IFilter::addSlash($goodsContent),
-						'img'          => isset($val['mainPic']) ? current($val['mainPic']) : '',
-						'seller_id'    => $seller_id,
-						'weight'       => $val[$titleToCols['weight']],
-					);
-					$goodsObject->setData($insertData);
-					$goods_id = $goodsObject->add();
-
-					//货品处理
-					if(isset($val['products']) && $val['products'])
+					$md5Code = md5_file($photoFile);
+					$photoRow= $photoDB->getObj('id = "'.$md5Code.'"');
+					if(!$photoRow || !is_file($photoRow['img']))
 					{
-						$goodsSpec = array();
-						foreach($val['products'] as $k => $pVal)
-						{
-							//整理goods表spec_array数据
-							foreach($pVal['spec_array'] as $specVal)
-							{
-								if(!isset( $goodsSpec[$specVal['id']] ))
-								{
-									$goodsSpec[$specVal['id']] = array(
-										'id'    => $specVal['id'],
-										'name'  => $specVal['name'],
-										'type'  => $specVal['type'],
-										'value' => array(),
-									);
-								}
+						$photoDB->del('id = "'.$md5Code.'"');
 
-								if(!in_array(array($specVal['tip'] => $specVal['value']),$goodsSpec[$specVal['id']]['value']))
-								{
-									$goodsSpec[$specVal['id']]['value'][] = array($specVal['tip'] => $specVal['value']);
-								}
-							}
-
-							//更新插入products表
-							$products_no = $insertData['goods_no'].'-'.($k+1);
-							$weight      = $insertData['weight'];
-							$productsDB  = new IModel('products');
-							$productsDB->setData(array(
-								'goods_id'    => $goods_id,
-								'products_no' => $products_no,
-								'spec_array'  => JSON::encode($pVal['spec_array']),
-								'store_nums'  => $pVal['store_nums'],
-								'market_price'=> $pVal['sell_price'],
-								'sell_price'  => $pVal['sell_price'],
-								'cost_price'  => $pVal['sell_price'],
-								'weight'      => $weight,
-							));
-							$productsDB->add();
-						}
-
-						//更新商品表
-						$goodsObject->setData(array( 'spec_array' => JSON::encode($goodsSpec) ));
-						$goodsObject->update("id = ".$goods_id);
+						$photoDB->setData(array("id" => $md5Code,"img" => $photoFile));
+						$photoDB->add();
 					}
-
-					//处理商品分类
-					if($category)
-					{
-						foreach($category as $catId)
-						{
-							$cateExtendDB->setData(array('goods_id' => $goods_id,'category_id' => $catId));
-							$cateExtendDB->add();
-						}
-					}
-
-					//处理商品图片
-					if(isset($val['mainPic']) && $val['mainPic'])
-					{
-						foreach($val['mainPic'] as $photoFile)
-						{
-							if(!is_file($photoFile))
-							{
-								continue;
-							}
-							$md5Code = md5_file($photoFile);
-							$photoRow= $photoDB->getObj('id = "'.$md5Code.'"');
-							if(!$photoRow || !is_file($photoRow['img']))
-							{
-								$photoDB->del('id = "'.$md5Code.'"');
-
-								$photoDB->setData(array("id" => $md5Code,"img" => $photoFile));
-								$photoDB->add();
-							}
-							$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
-							$photoRelationDB->add();
-						}
-					}
+					$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
+					$photoRelationDB->add();
 				}
 			}
 		}
-		//清理csv文件数据
-		IFile::rmdir($uploadCsvDir,true);
-		$this->redirect($returnUrl);
 	}
+
+	private function productsCsvImport($zipDir, $imageDir) {
+		
+		$productsFilename = $zipDir . "/products.csv";
+
+		if(!file_exists($productsFilename)) {
+			return false;
+		}
+
+		/* products.csv */
+		include_once($pluginDir.'jcshopProductsCsvHelper.php');
+		$productsCsvHelper = new jcshopProductsCsvHelper($productsFilename ,$imageDir);
+
+	}
+
 
 	/**
 	 * @brief 插件名字
@@ -246,7 +224,7 @@ class jcshopCsvImport extends pluginBase
 	 */
 	public static function name()
 	{
-		return "九猫商品CSV数据导入";
+		return "九猫商品数据导入";
 	}
 
 	/**
@@ -258,4 +236,3 @@ class jcshopCsvImport extends pluginBase
 		return "九猫CSV数据包直接导入到iWebShop系统中，管理后台可以用";
 	}
 }
-
