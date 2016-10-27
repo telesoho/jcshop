@@ -4393,8 +4393,8 @@ body > .mui-progressbar
 }
 .mui-slider .mui-segmented-control.mui-segmented-control-inverted ~ .mui-slider-group .mui-slider-item
 {
-    border-top: 1px solid #c8c7cc;
-    border-bottom: 1px solid #c8c7cc;
+    /*border-top: 1px solid #c8c7cc;*/
+    /*border-bottom: 1px solid #c8c7cc;*/
 }
 .mui-slider .mui-slider-group
 {
@@ -4753,7 +4753,6 @@ body > .mui-progressbar
 {
     position: relative;
     bottom: 0;
-
     height: 40px;
 }
 .mui-pull-bottom-pocket .mui-pull-loading
@@ -5589,13 +5588,13 @@ body > .mui-progressbar
 .mui-pull-top-wrapper .mui-icon.mui-reverse {
     /*-webkit-transform: rotate(180deg) translateZ(0);*/
 }
-.mui-pull-bottom-tips {
-    text-align: center;
-    background-color: #efeff4;
-    font-size: 15px;
-    line-height: 40px;
-    color: #777;
-}
+/*.mui-pull-bottom-tips {*/
+    /*text-align: center;*/
+    /*background-color: #efeff4;*/
+    /*font-size: 15px;*/
+    /*line-height: 40px;*/
+    /*color: #777;*/
+/*}*/
 .mui-pull-top-canvas {
     overflow: hidden;
     background-color: #fafafa;
