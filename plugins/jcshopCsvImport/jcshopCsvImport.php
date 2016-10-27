@@ -55,7 +55,8 @@ class jcshopCsvImport extends pluginBase
 
 		$zipPath = $packetData['fileSrc'];
 		$zipDir  = dirname($zipPath);
-		$imageDir= IWeb::$app->config['upload'].'/'.date('Y/m/d');
+		// $imageDir= IWeb::$app->config['upload'].'/'.date('Y/m/d');
+		$imageDir= IWeb::$app->config['upload'] . '/goods_pic';
 		file_exists($imageDir) ? '' : IFile::mkdir($imageDir);
 
 		//解压缩包
