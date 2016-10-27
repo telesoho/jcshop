@@ -326,9 +326,11 @@ input[type='search']{
 	margin-right:0.08rem;
 }
 .albumn_index .title .vedio_name{
+	display:inline-block;
 	position:relative;
 	top:-0.15rem;
 	margin-left:0.23rem;
+	min-width:2rem;
 	color:#3d4245;
 	font-size:0.3rem;
 	width:1.88rem;
@@ -336,7 +338,7 @@ input[type='search']{
 .albumn_index .title .vedio_name span{
     position:absolute;
 	left:0;
-	top:0.1rem;
+	top:0.34rem;
 	font-size:0.22rem;
 	color:#bbb;
 }
@@ -619,7 +621,6 @@ input[type='search']{
 	display:-webkit-flex;
 	background:#f8f8f8;
 	margin:0.29rem 2.66% 0.47rem;
-	height:2.24rem;
 }
 .article_body .content_ware .img{
 	margin:0.2rem 0.06rem;
