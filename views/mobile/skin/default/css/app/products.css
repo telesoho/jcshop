@@ -24,9 +24,9 @@ header span{color:#fff;float:left;margin-top:0.1rem;}
 .contentInfo{padding:0.2rem 0;}
 .contentInfo .info01{display:inline-block;}
 .contentInfo .info01 img{width:2.49rem;height:1.26rem;}
-.contentInfo .info02{display:inline-block;margin-left:0.2rem;}
+.contentInfo .info02{display:inline-block;margin-left:0.2rem;width:4rem;}
 .contentInfo .info02 p:first-child{font-size:0.26rem;color:#3d4245;letter-spacing:0px;}
-.contentInfo .info02 p:nth-child(2){font-size:0.26rem;color:#bbbbbb;letter-spacing:0px;margin-top:0.1rem;}
+.contentInfo .info02 p:nth-child(2){font-size:0.26rem;color:#bbbbbb;letter-spacing:0px;margin-top:0.1rem;white-space: nowrap;width: 100%;overflow: hidden;text-overflow: ellipsis;}
 .contentInfo .info02 p:last-child{font-size:0.22rem;color:#bbb;margin-top:0.2rem;}
 .contentInfo .info02 p:last-child img{width:0.32rem;height:0.19rem;margin-right:0.3rem;}
 .evaluateBox{padding:0.1rem 0.13rem;background:#fff;margin-top:0.2rem;border-top:1px solid #eee;border-bottom: 1px solid #eee;;}
@@ -54,16 +54,15 @@ header span{color:#fff;float:left;margin-top:0.1rem;}
 .brandDetail p:first-child{color:#3d4245;font-size: 0.28rem;margin-bottom:0.1rem;}
 .brandDetail p:last-child{color:#bbb;font-size: 0.26rem;}
 /*覆盖mui样式*/
-.mui-slider-indicator.mui-segmented-control{background:#fff;}
+.mui-slider-indicator.mui-segmented-control{background:#fff !important;}
 .mui-segmented-control.mui-scroll-wrapper{height:3.5rem;}
 .mui-segmented-control.mui-scroll-wrapper .mui-scroll{height:3.5rem;}
 .mui-segmented-control.mui-scroll-wrapper .mui-control-item{padding:0.125rem 0;}
 
 .goodsList{width:100%;height:6rem;}
-.goodsList div{font-size:0.24rem;}
-.goodsList div img{width:1.8rem;height:1.8rem;}
-.goodsList div p:first-child{color:#3d4245;}
-.goodsList div p:last-child{color:#fe0000;}
+.goodsList .mui-control-item img{width:1.8rem;height:1.8rem;}
+.goodsList .mui-control-item p{color:#3d4245;font-size:0.24rem;width:2rem;overflow: hidden;text-overflow: ellipsis;}
+.goodsList .mui-control-item p:last-child{color:#fe0000;}
 .servicePromise{background:#fff;margin-top:0.2rem;padding:0 0.13rem;border-top: 1px solid #eee;overflow:hidden;}
 .servicePromise p:first-child{padding:0.1rem 0;font-size:0.3rem;color:#3d4245;border-bottom: 1px solid #eee;}
 .servicePromise ul{width:100%;float:left;padding:0.3rem 0;}
