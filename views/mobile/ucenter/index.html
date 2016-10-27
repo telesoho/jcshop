@@ -8,6 +8,7 @@
     <title>九猫首页</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css"/>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/shopcar.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
@@ -134,26 +135,28 @@
     </section>
 <footer>
     <nav class="mui-bar mui-bar-tab">
-        <div class="mui-content">
-            <a id="defaultTab" class="mui-tab-item " href="index.html">
-                <span class="mui-icon mui-icon-home"></span>
-                <span class="mui-tab-label">首页</span>
-            </a>
-            <a class="mui-tab-item" href="#">
-                <span class="mui-icon mui-icon-list"></span>
-                <span class="mui-tab-label">分类</span>
-            </a>
-            <a class="mui-tab-item" href="shopcar.html">
-						<span class="mui-icon mui-icon-extra mui-icon-extra-cart">
-							<span class="mui-badge">0</span>
-							</span>
-                <span class="mui-tab-label">购物车</span>
-            </a>
-            <a class="mui-tab-item mui-active" href="#">
-                <span class="mui-icon mui-icon-contact"></span>
-                <span class="mui-tab-label">个人中心</span>
-            </a>
-        </div>
+        <a id="defaultTab" class="mui-tab-item  home" href="{url:/site/index}">
+            <span class="mui-icon nav-icon icon-home"></span>
+            <div class="mui-tab-label">首页</div>
+        </a>
+        <a class="mui-tab-item" href="{url:/site/sitemap}">
+            <span class="mui-icon nav-icon icon-classification"></span>
+            <div class="mui-tab-label">分类</div>
+        </a>
+        <a class="mui-tab-item" href="#">
+                <span class="nav-icon icon-vedio">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/move02.png" alt="" class="img-move02">
+                    <span class="tab-mark"></span>
+                </span>
+        </a>
+        <a class="mui-tab-item" href="{url:simple/cart}">
+            <span class="mui-icon nav-icon icon-shopcar"></span>
+            <div class="mui-tab-label">购物车</div>
+        </a>
+        <a class="mui-tab-item mui-active" href="{url:/ucenter/index}">
+            <span class="mui-icon nav-icon icon-my"></span>
+            <div class="mui-tab-label">我的</div>
+        </a>
     </nav>
 </footer>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
@@ -162,7 +165,9 @@
 <script>
     $(window).load(function(){
         $("#loading").fadeOut(300);
-        //    跳转到新增收货地址页面
+    })
+    mui('body').on("tap",'a',function(){
+        window.location.href=this.href;
     })
 </script>
 </body>
