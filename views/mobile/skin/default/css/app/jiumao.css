@@ -1036,3 +1036,37 @@ input[type='search']{
 	color:#bbbbbb;
 	padding-left:0.37rem;
 }
+#addressList{
+	margin-top:0.2rem;
+}
+.menuList{
+	margin-top:0.11rem;
+	background:#fff;
+}
+.menuList .name{
+	font-size:0.3rem;
+	color:#3d4245;
+	margin:0.22rem 0 0 0.33rem;
+}
+.menuList .phone{
+	font-family:'HelveticaNeueLt';
+	font-size:0.3rem;
+	color:#3d4245;
+	margin:0.25rem 0.25rem 0 0;
+}
+.menuList .addr{
+	font-size:0.28rem;
+	color:#bbbbbb;
+	padding:0.7rem 0 0.26rem 0.33rem;
+	border-bottom:0.01rem solid #eee;
+}
+.menuList .is_default img{
+	width:0.4rem;
+	margin:0.17rem 0 0.18rem 0.33rem;
+	vertical-align: middle;
+}
+.menuList .is_default span{
+	font-size:0.28rem;
+	color:#f3026a;
+	margin-left:0.17rem;
+}
