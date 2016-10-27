@@ -37,10 +37,6 @@
 	</div>
 </div>
 <!--loading页结束-->
-<header class="mui-bar mui-bar-nav">
-	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-	<h1 class="mui-title">订单一览</h1>
-</header>
 <!--订单详情页面-->
 <div class="mui-content" style="margin-top:51px">
 	<div id="slider" class="mui-slider mui-fullscreen">
@@ -218,11 +214,10 @@
 					up: {
 						callback: function() {
 							var self = this;
-							setTimeout(function(){
-								var div = self.element.querySelector('.mui-table-view');
-								var num=++pageNum['pageNum'+index];
-								self.endPullUpToRefresh();
-							}, 1000);
+							var div = self.element.querySelector('.mui-table-view');
+							var num=++pageNum['pageNum'+index];
+							 pullRefreshOrder(num,div)
+							self.endPullUpToRefresh();
 						}
 					}
 				});
@@ -260,6 +255,11 @@
 			}
 		}
 		return theRequest;
+	}
+//	下拉刷新加载项目
+	function pullRefreshOrder(num,div){
+
+
 	}
 </script>
 </body>
