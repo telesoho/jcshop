@@ -39,7 +39,7 @@ header span{color:#fff;float:left;margin-top:0.1rem;}
 .concreteContent div p:first-child img{width:0.6rem;height:0.6rem;vertical-align:middle;margin-right:0.2rem;}
 .concreteContent div p:first-child span{float:right;color:#bbb;font-size:0.26rem;margin-right:0.3rem;}
 .concreteContent div p:last-child{margin-top:0.2rem;color:#3d4245;font-size:0.26rem;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
-.graphicDetailsBox{background:#fff;margin-top:0.2rem;border-top: 1px solid #eee;border-bottom: 1px solid #eee;padding:0 0.13rem 0.2rem;}
+.graphicDetailsBox{background:#fff;margin-top:0.2rem;border-top: 1px solid #eee;border-bottom: 1px solid #eee;padding:0 0.13rem;}
 .graphicDetailsBox .title01{font-size:0.3rem;color:#3d4245;padding:0.1rem 0 0.2rem;border-bottom: 1px solid #eee;}
 .graphicDetailsBox .title01 div{font-size:0.24rem;color:#bbb;float:right;}
 .graphicDetailsBox .title01 div span:first-child{color:red;}
@@ -58,20 +58,21 @@ header span{color:#fff;float:left;margin-top:0.1rem;}
 .mui-segmented-control.mui-scroll-wrapper{height:3.5rem;}
 .mui-segmented-control.mui-scroll-wrapper .mui-scroll{height:3.5rem;}
 .mui-segmented-control.mui-scroll-wrapper .mui-control-item{padding:0.125rem 0;}
+.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{border:none;}
 
 .goodsList{width:100%;height:6rem;}
 .goodsList .mui-control-item img{width:1.8rem;height:1.8rem;}
 .goodsList .mui-control-item p{color:#3d4245;font-size:0.24rem;width:2rem;overflow: hidden;text-overflow: ellipsis;}
 .goodsList .mui-control-item p:last-child{color:#fe0000;}
-.servicePromise{background:#fff;margin-top:0.2rem;padding:0 0.13rem;border-top: 1px solid #eee;overflow:hidden;}
+.servicePromise{background:#fff;margin-top:0.2rem;padding:0 0.13rem;border-top: 1px solid #eee;overflow:hidden;margin-bottom:1.2rem;}
 .servicePromise p:first-child{padding:0.1rem 0;font-size:0.3rem;color:#3d4245;border-bottom: 1px solid #eee;}
 .servicePromise ul{width:100%;float:left;padding:0.3rem 0;}
 .servicePromise ul li{width:33.333%;float:left;text-align:center;}
 .servicePromise ul li img{width:0.64rem;height:0.64rem;}
 .servicePromise ul li p{color:#bbb;font-size: 0.28rem;}
-.footerBox{clear:both;width:100%;float:left;overflow: hidden;}
+.footerBox{clear:both;width:100%;float:left;overflow: hidden;position:fixed;bottom:0;z-index:2;}
 .footerBox div{width:50%;float:left;font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;}
-.footerBox div:first-child{color: #ff4aa0;}
+.footerBox div:first-child{color: #ff4aa0;background:#eee;}
 .footerBox div:last-child{color:#fff;background:#ff4aa0;}
 
 /*弹出框样式*/
