@@ -2,10 +2,11 @@
 ul li{padding:0;margin:0;list-style:none;}
 header{background:#000;color:#fff;text-align:center;font-size:0.36rem;height:0.72rem;line-height:0.72rem;}
 header span{color:#fff;float:left;margin-top:0.1rem;}
-#carousel{background:#fff;}
-.goodsTitle{padding:0 0.29rem 0 0.21rem;background:#fff;overflow:hidden;}
+#carousel{background:#fff;padding-bottom: 0.2rem;}
+.goodsTitle{padding:0.1rem 0.29rem 0.1rem 0.21rem;background:#fff;overflow:hidden;display: flex;flex-direction: row;justify-content: space-between;}
+.goodsTitle a:first-child{align-self: center;;}
 .goodsTitle span:first-child{font-size:0.32rem;color:#3d4245;text-align:left;white-space: nowrap;width:100%;overflow: hidden;text-overflow: ellipsis;}
-.titleIcon{float:right;}
+.titleIcon{}
 .titleIcon a:first-child img{width:1.2rem;height:0.55rem;}
 .titleIcon a:last-child img{width:0.6rem;height:0.6rem;margin-left:0.24rem;}
 .salePrice{padding:0 0.29rem 0 0.21rem;background:#fff;}
