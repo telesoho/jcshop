@@ -103,12 +103,13 @@
     //页面加载完成后调用的功能
     $(window).load(function(){
         $("#loading").fadeOut(300);
+        pullupRefresh();
     })
     mui.init({
         pullRefresh: {
             container: '#pullrefresh',
             up: {
-                auto:true,
+//                auto:true,
                 contentrefresh: '正在加载...',
                 callback: pullupRefresh
             }

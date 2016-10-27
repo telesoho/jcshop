@@ -46,6 +46,11 @@ color:#ef4145 !important;}
 .flexbox{
   display:flex;
 }
+.box{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
 *{margin:0;padding:0;}
 /*页面加载动画*/
 #loading {
