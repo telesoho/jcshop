@@ -341,7 +341,11 @@ class Apic extends IController
                 $data[$k][$key]['area_val'] =$temp2[$value['area']];
 //                $orderObj = new order_class();
 //                $data[$k][$key]['order_info'] = $orderObj->getOrderShow($value['id'],$this->user['user_id']);
-                $data[$k][$key]['goodslist'] = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
+                $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
+                foreach ($temp as $key => $value){
+                    $temp[$key]['goods_array'] = json_decode($value['goods_array'],true);
+                }
+                $data[$k][$key]['goodslist'] = $temp;
                 if (!empty($v)) switch ($k) {
 
 //                case 'state0':
