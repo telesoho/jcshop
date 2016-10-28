@@ -221,9 +221,11 @@
 		</div>
 	</script>
 	<script id="evaluate" type="text/html">
+		<%if(comments==0){%>
+		<%}else{%>
 		<div class="evaluateBox">
 			<div class="title01">
-				心得（）
+				心得（<%=comments %>）
 				<div>
 					<a href="#">
 						<span>查看全部心得</span>
@@ -231,23 +233,18 @@
 					</a>
 				</div>
 			</div>
+			<% for(var i=0,m=comments_data.length;i<2,i<m; i++){%>
+			<% var dat =comments_data[i] %>
 			<div class="concreteContent">
 				<div>
 					<a href="#">
-						<p><img src="/views/mobile/skin/default/image/jmj/img/girl02.png"/>南风薄荷<span>2016-10-01</span></p>
-						<p>拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来</p>
+						<p><%=dat.username %><span><%=dat.comment_time %></span></p>
+						<p><%=dat.contents %></p>
 					</a>
 				</div>
 			</div>
-			<div class="concreteContent">
-				<div>
-					<a href="#">
-						<p><img src="/views/mobile/skin/default/image/jmj/img/girl02.png"/>南风薄荷<span>2016-10-01</span></p>
-						<p>拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来</p>
-					</a>
-				</div>
-			</div>
-		</div>
+			<%}%>
+		<%}%>
 	</script>
 	<script src="/views/mobile/javascript/template-native.js"></script>
     <script src="/views/mobile/javascript/mui.js"></script>
