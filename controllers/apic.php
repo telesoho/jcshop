@@ -387,16 +387,16 @@ class Apic extends IController
         $id = IFilter::act(IReq::get('id'),'int');
 
         $orderObj = new order_class();
-        $this->order_info = $orderObj->getOrderShow($id,$this->user['user_id']);
+        $order_info = $orderObj->getOrderShow($id,$this->user['user_id']);
 
-        if(!$this->order_info)
+        if(!$order_info)
         {
             IError::show(403,'订单信息不存在');
         }
         $orderStatus = Order_Class::getOrderStatus($this->order_info);
-//        $this->setRenderData(array('orderStatus' => $orderStatus));
+        $data = array('order_info'=>$order_info, 'orderStatus'=>$orderStatus,"order_step"=>Order_Class::orderStep($order_info));
         header("Content-type: application/json");
-        echo json_encode($orderStatus, true);
+        echo json_encode($data, true);
         exit();
     }
 
