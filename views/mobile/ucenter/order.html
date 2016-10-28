@@ -221,7 +221,6 @@
 			for(var i=0;i<5;i++){
 				 dat[i]={};
 				dat[i]['state']=data['state'+i];
-				console.log(dat[i]['state'][1]['goodslist']);
 				$('#main_panel'+i).append(template('orderSum', dat[i]));
 			}
 		},
