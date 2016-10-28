@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/products.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css" />
 	<style>
 		#goodsContent img{
 			width:100%;
@@ -152,7 +153,7 @@
     </section>
     <section>
     	<div class="footerBox">
-    		<div>加入购物车</div>
+    		<div><a href="#select_product">加入购物车</a></div>
     		<div>立即购买</div>
     	</div>
     </section>
@@ -173,6 +174,36 @@
 					<span>新手满188包邮</span>
 				</p>
 				<p>新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮</p>
+			</div>
+		</div>
+    </section>
+	<section>
+    	<!--服务说明弹出框加入购物车-->
+    	<div id="select_product" class="mui-popover mui-popover-action mui-popover-bottom">
+			<div class="select_box">
+				<div class="select_top">
+					<div class="select_photo"><img src="/views/mobile/skin/default/image/jmj/img/1.png"/></div>
+					<div class="select_top_right">
+						<div class="sel_title">
+							<a href="#">商品名称商品名称商品名称</a>
+							<span>194.3</span>
+						</div>
+						<a href="#select_product" class="a_da"><span class="mui-icon mui-icon-closeempty"></span></a>
+					</div>
+				</div>
+				<div class="select_center">
+					<h3 class="select_h3">选择颜色<h3>
+					<div class="select_center_a"><a href="#" style="font-family:"ArialUnicodeMS";">红色</a><a href="#" class="background_pink">红色</a><a href="#">红色</a><a href="#" class="no_margin">红色</a></div>
+				</div>
+				<div class="select_center">
+					<h3 class="select_h3">选择颜色<h3>
+					<div class="select_center_a"><a href="#">红色</a><a href="#" class="background_pink">红色</a><a href="#">红色</a><a href="#" class="no_margin">红色</a></div>
+				</div>
+				<div class="select_center">
+					<h3 class="select_h3">数量<h3>
+					<div class="select_center_a"><span>-</span><input type="text" value="1"></input><span>+</span></div>
+				</div>
+				<button class="select_btn">确定</button>
 			</div>
 		</div>
     </section>
