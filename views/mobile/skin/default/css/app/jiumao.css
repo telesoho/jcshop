@@ -1107,3 +1107,80 @@ input[type='search']{
 	font-size:0.32rem;
 	color:#ff4aa0;
 }
+/*购物车页面*/
+.emptyCart{
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	margin-top:1.77rem;
+}
+.nodata .content{
+	margin-top:0.27rem;
+	display:flex;
+	justify-content: center;
+}
+.nodata .content span{
+	font-size:0.28rem;
+	color:#bbbbbb;
+}
+.nodata .content span:nth-child(2){
+	padding:0 0.37rem;
+}
+#shopcarContent{
+  margin-top:0.31rem;
+	background:#fff;
+}
+#shopcarContent .goodsNo{
+	font-size:0.28rem;
+	color:#3d4245;
+	margin-left:0.30rem;
+	line-height:0.8rem;
+}
+#shopcarContent .del img{
+	width:0.4rem;
+	height:0.4rem;
+	margin:0.2rem 0.3rem;
+}
+#shopcarContent .middle{
+	background:#f8f8f8;
+}
+#shopcarContent .middle img{
+	width:1.62rem;
+	margin:0.37rem;
+}
+#shopcarContent .goodsContent{
+	width:5.4rem;
+	border:1px solid red;
+}
+#shopcarContent .goodsContent .name{
+	white-space: nowrap;
+	width:5rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-top:0.36rem;
+	font-size:0.28rem;
+	color:#3d4245;
+}
+#shopcarContent .goodsContent .style{
+	font-size:0.26rem;
+	color:#bbbbbb;
+	margin-top:0.22rem;
+}
+#shopcarContent .goodsContent .price{
+	font-size:0.28rem;
+	color:#f3026a;
+	margin-top:0.41rem;
+}
+#shopcarContent .goodsContent .num{
+	font-size:0.28rem;
+	color:#bbbbbb;
+	margin-top:0.41rem;
+}
+#shopcarContent .goodsContent .count span{
+	background:#eeeeee;
+	width:0.56rem;
+	height:0.56rem;
+}
+#shopcarContent .goodsContent .count{
+
+}

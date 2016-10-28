@@ -1,12 +1,115 @@
-
-<div id="pageInfo" data-title="购物车"></div>
-<div id="shopcarContainer">
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>九猫商城</title>
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
+</head>
+<body>
+<!--loading页开始-->
+<div id="loading">
+	<div class="spinner">
+		<div class="spinner-container container1">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container2">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+		<div class="spinner-container container3">
+			<div class="circle1"></div>
+			<div class="circle2"></div>
+			<div class="circle3"></div>
+			<div class="circle4"></div>
+		</div>
+	</div>
+</div>
+<!--loading页结束-->
+<div id="shopcarContent">
+	<div class="goodItem">
+		<div class="box title">
+			<div class="goodsNo">商品编号：23994885599556</div>
+			<div class="del"><img src="/views/mobile/skin/default/image/jmj/icon/del.png" alt="" /></div>
+		</div>
+		<div class="box middle">
+			<div>
+				<img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
+			</div>
+			<div class="goodsContent">
+				<div class="name">
+					s商品名称商品名称s商品名称商品名称s商品名称商品名称s商品名称商品名称
+				</div>
+				<div class="style">
+					颜色： 红色
+				</div>
+				<div class="edit box">
+					<div class="price">￥ 238.90</div>
+					<div class="num">x 1</div>
+					<div class="count">
+						<span><img src="/views/mobile/skin/default/image/jmj/icon/j.png" /></span>
+						<input type="text"  style="width:0.3rem;height:0.3rem;">
+						<span><img src="/views/mobile/skin/default/image/jmj/icon/crease.png" /></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </div>
+<!--<div id="shopcarContainer">-->
+
+<!--</div>-->
+<hr>
+<footer>
+	<nav class="mui-bar mui-bar-tab">
+		<a id="defaultTab" class="mui-tab-item home" href="#">
+			<span class="mui-icon nav-icon icon-home"></span>
+			<div class="mui-tab-label">首页</div>
+		</a>
+		<a class="mui-tab-item" href="{url:/site/sitemap}">
+			<span class="mui-icon nav-icon icon-classification"></span>
+			<div class="mui-tab-label">分类</div>
+		</a>
+		<a class="mui-tab-item" href="#">
+                <span class="nav-icon icon-vedio">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/move02.png" alt="" class="img-move02">
+                    <span class="tab-mark"></span>
+                </span>
+		</a>
+		<a class="mui-tab-item  mui-active" href="{url:simple/cart}">
+			<span class="mui-icon nav-icon icon-shopcar"></span>
+			<div class="mui-tab-label">购物车</div>
+		</a>
+		<a class="mui-tab-item" href="{url:/ucenter/index}">
+			<span class="mui-icon nav-icon icon-my"></span>
+			<div class="mui-tab-label">我的</div>
+		</a>
+	</nav>
+</footer>
 <script type="text/html" id="shopCarTemplate">
 	<%if(goodsList.length==0){%>
 	<!--如果没有收货地址-->
-	<section class="nodata">购物车中空空如也哦~</section>
+	<section class="nodata">
+		<div class="emptyCart">
+			<img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt=""/>
+		</div>
+		<div class="content">
+			<span>~</span>
+			<span>购物车还是空的哦</span>
+			<span>~</span>
+		</div>
+	</section>
 	<%}else{%>
 	<!-- 商品列表 -->
 	<section class="cart_list">
@@ -69,7 +172,13 @@
 	</footer>
 	<%}%>
 </script>
+<script src="/views/mobile/javascript/template-native.js"></script>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
 <script>
+	$(window).load(function(){
+		$("#loading").fadeOut(300);
+	})
 	//定义template方法
 	template.helper('JSONstringify', function(obj){
 		return JSON.stringify(obj);
@@ -89,17 +198,6 @@
 			console.log(type);
 		}
 	});
-$(function(){
-	// 隐藏底部导航
-	hideNav();
-//	{if:$this->promotion}
-//	{foreach:items = $this->promotion}
-//	$('#cart_prompt ol').append( template.render('promotionTemplate',{"item":{echo:JSON::encode($item)}}) );
-//	{/foreach}
-//	$('#cart_prompt').show();
-//	{/if}
-
-})
 //购物车数量改动计算
 function cartCount(obj)
 {
