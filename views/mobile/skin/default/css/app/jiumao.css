@@ -1114,6 +1114,9 @@ input[type='search']{
 	justify-content: center;
 	margin-top:1.77rem;
 }
+.nodata{
+	background:#f8f8f8;
+}
 .nodata .content{
 	margin-top:0.27rem;
 	display:flex;
