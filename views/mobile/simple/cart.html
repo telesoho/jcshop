@@ -37,6 +37,7 @@
 </div>
 <!--loading页结束-->
 <div id="shopcarContent">
+
 	<div class="goodItem">
 		<div class="box title">
 			<div class="goodsNo">商品编号：23994885599556</div>
@@ -57,9 +58,9 @@
 					<div class="price">￥ 238.90</div>
 					<div class="num">x 1</div>
 					<div class="count">
-						<span><img src="/views/mobile/skin/default/image/jmj/icon/j.png" /></span>
-						<input type="text"  style="width:0.3rem;height:0.3rem;">
-						<span><img src="/views/mobile/skin/default/image/jmj/icon/crease.png" /></span>
+						<span class="reduce">-</span>
+						<input type="text" value="1">
+						<span class="add">+</span>
 					</div>
 				</div>
 			</div>
@@ -70,7 +71,6 @@
 <!--<div id="shopcarContainer">-->
 
 <!--</div>-->
-<hr>
 <footer>
 	<nav class="mui-bar mui-bar-tab">
 		<a id="defaultTab" class="mui-tab-item home" href="#">
@@ -112,65 +112,49 @@
 	</section>
 	<%}else{%>
 	<!-- 商品列表 -->
-	<section class="cart_list">
-		<ul>
-			<% for(var i=0; i<goodsList.length; i++){%>
-			<% var product =JSONstringify(goodsList[i]) %>
-			<li>
-				<div class="cart_list_goods">
-					<div class="cart_list_photo" onclick="gourl('{url:/site/products/id/$item['goods_id']}')">
-						<img src="<%=goodsList[i].img%>" alt="{$item['name']}">
-					</div>
-					<div class="cart_list_info">
-						<h3 class="cart_list_info_title"><%=goodsList[i].name%></h3>
-						<p class="cart_list_info_info">
-						</p>
-						<em class="cart_list_info_price">单价：￥<%=goodsList[i].sell_price%></em>
-					</div>
-				</div>
-				<del class="del" onclick='javascript:removeCartByJSON(<%=product%>);'>删除</del>
-				<div class="goods_num_adjust">
-					<span onclick='cart_reduce(<%=product%>);'>-</span>
-					<input type="text" onchange='cartCount(<%=product%>);' id="count_<%=goodsList[i].goods_id%>_<%=goodsList[i].product_id%>" value="<%=goodsList[i].count%>">
-					<span onclick='cart_increase(<%=product%>);'>+</span>
-				</div>
-				<div class="count">小结：￥<span id="sum_<%=goodsList[i].goods_id%>_<%=goodsList[i].product_id%"><%=goodsList[i].sum%></span></div>
-			</li>
-			<%}%>
-		</ul>
-	</section>
-	<!-- 统计信息 -->
-	<section class="cart_count">
-		<h4>购物车统计</h4>
-		<table>
-			<tr>
-				<th>总重量</th>
-				<th>总金额</th>
-				<th>商品优惠</th>
-				<th>促销优惠</th>
-			</tr>
-			<tr>
-				<td><span id='weight'><%=weight%></span>g</td>
-				<td>￥<span id='origin_price'><%=sum%></span></td>
-				<td>￥<span id='discount_price'><%=reduce%></span></td>
-				<td>￥<span id='promotion_price'><%=proReduce%></span></td>
-			</tr>
-		</table>
-	</section>
-
-	<footer class="cart_footer">
-		<div class="cart_footer_fixed">
-			<div class="buy btn_pay" id="btn_pay" onclick="gourl('{url:/simple/cart2}')">
-				去结算
+	<% for(var i=0; i<goodsList.length; i++){%>
+	<% var product =JSONstringify(goodsList[i]) %>
+		<div class="goodItem">
+			<div class="box title">
+				<div class="goodsNo">商品编号：<%=goodsList[i].goods_no%></div>
+				<div class="del" onclick='javascript:removeCartByJSON(<%=product%>);'>
+					<img src="/views/mobile/skin/default/image/jmj/icon/del.png" alt="" /></div>
 			</div>
-			<div class="count">
-				<span>合计:</span>
-				<em>￥<i id='sum_price'><%=final_sum%></i></em>
-				<u>不含运费</u>
+			<div class="box middle">
+				<div>
+					<img src="<%=goodsList[i].img%>" alt="{$item['name']}" />
+				</div>
+				<div class="goodsContent">
+					<div class="name">
+						<%=goodsList[i].name%>
+					</div>
+					<div class="style">
+						颜色： 红色
+					</div>
+					<div class="edit box">
+						<div class="price">￥ <%=goodsList[i].sell_price%></div>
+						<div class="num">x <%=goodsList[i].count%></div>
+						<div class="count">
+							<span class="reduce" onclick='cart_reduce(<%=product%>);'>-</span>
+							<input type="text" onchange='cartCount(<%=product%>);' id="count_<%=goodsList[i].goods_id%>_<%=goodsList[i].product_id%>" value="<%=goodsList[i].count%>">
+							<span class="add" onclick='cart_increase(<%=product%>);'>+</span>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-	</footer>
 	<%}%>
+		<div class="box total">
+			<div class="totalPrice">
+				<span class="text">合计: </span>
+				<span class="price">¥ <%=final_sum%></span>
+			</div>
+			<div class="btn_pay">
+				<span>结算(<%=count%>)</span>
+			</div>
+		</div>
+	<%}%>
+
 </script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
@@ -191,7 +175,7 @@
 		headers:{'Content-Type':'application/json'},
 		success:function(data){
 			var html = template('shopCarTemplate',data);
-			document.getElementById("shopcarContainer").innerHTML = html;
+			document.getElementById("shopcarContent").innerHTML = html;
 		},
 		error:function(xhr,type,errorThrown){
 			//异常处理；
