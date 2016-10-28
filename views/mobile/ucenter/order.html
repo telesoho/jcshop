@@ -134,14 +134,16 @@
 			<div class="orderNo">订单编号：<%=order.order_no%></div>
 			<div class="orderstate"><%=order.orderStatusText%></div>
 		</div>
+		<!--展示商品状态-->
 		<!--展示第1件商品-->
+		<%if(order.goodslist){%>
 		<div class="ware_item box">
 			<div class="img">
 				<img src="<%=order.goodslist[0].img%>" alt="" width="100%" />
 			</div>
 			<div class="content">
 				<div class="box">
-					<div class="name"><%=order.goodslist[0].goods_array%></div>
+					<div class="name"><%=order.goodslist[0].goods_array.name%></div>
 					<div class="price">￥ <%=order.goodslist[0].goods_price%></div>
 				</div>
 				<div class="num mui-pull-right">x <%=order.goodslist[0].goods_nums%></div>
@@ -149,66 +151,50 @@
 		</div>
 		<!--展示剩余商品-->
 		<div class="last_ware">
-		<% for(var j=1; j<order.goodslist.length; j++){%>
-		<% var goodlist =order.goodslist[j] %>
-		<div class="ware_item box">
-			<div class="img">
-				<img src="<%=goodlist.img%>" alt="" width="100%" />
-			</div>
-			<div class="content">
-				<div class="box">
-					<div class="name"><%=goodlist.goods_array%></div>
-					<div class="price">￥ <%=goodlist.goods_price%></div>
+			<% for(var j=1; j<order.goodslist.length; j++){%>
+			<% var goodlist =order.goodslist[j] %>
+			<div class="ware_item box">
+				<div class="img">
+					<img src="<%=goodlist.img%>" alt="" width="100%" />
 				</div>
-				<div class="num mui-pull-right">x <%=goodlist.goods_nums%></div>
+				<div class="content">
+					<div class="box">
+						<div class="name"><%=goodlist.goods_array.name%></div>
+						<div class="price">￥ <%=goodlist.goods_price%></div>
+					</div>
+					<div class="num mui-pull-right">x <%=goodlist.goods_nums%></div>
+				</div>
 			</div>
-		</div>
-		<%}%>
+			<%}%>
 		</div>
 		<div class="total">
 			共计<%=order.goodslist.length%>件商品  合计 <%=order.order_amount%>（含运费10元）
 		</div>
-			<!--不同的按钮状态-->
-			<%if(order.orderStatusVal==5){%>
-			<div class="action upline">
-				<a href="#" class="button1 delOrder">删除订单</a>
-				<a href="#" class="button2 evaluate">评价</a>
-			</div>
-			<%}%>
-			<%if(order.orderStatusVal==2){%>
-			<div class="action upline">
-				<a href="#" class="button1 delOrder">删除订单</a>
-				<a href="#" class="button2 evaluate">去付款</a>
-			</div>
-			<%}%>
-			<%if(order.orderStatusVal==3){%>
-			<div class="action upline">
-				<a href="#" class="button1 delOrder">查看物流</a>
-				<a href="#" class="button2 evaluate">确认收货</a>
-			</div>
-			<%}%>
+		<%}%>
+		<!--不同的按钮状态-->
+		<%if(order.orderStatusVal==5){%>
+		<div class="action upline">
+			<a href="#" class="button1 delOrder">删除订单</a>
+			<a href="#" class="button2 evaluate">评价</a>
+		</div>
+		<%}%>
+		<%if(order.orderStatusVal==2){%>
+		<div class="action upline">
+			<a href="#" class="button1 delOrder">删除订单</a>
+			<a href="#" class="button2 evaluate">去付款</a>
+		</div>
+		<%}%>
+		<%if(order.orderStatusVal==3){%>
+		<div class="action upline">
+			<a href="#" class="button1 delOrder">查看物流</a>
+			<a href="#" class="button2 evaluate">确认收货</a>
+		</div>
+		<%}%>
 	</div>
 	<%}%>
-	<!--存在该订单详情结束-->
+	<!--存在商品结束-->
 	<%}%>
 </script>
-<div class="mui-table-view-cell order-menu">
-	<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
-		<div class="order-top">
-			<span class="top1">订单编号：</span>
-			<span class="mui-pull-right Qorder"><%=order.orderStatusText%></span>
-		</div>
-		<div class="order-img">
-			<% for(var j=0; j<order.goodslist.length; j++){%>
-			<img src="<%=order.goodslist[j].img%>" alt="">
-			<%}%>
-		</div>
-	</a>
-	<div class="order-bottom">
-		<span>订单金额：<span style="color:#e53e42"><%=order.order_amount%>元</span></span>
-		<span class="mui-pull-right orderToDo"><%=order.text%></span>
-	</div>
-</div>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
@@ -235,6 +221,7 @@
 			for(var i=0;i<5;i++){
 				 dat[i]={};
 				dat[i]['state']=data['state'+i];
+				console.log(dat[i]['state'][1]['goodslist']);
 				$('#main_panel'+i).append(template('orderSum', dat[i]));
 			}
 		},

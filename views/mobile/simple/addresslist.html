@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css" />
 
 </head>
 <body>
@@ -99,23 +100,22 @@
             <div class="mui-content" style="height: 100%;">
                 <div id="addressNew">
                     <div class="title">请填写你的真实姓名，否则订单无法发出</div>
-                    <div class="mui-input-row">
+                    <div class="mui-input-row row_b_t">
                         <input type="text" class="mui-input-clear" value="<%=data[i].accept_name%>" id="username" onblur=check()>
                     </div>
-                    <div class="mui-input-row">
-                        <input type="hidden" class="mui-input-clear" value="<%=data[i].id%>" style="margin-bottom:2px;" id="addressid">
-                        <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" style="margin-bottom:2px;" id="userphone" onblur=checkPhone()>
-                        <input type="text" class="mui-input-clear" value="<%=data[i].province_val%> <%=data[i].city_val%> <%=data[i].area_val%>"
-                               style="margin-bottom:2px;" id="usercity" onfocus=checkcity()>
-                        <input type="text" class="mui-input-clear" value="<%=data[i].address%>" style="margin-bottom:2px;" id="useraddr" onblur=check()>
-                        <input type="text" class="mui-input-clear" value="<%=data[i].zip%>" style="margin-bottom:2px;" id="useryoubian" onblur=check()>
+                    <div class="mui-input-row row_margin row_b_t">
+                        <input type="hidden" class="mui-input-clear" value="<%=data[i].id%>" id="addressid">
+                        <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" id="userphone" onblur=checkPhone()>
+                        <input type="text" class="mui-input-clear" value="<%=data[i].province_val%> <%=data[i].city_val%> <%=data[i].area_val%>" id="usercity" onfocus=checkcity()>
+                        <input type="text" class="mui-input-clear" value="<%=data[i].address%>" id="useraddr" onblur=check()>
+                        <input type="text" class="mui-input-clear" value="<%=data[i].zip%>" id="useryoubian" onblur=check()>
                     </div>
                 </div>
             </div>
             <footer>
                 <div id="footer-fixed1">
-                    <div class="newAddrSub" style="text-align:center">
-                        <button id="submitaddr1" onclick="changeAddr();">完成</button>
+                    <div class="newAddrSub newAddrSub_position" style="text-align:center">
+                        <button id="submitaddr1" onclick="changeAddr();" class="submit_suc">完成</button>
                     </div>
                 </div>
             </footer>
