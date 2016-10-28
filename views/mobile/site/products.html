@@ -11,7 +11,12 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/products.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css" />
+	<style>
+		#goodsContent img{
+			width:100%;
+			height:auto;
+		}
+	</style>
 </head>
 <body>
     <!--<header>
@@ -21,73 +26,11 @@
     <section>
         <!--轮播开始-->
         <div id="carousel" class="mui-slider">
-            <div class="mui-slider-group mui-slider-loop">
-                <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-                <div class="mui-slider-item mui-slider-item-duplicate">
-                    <a href="#">
-                        <img src="/views/mobile/skin/default/image/jmj/img/banner04.png">
-                    </a>
-                </div>
-                <!-- 第一张 -->
-                <div class="mui-slider-item mui-active">
-                    <a href="#">
-                        <img src="/views/mobile/skin/default/image/jmj/img/banner04.png">
-                    </a>
-                </div>
-                <!-- 第二张 -->
-                <div class="mui-slider-item">
-                    <a href="#">
-                        <img src="/views/mobile/skin/default/image/jmj/img/banner04.png">
-                    </a>
-                </div>
-                <!-- 第三张 -->
-                <div class="mui-slider-item">
-                    <a href="#">
-                        <img src="/views/mobile/skin/default/image/jmj/img/banner04.png">
-                    </a>
-                </div>
-                <!-- 第四张 -->
-                <div class="mui-slider-item">
-                    <a href="#">
-                        <img src="/views/mobile/skin/default/image/jmj/img/banner04.png">
-                    </a>
-                </div>
-                <!-- 第五张 -->
-                <div class="mui-slider-item">
-                    <a href="#">
-                        <img src="/views/mobile/skin/default/image/jmj/img/banner04.png">
-                    </a>
-                </div>
-                <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
-                <div class="mui-slider-item mui-slider-item-duplicate">
-                    <a href="#">
-                        <img src="/views/mobile/skin/default/image/jmj/img/banner04.png">
-                    </a>
-                </div>
-            </div>
-            <div class="mui-slider-indicator">
-                <div class="mui-indicator mui-active"></div>
-                <div class="mui-indicator"></div>
-                <div class="mui-indicator"></div>
-                <div class="mui-indicator"></div>
-                <div class="mui-indicator"></div>
-            </div>
+
         </div>
     </section>
-    <section>
-        <div class="goodsTitle">
-            <a href="#"><span>资生堂商品标题商品标题</span></a>
-            <div class="titleIcon">
-                <a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png"/></a>
-                <a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon02.png"/></a>
-            </div>
-        </div>
-    </section>
-    <section>
-        <div class="salePrice"> 
-            <span class="bargainPrice">199.49</span>
-            <span>日本售价：</span><span>8395.49</span>
-        </div>
+    <section id="goods_detaile">
+
     </section>
     <section>
         <div class="postMethod">
@@ -115,34 +58,8 @@
             </div>  
         </div>
     </section>
-    <section>
-        <div class="evaluateBox">
-            <div class="title01">
-                心得（14）
-                <div>
-                	<a href="#">
-	                    <span>查看全部心得</span>
-	                    <span class="mui-icon mui-icon-arrowright"></span>
-	                </a>
-                </div>
-            </div>
-            <div class="concreteContent">
-                <div>
-                	<a href="#">
-	                    <p><img src="/views/mobile/skin/default/image/jmj/img/girl02.png"/>南风薄荷<span>2016-10-01</span></p>
-	                    <p>拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来</p>
-	                </a>
-                </div>    
-            </div>
-            <div class="concreteContent">
-                <div>
-                	<a href="#">
-	                    <p><img src="/views/mobile/skin/default/image/jmj/img/girl02.png"/>南风薄荷<span>2016-10-01</span></p>
-	                    <p>拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来拿回来</p>
-	                </a>
-                </div>    
-            </div>
-        </div>
+    <section id="evaluateBox">
+
     </section>
     <section>
     	<div class="graphicDetailsBox">
@@ -150,15 +67,18 @@
 	    		<div class="title01">
 	    			商品图文详情
 	    		</div>
-	    		<div>
-	    			<p class="title02">商品描述</p>
-	    			<p class="goodDetail">商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述</p>
-	    		</div>
-	    		<div>
-	    			<p class="title02">图片描述</p>
-	    			<img class="goodImg" src="/views/mobile/skin/default/image/jmj/img/good01.png"/>
-	    			<img class="goodImg" src="/views/mobile/skin/default/image/jmj/img/good02.png"/>
-	    		</div>
+				<div id="goodsContent">
+
+				</div>
+	    		<!--<div>-->
+	    			<!--<p class="title02">商品描述</p>-->
+	    			<!--<p class="goodDetail">商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述</p>-->
+	    		<!--</div>-->
+	    		<!--<div>-->
+	    			<!--<p class="title02">图片描述</p>-->
+	    			<!--<img class="goodImg" src="/views/mobile/skin/default/image/jmj/img/good01.png"/>-->
+	    			<!--<img class="goodImg" src="/views/mobile/skin/default/image/jmj/img/good02.png"/>-->
+	    		<!--</div>-->
 	    	</section>
 	    	<section>
 	    		<div class="title01">
@@ -216,22 +136,16 @@
     		<p class="title01">服务承诺</p>
     		<ul>
     		    <li>
-					<a href="#">
-						<img src="/views/mobile/skin/default/image/jmj/img/Zheng_icon.png"/>
-						<p>正品</p>
-					</a>
+    		    	<img src="/views/mobile/skin/default/image/jmj/img/Zheng_icon.png"/>
+    		    	<p>正品</p>
     		    </li>	
     		    <li>
-					<a href="#">
-						<img src="/views/mobile/skin/default/image/jmj/img/price_icon.png"/>
-						<p>同价</p>
-					</a>
+    		    	<img src="/views/mobile/skin/default/image/jmj/img/price_icon.png"/>
+    		    	<p>同价</p>
     		    </li>
     		    <li>
-					<a href="#">
-						<img src="/views/mobile/skin/default/image/jmj/img/hegui_icon.png"/>
-						<p>合规</p>
-					</a>
+    		    	<img src="/views/mobile/skin/default/image/jmj/img/hegui_icon.png"/>
+    		    	<p>合规</p>
     		    </li>
     		</ul>
     	</div>
@@ -262,13 +176,131 @@
 			</div>
 		</div>
     </section>
+	<!--轮播图模板引擎-->
+	<script id="product_carousel" type="text/html">
+		<div class="mui-slider-group mui-slider-loop">
+			<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+			<div class="mui-slider-item mui-slider-item-duplicate">
+				<a href="#">
+					<img src="<%=photo[0].img %>">
+				</a>
+			</div>
+			<% for(var i=0; i<photo.length; i++){%>
+			<% var dat =photo[i] %>
+				<div class="mui-slider-item mui-active">
+					<a href="#">
+						<img src="<%=dat.img %>">
+					</a>
+				</div>
+			<%}%>
+			<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+			<div class="mui-slider-item mui-slider-item-duplicate">
+				<a href="#">
+					<img src="<%=photo[photo.length-1].img %>">
+				</a>
+			</div>
+		</div>
+		<div class="mui-slider-indicator">
+			<div class="mui-indicator mui-active"></div>
+			<% for(var i=1; i<photo.length; i++){%>
+			<div class="mui-indicator"></div>
+			<%}%>
+		</div>
+	</script>
+	<script id="product_goodsDetail" type="text/html">
+		<div class="goodsTitle">
+			<a href="#"><span><%=name %></span></a>
+			<div class="titleIcon">
+				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png"/></a>
+				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon02.png"/></a>
+			</div>
+		</div>
+		<div class="salePrice">
+			<span class="bargainPrice"><%=sell_price %></span>
+			<span>日本售价：</span><span><%=market_price %></span>
+		</div>
+	</script>
+	<script id="evaluate" type="text/html">
+		<%if(comments==0){%>
+		<%}else{%>
+		<div class="evaluateBox">
+			<div class="title01">
+				心得（<%=comments %>）
+				<div>
+					<a href="#">
+						<span>查看全部心得</span>
+						<span class="mui-icon mui-icon-arrowright"></span>
+					</a>
+				</div>
+			</div>
+			<% for(var i=0,m=comments_data.length;i<2,i<m; i++){%>
+			<% var dat =comments_data[i] %>
+			<div class="concreteContent">
+				<div>
+					<a href="#">
+						<p><%=dat.username %><span><%=dat.comment_time %></span></p>
+						<p><%=dat.contents %></p>
+					</a>
+				</div>
+			</div>
+			<%}%>
+		<%}%>
+	</script>
+	<script src="/views/mobile/javascript/template-native.js"></script>
     <script src="/views/mobile/javascript/mui.js"></script>
     <script type="text/javascript" charset="utf-8">
-	    //banner图轮播
-		var carousel  = mui("#carousel");
-		carousel.slider({
-			interval: 1000
-		});
+		//	接收页面传过来的状态值
+		var Request = new Object();
+		Request = GetRequest();
+		var statusOrder=Request["id"];
+		getProductDetail(statusOrder);
+
+
+		function getProductDetail(obj){
+			var product_detail=obj;
+			mui.ajax('index.php?controller=apic&action=products_details',{
+				data:{id:product_detail},
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				success:function(data){
+					//轮播图展示页面
+					var html=template('product_carousel',data);
+					document.getElementById('carousel').innerHTML=html;
+					var html2=template('product_goodsDetail',data);
+					document.getElementById('goods_detaile').innerHTML=html2;
+					document.getElementById('goodsContent').innerHTML=data.content;
+					var html3=template('evaluate',data);
+					document.getElementById('evaluateBox').innerHTML=html3;
+
+				},
+				error:function(xhr,type,errorThrown){
+					//异常处理；
+					console.log(type);
+				}
+			});
+		}
+		//banner图轮播
+		window.onload=function(){
+			var carousel  = mui("#carousel");
+			carousel.slider({
+				interval: 1000
+			});
+		}
+		//	获取url传递过来的参数
+		function GetRequest() {
+			var url = location.search; //获取url中"?"符后的字串
+			var theRequest = new Object();
+			if (url.indexOf("?") != -1) {
+				var str = url.substr(1);
+				strs = str.split("&");
+				for(var i = 0; i < strs.length; i ++) {
+					theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+				}
+			}
+			return theRequest;
+		}
+
 	</script>
 </body>
 </html>
