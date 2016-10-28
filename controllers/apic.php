@@ -561,6 +561,16 @@ class Apic extends IController
             ISafe::set('visit',$visit);
         }
 
+
+        //评论
+        $commentDB = new IQuery('comment as c');
+        $commentDB->join   = 'left join goods as go on c.goods_id = go.id AND go.is_del = 0 left join user as u on u.id = c.user_id';
+        $commentDB->fields = 'u.head_ico,u.username,c.*';
+        $commentDB->where  = 'c.goods_id = '.$goods_id.' and c.status = 1';
+        $commentDB->order  = 'c.id desc';
+//        $commentDB->page   = $page;
+        $goods_info['comments_data']     = $commentDB->find();
+
 //        $this->setRenderData($goods_info);
         header("Content-type: application/json");
         echo json_encode($goods_info);
