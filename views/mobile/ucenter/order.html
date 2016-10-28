@@ -136,6 +136,7 @@
 		</div>
 		<!--展示商品状态-->
 		<!--展示第1件商品-->
+		<a href="{url:/ucenter/order_detail/id/<%=order.id%>}" class="toOrderDetail">
 		<%if(order.goodslist){%>
 		<div class="ware_item box">
 			<div class="img">
@@ -167,6 +168,7 @@
 			</div>
 			<%}%>
 		</div>
+		</a>
 		<div class="total">
 			共计<%=order.goodslist.length%>件商品  合计 <%=order.order_amount%>（含运费10元）
 		</div>
@@ -204,6 +206,10 @@
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
 	})
+	mui('body').on('tap','.toOrderDetail',function(){
+		document.location.href=this.href;
+	});
+
 //	接收页面传过来的状态值
 	var Request = new Object();
 	Request = GetRequest();
