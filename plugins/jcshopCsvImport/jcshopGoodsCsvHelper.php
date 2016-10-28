@@ -30,7 +30,33 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 	public function getTitleCallback()
 	{
 		// 设置回调函数
-		return array("销售属性" =>"spec_array_callback");
+		return array(
+			"商品JAN编码" => "jan_callback",
+			"销售属性" =>"spec_array_callback",
+			"销售价格" =>"price_callback",
+			"物流重量" => "weight_callback"
+			);
+	}
+
+	public function jan_callback($content) {
+		return trim($content);
+	}
+
+	protected function weight_callback($content) {
+		if(strpos($content, " Kg")) {
+			$weight = str_replace(" Kg", "", $content);
+			$weight = (float)$weight * 1000;
+		} else {
+			$weight = 0 + $content;
+		}
+		return $weight;
+	}
+
+    /**
+	 * 价格
+	 */
+	protected function price_callback($content) {
+		return trim($content);
 	}
 
 	/**
