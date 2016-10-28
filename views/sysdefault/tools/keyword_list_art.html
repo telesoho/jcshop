@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title></title>
+	<link rel="stylesheet" href="{skin:css/admin.css}" />
+	{js:jquery}
+	{js:dialog}
+	{js:artTemplate}
+</head>
+<body style="width:415px;min-height:250px;">
+
+<div class="content">
+	<table class="list_table">
+		<colgroup>
+			<col width="40px" />
+			<col width="250px" />
+			<col width="120px" />
+			<!--<col width="100px" />-->
+			<!--<col width="100px" />-->
+			<col />
+		</colgroup>
+
+		<thead>
+		<tr>
+			<th>选择</th>
+			<th>标签名称</th>
+			<!--<th>关联商品数量</th>-->
+			<th>是否热门</th>
+			<!--<th>排序</th>-->
+			<!--<th>操作</th>-->
+		</tr>
+		</thead>
+
+		<tbody>
+		{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+		{query: name=keyword page=$page order=`order` asc}
+		<tr>
+			<td><input class="keyword" type="checkbox" keyword="{$item['word']}" value="{$item['word']}" /></td>
+			<td>{$item['word']}</td>
+			<!--<td>{$item['goods_nums']}</td>-->
+			<td>
+				{if:$item['hot']==1}
+				<a class='red2' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>是</a>
+				{else:}
+				<a class='blue' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>否</a>
+				{/if}
+			</td>
+			<!--<td>-->
+			<!--<input type='text' maxlength='6' onblur='set_order("{$item['word']}",this,"{$item['order']}");' class='tiny' value='{$item['order']}' />-->
+			<!--</td>-->
+			<!--<td>-->
+				<!--<a href="{url:/tools/keyword_rel/id/$item['id']}" class="btn-block">关联标签</a>-->
+			<!--</td>-->
+		</tr>
+		{/query}
+		</tbody>
+	</table>
+</div>
+{$query->getPageBar()}
+<script type='text/javascript'>
+	jQuery(function()
+	{
+		var ids = [];
+		var selectedIds = art.dialog.data('selectIds');
+		var a = typeof(selectedIds)
+		if(selectedIds){
+			if (typeof(selectedIds) != "object"){
+				selectedIds = JSON.parse(selectedIds);
+			} else {
+				var temp = selectedIds[0];
+				selectedIds = temp.split(',');
+			}
+		}
+		$('.keyword').each(function () {
+			if ($.inArray(this.value, selectedIds) != -1){
+				$(this).prop('checked','checked');
+				ids.push(this.value);
+			}
+		})
+		$('.keyword').change(function () {
+			if ($(this).prop('checked')){
+				ids.push($(this).attr('keyword'));
+                art.dialog.data('selectIds', JSON.stringify(ids));
+			} else {
+				ids.splice(ids.indexOf($(this).attr('keyword')), 1);
+                art.dialog.data('selectIds', JSON.stringify(ids));
+			}
+		})
+	});
+</script>
+
+</body>
+</html>

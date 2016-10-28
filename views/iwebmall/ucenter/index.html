@@ -1,0 +1,83 @@
+<div class="left fl" style="width: 100%;">
+    <h3>您好，{$this->user['username']} 欢迎回来！</h3>
+    <p class="msg" style="margin-top: 20px;">您的余额：<span>￥{$user['balance']}</span></p>
+    <p class="msg" style="margin-top: 20px;">总消费额：<span>￥{echo:$statistics['amount']?$statistics['amount']:0.00}元</span></p>
+    <p class="msg">你的账户目前总积分：{$user['point']} 分</p>
+    <p class="msg">你的订单交易总数量：{$statistics['num']} 笔</p>
+    <p class="msg">你的代金我券：{$propData['prop_num']} 张</p>
+    {if:$msgNum>0}
+    <p class="msg">未读信息：<span>{$msgNum}</span></p>
+    {/if}
+
+    <dl class="orders-items fl wfs">
+        <dt class="fl wfs">
+        <h4 class="fl">最新订单</h4>
+        <a class="btn btn-danger btn-xs fr" href="{url:ucenter/order}">更多订单</a>
+        </dt>
+        <dd class="fl wfs" style="height: 450px;">
+
+                {set:$order_list = Api::run('getOrderListByUserid',array('#user_id#',$user['user_id']))}
+                {if:$order_list}
+                <div class="orders-no fl wfs">
+                <table class="list_table" width="100%" cellpadding="0" cellspacing="0">
+                    <col width="180px" />
+                    <col width="180px" />
+                    <tr>
+                        <th>订单编号</th><th>下单日期</th><th>收货人</th><th>支付方式</th><th>总金额</th><th>订单状态</th>
+                    </tr>
+                {foreach:items=$order_list}
+                    <tr>
+                        <td><a href="{url:/ucenter/order_detail/id/$item[id]}">{$item['order_no']}</a></td>
+                        <td>{$item['create_time']}</td>
+                        <td>{$item['accept_name']}</td>
+                        <td>{$this->payments[$item['pay_type']]['name']}</td>
+                        <td>￥{echo:($item['order_amount'])}</td>
+                        <td>
+                            {set:$orderStatus = Order_Class::getOrderStatus($item)}
+                            <b class="{if:$orderStatus >= 6}green{else:}orange{/if}">{echo:Order_Class::orderStatusText($orderStatus)}</b>
+                        </td>
+                    </tr>
+                {/foreach}
+                </table>
+                </div>
+                {else:}
+            <div class="orders-no fl wfs" style="padding: 20px;">
+                <img src="{skin:images/orders-no.png}" alt="">
+                <p>您最近还没有购买过东西哦，快去逛逛吧~</p>
+            </div>
+                {/if}
+        </dd>
+    </dl>
+</div>
+<script type='text/javascript'>
+//选择头像
+function select_ico()
+{
+	{set:$callback = urlencode(IUrl::creatUrl('/ucenter/user_ico_upload'))}
+	art.dialog.open('{url:/block/photo_upload?callback=$callback}',
+	{
+		'id':'user_ico',
+		'title':'设置头像',
+		'ok':function(iframeWin, topWin)
+		{
+			iframeWin.document.forms[0].submit();
+			return false;
+		}
+	});
+}
+
+//头像上传回调函数
+function callback_user_ico(content)
+{
+	var content = eval(content);
+	if(content.isError == true)
+	{
+		alert(content.message);
+	}
+	else
+	{
+		$('#user_ico_img').prop('src',content.data);
+	}
+	art.dialog({id:'user_ico'}).close();
+}
+</script>

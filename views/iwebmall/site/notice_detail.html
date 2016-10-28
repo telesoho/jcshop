@@ -1,0 +1,35 @@
+
+<div class="place fz12 wrapper" style="padding-left:0px;">
+    您现在的位置：<a href="{url:}"> 首页</a><code>&gt;</code><a href="{url:/site/notice}">公告列表</a><code>&gt;</code>{$this->noticeRow['title']}
+</div>
+<div class="wrapper clearfix container_2">
+<div class="sidebar f_l">
+	<div class="box m_10">
+		<div class="title">热卖商品</div>
+		<div class="content">
+		  <ul class="ranklist">
+			{foreach:items=Api::run('getCommendHot')}
+			<li class='current'><a href="{url:/site/products/id/$item[id]}"><img src="{url:/pic/thumb/img/$item[img]/w/200/h/200}" width="200px" height="200px" /></a><a href="{url:/site/products/id/$item[id]}">{$item['name']}</a><b>￥{$item['sell_price']}</b></li>
+			{/foreach}
+		  </ul>
+		</div>
+	</div>
+</div>
+<div class="main f_r">
+	<div class="box m_10">
+		<div class="title2">商城公告</div>
+		<div class="cont">
+			<div class="c_box">
+				<h2>{$this->noticeRow['title']}</h2>
+				<div class="partake_bar clearfix">
+					<span class="f_r"></span>发布日期：{$this->noticeRow['time']}
+				</div>
+				<hr class="m_10" />
+				<div class="textcontent">
+					<p>{$this->noticeRow['content']}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

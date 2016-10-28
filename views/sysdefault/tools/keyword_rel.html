@@ -1,0 +1,124 @@
+<div class="headbar">
+    <div class="position"><span>工具</span><span>></span><span>{$this->data['word']}标签关联</span><span></span></div>
+    <div class="operating">
+        <!--<a href="javascript:void(0)" onclick="selectAll('ids[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>-->
+    </div>
+    <div class="searchbar">
+        <form action="{url:/tools/keyword_rel/id/$this->data['id']}" method="post" name="searchListForm">
+            <input class="small" name="keyword" type="text" value="{$this->keyword}">
+            <!--<input name="word" type="hidden" value="{$this->keyword}">-->
+            <!--<button class="submit" type="submit" onclick="return checkForm()"><span>查询</span></button>-->
+            <button class="btn" type="submit"><span class="sel">查  询</span></button>
+        </form>
+    </div>
+</div>
+<form action="{url:/tools/keyword_rel/id/$this->data['id']}" method="post">
+    <input type="hidden" name="do" value="relation">
+    <input name="id" type="hidden" value="{$this->data['id']}">
+    <table class="list_table">
+        <colgroup>
+            <col width="40px" />
+            <col width="250px" />
+            <col width="120px" />
+            <col width="100px" />
+            <col />
+        </colgroup>
+
+        <thead>
+        <tr>
+            <th>选择</th>
+            <th>标签名称</th>
+            <th>是否热门</th>
+            <th>排序</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+        {if:$this->data['rel_word_data']}
+            {foreach:items = $this->data['rel_word_data']}
+            <tr>
+                <td><input type="checkbox" checked="checked" name="ids[]" value="{$item['id']}" /></td>
+                <td>{$item['word']}</td>
+                <td>
+                    {if:$item['hot']==1}
+                    <a class='red2' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>是</a>
+                    {else:}
+                    <a class='blue' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>否</a>
+                    {/if}
+                </td>
+                <td>
+                    <input type='text' maxlength='6' onblur='set_order("{$item['word']}",this,"{$item['order']}");' class='tiny' value='{$item['order']}' />
+                </td>
+            </tr>
+            {/foreach}
+        {/if}
+        </tbody>
+    </table>
+    {if:$this->rel_data}
+        <hr>
+        <table class="list_table">
+            <colgroup>
+                <col width="40px" />
+                <col width="250px" />
+                <col width="120px" />
+                <col width="100px" />
+                <col />
+            </colgroup>
+
+            <thead>
+            <tr>
+                <th>选择</th>
+                <th>标签名称</th>
+                <th>是否热门</th>
+                <th>排序</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <!--{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}-->
+            {foreach:items = $this->rel_data}
+            <tr>
+                <td><input type="checkbox" name="ids[]" value="{$item['id']}" /></td>
+                <td>{$item['word']}</td>
+                <td>
+                    {if:$item['hot']==1}
+                    <a class='red2' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>是</a>
+                    {else:}
+                    <a class='blue' href='javascript:void(0);' onclick='set_hot("{$item['word']}",this);'>否</a>
+                    {/if}
+                </td>
+                <td>
+                    <input type='text' maxlength='6' onblur='set_order("{$item['word']}",this,"{$item['order']}");' class='tiny' value='{$item['order']}' />
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    {else:}
+        <div class="operating" style="text-align: left;">查询结果为空</div>
+    {/if}
+    <div class="pages_bar">
+        <button type="submit">绑定关联</button>
+    </div>
+</form>
+<script>
+    //全选
+    function selectAll(nameVal)
+    {
+        //获取复选框的form对象
+        var formObj = $("table:has(:checkbox[name='"+nameVal+"'])");
+
+        //根据form缓存数据判断批量全选方式
+        if(formObj.data('selectType')=='' || formObj.data('selectType')==undefined)
+        {
+            $("input:checkbox[name='"+nameVal+"']:not(:checked)").prop('checked',true);
+            formObj.data('selectType','all');
+        }
+        else
+        {
+            $("input:checkbox[name='"+nameVal+"']").prop('checked',false);
+            formObj.data('selectType','');
+        }
+    }
+</script>

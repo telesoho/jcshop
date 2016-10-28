@@ -1,0 +1,197 @@
+.ju-itemlist {
+    position: relative;
+    margin: 10px auto;
+    width: 1210px;
+    position: relative;
+    zoom: 1;
+}
+
+
+.ju-itemlist li.item-small-v3 {
+    width: 390px;
+    height: 360px;
+    margin: 11px 11px 11px 2px;
+    float: left;
+}
+
+.ju-itemlist li.item-small-v3 .link-box {
+    height: 358px;
+    position: relative;
+    display: block;
+    cursor: pointer;
+    overflow: hidden;
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid #dcdcdc;
+}
+
+.ju-itemlist li.item-small-v3 .item-pic {
+    width: 390px;
+    height: 260px;
+    margin-bottom: 10px;
+    margin: 0 auto 0 -1px;
+    display: block;
+    background: url("../images/jhs.png");
+}
+
+.ju-itemlist li.item-small-v3 .prompt{
+    background: none;
+    border: 0px;
+    padding: 0px;
+}
+.ju-itemlist li.item-small-v3 h4 {
+    margin: 0 0 2px 10px;
+}
+
+.ju-itemlist li.item-small-v3 h4 .coupon {
+    float: right;
+    line-height: 17px;
+    color: #fff;
+    background-color: #f61d4b;
+    padding: 0 0 0 6px;
+    padding-right: 6px;
+}
+address, cite, dfn, em, var,i {
+    font-style: normal;
+}
+.ju-itemlist .sold-num em {
+    font-weight: 700;
+    line-height: 17px;
+    color: #fff;
+}
+.ju-itemlist li.item-small-v3 h4 .desc {
+    display: block;
+    color: #333;
+    font-size: 16px;
+    line-height: 15px;
+    font-weight: 400;
+    overflow: hidden;
+}
+.ju-itemlist li.item-small-v3 h3 {
+    font-size: 14px;
+    line-height: 20px;
+    height: 40px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.ju-itemlist li.item-small-v3 .price-point {
+    display: inline-block;
+    font-weight: 400;
+    color: #f61d4b;
+    font-size: 14px;
+    line-height: 20px;
+    height: 40px;
+}
+.ju-itemlist li.item-small-v3 .item-prices {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background-color: #f61d4b;
+}
+
+.ju-itemlist li.item-small-v3 .item-prices .item-info {
+    padding-right: 104px;
+    height: 50px;
+    overflow: hidden;
+    padding: 0 50px 0 10px;
+}
+
+.ju-itemlist li.item-small-v3 .price {
+    margin-right: 8px;
+    font-size: 0;
+    color: #fff;
+    float: left;
+    font-family: Tahoma;
+}
+.ju-itemlist li.item-small-v3 .item-prices .price i {
+    margin-right: 3px;
+    font-weight: 400;
+    font-family: "Microsoft Yahei","Hiragino Sans GB",Arial;
+    font-size: 22px;
+    display: inline-block;
+}
+
+.ju-itemlist li.item-small-v3 .price em {
+    font-size: 40px;
+    display: inline-block;
+    line-height: 50px;
+    font-weight: 400;
+    letter-spacing: -2px;
+    font-family: Helvetica Neue,Helvetica,Arial;
+    font-style: normal;
+}
+.ju-itemlist .link-box {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    overflow: hidden;
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid #dcdcdc;
+}
+.ju-itemlist li.item-small-v3 .dock .dock-price {
+    height: 18px;
+    margin-bottom: 3px;
+    overflow: hidden;
+}
+.ju-itemlist li.item-small-v3 .orig-price {
+    position: static;
+    text-align: left;
+    display: inline-block;
+    vertical-align: top;
+    color: #fff;
+    font-size: 12px;
+}
+
+.ju-itemlist li.item-small-v3 .sold-num {
+    display: inline-block;
+    zoom: 1;
+    line-height: 20px;
+    padding: 0 6px;
+    background-color: rgba(0,0,0,.1);
+    border-radius: 3px;
+    background-clip: padding-box;
+    color: #fff;
+    font-size: 12px;
+}
+
+.ju-itemlist li.item-small-v3 .item-prices .item-link .txt {
+    display: block;
+}
+
+.ju-itemlist li.item-small-v3 .item-prices .item-link .abbr {
+    display: none;
+}
+.ju-itemlist li.item-small-v3 .item-prices .item-link {
+    width: 100px;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    top: 0;
+    padding-left: 10px;
+    line-height: 50px;
+    overflow: hidden;
+    text-align: center;
+    font-size: 16px;
+    color: #f61d4b;
+    background: url(../images/qiang.png) no-repeat;
+}
+.ju-itemlist li.item-small-v3 h4 .desc {
+    display: block;
+    color: #333;
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: 400;
+    overflow: hidden;
+    padding-top: 10px;
+}
+.ju-itemlist li.item-small-v3 .dock {
+    _float: left;
+    overflow: hidden;
+    margin-top: 4px;
+    float: left;
+}

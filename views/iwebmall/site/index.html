@@ -1,0 +1,343 @@
+
+<div class="cover-page-index-slide j-index-slide fl wfs">
+    <div class="border">
+        <div class="center">
+            <div class="relative">
+                <div class="location">
+                    <div id="wrap" class="wrap">
+                        <div class="slide" id="slide">
+                            {if:$this->index_slide}
+                            <ul class="slide_ul">
+                                {foreach:items=$this->index_slide}
+                                <li title="{$item['name']}" style="background: url('{url:/pic/thumb/img/$item['img']}') repeat top center;">
+                                    <a href="{url:$item[url]}" >
+                                        <img src="{skin:images/tou.gif}" width="100%" height="425">
+                                    </a>
+                                </li>
+                                {/foreach}
+                            </ul>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="show_pre j-slide-btn" style="display: none;">左边</a>
+                <a href="javascript:void(0);" class="show_next j-slide-btn" style="display: none;">右边</a>
+            </div>
+        </div>
+    </div>
+    <div class="icons fl wfs">
+        <ul id="tips" style="width: 552px; margin-left: auto; margin-right: auto;">
+            {if:$this->index_slide} {foreach:items=$this->index_slide}
+            <li class=""><span style="width: 0px; display: none; overflow: hidden;"></span></li>
+            {/foreach} {/if}
+        </ul>
+    </div>
+</div>
+<div class="cover-page-index fl wfs pt50 bcf2">
+    <div class="cover-page-wrapper">
+        <div class="cover-page-plug-in j-cover-page-plug-in clearfix">
+            <div class="fl w484 mr1" style="height: 260px;">
+                {echo:Ad::show("首页幻灯片下方1(484*260)(iwebmall)")}
+            </div>
+            <div class="fl w241 mr1" style="height: 260px;">
+                {echo:Ad::show("首页幻灯片下方2(241*260)(iwebmall)")}
+            </div>
+            <div class="fl w241 mr1" style="height: 260px;">
+                {echo:Ad::show("首页幻灯片下方3(241*260)(iwebmall)")}
+            </div>
+            <div class="fl w241" style="height: 260px;">
+                {echo:Ad::show("首页幻灯片下方4(241*260)(iwebmall)")}
+            </div>
+        </div>
+
+
+        {set:$tuanitems=Api::run('getRegimentList',6)}
+        {if:$tuanitems}
+        <!--clearfix-->
+        <div class="clearfix111">
+            <!--tabs rcmd f-l-->
+            <div class="tabs rcmd ">
+                <!--tab-title-->
+                <div class="tab-title clearfix111">
+
+                    <li class="tab-title-hover">
+                        <h2 class="t14">团购商品</h2>
+                    </li>
+
+                    <li style="float: right; text-align: right">
+                        <a href="{url:site/groupon}" style="line-height: 39px;">更多>></a>
+                    </li>
+                </div>
+                <!--tab-title-->
+                <div class="clear"></div>
+                <!--tab-cnt-->
+                <div class="tab-cnt"  style="background: #fff">
+                    <!--tab-item-hover-->
+                    <div class="tab-item">
+                        <ul class="goods-list clearfix" style="padding-top: 10px; padding-bottom: 0px;">
+
+                            {foreach:items=$tuanitems}
+                            {set:$tmpId=$item['id'];}
+                            <li>
+                                <a class="goods-img" href="{url:/site/products/promo/groupon/id/$item[goods_id]/active_id/$tmpId}">
+                                    <img class="jImg" src="{webroot:$item[img]}">
+                                </a>
+                                <a class="goods-name" href="{url:/site/products/promo/groupon/id/$item[goods_id]/active_id/$tmpId}" title="{$item['title']}">
+                                    {$item['title']}<span class="txt-red"></span>
+                                </a>
+                                <div class="goods-price">
+                                    <span class="p-normal">团购价:￥{$item['regiment_price']}</span>
+                                </div>
+                            </li>
+                            {/foreach}
+                        </ul>
+                    </div>
+                    <div class="clear"></div>
+                    <!--tab-item-hover-->
+
+
+                </div>
+                <!--tab-cnt-->
+            </div>
+            <!--tabs rcmd f-l-->
+
+        </div>
+        <div class="clear"></div>
+
+        {/if}
+
+
+        {set:$qiangitems=Api::run('getPromotionList',6);}
+        {if:$qiangitems}
+        <!--clearfix-->
+        <div class="clearfix111">
+            <!--tabs rcmd f-l-->
+            <div class="tabs rcmd ">
+                <!--tab-title-->
+                <div class="tab-title clearfix111">
+                    <li class="tab-title-hover">
+                        <h2 class="t14">限时抢购</h2>
+                    </li>
+                    <!--<li style="float: right; text-align: right">-->
+                    <!--<a href="" style="line-height: 39px;">更多>></a>-->
+                    <!--</li>-->
+                </div>
+                <!--tab-title-->
+                <div class="clear"></div>
+                <!--tab-cnt-->
+                <div class="tab-cnt" style="background: #fff">
+
+                    <!--tab-item-hover-->
+                    <div class="tab-item">
+                        <ul class="goods-list clearfix" style="padding-top: 10px">
+
+                            {foreach:items=$qiangitems}
+                            {set:$free_time = ITime::getDiffSec($item['end_time'])}
+                            {set:$countNumsItem[] = $item['p_id'];}
+                            {set:$tmpGoodsId=$item['goods_id'];$tmpPId=$item['p_id'];}
+                            <li>
+                                <a class="goods-img" href="{url:/site/products/id/$tmpGoodsId/promo/time/active_id/$tmpPId}">
+                                    <img class="jImg" src="{url:/pic/thumb/img/$item[img]/w/175/h/175}">
+                                </a>
+                                <a class="goods-name" href="{url:/site/products/id/$tmpGoodsId/promo/time/active_id/$tmpPId}" title="{$item['name']}">
+                                    {$item['name']}<span class="txt-red"></span>
+                                </a>
+                                <p class="countdown"><b id='cd_hour_{$item['p_id']}'>{echo:floor($free_time/3600);}</b>时<b id='cd_minute_{$item['p_id']}'>{echo:floor(($free_time%3600)/60);}</b>分<b id='cd_second_{$item['p_id']}'>{echo:$free_time%60;}</b>秒</p>
+                                <div class="goods-price">
+                                    <span class="p-normal">抢购价:￥{$item['award_value']}</span>
+                                </div>
+                            </li>
+                            {/foreach}
+                        </ul>
+                    </div>
+                    <!--tab-item-hover-->
+
+                </div>
+                <!--tab-cnt-->
+            </div>
+            <!--tabs rcmd f-l-->
+
+        </div>
+        <div class="clear"></div>
+
+        {/if}
+
+
+        <div class="boutique boutique-index mt20 fl wfs">
+            <h3>精品推荐</h3>
+            <div class="canvas">
+                <ul class="items" style="width: 1222px;">
+                    {foreach:items=Api::run('getCommendRecom',8)} {set:$tmpId=$item['id'];}
+                    <li class="items-li j-items-li">
+                        <a href="{url:/site/products/id/$tmpId}" style="position:relative;">
+                            <img src="{url:/pic/thumb/img/$item[img]/w/294/h/294}" title="{$item['name']}">
+                        </a>
+                        <div class="wrap_div">
+                            <div>
+                                <b class="title"><a href="{url:/site/products/id/$tmpId}" title="{$item['name']}">
+							{echo:IString::substr($item['name'],40)}
+							</a></b>
+                            </div>
+                        </div>
+                        <p class="price-attente">
+                            <span class="price">
+                           ￥{$item['sell_price']}元
+						</span>
+                            <span class="attente" title="浏览量">{$item['visit']}</span>
+                        </p>
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+        </div>
+        <div class="boutique boutique-index mt20 fl wfs">
+            <h3>热卖商品</h3>
+            <div class="canvas">
+                <ul class="items" style="width: 1222px;">
+                    {foreach:items=Api::run('getCommendHot',8)} {set:$tmpId=$item['id'];}
+                    <li class="items-li j-items-li">
+                        <a  href="{url:/site/products/id/$tmpId}" style="position:relative;">
+                            <img src="{url:/pic/thumb/img/$item[img]/w/294/h/294}" title="{$item['name']}">
+                        </a>
+                        <div class="wrap_div">
+                            <div>
+                                <b class="title"><a  href="{url:/site/products/id/$tmpId}" title="{$item['name']}">
+							{echo:IString::substr($item['name'],40)}
+							</a></b>
+                            </div>
+                        </div>
+                        <p class="price-attente">
+                            <span class="price">
+                           ￥{$item['sell_price']}元
+						</span>
+                            <span class="attente" title="浏览量">{$item['visit']}</span>
+                        </p>
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+        </div>
+        <div class="church fl wfs mt50">
+            <dl class="reputation fl">
+                <dt class="title"><span class="h3"><a class="title-a" href="#" >关于我们</a></span><i></i></dt>
+                <dd class="fl wfs">
+                    <a class="template-community fl"  href="#">关于我们</a>
+                    <p class="items fl">
+                        <a class="fl wfs"  href="#">百度口碑</a>
+                        <a class="fl wfs"  href="#">百度百科</a>
+                        <a class="fl wfs"  href="#">问卷调查</a>
+                        <a class="fl wfs"  href="#">我要提问</a>
+                    </p>
+                </dd>
+            </dl>
+            <dl class="knowledge fl">
+                <dt class="title">
+                    <span class="h3"><a class="title-a"  href="#">帮助中心</a></span><i></i>
+                    <a class="more fr"  href="#"><span>more</span></a>
+                </dt>
+                <dd class="fl wfs">
+                    <b><a  href="#" title="IWEBSHOP下载 IWEBSHOP合集版下载 最新IWEBSHOP 下载">IWEBSHOP下载 IWEBSHOP合集版下载 最新IWEBSHOP...</a></b>
+                    <b><a  href="#" title="lnmp-qq登录502 bad 问题解决方法">lnmp-qq登录502 bad 问题解决方法</a></b>
+                    <b><a  href="#" title="IWEBSHOP，nginx配置伪静态规则方法">IWEBSHOP，nginx配置伪静态规则方法</a></b>
+                    <b><a  href="#" title="IWEBSHOP后台SQL查询提示错误 this sql May contain UPDATE,DELETE,TRUNCAT">IWEBSHOP后台SQL查询提示错误 this sql Ma...</a></b>
+                    <b><a  href="#" title="后台添加订单提示库存不足BUG解决（IWEBSHOP2.7.2.2.7.3版本）">后台添加订单提示库存不足BUG解决（IWEBSHOP2.7.2...</a></b>
+                </dd>
+            </dl>
+            <dl class="letters fl">
+                <dt class="title">
+                    <span class="h3"><a class="title-a"  href="{url:/site/notice}">网站公告</a></span><i></i>
+                    <a class="more fr"  href="{url:/site/notice}"><span>more</span></a>
+                </dt>
+                <dd class="fl wfs">
+                    {foreach:items=Api::run('getAnnouncementList',5)} {set:$tmpId=$item['id'];}
+                    <b><a href="{url:/site/notice_detail/id/$tmpId}" title="{$item['title']}">{$item['title']}</a></b> {/foreach}
+                </dd>
+            </dl>
+        </div>
+        <div class="demos fl wfs">
+            {foreach:items=Api::run('getHelpCategoryFoot') item=$helpCat}
+            <dl class="fl" style="margin-left:-1px;">
+                <dt><a href="{url:/site/help_list/id/$helpCat[id]}">{$helpCat['name']}</a></dt>
+                <dd>
+                    {foreach:items=Api::run('getHelpListByCatidAll',array('#cat_id#',$helpCat['id']))}
+                    <a href="{url:/site/help/id/$item[id]}">{$item['name']}</a> {/foreach}
+                </dd>
+            </dl>
+            {/foreach}
+            <div class="service fr">
+                <b>服务热线</b>
+                <strong>021-62601332</strong>
+                <a class="service_kefu" href="#" >在线客服</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript" src="{skin:js/jquery.SuperSlide.js}"></script>
+<script type='text/javascript'>
+//dom载入完毕执行
+jQuery(function()
+{
+	 $(".j-index-slide").slide({
+	    mainCell:"#slide .slide_ul",
+	    effect:"leftLoop",
+	    prevCell:".show_pre",
+	    nextCell:".show_next",
+	    titCell:"#tips li",
+	    titOnClassName:"cur",
+	    interTime:"5000",
+	    autoPlay:true
+	    });
+	//幻灯片开启
+
+	//index 分类展示
+	$('#index_category tr').hover(
+		function(){
+			$(this).addClass('current');
+		},
+		function(){
+			$(this).removeClass('current');
+		}
+	);
+
+	//显示抢购倒计时
+	var cd_timer = new countdown();
+	{if:isset($countNumsItem) && $countNumsItem}
+	{foreach:items = $countNumsItem}
+		cd_timer.add({$item});
+	{/foreach}
+	{/if}
+
+	//首页商品变色
+	var colorArray = ['green','yellow','purple'];
+	$('div[name="showGoods"]').each(function(i)
+	{
+		$(this).addClass(colorArray[i%colorArray.length]);
+	});
+});
+
+//电子邮件订阅
+function orderinfo()
+{
+	var email = $('[name="orderinfo"]').val();
+	if(email == '')
+	{
+		alert('请填写正确的email地址');
+	}
+	else
+	{
+		$.getJSON('{url:/site/email_registry}',{email:email},function(content){
+			if(content.isError == false)
+			{
+				alert('订阅成功');
+				$('[name="orderinfo"]').val('');
+			}
+			else
+				alert(content.message);
+		});
+	}
+}
+</script>

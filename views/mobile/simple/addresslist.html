@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>收货地址</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
+
+</head>
+<body>
+<!--loading页开始-->
+<div id="loading">
+    <div class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
+</div>
+<!--loading页结束-->
+<section>
+    <div id="addressList">
+    </div>
+</section>
+<footer>
+    <div id="footer-fixed">
+        <div class="newAddrSub">
+            <div id="submitaddr">添加收货地址</div>
+        </div>
+    </div>
+</footer>
+<script id="test" type="text/html">
+    <div class="addressListMenu">
+        <% for(var i=0; i<data.length; i++){%>
+        <div class="menuList">
+            <div class="top box" onclick=changeDefault1(<%=data[i].id%>)>
+                <div class="name"><%=data[i].accept_name%></div>
+                <div class="phone"><%=data[i].mobile%></div>
+            </div>
+            <div class="addr" onclick=changeDefault1(<%=data[i].id%>)>
+                <%=data[i].province_val%><%=data[i].city_val%><%=data[i].area_val%><%=data[i].address%>
+            </div>
+            <div class="box edit">
+                <%if(data[i].is_default==1){%>
+                <div class="is_default">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/choose.png" alt="" />
+                    <span>默认地址</span>
+                </div>
+                <%}else{%>
+                <!--非默认地址-->
+                <div class="no_default" onclick=changeDefault(<%=data[i].id%>)>
+                    <img src="/views/mobile/skin/default/image/jmj/icon/circle.png" alt="" />
+                    <span>默认地址</span>
+                </div>
+                <%}%>
+                <div class="isEdit box">
+                    <a href="#modalid<%=data[i].id%>"><div class="editAddr">
+                        <img src="/views/mobile/skin/default/image/jmj/icon/editaddr.png" alt="" />
+                        <span>编辑</span>
+                    </div></a>
+                    <%if(data[i].is_default==1){%>
+                    <!--默认地址没有删除功能-->
+                    <%}else{%>
+                    <div class="del" onclick=addressDel(<%=data[i].id%>)>
+                        <img src="/views/mobile/skin/default/image/jmj/icon/del.png" alt="" />
+                        <span>删除</span>
+                    </div>
+                    <%}%>
+                </div>
+            </div>
+        </div>
+        <!--编辑收货地址模态框-->
+        <div id="modalid<%=data[i].id%>" class="mui-modal">
+            <header class="mui-bar mui-bar-nav">
+                <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+                <h1 class="mui-title">编辑地址</h1>
+            </header>
+            <div class="mui-content" style="height: 100%;">
+                <div id="addressNew">
+                    <div class="title">请填写你的真实姓名，否则订单无法发出</div>
+                    <div class="mui-input-row">
+                        <input type="text" class="mui-input-clear" value="<%=data[i].accept_name%>" id="username" onblur=check()>
+                    </div>
+                    <div class="mui-input-row">
+                        <input type="hidden" class="mui-input-clear" value="<%=data[i].id%>" style="margin-bottom:2px;" id="addressid">
+                        <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" style="margin-bottom:2px;" id="userphone" onblur=checkPhone()>
+                        <input type="text" class="mui-input-clear" value="<%=data[i].province_val%> <%=data[i].city_val%> <%=data[i].area_val%>"
+                               style="margin-bottom:2px;" id="usercity" onfocus=checkcity()>
+                        <input type="text" class="mui-input-clear" value="<%=data[i].address%>" style="margin-bottom:2px;" id="useraddr" onblur=check()>
+                        <input type="text" class="mui-input-clear" value="<%=data[i].zip%>" style="margin-bottom:2px;" id="useryoubian" onblur=check()>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <div id="footer-fixed1">
+                    <div class="newAddrSub" style="text-align:center">
+                        <button id="submitaddr1" onclick="changeAddr();">完成</button>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    <%}%>
+</script>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/template-native.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/javascript/lazyload.js"></script>
+<script src="/views/mobile/javascript/mui.picker.min.js"></script>
+<script src="/views/mobile/javascript/mui.poppicker.js"></script>
+<script src="/views/mobile/javascript/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+
+
+<script>
+    var Request = new Object();
+    Request = GetRequest();
+    var statusOrder=Request["rev"];
+    //	模拟高亮画面
+    var submitaddr1,pro,cit,are;
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
+        //    跳转到新增收货地址页面
+
+    })
+    mui.ajax('index.php?controller=apic&action=address_list',{
+        dataType:'json',//服务器返回json格式数据
+        type:'get',//HTTP请求类型
+        timeout:10000,//超时时间设置为10秒；
+        headers:{'Content-Type':'application/json'},
+        success:function(data){
+            //服务器返回响应，根据响应结果，分析是否登录成功；
+            var dat={};
+            dat.data=data;
+            var html1 = template('test',dat);
+            document.getElementById("addressList").innerHTML = html1;
+            submitaddr1=document.getElementById("submitaddr");
+        },
+        error:function(xhr,type,errorThrown){
+            //异常处理；
+            console.log(type);
+        }
+    });
+//    跳转到新增收货地址页面
+    var submitaddr=document.getElementById("submitaddr");
+    submitaddr.addEventListener('tap',function(){
+        document.location.href="{url:/simple/addaddress}";
+    })
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
+
+    })
+//    三级联动
+    var cityPicker3 = new mui.PopPicker({
+        layer: 3
+    });
+    function checkcity(){
+        cityPicker3.setData(cityData3);
+        cityPicker3.show(function(items) {
+            var showCityPickerInput=document.getElementById('usercity');
+            showCityPickerInput.value = (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;
+            //返回 false 可以阻止选择框的关闭
+            pro=(items[0] || {}).value;
+            cit=(items[1] || {}).value;
+            are=(items[2] || {}).value;
+            //return false;
+            console.log(pro);
+        });
+
+    }
+
+
+    function changeAddr(){
+        var username=document.getElementById("username");
+        var phone=document.getElementById("userphone");
+        var address=document.getElementById("useraddr");
+        var useryoubian=document.getElementById("useryoubian");
+        var addressid=document.getElementById("addressid");
+        var addaddressInfo={
+            accept_name:username.value,
+            province:pro,
+            city:cit,
+            area:are,
+            address:address.value,
+            mobile:phone.value,
+            zip:useryoubian.value
+        };
+        var self=this;
+        mui.ajax('index.php?controller=apic&action=address_add',{
+            data:addaddressInfo,
+            dataType:'json',	// 服务器返回json格式数据
+            type:'post',		// HTTP请求类型
+            timeout:10000,		// 超时时间设置为10秒；
+            success:function(data){
+                document.location.href="{url:/simple/addresslist}";
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+                alert("failed");
+            }
+        });
+
+    }
+    function checkPhone(){
+        var phone = document.getElementById('userphone').value;
+        if(!(/^1[34578]\d{9}$/.test(phone))){
+            alert("手机号码有误，请重填");
+            document.getElementById('userphone').value="";
+            document.getElementById('userphone').focus();
+            return false;
+        }
+    }
+    function check(){
+        if(username.value&&address.value&&phone.value&&showCityPickerInput.value){
+            submitaddr1.disabled='';
+        }else{
+            submitaddr1.disabled='disabled';
+        }
+    }
+    function changeDefault(id){
+        var data1=id;
+        mui.ajax('index.php?controller=apic&action=address_default',{
+            data:{
+                id:data1,
+                is_default:1
+            },
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+                console.log(data);
+                window.location.reload();
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+    function changeDefault1(id){
+        var data1=id;
+        mui.ajax('index.php?controller=apic&action=address_default',{
+            data:{
+                id:data1,
+                is_default:1
+            },
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+                if(statusOrder){
+                    window.location.href="{url:/simple/cart2}";
+                }else{
+                    window.location.reload();
+                }
+
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+    function addressDel(id){
+        var data1=id;
+        mui.ajax('index.php?controller=apic&action=address_del',{
+            data:{
+                id:data1
+            },
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+                    window.location.reload();
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+    //	获取url传递过来的参数
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+</script>
+</body>
+</html>

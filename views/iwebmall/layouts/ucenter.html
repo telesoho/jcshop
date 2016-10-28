@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>{echo:$this->_siteConfig->name}</title>
+    <link rel="stylesheet" href="{skin:css/index.css}" />
+    <link rel="stylesheet" href="{skin:css/bootstrap.css}" />
+	<link rel="stylesheet" href="{skin:css/ucenter.css}" />
+
+
+	<link rel="shortcut icon" href="{webroot:favicon.ico}" />
+	{js:jquery}
+	{js:form}
+	{js:dialog}
+	{js:validate}
+	{js:artTemplate}
+	<script type='text/javascript' src="{theme:javascript/common.js}"></script>
+	<script type='text/javascript' src='{theme:javascript/site.js}'></script>
+</head>
+<body>
+<!--top fl wfs-->
+<div class="top fl wfs fz12">
+    <div class="wrapper">
+        <div class="left fl">欢迎您来到{echo:$this->_siteConfig->name}购物！</div>
+        <div class="right fr">
+            您的账号：{$this->user['username']}
+            <a href="{url:ucenter/password}">[修改密码]</a>
+            <a href="{url:/simple/logout}">[退出登录]</a>
+        </div>
+    </div>
+</div>
+<!--top fl wfs-->
+<!--head fl wfs-->
+<div class="head fl wfs">
+    <div class="wrapper">
+        <a class="logo" href="{url:site/index}">
+            <img src="{if:$this->_siteConfig->logo}{webroot:$this->_siteConfig->logo}{else:}{skin:images/front/logo.gif}{/if}" alt="{echo:$this->_siteConfig->name}">
+        </a>
+        <div class="nav">
+            <a class="index" href="{url:site/index}">首页</a>
+            <a class="member " href="{url:ucenter/index}">会员中心</a>
+            <a class="order " href="{url:ucenter/order}">订单中心</a>
+            <a class="account " href="{url:ucenter/info}">账户中心</a>
+            <a class="service " href="{url:ucenter/info}">个人资料</a>
+        </div>
+    </div>
+</div>
+
+<!--head fl wfs-->
+<!--module fl wfs-->
+<div class="module fl wfs">
+
+    <div class="wrapper mt20">
+        <!--menu-->
+        <div class="menu fl">
+            <div class="menu-body fl">
+                <div class="infos fl wfs">
+                    {set:$user_ico = $this->user['head_ico']}
+                    <a href="{url:ucenter/index}">
+                        <img class="fl" src="{url:/pic/thumb/img/$user_ico/w/100/h/100}" onerror="this.src='{skin:images/front/user_ico.gif}'">
+                    </a>
+                    <span class="fl">{$this->user['username']}</span><br>
+                    <i class="fl">{echo:ISafe::get('last_login')}</i>
+                </div>
+                <p class="index fl wfs">
+                    <a href="{url:ucenter/index}" style="color:#ffffff">用户中心&nbsp;-&nbsp;首页</a>
+                </p>
+            {set:$index=0;}
+            {foreach:items=menuUcenter::init()}
+            {set:$index++;}
+                <dl class="menu-dl fl wfs">
+                    <dt class="menu-dt service fl wfs"><i></i>{$key}</dt>
+                    <dd class="fl wfs">
+                    {foreach:items=$item key=$moreKey item=$moreValue}
+                        <p><a href="{url:$moreKey}">{$moreValue}</a></p>
+                        {/foreach}
+
+                    </dd>
+                </dl>
+              {/foreach}
+            </div>
+        </div>
+        <!--menu-->
+        <!--member-index-->
+        <div class="member-index fr w955">
+            {viewcontent}
+        </div>
+        <!--member-index-->
+    </div>
+
+</div>
+<!--module fl wfs-->
+
+
+<div class="foot fl wfs fz12">
+    {echo:IFilter::stripSlash($this->_siteConfig->site_footer_code)}
+</div>
+
+
+<script type='text/javascript'>
+//DOM加载完毕后运行
+$(function()
+{
+    $(document).on('click', '.menu-dt', function(){
+        $(this).siblings("dd").slideToggle(100);
+    })
+
+	//隔行换色
+	$(".list_table tr:nth-child(even)").addClass('even');
+	$(".list_table tr").hover(
+		function () {
+			$(this).addClass("sel");
+		},
+		function () {
+			$(this).removeClass("sel");
+		}
+	);
+
+});
+</script>
+</body>
+</html>
