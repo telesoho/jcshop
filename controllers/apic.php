@@ -378,6 +378,27 @@ class Apic extends IController
         echo json_encode($data, true);
         exit();
     }
+    /**
+     * @brief 订单详情
+     * @return String
+     */
+    public function order_detail()
+    {
+        $id = IFilter::act(IReq::get('id'),'int');
+
+        $orderObj = new order_class();
+        $this->order_info = $orderObj->getOrderShow($id,$this->user['user_id']);
+
+        if(!$this->order_info)
+        {
+            IError::show(403,'订单信息不存在');
+        }
+        $orderStatus = Order_Class::getOrderStatus($this->order_info);
+//        $this->setRenderData(array('orderStatus' => $orderStatus));
+        header("Content-type: application/json");
+        echo json_encode($orderStatus, true);
+        exit();
+    }
 
     /**
      * ---------------------------------------------------物流---------------------------------------------------*
@@ -569,6 +590,7 @@ class Apic extends IController
 //        $commentDB->page   = $page;
         $goods_info['comments_data']     = $commentDB->find();
 
+        $goods_info['spec_array'] = json_decode($goods_info['spec_array']);
 //        $this->setRenderData($goods_info);
         header("Content-type: application/json");
         echo json_encode($goods_info);
