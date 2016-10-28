@@ -7,3 +7,9 @@
 .inputContent input{border:1px solid #eee;border-left:0;border-right:0;border-radius:0;border-top:0;height:0.92rem;font-size:0.3rem;color:#bbb;}
 .add_newAddrSub{width:100%;overflow:hidden;position:fixed; left:0;bottom:0;}
 .add_newAddrSub .submitAdd{width:100%;background:#f3026a;color:#fff;border:0;border-radius:0;height:1rem;font-size:0.36rem;}
+
+/**
+sit_products.css更改
+**/
+.mui-control-item a{overflow:hidden;display:block;}
+.servicePromise ul li a{display:block;overflow:hidden;}
