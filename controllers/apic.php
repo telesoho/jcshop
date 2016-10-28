@@ -341,13 +341,14 @@ class Apic extends IController
                 $data[$k][$key]['area_val'] =$temp2[$value['area']];
 //                $orderObj = new order_class();
 //                $data[$k][$key]['order_info'] = $orderObj->getOrderShow($value['id'],$this->user['user_id']);
-//                $temp3 = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
-//                foreach ($temp3 as $key => $value){
-//                    $temp3[$key]['goods_array'] = json_decode($value['goods_array'],true);
-//                }
-////                var_dump($temp3);
-//                $data[$k][$key]['goodslist'] = $temp3;
-                $data[$k][$key]['goodslist'] = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
+                $temp3 = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
+                foreach ($temp3 as $key => $value){
+                    $temp3[$key]['goods_array'] = json_decode($value['goods_array'],true);
+                }
+//                var_dump($temp3);
+                $data[$k][$key]['goodslist'] = $temp3;
+
+//                $data[$k][$key]['goodslist'] = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
                 if (!empty($v)) switch ($k) {
 
 //                case 'state0':
@@ -374,6 +375,7 @@ class Apic extends IController
             $data['state0'][$key]['text'] = $relation[$value['orderStatusText']];
         }
 //        var_dump($data);
+//        var_dump(Api::run('getOrderGoodsListByGoodsid',array('#order_id#',15)));
         header("Content-type: application/json");
         echo json_encode($data, true);
         exit();
