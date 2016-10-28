@@ -1037,7 +1037,7 @@ input[type='search']{
 	padding-left:0.37rem;
 }
 #addressList{
-	margin-top:0.2rem;
+	margin-top:0.31rem;
 }
 .menuList{
 	margin-top:0.11rem;
@@ -1069,4 +1069,41 @@ input[type='search']{
 	font-size:0.28rem;
 	color:#f3026a;
 	margin-left:0.17rem;
+}
+.menuList .no_default img{
+	width:0.4rem;
+	margin:0.17rem 0 0.18rem 0.33rem;
+	vertical-align: middle;
+}
+.menuList .no_default span{
+	font-size:0.28rem;
+	color:#bbbbbb;
+	margin-left:0.17rem;
+}
+.menuList .isEdit img{
+	width:0.46rem;
+	margin:0.10rem 0 0.18rem 0.33rem;
+	vertical-align: middle;
+}
+.menuList .isEdit span{
+	font-size:0.28rem;
+	color:#bbbbbb;
+	margin-left:0.08rem;
+	margin-right:0.21rem;
+}
+.newAddrSub{
+	margin-top:2.01rem;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+}
+.newAddrSub #submitaddr{
+	border:0.02rem solid #ff4aa0;
+	border-radius:0.1rem;
+	width:4.96rem;
+	height:0.76rem;
+	line-height:0.76rem;
+	text-align:center;
+	font-size:0.32rem;
+	color:#ff4aa0;
 }
