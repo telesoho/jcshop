@@ -7,6 +7,7 @@
 .inputContent input{border:1px solid #eee;border-left:0;border-right:0;border-radius:0;border-top:0;height:0.92rem;font-size:0.3rem;color:#bbb;}
 .add_newAddrSub{width:100%;overflow:hidden;position:fixed; left:0;bottom:0;}
 .add_newAddrSub .submitAdd{width:100%;background:#f3026a;opacity:1;color:#fff;border:0;border-radius:0;height:1rem;font-size:0.36rem;}
+.add_newAddrSub .submitAdd:disabled{background:#f3026a;opacity:0.5;}
 
 /**
 sit_products.css更改
@@ -23,3 +24,10 @@ sit_products.css更改
 .mui-input-row input{border:1px solid #eee;border-left:0;border-right:0;border-radius:0;height:0.92rem;color:#bbb;font-size:0.3rem;border-top:0;}
 .newAddrSub_position{width:100%;overflow:hidden;position:fixed; left:0;bottom:0;}
 .newAddrSub_position .submit_suc{width:100%;background:#f3026a;color:#fff;border:0;border-radius:0;height:1rem;font-size:0.36rem;}
+
+/**
+购物车new样式
+**/
+.cat_box{width:100%;overflow:hidden;margin-top:0.32rem;}
+.cat_box li{overflow:hidden;width:100%;}
+.cat_title{width:100%;overflow:hidden;height:0.8rem;background:#fff;}
