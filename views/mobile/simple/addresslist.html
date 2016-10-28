@@ -140,6 +140,10 @@
     $(window).load(function(){
         $("#loading").fadeOut(300);
         //    跳转到新增收货地址页面
+        var submitaddr=document.getElementById("submitaddr");
+        submitaddr.addEventListener('tap',function(){
+            document.location.href="{url:/simple/addaddress}";
+        })
 
     })
     mui.ajax('index.php?controller=apic&action=address_list',{
@@ -160,15 +164,6 @@
             console.log(type);
         }
     });
-//    跳转到新增收货地址页面
-    var submitaddr=document.getElementById("submitaddr");
-    submitaddr.addEventListener('tap',function(){
-        document.location.href="{url:/simple/addaddress}";
-    })
-    $(window).load(function(){
-        $("#loading").fadeOut(300);
-
-    })
 //    三级联动
     var cityPicker3 = new mui.PopPicker({
         layer: 3
