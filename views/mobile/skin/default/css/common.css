@@ -33,7 +33,7 @@ html{font-size:13.35vw;
 body{
   font-size:0.24rem;
   width:100%;
-  over-flow:hidden;
+  overflow:hidden;
 }
 .mui-content{
 	width:100% !important;

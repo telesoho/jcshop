@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>九猫首页</title>
+    <title>个人中心</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css"/>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/shopcar.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
-
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/personalCenter.css" />
+    
 </head>
 <body>
 <div id="loading">
@@ -39,27 +39,20 @@
     </div>
 </div>
 <!--loading页结束-->
-    <header class="mui-bar mui-bar-nav">
+    <!--<header class="mui-bar mui-bar-nav">
         <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         <h1 class="mui-title">个人中心</h1>
-    </header>
-    <section id="section-user-info0" class="mui-content">
-        <div class="title">
-            <img src="https://img.bolo.me/shopping/app/images/user/mypage_appbg.jpg" alt="">
+    </header>-->
+    <section>
+        <div class="headBox">
+        	<div class="whiteBack">
+        	    <img src="/views/mobile/skin/default/image/jmj/img/cat_logo.png"/>	        		
+        	</div>        	
         </div>
-        <div class="content">
-            <div class="content1">
-                <span class="name">王枫wx-chat5005</span>
-                <span class="mui-badge mui-badge-danger">v0</span>
-            </div>
-            <div class="content2">
-                <span class="jifen">100积分</span>
-                <span class="youhui">1优惠券</span>
-            </div>
-        </div>
+        <div class="userName">九猫家的小小猫</div>
     </section>
     <section id="section-user-info">
-            <ul class="mui-table-view">
+            <ul class="myOrders mui-table-view">
                 <li class="mui-table-view-cell">
                     <a class="" href="{url:/ucenter/order}&status=0">
                         我的订单<span class="mui-pull-right ico-pull">查看全部订单
@@ -67,31 +60,30 @@
                     </a>
                 </li>
             </ul>
-            <div class=" order">
+            <div class="order">
                 <div class="mui-row">
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
                         <a  href="{url:/ucenter/order}&status=1">
-                        <span class="mui-icon mui-icon-home ico-order"></span>
+                        <img src="/views/mobile/skin/default/image/jmj/img/order-icon03.png"/>
                         <div class="mui-media-body">待付款</div></a>
                     </div>
                     <div class="mui-col-xs-3 mui-col-sm-3" style="text-align:center">
-                        <a  href="{url:/ucenter/order}&status=2">
-                        <span class="mui-icon mui-icon-email ico-order"></span>
+                        <a href="{url:/ucenter/order}&status=2">
+                        <img src="/views/mobile/skin/default/image/jmj/img/order-icon02.png"/>
                         <div class="mui-media-body">待发货</div></a>
                     </div>
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
-                        <a  href="{url:/ucenter/order}&status=3">
-                        <span class="mui-icon mui-icon-chatbubble ico-order"></span>
-                        <div class="mui-media-body">待收货</div></a>
+                        <a href="{url:/ucenter/order}&status=3">
+                        <img src="/views/mobile/skin/default/image/jmj/img/order-icon01.png"/>                        <div class="mui-media-body">待收货</div></a>
                     </div>
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
                         <a href="{url:/ucenter/order}&status=4">
-                        <span class="mui-icon mui-icon-location ico-order"></span>
+                        <img src="/views/mobile/skin/default/image/jmj/img/order-icon04.png"/>
                         <div class="mui-media-body">交易完成</div></a>
                     </div>
                 </div>
             </div>
-            <ul class="mui-table-view" style="margin-top:0.1rem">
+            <!--<ul class="mui-table-view" style="margin-top:0.1rem">
                 <li class="mui-table-view-cell">
                     <a class="mui-navigate-right">
                         我的积分
@@ -107,7 +99,7 @@
                         我的优惠券
                     </a>
                 </li>
-            </ul>
+            </ul>-->
             <ul class="mui-table-view" style="margin-top:0.1rem">
                 <li class="mui-table-view-cell">
                     <a class="mui-navigate-right" href="{url:/simple/addresslist}">
@@ -115,7 +107,7 @@
                     </a>
                 </li>
             </ul>
-            <ul class="mui-table-view" style="margin-top: 25px;margin-bottom:0.7rem;">
+            <!--<ul class="mui-table-view" style="margin-top: 25px;margin-bottom:0.7rem;">
                 <li class="mui-table-view-cell">
                     <a class="mui-navigate-right">
                         身份证信息
@@ -131,7 +123,7 @@
                         九猫微信号
                     </a>
                 </li>
-            </ul>
+            </ul>-->
     </section>
 <footer>
     <nav class="mui-bar mui-bar-tab">
