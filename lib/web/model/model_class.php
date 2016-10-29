@@ -137,6 +137,17 @@ class IModel
 		return $this->db->query($sql);
 	}
 
+
+	/**
+	 * @brief 获取符合记录的条数
+	 * @param string $where 查询条件
+	 * @return int 数据条数
+	 */
+	public function get_count($where) {
+		$result = $this->getObj($where, "count(*) as num");
+		return intval($result['num']);
+	}
+
 	/**
 	 * @brief 获取单条数据
 	 * @param string $where 查询条件
