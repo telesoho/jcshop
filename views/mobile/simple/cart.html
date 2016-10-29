@@ -133,7 +133,7 @@
 					</div>
 					<div class="edit box">
 						<div class="price">￥ <%=goodsList[i].sell_price%></div>
-						<div class="num">x <%=goodsList[i].count%></div>
+						<div class="num" id="num_<%=goodsList[i].goods_id%>_<%=goodsList[i].product_id%>">x <%=goodsList[i].count%></div>
 						<div class="count">
 							<span class="reduce" onclick='cart_reduce(<%=product%>);'>-</span>
 							<input type="text" onchange='cartCount(<%=product%>);' id="count_<%=goodsList[i].goods_id%>_<%=goodsList[i].product_id%>" value="<%=goodsList[i].count%>">
@@ -144,13 +144,13 @@
 			</div>
 		</div>
 	<%}%>
-		<div class="box total">
+		<div class="box total" style="margin-bottom:1rem;">
 			<div class="totalPrice">
 				<span class="text">合计: </span>
-				<span class="price">¥ <%=final_sum%></span>
+				<span class="price" id="sum_price">¥ <%=final_sum%></span>
 			</div>
 			<div class="btn_pay">
-				<span>结算(<%=count%>)</span>
+				<span id="sum_count">结算(<%=count%>)</span>
 			</div>
 		</div>
 	<%}%>
@@ -162,6 +162,9 @@
 <script>
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
+		mui(".btn_pay").on('tap',"#sum_count",function(){
+			window.location.href='/index.php?controller=simple&action=cart2';
+		})
 	})
 	//定义template方法
 	template.helper('JSONstringify', function(obj){
@@ -259,7 +262,11 @@ function cartCount(obj)
 					$('#origin_price').html(content.sum);
 					$('#discount_price').html(content.reduce);
 					$('#promotion_price').html(content.proReduce);
-					$('#sum_price').html(content.final_sum);
+					$('#sum_price').html("¥ "+content.final_sum);
+					$('#sum_count').html("结算("+content.count+")");
+					for(var j = 0;j < content.goodsList.length; j++){
+						$('#num_'+content.goodsList[j].goods_id+'_'+content.goodsList[j].product_id).html("x "+content.goodsList[j].count);
+					}
 					$('#sum_'+obj.goods_id+'_'+obj.product_id).html((obj.sell_price * countInputVal).toFixed(2));
 				});
 			}

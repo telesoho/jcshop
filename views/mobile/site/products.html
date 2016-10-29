@@ -153,8 +153,8 @@
     </section>
     <section>
     	<div class="footerBox">
-    		<div><a href="#select_product">加入购物车</a></div>
-    		<div>立即购买</div>
+    		<div><a href="#select_product" id="joinButton">加入购物车</a></div>
+    		<div><a href="#select_product" id="buyBottom">立即购买</a></div>
     	</div>
     </section>
     <section>
@@ -180,31 +180,10 @@
 	<section>
     	<!--服务说明弹出框加入购物车-->
     	<div id="select_product" class="mui-popover mui-popover-action mui-popover-bottom">
-			<div class="select_box">
-				<div class="select_top">
-					<div class="select_photo"><img src="/views/mobile/skin/default/image/jmj/img/1.png"/></div>
-					<div class="select_top_right">
-						<div class="sel_title">
-							<a href="#">商品名称商品名称商品名称</a>
-							<span>194.3</span>
-						</div>
-						<a href="#select_product" class="a_da"><span class="mui-icon mui-icon-closeempty"></span></a>
-					</div>
-				</div>
-				<div class="select_center">
-					<h3 class="select_h3">选择颜色<h3>
-					<div class="select_center_a"><a href="#">红色</a><a href="#" class="background_pink">红色</a><a href="#">红色</a><a href="#" class="no_margin">红色</a></div>
-				</div>
-				<div class="select_center">
-					<h3 class="select_h3">选择颜色<h3>
-					<div class="select_center_a"><a href="#">红色</a><a href="#" class="background_pink">红色</a><a href="#">红色</a><a href="#" class="no_margin">红色</a></div>
-				</div>
-				<div class="select_center">
-					<h3 class="select_h3">数量<h3>
-					<div class="select_center_a"><span>-</span><input type="text" value="1"></input><span>+</span></div>
-				</div>
-				<button class="select_btn">确定</button>
-			</div>
+
+		</div>
+		<div id="buyNow_product" class="mui-popover mui-popover-action mui-popover-bottom">
+
 		</div>
     </section>
 	<!--轮播图模板引擎-->
@@ -277,16 +256,67 @@
 			<%}%>
 		<%}%>
 	</script>
+	<!--加入购物车模板引擎-->
+	<script id="joinCarTemplate" type="text/html">
+		<div class="select_box">
+			<div class="select_top">
+				<div class="select_photo"><img src="<%=img %>"/></div>
+				<div class="select_top_right">
+					<div class="sel_title">
+						<a href="#"><%=name %></a>
+						<span><%=sell_price %></span>
+					</div>
+					<a href="#select_product" class="a_da"><span class="mui-icon mui-icon-closeempty"></span></a>
+				</div>
+			</div>
+			<% var spec =JSONarray(spec_array) %>
+			<% for(var i=0; i<spec.length; i++){%>
+			<div class="select_center">
+				<h3 class="select_h3">选择<%=spec[i].name %><h3>
+					<div class="select_center_a">
+						<% var size =JSONsplit(spec[i].value) %>
+						<% for(var j=0; j<size.length; j++){%>
+						<a href="#" specName="<%=spec[i].name %>" specId="<%=spec[i].id %>" specData="<%=size[j] %>"><%=size[j] %></a>
+						<%}%>
+					</div>
+			</div>
+			<%}%>
+			<div class="select_center">
+				<h3 class="select_h3">数量<h3>
+					<div class="select_center_a">
+						<span id="buyReduceButton">-</span><input type="text" value="1" id="buyNums"><span id="buyAddButton">+</span>
+					</div>
+			</div>
+			<button class="select_btn hide"  id="joinCarButton">确定</button>
+			<button class="select_btn hide"  id="buyNowButton">去付款</button>
+		</div>
+	</script>
+	<script src="/views/mobile/javascript/jquery.min.js"></script>
 	<script src="/views/mobile/javascript/template-native.js"></script>
     <script src="/views/mobile/javascript/mui.js"></script>
+	<script src="/views/mobile/javascript/products.js"></script>
     <script type="text/javascript" charset="utf-8">
+		//banner图轮播
+		window.onload=function(){
+			var productInstance = new productClass("{$id}","{$this->user['user_id']}","{$promo}","{$active_id}");
+			var carousel  = mui("#carousel");
+			carousel.slider({
+				interval: 1000
+			});
+			mui('body').on("tap","#joinButton",function(){
+				$("#joinCarButton").show();
+				$("#buyNowButton").hide();
+			})
+			mui('body').on("tap","#buyBottom",function(){
+				$("#joinCarButton").hide();
+				$("#buyNowButton").show();
+			})
+		}
 		//	接收页面传过来的状态值
 		var Request = new Object();
 		Request = GetRequest();
 		var statusOrder=Request["id"];
 		getProductDetail(statusOrder);
-
-
 		function getProductDetail(obj){
 			var product_detail=obj;
 			mui.ajax('index.php?controller=apic&action=products_details',{
@@ -303,7 +333,10 @@
 					document.getElementById('goodsContent').innerHTML=data.content;
 					var html3=template('evaluate',data);
 					document.getElementById('evaluateBox').innerHTML=html3;
-
+					var html4=template('joinCarTemplate',data);
+					document.getElementById('select_product').innerHTML=html4;
+//					var array=Object.keys(data.spec_array);
+//					console.log(array);
 				},
 				error:function(xhr,type,errorThrown){
 					//异常处理；
@@ -311,13 +344,25 @@
 				}
 			});
 		}
-		//banner图轮播
-		window.onload=function(){
-			var carousel  = mui("#carousel");
-			carousel.slider({
-				interval: 1000
-			});
-		}
+		//jsom解析模板引擎
+		template.helper('JSONstringify', function(obj){
+			return JSON.stringify(obj);
+		});
+		template.helper('JSONparse', function(obj){
+			return JSON.parse(obj);
+		});
+		template.helper('JSONarray', function(obj){
+			var arr=[];
+			for(var i in obj){
+				arr.push(obj[i])
+			}
+			return arr;
+		});
+		template.helper('JSONsplit', function(obj){
+			var arr=[];
+			arr=obj.split(',');
+			return arr;
+		});
 		//	获取url传递过来的参数
 		function GetRequest() {
 			var url = location.search; //获取url中"?"符后的字串

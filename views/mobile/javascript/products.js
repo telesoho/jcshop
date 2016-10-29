@@ -15,7 +15,6 @@ function productClass(goods_id,user_id,promo,active_id)
 
 	this.promo    = promo;    //活动类型
 	this.active_id= active_id;//活动ID
-
 	/**
 	 * 获取评论数据
 	 * @page 分页数
@@ -240,7 +239,7 @@ function productClass(goods_id,user_id,promo,active_id)
 	//检查选择规格是否完全
 	this.checkSpecSelected = function()
 	{
-		if(_self.specCount === $('[specId].current').length)
+		if(_self.specCount === $('[specId].background_pink').length)
 		{
 			return true;
 		}
@@ -266,15 +265,15 @@ function productClass(goods_id,user_id,promo,active_id)
 		$('[specId][specData]').bind('click',function()
 		{
 			//设置选中状态
-			$("[specId='"+$(this).attr('specId')+"']").removeClass('current');
-			$(this).addClass('current');
+			$("[specId='"+$(this).attr('specId')+"']").removeClass('background_pink');
+			$(this).addClass('background_pink');
 
 			//检查是否选择完成
 			if(_self.checkSpecSelected() == true)
 			{
 				//拼接选中的规格数据
 				var specJSON = [];
-				$('[specId].current').each(function()
+				$('[specId].background_pink').each(function()
 				{
 					specJSON.push({
 						"id":$(this).attr('specId'),
@@ -283,7 +282,6 @@ function productClass(goods_id,user_id,promo,active_id)
 						"name":$(this).attr('specName')
 					});
 				});
-
 				//获取货品数据并进行渲染
 				$.getJSON(creatUrl("site/getProduct"),{"goods_id":_self.goods_id,"specJSON":specJSON,"random":Math.random},function(json){
 					if(json.flag == 'success')
@@ -380,8 +378,8 @@ function productClass(goods_id,user_id,promo,active_id)
 				{
 					$('[name="mycart_count"]').text(json.count);
 					$('[name="mycart_sum"]').text(json.sum);
-
-					tips("目前选购商品共"+json.count+"件，合计：￥"+json.sum);
+					mui('#select_product').popover('toggle');
+					alert("加入购物车成功");
 				});
 			}
 			else
