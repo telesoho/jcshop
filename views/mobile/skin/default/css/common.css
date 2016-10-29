@@ -1,33 +1,55 @@
 @font-face {
-  font-family: 'AdobeHeitiStd-Regular';
-  src:url('../font/AdobeHeitiStd-Regular.otf') format('woff'); /* chrome、firefox */
+  font-family: 'ArialUnicodeMS';
+  src:url('../font/arialunicodems.ttf') format('truetype'); /* chrome、firefox */
 }
 @font-face {
   font-family: 'HelveticaNeueLt';
   src:url('../font/HelveticaNeueLt.ttf')  format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+}
+@font-face {
+  font-family: 'Impact';
+  src:url('../font/Impact.TTF')  format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+}
+@font-face {
+  font-family: 'WickedMouseDemo';
+  src:url('../font/WickedMouseDemo.otf')  format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+}
+@font-face {
+  font-family: 'petangueDEMO';
+  src:url('../font/petangueDEMO.otf')  format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
 }
 html, body, span, object,li,ul,img iframe, h1, h2, h3, h4, h5, h6, p, pre, a, em, img, strong, sub, sup, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header,  menu, nav, output, ruby, section, summary, time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
   outline: none;
-  font-family: 'AdobeHeitiStd-Regular','HelveticaNeueLt' ;
+  font-family: 'ArialUnicodeMS','HelveticaNeueLt' ;
   color: #000000;
+  -webkit-box-sizing:border-box;
 }
 html{font-size:13.35vw;
       height: 100%;
 }
 body{
   font-size:0.24rem;
+  width:100%;
 }
 .mui-content{
 	width:100% !important;
 	}
 #pullrefresh{
-	padding-bottom: 0.4rem;
+	padding-bottom: 1rem;
 }
 .mui-active{
 color:#ef4145 !important;}
+.flexbox{
+  display:flex;
+}
+.box{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
 *{margin:0;padding:0;}
 /*页面加载动画*/
 #loading {
@@ -154,24 +176,59 @@ color:#ef4145 !important;}
   background-color: #ccc;
   transform:scaleY(0.3);
 }
-.line{position:relative;}
-.line:after{
-  width:200%;
-  height:200%;
-  position:absolute;
-  top:0;
-  left:0;
-  z-index:0;
-  content:"";
-  -webkit-transform:scale(0.5);
-  -webkit-transform-origin:0 0;
-  transform:scale(0.5);
-  transform-origin:0 0;
-  border:1px solid #ccc;
-}
 .hide{
   display:none;
 }
 .show{
   display:block;
+}
+/*图标大小设定*/
+.img-hot{
+  width:0.28rem;
+}
+.img-share{
+  width:0.34rem;
+}
+.img-like{
+  width:0.39rem;
+}
+.img-paper{
+  width:0.35rem;
+}
+.img-pan1{
+  width:0.56rem;
+}
+.img-pan2{
+  width:0.37rem;
+}
+.img-vedio{
+  width:0.36rem;
+}
+.img-te{
+  width:1.17rem;
+}
+.img-ren{
+  width:1.17rem;
+}
+.img-dong{
+  width:1.8rem;
+}
+.img-address{
+  width:0.19rem;
+}
+.img-read{
+  width:0.35rem;
+  margin-right:0.19rem;
+}
+.img-click{
+  width:1.02rem;
+}
+.left-icon{
+  width:0.23rem;
+}
+.right-icon{
+  width:0.23rem;
+}
+.img-rmb{
+  width:1.47rem;
 }

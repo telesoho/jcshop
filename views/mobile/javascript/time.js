@@ -2,7 +2,7 @@
         function timer(eleId){  
             var element=document.getElementById(eleId);  
             if(element){  
-                endTimer=element.getAttribute('data-timer');  
+                endTimer=element.getAttribute('data_timer');
                 var endTime=new Date(parseInt(endTimer.substr(0,4)),parseInt(endTimer.substr(4,2)),parseInt(endTimer.substr(6,2)),parseInt(endTimer.substr(8,2)),parseInt(endTimer.substr(10,2)),parseInt(endTimer.substr(12,2)));  
                 var endTimeMonth=endTime.getMonth()-1;  
                 endTime.setMonth(endTimeMonth);  
@@ -21,9 +21,9 @@
                     document.getElementById("timer_s").innerHTML=ss;  
                     setTimeout(function(){timer(eleId);},1000);  
                 }else{  
-                    document.getElementById("timer_h").innerHTML=0;  
-                    document.getElementById("timer_m").innerHTML=0;  
-                    document.getElementById("timer_s").innerHTML=0;  
+                    document.getElementById("timer_h").innerHTML='00';
+                    document.getElementById("timer_m").innerHTML='00';
+                    document.getElementById("timer_s").innerHTML='00';
                 }  
             }  
         }  

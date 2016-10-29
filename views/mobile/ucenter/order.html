@@ -8,10 +8,7 @@
 	<title>九猫首页</title>
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/shopcar.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
 </head>
 <body>
 <div id="loading">
@@ -37,40 +34,40 @@
 	</div>
 </div>
 <!--loading页结束-->
-<header class="mui-bar mui-bar-nav">
-	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-	<h1 class="mui-title">订单一览</h1>
-</header>
 <!--订单详情页面-->
-<div class="mui-content" style="margin-top:51px">
-	<div id="slider" class="mui-slider mui-fullscreen">
+<div class="mui-content">
+	<div id="slider" class="mui-slider mui-fullscreen" style="background:#fff">
 		<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 			<div class="mui-scroll">
-				<a class="mui-control-item  mui-control-item0 mui-active" href="#itemmobile0">
+				<a class="order-control-item mui-control-item  mui-control-item0 mui-active" href="#itemmobile0">
 					全部订单
+					<span></span>
 				</a>
-				<a class="mui-control-item mui-control-item1" href="#itemmobile1">
+				<a class="order-control-item mui-control-item mui-control-item1" href="#itemmobile1">
 					待付款
+					<span></span>
 				</a>
-				<a class="mui-control-item mui-control-item2" href="#itemmobile2">
+				<a class="order-control-item mui-control-item mui-control-item2" href="#itemmobile2">
 					待发货
+					<span></span>
 				</a>
-				<a class="mui-control-item mui-control-item3" href="#itemmobile3">
+				<a class="order-control-item mui-control-item mui-control-item3" href="#itemmobile3">
 					待收货
+					<span></span>
 				</a>
-				<a class="mui-control-item mui-control-item4" href="#itemmobile4">
+				<a class="order-control-item mui-control-item mui-control-item4" href="#itemmobile4">
 					已完成订单
+					<span></span>
 				</a>
 			</div>
 		</div>
 		<div class="mui-slider-group">
 			<div id="itemmobile0" class="mui-slider-item mui-control-content mui-active">
-				<div id="scroll1" class="mui-scroll-wrapper">
+				<div id="scroll1" class="mui-scroll-wrapper" >
 					<div class="mui-scroll">
 						<div class="mui-table-view" id="main_panel0">
-						</div>
-						<div class="noOrder">
-							<img src="/views/mobile/skin/default/image/havenomore.png" alt="">
+							<div class="order_menu upline">
+							</div>
 						</div>
 					</div>
 				</div>
@@ -79,7 +76,8 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<div class="mui-table-view" id="main_panel1">
-
+							<div class="order_menu upline">
+							</div>
 						</div>
 					</div>
 				</div>
@@ -88,6 +86,8 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<div class="mui-table-view" id="main_panel2">
+							<div class="order_menu upline">
+							</div>
 						</div>
 					</div>
 				</div>
@@ -96,7 +96,8 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<div class="mui-table-view" id="main_panel3">
-
+							<div class="order_menu upline">
+							</div>
 						</div>
 					</div>
 				</div>
@@ -105,13 +106,7 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<div class="mui-table-view" id="main_panel4">
-							<!--<div class="mui-table-view-cell">-->
-							<!--</div>-->
-						</div>
-						<div class="haveNoOrder">
-							<div>
-								<img src="/views/mobile/skin/default/image/bolo_none.jpg" alt="">
-								<div>没有已完成订单</div>
+							<div class="order_menu upline">
 							</div>
 						</div>
 					</div>
@@ -120,26 +115,86 @@
 		</div>
 	</div>
 </div>
-<script id="order-detail" type="text/html">
+<script id="orderSum" type="text/html">
+	<%if(state.length==0){%>
+		<div class="logoImg">
+			<img src="/views/mobile/skin/default/image/jmj/icon/cat.png" style="width:1.98rem;height:1.98rem" alt="" />
+		</div>
+		<div class="load_text">
+			<span>~</span>
+			<span>暂时还没有订单哦</span>
+			<span>~</span>
+		</div>
+	<%}else{%>
+	<!--存在该订单详情-->
 	<% for(var i=0; i<state.length; i++){%>
 	<% var order =state[i] %>
-	<div class="mui-table-view-cell order-menu">
-		<a href="{url:/ucenter/order_detailw}" class="orderToDetaile">
-			<div class="order-top">
-				<span class="top1">订单编号：<%=order.order_no%></span>
-				<span class="mui-pull-right Qorder"><%=order.orderStatusText%></span>
-			</div>
-			<div class="order-img">
-				<% for(var j=0; j<order.goodslist.length; j++){%>
-				<img src="<%=order.goodslist[j].img%>" alt="">
-				<%}%>
-			</div>
-		</a>
-		<div class="order-bottom">
-			<span>订单金额：<span style="color:#e53e42"><%=order.order_amount%>元</span></span>
-			<span class="mui-pull-right orderToDo"><%=order.text%></span>
+	<div class="order_menu_list">
+		<div class="box">
+			<div class="orderNo">订单编号：<%=order.order_no%></div>
+			<div class="orderstate"><%=order.orderStatusText%></div>
 		</div>
+		<!--展示商品状态-->
+		<!--展示第1件商品-->
+		<a href="{url:/ucenter/order_detail/id/<%=order.id%>}" class="toOrderDetail">
+		<%if(order.goodslist){%>
+		<div class="ware_item box">
+			<div class="img">
+				<img src="<%=order.goodslist[0].img%>" alt="" width="100%" />
+			</div>
+			<div class="content">
+				<div class="box">
+					<div class="name"><%=order.goodslist[0].goods_array.name%></div>
+					<div class="price">￥ <%=order.goodslist[0].goods_price%></div>
+				</div>
+				<div class="num mui-pull-right">x <%=order.goodslist[0].goods_nums%></div>
+			</div>
+		</div>
+		<!--展示剩余商品-->
+		<div class="last_ware">
+			<% for(var j=1; j<order.goodslist.length; j++){%>
+			<% var goodlist =order.goodslist[j] %>
+			<div class="ware_item box">
+				<div class="img">
+					<img src="<%=goodlist.img%>" alt="" width="100%" />
+				</div>
+				<div class="content">
+					<div class="box">
+						<div class="name"><%=goodlist.goods_array.name%></div>
+						<div class="price">￥ <%=goodlist.goods_price%></div>
+					</div>
+					<div class="num mui-pull-right">x <%=goodlist.goods_nums%></div>
+				</div>
+			</div>
+			<%}%>
+		</div>
+		</a>
+		<div class="total">
+			共计<%=order.goodslist.length%>件商品  合计 <%=order.order_amount%>（含运费10元）
+		</div>
+		<%}%>
+		<!--不同的按钮状态-->
+		<%if(order.orderStatusVal==5){%>
+		<div class="action upline">
+			<a href="#" class="button1 delOrder">删除订单</a>
+			<a href="#" class="button2 evaluate">评价</a>
+		</div>
+		<%}%>
+		<%if(order.orderStatusVal==2){%>
+		<div class="action upline">
+			<a href="#" class="button1 delOrder">删除订单</a>
+			<a href="#" class="button2 evaluate">去付款</a>
+		</div>
+		<%}%>
+		<%if(order.orderStatusVal==3){%>
+		<div class="action upline">
+			<a href="#" class="button1 delOrder">查看物流</a>
+			<a href="#" class="button2 evaluate">确认收货</a>
+		</div>
+		<%}%>
 	</div>
+	<%}%>
+	<!--存在商品结束-->
 	<%}%>
 </script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
@@ -151,6 +206,10 @@
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
 	})
+	mui('body').on('tap','.toOrderDetail',function(){
+		document.location.href=this.href;
+	});
+
 //	接收页面传过来的状态值
 	var Request = new Object();
 	Request = GetRequest();
@@ -158,8 +217,6 @@
 //	模拟高亮画面
 	$('.mui-control-item').removeClass('mui-active')
 	$('.mui-control-item'+statusOrder).addClass('mui-active');
-	$('.mui-slider-item').removeClass('mui-active')
-	$('#itemmobile'+statusOrder).addClass('mui-active');
 //	ajax 请求
 	mui.ajax('index.php?controller=apic&action=order_list',{
 		dataType:'json',//服务器返回json格式数据
@@ -170,7 +227,7 @@
 			for(var i=0;i<5;i++){
 				 dat[i]={};
 				dat[i]['state']=data['state'+i];
-				$('#main_panel'+i).html(template('order-detail', dat[i]));
+				$('#main_panel'+i).append(template('orderSum', dat[i]));
 			}
 		},
 		error:function(xhr,type,errorThrown){
@@ -184,9 +241,7 @@
 	mui('body').on('tap','.orderToDetaile',function(){
 		document.location.href=this.href;
 	});
-	mui('body').on('tap','.orderToDo',function(){
-		alert("奔跑吧，少年")
-	});
+
 
 	(function($) {
 		var pageNum={
@@ -218,11 +273,10 @@
 					up: {
 						callback: function() {
 							var self = this;
-							setTimeout(function(){
-								var div = self.element.querySelector('.mui-table-view');
-								var num=++pageNum['pageNum'+index];
-								self.endPullUpToRefresh();
-							}, 1000);
+							var div = self.element.querySelector('.mui-table-view');
+							var num=++pageNum['pageNum'+index];
+							 pullRefreshOrder(num,div)
+							self.endPullUpToRefresh();
 						}
 					}
 				});
@@ -260,6 +314,13 @@
 			}
 		}
 		return theRequest;
+	}
+//	下拉刷新加载项目
+	function pullRefreshOrder(num,div){
+
+
+	}
+	function showTab(){
 	}
 </script>
 </body>

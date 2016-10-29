@@ -1,256 +1,337 @@
-<script src="{theme:javascript/products.js}"></script>
-<script src="{theme:javascript/jquery.slider.js}"></script>
-<section class="goods_photo">
-	<ul>
-		{foreach:items=$photo}
-		<li>
-			<img src="{url:/pic/thumb/img/$item[img]/w/350/h/350}">
-		</li>
-		{/foreach}
-	</ul>
-</section>
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>商品详情</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/products.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css" />
+	<style>
+		#goodsContent img{
+			width:100%;
+			height:auto;
+		}
+	</style>
+</head>
+<body>
+    <!--<header>
+        <span class="mui-icon mui-icon-arrowleft"></span>
+        商品详情  
+    </header>-->
+    <section>
+        <!--轮播开始-->
+        <div id="carousel" class="mui-slider">
 
-<section class="goods_info">
-	<ul>
-		<li class="goods_name">
-			{$name}
-		</li>
-		<!--抢购活动,引入 "_products_time"模板-->
-		{if:$promo == 'time' && isset($time)}
-		{include:_products_time}
-		{/if}
+        </div>
+    </section>
+    <section id="goods_detaile">
 
-		<!--团购活动,引入 "_products_groupon"模板-->
-		{if:$promo == 'groupon' && isset($groupon)}
-		{include:_products_groupon}
-		{/if}
-		{if:$promo == ''}
-			{if:$group_price}
-			<!--当前用户有会员价-->
-			<li>
-				会员价：<em class="price">￥<span id="data_groupPrice">{$group_price}</span></em>　
-				<del class="old_price">￥<span id="data_sellPrice">{$sell_price}</span></del>
-			</li>
+    </section>
+    <section>
+        <div class="postMethod">
+        	<a href="#serviceDescription"> 
+	            <ul>
+	                <li><img src="/views/mobile/skin/default/image/jmj/img/plane_icon.png"/>日本直邮</li>
+	                <li><img src="/views/mobile/skin/default/image/jmj/img/man_icon.png"/>满188包邮</li>
+	                <li><span class="mui-icon mui-icon-arrowright"></span></li>
+	            </ul>
+	        </a>
+        </div>
+    </section>
+    <section>
+        <div class="relatedContent">
+            <p class="title">相关内容</p> 
+            <div class="contentInfo">
+                <div class="info01"><a href="#"><img src="/views/mobile/skin/default/image/jmj/img/vedioImg.png"/></a></div> 
+                <div class="info02">
+                	<a href="#">
+	                    <p>精彩回放</p>
+	                    <p>视频名称视频名称视频名称</p>
+	                    <p><img src="/views/mobile/skin/default/image/jmj/img/eye_icon.png"/>1.53万次</p>
+	                </a>
+                </div>   
+            </div>  
+        </div>
+    </section>
+    <section id="evaluateBox">
 
-			{else:}
-			<!--当前用户普通价格-->
-			<li>
-				销售价：<em class="price">￥<span id="data_sellPrice">{$sell_price}</span></em>
-			</li>
-			{/if}
-		{/if}
-		<li>
-			商品编号：<span class="number" id="data_goodsNo">{echo:$goods_no?$goods_no:$id}</span>
-		</li>
-		<li>
-			库存：<span class="number" id="data_storeNums">{$store_nums}</span>
-		</li>
-		<li class="area_li">
-			至
-			<a class="sel_area" href="javascript:;" name="localArea">所在地区</a>：
-			<span id="deliveInfo"></span>
-			<div class="area_box none">
-				<ul>
-					<li><a data-code="1" href="#J_PostageTableCont"><strong>全部</strong></a></li>
-					{foreach:items=Api::run('getAreasListTop')}
-					<li><a href="javascript:$('.area_box').hide();" name="areaSelectButton" value="{$item['area_id']}">{$item['area_name']}</a></li>
-					{/foreach}
-				</ul>
-			</div>
-		</li>
-		<li>
-			商品重量：<span class="number">{$weight}g</span>
-		</li>
-		{if:isset($seller)}
-		{set:plugin::trigger("onServiceButton",$seller['id'])}
-		<li>
-			商家名称：<strong class="seller_name">{$seller['true_name']}</strong>
-		</li>
-		<li>
-			商家所在地：<span class="seller_area">{echo:join(' ',area::name($seller['province'],$seller['city'],$seller['area']))}</span>
-		</li>
-		<li>
-			联系客服：<a class="seller_tel" href="tel:{$seller['phone']}">{$seller['phone']}</a>
-		</li>
-		{/if}
-		<li>
-			商品评价：<span class="number">{$comments} 次</span>
-		</li>
-		<li>
-			商品销量：<span class="number">{$sale} 件</span>
-		</li>
-		{if:$this->user}
-		<li>
-			收藏商品：<span class="goods_favorite" onclick="favorite_add_ajax({$id},this);">点击收藏</span>
-		</li>
-		{/if}
-		<!-- 如果商品数量小于0 -->
-		{if:$store_nums <= 0}
-		<li>该商品已售完，不能购买，您可以看看其它商品！</li>
-		<!-- 商品数量大于0的正常情况 -->
-		{else:}
-			<!-- 如果商品有自定义参数 -->
-			{if:$spec_array}
-			{foreach:items=JSON::decode($spec_array)}
-			<li>
-				<dl class="goods_tags" name="specCols">
-					<dt>{$item['name']}：</dt>
-					<dd>
-						{set:$specVal=explode(',',trim($item['value'],','))}
-						{foreach:items=$specVal item=$spec_value}
-						{if:$item['type'] == 1}
-						<span specName="{$item['name']}" specId="{$item['id']}" specData="{$spec_value}">
-							{$spec_value}
-						</span>
-						{else:}
-						<span class="img_tags" specName="{$item['name']}" specId="{$item['id']}" specData="{$spec_value}">
-							<img src="{webroot:$spec_value}">
-						</span>
-						{/if}
-						{/foreach}
-					</dd>
-				</dl>
-			</li>
-			{/foreach}
-			{/if}
-			<!-- 购买数量调整 -->
-			<li>
-				<div class="goods_num_adjust">
-					<span id="buyReduceButton">-</span>
-					<input type='text' id="buyNums" onblur="checkBuyNums();" value="1">
-					<span id="buyAddButton">+</span>
+    </section>
+    <section>
+    	<div class="graphicDetailsBox">
+    		<section>
+	    		<div class="title01">
+	    			商品图文详情
+	    		</div>
+				<div id="goodsContent">
+
 				</div>
-			</li>
-		{/if}
-	</ul>
-	<!-- <a class="read_more" href="{url:/site/pro_detail/id/$id}">查看商品详情</a> -->
-</section>
-<section class="pro_tab">
-	<ul>
-		<li class="on">商品详情</li>
-		<li>商品评论</li>
-		<li>商品咨询</li>
-	</ul>
-</section>
-<section class="pro_con">
-	<div class="con">
-		{if:isset($content) && $content}
-			<article class="article_detail">{$content}</article>
-		{/if}
-	</div>
-	<div class="con none">
-		<div id='commentBox'></div>
-		<script type='text/html' id='commentRowTemplate'>
-		<div class="commet">
-			<div class="user">
-				<img src="{webroot:<%=head_ico%>}" onerror="this.src='{skin:image/user_ico.jpg}'" />
+	    		<!--<div>-->
+	    			<!--<p class="title02">商品描述</p>-->
+	    			<!--<p class="goodDetail">商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述商品描述</p>-->
+	    		<!--</div>-->
+	    		<!--<div>-->
+	    			<!--<p class="title02">图片描述</p>-->
+	    			<!--<img class="goodImg" src="/views/mobile/skin/default/image/jmj/img/good01.png"/>-->
+	    			<!--<img class="goodImg" src="/views/mobile/skin/default/image/jmj/img/good02.png"/>-->
+	    		<!--</div>-->
+	    	</section>
+	    	<section>
+	    		<div class="title01">
+	    			品牌介绍
+	    			<div><a href="#">查看<span>10</span>件商品<span class="mui-icon mui-icon-arrowright"></span></a></div>
+	    		</div>
+	    		<div class="brand">
+	    			<div class="brandBox">
+		    			<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/brand01.png"/></a>
+		    		</div>
+		    		<div class="brandDetail">
+		    			<a href="#">
+			    			<p>资生堂</p>
+			    			<p>品牌简单介绍</p>
+			    	   </a>
+		    		</div>
+		    		<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					    <div class="goodsList mui-scroll">
+					        <div class="mui-control-item">
+					        	<a href="#">
+						            <img src="/views/mobile/skin/default/image/jmj/img/1.png"/>
+				    				<p>商品名称商品名称</p>
+				    				<p>¥ 423.40</p>
+				    			</a>
+					        </div>
+					        <div class="mui-control-item">
+					            <a href="#">
+						            <img src="/views/mobile/skin/default/image/jmj/img/1.png"/>
+				    				<p>商品名称商品名称</p>
+				    				<p>¥ 423.40</p>
+				    			</a>
+					        </div>
+					        <div class="mui-control-item">
+					        	<a href="#">
+						            <img src="/views/mobile/skin/default/image/jmj/img/1.png"/>
+				    				<p>商品名称商品名称</p>
+				    				<p>¥ 423.40</p>
+				    			</a>
+					        </div>
+					        <div class="mui-control-item">
+					        	<a href="#">
+						            <img src="/views/mobile/skin/default/image/jmj/img/1.png"/>
+				    				<p>商品名称商品名称</p>
+				    				<p>¥ 423.40</p>
+				    			</a>
+					        </div>
+					    </div>
+					</div>
+	    		</div>	    		
+	    	</section>
+    	</div>
+    </section>
+    <section>
+    	<div class="servicePromise">
+    		<p class="title01">服务承诺</p>
+    		<ul>
+    		    <li>
+    		    	<img src="/views/mobile/skin/default/image/jmj/img/Zheng_icon.png"/>
+    		    	<p>正品</p>
+    		    </li>	
+    		    <li>
+    		    	<img src="/views/mobile/skin/default/image/jmj/img/price_icon.png"/>
+    		    	<p>同价</p>
+    		    </li>
+    		    <li>
+    		    	<img src="/views/mobile/skin/default/image/jmj/img/hegui_icon.png"/>
+    		    	<p>合规</p>
+    		    </li>
+    		</ul>
+    	</div>
+    </section>
+    <section>
+    	<div class="footerBox">
+    		<div><a href="#select_product">加入购物车</a></div>
+    		<div>立即购买</div>
+    	</div>
+    </section>
+    <section>
+    	<!--服务说明弹出框-->
+    	<div id="serviceDescription" class="mui-popover mui-popover-action mui-popover-bottom">
+			<div>服务说明<a href="#serviceDescription"><span class="mui-icon mui-icon-closeempty"></span></a></div>
+			<div class="descContent">
+				<p>
+					<img src="/views/mobile/skin/default/image/jmj/img/plane_icon.png"/>
+					<span>海外直邮</span>
+				</p>
+				<p>海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮</p>
 			</div>
-			<dl class="desc">
-				<%=contents%>
-			</dl>
+			<div class="descContent">
+				<p>
+					<img src="/views/mobile/skin/default/image/jmj/img/man_icon.png"/>
+					<span>新手满188包邮</span>
+				</p>
+				<p>新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮</p>
+			</div>
 		</div>
-		<%if(recontents){%>
-			<div class="recommet">
-				<div class="user"><img src="{skin:image/admin_ico.png}"></div>
-				<div class="desc"><%=recontents%></div>
+    </section>
+	<section>
+    	<!--服务说明弹出框加入购物车-->
+    	<div id="select_product" class="mui-popover mui-popover-action mui-popover-bottom">
+			<div class="select_box">
+				<div class="select_top">
+					<div class="select_photo"><img src="/views/mobile/skin/default/image/jmj/img/1.png"/></div>
+					<div class="select_top_right">
+						<div class="sel_title">
+							<a href="#">商品名称商品名称商品名称</a>
+							<span>194.3</span>
+						</div>
+						<a href="#select_product" class="a_da"><span class="mui-icon mui-icon-closeempty"></span></a>
+					</div>
+				</div>
+				<div class="select_center">
+					<h3 class="select_h3">选择颜色<h3>
+					<div class="select_center_a"><a href="#">红色</a><a href="#" class="background_pink">红色</a><a href="#">红色</a><a href="#" class="no_margin">红色</a></div>
+				</div>
+				<div class="select_center">
+					<h3 class="select_h3">选择颜色<h3>
+					<div class="select_center_a"><a href="#">红色</a><a href="#" class="background_pink">红色</a><a href="#">红色</a><a href="#" class="no_margin">红色</a></div>
+				</div>
+				<div class="select_center">
+					<h3 class="select_h3">数量<h3>
+					<div class="select_center_a"><span>-</span><input type="text" value="1"></input><span>+</span></div>
+				</div>
+				<button class="select_btn">确定</button>
 			</div>
+		</div>
+    </section>
+	<!--轮播图模板引擎-->
+	<script id="product_carousel" type="text/html">
+		<div class="mui-slider-group mui-slider-loop">
+			<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+			<div class="mui-slider-item mui-slider-item-duplicate">
+				<a href="#">
+					<img src="<%=photo[0].img %>">
+				</a>
+			</div>
+			<% for(var i=0; i<photo.length; i++){%>
+			<% var dat =photo[i] %>
+				<div class="mui-slider-item mui-active">
+					<a href="#">
+						<img src="<%=dat.img %>">
+					</a>
+				</div>
+			<%}%>
+			<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+			<div class="mui-slider-item mui-slider-item-duplicate">
+				<a href="#">
+					<img src="<%=photo[photo.length-1].img %>">
+				</a>
+			</div>
+		</div>
+		<div class="mui-slider-indicator">
+			<div class="mui-indicator mui-active"></div>
+			<% for(var i=1; i<photo.length; i++){%>
+			<div class="mui-indicator"></div>
+			<%}%>
+		</div>
+	</script>
+	<script id="product_goodsDetail" type="text/html">
+		<div class="goodsTitle">
+			<a href="#"><span><%=name %></span></a>
+			<div class="titleIcon">
+				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png"/></a>
+				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon02.png"/></a>
+			</div>
+		</div>
+		<div class="salePrice">
+			<span class="bargainPrice"><%=sell_price %></span>
+			<span>日本售价：</span><span><%=market_price %></span>
+		</div>
+	</script>
+	<script id="evaluate" type="text/html">
+		<%if(comments==0){%>
+		<%}else{%>
+		<div class="evaluateBox">
+			<div class="title01">
+				心得（<%=comments %>）
+				<div>
+					<a href="#">
+						<span>查看全部心得</span>
+						<span class="mui-icon mui-icon-arrowright"></span>
+					</a>
+				</div>
+			</div>
+			<% for(var i=0,m=comments_data.length;i<2,i<m; i++){%>
+			<% var dat =comments_data[i] %>
+			<div class="concreteContent">
+				<div>
+					<a href="#">
+						<p><%=dat.username %><span><%=dat.comment_time %></span></p>
+						<p><%=dat.contents %></p>
+					</a>
+				</div>
+			</div>
+			<%}%>
 		<%}%>
-		</script>
-	</div>
-	<div class="con none">
-		{if:$this->user}
-		<div class="question_btn">
-			<a href="{url:/site/consult/id/$id}">我要咨询</a>
-		</div>
-		{/if}
-		<div id='referBox'></div>
-		<!--购买咨询JS模板-->
-		<script type='text/html' id='referRowTemplate'>
-		<div class="commet">
-			<div class="user">
-				<img src="{webroot:<%=head_ico%>}" onerror="this.src='{skin:image/user_ico.jpg}'" />
-			</div>
-			<dl class="desc">
-				<%=question%>
-			</dl>
-		</div>
-		<%if(answer){%>
-			<div class="recommet">
-				<div class="user"><img src="{skin:image/admin_ico.png}"></div>
-				<div class="desc"><%=answer%></div>
-			</div>
-		<%}%>
-
-		</script>
-	</div>
-</section>
-<div class="btn_bottom_goods">
-	<ul class="btn_ico">
-		<li>
-			<a href="{url:/}">
-				<i class="icon-home"></i>
-				<span>首页</span>
-			</a>
-		</li>
-		<li>
-			<a href="{url:/simple/cart}">
-				<i class="icon-shopping-cart"></i>
-				<span>购物车</span>
-			</a>
-		</li>
-	</ul>
-	<div class="btn_tab">
-		<span id="buyNowButton" class="btn_tab_submit pink">立即购买</span>
-		<span id="joinCarButton" class="btn_tab_submit blue">加入购物车</span>
-	</div>
-</div>
+	</script>
+	<script src="/views/mobile/javascript/template-native.js"></script>
+    <script src="/views/mobile/javascript/mui.js"></script>
+    <script type="text/javascript" charset="utf-8">
+		//	接收页面传过来的状态值
+		var Request = new Object();
+		Request = GetRequest();
+		var statusOrder=Request["id"];
+		getProductDetail(statusOrder);
 
 
+		function getProductDetail(obj){
+			var product_detail=obj;
+			mui.ajax('index.php?controller=apic&action=products_details',{
+				data:{id:product_detail},
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				success:function(data){
+					//轮播图展示页面
+					var html=template('product_carousel',data);
+					document.getElementById('carousel').innerHTML=html;
+					var html2=template('product_goodsDetail',data);
+					document.getElementById('goods_detaile').innerHTML=html2;
+					document.getElementById('goodsContent').innerHTML=data.content;
+					var html3=template('evaluate',data);
+					document.getElementById('evaluateBox').innerHTML=html3;
 
-<script>
-$(function(){
-	// 设置焦点图
-    $(".goods_photo").MobileSlider({
-        width: 720,
-        height: 720
-    });
-    // 隐藏底部焦点图
-    hideNav();
-	//初始化商品详情对象
-	var productInstance = new productClass("{$id}","{$this->user['user_id']}","{$promo}","{$active_id}");
-
-	//城市地域选择按钮事件
-	$('.sel_area').focus(
-		function(){
-			$('.area_box').show();
+				},
+				error:function(xhr,type,errorThrown){
+					//异常处理；
+					console.log(type);
+				}
+			});
 		}
-	);
-	$(".article_detail").find('*').each(function(){
-		var t = $(this);
-		if (t.attr("style")){t.attr("style","")};
-		if (t.attr("width")){t.attr("width","")};
-		if (t.attr("height")){t.attr("height","")};
-	});
-	$(".pro_tab").on('click', 'li', function(){
-		var t = $(this),i = t.index();
-		t.addClass('on').siblings('li').removeClass('on');
-		$(".pro_con").children('.con').eq(i).removeClass('none').siblings('.con').addClass('none');
-		//滑动按钮绑定事件
-		switch(i)
-		{
-			case 1:
-			{
-				productInstance.comment_ajax();
-			}
-			break;
-
-			case 2:
-			{
-				productInstance.refer_ajax();
-			}
-			break;
-
+		//banner图轮播
+		window.onload=function(){
+			var carousel  = mui("#carousel");
+			carousel.slider({
+				interval: 1000
+			});
 		}
-	});
-})
-</script>
+		//	获取url传递过来的参数
+		function GetRequest() {
+			var url = location.search; //获取url中"?"符后的字串
+			var theRequest = new Object();
+			if (url.indexOf("?") != -1) {
+				var str = url.substr(1);
+				strs = str.split("&");
+				for(var i = 0; i < strs.length; i ++) {
+					theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+				}
+			}
+			return theRequest;
+		}
+
+	</script>
+</body>
+</html>

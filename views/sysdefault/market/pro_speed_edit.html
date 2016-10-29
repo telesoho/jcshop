@@ -7,6 +7,9 @@
 	<div class="content form_content">
 		<form action="{url:/market/pro_speed_edit_act}"  method="post" name='pro_edit'>
 			<input type='hidden' name='id' />
+			{if:$this->temp_ids}{foreach:$items=$this->temp_ids}
+			<input type='hidden' name='temp_ids[]' value="{$item}" />
+			{/foreach}{/if}
 			<table class="form_table">
 				<col width="150px" />
 				<col />
@@ -49,7 +52,7 @@
 							<col width="100px" />
 							<col width="200px" />
 							<col />
-							<input type='hidden' name='condition' />
+							<input type='hidden' name='condition[]' />
 							<thead>
 								<tr>
 									<th>图片</th>
@@ -62,7 +65,7 @@
 								<tr id='speed_goods' class='td_c'></tr>
 								<tr>
 									<td colspan='4'>
-										<button type='button' onclick="searchGoods('{url:/block/search_goods/type/radio}',searchGoodsCallback);" class='btn'><span>选择商品</span></button>
+										<button type='button' onclick="searchGoods('{url:/block/search_goods/type/checkbox}',searchGoodsCallback);" class='btn'><span>选择商品</span></button>
 										<label>* 设置要限时抢购的商品，仅能设置一种商品</label>
 									</td>
 								</tr>
@@ -70,6 +73,7 @@
 						</table>
 					</td>
 				</tr>
+
 				<tr>
 					<th>介绍：</th>
 					<td><textarea class='textarea' name='intro'>{$this->promotionRow['intro']}</textarea></td>
@@ -103,21 +107,47 @@
 	//关联商品回调处理函数
 	function relationCallBack(content)
 	{
-		if(content)
-		{
-			$('[name="condition"]').val(content['data']['id']);
+		if (content){
+
 			var imgUrl = "{webroot:@url@}";
 			imgUrl     = imgUrl.replace("@url@",content['data']['img']);
-
 			var html =   '<td><img src="'+imgUrl+'" title="'+content['data']['name']+'" style="max-width:140px;" /></td>'
 						+'<td>'+content['data']['name']+'</td>'
 						+'<td>'+content['data']['sell_price']+'</td>'
-						+'<td><input text="text" class="small" name="award_value" pattern="float" alt="请填写一个数字" />元 </td>';
+						+'<td><input text="text" class="small" name="award_value[]" pattern="float" alt="请填写一个数字" />元 </td>';
 
-			$('#speed_goods').html(html);
+			if ($('#speed_goods').html() == ''){
+				$('[name="condition[]"]').val(content['data']['id']);
+				$('#speed_goods').html(html);
+			} else {
+				$('#speed_goods').after("<tr class='td_c'><input type='hidden' name='condition[]' value='"+content['data']['id']+"' />"+html+"</tr>");
+			}
 		}
-	}
 
+	}
+	//关联商品回调处理函数
+	function relationCallBackNew(content)
+	{
+		if(content)
+		{
+			for (var i=0;i<content.length;i++){
+				var imgUrl = "{webroot:@url@}";
+				imgUrl     = imgUrl.replace("@url@",content[i]['data']['img']);
+				var html =   '<td><img src="'+imgUrl+'" title="'+content[i]['data']['name']+'" style="max-width:140px;" /></td>'
+							+'<td>'+content[i]['data']['name']+'</td>'
+							+'<td>'+content[i]['data']['sell_price']+'</td>'
+							+'<td><input text="text" class="small" name="award_value[]" pattern="float" alt="请填写一个数字" value="'+content[i]['data']['award_value']+'" />元 </td>';
+
+				if ($('#speed_goods').html() == ''){
+					$('[name="condition[]"]').val(content[i]['data']['id']);
+					$('#speed_goods').html(html);
+				} else {
+					$('#speed_goods').after("<tr class='td_c'><input type='hidden' name='condition[]' value='"+content[i]['data']['id']+"' />"+html+"</tr>");
+				}
+			}
+		}
+
+	}
 	//选择参与人群
 	function select_all()
 	{
@@ -143,9 +173,9 @@
 	}
 
 	//预定义商品绑定
-	relationCallBack({$this->promotionRow['goodsRow']});
+	relationCallBackNew({$this->promotionRow['goodsRow']});
 
 	//表单回填
 	var formObj = new Form('pro_edit');
-	formObj.init({echo:JSON::encode($this->promotionRow)});
+	formObj.init({echo:JSON::encode($this->promotionRow[0])});
 </script>

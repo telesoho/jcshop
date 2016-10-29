@@ -5,6 +5,14 @@
 		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
 		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
 	</div>
+	<div class="searchbar">
+		<form action="{url:/tools/article_list}" method="post" name="searchListForm">
+			<input class="small" name="article_title" type="text" value="<?php echo IFilter::act(IReq::get('article_title'),'string')?>">
+			<!--<input name="word" type="hidden" value="{$this->keyword}">-->
+			<!--<button class="submit" type="submit" onclick="return checkForm()"><span>查询</span></button>-->
+			<button class="btn" type="submit"><span class="sel">查  询</span></button>
+		</form>
+	</div>
 </div>
 <div class="content">
 	<form action="{url:/tools/article_del}" method="post" name="article">
@@ -35,10 +43,20 @@
 
 			<tbody>
 				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
-				{query: name=article as ar join=left join article_category as ac on ac.id eq ar.category_id order=ar.sort asc,ar.id desc page=$page fields=ar.id,ar.title,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ac.name}
+				<?php
+				$query = new IQuery("article as ar");
+				$query->join = "left join article_category as ac on ac.id = ar.category_id";
+				$where = IFilter::act(IReq::get('article_title'),'string');
+				if(!empty($where)){
+					$query->where = "ar.title like '%".$where."%'";
+				}
+				$query->order = "ar.sort asc,ar.id desc";
+				$query->fields = "ar.id,ar.title,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ac.name";
+				$items = $query->find();
+				foreach($items as $key => $item){?>
 				<tr>
 					<td><input type="checkbox" name="id[]" value="{$item['id']}" /></td>
-					<td><a target="_blank" href='{url:/site/article_detail/id/$item[id]}' title='查看'>{echo:Article::showTitle($item['title'],$item['color'],$item['style'])}</a></td>
+					<td><a href='{url:/tools/article_edit/id/$item[id]}'>{echo:Article::showTitle($item['title'],$item['color'],$item['style'])}</a></td>
 					<td>{$item['name']}</td>
 					<td>{$item['create_time']}</td>
 					<td>{echo:($item['visibility']==1) ? '是':'否'}</td>
@@ -50,7 +68,7 @@
 						<a href='javascript:void(0)' onclick="delModel({link:'{url:/tools/article_del/id/$item[id]}'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
 					</td>
 				</tr>
-				{/query}
+				<?php } ?>
 			</tbody>
 		</table>
 	</form>
