@@ -1248,3 +1248,182 @@ input[type='search']{
 	font-size:0.3rem;
 	color:#fff;
 }
+/*订单确认页面*/
+.defaultAddress{
+	margin-top:0.31rem;
+	height:1.57rem;
+	background:#fff;
+}
+.defaultAddress .name{
+	display: inline-block;
+	width:5rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.defaultAddress .name .text1{
+	font-size:0.28rem;
+	color:#bbbbbb;
+	padding:0.23rem 0 0 0.33rem;
+	display: inline-block;
+}
+.defaultAddress .name .text2{
+	font-size:0.28rem;
+	color:#3d4245;
+	width:3.5rem;
+}
+.defaultAddress .phone{
+	font-family:'HelveticaNeueLt';
+	font-size:0.3rem;
+	color:#3d4245;
+	margin:0.24rem 0.25rem 0 0;
+}
+.defaultAddress .addr .text1{
+	font-size:0.28rem;
+	color:#bbbbbb;
+	margin:0.38rem 0 0 0.33rem;
+}
+.defaultAddress .addr .text2{
+	width:5.1rem;
+	font-size:0.28rem;
+	color:#3d4245;
+	margin:0.38rem 0 0 0.23rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.defaultAddress .addr .text3 img{
+	width:0.15rem;
+	margin-top:0.43rem;
+}
+.orderBox{
+	margin-top:0.21rem;
+}
+.orderBox .orderNum{
+	font-size:0.28rem;
+	color:#3d4245;
+	height:0.7rem;
+	line-height:0.7rem;
+	background:#fff;
+	padding-left:0.32rem;
+}
+.orderBox .order_product .img img{
+	width:1.8rem;
+	margin:0.26rem;
+	height:1.8rem;
+}
+.orderBox .order_product .content .name{
+	width:4.6rem;
+	font-size:0.28rem;
+	color:#3d4245;
+	margin-top:0.4rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+}
+.orderBox .order_product .content .size{
+	font-size:0.26rem;
+	color:#bbbbbb;
+	margin-top:0.18rem;
+}
+.orderBox .order_product .content .price{
+	font-size:0.28rem;
+	color:#f3026a;
+	margin-top:0.4rem;
+}
+.orderBox .order_product .content .num{
+	font-size:0.28rem;
+	color:#bbbbbb;
+	margin:0.4rem 0 0 0.57rem;
+}
+.orderBox .distribution,.orderBox .orderTotal{
+	background:#fff;
+}
+.orderBox .distribution .title{
+	width:93%;
+	margin:0 auto;
+	height:1rem;
+	line-height:1rem;
+	border-bottom:1px solid #eee;
+}
+.orderBox .distribution .title div{
+	font-size:0.28rem;
+	color:#bbbbbb;
+}
+.orderBox .distribution .title .right{
+	color:#040404;
+}
+.orderBox .orderTotal .total{
+	width:93%;
+	margin:0 auto;
+	height:1rem;
+	line-height:1rem;
+}
+.orderBox .orderTotal .total .left{
+	font-size:0.28rem;
+	color:#bbbbbb;
+}
+.orderBox .orderTotal .total .right{
+	width:3.6rem;
+
+}
+.orderBox .orderTotal .total .right .text1{
+	font-size:0.28rem;
+	color:#040404;
+}
+.orderBox .orderTotal .total .right .text2{
+	font-size:0.28rem;
+	color:#040404;
+	margin-left:0.3rem;
+}
+.orderBox .orderTotal .total .right .text3{
+	font-family:"HelveticaNeueLt";
+	font-size:0.3rem;
+	color:#f3026a;
+}
+.totalButton{
+	width:100%;
+	height:1rem;
+	line-height:1rem;
+	position:fixed;
+	bottom:0;
+	left:0;
+}
+.totalButton .totalSumPrice{
+	width:50%;
+	background:#fff;
+	text-align: center;
+}
+.totalButton .totalSumPrice span{
+	font-size:0.28rem;
+	color:#3d4245;
+	margin-right:0.15rem;
+}
+.totalButton .totalSumPrice span:nth-child(2){
+	font-family:"HelveticaNeueLt";
+	font-size:0.3rem;
+	color:#f3026a;
+}
+.totalButton .toPayOrder{
+	width:50%;
+	background:#f3026a;
+	line-height:1rem;
+	text-align:center;
+	font-size:0.34rem;
+	color:#ffffff;
+}
+.order_addAddr{
+	display:flex;
+	align-items: center;
+	height:1.57rem;
+}
+.order_addAddr img{
+	margin-left:0.26rem;
+	width:0.8rem;
+}
+.order_addAddr .tex{
+	font-size: 0.3rem;
+	margin-left:0.2rem;
+	color:#bbbbbb;
+}

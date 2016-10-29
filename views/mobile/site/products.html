@@ -303,15 +303,15 @@
 			carousel.slider({
 				interval: 1000
 			});
-			mui('body').on("tap","#joinButton",function(){
-				$("#joinCarButton").show();
-				$("#buyNowButton").hide();
-			})
-			mui('body').on("tap","#buyBottom",function(){
-				$("#joinCarButton").hide();
-				$("#buyNowButton").show();
-			})
 		}
+		mui('body').on("tap","#joinButton",function(){
+			$("#joinCarButton").show();
+			$("#buyNowButton").hide();
+		})
+		mui('body').on("tap","#buyBottom",function(){
+			$("#joinCarButton").hide();
+			$("#buyNowButton").show();
+		})
 		//	接收页面传过来的状态值
 		var Request = new Object();
 		Request = GetRequest();
