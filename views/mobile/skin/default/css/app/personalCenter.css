@@ -56,5 +56,6 @@ ul,li{margin:0;padding:0;list-style: none;}
 .orderInfo p span{color:#bbb;font-size:0.26rem;display:inline-block;}
 .orderInfo p span:last-child{margin-left:0.4rem;}
 .buttonBox{background:#fff;margin-top:0.2rem;display:flex;flex-direction:row;justify-content: flex-end;padding:0.2rem 0;}
-.butt{width:20%;border:1px solid #3D4245;border-radius: 4px;margin:0 0.2rem;text-align:center;font-size:0.24rem;}
+.butt{width:20%;border:1px solid #3D4245;border-radius: 4px;margin:0 0.2rem;text-align:center;font-size:0.24rem;
+padding:0.1rem 0.2rem;}
 .buttonBox .butt:last-child{border-color: #f3026a;color:#f3026a;}
