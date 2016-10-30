@@ -135,10 +135,10 @@ class Apic extends IController
         //配送方式
         $data['delivery'] = Api::run('getDeliveryList');
         //付款方式
-//        $data['payment'] = Api::run('getPaymentList');
-//        foreach ($data['payment'] as $key=>$value){
-//            $data['payment'][$key]['paymentprice'] = CountSum::getGoodsPaymentPrice($value['id'],$data['sum']);
-//        }
+        $data['payment'] = Api::run('getPaymentList');
+        foreach ($data['payment'] as $key=>$value){
+            $data['payment'][$key]['paymentprice'] = CountSum::getGoodsPaymentPrice($value['id'],$data['sum']);
+        }
         //商品展示
         foreach ($data['goodsList'] as $key => $value){
             if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);

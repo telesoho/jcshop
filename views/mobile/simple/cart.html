@@ -73,7 +73,7 @@
 <!--</div>-->
 <footer>
 	<nav class="mui-bar mui-bar-tab">
-		<a id="defaultTab" class="mui-tab-item home" href="#">
+		<a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">
 			<span class="mui-icon nav-icon icon-home"></span>
 			<div class="mui-tab-label">首页</div>
 		</a>
@@ -166,6 +166,7 @@
 			window.location.href='/index.php?controller=simple&action=cart2';
 		})
 	})
+	mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
 	//定义template方法
 	template.helper('JSONstringify', function(obj){
 		return JSON.stringify(obj);
