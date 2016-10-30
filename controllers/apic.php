@@ -394,7 +394,8 @@ class Apic extends IController
             IError::show(403,'订单信息不存在');
         }
         $orderStatus = Order_Class::getOrderStatus($this->order_info);
-        $data = array('order_info'=>$order_info, 'orderStatus'=>$orderStatus,"order_step"=>Order_Class::orderStep($order_info));
+        $order_goods = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$order_info['order_id']));
+        $data = array('order_info'=>$order_info, 'orderStatus'=>$orderStatus,"order_step"=>Order_Class::orderStep($order_info), "order_goods"=>$order_goods);
         header("Content-type: application/json");
         echo json_encode($data, true);
         exit();
