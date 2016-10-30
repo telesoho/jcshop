@@ -19,43 +19,21 @@
 
 	    </div>
 	</section>
+    <section id="getAddress">
+
+    </section>
     <section>
-    	<div class="userInfo">
-    		<p><span>收货人：</span><span>小迷猫</span><span class="telNum">182 3994 2399</span></p>
-    		<p><span>收货地址：</span><span>浙江省杭州市滨江区泰林大厦6F</span></p>
+    	<div class="goodsInfo" id="order_goodlist">
     	</div>
     </section>
     <section>
-    	<div class="goodsInfo">
-    		<p>交易成功</p>
-    		<ul class="goodsList">
-    			<li><img src="/views/mobile/skin/default/image/jmj/img/4.png"/></li>
-    			<li class="goodsDesc"><p>商品名称</p><p>颜色：黑色</p></li>
-    			<li class="goodsPrice"><p>¥238.90</p><br/><br/><p>x1</p></li>
-    		</ul>
-    		<ul class="goodsList">
-    			<li><img src="/views/mobile/skin/default/image/jmj/img/4.png"/></li>
-    			<li class="goodsDesc"><p>商品名称</p><p>颜色：黑色</p></li>
-    			<li class="goodsPrice"><p>¥238.90</p><br/><br/><p>x1</p></li>
-    		</ul>
-    		<div class="showMore"><span>展示更多</span></div>
-    		<div class="priceBox">
-    			<p><span>合计</span><span>238.90(含运费10元)</span></p>
-    			<p><span>实付</span><span>¥238.90</span></p>
-    		</div>
+    	<div class="orderInfo" id="orderInfo">
+
     	</div>
     </section>
     <section>
-    	<div class="orderInfo">
-    		<p><span>订单编号</span><span>24895350030450600366 </span></p>    		
-    		<p><span>创建时间</span><span>2016-10-10 19:12:45</span></p>
-    		<p><span>结束时间</span><span>2016-10-16 10:06:32</span></p>
-    	</div>
-    </section>
-    <section>
-    	<div class="buttonBox">
-    		<div class="butt">删除订单</div>
-    	    <div class="butt">评价</div>
+    	<div class="buttonBox" id="buttonBox">
+
     	</div>
     </section>
 	<script id="order_detail_top_temp" type="text/html">
@@ -138,83 +116,49 @@
 
 	</script>
 	<script id="order_address_temp" type="text/html">
-		<%if(orderStatus==0){%>
-		<div class="orderDesc">待付款</div>
-		<ul class="orderStatus01">
-			<li>
-				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
-			</li>
-			<li>
-				<div class="outCircle"><div class="inCircle"></div></div>
-			</li>
-			<li>
-				<div class="outCircle"><div class="inCircle"></div></div>
-			</li>
-		</ul>
-		<ul class="orderStatus02">
-			<li class="statusActive">待付款</li>
-			<li>待发货</li>
-			<li >运输中</li>
+		<div class="userInfo">
+			<p><span>收货人：</span><span><%=order_info.accept_name%></span><span class="telNum"><%=order_info.mobile%></span></p>
+			<p><span>收货地址：</span><span><%=order_info.province_str%><%=order_info.city_str%><%=order_info.area_str%><%=order_info.address%></span></p>
+		</div>
+	</script>
+	<script id="order_goodlist_temp" type="text/html">
+		<p>  </p>
+		<% for(var i=0; i<order_goods.length; i++){%>
+		<% var goodlist =order_goods[i] %>
+		<ul class="goodsList">
+			<li><img src="<%=goodlist.img%>"/></li>
+			<% var size =JSONparse(goodlist.goods_array) %>
+			<li class="goodsDesc"><p><%=size.name%></p><p><%=size.value%></p></li>
+			<li class="goodsPrice"><p>¥<%=goodlist.goods_price%></p><br/><br/><p>x<%=goodlist.goods_nums%></p></li>
 		</ul>
 		<%}%>
-		<%if(orderStatus==1){%>
-		<div class="orderDesc">已付款未发货</div>
-		<ul class="orderStatus01">
-			<li>
-				<div class="outCircle"><div class="inCircle"></div></div>
-			</li>
-			<li>
-				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
-			</li>
-			<li>
-				<div class="outCircle"><div class="inCircle"></div></div>
-			</li>
-		</ul>
-		<ul class="orderStatus02">
-			<li>待付款</li>
-			<li class="statusActive">待发货</li>
-			<li>运输中</li>
-		</ul>
+		<div class="priceBox">
+			<p><span>合计</span><span><%=order_info.real_amount%>(含运费<%=order_info.real_freight%>元)</span></p>
+			<p><span>实付</span><span>¥<%=order_info.order_amount%></span></p>
+		</div>
+	</script>
+	<script id="order_info_temp" type="text/html">
+		<p><span>订单编号</span><span><%=order_info.order_no%> </span></p>
+		<p><span>创建时间</span><span><%=order_info.create_time%></span></p>
+		<%if(order_info.completion_time==null){%>
+		<p><span>结束时间</span><span>订单未结束</span></p>
+		<%}else{%>
+		<p><span>结束时间</span><span><%=order_info.completion_time%></span></p>
+		<%}%>
+	</script>
+	<script id="order_button_temp" type="text/html">
+		<%if(orderStatus==0){%>
+			<a href="#" class="butt">删除订单</a>
+			<a href="#" class="butt">去支付</a>
 		<%}%>
 		<%if(orderStatus==2){%>
-		<div class="orderDesc">已发货</div>
-		<ul class="orderStatus01">
-			<li>
-				<div class="outCircle"><div class="inCircle"></div></div>
-			</li>
-			<li>
-				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
-			</li>
-			<li>
-				<div class="outCircle"><div class="inCircle"></div></div>
-			</li>
-		</ul>
-		<ul class="orderStatus02">
-			<li>待发货</li>
-			<li class="statusActive">运输中</li>
-			<li>已签收</li>
-		</ul>
+			<a href="#" class="butt">查看物流</a>
+			<a href="#" class="butt">确认收货</a>
 		<%}%>
 		<%if(orderStatus==3){%>
-		<div class="orderDesc">交易成功</div>
-		<ul class="orderStatus01">
-			<li>
-				<div class="outCircle"><div class="inCircle"></div></div>
-			</li>
-			<li>
-				<div class="outCircle"><div class="inCircle"></div></div>
-			</li>
-			<li>
-				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
-			</li>
-		</ul>
-		<ul class="orderStatus02">
-			<li>已发货</li>
-			<li>运输中</li>
-			<li class="statusActive">已签收</li>
-		</ul>
+			<a href="#" class="butt">删除订单</a>
+			<a href="#" class="butt">评价</a>
 		<%}%>
-
 	</script>
 	<script src="/views/mobile/javascript/template-native.js"></script>
 	<script src="/views/mobile/javascript/jquery.min.js"></script>
@@ -232,12 +176,23 @@
 			success:function(data){
 				var html=template('order_detail_top_temp',data);
 				document.getElementById("order_detail_top").innerHTML=html;
+				var html2=template('order_address_temp',data);
+				document.getElementById("getAddress").innerHTML=html2;
+				var html3=template('order_goodlist_temp',data);
+				document.getElementById("order_goodlist").innerHTML=html3;
+				var html4=template('order_info_temp',data);
+				document.getElementById("orderInfo").innerHTML=html4;
+				var html5=template('order_button_temp',data);
+				document.getElementById("buttonBox").innerHTML=html5;
 			},
 			error:function(xhr,type,errorThrown){
 				//异常处理；
 				console.log(type);
 				alert("failed");
 			}
+		});
+		template.helper('JSONparse', function(obj){
+			return JSON.parse(obj);
 		});
 		//	获取url传递过来的参数
 		function GetRequest() {

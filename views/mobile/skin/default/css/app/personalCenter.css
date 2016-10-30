@@ -33,7 +33,13 @@ ul,li{margin:0;padding:0;list-style: none;}
 .goodsList{width:100%;padding:0.1rem 0.2rem;float:left;}
 .goodsList li{width:33.333%;float:left;}
 .goodsList li img{width:1.6rem;height:1.6rem;}
-.goodsList .goodsDesc p{color:#3d4245;font-size:0.24rem;text-align:left;background:transparent;padding:0;}
+.goodsList .goodsDesc p{color:#3d4245;font-size:0.24rem;text-align:left;background:transparent;padding:0;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
 .goodsList .goodsDesc p:last-child{color:#bbb;}
 .goodsList .goodsPrice p{font-size:0.28rem;text-align:right;color:#f3026a;background:transparent;padding:0;}
 .goodsList .goodsPrice p:last-child{color:#bbb;}

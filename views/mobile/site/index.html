@@ -336,6 +336,10 @@
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/time.js"></script>
 <script>
+    //设置分页
+    var pageData = {
+        page:1
+    };
     //aiax获取轮播图和限时购内容；
     getIndex();
     //页面加载完成后调用的功能
@@ -389,9 +393,6 @@
     /**
      * 上拉加载具体业务实现
      */
-    var pageData = {
-        page:1
-    };
     function pullupRefresh() {
         mui.ajax('index.php?controller=apic&action=article_list',{
             data:pageData,
@@ -438,7 +439,8 @@
                 dat.data=data;
                 var html = template('C_slider',dat);
                 document.getElementById("slider1").innerHTML = html;
-                getTimePurchase(dat);
+                getTimePurchase();
+                return;
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
@@ -446,7 +448,7 @@
             }
         });
     }
-    function getTimePurchase(dat){
+    function getTimePurchase(){
         var url1='index.php?controller=apic&action=pro_speed_list';
         mui.ajax(url1,{
             dataType:'json',//服务器返回json格式数据
@@ -457,6 +459,7 @@
                 document.getElementById("timer").setAttribute("data_timer",data1.end_time);
                 var html2=template('timeWare',data1);
                 document.getElementById("timePurchase_body").innerHTML = html2;
+                return;
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
