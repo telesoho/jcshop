@@ -59,6 +59,64 @@
     	</div>
     </section>
 	<script id="order_detail_top_temp" type="text/html">
+		<%if(orderStatus==0){%>
+		<div class="orderDesc">待付款</div>
+		<ul class="orderStatus01">
+			<li>
+				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
+			</li>
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+		</ul>
+		<ul class="orderStatus02">
+			<li class="statusActive">待付款</li>
+			<li>待发货</li>
+			<li >运输中</li>
+		</ul>
+		<%}%>
+		<%if(orderStatus==1){%>
+		<div class="orderDesc">已付款未发货</div>
+		<ul class="orderStatus01">
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+			<li>
+				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
+			</li>
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+		</ul>
+		<ul class="orderStatus02">
+			<li>待付款</li>
+			<li class="statusActive">待发货</li>
+			<li>运输中</li>
+		</ul>
+		<%}%>
+		<%if(orderStatus==2){%>
+		<div class="orderDesc">已发货</div>
+		<ul class="orderStatus01">
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+			<li>
+				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
+			</li>
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+		</ul>
+		<ul class="orderStatus02">
+			<li>待发货</li>
+			<li class="statusActive">运输中</li>
+			<li>已签收</li>
+		</ul>
+		<%}%>
+		<%if(orderStatus==3){%>
 		<div class="orderDesc">交易成功</div>
 		<ul class="orderStatus01">
 			<li>
@@ -76,6 +134,87 @@
 			<li>运输中</li>
 			<li class="statusActive">已签收</li>
 		</ul>
+		<%}%>
+
+	</script>
+	<script id="order_address_temp" type="text/html">
+		<%if(orderStatus==0){%>
+		<div class="orderDesc">待付款</div>
+		<ul class="orderStatus01">
+			<li>
+				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
+			</li>
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+		</ul>
+		<ul class="orderStatus02">
+			<li class="statusActive">待付款</li>
+			<li>待发货</li>
+			<li >运输中</li>
+		</ul>
+		<%}%>
+		<%if(orderStatus==1){%>
+		<div class="orderDesc">已付款未发货</div>
+		<ul class="orderStatus01">
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+			<li>
+				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
+			</li>
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+		</ul>
+		<ul class="orderStatus02">
+			<li>待付款</li>
+			<li class="statusActive">待发货</li>
+			<li>运输中</li>
+		</ul>
+		<%}%>
+		<%if(orderStatus==2){%>
+		<div class="orderDesc">已发货</div>
+		<ul class="orderStatus01">
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+			<li>
+				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
+			</li>
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+		</ul>
+		<ul class="orderStatus02">
+			<li>待发货</li>
+			<li class="statusActive">运输中</li>
+			<li>已签收</li>
+		</ul>
+		<%}%>
+		<%if(orderStatus==3){%>
+		<div class="orderDesc">交易成功</div>
+		<ul class="orderStatus01">
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+			<li>
+				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
+			</li>
+		</ul>
+		<ul class="orderStatus02">
+			<li>已发货</li>
+			<li>运输中</li>
+			<li class="statusActive">已签收</li>
+		</ul>
+		<%}%>
+
 	</script>
 	<script src="/views/mobile/javascript/template-native.js"></script>
 	<script src="/views/mobile/javascript/jquery.min.js"></script>

@@ -172,29 +172,28 @@
     <div class="mui-slider-group mui-slider-loop">
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[0].url %>">
-                <img dataimg="<%=data[0].img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                <img src="<%=data[0].img %>">
             </a>
         </div>
         <% for(var i=0; i<data.length; i++){%>
         <% var dat =data[i] %>
         <div class="mui-slider-item">
             <a href="<%=dat.url %>">
-                <img dataimg="<%=dat.img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                <img src="<%=dat.img %>">
             </a>
         </div>
         <%}%>
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[data.length-1].url %>">
-                <img dataimg="<%=data[data.length-1].img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                <img src="<%=data[data.length-1].img %>">
             </a>
         </div>
     </div>
     <div class="mui-slider-indicator">
         <div class="mui-indicator mui-active"></div>
+        <% for(var i=1; i<data.length; i++){%>
         <div class="mui-indicator"></div>
-        <div class="mui-indicator"></div>
-        <div class="mui-indicator"></div>
-        <div class="mui-indicator"></div>
+        <%}%>
     </div>
 </script>
 <!--限时购模板引擎-->
