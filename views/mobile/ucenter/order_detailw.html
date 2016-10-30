@@ -15,24 +15,8 @@
 </head>
 <body>
 	<section>
-		<div class="topBox">
-	    	<div class="orderDesc">交易成功</div>
-	    	<ul class="orderStatus01">
-	    		<li>
-	    			<div class="outCircle"><div class="inCircle"></div></div>
-	    		</li>
-	    		<li>
-	    			<div class="outCircle"><div class="inCircle"></div></div>
-	    		</li>
-	    		<li>
-	    			<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
-	    		</li>
-	    	</ul>
-	    	<ul class="orderStatus02">
-	    		<li>已发货</li>
-	    		<li>运输中</li>
-	    		<li class="statusActive">已签收</li>
-	    	</ul>
+		<div class="topBox" id="order_detail_top">
+
 	    </div>
 	</section>
     <section>
@@ -74,5 +58,61 @@
     	    <div class="butt">评价</div>
     	</div>
     </section>
+	<script id="order_detail_top_temp" type="text/html">
+		<div class="orderDesc">交易成功</div>
+		<ul class="orderStatus01">
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+			<li>
+				<div class="outCircle"><div class="inCircle"></div></div>
+			</li>
+			<li>
+				<div class="outCircle"><img src="/views/mobile/skin/default/image/jmj/img/cat-logo-small.png"/></div>
+			</li>
+		</ul>
+		<ul class="orderStatus02">
+			<li>已发货</li>
+			<li>运输中</li>
+			<li class="statusActive">已签收</li>
+		</ul>
+	</script>
+	<script src="/views/mobile/javascript/template-native.js"></script>
+	<script src="/views/mobile/javascript/jquery.min.js"></script>
+	<script src="/views/mobile/javascript/mui.js"></script>
+	<script>
+		var Request = new Object();
+		Request = GetRequest();
+		var getId=Request["id"];
+
+		mui.ajax('index.php?controller=apic&action=order_detail',{
+			data:{id:getId},
+			dataType:'json',	// 服务器返回json格式数据
+			type:'get',		// HTTP请求类型
+			timeout:10000,		// 超时时间设置为10秒；
+			success:function(data){
+				var html=template('order_detail_top_temp',data);
+				document.getElementById("order_detail_top").innerHTML=html;
+			},
+			error:function(xhr,type,errorThrown){
+				//异常处理；
+				console.log(type);
+				alert("failed");
+			}
+		});
+		//	获取url传递过来的参数
+		function GetRequest() {
+			var url = location.search; //获取url中"?"符后的字串
+			var theRequest = new Object();
+			if (url.indexOf("?") != -1) {
+				var str = url.substr(1);
+				strs = str.split("&");
+				for(var i = 0; i < strs.length; i ++) {
+					theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+				}
+			}
+			return theRequest;
+		}
+	</script>
 </body>
 </html>
