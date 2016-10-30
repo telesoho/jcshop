@@ -397,6 +397,8 @@ class Apic extends IController
         if ($orderStatus == 2){$orderStatus=0;}//待支付
         if ($orderStatus == 4){$orderStatus=1;}//待发货
         if ($orderStatus == 3 || $orderStatus == 8 || $orderStatus == 11 ){$orderStatus=2;}//待收货
+        if ($orderStatus == 6){$orderStatus=3;}//待发货
+
         $order_goods = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$order_info['order_id']));
         $data = array('order_info'=>$order_info, 'orderStatus'=>$orderStatus,"order_step"=>Order_Class::orderStep($order_info), "order_goods"=>$order_goods);
         header("Content-type: application/json");
