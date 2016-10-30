@@ -135,10 +135,10 @@ class Apic extends IController
         //配送方式
         $data['delivery'] = Api::run('getDeliveryList');
         //付款方式
-//        $data['payment'] = Api::run('getPaymentList');
-//        foreach ($data['payment'] as $key=>$value){
-//            $data['payment'][$key]['paymentprice'] = CountSum::getGoodsPaymentPrice($value['id'],$data['sum']);
-//        }
+        $data['payment'] = Api::run('getPaymentList');
+        foreach ($data['payment'] as $key=>$value){
+            $data['payment'][$key]['paymentprice'] = CountSum::getGoodsPaymentPrice($value['id'],$data['sum']);
+        }
         //商品展示
         foreach ($data['goodsList'] as $key => $value){
             if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
@@ -394,7 +394,13 @@ class Apic extends IController
             IError::show(403,'订单信息不存在');
         }
         $orderStatus = Order_Class::getOrderStatus($this->order_info);
-        $data = array('order_info'=>$order_info, 'orderStatus'=>$orderStatus,"order_step"=>Order_Class::orderStep($order_info));
+        if ($orderStatus == 2){$orderStatus=0;}//待支付
+        if ($orderStatus == 4){$orderStatus=1;}//待发货
+        if ($orderStatus == 3 || $orderStatus == 8 || $orderStatus == 11 ){$orderStatus=2;}//待收货
+        if ($orderStatus == 6){$orderStatus=3;}//待发货
+
+        $order_goods = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$order_info['order_id']));
+        $data = array('order_info'=>$order_info, 'orderStatus'=>$orderStatus,"order_step"=>Order_Class::orderStep($order_info), "order_goods"=>$order_goods);
         header("Content-type: application/json");
         echo json_encode($data, true);
         exit();

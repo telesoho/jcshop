@@ -179,29 +179,28 @@
     <div class="mui-slider-group mui-slider-loop">
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[0].url %>">
-                <img dataimg="<%=data[0].img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                <img src="<%=data[0].img %>">
             </a>
         </div>
         <% for(var i=0; i<data.length; i++){%>
         <% var dat =data[i] %>
         <div class="mui-slider-item">
             <a href="<%=dat.url %>">
-                <img dataimg="<%=dat.img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                <img src="<%=dat.img %>">
             </a>
         </div>
         <%}%>
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[data.length-1].url %>">
-                <img dataimg="<%=data[data.length-1].img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                <img src="<%=data[data.length-1].img %>">
             </a>
         </div>
     </div>
     <div class="mui-slider-indicator">
         <div class="mui-indicator mui-active"></div>
+        <% for(var i=1; i<data.length; i++){%>
         <div class="mui-indicator"></div>
-        <div class="mui-indicator"></div>
-        <div class="mui-indicator"></div>
-        <div class="mui-indicator"></div>
+        <%}%>
     </div>
 </script>
 <!--限时购模板引擎-->
@@ -344,6 +343,10 @@
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/time.js"></script>
 <script>
+    //设置分页
+    var pageData = {
+        page:1
+    };
     //aiax获取轮播图和限时购内容；
     getIndex();
     //页面加载完成后调用的功能
@@ -397,9 +400,6 @@
     /**
      * 上拉加载具体业务实现
      */
-    var pageData = {
-        page:1
-    };
     function pullupRefresh() {
         mui.ajax('index.php?controller=apic&action=article_list',{
             data:pageData,
@@ -446,7 +446,8 @@
                 dat.data=data;
                 var html = template('C_slider',dat);
                 document.getElementById("slider1").innerHTML = html;
-                getTimePurchase(dat);
+                getTimePurchase();
+                return;
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
@@ -454,7 +455,7 @@
             }
         });
     }
-    function getTimePurchase(dat){
+    function getTimePurchase(){
         var url1='index.php?controller=apic&action=pro_speed_list';
         mui.ajax(url1,{
             dataType:'json',//服务器返回json格式数据
@@ -465,6 +466,7 @@
                 document.getElementById("timer").setAttribute("data_timer",data1.end_time);
                 var html2=template('timeWare',data1);
                 document.getElementById("timePurchase_body").innerHTML = html2;
+                return;
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；

@@ -145,6 +145,7 @@ class jcshopCsvImport extends pluginBase
 			'img'        => '图片',
 			'spec_array' => '销售属性',
 			'weight'     => '物流重量',
+			'is_del'     => '状态',  /*0:上架 1：删除 2：下架 3:待审*/
 		);
 
 		//实例化商品
@@ -172,20 +173,59 @@ class jcshopCsvImport extends pluginBase
 
 				//更新GOODS表数据
 				$updateData = array(
-					'name'         => IFilter::act(trim($val[$titleToCols['name']],'"\'')),
 					'goods_no'     => $goods_no,
-					'sell_price'   => IFilter::act($val[$titleToCols['sell_price']],'float'),
-					'market_price' => IFilter::act($val[$titleToCols['sell_price']],'float'),
-					'is_del'       => '0',  /* 1：删除 2：下架 3:待审*/
-					'up_time'      => ITime::getDateTime('0000-00-00 00:00:00'),
-					'down_time'    => ITime::getDateTime(),
-					'create_time'  => ITime::getDateTime(),
-					'store_nums'   => IFilter::act($val[$titleToCols['store_nums']],'int'),
-					'content'      => IFilter::addSlash(trim($val[$titleToCols['content']])),
 					'img'          => isset($val['mainPic']) ? current($val['mainPic']) : '',
 					'seller_id'    => $this->seller_id,
-					'weight'       => $val[$titleToCols['weight']],
 				);
+
+				$field = trim($val[$titleToCols['name']],'"\' ');
+				if(!empty($field)) {
+					$updateData['name'] = IFilter::act($field);
+				}
+
+				$field = trim($val[$titleToCols['sell_price']]);
+				if($field !== "") {
+					$updateData['sell_price']  = IFilter::act($field,'float');
+					$updateData['market_price']  = IFilter::act($field,'float');
+				}
+
+				$field = trim($val[$titleToCols['weight']]);
+				if($field !== "") {
+					$updateData['weight'] = IFilter::act($field,'int');
+				}
+				
+				// 处理上下架状态
+				$field = trim($val[$titleToCols['is_del']]);
+				if($field !== "") {
+					$updateData['is_del'] = IFilter::act($field,'int');
+					switch($updateData['is_del']) 
+					{
+					case 0:
+						$updateData['up_time'] = ITime::getDateTime();
+						$updateData['down_time'] = ITime::getDateTime('0000-00-00 00:00:00');
+						break;
+					case 1:
+						$updateData['up_time'] = ITime::getDateTime('0000-00-00 00:00:00');
+						$updateData['down_time'] = ITime::getDateTime();
+						break;
+					case 2:
+						$updateData['up_time'] = ITime::getDateTime('0000-00-00 00:00:00');
+						$updateData['down_time'] = ITime::getDateTime();
+						break;
+					}
+				}
+
+				// 处理库存数
+				$field = trim($val[$titleToCols['store_nums']]);
+				if($filed !== "") {
+					$updateData['store_nums'] = IFilter::act($field,'int');
+				}
+
+				// 处理内容
+				$field = trim($val[$titleToCols['content']], '"\' ');
+				if($filed !== "") {
+					$updateData['content'] = IFilter::addSlash($field);
+				}
 
 				$goodsObject->setData($updateData);
 
@@ -240,7 +280,7 @@ class jcshopCsvImport extends pluginBase
 					'goods_no'     => $goods_no,
 					'sell_price'   => IFilter::act($val[$titleToCols['sell_price']],'float'),
 					'market_price' => IFilter::act($val[$titleToCols['sell_price']],'float'),
-					'is_del'       => '0',  /*0:上架 1：删除 2：下架 3:待审*/
+					'is_del'       => IFilter::act($val[$titleToCols['is_del']],'int'),
 					'up_time'      => ITime::getDateTime('0000-00-00 00:00:00'),
 					'down_time'    => ITime::getDateTime(),
 					'create_time'  => ITime::getDateTime(),
