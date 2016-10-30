@@ -209,7 +209,7 @@
 	mui('body').on('tap','.toOrderDetail',function(){
 		document.location.href=this.href;
 	});
-
+	mui('.mui-scroll-wrapper').scroll();
 //	接收页面传过来的状态值
 	var Request = new Object();
 	Request = GetRequest();
@@ -273,10 +273,11 @@
 					up: {
 						callback: function() {
 							var self = this;
+							self.endPullUpToRefresh();
 							var div = self.element.querySelector('.mui-table-view');
 							var num=++pageNum['pageNum'+index];
-							 pullRefreshOrder(num,div)
-							self.endPullUpToRefresh();
+//							 pullRefreshOrder(num,div)
+
 						}
 					}
 				});
@@ -314,13 +315,6 @@
 			}
 		}
 		return theRequest;
-	}
-//	下拉刷新加载项目
-	function pullRefreshOrder(num,div){
-
-
-	}
-	function showTab(){
 	}
 </script>
 </body>
