@@ -21,7 +21,7 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 	 */
 	public function getDataTitle()
 	{
-		return array("品牌名","商品JAN编码","商品名称","商品类目","销售价格","库存数量","商品详情","图片","销售属性","商家编码","物流重量");
+		return array("品牌名","商品JAN编码","商品名称","商品类目","销售价格","库存数量","商品详情","图片","销售属性","商家编码","物流重量","状态");
 	}
 	/**
 	 * override abstruact function
@@ -68,18 +68,25 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 		if(!$content) 
 			return "";
 
-		$skus = JSON::decode($content); 
+		try{
 
-		$skuProps = array();
-		$index = 0;
-		foreach($skus as $key => $val) {
-			$skuProp['id'] = ++$index;
-			$skuProp['type'] = "1"; // 1：文字类型， 2：图片类型
-			$skuProp['name'] = $key;
-			$skuProp['value'] = $val;
-			$skuProps[] = $skuProp;
+			$skus = JSON::decode($content); 
+
+			$skuProps = array();
+			$index = 0;
+			foreach($skus as $key => $val) {
+				$skuProp['id'] = ++$index;
+				$skuProp['type'] = "1"; // 1：文字类型， 2：图片类型
+				$skuProp['name'] = $key;
+				$skuProp['value'] = $val;
+				$skuProps[] = $skuProp;
+			}
+			$content = JSON::encode($skuProps);
 		}
-		$content = JSON::encode($skuProps);
+		catch(Exception $e){
+			$this->error($e->getMessage());
+			return "";
+		}
 		return $content;
 	}
 	/**
