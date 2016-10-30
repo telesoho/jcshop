@@ -1408,7 +1408,7 @@ input[type='search']{
 .totalButton .toPayOrder{
 	width:50%;
 	background:#f3026a;
-	line-height:1rem;
+	/*line-height:1rem;*/
 	text-align:center;
 	font-size:0.34rem;
 	color:#ffffff;
