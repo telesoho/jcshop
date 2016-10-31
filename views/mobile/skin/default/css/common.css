@@ -1,8 +1,4 @@
 @font-face {
-  font-family: 'ArialUnicodeMS';
-  src:url('../font/arialunicodems.ttf') format('truetype'); /* chrome、firefox */
-}
-@font-face {
   font-family: 'HelveticaNeueLt';
   src:url('../font/HelveticaNeueLt.ttf')  format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
 }

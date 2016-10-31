@@ -127,7 +127,7 @@
 	<% var goodlist =order_goods[i] %>
 	<ul class="goodsList">
 		<li><img src="<%=goodlist.img%>"/></li>
-		<% var size =JSONparse(goodlist.goods_array) %>
+		<% var size =goodlist.goods_array %>
 		<li class="goodsDesc"><p><%=size.name%></p><p><%=size.value%></p></li>
 		<li class="goodsPrice"><p>¥<%=goodlist.goods_price%></p><br/><br/><p>x<%=goodlist.goods_nums%></p></li>
 	</ul>
@@ -173,8 +173,6 @@
 		type:'get',		// HTTP请求类型
 		timeout:10000,		// 超时时间设置为10秒；
 		success:function(data){
-			console.log(data.order_step);
-			console.log(data.order_step);
 			var html=template('order_detail_top_temp',data);
 			document.getElementById("order_detail_top").innerHTML=html;
 			var html2=template('order_address_temp',data);
