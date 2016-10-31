@@ -54,34 +54,34 @@
     </style>
 </head>
 <body>
-    <section>
-        <div class="order_last">
-            <div class="flexbox">
-                <div class="left">订单编号:</div>
-                <div class="right">{$this->order_num}</div>
-            </div>
-            <div class="flexbox">
-                <div class="left">订单金额:</div>
-                <div class="right">￥{$this->final_sum}</div>
-            </div>
-            <div class="flexbox">
-                <div class="left">配送方式:</div>
-                <div class="right">EMS</div>
-            </div>
-            <div class="flexbox">
-                <div class="left">支付方式:</div>
-                <div class="right">微信支付</div>
-            </div>
-            <div class="flexbox">
-                <div class="left">收货人名:</div>
-                <div class="right">{$accept_name}</div>
-            </div>
-            <div class="flexbox">
-                <div class="left">联系方式:</div>
-                <div class="right">{$mobile}</div>
-            </div>
+<section>
+    <div class="order_last">
+        <div class="flexbox">
+            <div class="left">订单编号:</div>
+            <div class="right">{$this->order_num}</div>
         </div>
-    </section>
+        <div class="flexbox">
+            <div class="left">订单金额:</div>
+            <div class="right">￥{$this->final_sum}</div>
+        </div>
+        <div class="flexbox">
+            <div class="left">配送方式:</div>
+            <div class="right">EMS</div>
+        </div>
+        <div class="flexbox">
+            <div class="left">支付方式:</div>
+            <div class="right">微信支付</div>
+        </div>
+        <div class="flexbox">
+            <div class="left">收货人名:</div>
+            <div class="right">{$accept_name}</div>
+        </div>
+        <div class="flexbox">
+            <div class="left">联系方式:</div>
+            <div class="right">{$mobile}</div>
+        </div>
+    </div>
+</section>
 {if:$this->deliveryType != 1 && $this->paymentType == 1} {set:$tmpId=$this->order_id;}
 <div class="btn_bottom">
     <form action='{url:/block/doPay/order_id/$tmpId}' method='post' class="form_submit">

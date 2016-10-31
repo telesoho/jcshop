@@ -148,15 +148,14 @@
 </script>
 <script id="order_button_temp" type="text/html">
 	<%if(orderStatus==0){%>
-	<a href="#" class="butt">删除订单</a>
+	<a href="{url:/ucenter/order_status/order_id/<%=order_info.order_id%>/op/cancel}" class="butt">取消订单</a>
 	<a href="#" class="butt">去支付</a>
 	<%}%>
 	<%if(orderStatus==2){%>
 	<a href="#" class="butt">查看物流</a>
-	<a href="#" class="butt">确认收货</a>
+	<a href="{url:/ucenter/order_status/order_id/<%=order_info.order_id%>/op/confirm}" class="butt">确认收货</a>
 	<%}%>
 	<%if(orderStatus==3){%>
-	<a href="#" class="butt">删除订单</a>
 	<a href="#" class="butt">评价</a>
 	<%}%>
 </script>
@@ -174,6 +173,8 @@
 		type:'get',		// HTTP请求类型
 		timeout:10000,		// 超时时间设置为10秒；
 		success:function(data){
+			console.log(data.order_step);
+			console.log(data.order_step);
 			var html=template('order_detail_top_temp',data);
 			document.getElementById("order_detail_top").innerHTML=html;
 			var html2=template('order_address_temp',data);

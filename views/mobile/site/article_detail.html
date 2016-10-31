@@ -46,12 +46,11 @@
             <?php
                 $content = htmlspecialchars_decode($this->articleRow['content']);
                 $x = explode('{{', $content);
-                for($i=1;$i<count($x);$i++){
-                    $y = explode('}}', $x[$i]);
-
-                    $goods_no = $y[0];
-                    if (!empty($goods_no)){
-                        $goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
+                $y = explode('}}', $x[1]);
+                $goods_no = $y[0];
+                if (!empty($goods_no)){
+                    $goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
+                    echo $x[0];
             ?>
             <div class="content_ware">
                 <div class="img">
@@ -69,10 +68,9 @@
             </div>
 
             <?php
-                        echo $y[1];
-                    } else {
-                        echo $content;
-                    }
+                    echo $y[1];
+                } else {
+                    echo $content;
                 }
             ?>
         </div>
@@ -117,9 +115,6 @@
             }
         }
     });
-    mui('.mui-scroll-wrapper').scroll({
-        deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
-    });
     mui('body').on('tap','a',function(){document.location.href=this.href;});
      //获取url的商品id
     var Request = new Object();
@@ -138,6 +133,7 @@
             type:'get',		// HTTP请求类型
             timeout:10000,		// 超时时间设置为10秒；
             success:function(data){
+                console.log(data);
                 articlePageData.page++;
                 var pageArticle={};
                 pageArticle.data=data;

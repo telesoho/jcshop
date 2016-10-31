@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>九猫商城1</title>
+    <title>九猫商城</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
@@ -122,7 +122,7 @@
 </div>
 <footer>
     <nav class="mui-bar mui-bar-tab">
-            <a id="defaultTab" class="mui-tab-item mui-active home" href="#">
+            <a id="defaultTab" class="mui-tab-item mui-active home" href="{url:/site/index}">
                 <span class="mui-icon nav-icon icon-home"></span>
                 <div class="mui-tab-label">首页</div>
             </a>
@@ -149,13 +149,13 @@
 <!--模态框-->
 <div id="modalid-searth" class="hide">
     <div class="title">
-        猫猫都在搜
+        大家都在搜
     </div>
     <div class="searth-content">
-        <a href="#" class="content_red">万圣节</a>
+        <a href="#">万圣节</a>
         <a href="#">爱丽小屋</a>
         <a href="#">吃饱撑着</a>
-        <a href="#" class="no_margin_right">哈哈哈</a>
+        <a href="#">哈哈哈</a>
         <a href="#">英文</a>
         <a href="#">数字</a>
         <a href="#">万圣节</a>
@@ -164,13 +164,6 @@
         <a href="#">万圣节</a>
         <a href="#">万圣节</a>
     </div>
-    <div class="title">
-        最近搜索
-    </div>
-    <ul class="search_element">
-        <li><a href="#" class="no_margin">美妆</a><a href="#">美妆</a></li>
-    </ul>
-    <button type="button" id="button-submit" class="remove" onclick="searthSubmit();">清空最近搜索</button>
     <button type="button" id="button-submit" class="mui-btn  mui-btn-outlined buttom-submit" onclick="searthSubmit();">确定</button>
     <button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
 </div>
@@ -179,20 +172,20 @@
     <div class="mui-slider-group mui-slider-loop">
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[0].url %>">
-                <img src="<%=data[0].img %>">
+                <img dataimg="<%=data[0].img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
             </a>
         </div>
         <% for(var i=0; i<data.length; i++){%>
         <% var dat =data[i] %>
         <div class="mui-slider-item">
             <a href="<%=dat.url %>">
-                <img src="<%=dat.img %>">
+                <img dataimg="<%=dat.img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
             </a>
         </div>
         <%}%>
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[data.length-1].url %>">
-                <img src="<%=data[data.length-1].img %>">
+                <img dataimg="<%=data[data.length-1].img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
             </a>
         </div>
     </div>
@@ -343,10 +336,6 @@
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/time.js"></script>
 <script>
-    //设置分页
-    var pageData = {
-        page:1
-    };
     //aiax获取轮播图和限时购内容；
     getIndex();
     //页面加载完成后调用的功能
@@ -354,7 +343,7 @@
         $("#loading").fadeOut(300);
         timer('timer');
         //图片轮播功能
-        var gallery = mui('.mui-slider');
+        var gallery = mui('#slider1');
         gallery.slider({
             interval:4000//自动轮播周期，若为0则不自动播放，默认为0；
         });
@@ -400,6 +389,9 @@
     /**
      * 上拉加载具体业务实现
      */
+    var pageData = {
+        page:1
+    };
     function pullupRefresh() {
         mui.ajax('index.php?controller=apic&action=article_list',{
             data:pageData,
@@ -446,8 +438,7 @@
                 dat.data=data;
                 var html = template('C_slider',dat);
                 document.getElementById("slider1").innerHTML = html;
-                getTimePurchase();
-                return;
+                getTimePurchase(dat);
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
@@ -455,7 +446,7 @@
             }
         });
     }
-    function getTimePurchase(){
+    function getTimePurchase(dat){
         var url1='index.php?controller=apic&action=pro_speed_list';
         mui.ajax(url1,{
             dataType:'json',//服务器返回json格式数据
@@ -466,7 +457,6 @@
                 document.getElementById("timer").setAttribute("data_timer",data1.end_time);
                 var html2=template('timeWare',data1);
                 document.getElementById("timePurchase_body").innerHTML = html2;
-                return;
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
