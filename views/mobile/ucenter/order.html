@@ -174,22 +174,21 @@
 		</div>
 		<%}%>
 		<!--不同的按钮状态-->
-		<%if(order.orderStatusVal==5){%>
+		<%if(order.orderStatusVal==6){%>
 		<div class="action upline">
-			<a href="#" class="button1 delOrder">删除订单</a>
 			<a href="#" class="button2 evaluate">评价</a>
 		</div>
 		<%}%>
 		<%if(order.orderStatusVal==2){%>
 		<div class="action upline">
-			<a href="#" class="button1 delOrder">删除订单</a>
+			<a href="{url:/ucenter/order_status/order_id/<%=order.id%>/op/cancel}" class="button1 delOrder">取消订单</a>
 			<a href="#" class="button2 evaluate">去付款</a>
 		</div>
 		<%}%>
 		<%if(order.orderStatusVal==3){%>
 		<div class="action upline">
 			<a href="#" class="button1 delOrder">查看物流</a>
-			<a href="#" class="button2 evaluate">确认收货</a>
+			<a href="{url:/ucenter/order_status/order_id/<%=order.id%>/op/confirm}" class="button2 evaluate" >确认收货</a>
 		</div>
 		<%}%>
 	</div>
@@ -209,7 +208,12 @@
 	mui('body').on('tap','.toOrderDetail',function(){
 		document.location.href=this.href;
 	});
-
+	mui('body').on('tap','.button1',function(){
+		document.location.href=this.href;
+	});
+	mui('body').on('tap','.button2',function(){
+		document.location.href=this.href;
+	});
 //	接收页面传过来的状态值
 	var Request = new Object();
 	Request = GetRequest();

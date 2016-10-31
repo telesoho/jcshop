@@ -101,7 +101,7 @@
                 </div>
                 <div class="right">
                     <span class="mui-icon mui-icon-forward mui-pull-right"></span>
-                    <a href="index.php?controller=site&action=time_purchase"><span class=" mui-pull-right">更多a</span></a>
+                    <a href="index.php?controller=site&action=time_purchase"><span class=" mui-pull-right">更多</span></a>
                 </div>
             </div>
             <div class="timePurchase_body" id="timePurchase_body">
@@ -339,15 +339,11 @@
     //aiax获取轮播图和限时购内容；
     getIndex();
     //页面加载完成后调用的功能
-    $(window).load(function(){
+    window.onload=function(){
         $("#loading").fadeOut(300);
-        timer('timer');
-        //图片轮播功能
-        var gallery = mui('#slider1');
-        gallery.slider({
-            interval:4000//自动轮播周期，若为0则不自动播放，默认为0；
-        });
-    })
+    }
+
+
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
     mui('body').on('tap','a',function(){
@@ -438,6 +434,10 @@
                 dat.data=data;
                 var html = template('C_slider',dat);
                 document.getElementById("slider1").innerHTML = html;
+                var gallery = mui('#slider1');
+                gallery.slider({
+                    interval:4000//自动轮播周期，若为0则不自动播放，默认为0；
+                });
                 getTimePurchase(dat);
             },
             error:function(xhr,type,errorThrown){
@@ -457,6 +457,7 @@
                 document.getElementById("timer").setAttribute("data_timer",data1.end_time);
                 var html2=template('timeWare',data1);
                 document.getElementById("timePurchase_body").innerHTML = html2;
+                timer('timer');
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
