@@ -1,7 +1,7 @@
-@font-face {
-  font-family: 'ArialUnicodeMS';
-  src:url('../font/arialunicodems.ttf') format('truetype'); /* chrome、firefox */
-}
+/*@font-face {*/
+  /*font-family: 'ArialUnicodeMS';*/
+  /*src:url('../font/arialunicodems.ttf') format('truetype'); !* chrome、firefox *!*/
+/*}*/
 @font-face {
   font-family: 'HelveticaNeueLt';
   src:url('../font/HelveticaNeueLt.ttf')  format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
@@ -23,7 +23,7 @@ html, body, span, object,li,ul,img iframe, h1, h2, h3, h4, h5, h6, p, pre, a, em
   padding: 0;
   border: 0;
   outline: none;
-  font-family: 'ArialUnicodeMS','HelveticaNeueLt' ;
+  font-family: "Microsoft Yahei",'HelveticaNeueLt' ;
   color: #000000;
   -webkit-box-sizing:border-box;
 }
