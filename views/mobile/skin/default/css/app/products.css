@@ -22,7 +22,7 @@ header span{color:#fff;float:left;margin-top:0.1rem;}
 .postMethod ul li:last-child{float:right;}
 .postMethod ul li:last-child span{font-size:0.32rem;color:#bbb;}
 .relatedContent{background:#fff;margin-top:0.3rem;padding:0 0.13rem;border-top:1px solid #eee;border-bottom:1px solid #eee;}
-.relatedContent .title{font-size:0.32rem;padding:0.2rem 0;border-bottom:1px solid #eee;}
+.relatedContent .title{font-size:0.32rem;border-bottom:1px solid #eee;}
 .contentInfo{padding:0.2rem 0;}
 .contentInfo .info01{display:inline-block;}
 .contentInfo .info01 img{width:2.49rem;height:1.26rem;}
@@ -75,7 +75,8 @@ header span{color:#fff;float:left;margin-top:0.1rem;}
 .footerBox{clear:both;width:100%;float:left;overflow: hidden;position:fixed;bottom:0;z-index:2;}
 .footerBox div{width:50%;float:left;font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;}
 .footerBox div:first-child{color: #ff4aa0;background:#eee;}
-.footerBox div:last-child{color:#fff;background:#ff4aa0;}
+.footerBox div:last-child{color:#fff;background:#f3026a;}
+.footerBox div:last-child a{color: #fff	;}
 
 /*弹出框样式*/
 #serviceDescription{background:#fff;width: 100%;}
