@@ -11,6 +11,11 @@
 			<!--<input name="word" type="hidden" value="{$this->keyword}">-->
 			<!--<button class="submit" type="submit" onclick="return checkForm()"><span>查询</span></button>-->
 			<button class="btn" type="submit"><span class="sel">查  询</span></button>
+			<?php
+				$query = new IQuery("article as ar");
+				$nums = count($query->find());
+				echo "共计 " . $nums . " 条专辑";
+			?>
 		</form>
 	</div>
 </div>
@@ -42,13 +47,13 @@
 			</thead>
 
 			<tbody>
-				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
 				<?php
 				$query = new IQuery("article as ar");
+				$query->page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;
 				$query->join = "left join article_category as ac on ac.id = ar.category_id";
 				$where = IFilter::act(IReq::get('article_title'),'string');
 				if(!empty($where)){
-					$query->where = "ar.title like '%".$where."%'";
+				$query->where = "ar.title like '%".$where."%'";
 				}
 				$query->order = "ar.sort asc,ar.id desc";
 				$query->fields = "ar.id,ar.title,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ac.name";
@@ -72,5 +77,5 @@
 			</tbody>
 		</table>
 	</form>
+	<?php $query->getPageBar();?>
 </div>
-{$query->getPageBar()}
