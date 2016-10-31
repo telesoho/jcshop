@@ -399,7 +399,10 @@ class Apic extends IController
         if ($orderStatus == 3 || $orderStatus == 8 || $orderStatus == 11 ){$orderStatusT=2;}//待收货
         if ($orderStatus == 6){$orderStatusT=3;}//待发货
 
-        $order_goods = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$order_info['order_id']));
+        $order_goods = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$order_info['id']));
+        foreach ($order_goods as $key => $value){
+            $order_goods[$key]['goods_array'] = json_decode($value['goods_array'],true);
+        }
         $data = array('order_info'=>$order_info, 'orderStatus'=>$orderStatusT,"order_step"=>Order_Class::orderStep($order_info), "order_goods"=>$order_goods);
         header("Content-type: application/json");
         echo json_encode($data, true);
