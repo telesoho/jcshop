@@ -4464,7 +4464,7 @@ body > .mui-progressbar
 .mui-slider-indicator
 {
     position: absolute;
-    bottom: 0.08rem;
+    bottom: 0.40rem;
     width: 100%;
     text-align: center;
     background: none;
