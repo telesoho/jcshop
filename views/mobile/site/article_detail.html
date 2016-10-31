@@ -46,12 +46,13 @@
             <?php
                 $content = htmlspecialchars_decode($this->articleRow['content']);
                 $x = explode('{{', $content);
-                for($i=1;$i<count($x);$i++){
-                    $y = explode('}}', $x[$i]);
-
-                    $goods_no = $y[0];
-                    if (!empty($goods_no)){
-                        $goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
+                if (!empty($x['1'])){
+                    echo $x[0];
+                    for($i=1;$i<count($x);$i++){
+                        $y = explode('}}', $x[$i]);
+                        $goods_no = $y[0];
+                        if (!empty($goods_no)){
+                            $goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
             ?>
             <div class="content_ware">
                 <div class="img">
@@ -69,10 +70,13 @@
             </div>
 
             <?php
-                        echo $y[1];
-                    } else {
-                        echo $content;
+                            echo $y[1];
+                        } else {
+                            echo $content;
+                        }
                     }
+                } else {
+                    echo $content;
                 }
             ?>
         </div>
