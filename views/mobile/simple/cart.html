@@ -162,8 +162,8 @@
 <script>
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
-		mui(".btn_pay").on('tap',"#sum_count",function(){
-			window.location.href='/index.php?controller=simple&action=cart2';
+		mui("body").on('tap',"#sum_count",function(){
+			window.location.href='index.php?controller=simple&action=cart2';
 		})
 	})
 	mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
@@ -171,6 +171,7 @@
 	template.helper('JSONstringify', function(obj){
 		return JSON.stringify(obj);
 	});
+
 	mui.init();
 	mui.ajax('index.php?controller=apic&action=cart',{
 		dataType:'json',//服务器返回json格式数据

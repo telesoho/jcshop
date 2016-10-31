@@ -1,0 +1,6 @@
+.logistic_state{
+    position:relative;
+}
+.logistic_state .item{
+    position:absolute;
+}

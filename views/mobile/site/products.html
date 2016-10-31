@@ -188,6 +188,7 @@
     </section>
 	<!--轮播图模板引擎-->
 	<script id="product_carousel" type="text/html">
+		<%if(photo[0]){%>
 		<div class="mui-slider-group mui-slider-loop">
 			<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
 			<div class="mui-slider-item mui-slider-item-duplicate">
@@ -214,6 +215,7 @@
 			<div class="mui-indicator mui-active"></div>
 			<% for(var i=1; i<photo.length; i++){%>
 			<div class="mui-indicator"></div>
+			<%}%>
 			<%}%>
 		</div>
 	</script>
