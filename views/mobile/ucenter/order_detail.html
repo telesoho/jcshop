@@ -152,7 +152,7 @@
 	<a href="#" class="butt">去支付</a>
 	<%}%>
 	<%if(orderStatus==2){%>
-	<a href="#" class="butt">查看物流</a>
+	<a href="#" class="butt" onclick="freightLine(<%=order_goods[0].delivery_id %>);">查看物流</a>
 	<a href="{url:/ucenter/order_status/order_id/<%=order_info.order_id%>/op/confirm}" class="butt">确认收货</a>
 	<%}%>
 	<%if(orderStatus==3){%>
@@ -205,6 +205,13 @@
 			}
 		}
 		return theRequest;
+	}
+	//快递跟踪
+	function freightLine(doc_id){
+		var urlVal = "{url:/block/freight/id/@id@}";
+		urlVal = urlVal.replace("@id@", doc_id);
+		console.log(urlVal);
+
 	}
 </script>
 </body>

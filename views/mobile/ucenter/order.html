@@ -221,6 +221,8 @@
 //	模拟高亮画面
 	$('.mui-control-item').removeClass('mui-active')
 	$('.mui-control-item'+statusOrder).addClass('mui-active');
+	$('.mui-slider-item').removeClass('mui-active')
+	$('#itemmobile'+statusOrder).addClass('mui-active');
 //	ajax 请求
 	mui.ajax('index.php?controller=apic&action=order_list',{
 		dataType:'json',//服务器返回json格式数据
