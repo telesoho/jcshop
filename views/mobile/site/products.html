@@ -298,11 +298,8 @@
     <script type="text/javascript" charset="utf-8">
 		//banner图轮播
 		window.onload=function(){
-			var productInstance = new productClass("{$id}","{$this->user['user_id']}","{$promo}","{$active_id}");
-			var carousel  = mui("#carousel");
-			carousel.slider({
-				interval: 1000
-			});
+
+
 		}
 		mui('body').on("tap","#joinButton",function(){
 			$("#joinCarButton").show();
@@ -328,6 +325,10 @@
 					//轮播图展示页面
 					var html=template('product_carousel',data);
 					document.getElementById('carousel').innerHTML=html;
+					var carousel  = mui("#carousel");
+					carousel.slider({
+						interval: 1000
+					});
 					var html2=template('product_goodsDetail',data);
 					document.getElementById('goods_detaile').innerHTML=html2;
 					document.getElementById('goodsContent').innerHTML=data.content;
@@ -335,6 +336,7 @@
 					document.getElementById('evaluateBox').innerHTML=html3;
 					var html4=template('joinCarTemplate',data);
 					document.getElementById('select_product').innerHTML=html4;
+					var productInstance = new productClass("{$id}","{$this->user['user_id']}","{$promo}","{$active_id}");
 //					var array=Object.keys(data.spec_array);
 //					console.log(array);
 				},
