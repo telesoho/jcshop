@@ -970,9 +970,10 @@ input[type='search']{
 	display:block;
 }
 .order_menu{
+	margin-top:0.19rem;
   background:#f8f8f8;
-
-}.order_menu_list{
+}
+.order_menu_list{
 	 margin-bottom:0.2rem;
 	background:#fff;
  }

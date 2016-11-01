@@ -5423,7 +5423,7 @@ body > .mui-progressbar
 .mui-fullscreen .mui-segmented-control ~ .mui-slider-group
 {
     position: absolute;
-    top: 40px;
+    top: 0.7rem;
     bottom: 0;
 
     width: 100%;
