@@ -65,7 +65,7 @@ input[type='search']{
 }
 .mui-control-item .text{
 	position:relative !important;
-	left:-0.08rem;
+	left:-0.07rem;
 	z-index:999;
 	font-size:0.28rem;
 	letter-spacing: 0.01rem;
@@ -79,7 +79,7 @@ input[type='search']{
 	position:absolute;
 	background:url('../../image/jmj/icon/button.png');
 	background-size:100% 100%;
-	bottom:0.15rem;
+	bottom:0.14rem;
 	left:0;
 }
 .mui-scroll-wrapper{

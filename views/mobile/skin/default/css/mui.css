@@ -4477,13 +4477,13 @@ body > .mui-progressbar
 .mui-slider-indicator .mui-indicator
 {
     display: inline-block;
-    width: 0.14rem;
-    height: 0.14rem;
-    padding: 0.1rem 0.1rem 0 0;
+    width: 8px;
+    height: 8px;
+    padding: 1px 1px 0 0;
     cursor: pointer;
-    border-radius: 50%;
+    border-radius: 100%;
     background:#ffffff;
-    border:0.01rem solid #979797;
+    border:1px solid #979797;
 }
 .mui-slider-indicator .mui-active.mui-indicator
 {
