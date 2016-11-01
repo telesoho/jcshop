@@ -713,4 +713,25 @@ class Apic extends IController
         echo json_encode($banner);
         exit();
     }
+
+    /**
+     * @return string
+     */
+    public function info()
+    {
+        $user_id = $this->user['user_id'];
+
+        $userObj       = new IModel('user');
+        $where         = 'id = '.$user_id;
+        $userRow = $userObj->getObj($where, array('head_ico','username'));
+
+        $memberObj       = new IModel('member');
+        $where           = 'user_id = '.$user_id;
+        $memberRow = $memberObj->getObj($where);
+
+        $data = array_merge($userRow, $memberRow);
+        header("Content-type: application/json");
+        echo json_encode($data);
+        exit();
+    }
 }
