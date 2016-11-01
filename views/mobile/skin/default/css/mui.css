@@ -1232,8 +1232,8 @@ input[type='submit'],
 .mui-btn-primary, .mui-btn-blue
 {
     color: #fff;
-    border: 1px solid #007aff;
-    background-color: #007aff;
+    /*border: 1px solid #007aff;*/
+    /*background-color: #007aff;*/
 }
 input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 .mui-btn-primary:enabled:active,
@@ -4464,7 +4464,7 @@ body > .mui-progressbar
 .mui-slider-indicator
 {
     position: absolute;
-    bottom: 0.08rem;
+    bottom: 0.40rem;
     width: 100%;
     text-align: center;
     background: none;
@@ -4477,13 +4477,13 @@ body > .mui-progressbar
 .mui-slider-indicator .mui-indicator
 {
     display: inline-block;
-    width: 0.14rem;
-    height: 0.14rem;
-    padding: 0.1rem 0.1rem 0 0;
+    width: 8px;
+    height: 8px;
+    padding: 1px 1px 0 0;
     cursor: pointer;
-    border-radius: 50%;
+    border-radius: 100%;
     background:#ffffff;
-    border:0.01rem solid #979797;
+    border:1px solid #979797;
 }
 .mui-slider-indicator .mui-active.mui-indicator
 {
@@ -4494,7 +4494,6 @@ body > .mui-progressbar
 {
     font-size: 20px;
     line-height: 30px;
-
     width: 40px;
     height: 30px;
     margin: 3px;
@@ -5424,7 +5423,7 @@ body > .mui-progressbar
 .mui-fullscreen .mui-segmented-control ~ .mui-slider-group
 {
     position: absolute;
-    top: 40px;
+    top: 0.7rem;
     bottom: 0;
 
     width: 100%;

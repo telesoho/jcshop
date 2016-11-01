@@ -8,9 +8,9 @@
 	<title>九猫首页</title>
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/shopcar.css" />
+	<script src="/views/mobile/javascript/orderFormClass.js"></script>
 </head>
 <body>
 <!--loading页开始-->
@@ -47,10 +47,8 @@
 	</div>
 </section>
 <section>
-	<div class="totalButton box">
-		<div class="totalSumPrice"><span>合计：</span><span id="totalPrice_sum">¥238.90</span></div>
-		<div class="toPayOrder">提交订单</div>
-	</div>
+	<form action='{url:/simple/cart3}' class="form" method='post' name='order_form' onsubmit='return orderFormInstance.isSubmit()' id="testForm">
+	</form>
 </section>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
@@ -98,7 +96,11 @@
 		</div>
 		<div class="content">
 			<div class="name"><%=product.name%></div>
-			<div class="size">颜色：黑色</div>
+			<!--如果存在展示size的第一类-->
+			<%if(product.spec_array){%>
+			<% var size =JSONsize(product.spec_array) %>
+			<div class="size"><%=size[0]%></div>
+			<%}%>
 			<div class="flexbox">
 				<div class="price">￥ <%=product.sell_price%></div>
 				<div class="num">x <%=product.count%></div>
@@ -112,7 +114,7 @@
 			<div class="right">EMS</div>
 		</div>
 	</div>
-	<div class="orderTotal">
+	<div class="orderTotal" style="margin-bottom:1.5rem;">
 		<div class="box total">
 			<div class="left">合计</div>
 			<div class="right box">
@@ -125,24 +127,20 @@
 		</div>
 	</div>
 </script>
-<script id="footer-content" type="text/html">
-	<ul class="mui-table-view">
-		<li class="mui-table-view-cell">
-			共<span style="color:#e53e42"><%=count%></span>件商品
-			<span class="mui-pull-right">应付金额：<span style="color:#e53e42">￥<%=final_sum%></span></span>
-		</li>
-		<%if(addressList.length==0){%>
-		<!--如果没有收货地址-->
-		<li class="mui-table-view-cell payware">
-			<a href="{url:/simple/addaddress}" type="button" class="mui-btn mui-btn-danger payWare">添加收货地址</a>
-		</li>
-		<%}else{%>
-		<li class="mui-table-view-cell payware">
-			<!--要跳到支付页面-->
-			<a href="" type="button" class="mui-btn mui-btn-danger payWare">确认支付</a>
-		</li>
-		<%}%>
-	</ul>
+<script id="testFormTemp" type="text/html">
+	<input type='hidden' name='direct_gid' value='<%=gid%>' />
+	<input type='hidden' name='direct_type' value='<%=type%>' />
+	<input type='hidden' name='direct_num' value='<%=num%>' />
+	<input type='hidden' name='direct_promo' value='<%=promo%>' />
+	<input type='hidden' name='direct_active_id' value='<%=active_id%>' />
+	<input name="radio_address" type="hidden" value="<%=addressList[0].id%>"/>
+	<input type="hidden" name="delivery_id" value="<%=delivery[0].id%>" />
+	<input type='hidden'  name='accept_time' value='任意' />
+	<input name="payment"  type="hidden" value="<%=payment[0].id%>" />
+	<div class="totalButton box">
+		<div class="totalSumPrice"><span>合计：</span><span id="totalPrice_sum">¥<%=final_sum%></span></div>
+		<input class="toPayOrder" type="submit" value="提交订单">
+	</div>
 </script>
 <script>
 	var addr=true;//判断用户是否提供地址
@@ -161,15 +159,23 @@
 			document.getElementById("defaultAddress").innerHTML = html1;
 			var html2 = template('wareList',data);
 			document.getElementById("orderBox").innerHTML = html2;
-//			var html3 = template('footer-content',data);
-//			document.getElementById("footer-fixed").innerHTML = html3;
-			document.getElementById("totalPrice_sum").innerHTML="￥"+data.final_sum;
+			var html3 = template('testFormTemp',data);
+			document.getElementById("testForm").innerHTML = html3;
+//			document.getElementById("totalPrice_sum").innerHTML="￥"+data.final_sum;
 
 		},
 		error:function(xhr,type,errorThrown){
 			//异常处理；
 			console.log(type);
 		}
+	});
+	template.helper('JSONsize', function(obj){
+		var arr=[];
+		for(var i in obj){
+			var temp=i+":"+obj[i];
+			arr.push(temp)
+		}
+		return arr;
 	});
 	//页面加载动画的调用
 	$(window).load(function(){
@@ -178,19 +184,9 @@
 	var turn=true;
 	//解决tab选项卡a标签无法跳转的问题
 	mui('body').on('tap','a',function(){
-			document.location.href=this.href;
+		document.location.href=this.href;
 	});
-	mui('body').on('tap','#collapse-wareList',function(){
-		if(turn){
-			turn=false;
-			document.querySelector('.icon-sign').className="mui-icon  mui-icon-arrowup icon-sign";
-			document.getElementById("collapse-wareList-item").style.display='block';
-		}else{
-			turn=true;
-			document.querySelector('.icon-sign').className="mui-icon  mui-icon-arrowdown icon-sign";
-			document.getElementById("collapse-wareList-item").style.display='none';
-		}
-	});
+
 
 </script>
 </body>

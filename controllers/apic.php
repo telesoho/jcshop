@@ -135,10 +135,10 @@ class Apic extends IController
         //配送方式
         $data['delivery'] = Api::run('getDeliveryList');
         //付款方式
-//        $data['payment'] = Api::run('getPaymentList');
-//        foreach ($data['payment'] as $key=>$value){
-//            $data['payment'][$key]['paymentprice'] = CountSum::getGoodsPaymentPrice($value['id'],$data['sum']);
-//        }
+        $data['payment'] = Api::run('getPaymentList');
+        foreach ($data['payment'] as $key=>$value){
+            $data['payment'][$key]['paymentprice'] = CountSum::getGoodsPaymentPrice($value['id'],$data['sum']);
+        }
         //商品展示
         foreach ($data['goodsList'] as $key => $value){
             if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
@@ -393,8 +393,17 @@ class Apic extends IController
         {
             IError::show(403,'订单信息不存在');
         }
-        $orderStatus = Order_Class::getOrderStatus($this->order_info);
-        $data = array('order_info'=>$order_info, 'orderStatus'=>$orderStatus,"order_step"=>Order_Class::orderStep($order_info));
+        $orderStatus = Order_Class::getOrderStatus($order_info);
+        if ($orderStatus == 2){$orderStatusT=0;}//待支付
+        if ($orderStatus == 4){$orderStatusT=1;}//待发货
+        if ($orderStatus == 3 || $orderStatus == 8 || $orderStatus == 11 ){$orderStatusT=2;}//待收货
+        if ($orderStatus == 6){$orderStatusT=3;}//待发货
+
+        $order_goods = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$order_info['id']));
+        foreach ($order_goods as $key => $value){
+            $order_goods[$key]['goods_array'] = json_decode($value['goods_array'],true);
+        }
+        $data = array('order_info'=>$order_info, 'orderStatus'=>$orderStatusT,"order_step"=>Order_Class::orderStep($order_info), "order_goods"=>$order_goods);
         header("Content-type: application/json");
         echo json_encode($data, true);
         exit();
@@ -702,6 +711,27 @@ class Apic extends IController
         $banner = Api::run('getBannerList');
         header("Content-type: application/json");
         echo json_encode($banner);
+        exit();
+    }
+
+    /**
+     * @return string
+     */
+    public function info()
+    {
+        $user_id = $this->user['user_id'];
+
+        $userObj       = new IModel('user');
+        $where         = 'id = '.$user_id;
+        $userRow = $userObj->getObj($where, array('head_ico','username'));
+
+        $memberObj       = new IModel('member');
+        $where           = 'user_id = '.$user_id;
+        $memberRow = $memberObj->getObj($where);
+
+        $data = array_merge($userRow, $memberRow);
+        header("Content-type: application/json");
+        echo json_encode($data);
         exit();
     }
 }

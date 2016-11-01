@@ -1,7 +1,7 @@
 {js:kindeditor}
 {set:$swfloadObject = new Swfupload();$swfloadObject->show($this->admin['admin_name'],$this->admin['admin_pwd']);}
 <div class="headbar">
-	<div class="position"><span>工具</span><span>></span><span>文章管理</span><span>></span><span>{if:isset($this->articleRow['id'])}编辑{else:}添加{/if}文章</span></div>
+	<div class="position"><span>工具</span><span>></span><span>专辑管理</span><span>></span><span>{if:isset($this->articleRow['id'])}编辑{else:}添加{/if}专辑</span></div>
 </div>
 <div class="content_box">
 	<div class="content form_content">
@@ -16,12 +16,12 @@
 					<th>分类：</th>
 					<td>
 						<select class="auto" name="category_id" pattern="required" alt="请选择分类值">
-							<option value=''>选择文章分类</option>
+							<option value=''>选择专辑分类</option>
 							{query:name=article_category order=path asc}
 							<option value='{$item['id']}'>{echo:str_repeat('&nbsp;&nbsp;&nbsp;',substr_count($item['path'],',')-2)}{$item['name']}</option>
 							{/query}
 						</select>
-						<label>*选择文章所属分类（必填）</label>
+						<label>*选择专辑所属分类（必填）</label>
 					</td>
 				</tr>
 				<tr>
@@ -72,7 +72,7 @@
 							<tbody id="goodsListBox"></tbody>
 						</table>
 						<button class='btn' type='button' onclick="searchGoods('{url:/block/search_goods/type/checkbox}',searchGoodsCallback);"><span>选择商品</span></button>
-						<label>文章所要关联的商品（可选）</label>
+						<label>专辑所要关联的商品（可选）</label>
 					</td>
 				</tr>
 

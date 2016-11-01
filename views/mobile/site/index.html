@@ -54,9 +54,7 @@
                 <div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
                     <div class="mui-scroll">
                         <a class="mui-control-item mui-active" href="#">
-                            <span class="text">推荐</span><span class="bg">
-                    <img src="" alt="">
-                </span>
+                            <span class="text">推荐</span><span class="bg"></span>
                         </a>
                         <a class="mui-control-item" href="#">
                             <span class="text">限时购</span><span class="bg"></span>
@@ -122,7 +120,7 @@
 </div>
 <footer>
     <nav class="mui-bar mui-bar-tab">
-            <a id="defaultTab" class="mui-tab-item mui-active home" href="#">
+            <a id="defaultTab" class="mui-tab-item mui-active home" href="{url:/site/index}">
                 <span class="mui-icon nav-icon icon-home"></span>
                 <div class="mui-tab-label">首页</div>
             </a>
@@ -172,29 +170,28 @@
     <div class="mui-slider-group mui-slider-loop">
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[0].url %>">
-                <img dataimg="<%=data[0].img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                <img src="/<%=data[0].img %>">
             </a>
         </div>
         <% for(var i=0; i<data.length; i++){%>
         <% var dat =data[i] %>
         <div class="mui-slider-item">
             <a href="<%=dat.url %>">
-                <img dataimg="<%=dat.img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                <img src="/<%=dat.img %>" class="samLazyImg">
             </a>
         </div>
         <%}%>
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[data.length-1].url %>">
-                <img dataimg="<%=data[data.length-1].img %>" class="samLazyImg" src="http://a.tbcdn.cn/mw/webapp/fav/img/grey.gif">
+                <img src="/<%=data[data.length-1].img %>">
             </a>
         </div>
     </div>
     <div class="mui-slider-indicator">
         <div class="mui-indicator mui-active"></div>
+        <% for(var i=1; i<data.length; i++){%>
         <div class="mui-indicator"></div>
-        <div class="mui-indicator"></div>
-        <div class="mui-indicator"></div>
-        <div class="mui-indicator"></div>
+        <%}%>
     </div>
 </script>
 <!--限时购模板引擎-->
@@ -314,7 +311,7 @@
                 <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
             </span>
         </div>
-        <a href="index.php?controller=apic&action=article_list&id=<%=dat.id %>">
+        <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
             <div class="content">
                 <div class="img">
                     <img src="<%=dat.image %>" alt="" width="100%">
@@ -337,18 +334,13 @@
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/time.js"></script>
 <script>
-    //aiax获取轮播图和限时购内容；
-    getIndex();
+        getIndex();
     //页面加载完成后调用的功能
-    $(window).load(function(){
+    window.onload=function(){
         $("#loading").fadeOut(300);
-        timer('timer');
-        //图片轮播功能
-        var gallery = mui('.mui-slider');
-        gallery.slider({
-            interval:4000//自动轮播周期，若为0则不自动播放，默认为0；
-        });
-    })
+    }
+
+
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
     mui('body').on('tap','a',function(){
@@ -439,7 +431,11 @@
                 dat.data=data;
                 var html = template('C_slider',dat);
                 document.getElementById("slider1").innerHTML = html;
-                getTimePurchase(dat);
+                var gallery = mui('#slider1');
+                gallery.slider({
+                    interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
+                });
+                getTimePurchase();
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
@@ -447,7 +443,7 @@
             }
         });
     }
-    function getTimePurchase(dat){
+    function getTimePurchase(){
         var url1='index.php?controller=apic&action=pro_speed_list';
         mui.ajax(url1,{
             dataType:'json',//服务器返回json格式数据
@@ -458,6 +454,7 @@
                 document.getElementById("timer").setAttribute("data_timer",data1.end_time);
                 var html2=template('timeWare',data1);
                 document.getElementById("timePurchase_body").innerHTML = html2;
+                timer('timer');
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；

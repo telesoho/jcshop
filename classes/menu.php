@@ -143,9 +143,9 @@ class Menu
 				'/tools/db_bak' => '数据库备份',
 				'/tools/db_res' => '数据库还原',
 			),
-			'文章管理'=>array(
-				'/tools/article_cat_list'=> '文章分类',
-				'/tools/article_list'=> '文章列表'
+			'专辑管理'=>array(
+				'/tools/article_cat_list'=> '专辑分类',
+				'/tools/article_list'=> '专辑列表'
 			),
 
 			'帮助管理'=>array(

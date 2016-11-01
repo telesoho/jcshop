@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查看物流</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css">
+    <style>
+        #container{
+            width:100%;
+            font-size:0.28rem;
+        }
+    </style>
+</head>
+<body>
+     <section id="container">
+
+     </section>
+</body>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script>
+    //	接收页面传过来的状态值
+    var Request = new Object();
+    Request = GetRequest();
+    var statusOrder=Request["id"];
+    var urlVal = "{url:/block/freight/id/@id@}";
+    urlVal = urlVal.replace("@id@", statusOrder);
+    $.get(urlVal,function(response){
+        console.log(response);
+        var responseHtml=response.substring(response.indexOf('<div class="container">'),response.indexOf("</body>"));
+        console.log(responseHtml);
+        document.getElementById("container").innerHTML=responseHtml;
+    })
+    //	获取url传递过来的参数
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+</script>
+</html>
