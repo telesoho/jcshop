@@ -133,10 +133,26 @@ class jcshopCsvImport extends pluginBase
 
 	}
 
+	// 取得$seller_id与$parent_id类目下相同的类目名的所有类目ID
+	private function getCategoryIds($name, $seller_id, $goods_id=null, $parent_id=null) {
+
+		$ret = [];
+		$category = new IModel('category');
+
+		$theCat = $category->query('name ="' . $name . '" and seller_id=' . $seller_id);
+
+		foreach($this->theCat as $catId){
+			$ret[] = $catId; 
+		}
+
+		return $ret;
+	}
+
 	// 将商品数据插入数据库
 	private function processGoodsData($collectData) {
 
 		$titleToCols = array(
+			'category.name'   => '商品类目',
 			'name'       => '商品名称',
 			'goods_no'	 => '商品JAN编码',
 			'sell_price' => '销售价格',
@@ -193,7 +209,7 @@ class jcshopCsvImport extends pluginBase
 				if($field !== "") {
 					$updateData['weight'] = IFilter::act($field,'int');
 				}
-				
+
 				// 处理上下架状态
 				$field = trim($val[$titleToCols['is_del']]);
 				if($field !== "") {
@@ -229,23 +245,38 @@ class jcshopCsvImport extends pluginBase
 
 				$goodsObject->setData($updateData);
 
-				if($goodsObject->update($where) == false) {
+				$qret = $goodsObject->update($where);
+
+				if( $qret === false) {
 					$this->error($where . ":" . JSON::encode($updateData));
 					continue;
 				}
 
-				//处理商品分类
-				if($this->category)
-				{
-					foreach($this->category as $catId)
+				// 如果存在分类名
+				$field = trim($val[$titleToCols['category.name']]);
+
+				if($field !== "") {
+
+					$cids = $this->getCategoryIds($field, $this->seller_id);
+
+					// 查找需要追加的分类
+					if($this->category)
 					{
-						$ret = $cateExtendDB->get_count('goods_id =' . $goods_id . ' and category_id =' . $catId);
-						if($ret == 0) {
-							$cateExtendDB->setData(array('goods_id' => $goods_id,'category_id' => $catId));
-							$cateExtendDB->add();
+						foreach($this->category as $catId)
+						{
+							$cids[] = $catId;
 						}
+					} 
+
+					foreach($cids as $cid) {
+						$ret = $cateExtendDB->get_count('goods_id =' . $goods_id . ' and category_id =' . $cid);
+						if($ret == 0) {
+							$cateExtendDB->setData(array('goods_id' => $goods_id,'category_id' => $cid));
+							$cateExtendDB->add();
+						}					
 					}
 				}
+
 
 				//处理商品图片
 				if(isset($val['mainPic']) && $val['mainPic'])
