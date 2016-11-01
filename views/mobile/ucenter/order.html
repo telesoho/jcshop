@@ -140,7 +140,7 @@
 		<%if(order.goodslist){%>
 		<div class="ware_item box">
 			<div class="img">
-				<img src="<%=order.goodslist[0].img%>" alt="" width="100%" />
+				<img src="/<%=order.goodslist[0].img%>" alt="" width="100%" />
 			</div>
 			<div class="content">
 				<div class="box">
@@ -156,7 +156,7 @@
 			<% var goodlist =order.goodslist[j] %>
 			<div class="ware_item box">
 				<div class="img">
-					<img src="<%=goodlist.img%>" alt="" width="100%" />
+					<img src="/<%=goodlist.img%>" alt="" width="100%" />
 				</div>
 				<div class="content">
 					<div class="box">
@@ -182,7 +182,7 @@
 		<%if(order.orderStatusVal==2){%>
 		<div class="action upline">
 			<a href="{url:/ucenter/order_status/order_id/<%=order.id%>/op/cancel}" class="button1 delOrder">取消订单</a>
-			<a href="#" class="button2 evaluate">去付款</a>
+			<a href="{url:/block/doPay/order_id/<%=order.id%>}" class="button2 evaluate">去付款</a>
 		</div>
 		<%}%>
 		<%if(order.orderStatusVal==3){%>

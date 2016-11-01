@@ -1285,6 +1285,9 @@ input[type='search']{
 	color:#fff;
 }
 /*订单确认页面*/
+.mui-poppicker-btn-ok{
+	color:#f3026a !important;
+}
 .defaultAddress{
 	margin-top:0.31rem;
 	height:1.57rem;
