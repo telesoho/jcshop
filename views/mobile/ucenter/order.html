@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/personalCenter.css" />
 </head>
 <body>
 <div id="loading">
@@ -63,7 +64,7 @@
 		</div>
 		<div class="mui-slider-group">
 			<div id="itemmobile0" class="mui-slider-item mui-control-content mui-active">
-				<div id="scroll1" class="mui-scroll-wrapper" >
+				<div id="scroll1" class="mui-scroll-wrapper"  style="margin-top:0.15rem">
 					<div class="mui-scroll">
 						<div class="mui-table-view" id="main_panel0">
 							<div class="order_menu upline">
@@ -73,7 +74,7 @@
 				</div>
 			</div>
 			<div id="itemmobile1" class="mui-slider-item mui-control-content ">
-				<div class="mui-scroll-wrapper">
+				<div class="mui-scroll-wrapper"  style="margin-top:0.15rem">
 					<div class="mui-scroll">
 						<div class="mui-table-view" id="main_panel1">
 							<div class="order_menu upline">
@@ -83,7 +84,7 @@
 				</div>
 			</div>
 			<div id="itemmobile2" class="mui-slider-item mui-control-content">
-				<div class="mui-scroll-wrapper">
+				<div class="mui-scroll-wrapper"  style="margin-top:0.15rem">
 					<div class="mui-scroll">
 						<div class="mui-table-view" id="main_panel2">
 							<div class="order_menu upline">
@@ -94,7 +95,7 @@
 			</div>
 			<div id="itemmobile3" class="mui-slider-item mui-control-content">
 				<div class="mui-scroll-wrapper">
-					<div class="mui-scroll">
+					<div class="mui-scroll" style="margin-top:0.15rem">
 						<div class="mui-table-view" id="main_panel3">
 							<div class="order_menu upline">
 							</div>
@@ -104,7 +105,7 @@
 			</div>
 			<div id="itemmobile4" class="mui-slider-item mui-control-content">
 				<div class="mui-scroll-wrapper">
-					<div class="mui-scroll">
+					<div class="mui-scroll" style="margin-top:0.15rem">
 						<div class="mui-table-view" id="main_panel4">
 							<div class="order_menu upline">
 							</div>
@@ -115,10 +116,22 @@
 		</div>
 	</div>
 </div>
+<section>
+	<!--物流弹出菜单-->
+	<div id="logistics" class="mui-modal">
+		<header class="mui-bar mui-bar-nav">
+			<a href="#logistics" class="mui-icon mui-icon-left-nav mui-pull-left testClick1"></a>
+			<h1 class="mui-title">物流详情</h1>
+		</header>
+		<div class="mui-content" style="height: 100%;" id="container">
+
+		</div>
+	</div>
+</section>
 <script id="orderSum" type="text/html">
 	<%if(state.length==0){%>
 		<div class="logoImg">
-			<img src="/views/mobile/skin/default/image/jmj/icon/cat.png" style="width:1.98rem;height:1.98rem" alt="" />
+			<img src="/views/mobile/skin/default/image/jmj/icon/cat.png" style="width:1.98rem;height:2.66rem" alt="" />
 		</div>
 		<div class="load_text">
 			<span>~</span>
@@ -136,7 +149,7 @@
 		</div>
 		<!--展示商品状态-->
 		<!--展示第1件商品-->
-		<a href="{url:/ucenter/order_detail/id/<%=order.id%>}" class="toOrderDetail">
+		<a href="{url:/ucenter/order_detail}?id=<%=order.id%>" class="toOrderDetail">
 		<%if(order.goodslist){%>
 		<div class="ware_item box">
 			<div class="img">
@@ -187,8 +200,8 @@
 		<%}%>
 		<%if(order.orderStatusVal==3){%>
 		<div class="action upline">
-			<a href="#" class="button1 delOrder">查看物流</a>
-			<a href="{url:/ucenter/order_status/order_id/<%=order.id%>/op/confirm}" class="button2 evaluate" >确认收货</a>
+			<a href="#" class="button1 testClick" data-v="<%=order.goodslist[0].delivery_id %>">查看物流</a>
+			<a href="{url:/ucenter/order_status/order_id/<%=order.id%>/op/confirm}" class="button2 evaluate">确认收货</a>
 		</div>
 		<%}%>
 	</div>
@@ -208,7 +221,16 @@
 	mui('body').on('tap','.toOrderDetail',function(){
 		document.location.href=this.href;
 	});
-	mui('body').on('tap','.button1',function(){
+	mui('body').on('tap','.testClick',function(){
+		var attr=this.getAttribute("data-v");
+		getDelivery(attr);
+		mui("#logistics").popover('show');
+		$('.mui-backdrop').hide();
+	});
+//	mui('body').on('tap','.testClick1',function(){
+//		mui("#logistics").popover('hide');
+//	});
+	mui('body').on('tap','.delOrder',function(){
 		document.location.href=this.href;
 	});
 	mui('body').on('tap','.button2',function(){
@@ -326,7 +348,22 @@
 
 
 	}
-	function showTab(){
+	//快递跟踪
+	function freightLine(doc_id){
+		mui('.mui-popover').popover('toggle',document.getElementById("logistics_all"));
+		var urlVal = "{url:/block/freight/id/@id@}";
+		urlVal = urlVal.replace("@id@", doc_id);
+//		window.location.href=urlVal;
+	}
+	function getDelivery(id){
+		//获取物流信息
+		var urlVal = "{url:/block/freight/id/@id@}";
+		urlVal = urlVal.replace("@id@", id);
+		$.get(urlVal,function(response){
+			var responseHtml=response.substring(response.indexOf('<div class="container">'),response.indexOf("</body>"));
+			console.log(responseHtml);
+			document.getElementById("container").innerHTML=responseHtml;
+		})
 	}
 </script>
 </body>

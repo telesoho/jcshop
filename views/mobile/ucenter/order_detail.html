@@ -8,9 +8,6 @@
 	<title>九猫首页</title>
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/personalCenter.css" />
 </head>
 <body>
@@ -34,6 +31,18 @@
 <section>
 	<div class="buttonBox" id="buttonBox">
 
+	</div>
+</section>
+<section>
+	<!--物流弹出菜单-->
+	<div id="logistics" class="mui-modal">
+		<header class="mui-bar mui-bar-nav">
+			<a href="#logistics" class="mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">物流详情</h1>
+		</header>
+		<div class="mui-content" style="height: 100%;" id="container">
+
+		</div>
 	</div>
 </section>
 <script id="order_detail_top_temp" type="text/html">
@@ -152,7 +161,7 @@
 	<a href="#" class="butt">去支付</a>
 	<%}%>
 	<%if(orderStatus==2){%>
-	<a href="#" class="butt" onclick="freightLine(<%=order_goods[0].delivery_id %>);">查看物流</a>
+	<a href="#logistics" class="butt logistics">查看物流</a>
 	<a href="{url:/ucenter/order_status/order_id/<%=order_info.order_id%>/op/confirm}" class="butt">确认收货</a>
 	<%}%>
 	<%if(orderStatus==3){%>
@@ -166,7 +175,7 @@
 	var Request = new Object();
 	Request = GetRequest();
 	var getId=Request["id"];
-
+    var delivery_id;
 	mui.ajax('index.php?controller=apic&action=order_detail',{
 		data:{id:getId},
 		dataType:'json',	// 服务器返回json格式数据
@@ -183,6 +192,8 @@
 			document.getElementById("orderInfo").innerHTML=html4;
 			var html5=template('order_button_temp',data);
 			document.getElementById("buttonBox").innerHTML=html5;
+			delivery_id=data.order_goods[0].delivery_id;
+			getDelivery(delivery_id);
 		},
 		error:function(xhr,type,errorThrown){
 			//异常处理；
@@ -190,6 +201,17 @@
 			alert("failed");
 		}
 	});
+	function getDelivery(id){
+		//获取物流信息
+		var urlVal = "{url:/block/freight/id/@id@}";
+		urlVal = urlVal.replace("@id@", id);
+		$.get(urlVal,function(response){
+			var responseHtml=response.substring(response.indexOf('<div class="container">'),response.indexOf("</body>"));
+			console.log(responseHtml);
+			document.getElementById("container").innerHTML=responseHtml;
+		})
+	}
+
 	template.helper('JSONparse', function(obj){
 		return JSON.parse(obj);
 	});
@@ -207,12 +229,12 @@
 		return theRequest;
 	}
 	//快递跟踪
-	function freightLine(doc_id){
-		var urlVal = "{url:/block/freight/id/@id@}";
-		urlVal = urlVal.replace("@id@", doc_id);
-		console.log(urlVal);
-
-	}
+//	function freightLine(doc_id){
+//		console.log(doc_id);
+//		var urlVal = "{url:/block/freight/id/@id@}";
+//		urlVal = urlVal.replace("@id@", doc_id);
+//		window.location.href=urlVal;
+//	}
 </script>
 </body>
 </html>

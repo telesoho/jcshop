@@ -59,3 +59,21 @@ ul,li{margin:0;padding:0;list-style: none;}
 .butt{width:20%;border:1px solid #3D4245;border-radius: 4px;margin:0 0.2rem;text-align:center;font-size:0.24rem;
 padding:0.1rem 0.2rem;}
 .buttonBox .butt:last-child{border-color: #f3026a;color:#f3026a;}
+#container{
+background:#f8f8f8;
+}
+#container td{
+    font-size:0.26rem;
+    color:#bbbbbb;
+    line-height:0.3rem;
+    text-align:left;
+    padding:0.6rem 0 0 0.18rem;
+}
+#container td p{
+    padding-top:0.1rem;
+    font-size:0.28rem;
+    color:#3d4225;
+    line-height:0.3rem;
+    text-align:left;
+}
+
