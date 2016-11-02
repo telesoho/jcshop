@@ -13,6 +13,23 @@ class jcshopCsvImport extends pluginBase
 	private $pluginDir;
 	private $log;
 
+	//注册事件
+	public function reg()
+	{
+		//后台管理
+		plugin::reg("onSystemMenuCreate",function(){
+			$link = "/plugins/jcshopCsvImport";
+			Menu::$menu["插件"]["插件管理"][$link] = $this->name();
+		});
+
+		plugin::reg("onBeforeCreateAction@plugins@jcshopCsvImport",function(){
+			self::controller()->jcshopCsvImport = function(){$this->redirect("jcshopCsvImport");};
+		});
+		plugin::reg("onBeforeCreateAction@plugins@doJcshopCsvImport",function(){
+			self::controller()->doJcshopCsvImport = function(){$this->csvImport("jcshopCsvImport");};
+		});
+	}
+
 	/**
 	 * @brief 开始运行
 	 */
@@ -87,23 +104,6 @@ class jcshopCsvImport extends pluginBase
 		$this->redirect($returnUrl);
 	}
 
-	//注册事件
-	public function reg()
-	{
-		//后台管理
-		plugin::reg("onSystemMenuCreate",function(){
-			$link = "/plugins/jcshopCsvImport";
-			Menu::$menu["插件"]["插件管理"][$link] = $this->name();
-		});
-
-		plugin::reg("onBeforeCreateAction@plugins@jcshopCsvImport",function(){
-			self::controller()->jcshopCsvImport = function(){$this->redirect("jcshopCsvImport");};
-		});
-		plugin::reg("onBeforeCreateAction@plugins@csvImport",function(){
-			self::controller()->csvImport = function(){$this->csvImport("jcshopCsvImport");};
-		});
-	}
-
 	protected function log($msg) {
 		$this->log->write($msg);
 	}
@@ -140,9 +140,8 @@ class jcshopCsvImport extends pluginBase
 		$category = new IModel('category');
 
 		$theCat = $category->query('name ="' . $name . '" and seller_id=' . $seller_id);
-
-		foreach($this->theCat as $catId){
-			$ret[] = $catId; 
+		foreach($theCat as $catId){
+			$ret[] = $catId['id']; 
 		}
 
 		return $ret;
