@@ -118,6 +118,7 @@ class jcshopCsvImport extends pluginBase
 		$goodsFilename = $zipDir . "/goods.csv";
 
 		if(!file_exists($goodsFilename)) {
+			die("无法找到goods.csv文件");
 			return false;
 		}
 
@@ -278,14 +279,16 @@ class jcshopCsvImport extends pluginBase
 
 
 				//处理商品图片
+				$mainPic = $val['mainPic'];
+
 				if(isset($val['mainPic']) && $val['mainPic'])
 				{
-					foreach($val['mainPic'] as $photoFile)
-					{
+					//while(($photoFile = array_pop($mainPic)) !== NULL) {
+					foreach($mainPic as $photoFile) {
 						if(!is_file($photoFile))
 						{
 							continue;
-						}
+						}						
 						$md5Code = md5_file($photoFile);
 						$photoRow= $photoDB->getObj('id = "'.$md5Code.'"');
 						if(!$photoRow || !is_file($photoRow['img']))
@@ -336,10 +339,11 @@ class jcshopCsvImport extends pluginBase
 				}
 
 				//处理商品图片
+				$mainPic = $val['mainPic'];
 				if(isset($val['mainPic']) && $val['mainPic'])
 				{
-					foreach($val['mainPic'] as $photoFile)
-					{
+					// while(($photoFile = array_pop($mainPic)) !== NULL) {
+					foreach($mainPic as $photoFile) {
 						if(!is_file($photoFile))
 						{
 							continue;
@@ -353,8 +357,10 @@ class jcshopCsvImport extends pluginBase
 							$photoDB->setData(array("id" => $md5Code,"img" => $photoFile));
 							$photoDB->add();
 						}
-						$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
-						$photoRelationDB->add();
+						if($photoRelationDB->get_count('goods_id =' . $goods_id . " and photo_id ='" . $md5Code . "'") == 0) {
+							$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
+							$photoRelationDB->add();
+						}
 					}
 				}
 
