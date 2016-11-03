@@ -411,7 +411,7 @@ function productClass(goods_id,user_id,promo,active_id)
 		//商品先加入购物车
 
 		//普通购买
-		var url = "/simple/cart2cp?id="+id+"&num="+buyNums+"&type="+type;
+		var url = "/simple/cart2?id="+id+"&num="+buyNums+"&type="+type;
 
 		//有促销活动（团购，抢购）
 		if(_self.promo && _self.active_id)
@@ -420,7 +420,7 @@ function productClass(goods_id,user_id,promo,active_id)
 		}
 
 		//页面跳转
-		window.location.href = creatUrl(url);
+		window.location.href = url;
 	}
 
 	//构造函数

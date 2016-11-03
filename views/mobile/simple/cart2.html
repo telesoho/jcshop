@@ -144,11 +144,17 @@
 </script>
 <script>
 	var addr=true;//判断用户是否提供地址
+	var Request = new Object();
+	Request = GetRequest();
 	mui.ajax('index.php?controller=apic&action=cart2',{
+		data:{
+			id:Request["id"],
+			num:Request["num"],
+			type:Request["type"]
+		},
 		dataType:'json',//服务器返回json格式数据
 		type:'get',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
-		headers:{'Content-Type':'application/json'},
 		success:function(data){
 			//服务器返回响应，根据响应结果，分析是否登录成功；
 			var data=data;
@@ -186,7 +192,19 @@
 	mui('body').on('tap','a',function(){
 		document.location.href=this.href;
 	});
-
+	//	获取url传递过来的参数
+	function GetRequest() {
+		var url = location.search; //获取url中"?"符后的字串
+		var theRequest = new Object();
+		if (url.indexOf("?") != -1) {
+			var str = url.substr(1);
+			strs = str.split("&");
+			for(var i = 0; i < strs.length; i ++) {
+				theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+			}
+		}
+		return theRequest;
+	}
 
 </script>
 </body>
