@@ -448,6 +448,9 @@ class Apic extends IController
         $query2->where = sprintf("p.type = 1 and p.seller_id = 0 and p.name = '%s'", $items[0]['name']);
         $query2->limit = 6;
         $items2 = $query2->find();
+        foreach ($items2 as $key=>$value){
+            $items2[$key]['img_thumb'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/230/h/230");
+        }
         $items[0]['child'] = $items2;
         header("Content-type: application/json");
         echo json_encode($items[0]);
@@ -630,7 +633,8 @@ class Apic extends IController
             default:
                 break;
         }
-        $query->order = "ar.sort asc,ar.id desc";
+//        $query->order = "ar.sort asc,ar.id desc";
+        $query->order = "ar.sort desc";
         $query->fields = "ar.id,ar.title,ar.content,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ar.category_id,ar.image,ac.name";
         $items = $query->find();
         foreach ($items as $key => $value){
@@ -730,8 +734,9 @@ class Apic extends IController
         $memberRow = $memberObj->getObj($where);
 
         $data = array_merge($userRow, $memberRow);
-        header("Content-type: application/json");
-        echo json_encode($data);
-        exit();
+
+//        header("Content-type: application/json");
+//        echo json_encode($data);
+//        exit();
     }
 }

@@ -272,7 +272,8 @@ class Tools extends IController implements adminAuthorization
 			'sort'        => IFilter::act(IReq::get('sort','post'),'int'),
 			'style'       => IFilter::act(IReq::get('style','post')),
 			'color'       => IFilter::act(IReq::get('color','post')),
-			'image'       => substr(IFilter::act(IReq::get('image','post')),1,strlen(IFilter::act(IReq::get('image','post')))),
+			'image'       => substr(IFilter::act(IReq::get(
+			    'image','post')),1,strlen(IFilter::act(IReq::get('image','post')))),
 		);
 
         //检查catid是否为空
