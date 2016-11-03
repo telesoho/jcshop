@@ -260,6 +260,7 @@ input[type='search']{
 	background:#fff;
 }
 .albumn_index .title .logo{
+	display: inline-block;
 	margin-left:0.24rem;
 	position:relative;
 	top:0.05rem;
@@ -273,11 +274,6 @@ input[type='search']{
 	margin-left:0.23rem;
 	color:#3d4245;
 	font-size:0.3rem;
-	width:3.3rem;
-	display:inline-block;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
 }
 .albumn_index .title .share{
 	margin-right:0.43rem !important;
