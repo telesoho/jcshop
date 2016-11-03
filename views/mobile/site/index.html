@@ -172,20 +172,20 @@
     <div class="mui-slider-group mui-slider-loop">
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[0].url %>">
-                <img src="<%=data[0].img %>">
+                <img src="/<%=data[0].img %>">
             </a>
         </div>
         <% for(var i=0; i<data.length; i++){%>
         <% var dat =data[i] %>
         <div class="mui-slider-item">
             <a href="<%=dat.url %>">
-                <img src="<%=dat.img %>" class="samLazyImg">
+                <img src="/<%=dat.img %>" class="samLazyImg">
             </a>
         </div>
         <%}%>
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[data.length-1].url %>">
-                <img src="<%=data[data.length-1].img %>">
+                <img src="/<%=data[data.length-1].img %>">
             </a>
         </div>
     </div>
@@ -264,7 +264,7 @@
     <%if(dat.category_id==1){%>
     <section class="recommended line albumn_index">
         <div class="title">
-            <span class="logo" style="top:-0.28rem;">
+            <span class="logo" >
                 <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
             </span>
             <span class="name">
@@ -283,7 +283,7 @@
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
             <div class="content">
                 <div class="img">
-                    <img src="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
+                    <img src="/<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
                 </div>
                 <div class="mark1"><%=dat.nums %>件商品
                 </div>
@@ -298,7 +298,7 @@
     <section class="recommended line albumn_index">
         <div class="title">
             <span class="logo">
-                <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot" style="top:-0.3rem;">
+                <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
             </span>
             <span class="name">
             人気雑誌
@@ -316,7 +316,7 @@
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
             <div class="content">
                 <div class="img">
-                    <img src="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
+                    <img src="/<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
                 </div>
                 <div class="mark1"><%=dat.nums %>件商品</div>
                 <div class="mark2">
@@ -400,7 +400,7 @@
         mui("body").on("tap",".fix-toTop",function(){
             $("html,body").animate({scrollTop:0},0);
             return false;
-        })
+        });
     function pullupRefresh() {
         mui.ajax('index.php?controller=apic&action=article_list',{
             data:pageData,
