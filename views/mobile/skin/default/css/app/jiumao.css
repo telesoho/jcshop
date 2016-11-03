@@ -262,7 +262,7 @@ input[type='search']{
 .albumn_index .title .logo{
 	margin-left:0.24rem;
 	position:relative;
-	top:-0.25rem;
+	top:0.05rem;
 }
 .albumn_index .title .paper{
 	margin-left:0.24rem;
