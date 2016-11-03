@@ -336,6 +336,9 @@
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/time.js"></script>
 <script>
+    var pageData = {
+        page:1
+    };
         getIndex();
     //页面加载完成后调用的功能
     window.onload=function(){
@@ -398,9 +401,6 @@
             $("html,body").animate({scrollTop:0},0);
             return false;
         })
-    var pageData = {
-        page:1
-    };
     function pullupRefresh() {
         mui.ajax('index.php?controller=apic&action=article_list',{
             data:pageData,
@@ -420,7 +420,7 @@
             error:function(xhr,type,errorThrown){
                 //异常处理；
                 console.log(type);
-                alert("failed");
+
             }
         });
     }
