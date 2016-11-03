@@ -1,4 +1,5 @@
 {js:kindeditor}
+{set:$swfloadObject = new Swfupload();$swfloadObject->show($this->admin['admin_name'],$this->admin['admin_pwd']);}
 <div class="headbar">
 	<div class="position"><span>商品</span><span>></span><span>商品分类管理</span><span>></span><span>编辑分类</span></div>
 </div>
@@ -36,6 +37,39 @@
 					</td>
 				</tr>
 				<tr>
+					<th>分类图片：</th>
+					<td>
+						<input class="middle" type="text" disabled />
+						<div class="upload_btn">
+							<span id="uploadButton"></span>
+						</div>
+						<label>可以上传多张图片，分辨率3000px以下，大小不得超过{echo:IUpload::getMaxSize()}</label>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td id="divFileProgressContainer"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td id="thumbnails"></td>
+
+					<!--图片模板-->
+					<script type='text/html' id='picTemplate'>
+						<span class='pic'>
+							<input type="hidden" name="image" value="{webroot:<%=picRoot%>}">
+							<input type='hidden' name="img" value="" />
+							<input type='hidden' name="_imgList" value="" />
+							<img name="picThumb" onclick="defaultImage(this);" style="margin:5px; opacity:1;width:100px;height:100px" src="{webroot:<%=picRoot%>}" alt="<%=picRoot%>" />
+							<p>
+								<a class='orange' href='javascript:void(0)' onclick="$(this).parents('.pic').insertBefore($(this).parents('.pic').prev());"><img src="{skin:images/admin/arrow_left.png}" title="左移动" alt="左移动" /></a>
+								<a class='orange' href='javascript:void(0)' onclick="$(this).parents('.pic').remove();"><img src="{skin:images/admin/sign_cacel.png}" title="删除" alt="删除" /></a>
+								<a class='orange' href='javascript:void(0)' onclick="$(this).parents('.pic').insertAfter($(this).parents('.pic').next());"><img src="{skin:images/admin/arrow_right.png}" title="右移动" alt="右移动" /></a>
+							</p>
+						</span>
+					</script>
+				</tr>
+				<tr>
 					<th>排序：</th><td><input class="normal" name="sort" pattern='int' empty alt='排序必须是一个数字' type="text" value=""/></td>
 				</tr>
 				<tr>
@@ -48,7 +82,7 @@
 					<th>SEO描述：</th><td><textarea name="descript" cols="" rows=""></textarea></td>
 				</tr>
 				<tr>
-					<td></td><td><button class="submit" type="submit"><span>确 定</span></button></td>
+					<td></td><td><button class="submit" type="submit" onclick="return checkForm()"><span>确 定</span></button></td>
 				</tr>
 			</table>
 		</form>
@@ -60,5 +94,48 @@ $(function()
 {
 	var formObj = new Form();
 	formObj.init({echo:JSON::encode($this->categoryRow)});
+
+	//商品图片的回填
+	{if:isset($this->categoryRow)}
+	var categoryRow = {echo:JSON::encode($this->categoryRow)};
+	if (categoryRow.image){
+		var image = categoryRow.image.split(',');
+		for(var item in image)
+		{
+			var picHtml = template.render('picTemplate',{'picRoot':image[item]});
+			$('#thumbnails').append(picHtml);
+		}
+	}
+	{/if}
 })
+/**
+ * 图片上传回调,handers.js回调
+ * @param picJson => {'flag','img','list','show'}
+ */
+function uploadPicCallback(picJson)
+{
+	var picHtml = template.render('picTemplate',{'picRoot':picJson.img});
+	$('#thumbnails').append(picHtml);
+
+	//默认设置第一个为默认图片
+	if($('#thumbnails img[name="picThumb"][class="current"]').length == 0)
+	{
+		$('#thumbnails img[name="picThumb"]:first').addClass('current');
+	}
+}
+//提交表单前的检查
+function checkForm()
+{
+	//整理商品图片
+	var goodsPhoto = [];
+	$('#thumbnails img[name="picThumb"]').each(function(){
+		goodsPhoto.push(this.alt);
+	});
+	if(goodsPhoto.length > 0)
+	{
+		$('input[name="_imgList"]').val(goodsPhoto.join(','));
+		$('input[name="img"]').val($('#thumbnails img[name="picThumb"][class="current"]').attr('alt'));
+	}
+	return true;
+}
 </script>
