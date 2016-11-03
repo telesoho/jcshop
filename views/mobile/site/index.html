@@ -262,7 +262,7 @@
     <%if(dat.category_id==1){%>
     <section class="recommended line albumn_index">
         <div class="title">
-            <span class="logo">
+            <span class="logo" style="top:-0.28rem;">
                 <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
             </span>
             <span class="name">
@@ -272,16 +272,16 @@
             999+
             </span>
             <span class="like mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like" />
             </span>
             <span class="share mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
+                <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share" />
             </span>
         </div>
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
             <div class="content">
                 <div class="img">
-                    <img src="<%=dat.image %>" alt="" width="100%">
+                    <img src="/pic/thumb/img/<%=dat.image %>" alt="" width="100%" style="min-height:3.8rem;" />
                 </div>
                 <div class="mark1"><%=dat.nums %>件商品
                 </div>
@@ -296,7 +296,7 @@
     <section class="recommended line albumn_index">
         <div class="title">
             <span class="logo">
-                <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
+                <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot" style="top:-0.3rem;">
             </span>
             <span class="name">
             <%=dat.title %>
@@ -314,7 +314,7 @@
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
             <div class="content">
                 <div class="img">
-                    <img src="<%=dat.image %>" alt="" width="100%">
+                    <img src="/pic/thumb/img/<%=dat.image %>" alt="" width="100%" style="min-height:3.8rem;" />
                 </div>
                 <div class="mark1"><%=dat.nums %>件商品</div>
                 <div class="mark2">
@@ -338,6 +338,7 @@
     //页面加载完成后调用的功能
     window.onload=function(){
         $("#loading").fadeOut(300);
+        pullupRefresh();
     }
 
 
