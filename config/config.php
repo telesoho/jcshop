@@ -15,7 +15,7 @@
         'host' => '192.168.0.172:32771',
         'user' => 'root',
         'passwd' => '123456',
-        'name' => 'jmj_dev',
+        'name' => 'jmj',
       ),
     ),
     'write' => 
@@ -23,7 +23,7 @@
       'host' => '192.168.0.172:32771',
       'user' => 'root',
       'passwd' => '123456',
-      'name' => 'jmj_dev',
+      'name' => 'jmj',
     ),
   ),
   'interceptor' => 
