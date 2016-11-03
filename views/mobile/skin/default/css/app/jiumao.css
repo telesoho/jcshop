@@ -370,12 +370,14 @@ input[type='search']{
 	transform:scale(0.6);
 	font-size:0.29rem;
 }
-.fix-toTop img{
-	width:0.84rem;
-	position:fixed;
+.fix-toTop{
+	position:fixed !important;
 	right:0.39rem;
 	bottom:2.7rem;
 	z-index:99;
+}
+.fix-toTop img{
+	width:0.84rem;
 }
 /*搜索页面*/
 #modalid-searth{

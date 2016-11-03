@@ -117,8 +117,8 @@
         </div>
     </div>
 </div>
-<div class="fix-toTop">
-    <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" class="hide" />
+<div class="fix-toTop hide">
+    <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt=""  />
 </div>
 <footer>
     <nav class="mui-bar mui-bar-tab">
@@ -391,9 +391,11 @@
                 stop=true
             }
             if($(window).scrollTop()>100){
-                $(".fix-toTop img").fadeIn(400);
+                $(".fix-toTop").show();
+                $(".fix-toTop").css("position","fixed");
             }else{
-                $(".fix-toTop img").fadeOut(300);
+                $(".fix-toTop").hide();
+                $(".fix-toTop").css("position","fixed");
             }
         });
         //点击直达顶部
