@@ -262,7 +262,7 @@ input[type='search']{
 .albumn_index .title .logo{
 	margin-left:0.24rem;
 	position:relative;
-	top:0.05rem;
+	top:-0.25rem;
 }
 .albumn_index .title .paper{
 	margin-left:0.24rem;
@@ -374,14 +374,12 @@ input[type='search']{
 	transform:scale(0.6);
 	font-size:0.29rem;
 }
-.fix-toTop{
-	position:fixed;
-	right:0.39rem;
-	bottom:2.6rem;
-	z-index:99;
-}
 .fix-toTop img{
 	width:0.84rem;
+	position:fixed;
+	right:0.39rem;
+	bottom:2.7rem;
+	z-index:99;
 }
 /*搜索页面*/
 #modalid-searth{
