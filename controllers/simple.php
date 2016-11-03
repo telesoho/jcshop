@@ -374,7 +374,9 @@ class Simple extends IController
     	//渲染页面
     	$this->redirect('cart2');
     }
-
+    function cart2cp(){
+    	$this->redirect('cart2cp');
+    }
 	/**
 	 * 生成订单
 	 */

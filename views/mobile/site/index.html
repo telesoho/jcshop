@@ -37,8 +37,8 @@
 </div>
 <!--loading页结束-->
 <!--下拉刷新容器-->
-<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
-    <div class="mui-scroll" id="muiScroll">
+<!--<div id="pullrefresh" class="mui-content mui-scroll-wrapper">-->
+    <!--<div class="mui-scroll" id="muiScroll">-->
         <!--头部-->
         <section class="homeHeader">
             <div class="nav-header">
@@ -85,29 +85,29 @@
             <!--轮播图结束-->
         </section>
         <!--专辑-->
-        <section class="timePurchase line">
-            <div class="timePurchase_title">
-                <div class="logo">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying01.png" alt="" class="img-pan1">
-                    <span>限时抢购</span>
-                    <img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying02.png" alt="" class="img-pan2">
-                </div>
-                <div id="timer" data_timer="0000000000" class="timer">
-                    <span id="timer_h">00</span>
-                    <span id="timer_m">00</span>
-                    <span id="timer_s">00</span>
-                </div>
-                <div class="right">
-                    <span class="mui-icon mui-icon-forward mui-pull-right"></span>
-                    <a href="index.php?controller=site&action=time_purchase"><span class=" mui-pull-right">更多</span></a>
-                </div>
-            </div>
-            <div class="timePurchase_body" id="timePurchase_body">
-            </div>
-        </section>
+        <!--<section class="timePurchase line">-->
+            <!--<div class="timePurchase_title">-->
+                <!--<div class="logo">-->
+                    <!--<img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying01.png" alt="" class="img-pan1">-->
+                    <!--<span>限时抢购</span>-->
+                    <!--<img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying02.png" alt="" class="img-pan2">-->
+                <!--</div>-->
+                <!--<div id="timer" data_timer="0000000000" class="timer">-->
+                    <!--<span id="timer_h">00</span>-->
+                    <!--<span id="timer_m">00</span>-->
+                    <!--<span id="timer_s">00</span>-->
+                <!--</div>-->
+                <!--<div class="right">-->
+                    <!--<span class="mui-icon mui-icon-forward mui-pull-right"></span>-->
+                    <!--<a href="index.php?controller=site&action=time_purchase"><span class=" mui-pull-right">更多</span></a>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="timePurchase_body" id="timePurchase_body">-->
+            <!--</div>-->
+        <!--</section>-->
         <div id="pullContainer"></div>
-    </div>
-</div>
+    <!--</div>-->
+<!--</div>-->
 <!--底部空隙-->
 <div style="padding-bottom:2.42rem;background:#f8f8f8"></div>
 <div class="fix-nav">
@@ -116,7 +116,9 @@
             <span>19.32</span>
         </div>
     </div>
-
+</div>
+<div class="fix-toTop hide">
+    <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" />
 </div>
 <footer>
     <nav class="mui-bar mui-bar-tab">
@@ -170,24 +172,24 @@
     <div class="mui-slider-group mui-slider-loop">
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[0].url %>">
-                <img src="/<%=data[0].img %>">
+                <img src="<%=data[0].img %>">
             </a>
         </div>
         <% for(var i=0; i<data.length; i++){%>
         <% var dat =data[i] %>
         <div class="mui-slider-item">
             <a href="<%=dat.url %>">
-                <img src="/<%=dat.img %>" class="samLazyImg">
+                <img src="<%=dat.img %>" class="samLazyImg">
             </a>
         </div>
         <%}%>
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[data.length-1].url %>">
-                <img src="/<%=data[data.length-1].img %>">
+                <img src="<%=data[data.length-1].img %>">
             </a>
         </div>
     </div>
-    <div class="mui-slider-indicator">
+    <div class="mui-slider-indicator" style="bottom:0.16rem;">
         <div class="mui-indicator mui-active"></div>
         <% for(var i=1; i<data.length; i++){%>
         <div class="mui-indicator"></div>
@@ -195,21 +197,21 @@
     </div>
 </script>
 <!--限时购模板引擎-->
-<script id="timeWare" type="text/html">
-        <% for(var i=0,m=child.length; i<m; i++){%>
-        <% var dat =child[i] %>
-        <div class="item">
-            <a href="index.php?controller=site&action=time_purchase"><div class="img" style="border:1px solid #eee">
-                    <img src="<%=dat.img %>" alt="" width="100%">
-                    <span><%=dat.award_value %></span>
-                </div>
-                <div class="text">
-                    <div class="title"><%=dat.name %></div>
-                    <div class="price"><s><span>￥</span><%=dat.sell_price %></s></div>
-                </div></a>
-            </div>
-        <%}%>
-</script>
+<!--<script id="timeWare" type="text/html">-->
+        <!--<% for(var i=0,m=child.length; i<m; i++){%>-->
+        <!--<% var dat =child[i] %>-->
+        <!--<div class="item">-->
+            <!--<a href="index.php?controller=site&action=time_purchase"><div class="img" style="border:1px solid #eee">-->
+                    <!--<img src="<%=dat.img %>" alt="" width="100%">-->
+                    <!--<span><%=dat.award_value %></span>-->
+                <!--</div>-->
+                <!--<div class="text">-->
+                    <!--<div class="title"><%=dat.name %></div>-->
+                    <!--<div class="price"><s><span>￥</span><%=dat.sell_price %></s></div>-->
+                <!--</div></a>-->
+            <!--</div>-->
+        <!--<%}%>-->
+<!--</script>-->
 <!--专辑分页模板-->
 <script id="albumPage" type="text/html">
     <% for(var i=0; i<data.length; i++){%>
@@ -222,7 +224,7 @@
                 <img src="/views/mobile/skin/default/image/jmj/icon/move.png" alt="" class="img-vedio">
             </span>
             <span class="vedio_name">
-            <%=dat.name %>
+            動画のビデオ
                 <span>
                     <img src="/views/mobile/skin/default/image/jmj/icon/address.png" alt="" class="img-address">日本东京
                 </span>
@@ -266,7 +268,7 @@
                 <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
             </span>
             <span class="name">
-            <%=dat.title %>
+            特別推薦
             </span>
             <span class="num mui-pull-right">
             999+
@@ -281,13 +283,13 @@
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
             <div class="content">
                 <div class="img">
-                    <img src="/pic/thumb/img/<%=dat.image %>" alt="" width="100%" style="min-height:3.8rem;" />
+                    <img src="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
                 </div>
                 <div class="mark1"><%=dat.nums %>件商品
                 </div>
                 <div class="mark2">
                     <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-                    25万次</div>
+                    9999次</div>
             </div>
         </a>
     </section>
@@ -299,7 +301,7 @@
                 <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot" style="top:-0.3rem;">
             </span>
             <span class="name">
-            <%=dat.title %>
+            人気雑誌
             </span>
             <span class="num mui-pull-right">
                 999+
@@ -314,7 +316,7 @@
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
             <div class="content">
                 <div class="img">
-                    <img src="/pic/thumb/img/<%=dat.image %>" alt="" width="100%" style="min-height:3.8rem;" />
+                    <img src="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
                 </div>
                 <div class="mark1"><%=dat.nums %>件商品</div>
                 <div class="mark2">
@@ -334,14 +336,16 @@
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/time.js"></script>
 <script>
+    var pageData = {
+        page:1
+    };
         getIndex();
     //页面加载完成后调用的功能
     window.onload=function(){
         $("#loading").fadeOut(300);
         pullupRefresh();
     }
-
-
+    mui.init();
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
     mui('body').on('tap','a',function(){
@@ -371,21 +375,32 @@
         document.getElementById("modalid-searth").className="show";
         document.body.style.overflow = 'hidden';
     });
-    mui.init({
-        pullRefresh: {
-            container: '#pullrefresh',
-            up: {
-                contentrefresh: '正在加载...',
-                callback: pullupRefresh
+//    mui.init({
+//        pullRefresh: {
+//            container: '#pullrefresh',
+//        }
+//    });
+        //上拉加载
+        $(window).bind('scroll', function() {
+            var stop=true;
+            if ($(window).scrollTop() + $(window).height() +400 >= $(document).height() && $(window).scrollTop() > 50) {
+                if(stop==true){
+                    stop=false;
+                    pullupRefresh()
+                }
+                stop=true
             }
-        }
-    });
-    /**
-     * 上拉加载具体业务实现
-     */
-    var pageData = {
-        page:1
-    };
+            if($(window).scrollTop()>100){
+                $(".fix-toTop").fadeIn(400);
+            }else{
+                $(".fix-toTop").fadeOut(300);
+            }
+        });
+        //点击直达顶部
+        mui("body").on("tap",".fix-toTop",function(){
+            $("html,body").animate({scrollTop:0},0);
+            return false;
+        })
     function pullupRefresh() {
         mui.ajax('index.php?controller=apic&action=article_list',{
             data:pageData,
@@ -399,13 +414,13 @@
                 var div = document.createElement('div');
                 div.innerHTML=html3;
                 document.getElementById("pullContainer").appendChild(div);
-               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
+//               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
                 pageData.page++;
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
                 console.log(type);
-                alert("failed");
+
             }
         });
     }
@@ -436,7 +451,8 @@
                 gallery.slider({
                     interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
                 });
-                getTimePurchase();
+//                获取限时购数据
+//                getTimePurchase();
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
@@ -444,25 +460,25 @@
             }
         });
     }
-    function getTimePurchase(){
-        var url1='index.php?controller=apic&action=pro_speed_list';
-        mui.ajax(url1,{
-            dataType:'json',//服务器返回json格式数据
-            type:'get',//HTTP请求类型
-            timeout:10000,//超时时间设置为10秒；
-            success:function(data1){
-                //服务器返回响应，根据响应结果，分析是否登录成功；
-                document.getElementById("timer").setAttribute("data_timer",data1.end_time);
-                var html2=template('timeWare',data1);
-                document.getElementById("timePurchase_body").innerHTML = html2;
-                timer('timer');
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
-            }
-        });
-    }
+//    function getTimePurchase(){
+//        var url1='index.php?controller=apic&action=pro_speed_list';
+//        mui.ajax(url1,{
+//            dataType:'json',//服务器返回json格式数据
+//            type:'get',//HTTP请求类型
+//            timeout:10000,//超时时间设置为10秒；
+//            success:function(data1){
+//                //服务器返回响应，根据响应结果，分析是否登录成功；
+//                document.getElementById("timer").setAttribute("data_timer",data1.end_time);
+//                var html2=template('timeWare',data1);
+//                document.getElementById("timePurchase_body").innerHTML = html2;
+//                timer('timer');
+//            },
+//            error:function(xhr,type,errorThrown){
+//                //异常处理；
+//                console.log(type);
+//            }
+//        });
+//    }
     function checkPause(obj){
         var self=obj;
         $(self).next().next().removeClass("hide");

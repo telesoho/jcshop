@@ -159,9 +159,11 @@ jQuery(function(){
 	{if:$this->articleRow}
 	{set:$goodsList = Api::run("getArticleGoods",array("#article_id#",$this->articleRow['id']))}
 	createGoodsList({echo:JSON::encode($goodsList)});
-	var a = {echo:JSON::encode($this->articleRow['image'])};
-	var picHtml = template.render('picTemplate', {'picRoot': a});
-	$('#thumbnails').append(picHtml);
+		{if:$this->articleRow['image']}
+		var a = {echo:JSON::encode($this->articleRow['image'])};
+		var picHtml = template.render('picTemplate', {'picRoot': a});
+		$('#thumbnails').append(picHtml);
+		{/if}
 	{/if}
 
 });

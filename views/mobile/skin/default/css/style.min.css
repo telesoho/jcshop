@@ -2,9 +2,9 @@
 新增地址样式
 **/
 .inputName{margin-top:0.29rem;}
-.inputName input{border:1px solid #eee;border-left:0;border-right:0;border-radius:0;height:0.92rem;font-size:0.3rem;color:#bbb;}
+.inputName input{border:1px solid #eee;border-left:0;border-right:0;border-radius:0;height:0.92rem;font-size:0.3rem;color:#040404;padding-left:0.16rem;}
 .inputContent{margin-top:0.13rem;border-top:1px solid #eee;}
-.inputContent input{border:1px solid #eee;border-left:0;border-right:0;border-radius:0;border-top:0;height:0.92rem;font-size:0.3rem;color:#bbb;}
+.inputContent input{border:1px solid #eee;border-left:0;border-right:0;border-radius:0;border-top:0;height:0.92rem;font-size:0.3rem;color:#040404;padding-left:0.16rem;}
 .add_newAddrSub{width:100%;overflow:hidden;position:fixed; left:0;bottom:0;}
 .add_newAddrSub .submitAdd{width:100%;background:#f3026a;opacity:1;color:#fff;border:0;border-radius:0;height:1rem;font-size:0.36rem;}
 .add_newAddrSub .submitAdd:disabled{background:#f3026a;opacity:0.5;}
@@ -21,7 +21,7 @@ sit_products.css更改
 .row_b_t{border-top:1px solid #eee;}
 .title{height:0.6rem;line-height:0.7rem;font-size:0.14rem;padding:0 0.1rem;}
 .row_margin{margin-top:0.13rem;}
-.mui-input-row input{border:1px solid #eee;border-left:0;border-right:0;border-radius:0;height:0.92rem;color:#bbb;font-size:0.3rem;border-top:0;}
+.mui-input-row input{border:1px solid #eee;border-left:0;border-right:0;border-radius:0;height:0.92rem;color:#040404;font-size:0.3rem;border-top:0;padding-left:0.16rem;}
 .newAddrSub_position{width:100%;overflow:hidden;position:fixed; left:0;bottom:0;}
 .newAddrSub_position .submit_suc{width:100%;background:#f3026a;color:#fff;border:0;border-radius:0;height:1rem;font-size:0.36rem;}
 
@@ -43,7 +43,7 @@ sit_products.css更改
 .sel_title{overflow:hidden;margin-left:2.3rem;}
 .sel_title a{display:block;font-size:0.3rem;color:#3d4245;line-height:0.35rem;text-align:left;width:3.75rem;}
 .a_da{position:absolute;top:0;right:0;}
-.sel_title span{display:block;font-size:0.3rem;margin-top:0.29rem;
+.sel_title span{display:block;font-size:0.3rem;margin-top:0.29rem;padding-left:0.1rem;
     font-family:'WickedMouseDemo';
     text-shadow: 0.03rem 0.03rem 0 #0104f0, 0.03rem -0.03rem 0 #0104f0, -0.03rem -0.03rem 0 #0104f0, -0.03rem 0.03rem 0 #0104f0, 0.03rem 0.02rem 0 #0104f0, 0.03rem -0.02rem 0 #0104f0, -0.03rem -0.02rem 0 #0104f0, -0.03rem 0.02rem 0 #0104f0, 0.03rem 0.01rem 0 #0104f0, 0.03rem -0.01rem 0 #0104f0, -0.03rem -0.01rem 0 #0104f0, -0.03rem 0.01rem 0 #0104f0, 0.03rem 0px 0 #0104f0, 0.03rem 0px 0 #0104f0, -0.03rem 0px 0 #0104f0, -0.03rem 0px 0 #0104f0, 0.02rem 0.03rem 0 #0104f0, 0.02rem -0.03rem 0 #0104f0, -0.02rem -0.03rem 0 #0104f0, -0.02rem 0.03rem 0 #0104f0, 0.02rem 0.02rem 0 #0104f0, 0.02rem -0.02rem 0 #0104f0, -0.02rem -0.02rem 0 #0104f0, -0.02rem 0.02rem 0 #0104f0, 0.02rem 0.01rem 0 #0104f0, 0.02rem -0.01rem 0 #0104f0, -0.02rem -0.01rem 0 #0104f0, -0.02rem 0.01rem 0 #0104f0, 0.02rem 0px 0 #0104f0, 0.02rem 0px 0 #0104f0, -0.02rem 0px 0 #0104f0, -0.02rem 0px 0 #0104f0, 0.01rem 0.03rem 0 #0104f0, 0.01rem -0.03rem 0 #0104f0, -0.01rem -0.03rem 0 #0104f0, -0.01rem 0.03rem 0 #0104f0, 0.01rem 0.02rem 0 #0104f0, 0.01rem -0.02rem 0 #0104f0, -0.01rem -0.02rem 0 #0104f0, -0.01rem 0.02rem 0 #0104f0, 0.01rem 0.01rem 0 #0104f0, 0.01rem -0.01rem 0 #0104f0, -0.01rem -0.01rem 0 #0104f0, -0.01rem 0.01rem 0 #0104f0, 0.01rem 0px 0 #0104f0, 0.01rem 0px 0 #0104f0, -0.01rem 0px 0 #0104f0, -0.01rem 0px 0 #0104f0, 0px 0.03rem 0 #0104f0, 0px -0.03rem 0 #0104f0, 0px -0.03rem 0 #0104f0, 0px 0.03rem 0 #0104f0, 0px 0.02rem 0 #0104f0, 0px -0.02rem 0 #0104f0, 0px -0.02rem 0 #0104f0, 0px 0.02rem 0 #0104f0, 0px 0.01rem 0 #0104f0, 0px -0.01rem 0 #0104f0, 0px -0.01rem 0 #0104f0, 0px 0.01rem 0 #0104f0, 0px 0px 0 #0104f0, 0px 0px 0 #0104f0, 0px 0px 0 #0104f0, 0px 0px 0 #0104f0, 0 0 0 #0104f0;
     color:#fff900;}

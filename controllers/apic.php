@@ -448,6 +448,9 @@ class Apic extends IController
         $query2->where = sprintf("p.type = 1 and p.seller_id = 0 and p.name = '%s'", $items[0]['name']);
         $query2->limit = 6;
         $items2 = $query2->find();
+        foreach ($items2 as $key=>$value){
+            $items2[$key]['img_thumb'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/230/h/230");
+        }
         $items[0]['child'] = $items2;
         header("Content-type: application/json");
         echo json_encode($items[0]);
@@ -613,7 +616,6 @@ class Apic extends IController
     public function article_list(){
         $type = IFilter::act(IReq::get('type'),'int');
         $query = new IQuery("article as ar");
-//        $page = 1;
         $query->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
         $query->pagesize = 3;
         $query->join = "left join article_category as ac on ac.id = ar.category_id";
@@ -630,8 +632,9 @@ class Apic extends IController
             default:
                 break;
         }
-        $query->order = "ar.sort asc,ar.id desc";
-        $query->fields = "ar.id,ar.title,ar.content,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ar.category_id,ar.image,ac.name";
+//        $query->order = "ar.sort asc,ar.id desc";
+        $query->order = "ar.sort desc";
+        $query->fields = "ar.id,ar.title,ar.content,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ar.category_id,ar.image,ar.visit_num,ar.favorite,ac.name";
         $items = $query->find();
         foreach ($items as $key => $value){
             $items[$key]['nums'] = count(Api::run('getArticleGoods',array("#article_id#",$value['id'])));
@@ -730,8 +733,61 @@ class Apic extends IController
         $memberRow = $memberObj->getObj($where);
 
         $data = array_merge($userRow, $memberRow);
-        header("Content-type: application/json");
-        echo json_encode($data);
-        exit();
+
+//        header("Content-type: application/json");
+//        echo json_encode($data);
+//        exit();
+    }
+
+
+    //添加收藏夹
+    function favorite_article_add()
+    {
+        $article_id = IFilter::act(IReq::get('id'),'int');
+        $message  = '';
+
+        if($article_id == 0)
+        {
+            $message = '文章id值不能为空';
+        }
+        else if(!isset($this->user['user_id']) || !$this->user['user_id'])
+        {
+            $message = '请先登录';
+        }
+        else
+        {
+            $favoriteObj = new IModel('favorite_article');
+            $articleRow    = $favoriteObj->getObj('user_id = '.$this->user['user_id'].' and aid = '.$article_id);
+            if($articleRow)
+            {
+                $message = '您已经收藏过此件专辑';
+            }
+            else
+            {
+                $catObj = new IModel('article');
+                $catRow = $catObj->getObj('id = '.$article_id);
+                $cat_id = $catRow ? $catRow['category_id'] : 0;
+                $dataArray   = array(
+                    'user_id' => $this->user['user_id'],
+                    'aid'     => $article_id,
+                    'time'    => ITime::getDateTime(),
+                    'cat_id'  => $cat_id,
+                );
+                $favoriteObj->setData($dataArray);
+                $favoriteObj->add();
+                $message = '收藏成功';
+
+                //商品收藏信息更新
+                $articleDB = new IModel('article');
+                $articleDB->setData(array("favorite" => "favorite + 1"));
+                $articleDB->update("id = ".$article_id,'favorite');
+            }
+        }
+        $result = array(
+            'isError' => true,
+            'message' => $message,
+        );
+
+        echo JSON::encode($result);
     }
 }

@@ -56,7 +56,7 @@
             ?>
             <div class="content_ware">
                 <div class="img">
-                    <a href={url:/site/products/id/$goods_no_data['goods_id']}><img src="{$goods_no_data['img']}" alt="" style="width:2rem;"></a>
+                    <a href={url:/site/products?id=$goods_no_data['goods_id']}><img src="{$goods_no_data['img']}" alt="" style="width:2rem;"></a>
                 </div>
                 <div class="ware">
                     <div class="title">{$goods_no_data['name']}</div>
@@ -65,7 +65,7 @@
                         <span class="art">日本售价:</span>
                         <span class="price2">{$goods_no_data['sell_price']}</span>
                     </div>
-                    <a href="{url:/site/products/id/$goods_no_data['goods_id']}"><div class="buy">立即购买</div></a>
+                    <a href="{url:/site/products?id=$goods_no_data['goods_id']}"><div class="buy">立即购买</div></a>
                 </div>
             </div>
 

@@ -296,7 +296,8 @@ class Site extends IController
 				IError::show(403,'资讯文章不存在');
 				exit;
 			}
-
+            $articleObj->setData(array("visit_num"=>$this->articleRow['visit_num']+1));
+			$articleObj->update('id = '.$this->article_id);
 			//关联商品
 			$this->relationList = Api::run('getArticleGoods',array("#article_id#",$this->article_id));
 			$this->redirect('article_detail');
