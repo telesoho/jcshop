@@ -659,6 +659,9 @@ class Apic extends IController
         if ($article->page > $total_page){
             $relationList = [];
         }
+        foreach($relationList as $key => $value){
+            $relationList[$key]['img'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/250/h/250");
+        }
         header("Content-type: application/json");
         echo json_encode($relationList);
         exit();
@@ -677,7 +680,6 @@ class Apic extends IController
         echo json_encode($data);
         exit();
     }
-
     /**
      * 获取其子类数据信息
      */

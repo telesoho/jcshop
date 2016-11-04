@@ -13,7 +13,7 @@ return array(
     'getGoodsInfoByGoodsNO' => array(
         'query' => array(
             'name'   => 'goods as go',
-            'where'  => 'go.goods_no = #goods_no# and go.is_del = 0',
+            'where'  => 'go.goods_no = "#goods_no#" and go.is_del = 0',
             'fields' => 'go.name,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id',
             'type'   => 'row',
         )
