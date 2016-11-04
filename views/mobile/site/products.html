@@ -20,10 +20,6 @@
 	</style>
 </head>
 <body>
-    <!--<header>
-        <span class="mui-icon mui-icon-arrowleft"></span>
-        商品详情  
-    </header>-->
     <section>
         <!--轮播开始-->
         <div id="carousel" class="mui-slider">
@@ -45,19 +41,15 @@
         </div>
     </section>
     <section>
-        <div class="relatedContent">
-            <p class="title">相关内容</p> 
-            <div class="contentInfo">
-                <div class="info01"><a href="#"><img src="/views/mobile/skin/default/image/jmj/img/vedioImg.png"/></a></div> 
-                <div class="info02">
-                	<a href="#">
-	                    <p>精彩回放</p>
-	                    <p>视频名称视频名称视频名称</p>
-	                    <p><img src="/views/mobile/skin/default/image/jmj/img/eye_icon.png"/>1.53万次</p>
-	                </a>
-                </div>   
-            </div>  
-        </div>
+		<div class="relatedContent">
+			<p class="title">相关视频</p>
+			<div class="contentInfo">
+				<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" style="height:1.8rem">
+					<div class="mui-scroll" id="relateVedio">
+					</div>
+				</div>
+			</div>
+		</div>
     </section>
     <section id="evaluateBox">
 
@@ -84,48 +76,13 @@
 	    	<section>
 	    		<div class="title01">
 	    			品牌介绍
-	    			<div><a href="#">查看<span>10</span>件商品<span class="mui-icon mui-icon-arrowright"></span></a></div>
+	    			<div><a href="#">查看<span id="sumRelative">10</span>件商品<span class="mui-icon mui-icon-arrowright"></span></a></div>
 	    		</div>
 	    		<div class="brand">
-	    			<div class="brandBox">
-		    			<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/brand01.png"/></a>
-		    		</div>
-		    		<div class="brandDetail">
-		    			<a href="#">
-			    			<p>资生堂</p>
-			    			<p>品牌简单介绍</p>
-			    	   </a>
-		    		</div>
+					<div id="bannel">
+					</div>
 		    		<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-					    <div class="goodsList mui-scroll">
-					        <div class="mui-control-item">
-					        	<a href="#">
-						            <img src="/views/mobile/skin/default/image/jmj/img/1.png"/>
-				    				<p>商品名称商品名称</p>
-				    				<p>¥ 423.40</p>
-				    			</a>
-					        </div>
-					        <div class="mui-control-item">
-					            <a href="#">
-						            <img src="/views/mobile/skin/default/image/jmj/img/1.png"/>
-				    				<p>商品名称商品名称</p>
-				    				<p>¥ 423.40</p>
-				    			</a>
-					        </div>
-					        <div class="mui-control-item">
-					        	<a href="#">
-						            <img src="/views/mobile/skin/default/image/jmj/img/1.png"/>
-				    				<p>商品名称商品名称</p>
-				    				<p>¥ 423.40</p>
-				    			</a>
-					        </div>
-					        <div class="mui-control-item">
-					        	<a href="#">
-						            <img src="/views/mobile/skin/default/image/jmj/img/1.png"/>
-				    				<p>商品名称商品名称</p>
-				    				<p>¥ 423.40</p>
-				    			</a>
-					        </div>
+					    <div class="goodsList mui-scroll" id="getDetailR">
 					    </div>
 					</div>
 	    		</div>	    		
@@ -180,10 +137,8 @@
 	<section>
     	<!--服务说明弹出框加入购物车-->
     	<div id="select_product" class="mui-popover mui-popover-action mui-popover-bottom">
-
 		</div>
 		<div id="buyNow_product" class="mui-popover mui-popover-action mui-popover-bottom">
-
 		</div>
     </section>
 	<!--轮播图模板引擎-->
@@ -219,6 +174,7 @@
 			<%}%>
 		</div>
 	</script>
+	<!--商品详情模板引擎-->
 	<script id="product_goodsDetail" type="text/html">
 		<div class="goodsTitle">
 			<a href="#"><span><%=name %></span></a>
@@ -232,6 +188,7 @@
 			<span>日本售价：</span><span><%=market_price %></span>
 		</div>
 	</script>
+	<!--心得模板-->
 	<script id="evaluate" type="text/html">
 		<%if(comments==0){%>
 		<%}else{%>
@@ -293,6 +250,51 @@
 			<button class="select_btn hide"  id="buyNowButton">去付款</button>
 		</div>
 	</script>
+	<!--相关视频专辑-->
+	<script id="vedioTemp" type="text/html">
+		<%if(article_data){%>
+			<% for(var i=0; i<article_data.length; i++){%>
+			<% var item =article_data[i] %>
+			<div class="mui-control-item">
+				<div class="info01"><a href="#"><img src="<%=item.image %>"/></a></div>
+				<div class="info02">
+					<a href="#">
+						<p>精彩回放</p>
+						<p><%=item.title %></p>
+						<p><img src="/views/mobile/skin/default/image/jmj/img/eye_icon.png"/>0次</p>
+					</a>
+				</div>
+			</div>
+			<%}%>
+		<%}%>
+	</script>
+	<!--关联品牌-->
+	<script id="relateTemp" type="text/html">
+		<%if(brand_good_data){%>
+		<% for(var i=0; i<brand_good_data.length; i++){%>
+		<% var item =brand_good_data[i] %>
+		<div class="mui-control-item">
+			<a href="#">
+				<img src="<%=item.img_thumb %>"/>
+				<p><%=item.name %></p>
+				<p>¥ <%=item.sell_price %></p>
+			</a>
+		</div>
+		<%}%>
+		<%}%>
+	</script>
+	<!--关联品牌bannel-->
+	<script id="relateBannelTemp" type="text/html">
+		<div class="brandBox">
+			<a href="#"><img src="<%=brand_data.logo %>"/></a>
+		</div>
+		<div class="brandDetail">
+			<a href="<%=brand_data.url %>">
+				<p><%=brand_data.name %></p>
+				<p><%=brand_data.description %>这是商品详细介绍</p>
+			</a>
+		</div>
+	</script>
 	<script src="/views/mobile/javascript/jquery.min.js"></script>
 	<script src="/views/mobile/javascript/template-native.js"></script>
     <script src="/views/mobile/javascript/mui.js"></script>
@@ -300,8 +302,6 @@
     <script type="text/javascript" charset="utf-8">
 		//banner图轮播
 		window.onload=function(){
-
-
 		}
 		mui('body').on("tap","#joinButton",function(){
 			$("#joinCarButton").show();
@@ -339,8 +339,8 @@
 					var html4=template('joinCarTemplate',data);
 					document.getElementById('select_product').innerHTML=html4;
 					var productInstance = new productClass("{$id}","{$this->user['user_id']}","{$promo}","{$active_id}");
-//					var array=Object.keys(data.spec_array);
-//					console.log(array);
+					console.log(product_detail);
+					getRelateDetail(product_detail);
 				},
 				error:function(xhr,type,errorThrown){
 					//异常处理；
@@ -380,7 +380,28 @@
 			}
 			return theRequest;
 		}
-
+		function getRelateDetail(obj){
+			mui.ajax('index.php?controller=apic&action=products_details_other',{
+				data:{id:obj},
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				success:function(data){
+					//轮播图展示页面
+					var relateV=template('vedioTemp',data);
+					document.getElementById('relateVedio').innerHTML=relateV;
+					var relateW=template('relateTemp',data);
+					document.getElementById('getDetailR').innerHTML=relateW;
+					var relateB=template('relateBannelTemp',data);
+					document.getElementById('bannel').innerHTML=relateB;
+					document.getElementById('sumRelative').innerHTML=data.brand_data.nums;
+				},
+				error:function(xhr,type,errorThrown){
+					//异常处理；
+					console.log(type);
+				}
+			});
+		}
 	</script>
 </body>
 </html>

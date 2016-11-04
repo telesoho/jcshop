@@ -230,7 +230,7 @@
                 </span>
             </span>
             <span class="num mui-pull-right">
-                0
+                <%=dat.favorite %>
             </span>
             <span class="like mui-pull-right">
                 <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
@@ -241,14 +241,14 @@
         </div>
         <div class="vedio">
             <video class="player" src="http://f02.v1.cn/transcode/14410292MOBILET2.mp4"
-                   webkit-playsinline=""   width="100%" onpause="checkPause(this);" onplaying="checkPlay(this);">
+                   width="100%" onpause="checkPause(this);" onplaying="checkPlay(this);">
             </video>
             <div class="vedioStyle">
                 <div class="top">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="" class="img-read">1.53万次
+                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="" class="img-read"><%=dat.visit_num %>次
                 </div>
                 <div class="bottom">
-                    <span class="name">视频名称视频名称
+                    <span class="name"><%=dat.name %>
                     </span>
                     <!--<span class="time">09:13</span>-->
                 </div>

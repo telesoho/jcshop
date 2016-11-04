@@ -119,14 +119,13 @@
     };
     var articleItemStr="";
     //上拉加载
+    var stop = true;
     $(window).bind('scroll', function() {
-        var stop = true;
         if ($(window).scrollTop() + $(window).height() + 600 >= $(document).height() && $(window).scrollTop() > 50) {
             if (stop == true) {
                 stop = false;
                 pullupRefresh()
             }
-            stop = true;
         }
     });
     function pullupRefresh() {
@@ -142,9 +141,12 @@
                 var html=template('articleItem',pageArticle);
                 articleItemStr+=html;
                 document.getElementById("getArticleWare").innerHTML=articleItemStr;
+                console.log();
 //                mui('#pullrefresh').pullRefresh().endPullupToRefresh(data==false);
                 if(data==false){
-
+                    stop = false;
+                }else{
+                    stop = true;
                 }
             },
             error:function(xhr,type,errorThrown){
