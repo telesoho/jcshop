@@ -415,25 +415,6 @@ class Apic extends IController
     /**
      * ---------------------------------------------------商品---------------------------------------------------*
      */
-    /**
-     * 返回热卖商品
-     */
-    public function getCommendHot()
-    {
-        $data = Api::run('getCommendHot',8);
-        header("Content-type: application/json");
-        echo json_encode($data);
-        exit();
-    }
-    //获取分类下的商品
-    public function getCategoryExtendList()
-    {
-        $first_id = IFilter::act(IReq::get('id'),'int');
-        $data = Api::run('getCategoryExtendList',array('#categroy_id#',$first_id),8);
-        header("Content-type: application/json");
-        echo json_encode($data);
-        exit();
-    }
     //限时购
     public function pro_speed_list(){
         $query = new IQuery("promotion as p");
@@ -609,6 +590,18 @@ class Apic extends IController
         exit();
 //        $this->redirect('products');
     }
+    //商品详情的补充信息内容
+    public function products_details_other(){
+        $goods_id = IFilter::act(IReq::get('id'),'int');
+        $relation_query = new IQuery('relation as a');
+        $relation_query->join = "right join article as b on a.article_id = b.id and b.category_id = 3";
+        $relation_query->fields = "a.goods_id,b.id,b.title,b.image";
+        $relation_query->where = "a.goods_id = " . $goods_id;
+        $data = $relation_query->find();
+        header("Content-type: application/json");
+        echo json_encode($data);
+        exit();
+    }
     /**
      * ---------------------------------------------------专辑---------------------------------------------------*
      */
@@ -660,7 +653,7 @@ class Apic extends IController
             $relationList = [];
         }
         foreach($relationList as $key => $value){
-            $relationList[$key]['img'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/250/h/250");
+            $relationList[$key]['img'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
         }
         header("Content-type: application/json");
         echo json_encode($relationList);
