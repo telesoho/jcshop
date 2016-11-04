@@ -67,21 +67,53 @@
                 <a href="{url:/site/products?id=$goods_no_data['goods_id']}"><div class="buy">立即购买</div></a>
             </div>
         </div>
+<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+    <div class="mui-scroll" id="muiScroll">
+        <div class="article_title">
+            <img src="{webroot:$this->articleRow['image']}" alt="" width="100%" />
+        </div>
+        <div class="article_body">
+            <?php
+                $content = htmlspecialchars_decode($this->articleRow['content']);
+                $x = explode('{{', $content);
+                if (!empty($x['1'])){
+                    echo $x[0];
+                    for($i=1;$i<count($x);$i++){
+                        $y = explode('}}', $x[$i]);
+                        $goods_no = $y[0];
+                        if (!empty($goods_no)){
+                            $goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
+            ?>
+            <div class="content_ware">
+                <div class="img">
+                    <a href={url:/site/products?id=$goods_no_data['goods_id']}><img src="{url:/pic/thumb/img/$goods_no_data['img']/w/160/h/160}" alt="" style="width:2rem;"></a>
+                </div>
+                <div class="ware">
+                    <div class="title">{$goods_no_data['name']}</div>
+                    <div class="price">
+                        <span class="price1">{$goods_no_data['sell_price']}</span>
+                        <span class="art">日本售价:</span>
+                        <span class="price2">{$goods_no_data['sell_price']}</span>
+                    </div>
+                    <a href="{url:/site/products?id=$goods_no_data['goods_id']}"><div class="buy">立即购买</div></a>
+                </div>
+            </div>
 
-        <?php
-                        echo $y[1];
-                    } else {
-                        echo $content;
+            <?php
+                            echo $y[1];
+                        } else {
+                            echo $content;
+                        }
                     }
+                } else {
+                    echo $content;
                 }
-            } else {
-                echo $content;
-            }
-        ?>
-    </div>
-    <div class="articledetail_ware">
-        <div class="title"><span>~</span><span>推荐商品</span>~</div>
-        <div class="content" id="getArticleWare">
+            ?>
+        </div>
+        <div class="articledetail_ware">
+            <div class="title"><span>~</span><span>推荐商品</span>~</div>
+            <div class="content" id="getArticleWare">
+            </div>
         </div>
     </div>
 </section>
