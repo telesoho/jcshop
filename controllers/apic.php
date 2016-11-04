@@ -485,6 +485,10 @@ class Apic extends IController
         $tb_goods_photo->where =' g.goods_id='.$goods_id;
         $goods_info['photo'] = $tb_goods_photo->find();
 
+        foreach ($goods_info['photo'] as $key => $value){
+            $goods_info['photo'][$key]['img_thumb'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/590/h/590");
+        }
+
         //商品是否参加促销活动(团购，抢购)
         $goods_info['promo']     = IReq::get('promo')     ? IReq::get('promo') : '';
         $goods_info['active_id'] = IReq::get('active_id') ? IFilter::act(IReq::get('active_id'),'int') : 0;
@@ -724,7 +728,14 @@ class Apic extends IController
      * ---------------------------------------------------搜索---------------------------------------------------*
      */
 
-
+    public function search(){
+        $word = IFilter::act(IReq::get('word'),'string');
+        $goods_query = new IQuery('goods');
+        $goods_query->where = "name like '%,".$word.",%'";
+//        echo $goods_query->getSql();
+        $goods_data = $goods_query->find();
+        var_dump($goods_data);
+    }
     /**
      * ---------------------------------------------------幻灯片---------------------------------------------------*
      */

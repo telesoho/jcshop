@@ -12,10 +12,13 @@
 			<!--<button class="submit" type="submit" onclick="return checkForm()"><span>查询</span></button>-->
 			<button class="btn" type="submit"><span class="sel">查  询</span></button>
 			<?php
-				$query = new IQuery("article as ar");
-				$nums = count($query->find());
-				echo "共计 " . $nums . " 条专辑";
+			$query = new IQuery("article as ar");
+			$nums = count($query->find());
+			echo "共计 " . $nums . " 条专辑";
 			?>
+			<button class="btn" onclick="a()"><span class="sel">视频专辑</span></button>
+			<button class="btn" onclick="a()"><span class="sel">商品专辑</span></button>
+			<button class="btn" onclick="a()"><span class="sel">图文专辑</span></button>
 		</form>
 	</div>
 </div>
