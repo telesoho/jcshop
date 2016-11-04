@@ -593,11 +593,34 @@ class Apic extends IController
     //商品详情的补充信息内容
     public function products_details_other(){
         $goods_id = IFilter::act(IReq::get('id'),'int');
+        //商品关联到的专辑
+        $goods_query = new IModel('goods');
+        $goods_data = $goods_query->getObj('id = ' . $goods_id);
         $relation_query = new IQuery('relation as a');
         $relation_query->join = "right join article as b on a.article_id = b.id and b.category_id = 3";
         $relation_query->fields = "a.goods_id,b.id,b.title,b.image";
         $relation_query->where = "a.goods_id = " . $goods_id;
-        $data = $relation_query->find();
+        $article_data = $relation_query->find();
+        //品牌下的商品
+        $brands_query = new IQuery('brand as a');
+        $brands_query->join = "right join goods as b on a.id = b.brand_id";
+        $brands_query->fields = "b.id,b.name,b.img,b.sell_price,b.brand_id";
+        $brands_query->where = "b.brand_id = " . $goods_data['brand_id'];
+        $brands_query->limit = 6;
+        $brand_good_data = $brands_query->find();
+        foreach ($brand_good_data as $key => $value){
+            $brand_good_data[$key]['img_thumb'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/180/h/180");
+        }
+        //某品牌下商品数量
+        $brands_query->join = "right join goods as b on a.id = b.brand_id";
+        $brands_query->fields = "count(*) as nums";
+        $brands_query->where = "b.brand_id = " . $goods_data['brand_id'];
+        $nums = $brands_query->find()[0]['nums'];
+
+        $brand_model = new IModel('brand');
+        $brand_data = $brand_model->getObj('id = ' . $goods_data['brand_id']);
+        $brand_data['nums'] = $nums;
+        $data = array('article_data'=>$article_data,'brand_good_data'=>$brand_good_data,"brand_data" => $brand_data);
         header("Content-type: application/json");
         echo json_encode($data);
         exit();
