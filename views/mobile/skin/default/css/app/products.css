@@ -2,7 +2,12 @@
 ul li{padding:0;margin:0;list-style:none;}
 header{background:#000;color:#fff;text-align:center;font-size:0.36rem;height:0.72rem;line-height:0.72rem;}
 header span{color:#fff;float:left;margin-top:0.1rem;}
-#carousel{background:#fff;padding-bottom: 0.2rem;}
+#carousel{background:#fff;padding-bottom: 0.17rem;width:7.5rem;height:7.5rem;}
+#carousel img{
+    width:6rem;
+    height:6rem;
+    margin:0.75rem;
+}
 .goodsTitle{padding:0.1rem 0.29rem 0.1rem 0.21rem;background:#fff;overflow:hidden;display: flex;flex-direction: row;justify-content: space-between;}
 .goodsTitle a:first-child{align-self: center;;}
 .goodsTitle span:first-child{display:inline-block;font-size:0.32rem;color:#3d4245;text-align:left;white-space: nowrap;width:5rem;;overflow: hidden;text-overflow: ellipsis;}

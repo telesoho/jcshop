@@ -569,22 +569,6 @@ input[type='search']{
 .mui-tab-item.mui-active{
 	color:#ff4aa0 !important;
 }
-/*分类页面*/
-.siteMap{
-	margin:0.9rem 0 1rem;
-	display:flex;
-	display:-webkit-flex;
-}
-.siteMap .left{
-	width:1.8rem;
-	height:100%;
-	overflow-y: auto;
-}
-.siteMap .right{
-	width:5.7rem;
-	height:100%;
-	overflow-y: auto;
-}
 .mui-control-content {
 	display: block;
 }
