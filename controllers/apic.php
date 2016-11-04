@@ -486,7 +486,7 @@ class Apic extends IController
         $goods_info['photo'] = $tb_goods_photo->find();
 
         foreach ($goods_info['photo'] as $key => $value){
-            $goods_info['photo'][$key]['img_thumb'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/590/h/590");
+            $goods_info['photo'][$key]['img_thumb'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/600/h/600");
         }
 
         //商品是否参加促销活动(团购，抢购)
