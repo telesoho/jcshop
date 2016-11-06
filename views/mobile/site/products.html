@@ -148,7 +148,7 @@
 			<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
 			<div class="mui-slider-item mui-slider-item-duplicate">
 				<a href="#">
-					<img src="<%=photo[0].img %>">
+					<img src="<%=photo[photo.length-1].img %>">
 				</a>
 			</div>
 			<% for(var i=0; i<photo.length; i++){%>
@@ -162,7 +162,7 @@
 			<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
 			<div class="mui-slider-item mui-slider-item-duplicate">
 				<a href="#">
-					<img src="<%=photo[photo.length-1].img %>">
+					<img src="<%=photo[0].img %>">
 				</a>
 			</div>
 		</div>
@@ -329,7 +329,7 @@
 					document.getElementById('carousel').innerHTML=html;
 					var carousel  = mui("#carousel");
 					carousel.slider({
-						interval: 1000
+						interval: 2000
 					});
 					var html2=template('product_goodsDetail',data);
 					document.getElementById('goods_detaile').innerHTML=html2;
