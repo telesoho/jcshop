@@ -117,7 +117,7 @@
                 timeout:10000,		// 超时时间设置为10秒；
                 success:function(data){
                     if(statusOrder=="cart2"){
-                        document.location.href="{url:/simple/cart2}";
+                        window.history.back();
                     }else{
                         document.location.href="{url:/simple/addresslist}";
                     }
