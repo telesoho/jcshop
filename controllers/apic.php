@@ -488,9 +488,6 @@ class Apic extends IController
         $tb_goods_photo->join = 'left join goods_photo as p on p.id=g.photo_id ';
         $tb_goods_photo->where =' g.goods_id='.$goods_id;
         $goods_info['photo'] = $tb_goods_photo->find();
-        foreach ($goods_info['photo'] as $key=>$value){
-//            $goods_info['photo'][$key][]
-        }
 
         foreach ($goods_info['photo'] as $key => $value){
             $goods_info['photo'][$key]['img'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/600/h/600");
@@ -797,10 +794,9 @@ class Apic extends IController
         $memberRow = $memberObj->getObj($where);
 
         $data = array_merge($userRow, $memberRow);
-
-//        header("Content-type: application/json");
-//        echo json_encode($data);
-//        exit();
+        header("Content-type: application/json");
+        echo json_encode($data);
+        exit();
     }
 
 
