@@ -233,13 +233,17 @@ class Apic extends IController
         if($user_id)
         {
             $model = new IModel('address');
-            $model->setData($sqlData);
             if($id)
             {
+                $model->setData($sqlData);
                 $model->update("id = ".$id." and user_id = ".$user_id);
             }
             else
             {
+                $model->setData(array('is_default' => 0));
+                $model->update("user_id = ".$this->user['user_id']);
+                $sqlData['is_default'] = 1;
+                $model->setData($sqlData);
                 $id = $model->add();
             }
             $sqlData['id'] = $id;
