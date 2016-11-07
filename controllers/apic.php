@@ -620,7 +620,7 @@ class Apic extends IController
         $brands_query->limit = 6;
         $brand_good_data = $brands_query->find();
         foreach ($brand_good_data as $key => $value){
-            $brand_good_data[$key]['img_thumb'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/180/h/180");
+            $brand_good_data[$key]['img_thumb'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/180/h/180");
         }
         //某品牌下商品数量
         $brands_query->join = "right join goods as b on a.id = b.brand_id";
@@ -703,6 +703,16 @@ class Apic extends IController
     public function category_top()
     {
         $data = Api::run('getCategoryListTop');
+        foreach ($data as $key => $value){
+            if (!empty($value['image'])) {
+                $temp1 = explode(',', $value['image']);
+                $temp2 = '';
+                for ($i = 0; $i < count($temp1); $i++) {
+                    $temp2 .= IWeb::$app->config['image_host'] . $temp1[$i] . ',';
+                }
+                $data[$key]['image'] = $temp2;
+            }
+        }
         header("Content-type: application/json");
         echo json_encode($data);
         exit();
@@ -714,6 +724,16 @@ class Apic extends IController
     {
         $first_id = IFilter::act(IReq::get('id'),'int');
         $data = Api::run('getCategoryByParentid',array('#parent_id#',$first_id));
+        foreach ($data as $key => $value){
+            if (!empty($value['image'])){
+                $temp1 = explode(',',$value['image']);
+                $temp2 = '';
+                for ($i=0;$i<count($temp1);$i++){
+                    $temp2 .= IWeb::$app->config['image_host'] . $temp1[$i] . ',';
+                }
+                $data[$key]['image'] = $temp2;
+            }
+        }
         header("Content-type: application/json");
         echo json_encode($data);
         exit();
@@ -727,6 +747,11 @@ class Apic extends IController
     public function brand_list()
     {
         $data = Api::run('getBrandList');
+        foreach ($data as $key=>$value){
+            if (!empty($value['logo'])){
+                $data[$key]['logo'] = IWeb::$app->config['image_host'] . '/' . $value['logo'];
+            }
+        }
         header("Content-type: application/json");
         echo json_encode($data);
         exit();
@@ -748,6 +773,9 @@ class Apic extends IController
      */
     public function banner_list(){
         $banner = Api::run('getBannerList');
+        foreach ($banner as $key=>$value){
+            $banner[$key]['img'] = IWeb::$app->config['image_host'] . '/' . $value['img'];
+        }
         header("Content-type: application/json");
         echo json_encode($banner);
         exit();
