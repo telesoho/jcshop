@@ -24,14 +24,21 @@ abstract class jcshopPacketHelperAbstract
 
 	protected $titleArrayCn;
 
+	protected $config;
+
 
 	/**
 	 * constructor,open the csv packet date file
 	 * @param string $csvFile csv file name
 	 * @param string $targetImagePath create csv image path
 	 */
-	public function __construct($csvFile,$targetImagePath)
+	public function __construct($config)
 	{
+		$this->config = $config;
+		$csvFile = $config['csvFile'];
+		$targetImagePath = $config['targetImagePath'];
+
+
 		if(!preg_match('|^[\w\-]+$|',basename($csvFile,'.csv')))
 		{
 			throw new Exception('the csv file name must use english');
@@ -128,10 +135,10 @@ abstract class jcshopPacketHelperAbstract
 	}
 
 	/**
-	 * run title callback function
+	 * 运行回调函数
 	 * 回调函数示例：
 	 * 
-	 *	public function getTitleCallback()
+	 *	public function getColumnCallback()
 	 * {
 	*		// 设置回调函数
 	*		return array("品牌" =>"brandCallback");
@@ -143,7 +150,7 @@ abstract class jcshopPacketHelperAbstract
 	 */
 	public function runCallback($content,$title)
 	{
-		$configCallback = $this->getTitleCallback();
+		$configCallback = $this->getColumnCallback();
 
 		if(isset($configCallback[$title]))
 		{
@@ -170,5 +177,5 @@ abstract class jcshopPacketHelperAbstract
 	 * get function config from title callback
 	 * @return array
 	 */
-	abstract public function getTitleCallback();
+	abstract public function getColumnCallback();
 }
