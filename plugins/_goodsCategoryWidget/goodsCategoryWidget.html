@@ -15,7 +15,7 @@ jQuery(function()
 	//绑定UI按钮入口
 	$(document).on("click","[name='_goodsCategoryButton']",selectGoodsCategory);
 	$(document).on("click","[name='_goodsKeywordButton']",selectGoodsKeyword);
-	art.dialog.data('aa',{echo:JSON::encode($categoryData)});
+
 	//完整分类数据
 	{query:name=category order=sort asc items=$categoryData}{/query}
 	art.dialog.data('categoryWhole',{echo:JSON::encode($categoryData)});
