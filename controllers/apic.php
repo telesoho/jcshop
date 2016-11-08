@@ -613,6 +613,9 @@ class Apic extends IController
      */
     //显示专辑列表（首页）
     public function article_list(){
+        if (empty($this->user['user_id'])){
+            $this->json_echo([]);
+        }
         $type = IFilter::act(IReq::get('type'),'int');
         $query = new IQuery("article as ar");
         $query->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
@@ -638,6 +641,14 @@ class Apic extends IController
         foreach ($items as $key => $value){
             $items[$key]['nums'] = count(Api::run('getArticleGoods',array("#article_id#",$value['id'])));
             $items[$key]['totalpage'] = $query->getTotalPage();
+            $favorite_article = new IQuery('favorite_article');
+            $favorite_article->where = 'user_id='.$this->user['user_id'].' and aid='.$value['id'];
+            $fdata = $favorite_article->find();
+            if (!empty($fdata)){
+                $items[$key]['is_favorite'] = 1;
+            } else {
+                $items[$key]['is_favorite'] = 0;
+            }
         }
         $this->json_echo($items);
     }
@@ -660,6 +671,56 @@ class Apic extends IController
             $relationList[$key]['img'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
         }
         $this->json_echo($relationList);
+    }
+    //专辑添加收藏夹
+    function favorite_article_add()
+    {
+        $article_id = IFilter::act(IReq::get('id'),'int');
+        $message  = '';
+
+        if($article_id == 0)
+        {
+            $message = '文章id值不能为空';
+        }
+        else if(!isset($this->user['user_id']) || !$this->user['user_id'])
+        {
+            $message = '请先登录';
+        }
+        else
+        {
+            $favoriteObj = new IModel('favorite_article');
+            $articleRow    = $favoriteObj->getObj('user_id = '.$this->user['user_id'].' and aid = '.$article_id);
+            if($articleRow)
+            {
+                $message = '您已经收藏过此件专辑';
+            }
+            else
+            {
+                $catObj = new IModel('article');
+                $catRow = $catObj->getObj('id = '.$article_id);
+                $cat_id = $catRow ? $catRow['category_id'] : 0;
+                $dataArray   = array(
+                    'user_id' => $this->user['user_id'],
+                    'aid'     => $article_id,
+                    'time'    => ITime::getDateTime(),
+                    'cat_id'  => $cat_id,
+                );
+                $favoriteObj->setData($dataArray);
+                $favoriteObj->add();
+                $message = '收藏成功';
+
+                //商品收藏信息更新
+                $articleDB = new IModel('article');
+                $articleDB->setData(array("favorite" => "favorite + 1"));
+                $articleDB->update("id = ".$article_id,'favorite');
+            }
+        }
+        $result = array(
+            'isError' => true,
+            'message' => $message,
+        );
+
+        $this->json_echo($result);
     }
     /**
      * ---------------------------------------------------分类---------------------------------------------------*
@@ -769,56 +830,7 @@ class Apic extends IController
     }
 
 
-    //添加收藏夹
-    function favorite_article_add()
-    {
-        $article_id = IFilter::act(IReq::get('id'),'int');
-        $message  = '';
 
-        if($article_id == 0)
-        {
-            $message = '文章id值不能为空';
-        }
-        else if(!isset($this->user['user_id']) || !$this->user['user_id'])
-        {
-            $message = '请先登录';
-        }
-        else
-        {
-            $favoriteObj = new IModel('favorite_article');
-            $articleRow    = $favoriteObj->getObj('user_id = '.$this->user['user_id'].' and aid = '.$article_id);
-            if($articleRow)
-            {
-                $message = '您已经收藏过此件专辑';
-            }
-            else
-            {
-                $catObj = new IModel('article');
-                $catRow = $catObj->getObj('id = '.$article_id);
-                $cat_id = $catRow ? $catRow['category_id'] : 0;
-                $dataArray   = array(
-                    'user_id' => $this->user['user_id'],
-                    'aid'     => $article_id,
-                    'time'    => ITime::getDateTime(),
-                    'cat_id'  => $cat_id,
-                );
-                $favoriteObj->setData($dataArray);
-                $favoriteObj->add();
-                $message = '收藏成功';
-
-                //商品收藏信息更新
-                $articleDB = new IModel('article');
-                $articleDB->setData(array("favorite" => "favorite + 1"));
-                $articleDB->update("id = ".$article_id,'favorite');
-            }
-        }
-        $result = array(
-            'isError' => true,
-            'message' => $message,
-        );
-
-        $this->json_echo($result);
-    }
     private function json_echo($data){
         echo json_encode($data);
         exit();
