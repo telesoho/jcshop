@@ -95,9 +95,18 @@
                     </a>
                 </li>
             </ul>-->
-            <ul class="mui-table-view" style="margin-top:0.1rem">
+            <ul class="mui-table-view" style="margin-top:0.15rem">
                 <li class="mui-table-view-cell">
                     <a class="mui-navigate-right" href="{url:/simple/addresslist}">
+                        <img src="/views/mobile/skin/default/image/jmj/icon/address-info.png" alt=""  style="vertical-align: middle" />
+                        收货地址
+                    </a>
+                </li>
+            </ul>
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a class="mui-navigate-right" href="#">
+                        <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle" />
                         收货地址
                     </a>
                 </li>
@@ -159,7 +168,7 @@
     <%if(true_name==null){%>
     <div class="userName">九猫家的小小猫</div>
     <%}else{%>
-    <div class="userName"><%=true_name %></div>
+    <div class="userName"><%=username %></div>
     <%}%>
 
 
@@ -170,33 +179,37 @@
 <script>
     $(window).load(function(){
         $("#loading").fadeOut(300);
+        getInfo();
     })
     mui('body').on("tap",'a',function(){
         window.location.href=this.href;
     })
-    mui.ajax('index.php?controller=apic&action=info',{
-        dataType:'json',	// 服务器返回json格式数据
-        type:'get',		// HTTP请求类型
-        timeout:10000,		// 超时时间设置为10秒；
-        success:function(data){
-            if(data){
+    function getInfo(){
+        mui.ajax('index.php?controller=apic&action=info',{
+            dataType:'json',	// 服务器返回json格式数据
+            type:'get',		// HTTP请求类型
+            timeout:10000,		// 超时时间设置为10秒；
+            success:function(data){
+                if(data){
 
-            }else{
-                data={
-                    head_ico:null,
-                    true_name:null
-                }
-            };
-            var html=template('userinfo',data);
-            document.getElementById("user_Info").innerHTML=html;
+                }else{
+                    data={
+                        head_ico:null,
+                        true_name:null
+                    }
+                };
+                var html=template('userinfo',data);
+                document.getElementById("user_Info").innerHTML=html;
 
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
-            console.log(type);
-            alert("failed");
-        }
-    });
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+                alert("failed");
+            }
+        });
+    }
+
 </script>
 </body>
 </html>

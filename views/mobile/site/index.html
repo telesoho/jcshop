@@ -105,10 +105,7 @@
             <!--<div class="timePurchase_body" id="timePurchase_body">-->
             <!--</div>-->
         <!--</section>-->
-        <div id="pullContainer"></div>
-    <!--</div>-->
-<!--</div>-->
-<!--底部空隙-->
+<div id="pullContainer"></div>
 <div style="padding-bottom:2.42rem;background:#f8f8f8"></div>
 <div class="fix-nav">
     <div class="img"><img src="/views/mobile/skin/default/image/jmj/icon/rmb.png" alt="" class="img-rmb"/>
@@ -233,7 +230,7 @@
                 <%=dat.favorite %>
             </span>
             <span class="like mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like"   onclick=collection(<%=dat.id %>) >
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like" onclick=collection(<%=dat.id %>) >
             </span>
             <span class="share mui-pull-right">
                 <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
@@ -274,7 +271,7 @@
             <%=dat.favorite %>
             </span>
             <span class="like mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like"  onclick="collection(<%=dat.id %>)"/>
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like" onclick="collection(<%=dat.id %>)"/>
             </span>
         </div>
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
@@ -304,7 +301,7 @@
              <%=dat.favorite %>
             </span>
             <span class="like mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like"   onclick=collection(<%=dat.id %>) >
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like" onclick=collection(<%=dat.id %>) >
             </span>
             <span class="share mui-pull-right">
                 <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
@@ -337,10 +334,10 @@
     var pageData = {
         page:1
     };
-    getIndex();
     //页面加载完成后调用的功能
     window.onload=function(){
         $("#loading").fadeOut(300);
+        getIndex();
         pullupRefresh();
     }
     //解决tab选项卡a标签无法跳转的问题

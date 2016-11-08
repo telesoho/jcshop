@@ -1585,7 +1585,7 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     padding-top: 0;
 }
 .mui-bar-tab .mui-tab-item .mui-icon ~ .mui-tab-label
-{  font-size:0.22rem;
+{  font-size:0.2rem !important;
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2197,7 +2197,7 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 
     overflow: hidden;
 
-    padding: 11px 15px;
+    padding: 0.19rem 0.3rem;
 
     -webkit-touch-callout: none;
 }

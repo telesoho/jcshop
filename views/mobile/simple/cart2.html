@@ -146,7 +146,7 @@
 	var addr=true;//判断用户是否提供地址
 	var Request = new Object();
 	Request = GetRequest();
-	mui.ajax('index.php?controller=apic&action=cart2',{
+	mui.ajax('/apic/cart2',{
 		data:{
 			id:Request["id"],
 			num:Request["num"],
@@ -158,6 +158,7 @@
 		success:function(data){
 			//服务器返回响应，根据响应结果，分析是否登录成功；
 			var data=data;
+			console.log(data);
 			if(data.addressList.length==0){
 				addr=false;
 			}

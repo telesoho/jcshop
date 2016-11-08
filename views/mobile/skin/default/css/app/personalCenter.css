@@ -9,8 +9,8 @@ ul,li{margin:0;padding:0;list-style: none;}
 .ico-pull{color:#bbb;}
 .ico-pull span{color:#bbb;}
 .order{background:#fff;padding:0.2rem 0;border-bottom: 1px solid #eee;}
-.order img{width:0.54rem;height: 0.54rem;}
-.order .mui-media-body{margin-top:0.1rem;font-size: 0.24rem;}
+.order img{width:0.7rem;height: 0.7rem;}
+.order .mui-media-body{font-size: 0.24rem;}
 
 /*订单详情页面样式*/
 .topBox{position: relative;}
