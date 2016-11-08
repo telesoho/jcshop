@@ -742,7 +742,11 @@ class Apic extends IController
         foreach ($banner as $key=>$value){
             $banner[$key]['img'] = IWeb::$app->config['image_host'] . '/' . $value['img'];
         }
-        $this->json_echo($banner);
+        $goods = new IQuery('goods');
+        $goods->fields = 'count(*) as nums';
+        $nums = $goods->find()[0]['nums'];
+
+        $this->json_echo(['banner'=>$banner,'goods_nums'=>$nums]);
     }
 
     /**
