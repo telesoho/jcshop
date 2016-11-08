@@ -43,13 +43,13 @@
 <!--购物车界面-->
     <div id="addressNew">
         <div class="inputName">
-            <input type="text" class="mui-input-clear"  placeholder="输入收货人的姓名" id="username" onblur=check()>
+            <input type="text" class="mui-input-clear"  placeholder="输入收货人的姓名" id="username" onkeyup=check()>
         </div>
         <div class="inputContent">
             <input type="text" class="mui-input-clear" placeholder="输入手机号"  id="userphone" onchange=checkPhone()>
             <input type="text" class="mui-input-clear"  placeholder="选择城市"  id="usercity">
-            <input type="text" class="mui-input-clear" placeholder="详细收货地址"  id="useraddr" onblur=check() onfocus=check()>
-            <input type="text" class="mui-input-clear" placeholder="邮编"  id="useryoubian" onblur=check()>
+            <input type="text" class="mui-input-clear" placeholder="详细收货地址"  id="useraddr" onkeyup=check()>
+            <input type="text" class="mui-input-clear" placeholder="邮编"  id="useryoubian" onkeyup=check()>
         </div>
     </div>
 <footer>
@@ -83,6 +83,7 @@
     cityPicker3.setData(cityData3);
     var showCityPickerInput = document.getElementById('usercity');
     showCityPickerInput.onfocus=function(event) {
+        document.activeElement.blur();
         cityPicker3.show(function(items) {
             showCityPickerInput.value = (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;
             //返回 false 可以阻止选择框的关闭
@@ -90,7 +91,7 @@
             cit=(items[1] || {}).value;
             are=(items[2] || {}).value;
             //return false;
-            console.log(pro);
+
         });
     }
     //  获取登录的表单信息
@@ -158,12 +159,15 @@
         return theRequest;
     }
     //    判定是否显示软键盘状态
-    $('.mui-input-clear').bind('focus',function(){
-        $('#submitAdd').css('position','static');
-    }).bind('blur',function(){
-        $('#submitAdd').css({'position':'fixed','bottom':'0'});
-        //或者$('#viewport').height('auto');
-    });
+    $('input').each(function(){
+        $(this).bind('focus',function(){
+            $('#submitAdd').css('display','none');
+            //或者$('#viewport').height($(window).height()+'px');
+        }).bind('blur',function(){
+            $('#submitAdd').css('display','block');
+            //或者$('#viewport').height('auto');
+        });
+    })
 </script>
 </body>
 </html>

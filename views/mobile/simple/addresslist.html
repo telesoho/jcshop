@@ -101,14 +101,14 @@
                 <div id="addressNew">
                     <div class="title">请填写你的真实姓名，否则订单无法发出</div>
                     <div class="mui-input-row row_b_t">
-                        <input type="text" class="mui-input-clear" value="<%=data[i].accept_name%>" id="username" onblur=check()>
+                        <input type="text" class="mui-input-clear changeHH" value="<%=data[i].accept_name%>" id="username" onkeyup=check()>
                     </div>
                     <div class="mui-input-row row_margin row_b_t">
                         <input type="hidden" class="mui-input-clear" value="<%=data[i].id%>" id="addressid">
-                        <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" id="userphone" onchange=checkPhone() >
+                        <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" id="userphone" onkeyup=checkPhone() >
                         <input type="text" class="mui-input-clear" value="<%=data[i].province_val%> <%=data[i].city_val%> <%=data[i].area_val%>" id="usercity" onfocus=checkcity()>
-                        <input type="text" class="mui-input-clear" value="<%=data[i].address%>" id="useraddr" onblur=check()>
-                        <input type="text" class="mui-input-clear" value="<%=data[i].zip%>" id="useryoubian" onblur=check()>
+                        <input type="text" class="mui-input-clear" value="<%=data[i].address%>" id="useraddr" onkeyup=check()>
+                        <input type="text" class="mui-input-clear" value="<%=data[i].zip%>" id="useryoubian" onkeyup=check()>
                     </div>
                 </div>
             </div>
@@ -169,6 +169,7 @@
         layer: 3
     });
     function checkcity(){
+        document.activeElement.blur();//去除软键盘
         cityPicker3.setData(cityData3);
         cityPicker3.show(function(items) {
             var showCityPickerInput=document.getElementById('usercity');
@@ -178,7 +179,7 @@
             cit=(items[1] || {}).value;
             are=(items[2] || {}).value;
         });
-
+        this.blur();
     }
 
 
@@ -305,13 +306,15 @@
         return theRequest;
     }
 //    判定是否显示软键盘状态
-    $('.mui-input-clear').bind('focus',function(){
-        $('#submitaddr1').css('position','static');
+$('input').each(function(){
+    $(this).bind('focus',function(){
+        $('#submitaddr1').css('display','none');
         //或者$('#viewport').height($(window).height()+'px');
     }).bind('blur',function(){
-        $('#submitaddr1').css({'position':'fixed','bottom':'0'});
+        $('#submitaddr1').css('display','block');
         //或者$('#viewport').height('auto');
     });
+})
 </script>
 </body>
 </html>
