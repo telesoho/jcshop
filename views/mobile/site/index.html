@@ -230,7 +230,11 @@
                 <%=dat.favorite %>
             </span>
             <span class="like mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like" onclick=collection(<%=dat.id %>) >
+                <%if(dat.is_favorite==0){%>
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>) >
+                <%}else{%>
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt="" class="img-like"  />
+                <%}%>
             </span>
             <span class="share mui-pull-right">
                 <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
@@ -271,7 +275,11 @@
             <%=dat.favorite %>
             </span>
             <span class="like mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like" onclick="collection(<%=dat.id %>)"/>
+                <%if(dat.is_favorite==0){%>
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" id="shareContent<%=dat.id %>" alt="" class="img-like" onclick="collection(<%=dat.id %>)" />
+                <%}else{%>
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like"  />
+                <%}%>
             </span>
         </div>
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
@@ -301,7 +309,11 @@
              <%=dat.favorite %>
             </span>
             <span class="like mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like" onclick=collection(<%=dat.id %>) >
+               <%if(dat.is_favorite==0){%>
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>) />
+                <%}else{%>
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt=""  class="img-like"  />
+                <%}%>
             </span>
             <span class="share mui-pull-right">
                 <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
@@ -482,7 +494,6 @@
         $(self).next().next().addClass("hide");
     }
     function collection(id){
-        console.log(id);
         mui.ajax('index.php?controller=apic&action=favorite_article_add',{
             data:{
                 id:id
@@ -491,12 +502,13 @@
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
-                console.log(data);
                if(data.message=="收藏成功"){
                     var num=document.getElementById("favorite"+id);
                         num.innerHTML=parseInt(num.innerHTML)+1;
+                    var share=document.getElementById("shareContent"+id);
+                        share.src="/views/mobile/skin/default/image/jmj/icon/like-ed.png";
                }else{
-
+                    console.log("已经收藏");
                }
             },
             error:function(xhr,type,errorThrown){
