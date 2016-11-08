@@ -18,6 +18,7 @@ class Apic extends IController
         $stream->setFormatter($formatter);
         $this->log = new Logger('api');
         $this->log->pushHandler($stream);
+        header("Content-type: application/json");
     }
     /**
      * ---------------------------------------------------购物车---------------------------------------------------*
@@ -25,18 +26,14 @@ class Apic extends IController
     //购物车商品列表页面
     public function cart()
     {
-        header("Content-type: application/json");
-        //开始计算购物车中的商品价格
         $countObj = new CountSum();
         $result   = $countObj->cart_count();
-
         if(is_string($result))
         {
 //            IError::show($result,403);
             $this->log->addError('$result变量错误');
         }
-        echo json_encode($result);
-        exit();
+        $this->json_echo($result);
     }
 
     /**
@@ -144,9 +141,7 @@ class Apic extends IController
             if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
         }
 
-        header("Content-type: application/json");
-        echo json_encode($data);
-        exit();
+        $this->json_echo($data);
     }
     /**
      * ---------------------------------------------------购物车-收货地址---------------------------------------------------*
@@ -167,10 +162,7 @@ class Apic extends IController
             $addressList[$key]['city_val'] =$temp[$data['city']];
             $addressList[$key]['area_val'] =$temp[$data['area']];
         }
-
-        header("Content-type: application/json");
-        echo json_encode($addressList);
-        exit();
+        $this->json_echo($addressList);
     }
     //添加和编辑地址
     function address_add()
@@ -260,11 +252,7 @@ class Apic extends IController
         $sqlData['area_val']     = $areaList[$area];
         $result = array('data' => $sqlData);
 
-
-
-        header("Content-type: application/json");
-        echo json_encode($result);
-        exit();
+        $this->json_echo($result);
     }
     /**
      * @brief 收货地址删除处理
@@ -280,9 +268,7 @@ class Apic extends IController
             $model->del('id = '.$id.' and user_id = '.$this->user['user_id']);
             $ret = true;
         }
-        header("Content-type: application/json");
-        echo json_encode(array('ret'=>$ret));
-        exit();
+        $this->json_echo(['ret'=>$ret]);
     }
     /**
      * @brief 设置默认的收货地址
@@ -300,9 +286,8 @@ class Apic extends IController
         $model->setData(array('is_default' => $default));
         $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
         $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
-        header("Content-type: application/json");
-        echo json_encode(array('ret'=>true));
-        exit();
+
+        $this->json_echo(array('ret'=>true));
     }
 
     /**
@@ -323,7 +308,7 @@ class Apic extends IController
         $data['state2'] = $ret2->find();
         $data['state3'] = $ret3->find();
         $data['state4'] = $ret4->find();
-//        $data['pagebar'] = $ret->getPageBar();
+        //支付方式
         $payment = new IQuery('payment');
         $payment->fields = 'id,name,type';
         $payments = $payment->find();
@@ -333,6 +318,7 @@ class Apic extends IController
             $items[$pay['id']]['name'] = $pay['name'];
             $items[$pay['id']]['type'] = $pay['type'];
         }
+
         $temp = [];
         foreach ($data as $k => $v){
             foreach ($v as $key => $value ){
@@ -373,14 +359,11 @@ class Apic extends IController
                 }
             }
         }
-        $relation = array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流');
+        $relation = array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流', '已取消'=>'已取消');
         foreach ($data['state0'] as $key => $value){
             $data['state0'][$key]['text'] = $relation[$value['orderStatusText']];
         }
-//        var_dump($data);
-        header("Content-type: application/json");
-        echo json_encode($data, true);
-        exit();
+        $this->json_echo($data);
     }
     /**
      * @brief 订单详情
@@ -408,9 +391,8 @@ class Apic extends IController
             $order_goods[$key]['goods_array'] = json_decode($value['goods_array'],true);
         }
         $data = array('order_info'=>$order_info, 'orderStatus'=>$orderStatusT,"order_step"=>Order_Class::orderStep($order_info), "order_goods"=>$order_goods);
-        header("Content-type: application/json");
-        echo json_encode($data, true);
-        exit();
+
+        $this->json_echo($data);
     }
 
     /**
@@ -437,9 +419,7 @@ class Apic extends IController
             $items2[$key]['img_thumb'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/230/h/230");
         }
         $items[0]['child'] = $items2;
-        header("Content-type: application/json");
-        echo json_encode($items[0]);
-        exit();
+        $this->json_echo($items[0]);
     }
     //商品展示
     function products_details()
@@ -593,10 +573,7 @@ class Apic extends IController
 
         $goods_info['spec_array'] = json_decode($goods_info['spec_array']);
 //        $this->setRenderData($goods_info);
-        header("Content-type: application/json");
-        echo json_encode($goods_info);
-        exit();
-//        $this->redirect('products');
+        $this->json_echo($goods_info);
     }
     //商品详情的补充信息内容
     public function products_details_other(){
@@ -629,9 +606,7 @@ class Apic extends IController
         $brand_data = $brand_model->getObj('id = ' . $goods_data['brand_id']);
         $brand_data['nums'] = $nums;
         $data = array('article_data'=>$article_data,'brand_good_data'=>$brand_good_data,"brand_data" => $brand_data);
-        header("Content-type: application/json");
-        echo json_encode($data);
-        exit();
+        $this->json_echo($data);
     }
     /**
      * ---------------------------------------------------专辑---------------------------------------------------*
@@ -664,9 +639,7 @@ class Apic extends IController
             $items[$key]['nums'] = count(Api::run('getArticleGoods',array("#article_id#",$value['id'])));
             $items[$key]['totalpage'] = $query->getTotalPage();
         }
-        header("Content-type: application/json");
-        echo json_encode($items);
-        exit();
+        $this->json_echo($items);
     }
     //通过专辑获取相关商品
     public function article_rel_goods()
@@ -686,9 +659,7 @@ class Apic extends IController
         foreach($relationList as $key => $value){
             $relationList[$key]['img'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
         }
-        header("Content-type: application/json");
-        echo json_encode($relationList);
-        exit();
+        $this->json_echo($relationList);
     }
     /**
      * ---------------------------------------------------分类---------------------------------------------------*
@@ -709,11 +680,18 @@ class Apic extends IController
                 }
                 $data[$key]['image'] = $temp2;
             }
+            $data[$key]['child'] = [];
+            $second = Api::run('getCategoryByParentid',array('#parent_id#',$value['id']));
+            if(!empty($second)) foreach ($second as $key=>$value){
+                if (!empty($value['image'])){
+                    $second[$key]['image'] = IWeb::$app->config['image_host'] . $value['image'];
+                }
+            }
+            $data[$key]['child'] = $second;
         }
-        header("Content-type: application/json");
-        echo json_encode($data);
-        exit();
+        $this->json_echo($data);
     }
+
     /**
      * 获取其子类数据信息
      */
@@ -723,17 +701,10 @@ class Apic extends IController
         $data = Api::run('getCategoryByParentid',array('#parent_id#',$first_id));
         foreach ($data as $key => $value){
             if (!empty($value['image'])){
-                $temp1 = explode(',',$value['image']);
-                $temp2 = '';
-                for ($i=0;$i<count($temp1);$i++){
-                    $temp2 .= IWeb::$app->config['image_host'] . $temp1[$i] . ',';
-                }
-                $data[$key]['image'] = $temp2;
+                $second[$key]['image'] = IWeb::$app->config['image_host'] . $value['image'];
             }
         }
-        header("Content-type: application/json");
-        echo json_encode($data);
-        exit();
+        $this->json_echo($data);
     }
     /**
      * ---------------------------------------------------品牌---------------------------------------------------*
@@ -749,9 +720,7 @@ class Apic extends IController
                 $data[$key]['logo'] = IWeb::$app->config['image_host'] . '/' . $value['logo'];
             }
         }
-        header("Content-type: application/json");
-        echo json_encode($data);
-        exit();
+        $this->json_echo($data);
     }
     /**
      * ---------------------------------------------------搜索---------------------------------------------------*
@@ -773,9 +742,7 @@ class Apic extends IController
         foreach ($banner as $key=>$value){
             $banner[$key]['img'] = IWeb::$app->config['image_host'] . '/' . $value['img'];
         }
-        header("Content-type: application/json");
-        echo json_encode($banner);
-        exit();
+        $this->json_echo($banner);
     }
 
     /**
@@ -794,9 +761,7 @@ class Apic extends IController
         $memberRow = $memberObj->getObj($where);
 
         $data = array_merge($userRow, $memberRow);
-        header("Content-type: application/json");
-        echo json_encode($data);
-        exit();
+        $this->json_echo($data);
     }
 
 
@@ -848,6 +813,10 @@ class Apic extends IController
             'message' => $message,
         );
 
-        echo JSON::encode($result);
+        $this->json_echo($result);
+    }
+    private function json_echo($data){
+        echo json_encode($data);
+        exit();
     }
 }
