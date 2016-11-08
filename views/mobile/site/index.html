@@ -272,7 +272,7 @@
             特別推薦
             </span>
             <span class="num mui-pull-right" id="favorite<%=dat.id %>">
-            <%=dat.favorite %>
+            <%=cal(dat.favorite) %>
             </span>
             <span class="like mui-pull-right">
                 <%if(dat.is_favorite==0){%>
@@ -291,7 +291,7 @@
                 </div>
                 <div class="mark2">
                     <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-                    <%=dat.visit_num %></div>
+                    <%=cal(dat.visit_num) %></div>
             </div>
         </a>
     </section>
@@ -306,7 +306,7 @@
             人気雑誌
             </span>
             <span class="num mui-pull-right" id="favorite<%=dat.id %>">
-             <%=dat.favorite %>
+             <%=cal(dat.favorite) %>
             </span>
             <span class="like mui-pull-right">
                <%if(dat.is_favorite==0){%>
@@ -327,7 +327,7 @@
                 <div class="mark1"><%=dat.nums %>件商品</div>
                 <div class="mark2">
                     <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-                    <%=dat.visit_num %></div>
+                    <%=cal(dat.visit_num) %></div>
             </div>
         </a>
     </section>
@@ -381,20 +381,35 @@
         document.getElementById("modalid-searth").className="show";
         document.body.style.overflow = 'hidden';
     });
+    //处理分享数据
+        template.helper('cal', function(obj){
+            if(obj>=1000000){
+                return parseInt(obj/1000000)+"万";
+            }
+            if(obj>=100000){
+                return (obj/100000).toFixed(1)+"万";
+            }
+            if(obj>=10000){
+                return (obj/10000).toFixed(2)+"万";
+            }
+            if(obj<10000){
+                return obj;
+            }
+            return JSON.stringify(obj);
+        });
 //    mui.init({
 //        pullRefresh: {
 //            container: '#pullrefresh',
 //        }
 //    });
         //上拉加载
+         var stop=true;
         $(window).bind('scroll', function() {
-            var stop=true;
             if ($(window).scrollTop() + $(window).height() +600 >= $(document).height() && $(window).scrollTop() > 50) {
                 if(stop==true){
                     stop=false;
                     pullupRefresh()
                 }
-                stop=true
             }
             if($(window).scrollTop()>100){
                 $(".fix-toTop").show();
@@ -423,6 +438,12 @@
                 div.innerHTML=html3;
                 document.getElementById("pullContainer").appendChild(div);
 //               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
+                if(data[0].totalpage>pageData.page){
+                    stop = true;
+                    console.log(data);
+                }else{
+                    stop = false;
+                }
                 pageData.page++;
             },
             error:function(xhr,type,errorThrown){
