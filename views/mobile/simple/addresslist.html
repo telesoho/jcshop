@@ -105,7 +105,7 @@
                     </div>
                     <div class="mui-input-row row_margin row_b_t">
                         <input type="hidden" class="mui-input-clear" value="<%=data[i].id%>" id="addressid">
-                        <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" id="userphone" onchange=checkPhone()>
+                        <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" id="userphone" onchange=checkPhone() >
                         <input type="text" class="mui-input-clear" value="<%=data[i].province_val%> <%=data[i].city_val%> <%=data[i].area_val%>" id="usercity" onfocus=checkcity()>
                         <input type="text" class="mui-input-clear" value="<%=data[i].address%>" id="useraddr" onblur=check()>
                         <input type="text" class="mui-input-clear" value="<%=data[i].zip%>" id="useryoubian" onblur=check()>
@@ -304,6 +304,14 @@
         }
         return theRequest;
     }
+//    判定是否显示软键盘状态
+    $('.mui-input-clear').bind('focus',function(){
+        $('#submitaddr1').css('position','static');
+        //或者$('#viewport').height($(window).height()+'px');
+    }).bind('blur',function(){
+        $('#submitaddr1').css({'position':'fixed','bottom':'0'});
+        //或者$('#viewport').height('auto');
+    });
 </script>
 </body>
 </html>
