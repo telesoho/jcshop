@@ -172,20 +172,20 @@
     <div class="mui-slider-group mui-slider-loop">
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[data.length-1].url %>">
-                <img src="/<%=data[data.length-1].img %>">
+                <img src="<%=data[data.length-1].img %>">
             </a>
         </div>
         <% for(var i=0; i<data.length; i++){%>
         <% var dat =data[i] %>
         <div class="mui-slider-item">
             <a href="<%=dat.url %>">
-                <img src="/<%=dat.img %>" class="samLazyImg">
+                <img src="<%=dat.img %>" class="samLazyImg">
             </a>
         </div>
         <%}%>
         <div class="mui-slider-item mui-slider-item-duplicate">
             <a href="<%=data[0].url %>">
-                <img src="/<%=data[0].img %>">
+                <img src="<%=data[0].img %>">
             </a>
         </div>
     </div>
@@ -241,7 +241,7 @@
         </div>
         <div class="vedio">
             <video class="player" src="http://f02.v1.cn/transcode/14410292MOBILET2.mp4"
-                   width="100%" onpause="checkPause(this);" onplaying="checkPlay(this);">
+                   width="100%" onpause="checkPause(this);" onplaying="checkPlay(this);" -webkit-playsinline webkit-playsinline>
             </video>
             <div class="vedioStyle">
                 <div class="top">
@@ -283,7 +283,7 @@
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
             <div class="content">
                 <div class="img">
-                    <img src="/<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
+                    <img src="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
                 </div>
                 <div class="mark1"><%=dat.nums %>件商品
                 </div>
@@ -316,7 +316,7 @@
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
             <div class="content">
                 <div class="img">
-                    <img src="/<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
+                    <img src="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
                 </div>
                 <div class="mark1"><%=dat.nums %>件商品</div>
                 <div class="mark2">
@@ -330,22 +330,22 @@
     <%}%>
 </script>
 <!--头信息结束-->
+<script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/time.js"></script>
 <script>
+    mui.init();
     var pageData = {
         page:1
     };
-        getIndex();
+    getIndex();
     //页面加载完成后调用的功能
     window.onload=function(){
         $("#loading").fadeOut(300);
         pullupRefresh();
     }
-    mui.init();
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
     mui('body').on('tap','a',function(){

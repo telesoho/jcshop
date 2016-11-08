@@ -217,6 +217,24 @@
 <script>
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
+		//	ajax 请求
+		mui.ajax('index.php?controller=apic&action=order_list',{
+			dataType:'json',//服务器返回json格式数据
+			type:'get',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			success:function(data){
+				var dat={}
+				for(var i=0;i<5;i++){
+					dat[i]={};
+					dat[i]['state']=data['state'+i];
+					$('#main_panel'+i).append(template('orderSum', dat[i]));
+				}
+			},
+			error:function(xhr,type,errorThrown){
+				//异常处理；
+				console.log(type);
+			}
+		});
 	})
 	mui('body').on('tap','.toOrderDetail',function(){
 		document.location.href=this.href;
@@ -245,24 +263,7 @@
 	$('.mui-control-item'+statusOrder).addClass('mui-active');
 	$('.mui-slider-item').removeClass('mui-active')
 	$('#itemmobile'+statusOrder).addClass('mui-active');
-//	ajax 请求
-	mui.ajax('index.php?controller=apic&action=order_list',{
-		dataType:'json',//服务器返回json格式数据
-		type:'get',//HTTP请求类型
-		timeout:10000,//超时时间设置为10秒；
-		success:function(data){
-			var dat={}
-			for(var i=0;i<5;i++){
-				 dat[i]={};
-				dat[i]['state']=data['state'+i];
-				$('#main_panel'+i).append(template('orderSum', dat[i]));
-			}
-		},
-		error:function(xhr,type,errorThrown){
-			//异常处理；
-			console.log(type);
-		}
-	});
+
 
 
 	mui.init();

@@ -41,7 +41,7 @@
         </div>
     </section>
     <section>
-		<div class="relatedContent">
+		<div class="relatedContent" id="showVedio">
 			<p class="title">相关视频</p>
 			<div class="contentInfo">
 				<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" style="height:1.8rem">
@@ -300,9 +300,6 @@
     <script src="/views/mobile/javascript/mui.js"></script>
 	<script src="/views/mobile/javascript/products.js"></script>
     <script type="text/javascript" charset="utf-8">
-		//banner图轮播
-		window.onload=function(){
-		}
 		mui('body').on("tap","#joinButton",function(){
 			$("#joinCarButton").show();
 			$("#buyNowButton").hide();
@@ -339,7 +336,6 @@
 					var html4=template('joinCarTemplate',data);
 					document.getElementById('select_product').innerHTML=html4;
 					var productInstance = new productClass("{$id}","{$this->user['user_id']}","{$promo}","{$active_id}");
-					console.log(product_detail);
 					getRelateDetail(product_detail);
 				},
 				error:function(xhr,type,errorThrown){
@@ -348,7 +344,7 @@
 				}
 			});
 		}
-		//jsom解析模板引擎
+		//json解析模板引擎
 		template.helper('JSONstringify', function(obj){
 			return JSON.stringify(obj);
 		});
@@ -387,7 +383,10 @@
 				type:'get',//HTTP请求类型
 				timeout:10000,//超时时间设置为10秒；
 				success:function(data){
-					//轮播图展示页面
+					console.log(data.article_data.length);
+					if(data.article_data.length==2){
+						$("#showVedio").hide();
+					}
 					var relateV=template('vedioTemp',data);
 					document.getElementById('relateVedio').innerHTML=relateV;
 					var relateW=template('relateTemp',data);

@@ -133,7 +133,7 @@
 	<input type='hidden' name='direct_num' value='<%=num%>' />
 	<input type='hidden' name='direct_promo' value='<%=promo%>' />
 	<input type='hidden' name='direct_active_id' value='<%=active_id%>' />
-	<%if(addressList){%>
+	<%if(addressList.length>0){%>
 	<input name="radio_address" type="hidden" value="<%=addressList[0].id%>"/>
 	<%}%>
 	<input type="hidden" name="delivery_id" value="<%=delivery[0].id%>" />

@@ -201,6 +201,89 @@ input[type='search']{
     font-size:0.26rem;
 }
 /*分类样式*/
-.siteMap{
-     margin:0.9rem 0 1.0rem 0;
- }
+#left-scroll{
+    width:2rem;
+    margin:0.9rem 0 1.01rem 0;
+    background:#f8f8f8;
+    box-shadow:0 0.22rem 0.1rem rgba(153,153,153,0.15);
+    border-color: #fff !important;
+    border-right-width: 0.19rem;
+}
+#left-scroll li{
+    height:1.28rem;
+}
+#left-scroll li .icon{
+    width:0.34rem;
+    height:0.34rem;
+}
+#left-scroll li .content{
+    position:relative;
+    text-align:center;
+    margin:0 0.2rem;
+    height:1.28rem;
+    border-bottom:0.01rem solid #eee;
+}
+#left-scroll li.active{
+    background:#fff;
+    border-bottom:0.01rem solid transparent;
+}
+#left-scroll li img{
+  margin-top:0.26rem;
+}
+#left-scroll li span{
+    display:block;
+}
+#left-scroll li .name{
+    margin:0.1rem 0;
+    font-size:0.26rem;
+    color:#3d4225;
+    padding:0 0.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#left-scroll li .bg{
+    display:block;
+    text-align:center;
+    background:#ff4aa0;
+    border-radius:0.08rem;
+    width:100%;
+    height:0.06rem;
+    position:absolute;
+    left:0;
+}
+#right-scroll{
+    width:5.28rem;
+    background:#fff !important;
+    margin:0.9rem 0.03rem 1.08rem 2.19rem;
+}
+#right-scroll .banner img{
+    width:5.20rem;
+    min-height:1.54rem;
+}
+#right-scroll .S_classification{
+    display:flex;
+    justify-content:flex-start;
+    flex-wrap: wrap;
+}
+#right-scroll .S_classification .type{
+    width:31%;
+    margin-right:2%;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+#right-scroll .S_classification .type img{
+    width:auto;
+    height:1.54rem;
+}
+#right-scroll .S_classification .type .name{
+    font-size:0.26rem;
+    color:#3d4245;
+    width:1.56rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align:center;
+    margin:0.14rem 0;
+}
