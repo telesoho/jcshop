@@ -743,9 +743,9 @@ class Apic extends IController
             }
             $data[$key]['child'] = [];
             $second = Api::run('getCategoryByParentid',array('#parent_id#',$value['id']));
-            if(!empty($second)) foreach ($second as $key=>$value){
-                if (!empty($value['image'])){
-                    $second[$key]['image'] = IWeb::$app->config['image_host'] . $value['image'];
+            if(!empty($second)) foreach ($second as $k=>$v){
+                if (!empty($v['image'])){
+                    $second[$k]['image'] = IWeb::$app->config['image_host'] . $v['image'];
                 }
             }
             $data[$key]['child'] = $second;
