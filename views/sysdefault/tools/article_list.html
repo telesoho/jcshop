@@ -58,15 +58,21 @@
 				$query = new IQuery("article as ar");
 				$query->page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;
 				$query->join = "left join article_category as ac on ac.id = ar.category_id";
-				$where = IFilter::act(IReq::get('article_title'),'string');
-				$query->where = '';
-				if(!empty($where)){
-					$query->where .= "ar.title like '%".$where."%'";
+				$a = IFilter::act(IReq::get('article_title'),'string');
+				if(!empty($a)){
+					$where = "ar.title like '%".$a."%'";
+				} else {
+					$where = '';
 				}
 				$type = IFilter::act(IReq::get('type'),'int');
 				if(!empty($type)) {
-					$query->where .= "ar.category_id=".$type;
+					if(!empty($where)){
+						$where .= " and ar.category_id=".$type;
+					} else {
+						$where .= "ar.category_id=".$type;
+					}
 				}
+				$query->where = $where;
 				$query->order = "ar.sort asc,ar.id desc";
 				$query->fields = "ar.id,ar.title,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ac.name";
 				$items = $query->find();
