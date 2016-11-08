@@ -161,17 +161,17 @@
 <script>
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
-		mui("body").on('tap',"#sum_count",function(){
-			window.location.href='index.php?controller=simple&action=cart2';
-		})
+		getCartInfo();
+	});
+	mui("body").on('tap',"#sum_count",function(){
+		window.location.href='index.php?controller=simple&action=cart2';
 	})
 	mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
 	//定义template方法
 	template.helper('JSONstringify', function(obj){
 		return JSON.stringify(obj);
 	});
-
-	mui.init();
+function getCartInfo(){
 	mui.ajax('index.php?controller=apic&action=cart',{
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
@@ -186,6 +186,7 @@
 			console.log(type);
 		}
 	});
+}
 //购物车数量改动计算
 function cartCount(obj)
 {

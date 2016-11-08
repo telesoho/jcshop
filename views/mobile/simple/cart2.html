@@ -146,36 +146,6 @@
 	var addr=true;//判断用户是否提供地址
 	var Request = new Object();
 	Request = GetRequest();
-	mui.ajax('/apic/cart2',{
-		data:{
-			id:Request["id"],
-			num:Request["num"],
-			type:Request["type"]
-		},
-		dataType:'json',//服务器返回json格式数据
-		type:'get',//HTTP请求类型
-		timeout:10000,//超时时间设置为10秒；
-		success:function(data){
-			//服务器返回响应，根据响应结果，分析是否登录成功；
-			var data=data;
-			console.log(data);
-			if(data.addressList.length==0){
-				addr=false;
-			}
-			var html1 = template('test',data);
-			document.getElementById("defaultAddress").innerHTML = html1;
-			var html2 = template('wareList',data);
-			document.getElementById("orderBox").innerHTML = html2;
-			var html3 = template('testFormTemp',data);
-			document.getElementById("testForm").innerHTML = html3;
-//			document.getElementById("totalPrice_sum").innerHTML="￥"+data.final_sum;
-
-		},
-		error:function(xhr,type,errorThrown){
-			//异常处理；
-			console.log(type);
-		}
-	});
 	template.helper('JSONsize', function(obj){
 		var arr=[];
 		for(var i in obj){
@@ -187,6 +157,7 @@
 	//页面加载动画的调用
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
+		getCart2Info();
 	})
 	var turn=true;
 	//解决tab选项卡a标签无法跳转的问题
@@ -205,6 +176,38 @@
 			}
 		}
 		return theRequest;
+	}
+	function getCart2Info(){
+		mui.ajax('/apic/cart2',{
+			data:{
+				id:Request["id"],
+				num:Request["num"],
+				type:Request["type"]
+			},
+			dataType:'json',//服务器返回json格式数据
+			type:'get',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			success:function(data){
+				//服务器返回响应，根据响应结果，分析是否登录成功；
+				var data=data;
+				console.log(data);
+				if(data.addressList.length==0){
+					addr=false;
+				}
+				var html1 = template('test',data);
+				document.getElementById("defaultAddress").innerHTML = html1;
+				var html2 = template('wareList',data);
+				document.getElementById("orderBox").innerHTML = html2;
+				var html3 = template('testFormTemp',data);
+				document.getElementById("testForm").innerHTML = html3;
+//			document.getElementById("totalPrice_sum").innerHTML="￥"+data.final_sum;
+
+			},
+			error:function(xhr,type,errorThrown){
+				//异常处理；
+				console.log(type);
+			}
+		});
 	}
 
 </script>

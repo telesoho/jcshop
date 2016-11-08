@@ -129,8 +129,6 @@
 <script src="/views/mobile/javascript/mui.picker.min.js"></script>
 <script src="/views/mobile/javascript/mui.poppicker.js"></script>
 <script src="/views/mobile/javascript/city.data-3.js" type="text/javascript" charset="utf-8"></script>
-
-
 <script>
     var Request = new Object();
     Request = GetRequest();
@@ -140,30 +138,32 @@
     $(window).load(function(){
         $("#loading").fadeOut(300);
         //    跳转到新增收货地址页面
+        getAddressInfo();
         var submitaddr=document.getElementById("submitaddr");
         submitaddr.addEventListener('tap',function(){
             document.location.href="{url:/simple/addaddress}";
         })
-
     })
-    mui.ajax('index.php?controller=apic&action=address_list',{
-        dataType:'json',//服务器返回json格式数据
-        type:'get',//HTTP请求类型
-        timeout:10000,//超时时间设置为10秒；
-        headers:{'Content-Type':'application/json'},
-        success:function(data){
-            //服务器返回响应，根据响应结果，分析是否登录成功；
-            var dat={};
-            dat.data=data;
-            var html1 = template('test',dat);
-            document.getElementById("addressList").innerHTML = html1;
-            submitaddr1=document.getElementById("submitaddr");
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
-            console.log(type);
-        }
-    });
+    function getAddressInfo(){
+        mui.ajax('index.php?controller=apic&action=address_list',{
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            headers:{'Content-Type':'application/json'},
+            success:function(data){
+                //服务器返回响应，根据响应结果，分析是否登录成功；
+                var dat={};
+                dat.data=data;
+                var html1 = template('test',dat);
+                document.getElementById("addressList").innerHTML = html1;
+                submitaddr1=document.getElementById("submitaddr");
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
 //    三级联动
     var cityPicker3 = new mui.PopPicker({
         layer: 3

@@ -312,8 +312,10 @@
 		var Request = new Object();
 		Request = GetRequest();
 		var statusOrder=Request["id"];
-
-		getProductDetail(statusOrder);
+		$(window).load(function(){
+			$("#loading").fadeOut(300);
+			getProductDetail(statusOrder);
+		});
 		function getProductDetail(obj){
 			var product_detail=obj;
 			mui.ajax('index.php?controller=apic&action=products_details',{
