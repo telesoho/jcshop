@@ -649,6 +649,7 @@ class Apic extends IController
             } else {
                 $items[$key]['is_favorite'] = 0;
             }
+            $items[$key]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/750/h/380");
         }
         $this->json_echo($items);
     }
