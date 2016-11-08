@@ -9,7 +9,7 @@
 		<form action="{url:/tools/article_list}" method="post" name="searchListForm">
 			<input class="small" name="article_title" type="text" value="<?php echo IFilter::act(IReq::get('article_title'),'string')?>">
 
-			<select name="type" >
+			<select class="auto" name="type" >
 				{query: name=article_category order=path}
 					<option value="{$item['id']}" <?php if($_POST['type'] == $item['id']) echo 'selected'; ?> >{$item['name']}</option>
 				{/query}
@@ -55,16 +55,17 @@
 
 			<tbody>
 				<?php
-				//var_dump($_POST);exit();
 				$query = new IQuery("article as ar");
 				$query->page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;
 				$query->join = "left join article_category as ac on ac.id = ar.category_id";
-				//$where = IFilter::act(IReq::get('article_title'),'string');
-				//if(!empty($where)){
-				//$query->where = "ar.title like '%".$where."%'";
-				//}
-				if(!empty($_POST['type'])) {
-					$query->where = "ar.category_id=".$_POST['type'];
+				$where = IFilter::act(IReq::get('article_title'),'string');
+				$query->where = '';
+				if(!empty($where)){
+					$query->where .= "ar.title like '%".$where."%'";
+				}
+				$type = IFilter::act(IReq::get('type'),'int');
+				if(!empty($type)) {
+					$query->where .= "ar.category_id=".$type;
 				}
 				$query->order = "ar.sort asc,ar.id desc";
 				$query->fields = "ar.id,ar.title,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ac.name";

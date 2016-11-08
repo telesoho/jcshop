@@ -743,6 +743,23 @@ class goods_class
 				$where[] = "go.seller_id ".$seller_id;
 			}
 		}
+		//标题和专辑内容是否是中文
+        if(isset($search['is_zh_title']))
+        {
+            $is_zh_title = IFilter::act($search['is_zh_title'], 'int');
+            if ('' != $is_zh_title)
+            {
+                $where[] = "go.is_zh_title = ".$is_zh_title;
+            }
+        }
+        if(isset($search['is_zh_content']))
+        {
+            $is_zh_content = IFilter::act($search['is_zh_content'], 'int');
+            if ('' != $is_zh_content)
+            {
+                $where[] = "go.is_zh_content = ".$is_zh_content;
+            }
+        }
 		// 高级筛选
 		if (isset($search['adv_search']) && 1 == $search['adv_search'])
 		{

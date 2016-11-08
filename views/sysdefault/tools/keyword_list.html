@@ -3,7 +3,7 @@
 	<div class="operating">
 		<a href="javascript:void(0)" onclick="event_link('{url:/tools/keyword_edit}');"><button class="operating_btn" type="button"><span class="addition">添加标签</span></button></a>
 		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
-		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel({form:'keyword_del'});"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
 		<a href="javascript:void(0)" onclick="window.document.forms[0].action='{url:/tools/keyword_account}';delModel({msg:'是否批量同步？'});"><button class="operating_btn" type="button"><span class="refresh">批量同步</span></button></a>
 	</div>
 	<div class="searchbar">
@@ -16,7 +16,7 @@
 	</div>
 </div>
 <div class="content">
-	<form action="{url:/tools/keyword_del}" method="post">
+	<form action="{url:/tools/keyword_del}" name="keyword_del" method="post">
 		<table class="list_table">
 			<colgroup>
 				<col width="40px" />
