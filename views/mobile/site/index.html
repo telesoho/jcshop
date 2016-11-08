@@ -43,7 +43,7 @@
         <section class="homeHeader">
             <div class="nav-header">
                 <div class="mui-input-row mui-search">
-                    <input type="search" id="searth"  placeholder="搜索你想要的品牌">
+                    <input type="search" id="searth"  placeholder="">
                 </div>
             </div>
             <img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon">
@@ -171,12 +171,12 @@
 <script id="C_slider" type="text/html">
     <div class="mui-slider-group mui-slider-loop">
         <div class="mui-slider-item mui-slider-item-duplicate">
-            <a href="<%=data[data.length-1].url %>">
-                <img src="<%=data[data.length-1].img %>">
+            <a href="<%=banner[banner.length-1].url %>">
+                <img src="<%=banner[banner.length-1].img %>">
             </a>
         </div>
-        <% for(var i=0; i<data.length; i++){%>
-        <% var dat =data[i] %>
+        <% for(var i=0; i<banner.length; i++){%>
+        <% var dat =banner[i] %>
         <div class="mui-slider-item">
             <a href="<%=dat.url %>">
                 <img src="<%=dat.img %>" class="samLazyImg">
@@ -184,14 +184,14 @@
         </div>
         <%}%>
         <div class="mui-slider-item mui-slider-item-duplicate">
-            <a href="<%=data[0].url %>">
-                <img src="<%=data[0].img %>">
+            <a href="<%=banner[0].url %>">
+                <img src="<%=banner[0].img %>">
             </a>
         </div>
     </div>
     <div class="mui-slider-indicator" style="bottom:0.16rem;">
         <div class="mui-indicator mui-active"></div>
-        <% for(var i=1; i<data.length; i++){%>
+        <% for(var i=1; i<banner.length; i++){%>
         <div class="mui-indicator"></div>
         <%}%>
     </div>
@@ -275,9 +275,6 @@
             </span>
             <span class="like mui-pull-right">
                 <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like"  onclick="collection(<%=dat.id %>)"/>
-            </span>
-            <span class="share mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share" />
             </span>
         </div>
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
@@ -444,10 +441,9 @@
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
-                //服务器返回响应，根据响应结果，分析是否登录成功；
-                var dat={};
-                dat.data=data;
-                var html = template('C_slider',dat);
+                console.log(data);
+                $(".mui-placeholder span").eq(1).html(data.goods_nums+"件商品等你来搜")
+                var html = template('C_slider',data);
                 document.getElementById("slider1").innerHTML = html;
                 var gallery = mui('#slider1');
                 gallery.slider({
@@ -458,7 +454,6 @@
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
-                console.log(type);
             }
         });
     }

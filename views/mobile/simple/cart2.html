@@ -133,9 +133,7 @@
 	<input type='hidden' name='direct_num' value='<%=num%>' />
 	<input type='hidden' name='direct_promo' value='<%=promo%>' />
 	<input type='hidden' name='direct_active_id' value='<%=active_id%>' />
-	<%if(addressList.length>0){%>
 	<input name="radio_address" type="hidden" value="<%=addressList[0].id%>"/>
-	<%}%>
 	<input type="hidden" name="delivery_id" value="<%=delivery[0].id%>" />
 	<input type='hidden'  name='accept_time' value='任意' />
 	<input name="payment"  type="hidden" value="<%=payment[0].id%>" />

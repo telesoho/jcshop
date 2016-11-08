@@ -181,7 +181,9 @@ color:#ef4145 !important;}
 }
 /*图标大小设定*/
 .img-hot{
-  width:0.28rem;
+  width:0.48rem;
+  position:relative;
+  top:0.06rem;
 }
 .img-share{
   width:0.34rem;
@@ -199,7 +201,9 @@ color:#ef4145 !important;}
   width:0.37rem;
 }
 .img-vedio{
-  width:0.36rem;
+  width:0.48rem;
+  position:relative;
+  top:0.06rem;
 }
 .img-te{
   width:1.17rem;
@@ -211,7 +215,7 @@ color:#ef4145 !important;}
   width:1.8rem;
 }
 .img-address{
-  width:0.19rem;
+  width:0.26rem;
 }
 .img-read{
   width:0.35rem;

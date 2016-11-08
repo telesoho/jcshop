@@ -1580,17 +1580,16 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 }
 .mui-bar-tab .mui-tab-item .mui-icon
 {
-    top: 0.12rem !important;
-    width: 0.50rem;
-    height: 0.50rem;
+    width: 0.70rem;
+    height: 0.70rem;
     padding-top: 0;
-    margin-bottom: 0.10rem;
 }
 .mui-bar-tab .mui-tab-item .mui-icon ~ .mui-tab-label
 {  font-size:0.22rem;
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-top:-0.15rem;
     /*padding-top:0.11rem;*/
 }
 .mui-bar-tab .mui-tab-item .mui-icon:active
