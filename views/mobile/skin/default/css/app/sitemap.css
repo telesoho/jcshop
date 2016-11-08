@@ -230,7 +230,7 @@ input[type='search']{
 #left-scroll li img{
   margin-top:0.26rem;
 }
-#left-scroll li span{
+#left-scroll li.active span{
     display:block;
 }
 #left-scroll li .name{
@@ -243,7 +243,7 @@ input[type='search']{
     text-overflow: ellipsis;
 }
 #left-scroll li .bg{
-    display:block;
+    display:none;
     text-align:center;
     background:#ff4aa0;
     border-radius:0.08rem;

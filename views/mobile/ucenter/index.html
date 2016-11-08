@@ -165,7 +165,7 @@
             <%}%>
         </div>
     </div>
-    <%if(true_name==null){%>
+    <%if(username==null){%>
     <div class="userName">九猫家的小小猫</div>
     <%}else{%>
     <div class="userName"><%=username %></div>
@@ -191,11 +191,10 @@
             timeout:10000,		// 超时时间设置为10秒；
             success:function(data){
                 if(data){
-
                 }else{
                     data={
                         head_ico:null,
-                        true_name:null
+                        username:null
                     }
                 };
                 var html=template('userinfo',data);
@@ -205,7 +204,6 @@
             error:function(xhr,type,errorThrown){
                 //异常处理；
                 console.log(type);
-                alert("failed");
             }
         });
     }

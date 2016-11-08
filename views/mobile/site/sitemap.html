@@ -49,98 +49,7 @@
 <section class="box" id="scroll_sitemap">
 	<div class="mui-scroll-wrapper" id="left-scroll">
 		<div class="mui-scroll">
-			<ul>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-red.png" alt="" class="icon img-red">
-						<span class="name">医药品mingchengmggmggg</span>
-						<span class="bg"></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
-				<li>
-					<div class="content">
-						<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-red">
-						<span class="name">医药品</span>
-						<span></span>
-					</div>
-				</li>
+			<ul id="controlTop">
 			</ul>
 		</div>
 	</div>
@@ -343,7 +252,6 @@
 							这是二级分类名称
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -397,17 +305,38 @@
 </div>
 <!--<span class="mui-icon-extra mui-icon-extra-top" id="pagetop"></span>-->
 <!--头信息结束-->
+<!--一级分类-->
+<script type="text/html" id="controlTopTemp">
+	<li class="active">
+		<div class="content">
+			<img src="/views/mobile/skin/default/image/jmj/icon/icon-red.png" alt="" class="icon img-red">
+			<span class="name">医药品mingchengmggmggg</span>
+			<span class="bg"></span>
+		</div>
+	</li>
+	<% for(var i=1; i<data.length; i++){%>
+	<% var Fsite =data[i] %>
+		<li>
+			<div class="content">
+				<img src="/views/mobile/skin/default/image/jmj/icon/icon-red.png" alt="" class="icon img-red">
+				<span class="name"><%=Fsite.name %></span>
+				<span class="bg"></span>
+			</div>
+		</li>
+	<%}%>
+</script>
+<script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script>
 	//页面加载动画的调用
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
+		getSitemapInfo();
 	})
 	//解决tab选项卡a标签无法跳转的问题
 	mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
 	mui('body').on('tap','a',function(){document.location.href=this.href;});
-
 	document.getElementById("searth").addEventListener('focus',function(){
 		document.getElementById("modalid-searth").className="show";
 		document.body.style.overflow = 'hidden';
@@ -424,6 +353,24 @@
 		}else{
 			window.location.href="home.html?item="+subContent;
 		}
+	}
+	function getSitemapInfo(){
+		mui.ajax('/apic/category_top',{
+			dataType:'json',
+			type:'get',
+			timeout:10000,
+			success:function(data){
+				console.log(data);
+				var dat={};
+				dat.data=data;
+				var html = template('controlTopTemp',dat);
+				document.getElementById("controlTop").innerHTML=html;
+			},
+			error:function(xhr,type,errorThrown){
+				//异常处理；
+				console.log(type);
+			}
+		});
 	}
 </script>
 </body>
