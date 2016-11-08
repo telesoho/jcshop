@@ -12,18 +12,18 @@
     array (
       0 => 
       array (
-        'host' => '192.168.0.172:32771',
+        'host' => '101.201.232.15:32813',
         'user' => 'root',
         'passwd' => '123456',
-        'name' => 'jmj_dev',
+        'name' => 'jmj',
       ),
     ),
     'write' => 
     array (
-      'host' => '192.168.0.172:32771',
+      'host' => '101.201.232.15:32813',
       'user' => 'root',
       'passwd' => '123456',
-      'name' => 'jmj_dev',
+      'name' => 'jmj',
     ),
   ),
   'interceptor' => 
@@ -55,7 +55,7 @@
   'timezone' => 'Etc/GMT-8',
   'upload' => 'upload',
   'dbbackup' => 'backup/database',
-  'sqlLog' => '1',
+  'sqlLog' => '0',
   'sqlDebug' => '0',
   'safe' => 'cookie',
   'lang' => 'zh_sc',
