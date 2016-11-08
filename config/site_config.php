@@ -39,4 +39,5 @@
     1 => 'systemadmin/index',
     2 => 'seller/index',
   ),
+  'exchange_rate_jp' => '15.2693',
 )?>

@@ -171,8 +171,8 @@
 <script id="C_slider" type="text/html">
     <div class="mui-slider-group mui-slider-loop">
         <div class="mui-slider-item mui-slider-item-duplicate">
-            <a href="<%=data[0].url %>">
-                <img src="/<%=data[0].img %>">
+            <a href="<%=data[data.length-1].url %>">
+                <img src="/<%=data[data.length-1].img %>">
             </a>
         </div>
         <% for(var i=0; i<data.length; i++){%>
@@ -184,8 +184,8 @@
         </div>
         <%}%>
         <div class="mui-slider-item mui-slider-item-duplicate">
-            <a href="<%=data[data.length-1].url %>">
-                <img src="/<%=data[data.length-1].img %>">
+            <a href="<%=data[0].url %>">
+                <img src="/<%=data[0].img %>">
             </a>
         </div>
     </div>
@@ -229,11 +229,11 @@
                     <img src="/views/mobile/skin/default/image/jmj/icon/address.png" alt="" class="img-address">日本东京
                 </span>
             </span>
-            <span class="num mui-pull-right">
+            <span class="num mui-pull-right" id="favorite<%=dat.id %>">
                 <%=dat.favorite %>
             </span>
             <span class="like mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like"   onclick=collection(<%=dat.id %>) >
             </span>
             <span class="share mui-pull-right">
                 <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
@@ -270,11 +270,11 @@
             <span class="name">
             特別推薦
             </span>
-            <span class="num mui-pull-right">
+            <span class="num mui-pull-right" id="favorite<%=dat.id %>">
             <%=dat.favorite %>
             </span>
             <span class="like mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like" />
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like"  onclick="collection(<%=dat.id %>)"/>
             </span>
             <span class="share mui-pull-right">
                 <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share" />
@@ -303,11 +303,11 @@
             <span class="name">
             人気雑誌
             </span>
-            <span class="num mui-pull-right">
+            <span class="num mui-pull-right" id="favorite<%=dat.id %>">
              <%=dat.favorite %>
             </span>
             <span class="like mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like">
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" class="img-like"   onclick=collection(<%=dat.id %>) >
             </span>
             <span class="share mui-pull-right">
                 <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
@@ -489,6 +489,31 @@
         var self=obj;
         $(self).next().next().addClass("hide");
     }
+    function collection(id){
+        console.log(id);
+        mui.ajax('index.php?controller=apic&action=favorite_article_add',{
+            data:{
+                id:id
+            },
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+                console.log(data);
+               if(data.message=="收藏成功"){
+                    var num=document.getElementById("favorite"+id);
+                        num.innerHTML=parseInt(num.innerHTML)+1;
+               }else{
+
+               }
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+
 </script>
 </body>
 </html>

@@ -9,7 +9,28 @@
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css" />
-    <script src="/views/mobile/javascript/vue.js"></script>
+	<style>
+		#scrollItem{
+			width:2rem;
+			box-shadow:0 0.22rem 0.3rem 0;
+		}
+		#scrollItem a{
+			display: block;
+			height:1.28rem;
+			background:#f8f8f8;
+		}
+		#scrollItem a.mui-active{
+			background:#fff;
+		}
+		#scrollContent{
+			height:100%;
+			overflow-y: scroll;
+			border:1px solid blue;
+		}
+		.mui-slider .mui-slider-group .mui-slider-item{
+
+		}
+	</style>
 </head>
 <body>
 <!--loading页开始-->
@@ -47,9 +68,145 @@
 	<img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon">
 </section>
 <!--分类页面-->
-<section class="siteMap mui-fullscreen">
-      <div class="left">这是一级导航</div>
-    <div class="left">这是二级导航</div>
+<section class="siteMap mui-fullscreen box">
+      <div class="mui-scroll-wrapper" id="scrollItem">
+		  <div class="mui-scroll">
+			  <a class="mui-control-item mui-active" href="#item1mobile">
+				  推荐
+			  </a>
+			  <a class="mui-control-item" href="#item2mobile">
+				  热点
+			  </a>
+			  <a class="mui-control-item" href="#item3mobile">
+				  北京
+			  </a>
+			  <a class="mui-control-item " href="#item4mobile">
+				  推荐
+			  </a>
+			  <a class="mui-control-item" href="#item5mobile">
+				  热点
+			  </a>
+			  <a class="mui-control-item" href="#item6mobile">
+				  北京
+			  </a>
+			  <a class="mui-control-item " href="#item7mobile">
+				  推荐
+			  </a>
+			  <a class="mui-control-item" href="#item8mobile">
+				  热点
+			  </a>
+			  <a class="mui-control-item" href="#item9mobile">
+				  北京
+			  </a>
+			  <a class="mui-control-item " href="#item10mobile">
+				  推荐
+			  </a>
+			  <a class="mui-control-item" href="#item11mobile">
+				  热点
+			  </a>
+		  </div>
+	  </div>
+	<div class="mui-slider-group" id="scrollContent">
+		<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+			<div  class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						11hah
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="item2mobile" class="mui-slider-item mui-control-content">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						22
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="item3mobile" class="mui-slider-item mui-control-content">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						33
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="item4mobile" class="mui-slider-item mui-control-content">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						33
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="item5mobile" class="mui-slider-item mui-control-content">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						33
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="item6mobile" class="mui-slider-item mui-control-content">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						33
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="item7mobile" class="mui-slider-item mui-control-content">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						33
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="item8mobile" class="mui-slider-item mui-control-content">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						33
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="item9mobile" class="mui-slider-item mui-control-content">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						33
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="item10mobile" class="mui-slider-item mui-control-content">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						33
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="item11mobile" class="mui-slider-item mui-control-content">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						33
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 <footer>
 	<nav class="mui-bar mui-bar-tab">
@@ -114,21 +271,22 @@
 		document.getElementById("modalid-searth").className="show";
 		document.body.style.overflow = 'hidden';
 	});
+	mui('.mui-scroll-wrapper').scroll();
     //滚动监听
-    document.getElementById('segmentedControlContents').onscroll=function(){
-        var scrollTop=this.scrollTop;//滚动条高度;可滚动高度
-        $('.mui-control-content').each(function(index){
-            var uhTop = this.offsetTop,
-                    uhBot = uhTop + this.offsetHeight;
-            if(scrollTop<uhBot && scrollTop>=uhTop){
-                $('.site-control-item').removeClass('mui-active');
-                $('.site-control-item:eq('+ index +')').addClass('mui-active');
-            }else{
-                return;
-            }
-        })
+    <!--document.getElementById('segmentedControlContents').onscroll=function(){-->
+        <!--var scrollTop=this.scrollTop;-->
+        <!--$('.mui-control-content').each(function(index){-->
+            <!--var uhTop = this.offsetTop,-->
+                    <!--uhBot = uhTop + this.offsetHeight;-->
+            <!--if(scrollTop<uhBot && scrollTop>=uhTop){-->
+                <!--$('.site-control-item').removeClass('mui-active');-->
+                <!--$('.site-control-item:eq('+ index +')').addClass('mui-active');-->
+            <!--}else{-->
+                <!--return;-->
+            <!--}-->
+        <!--})-->
 
-    }
+    <!--}-->
 	function searthCancel(){
 		document.getElementById("modalid-searth").className="hide";
 		document.body.style.overflow = 'auto';

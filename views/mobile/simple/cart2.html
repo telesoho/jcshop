@@ -57,7 +57,7 @@
 <script id="test" type="text/html">
 	<%if(addressList.length==0){%>
 	<!--如果没有收货地址-->
-	<a href="{url:/simple/addaddress}">
+	<a href="{url:/simple/addaddress}?from=cart2">
 		<div class="order_addAddr flexbox">
 			<div class="img">
 				<img src="/views/mobile/skin/default/image/jmj/icon/add.png" alt="" />
@@ -133,7 +133,9 @@
 	<input type='hidden' name='direct_num' value='<%=num%>' />
 	<input type='hidden' name='direct_promo' value='<%=promo%>' />
 	<input type='hidden' name='direct_active_id' value='<%=active_id%>' />
+	<%if(addressList){%>
 	<input name="radio_address" type="hidden" value="<%=addressList[0].id%>"/>
+	<%}%>
 	<input type="hidden" name="delivery_id" value="<%=delivery[0].id%>" />
 	<input type='hidden'  name='accept_time' value='任意' />
 	<input name="payment"  type="hidden" value="<%=payment[0].id%>" />

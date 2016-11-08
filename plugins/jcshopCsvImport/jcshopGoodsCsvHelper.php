@@ -1,6 +1,6 @@
 <?php
 
-include_once($pluginDir.'jcshopPacketHelperAbstract.php');
+include_once(__DIR__.'/jcshopPacketHelperAbstract.php');
 
 /**
  * @brief the Jcshop data packet dispose
@@ -15,48 +15,27 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 	//SKU cache
 	private $skuCache = array();
 
+
 	/**
 	 * override abstract function
 	 * @return array
 	 */
 	public function getDataTitle()
 	{
-		return array("品牌名","商品JAN编码","商品名称","商品类目","销售价格","库存数量","商品详情","图片","销售属性","商家编码","物流重量","状态");
+		return array(
+			"品牌名","商品JAN编码","商品名称","商品类目","日本市场价格","库存数量","商品详情","图片",
+			"销售属性","商家编码","物流重量","商品详情日文","商品名称日文","状态",
+			"日本价格", "商品标题是中文","商品详情是中文");
 	}
+
 	/**
 	 * override abstruact function
 	 * @return array
 	 */
-	public function getTitleCallback()
+	public function getColumnCallback()
 	{
 		// 设置回调函数
-		return array(
-			"商品JAN编码" => "jan_callback",
-			"销售属性" =>"spec_array_callback",
-			"销售价格" =>"price_callback",
-			"物流重量" => "weight_callback"
-			);
-	}
-
-	public function jan_callback($content) {
-		return trim($content);
-	}
-
-	protected function weight_callback($content) {
-		if(strpos($content, " Kg")) {
-			$weight = str_replace(" Kg", "", $content);
-			$weight = (float)$weight * 1000;
-		} else {
-			$weight = 0 + $content;
-		}
-		return $weight;
-	}
-
-    /**
-	 * 价格
-	 */
-	protected function price_callback($content) {
-		return trim($content);
+		return array();
 	}
 
 	/**
@@ -89,104 +68,19 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 		}
 		return $content;
 	}
-	/**
-	 * column callback function
-	 * @param string $content data content
-	 * @return string
-	 */
-	protected function newImageCallback($content)
-	{
-		$record    = array();
-		$content   = explode(';',trim($content,'"'));
-
-		if(!$content)
-		{
-			return '';
-		}
-
-		$return  = array();
-		foreach($content as $key => $val)
-		{
-			if($val)
-			{
-				$imageName = current(explode(':',$val));
-
-				if(in_array($imageName,$record))
-				{
-					continue;
-				}
-				$record[] = $imageName;
-
-				if(stripos($imageName,'http://') === 0)
-				{
-					$imageMd5 = md5($imageName);
-					file_put_contents($this->sourceImagePath .'/'. $imageMd5.'.tbi',file_get_contents($imageName));
-					$imageName = $imageMd5;
-				}
-				$source = $this->sourceImagePath .'/'. $imageName.'.tbi';
-				if(!is_file($source))
-				{
-					$source = $this->sourceImagePath .'/'. $imageName.'.jpg';
-				}
-				$target = $this->targetImagePath .'/'. $imageName.'.jpg';
-				$return[$source] = $target;
-			}
-		}
-		return $return;
-	}
-
 
 	//整合采集信息
 	public function collect()
 	{
 		// 拷贝商品详情页面图片
 		$this->copyDetailImage();
-
-		$result = parent::collect();
-
-		// 逐个处理商品信息
-		foreach($result as $goodsKey => $goodsRow)
-		{
-			//处理图片包括主图
-			$mainPic = array();
-
-			// 商品JAN
-			$jan = $goodsRow["商品JAN编码"];
-
-			$goodsImgDir = $this->targetImagePath . "/" . "mainPic" . "/" . $jan;
-
-
-			if(is_dir($goodsImgDir)) {
-
-				$handle = opendir($goodsImgDir);
-
-				while($file = readdir($handle))
-				{
-					if($file != '.' && $file != '..'){
-						// 并将图片文件名改为图片内容的MD5码
-						// $ext = pathinfo($file, PATHINFO_EXTENSION);
-						$source_file =  $goodsImgDir . "/" . $file;
-						// $target_file = $goodsImgDir . "/" . md5_file($source_file) . "." . $ext ;
-
-						// if($source_file !== $target_file) {
-						// 	copy($source_file,$target_file);
-						// 	unlink($source_file);
-						// }
-						$mainPic[] = $source_file;
-					}
-				}
-			}
-
-			//赋值商品主图
-			$result[$goodsKey]['mainPic'] = $mainPic;
-		}
-
-		return $result;
+		return  parent::collect();
 	}
 
 	//拷贝商品详情图片
 	public function copyDetailImage()
 	{
+
 		if(is_dir($this->sourceImagePath . DIRECTORY_SEPARATOR .'pictures'))
 		{
 			IFile::xcopy($this->sourceImagePath. DIRECTORY_SEPARATOR .'pictures',$this->targetImagePath . DIRECTORY_SEPARATOR . 'mainPic',true);
@@ -194,3 +88,4 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 	}
 
 }
+

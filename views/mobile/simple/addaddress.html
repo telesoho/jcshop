@@ -66,6 +66,10 @@
 <script src="/views/mobile/javascript/mui.poppicker.js"></script>
 <script src="/views/mobile/javascript/city.data-3.js" type="text/javascript" charset="utf-8"></script>
 <script>
+    //	接收页面传过来的状态值
+    var Request = new Object();
+    Request = GetRequest();
+    var statusOrder=Request["from"];
     mui.init();
     var pro,cit,are;
     $(window).load(function(){
@@ -112,7 +116,11 @@
                 type:'post',		// HTTP请求类型
                 timeout:10000,		// 超时时间设置为10秒；
                 success:function(data){
-                    document.location.href="{url:/simple/addresslist}";
+                    if(statusOrder=="cart2"){
+                        window.history.back();
+                    }else{
+                        document.location.href="{url:/simple/addresslist}";
+                    }
                 },
                 error:function(xhr,type,errorThrown){
                     //异常处理；
@@ -136,6 +144,19 @@
         }else{
             submitaddr.disabled='disabled';
         }
+    }
+    //	获取url传递过来的参数
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
     }
 </script>
 </body>

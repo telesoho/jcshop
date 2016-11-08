@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 
 /**
  * @brief CSV商品导入插件
@@ -12,6 +13,8 @@ class jcshopCsvImport extends pluginBase
 	private $category;
 	private $pluginDir;
 	private $log;
+	private $exchange_rate_jp;
+	private $imageDir;
 
 	//注册事件
 	public function reg()
@@ -75,9 +78,16 @@ class jcshopCsvImport extends pluginBase
 
 		$zipPath = $packetData['fileSrc'];
 		$zipDir  = dirname($zipPath);
-		// $imageDir= IWeb::$app->config['upload'].'/'.date('Y/m/d');
 		$imageDir= IWeb::$app->config['upload'] . '/goods_pic';
+
+		// 加载site_config文件并读取日币对人民币汇率
+		$siteConfigObj = new Config("site_config");
+		$site_config   = $siteConfigObj->getInfo();
+		$this->exchange_rate_jp = isset($site_config['exchange_rate_jp'])?floatval($site_config['exchange_rate_jp']):1.0;
+
 		file_exists($imageDir) ? '' : IFile::mkdir($imageDir);
+
+		$this->imageDir = $imageDir;
 
 		//解压缩包
 		$zipObject = new ZipArchive();
@@ -94,6 +104,7 @@ class jcshopCsvImport extends pluginBase
 		if($this->csvType !== "jcshop") {
 			die("请选择九猫商品数据包");
 		}
+
 
 		$this->goodsCsvImport($zipDir, $imageDir);
 
@@ -114,7 +125,6 @@ class jcshopCsvImport extends pluginBase
 	
 	private function goodsCsvImport($zipDir, $imageDir) {
 
-
 		$goodsFilename = $zipDir . "/goods.csv";
 
 		if(!file_exists($goodsFilename)) {
@@ -122,13 +132,21 @@ class jcshopCsvImport extends pluginBase
 			return false;
 		}
 
-		/* goods.csv */
-		include_once($pluginDir.'jcshopGoodsCsvHelper.php');
-		$goodsCsvHelper = new jcshopGoodsCsvHelper($goodsFilename ,$imageDir);
 
+		/* goods.csv */
+		require_once($this->pluginDir.'jcshopGoodsCsvHelper.php');
+
+
+		$config = array('csvFile' => $goodsFilename,
+			'targetImagePath' => $imageDir,
+			'exchange_rate_jp' => $this->exchange_rate_jp,
+			);
+
+		$goodsCsvHelper = new jcshopGoodsCsvHelper($config);
+
+		
 		//从csv中解析数据
 		$collectData = $goodsCsvHelper->collect();
-
 
 		$this->processGoodsData($collectData);
 
@@ -152,16 +170,22 @@ class jcshopCsvImport extends pluginBase
 	private function processGoodsData($collectData) {
 
 		$titleToCols = array(
-			'category.name'   => '商品类目',
-			'name'       => '商品名称',
-			'goods_no'	 => '商品JAN编码',
-			'sell_price' => '销售价格',
-			'store_nums' => '库存数量',
-			'content'    => '商品详情',
-			'img'        => '图片',
-			'spec_array' => '销售属性',
-			'weight'     => '物流重量',
-			'is_del'     => '状态',  /*0:上架 1：删除 2：下架 3:待审*/
+			'brand.name' 	 	=> '品牌名',
+			'goods_no'	 		=> '商品JAN编码',
+			'name'       		=> '商品名称',
+			'category.name'   	=> '商品类目',			
+			'jp_market_price' 	=> '日本市场价格',
+			'store_nums' 		=> '库存数量',
+			'content'    		=> '商品详情',
+			'img'        		=> '图片',
+			'spec_array' 		=> '销售属性',
+			'weight'     		=> '物流重量',
+			'name_jp'	 		=> '商品名称日文',
+			'content_jp'		=> '商品详情日文',
+			'is_del'     		=> '状态',  /*0:上架 1：删除 2：下架 3:待审*/
+			'jp_price'   		=> '日本价格',
+			'is_zh_title' 		=> '商品标题是中文',
+			'is_zh_content' 	=> '商品详情是中文',
 		);
 
 		//实例化商品
@@ -169,81 +193,147 @@ class jcshopCsvImport extends pluginBase
 		$photoRelationDB = new IModel('goods_photo_relation');
 		$photoDB         = new IModel('goods_photo');
 		$cateExtendDB    = new IModel('category_extend');
+		$brandDB 		 = new IModel('brand');
 
 		//插入商品表
 		foreach($collectData as $key => $val)
 		{
-			$goods_no = IFilter::act(trim($val[$titleToCols['goods_no']]));
-
-			if(empty($goods_no)) {
+			//更新GOODS表数据
+			$theData = array(
+				'img'          => isset($val['mainPic']) ? current($val['mainPic']) : '',
+				'seller_id'    => $this->seller_id,
+			);
+		
+			// 商品JAN编码
+			$field = trim($val[$titleToCols['goods_no']]);
+			if('' === $field) {
 				$this->error("商品JAN编码为空：" . JSON::encode($val));
-				continue;
+				continue;				
+			}
+			
+			$goods_no = IFilter::act($field, "string", 20);
+			$theData['goods_no'] = $goods_no;
+
+			// 品牌名
+			$field = trim($val[$titleToCols['brand.name']]);
+			if('' !== $field) {
+				$brandName = IFilter::act($field, "string");
+				$brandObj = $brandDB->getObj("name = '" . $brandName . "'" );
+				if($brandObj) {
+					$theData['brand_id'] = $brandObj['id'];
+				}
 			}
 
+			// 查询商品是否存在, 如果商品存在，则$the_goods是该商品记录，否则为false
 			$where = "goods_no = ". "'". $goods_no . "'";
 			$the_goods = $goodsObject->getObj($where);
 
+			// 如果商品名称不为空，则修改商品名
+			$field = trim($val[$titleToCols['name']]);
+			if('' !== $field) {
+				$theData['name'] = IFilter::act($field, "string");
+			}
 
-			if( $the_goods) {
-				$goods_id = $the_goods["id"];
 
-				//更新GOODS表数据
-				$updateData = array(
-					'goods_no'     => $goods_no,
-					'img'          => isset($val['mainPic']) ? current($val['mainPic']) : '',
-					'seller_id'    => $this->seller_id,
-				);
+			// 如果日本市场价格不为空，则修改日本市场价格
+			$field = trim($val[$titleToCols['jp_market_price']]);
+			if('' !== $field) {
+				$jp_market_price = IFilter::act($field,'float');
+				$theData['jp_market_price']  = $jp_market_price;
+				$theData['sell_price']  = $jp_market_price / $this->exchange_rate_jp;
+				$theData['market_price']  = $theData['sell_price'] ;
+			}
 
-				$field = trim($val[$titleToCols['name']],'"\' ');
-				if(!empty($field)) {
-					$updateData['name'] = IFilter::act($field);
+			// 处理库存数
+			$field = trim($val[$titleToCols['store_nums']]);
+			if('' !== $field) {
+				$theData['store_nums'] = IFilter::act($field,'int');
+			}
+
+			// 商品详情
+			$field = trim($val[$titleToCols['content']], '"\' ');
+			if('' !== $field) {
+				$theData['content'] = IFilter::addSlash($field);
+			}
+
+			// 销售属性
+
+			// 商家编码
+
+			// 物流重量
+			$field = trim($val[$titleToCols['weight']]);
+			if('' !== $field) {
+				$weight = IFilter::act($field, "string");
+				if(strpos($weight, " Kg")) {
+					$weight = str_replace(" Kg", "", $weight);
+					$weight = round(floatval($weight) * 1000);
+				} else {
+					$weight = round(floatval($weight));
 				}
+				$theData['weight'] = $weight;
+			}
 
-				$field = trim($val[$titleToCols['sell_price']]);
-				if($field !== "") {
-					$updateData['sell_price']  = IFilter::act($field,'float');
-					$updateData['market_price']  = IFilter::act($field,'float');
+			// 商品名称日文
+			$field = trim($val[$titleToCols['name_jp']], '"\' ');
+			if('' !== $field) {
+				$theData['name_jp'] = IFilter::act($field, "string");
+			}
+
+			// 商品详情日文
+			$field = trim($val[$titleToCols['content_jp']], '"\' ');
+			if('' !== $field) {
+				$theData['content_jp'] = IFilter::addSlash($field);
+			}
+
+			// 处理上下架状态
+			$field = trim($val[$titleToCols['is_del']]);
+			if('' !== $field) {
+				$theData['is_del'] = IFilter::act($field,'int');
+				switch($theData['is_del']) 
+				{
+				case 0:
+					$theData['up_time'] = ITime::getDateTime();
+					$theData['down_time'] = ITime::getDateTime('0000-00-00 00:00:00');
+					break;
+				case 1:
+					$theData['up_time'] = ITime::getDateTime('0000-00-00 00:00:00');
+					$theData['down_time'] = ITime::getDateTime();
+					break;
+				case 2:
+					$theData['up_time'] = ITime::getDateTime('0000-00-00 00:00:00');
+					$theData['down_time'] = ITime::getDateTime();
+					break;
 				}
+			}
 
-				$field = trim($val[$titleToCols['weight']]);
-				if($field !== "") {
-					$updateData['weight'] = IFilter::act($field,'int');
-				}
+			// 日本价格
+			$field = trim($val[$titleToCols['jp_price']]);
+			if('' !== $field) {
+				$theData['jp_price'] = IFilter::act($field,'int');
+			}
 
-				// 处理上下架状态
-				$field = trim($val[$titleToCols['is_del']]);
-				if($field !== "") {
-					$updateData['is_del'] = IFilter::act($field,'int');
-					switch($updateData['is_del']) 
-					{
-					case 0:
-						$updateData['up_time'] = ITime::getDateTime();
-						$updateData['down_time'] = ITime::getDateTime('0000-00-00 00:00:00');
-						break;
-					case 1:
-						$updateData['up_time'] = ITime::getDateTime('0000-00-00 00:00:00');
-						$updateData['down_time'] = ITime::getDateTime();
-						break;
-					case 2:
-						$updateData['up_time'] = ITime::getDateTime('0000-00-00 00:00:00');
-						$updateData['down_time'] = ITime::getDateTime();
-						break;
-					}
-				}
+			// 有中文商品标题
+			$field = trim($val[$titleToCols['is_zh_title']]);
+			if('' !== $field) {
+				$theData['is_zh_title'] = IFilter::act($field, 'bool');
+			}
 
-				// 处理库存数
-				$field = trim($val[$titleToCols['store_nums']]);
-				if($filed !== "") {
-					$updateData['store_nums'] = IFilter::act($field,'int');
-				}
+			// 有中文商品详情
+			$field = trim($val[$titleToCols['is_zh_content']]);
+			if('' !== $field) {
+				$theData['is_zh_content'] = IFilter::act($field, 'bool');
+			}
 
-				// 处理内容
-				$field = trim($val[$titleToCols['content']], '"\' ');
-				if($filed !== "") {
-					$updateData['content'] = IFilter::addSlash($field);
-				}
+			if( $the_goods ) {
+				// 商品已经存在
+				// 更新GOODS表数据
+				$updateData = $theData;
 
-				$goodsObject->setData($updateData);
+				$updateData['goods_no'] = $goods_no;
+
+				$goodsObject->setData($theData);
+				
+				$where = "goods_no = ". "'". $goods_no . "'";
 
 				$qret = $goodsObject->update($where);
 
@@ -251,124 +341,98 @@ class jcshopCsvImport extends pluginBase
 					$this->error($where . ":" . JSON::encode($updateData));
 					continue;
 				}
-
-				// 如果存在分类名
-				$field = trim($val[$titleToCols['category.name']]);
-
-				if($field !== "") {
-
-					$cids = $this->getCategoryIds($field, $this->seller_id);
-
-					// 查找需要追加的分类
-					if($this->category)
-					{
-						foreach($this->category as $catId)
-						{
-							$cids[] = $catId;
-						}
-					} 
-
-					foreach($cids as $cid) {
-						$ret = $cateExtendDB->get_count('goods_id =' . $goods_id . ' and category_id =' . $cid);
-						if($ret == 0) {
-							$cateExtendDB->setData(array('goods_id' => $goods_id,'category_id' => $cid));
-							$cateExtendDB->add();
-						}					
-					}
-				}
-
-
-				//处理商品图片
-				$mainPic = $val['mainPic'];
-
-				if(isset($val['mainPic']) && $val['mainPic'])
-				{
-					//while(($photoFile = array_pop($mainPic)) !== NULL) {
-					foreach($mainPic as $photoFile) {
-						if(!is_file($photoFile))
-						{
-							continue;
-						}						
-						$md5Code = md5_file($photoFile);
-						$photoRow= $photoDB->getObj('id = "'.$md5Code.'"');
-						if(!$photoRow || !is_file($photoRow['img']))
-						{
-							$photoDB->del('id = "'.$md5Code.'"');
-
-							$photoDB->setData(array("id" => $md5Code,"img" => $photoFile));
-							$photoDB->add();
-						}
-						if($photoRelationDB->get_count('goods_id =' . $goods_id . " and photo_id ='" . $md5Code . "'") == 0) {
-							$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
-							$photoRelationDB->add();
-						}
-					}
-				}
+				
+				$goods_id = $the_goods["id"];
 
 			} else {
+				// 商品不存在
+				// 插入GOODS表数据
+				$insertData = $theData;
 
-				//插入GOODS表数据
-				$insertData = array(
-					'name'         => IFilter::act(trim($val[$titleToCols['name']],'"\'')),
-					'goods_no'     => $goods_no,
-					'sell_price'   => IFilter::act($val[$titleToCols['sell_price']],'float'),
-					'market_price' => IFilter::act($val[$titleToCols['sell_price']],'float'),
-					'is_del'       => IFilter::act($val[$titleToCols['is_del']],'int'),
-					'up_time'      => ITime::getDateTime('0000-00-00 00:00:00'),
-					'down_time'    => ITime::getDateTime(),
-					'create_time'  => ITime::getDateTime(),
-					'store_nums'   => IFilter::act($val[$titleToCols['store_nums']],'int'),
-					'content'      => IFilter::addSlash(trim($val[$titleToCols['content']])),
-					'img'          => isset($val['mainPic']) ? current($val['mainPic']) : '',
-					'seller_id'    => $this->seller_id,
-					'weight'       => $val[$titleToCols['weight']],
-				);
-
+				$insertData['goods_no'] = $goods_no;
 
 				$goodsObject->setData($insertData);
-				$goods_id = $goodsObject->add();			
+				$goods_id = $goodsObject->add();
 
-				//处理商品分类
+				if(false === $goods_id){
+					$this->error("Insert error:" . JSON::encode($insertData));
+					continue;
+				}
+			}
+
+			// 如果存在分类名，则商品是否已经与该分类关联，如果没有关联，则将其关联
+			$field = trim($val[$titleToCols['category.name']]);
+			if('' !== $field) {
+
+				// 查找与分类名相同的分类ID
+				$cids = $this->getCategoryIds($field, $this->seller_id);
+
+				// 如果用户选择了分类，则查找需要追加的分类
 				if($this->category)
 				{
 					foreach($this->category as $catId)
 					{
-						$cateExtendDB->setData(array('goods_id' => $goods_id,'category_id' => $catId));
+						$cids[] = $catId;
+					}
+				}
+
+				foreach($cids as $cid) {
+					// 查询商品是否与分类关联
+					$ret = $cateExtendDB->get_count('goods_id =' . $goods_id . ' and category_id =' . $cid);
+					if($ret == 0) {
+						// 将商品与分类关联
+						$cateExtendDB->setData(array('goods_id' => $goods_id,'category_id' => $cid));
 						$cateExtendDB->add();
 					}
 				}
+			}
 
-				//处理商品图片
-				$mainPic = $val['mainPic'];
-				if(isset($val['mainPic']) && $val['mainPic'])
+			//处理商品图片
+			
+			// 主图
+			$mainPic = array();
+
+
+			$goodsImgDir = $this->imageDir . "/" . "mainPic" . "/" . $goods_no;
+
+			if(is_dir($goodsImgDir)) {
+
+				$handle = opendir($goodsImgDir);
+
+				while($file = readdir($handle))
 				{
-					// while(($photoFile = array_pop($mainPic)) !== NULL) {
-					foreach($mainPic as $photoFile) {
-						if(!is_file($photoFile))
-						{
-							continue;
-						}
-						$md5Code = md5_file($photoFile);
-						$photoRow= $photoDB->getObj('id = "'.$md5Code.'"');
-						if(!$photoRow || !is_file($photoRow['img']))
-						{
-							$photoDB->del('id = "'.$md5Code.'"');
-
-							$photoDB->setData(array("id" => $md5Code,"img" => $photoFile));
-							$photoDB->add();
-						}
-						if($photoRelationDB->get_count('goods_id =' . $goods_id . " and photo_id ='" . $md5Code . "'") == 0) {
-							$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
-							$photoRelationDB->add();
-						}
+					if($file != '.' && $file != '..'){
+						$source_file =  $goodsImgDir . "/" . $file;
+						$mainPic[] = $source_file;
 					}
 				}
+			}
 
+			foreach($mainPic as $photoFile) {
+				if(!is_file($photoFile))
+				{
+					continue;
+				}
+				$md5Code = md5_file($photoFile);
+				$photoRow= $photoDB->getObj('id = "'.$md5Code.'"');
+				if(!$photoRow || !is_file($photoRow['img']))
+				{
+					// 如果数据库中找不到对应的图片或者原来的图片已经不存在
+					$photoDB->del('id = "'.$md5Code.'"');
+					$photoDB->setData(array("id" => $md5Code,"img" => $photoFile));
+					$photoDB->add();
+				}
+
+				// 关联商品主图
+				if($photoRelationDB->get_count('goods_id =' . $goods_id . " and photo_id ='" . $md5Code . "'") == 0) {
+					$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
+					$photoRelationDB->add();
+				}
 			}
 		}
-
 	}
 
+	// TODO:
 	private function productsCsvImport($zipDir, $imageDir) {
 		
 		$productsFilename = $zipDir . "/products.csv";
