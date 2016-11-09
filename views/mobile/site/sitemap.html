@@ -112,7 +112,9 @@
 	<% var string =JSONstringfly(data[0].image) %>
 	<li class="controlItem controlItem<%=data[0].id%> active" onclick="changeSite(<%=data[0].id%>,0,<%=allstring%>)">
 		<div class="content">
+			<%if(data[0].image){%>
 			<img src="<%=JSONsplit(data[0].image)[0]%>" alt="" class="icon img-red icon_first" id="icon_first_<%=data[0].id%>">
+			<%}%>
 			<span class="name"><%=data[0].name%></span>
 			<span class="bg"></span>
 		</div>
@@ -122,7 +124,9 @@
 	<% var string1 =JSONstringfly(Fsite.image) %>
 		<li class="controlItem controlItem<%=Fsite.id%>" onclick="changeSite(<%=Fsite.id%>,<%=i%>,<%=allstring%>)">
 			<div class="content">
+				<%if(Fsite.image){%>
 				<img src="<%=JSONsplit(Fsite.image)[1]%>" alt="" class="icon img-dark icon_first" id="icon_first_<%=Fsite.id%>">
+				<%}%>
 				<span class="name"><%=Fsite.name %></span>
 				<span class="bg"></span>
 			</div>

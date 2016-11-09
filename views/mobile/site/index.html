@@ -443,6 +443,7 @@
             type:'post',		// HTTP请求类型
             timeout:10000,		// 超时时间设置为10秒；
             success:function(data){
+                console.log(data);
                 var pageAlbum={};
                 pageAlbum.data=data;
                 var html3=template('albumPage',pageAlbum);
@@ -452,7 +453,6 @@
 //               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
                 if(data[0].totalpage>pageData.page){
                     stop = true;
-                    console.log(data);
                 }else{
                     stop = false;
                 }
