@@ -818,4 +818,7 @@ class Site extends IController
 		$this->setRenderData(array('sellerRow' => $sellerRow,'seller_id' => $seller_id));
 		$this->redirect('home');
 	}
+	function category_third(){
+        $this->redirect('category_third');
+    }
 }
