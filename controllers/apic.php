@@ -637,7 +637,7 @@ class Apic extends IController
     //显示专辑列表（首页）
     public function article_list(){
         if (empty($this->user['user_id'])){
-            $this->json_echo([]);
+            // $this->json_echo([]);
         }
         $type = IFilter::act(IReq::get('type'),'int');
         $query = new IQuery("article as ar");
