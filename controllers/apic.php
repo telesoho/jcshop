@@ -693,7 +693,8 @@ class Apic extends IController
             $articleRow    = $favoriteObj->getObj('user_id = '.$this->user['user_id'].' and aid = '.$article_id);
             if($articleRow)
             {
-                $message = '您已经收藏过此件专辑';
+//                $message = '您已经收藏过此件专辑';
+                $favoriteObj->del('user_id = '.$this->user['user_id'].' and aid = '.$article_id);
             }
             else
             {
@@ -738,7 +739,7 @@ class Apic extends IController
                 $temp1 = explode(',', $value['image']);
                 $temp2 = '';
                 for ($i = 0; $i < count($temp1); $i++) {
-                    $temp2 .= IWeb::$app->config['image_host'] . $temp1[$i] . ',';
+                    $temp2 .= IWeb::$app->config['image_host'] . '/' . $temp1[$i] . ',';
                 }
                 $data[$key]['image'] = $temp2;
             }
@@ -746,7 +747,7 @@ class Apic extends IController
             $second = Api::run('getCategoryByParentid',array('#parent_id#',$value['id']));
             if(!empty($second)) foreach ($second as $k=>$v){
                 if (!empty($v['image'])){
-                    $second[$k]['image'] = IWeb::$app->config['image_host'] . $v['image'];
+                    $second[$k]['image'] = IWeb::$app->config['image_host'] . '/' . $v['image'];
                 }
             }
             $data[$key]['child'] = $second;
