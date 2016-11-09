@@ -158,16 +158,6 @@
         }
         return theRequest;
     }
-    //    判定是否显示软键盘状态
-    $('input').each(function(){
-        $(this).bind('focus',function(){
-            $('#submitAdd').css('display','none');
-            //或者$('#viewport').height($(window).height()+'px');
-        }).bind('blur',function(){
-            $('#submitAdd').css('display','block');
-            //或者$('#viewport').height('auto');
-        });
-    })
 </script>
 </body>
 </html>
