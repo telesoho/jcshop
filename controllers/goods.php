@@ -463,7 +463,7 @@ class Goods extends IController implements adminAuthorization
 		$title = IFilter::act(IReq::get('title'));
 		$keywords = IFilter::act(IReq::get('keywords'));
 		$descript = IFilter::act(IReq::get('descript'));
-        $image = IFilter::act(IReq::get('_imgList'));
+        $banner_image = explode(',',IFilter::act(IReq::get('_imgList')))[0];
 
 		if(!$name)
 		{
@@ -479,7 +479,8 @@ class Goods extends IController implements adminAuthorization
 			'keywords'  => $keywords,
 			'descript'  => $descript,
 			'title'     => $title,
-			'image'     => $image
+//			'image'     => $image,
+            'banner_image' => $banner_image
 		);
 		$tb_category->setData($category_info);
 		if($category_id)									//保存修改分类信息

@@ -608,6 +608,29 @@ class Apic extends IController
         $data = array('article_data'=>$article_data,'brand_good_data'=>$brand_good_data,"brand_data" => $brand_data);
         $this->json_echo($data);
     }
+    function category_goods(){
+        $this->catId = IFilter::act(IReq::get('id'),'int');//分类id
+
+        if($this->catId == 0)
+        {
+//            IError::show(403,'缺少分类ID');
+            $this->json_echo([]);
+        }
+
+        //查找分类信息
+        $catObj       = new IModel('category');
+        $this->catRow = $catObj->getObj('id = '.$this->catId);
+
+        $data = $this->catRow;
+        if($this->catRow == null)
+        {
+//            IError::show(403,'此分类不存在');
+            $this->json_echo([]);
+        }
+        $goodsObj = search_goods::find(array('category_extend' => goods_class::catChild($this->catId)),20);
+        $resultData = $goodsObj->find();
+        $this->json_echo($resultData);
+    }
     /**
      * ---------------------------------------------------专辑---------------------------------------------------*
      */
@@ -735,19 +758,14 @@ class Apic extends IController
     {
         $data = Api::run('getCategoryListTop');
         foreach ($data as $key => $value){
-            if (!empty($value['image'])) {
-                $temp1 = explode(',', $value['image']);
-                $temp2 = '';
-                for ($i = 0; $i < count($temp1); $i++) {
-                    $temp2 .= IWeb::$app->config['image_host'] . '/' . $temp1[$i] . ',';
-                }
-                $data[$key]['image'] = $temp2;
+            if (!empty($value['banner_image'])){
+                $data[$key]['banner_image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['banner_image']."/w/520/h/154");
             }
             $data[$key]['child'] = [];
             $second = Api::run('getCategoryByParentid',array('#parent_id#',$value['id']));
             if(!empty($second)) foreach ($second as $k=>$v){
-                if (!empty($v['image'])){
-                    $second[$k]['image'] = IWeb::$app->config['image_host'] . '/' . $v['image'];
+                if (!empty($v['banner_image'])){
+                    $second[$k]['banner_image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['banner_image']."/w/154/h/154");
                 }
             }
             $data[$key]['child'] = $second;
