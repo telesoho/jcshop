@@ -202,13 +202,15 @@ input[type='search']{
 }
 /*分类样式*/
 #left-scroll{
-    width:2rem;
+    width:2.19rem;
     margin:0.9rem 0 1.01rem 0;
-    background:#f8f8f8;
-    box-shadow:0 0.22rem 0.19rem rgba(153,153,153,0.3);
-    border-color: #fff !important;
+    padding-right:0.19rem;
+    background:#fff !important;
 }
+
 #left-scroll li{
+    background:#f8f8f8;
+    width:2rem;
     height:1.28rem;
 }
 #left-scroll li .icon{
@@ -261,6 +263,7 @@ input[type='search']{
     margin:0.9rem 0.03rem 1.08rem 2.19rem;
 }
 #right-scroll .banner img{
+    margin-top:0.18rem;
     width:5.20rem;
     min-height:1.54rem;
 }
