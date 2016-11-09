@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>分类子页面</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css" />
+</head>
+<body>
+<!--loading页开始-->
+<div id="loading">
+    <div class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
+</div>
+<!--loading页结束-->
+<!--三级分类-->
+<section>
+    <div id="category_third">
+    </div>
+</section>
+<script type="text/html" id="category_third_temp">
+    <% for(var i=1; i<data.length; i++){%>
+    <% var category=data[i] %>
+        <div class="product_item">
+            <a href="index.php?controller=site&action=products&id=<%=category.id %>">
+                <div class="img">
+                    <img src="<%=category.image%>" alt="" />
+                </div>
+                <div class="content">
+                    <div class="name">
+                        <%=category.name%>
+                    </div>
+                    <div class="price">
+                        <span class="sell_price">¥238.49</span>
+                        <span class="openprice">国内价：¥238.49</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    <%}%>
+</script>
+<script src="/views/mobile/javascript/template-native.js"></script>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
+<script>
+    //页面加载动画的调用
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
+        getcategory_thirdInfo();
+    })
+    //解决tab选项卡a标签无法跳转的问题
+    mui('body').on('tap','a',function(){document.location.href=this.href;});
+    //获取url的商品id
+    var Request = new Object();
+    Request = GetRequest();
+    var getId=Request["id"];
+    //文章商品分类
+    function getcategory_thirdInfo(){
+        mui.ajax('/apic/category_child',{
+            data:{id:getId},
+            dataType:'json',
+            type:'get',
+            timeout:10000,
+            success:function(data){
+                var dat={};
+                dat.data=data;
+                console.log(data);
+            var html = template('category_third_temp',dat);
+            document.getElementById("category_third").innerHTML=html;
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+    //	获取url传递过来的参数
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+</script>
+</body>
+</html>

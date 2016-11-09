@@ -387,7 +387,7 @@
 				timeout:10000,//超时时间设置为10秒；
 				success:function(data){
 					console.log(data.article_data.length);
-					if(data.article_data.length==2){
+					if(data.article_data.length==0){
 						$("#showVedio").hide();
 					}
 					var relateV=template('vedioTemp',data);

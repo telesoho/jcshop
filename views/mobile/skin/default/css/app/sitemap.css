@@ -212,8 +212,8 @@ input[type='search']{
     height:1.28rem;
 }
 #left-scroll li .icon{
-    width:0.34rem;
-    height:0.34rem;
+    width:0.6rem;
+    height:0.6rem;
 }
 #left-scroll li .content{
     position:relative;
@@ -227,7 +227,7 @@ input[type='search']{
     border-bottom:0.01rem solid transparent;
 }
 #left-scroll li img{
-  margin-top:0.26rem;
+    margin-top:0.1rem;
 }
 #left-scroll li.active span{
     display:block;
@@ -235,7 +235,8 @@ input[type='search']{
 }
 #left-scroll li .name{
     display:block;
-    margin:0.1rem 0;
+    /*margin:0.1rem 0;*/
+    margin-bottom:0.1rem;
     font-size:0.26rem;
     color:#3d4225;
     padding:0 0.1rem;
@@ -295,7 +296,58 @@ input[type='search']{
     margin:0.14rem 0;
 }
 /*三级分类页面*/
+body{
+    background:#f8f8f8;
+}
 #category_third{
-    display:flex;
-    flex-wrap:wrap;
+    display:-webkit-flex;
+    -webkit-flex-wrap:wrap;
+    -webkit-justify-content: flex-start;
+    margin:0.3rem 0.1rem 0 0.19rem;
+
+}
+#category_third .product_item{
+    background:#ffffff;
+    border-radius:0.2rem;
+    width:3.5rem;
+    height:5.02rem;
+    margin-right:0.09rem;
+    margin-bottom:0.2rem;
+}
+#category_third .product_item img{
+    width:3.5rem;
+    height:3.5rem;
+    border-radius:0.2rem 0.2rem 0 0;
+    border-bottom:0.01rem solid #eee;
+}
+#category_third .product_item .name{
+    margin-top:0.1rem;
+    font-size:0.28rem;
+    color:#3d4245;
+    line-height:0.33rem;
+    width:3.3rem;
+    display:inline-block;
+    padding:0 0.1rem;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+#category_third .product_item .sell_price{
+    margin-top:0.1rem;
+    display:block;
+    font-family:'HelveticaNeueLt';
+    font-size:0.34rem;
+    color:#ff44a0;
+    letter-spacing:0;
+    padding-left:0.1rem;
+}
+#category_third .product_item .openprice{
+    margin-top:0.1rem;
+    font-family:'HelveticaNeueLt';
+    font-size:0.26rem;
+    color:#bbb;
+    letter-spacing:0;
+    padding-left:0.1rem;
 }

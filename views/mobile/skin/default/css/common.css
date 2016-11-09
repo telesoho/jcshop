@@ -23,6 +23,7 @@ html, body, span, object,li,ul,img iframe, h1, h2, h3, h4, h5, h6, p, pre, a, em
   font-weight:normal;
   -webkit-box-sizing:border-box;
   font-family: "Microsoft Yahei",'HelveticaNeueLt' ;
+  text-decoration: none;
 }
 html{font-size:13.35vw;
       height: 100%;
