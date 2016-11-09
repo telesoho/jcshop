@@ -37,7 +37,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th>分类图片：</th>
+					<th>分类banner图片：</th>
 					<td>
 						<input class="middle" type="text" disabled />
 						<div class="upload_btn">
@@ -98,13 +98,13 @@ $(function()
 	//商品图片的回填
 	{if:isset($this->categoryRow)}
 	var categoryRow = {echo:JSON::encode($this->categoryRow)};
-	if (categoryRow.image){
-		var image = categoryRow.image.split(',');
-		for(var item in image)
-		{
-			var picHtml = template.render('picTemplate',{'picRoot':image[item]});
-			$('#thumbnails').append(picHtml);
-		}
+	if (categoryRow.banner_image){
+		var picHtml = template.render('picTemplate',{'picRoot':categoryRow.banner_image});
+		$('#thumbnails').append(picHtml);
+//		var image = categoryRow.image.split(',');
+//		for(var item in image)
+//		{
+//		}
 	}
 	{/if}
 })
