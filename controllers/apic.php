@@ -758,10 +758,10 @@ class Apic extends IController
     {
         $data = Api::run('getCategoryListTop');
         foreach ($data as $key => $value){
-            $temp2 = IWeb::$app->config['image_host'] . 'category_icon/' . $value['id'] . '_0.png,';
-            $temp2 .= IWeb::$app->config['image_host'] . 'category_icon/' . $value['id'] . '_1.png';
+            $temp2 = IWeb::$app->config['image_host'] . '/upload/category_icon/' . $value['id'] . '_0.png,';
+            $temp2 .= IWeb::$app->config['image_host'] . '/upload/category_icon/' . $value['id'] . '_1.png';
             $data[$key]['image'] = $temp2;
-                        
+
             if (!empty($value['banner_image'])){
                 $data[$key]['banner_image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['banner_image']."/w/520/h/154");
             }
