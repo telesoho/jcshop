@@ -279,7 +279,6 @@ input[type='search']{
     margin-top:0.12rem;
     width:1.54rem;
     height:1.54rem;
-    border:1px solid red;
 }
 #right-scroll .S_classification .type img{
     width:auto;
@@ -294,4 +293,9 @@ input[type='search']{
     text-overflow: ellipsis;
     text-align:center;
     margin:0.14rem 0;
+}
+/*三级分类页面*/
+#category_third{
+    display:flex;
+    flex-wrap:wrap;
 }

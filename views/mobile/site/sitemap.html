@@ -108,18 +108,21 @@
 <!--头信息结束-->
 <!--一级分类-->
 <script type="text/html" id="controlTopTemp">
-	<li class="controlItem controlItem<%=data[0].id%> active" onclick="changeSite(<%=data[0].id%>,0)">
+	<% var allstring =JSONstringfly(data) %>
+	<% var string =JSONstringfly(data[0].image) %>
+	<li class="controlItem controlItem<%=data[0].id%> active" onclick="changeSite(<%=data[0].id%>,0,<%=allstring%>)">
 		<div class="content">
-			<img src="/views/mobile/skin/default/image/jmj/icon/icon-red.png" alt="" class="icon img-red">
+			<img src="<%=JSONsplit(data[0].image)[0]%>" alt="" class="icon img-red icon_first" id="icon_first_<%=data[0].id%>">
 			<span class="name"><%=data[0].name%></span>
 			<span class="bg"></span>
 		</div>
 	</li>
 	<% for(var i=1; i<data.length; i++){%>
 	<% var Fsite =data[i] %>
-		<li class="controlItem controlItem<%=Fsite.id%>" onclick="changeSite(<%=Fsite.id%>,<%=i%>)">
+	<% var string1 =JSONstringfly(Fsite.image) %>
+		<li class="controlItem controlItem<%=Fsite.id%>" onclick="changeSite(<%=Fsite.id%>,<%=i%>,<%=allstring%>)">
 			<div class="content">
-				<img src="/views/mobile/skin/default/image/jmj/icon/icon-dark.png" alt="" class="icon img-dark">
+				<img src="<%=JSONsplit(Fsite.image)[1]%>" alt="" class="icon img-dark icon_first" id="icon_first_<%=Fsite.id%>">
 				<span class="name"><%=Fsite.name %></span>
 				<span class="bg"></span>
 			</div>
@@ -138,7 +141,7 @@
 			<% for(var j=0; j<data[0].child.length; j++){%>
 			<% var Ssite =data[0].child[j] %>
 			<div class="type">
-				<a href="">
+				<a href="index.php?controller=site&action=category_third&id=<%=Ssite.id %>">
 					<div class="img">
 					<img src="<%=Ssite.image %>" alt="" width="1.54rem" height="1.54rem" style=""/>
 					</div>
@@ -163,12 +166,14 @@
 			<% for(var j=0; j<Fsite.child.length; j++){%>
 			<% var Ssite =Fsite.child[j] %>
 				<div class="type">
-					<div class="img">
-							<img src="<%=Ssite.image %>" alt="" width="1.54rem" height="1.54rem" style=""/>
-					</div>
-					<div class="name">
-						<%=Ssite.name %>
-					</div>
+					<a href="index.php?controller=site&action=category_third&id=<%=Ssite.id %>">
+						<div class="img">
+								<img src="<%=Ssite.image %>" alt="" width="1.54rem" height="1.54rem" style=""/>
+						</div>
+						<div class="name">
+							<%=Ssite.name %>
+						</div>
+					</a>
 				</div>
 			<%}%>
 		</div>
@@ -204,6 +209,12 @@
 			window.location.href="home.html?item="+subContent;
 		}
 	}
+	template.helper('JSONsplit', function(obj){
+		return obj.split(",")
+	});
+	template.helper('JSONstringfly', function(obj){
+		return JSON.stringify(obj)
+	});
 	function getSitemapInfo(){
 		mui.ajax('/apic/category_top',{
 			dataType:'json',
@@ -224,7 +235,8 @@
 			}
 		});
 	}
-	function changeSite(eid,num){
+	function changeSite(eid,num,obj){
+		console.log(obj);
 		$(".controlItem").removeClass("active");
 		$(".controlItem"+eid).addClass("active");
 		$(".siteid").addClass("hide");
@@ -232,9 +244,15 @@
 		var height=$(".controlItem"+eid).height();
 		var totalHeight=$("#left-scroll").height();
 		var offsetTop=$(".controlItem"+eid).offset().top;//相对于容器的高度
-		console.log(totalHeight);
-		console.log(num*height);
-		console.log("当前高度"+offsetTop);
+//		点击改变图标状态
+		var img_arr=[];
+		for(var i=0,m=obj.length;i<m;i++){
+			img_arr.push(obj[i].image.split(","));
+			$(".icon_first").eq(i).attr("src",img_arr[i][1])
+		}
+
+		$("#icon_first_"+eid).attr("src",img_arr[num][0])
+//		一级分类位置判定
 		if(num<5){
 			mui('#left-scroll').scroll().scrollTo(0,0,100);
 		}

@@ -172,35 +172,40 @@
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script>
+	window.onload=function(){
+		getOrderDetail();
+	}
 	var Request = new Object();
 	Request = GetRequest();
 	var getId=Request["id"];
     var delivery_id;
-	mui.ajax('index.php?controller=apic&action=order_detail',{
-		data:{id:getId},
-		dataType:'json',	// 服务器返回json格式数据
-		type:'get',		// HTTP请求类型
-		timeout:10000,		// 超时时间设置为10秒；
-		success:function(data){
-			var html=template('order_detail_top_temp',data);
-			document.getElementById("order_detail_top").innerHTML=html;
-			var html2=template('order_address_temp',data);
-			document.getElementById("getAddress").innerHTML=html2;
-			var html3=template('order_goodlist_temp',data);
-			document.getElementById("order_goodlist").innerHTML=html3;
-			var html4=template('order_info_temp',data);
-			document.getElementById("orderInfo").innerHTML=html4;
-			var html5=template('order_button_temp',data);
-			document.getElementById("buttonBox").innerHTML=html5;
-			delivery_id=data.order_goods[0].delivery_id;
-			getDelivery(delivery_id);
-		},
-		error:function(xhr,type,errorThrown){
-			//异常处理；
-			console.log(type);
-			alert("failed");
-		}
-	});
+	function getOrderDetail(){
+		mui.ajax('index.php?controller=apic&action=order_detail',{
+			data:{id:getId},
+			dataType:'json',	// 服务器返回json格式数据
+			type:'get',		// HTTP请求类型
+			timeout:10000,		// 超时时间设置为10秒；
+			success:function(data){
+				var html=template('order_detail_top_temp',data);
+				document.getElementById("order_detail_top").innerHTML=html;
+				var html2=template('order_address_temp',data);
+				document.getElementById("getAddress").innerHTML=html2;
+				var html3=template('order_goodlist_temp',data);
+				document.getElementById("order_goodlist").innerHTML=html3;
+				var html4=template('order_info_temp',data);
+				document.getElementById("orderInfo").innerHTML=html4;
+				var html5=template('order_button_temp',data);
+				document.getElementById("buttonBox").innerHTML=html5;
+				delivery_id=data.order_goods[0].delivery_id;
+				getDelivery(delivery_id);
+			},
+			error:function(xhr,type,errorThrown){
+				//异常处理；
+				console.log(type);
+				alert("failed");
+			}
+		});
+	}
 	function getDelivery(id){
 		//获取物流信息
 		var urlVal = "{url:/block/freight/id/@id@}";
