@@ -242,9 +242,10 @@
             </span>
             <span class="like mui-pull-right">
                 <%if(dat.is_favorite==0){%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>) >
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" id="shareContent<%=dat.id %>" class="img-like"
+                     onclick=collection(<%=dat.id %>) >
                 <%}else{%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt="" class="img-like"  />
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>)  />
                 <%}%>
             </span>
             <span class="share mui-pull-right">
@@ -289,7 +290,7 @@
                 <%if(dat.is_favorite==0){%>
                 <img src="/views/mobile/skin/default/image/jmj/icon/like.png" id="shareContent<%=dat.id %>" alt="" class="img-like" onclick="collection(<%=dat.id %>)" />
                 <%}else{%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like"  />
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" id="shareContent<%=dat.id %>" alt="" class="img-like" onclick=collection(<%=dat.id %>) />
                 <%}%>
             </span>
         </div>
@@ -323,7 +324,7 @@
                <%if(dat.is_favorite==0){%>
                 <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>) />
                 <%}else{%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt=""  class="img-like"  />
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>)  />
                 <%}%>
             </span>
             <span class="share mui-pull-right">
@@ -534,13 +535,15 @@
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
+                console.log(data);
+                var num=document.getElementById("favorite"+id);
+                var share=document.getElementById("shareContent"+id);
                if(data.message=="收藏成功"){
-                    var num=document.getElementById("favorite"+id);
                         num.innerHTML=parseInt(num.innerHTML)+1;
-                    var share=document.getElementById("shareContent"+id);
                         share.src="/views/mobile/skin/default/image/jmj/icon/like-ed.png";
                }else{
-                    console.log("已经收藏");
+                   num.innerHTML=parseInt(num.innerHTML)-1;
+                   share.src="/views/mobile/skin/default/image/jmj/icon/like.png";
                }
             },
             error:function(xhr,type,errorThrown){
