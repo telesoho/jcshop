@@ -608,8 +608,10 @@ class Apic extends IController
         $data = array('article_data'=>$article_data,'brand_good_data'=>$brand_good_data,"brand_data" => $brand_data);
         $this->json_echo($data);
     }
-    function category_goods(){
-        $this->catId = IFilter::act(IReq::get('id'),'int');//分类id
+    function tag_goods(){
+        $this->string = IFilter::act(IReq::get('tag'),'string');
+        $goods_query = new IQuery('goods');
+        $goods_query->where = 'keywords';
 
         if($this->catId == 0)
         {
@@ -636,6 +638,7 @@ class Apic extends IController
      */
     //显示专辑列表（首页）
     public function article_list(){
+//        ISession::clearAll();
         if (empty($this->user['user_id'])){
              $this->json_echo([]);
         }
@@ -708,11 +711,23 @@ class Apic extends IController
 //        echo ISession::get('visit_num');
 //        ISession::clear('visit_num');
         $page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+        $favorite_article = new IQuery('favorite_article');
         if ($page == 1){
-            $this->json_echo($goods_data_tbtj);
+            $data = $goods_data_tbtj;
         } else {
-            $this->json_echo($goods_data_twzj);
+            $data = $goods_data_twzj;
         }
+        foreach ($data as $k=>$v){
+            $favorite_article->where = 'user_id='.$this->user['user_id'].' and aid='.$v['id'];
+            $fdata = $favorite_article->find();
+            if (!empty($fdata)){
+                $data[$k]['is_favorite'] = 1;
+            } else {
+                $data[$k]['is_favorite'] = 0;
+            }
+            $data[$k]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
+        }
+        $this->json_echo($data);
 
 
 //exit();
