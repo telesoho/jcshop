@@ -224,73 +224,22 @@
 <script id="albumPage" type="text/html">
     <% for(var i=0; i<data.length; i++){%>
     <% var dat =data[i] %>
-    <%if(dat.category_id==3){%>
-    <!--视频专题-->
-    <section class="vedio_album albumn_index">
-        <div class="title">
-            <span class="logo">
-                <img src="/views/mobile/skin/default/image/jmj/icon/move.png" alt="" class="img-vedio">
-            </span>
-            <span class="vedio_name">
-            動画のビデオ
-                <span>
-                    <img src="/views/mobile/skin/default/image/jmj/icon/address.png" alt="" class="img-address">日本东京
-                </span>
-            </span>
-            <span class="num mui-pull-right" id="favorite<%=dat.id %>">
-                <%=dat.favorite %>
-            </span>
-            <span class="like mui-pull-right">
-                <%if(dat.is_favorite==0){%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" id="shareContent<%=dat.id %>" class="img-like"
-                     onclick=collection(<%=dat.id %>) >
-                <%}else{%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>)  />
-                <%}%>
-            </span>
-            <span class="share mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
-            </span>
-        </div>
-        <div class="vedio">
-            <video class="player" src="http://f02.v1.cn/transcode/14410292MOBILET2.mp4"
-                   width="100%" onpause="checkPause(this);" onplaying="checkPlay(this);" -webkit-playsinline webkit-playsinline>
-            </video>
-            <div class="vedioStyle">
-                <div class="top">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="" class="img-read"><%=dat.visit_num %>次
-                </div>
-                <div class="bottom">
-                    <span class="name"><%=dat.name %>
-                    </span>
-                    <!--<span class="time">09:13</span>-->
-                </div>
-                <span class="time">09:13
-                </span>
-            </div>
-            <div class="middle">
-                <img src="/views/mobile/skin/default/image/jmj/icon/click.png" alt="" class="img-click">
-            </div>
-        </div>
-    </section>
-    <%}else{%>
-    <%if(dat.category_id==1){%>
     <section class="recommended line albumn_index">
         <div class="title">
             <span class="logo" >
                 <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
             </span>
             <span class="name">
-            特別推薦
+            <%=dat.category_name %>
             </span>
-            <span class="num mui-pull-right" id="favorite<%=dat.id %>">
+            <span class="num mui-pull-right favorite<%=dat.id %>">
             <%=cal(dat.favorite) %>
             </span>
             <span class="like mui-pull-right">
                 <%if(dat.is_favorite==0){%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" id="shareContent<%=dat.id %>" alt="" class="img-like" onclick="collection(<%=dat.id %>)" />
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png"  alt="" class="img-like shareContent<%=dat.id %>" onclick="collection(<%=dat.id %>)" />
                 <%}else{%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" id="shareContent<%=dat.id %>" alt="" class="img-like" onclick=collection(<%=dat.id %>) />
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like shareContent<%=dat.id %>" onclick=collection(<%=dat.id %>) />
                 <%}%>
             </span>
         </div>
@@ -307,44 +256,6 @@
             </div>
         </a>
     </section>
-    <%}else{%>
-    <!--专辑-->
-    <section class="recommended line albumn_index">
-        <div class="title">
-            <span class="logo">
-                <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
-            </span>
-            <span class="name">
-            人気雑誌
-            </span>
-            <span class="num mui-pull-right" id="favorite<%=dat.id %>">
-             <%=cal(dat.favorite) %>
-            </span>
-            <span class="like mui-pull-right">
-               <%if(dat.is_favorite==0){%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>) />
-                <%}else{%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>)  />
-                <%}%>
-            </span>
-            <span class="share mui-pull-right">
-                <img src="/views/mobile/skin/default/image/jmj/icon/share.png" alt="" class="img-share">
-            </span>
-        </div>
-        <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
-            <div class="content">
-                <div class="img">
-                    <img src="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
-                </div>
-                <div class="mark1"><%=dat.nums %>件商品</div>
-                <div class="mark2">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-                    <%=cal(dat.visit_num) %></div>
-            </div>
-        </a>
-    </section>
-    <%}%>
-    <%}%>
     <%}%>
 </script>
 <!--头信息结束-->
@@ -539,14 +450,16 @@
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
                 console.log(data);
-                var num=document.getElementById("favorite"+id);
-                var share=document.getElementById("shareContent"+id);
+                var num=$(".favorite"+id);
+                var share=$(".shareContent"+id);
                if(data.message=="收藏成功"){
-                        num.innerHTML=parseInt(num.innerHTML)+1;
-                        share.src="/views/mobile/skin/default/image/jmj/icon/like-ed.png";
+//                        num.innerHTML=parseInt(num.innerHTML)+1;
+                        num.html(parseInt(num.html())+1);
+                        share.attr("src","/views/mobile/skin/default/image/jmj/icon/like-ed.png");
                }else{
-                   num.innerHTML=parseInt(num.innerHTML)-1;
-                   share.src="/views/mobile/skin/default/image/jmj/icon/like.png";
+//                   num.innerHTML=parseInt(num.innerHTML)-1;
+                   num.html(parseInt(num.html())-1);
+                   share.attr("src","/views/mobile/skin/default/image/jmj/icon/like.png");
                }
             },
             error:function(xhr,type,errorThrown){

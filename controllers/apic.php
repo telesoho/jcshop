@@ -859,6 +859,10 @@ class Apic extends IController
                 if (!empty($v['banner_image'])){
                     $second[$k]['banner_image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['banner_image']."/w/154/h/154");
                 }
+                if (!empty($v['image'])){
+                    $temp = explode(',',$v['image']);
+                    $second[$key]['image'] = IWeb::$app->config['image_host'] . '/' . $temp[0];
+                }
             }
             $data[$key]['child'] = $second;
         }
