@@ -581,8 +581,18 @@ input[type='search']{
 .img-move02{
 	position:relative;
 	z-index:24;
-	width:1.06rem;
+	width:0.79rem;
 	margin-top:0.125rem;
+
+}
+.mui-tab-item .grow{
+	position:relative;
+	margin-top:0.08rem;
+	z-index:23;
+	color:#929292;
+}
+.mui-tab-item.mui-active .grow{
+	color:#ff4aa0;
 }
 .mui-tab-item.mui-active .icon-home{
 	background:url('../../image/jmj/icon/home-ed.png') no-repeat 100%;
