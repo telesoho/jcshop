@@ -185,23 +185,24 @@
 	</div>
 	<%}%>
 </script>
+<script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/mui.js"></script>
+
 <script>
 	//页面加载动画的调用
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
 		getSitemapInfo();
+		//解决tab选项卡a标签无法跳转的问题
+		mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
+		mui('body').on('tap','a',function(){document.location.href=this.href;});
+		mui('.mui-scroll-wrapper').scroll();
 	})
-	//解决tab选项卡a标签无法跳转的问题
-	mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
-	mui('body').on('tap','a',function(){document.location.href=this.href;});
 	document.getElementById("searth").addEventListener('focus',function(){
 		document.getElementById("modalid-searth").className="show";
 		document.body.style.overflow = 'hidden';
 	});
-	mui('.mui-scroll-wrapper').scroll();
 	function searthCancel(){
 		document.getElementById("modalid-searth").className="hide";
 		document.body.style.overflow = 'auto';
@@ -270,9 +271,6 @@
 		if(offsetTop+height+100>totalHeight){
 			mui('#left-scroll').scroll().scrollToBottom();
 		}
-
-
-
 	}
 </script>
 </body>

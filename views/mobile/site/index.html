@@ -54,27 +54,27 @@
             <div  class="mui-slider">
                 <div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
                     <div class="mui-scroll">
-                        <a class="mui-control-item mui-active" href="#">
+                        <a class="mui-control-item mui-active" href="{url:/site/index}">
                             <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg1.png" alt=""  />
                             <span class="text">推荐</span>
                             <span class="bg"></span>
                         </a>
-                        <a class="mui-control-item" href="#">
+                        <a class="mui-control-item mui-control-item2" href="{url:/site/pro_list}?cat=2">
                             <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg2.png" alt=""/>
                             <span class="text">药妆</span>
                             <span class="bg"></span>
                         </a>
-                        <a class="mui-control-item" href="#">
+                        <a class="mui-control-item mui-control-item3" href="{url:/site/pro_list}?cat=3">
                             <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg3.png" alt=""  />
                             <span class="text">个护</span>
                             <span class="bg"></span>
                         </a>
-                        <a class="mui-control-item " href="#">
+                        <a class="mui-control-item mui-control-item4" href="{url:/site/pro_list}?cat=4">
                             <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg4.png" alt="" />
                             <span class="text">宠物</span>
                             <span class="bg"></span>
                         </a>
-                        <a class="mui-control-item" href="#">
+                        <a class="mui-control-item mui-control-item5" href="{url:/site/pro_list}?cat=5">
                             <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg5.png" alt="" />
                             <span class="text">健康</span>
                             <span class="bg"></span>
@@ -176,7 +176,6 @@
     <button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
 </div>
 <!--轮播图模板引擎-->
-<script src="/views/mobile/javascript/mui.js"></script>
 <script id="C_slider" type="text/html">
     <div class="mui-slider-group mui-slider-loop">
         <div class="mui-slider-item mui-slider-item-duplicate">
@@ -349,6 +348,7 @@
     <%}%>
 </script>
 <!--头信息结束-->
+<script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/lazyload.js"></script>
@@ -362,32 +362,38 @@
         $("#loading").fadeOut(300);
         getIndex();
         pullupRefresh();
-    }
-    //解决tab选项卡a标签无法跳转的问题
-    mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
-    mui('body').on('tap','a',function(){
-        document.location.href=this.href;
-    });
-    mui('body').on('tap','video',function(){
-        var self=this;
-        if(this.paused){
-            self.setAttribute("controls",'controls');
-            $(self).next().addClass('hide');
-            self.play();
-        }else{
-            self.setAttribute("controls",false);
-            self.pause();
-        }
-    });
-    mui('body').on('tap','.img-click',function(){
-        var self=this;
-        var self_Aid=self.parentNode;
+        //解决tab选项卡a标签无法跳转的问题
+        mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
+        mui('body').on('tap','a',function(){
+            document.location.href=this.href;
+        });
+        mui('body').on('tap','video',function(){
+            var self=this;
+            if(this.paused){
+                self.setAttribute("controls",'controls');
+                $(self).next().addClass('hide');
+                self.play();
+            }else{
+                self.setAttribute("controls",false);
+                self.pause();
+            }
+        });
+        mui('body').on('tap','.img-click',function(){
+            var self=this;
+            var self_Aid=self.parentNode;
 //        self_Aid.previousSiblingNode.play();
-        $(self_Aid).prev().addClass("hide");
-        $(self_Aid).prev().prev()[0].play();
+            $(self_Aid).prev().addClass("hide");
+            $(self_Aid).prev().prev()[0].play();
 
 
-    });
+        });
+        //点击直达顶部
+        mui("body").on("tap",".fix-toTop",function(){
+            $("html,body").animate({scrollTop:0},0);
+            return false;
+        });
+    }
+
     document.getElementById("searth").addEventListener('focus',function(){
         document.getElementById("modalid-searth").className="show";
         document.body.style.overflow = 'hidden';
@@ -430,11 +436,7 @@
                 $(".fix-toTop").css("position","fixed");
             }
         });
-        //点击直达顶部
-        mui("body").on("tap",".fix-toTop",function(){
-            $("html,body").animate({scrollTop:0},0);
-            return false;
-        });
+
     function pullupRefresh() {
         mui.ajax('index.php?controller=apic&action=article_list',{
             data:pageData,

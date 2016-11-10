@@ -300,14 +300,6 @@
     <script src="/views/mobile/javascript/mui.js"></script>
 	<script src="/views/mobile/javascript/products.js"></script>
     <script type="text/javascript" charset="utf-8">
-		mui('body').on("tap","#joinButton",function(){
-			$("#joinCarButton").show();
-			$("#buyNowButton").hide();
-		})
-		mui('body').on("tap","#buyBottom",function(){
-			$("#joinCarButton").hide();
-			$("#buyNowButton").show();
-		})
 		//	接收页面传过来的状态值
 		var Request = new Object();
 		Request = GetRequest();
@@ -315,6 +307,14 @@
 		$(window).load(function(){
 			$("#loading").fadeOut(300);
 			getProductDetail(statusOrder);
+			mui('body').on("tap","#joinButton",function(){
+				$("#joinCarButton").show();
+				$("#buyNowButton").hide();
+			})
+			mui('body').on("tap","#buyBottom",function(){
+				$("#joinCarButton").hide();
+				$("#buyNowButton").show();
+			})
 		});
 		function getProductDetail(obj){
 			var product_detail=obj;

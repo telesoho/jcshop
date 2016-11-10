@@ -128,8 +128,6 @@ input[type='search']{
 .mui-control-item.mui-active .bg{
 	display:block;
 	z-index:2 !important;
-
-
 }
 /*轮播图样式*/
 .mui-slider-item img{
