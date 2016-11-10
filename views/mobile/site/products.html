@@ -180,7 +180,7 @@
 			<a href="#"><span><%=name %></span></a>
 			<div class="titleIcon">
 				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png"/></a>
-				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon02.png"/></a>
+				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon02.png" onclick="Collection(<%=id %>)"/></a>
 			</div>
 		</div>
 		<div class="salePrice">
@@ -274,7 +274,7 @@
 		<% for(var i=0; i<brand_good_data.length; i++){%>
 		<% var item =brand_good_data[i] %>
 		<div class="mui-control-item">
-			<a href="#">
+			<a href="index.php?controller=site&action=products&id=<%=item.id %>" class="test11">
 				<img src="<%=item.img_thumb %>"/>
 				<p><%=item.name %></p>
 				<p>¥ <%=item.sell_price %></p>
@@ -315,6 +315,9 @@
 				$("#joinCarButton").hide();
 				$("#buyNowButton").show();
 			})
+            mui('body').on("tap",".test11",function(){
+                window.location.href=this.href;
+            })
 		});
 		function getProductDetail(obj){
 			var product_detail=obj;
@@ -325,6 +328,7 @@
 				timeout:10000,//超时时间设置为10秒；
 				success:function(data){
 					//轮播图展示页面
+                    console.log(data);
 					var html=template('product_carousel',data);
 					document.getElementById('carousel').innerHTML=html;
 					var carousel  = mui("#carousel");
@@ -386,6 +390,7 @@
 				type:'get',//HTTP请求类型
 				timeout:10000,//超时时间设置为10秒；
 				success:function(data){
+				    console.log(data);
 					console.log(data.article_data.length);
 					if(data.article_data.length==0){
 						$("#showVedio").hide();
@@ -404,6 +409,24 @@
 				}
 			});
 		}
+		function Collection(id){
+            mui.ajax('/simple/favorite_add/_paramKey_/_paramVal_',{
+                data:{
+					goods_id:id,
+					random:Math.random()
+                },
+                dataType:'json',//服务器返回json格式数据
+                type:'get',//HTTP请求类型
+                timeout:10000,//超时时间设置为10秒；
+                success:function(data){
+                   console.log(data);
+                },
+                error:function(xhr,type,errorThrown){
+                    //异常处理；
+                    console.log(type);
+                }
+            });
+        }
 	</script>
 </body>
 </html>

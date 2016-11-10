@@ -470,7 +470,7 @@ class Apic extends IController
         $goods_info['photo'] = $tb_goods_photo->find();
 
         foreach ($goods_info['photo'] as $key => $value){
-            $goods_info['photo'][$key]['img'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/600/h/600");
+            $goods_info['photo'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/600/h/600");
         }
 
         //商品是否参加促销活动(团购，抢购)
@@ -573,6 +573,16 @@ class Apic extends IController
 
         $goods_info['spec_array'] = json_decode($goods_info['spec_array']);
 //        $this->setRenderData($goods_info);
+            $favorite = new IQuery('favorite');
+            $favorite->where = 'user_id='.$this->user['user_id'].' and rid='.$goods_info['id'];
+            $fdata = $favorite->find();
+            if (!empty($fdata)){
+                $goods_info['is_favorite'] = 1;
+            } else {
+                $goods_info['is_favorite'] = 0;
+            }
+
+
         $this->json_echo($goods_info);
     }
     //商品详情的补充信息内容
@@ -766,7 +776,7 @@ class Apic extends IController
         $article_id = IFilter::act(IReq::get('id'),'int');
         $article = new IQuery('relation as r');
         $article->join = 'left join goods as go on r.goods_id = go.id';
-        $article->where = sprintf('r.article_id = %s and go.id is not null', $article_id);
+        $article->where = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $article_id);
         $article->filds = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price';
         $article->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
         $article->pagesize = 4;
@@ -776,7 +786,7 @@ class Apic extends IController
             $relationList = [];
         }
         foreach($relationList as $key => $value){
-            $relationList[$key]['img'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
+            $relationList[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
         }
         $this->json_echo($relationList);
     }

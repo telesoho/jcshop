@@ -821,4 +821,7 @@ class Site extends IController
 	function category_third(){
         $this->redirect('category_third');
     }
+    function favorite(){
+        $this->redirect('favorite');
+    }
 }
