@@ -48,32 +48,43 @@
             </div>
             <img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon">
             <img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon">
+            <img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower">
         </section>
         <section id="nav-slider">
             <div  class="mui-slider">
                 <div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
                     <div class="mui-scroll">
-                        <a class="mui-control-item mui-active" href="#">
-                            <span class="text">推荐</span><span class="bg"></span>
+                        <a class="mui-control-item mui-active" href="{url:/site/index}">
+                            <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg1.png" alt=""  />
+                            <span class="text">推荐</span>
+                            <span class="bg"></span>
                         </a>
-                        <a class="mui-control-item" href="#">
-                            <span class="text">限时购</span><span class="bg"></span>
+                        <a class="mui-control-item mui-control-item2" href="{url:/site/pro_list}?cat=2">
+                            <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg2.png" alt=""/>
+                            <span class="text">药妆</span>
+                            <span class="bg"></span>
                         </a>
-                        <a class="mui-control-item" href="#">
-                            <span class="text">逛</span><span class="bg"></span>
+                        <a class="mui-control-item mui-control-item3" href="{url:/site/pro_list}?cat=3">
+                            <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg3.png" alt=""  />
+                            <span class="text">个护</span>
+                            <span class="bg"></span>
                         </a>
-                        <a class="mui-control-item " href="#">
-                            <span class="text">药妆</span><span class="bg"></span>
+                        <a class="mui-control-item mui-control-item4" href="{url:/site/pro_list}?cat=4">
+                            <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg4.png" alt="" />
+                            <span class="text">宠物</span>
+                            <span class="bg"></span>
                         </a>
-                        <a class="mui-control-item" href="#">
-                            <span class="text">个护</span><span class="bg"></span>
+                        <a class="mui-control-item mui-control-item5" href="{url:/site/pro_list}?cat=5">
+                            <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg5.png" alt="" />
+                            <span class="text">健康</span>
+                            <span class="bg"></span>
                         </a>
-                        <a class="mui-control-item" href="#">
-                            <span class="text">宠物</span><span class="bg"></span>
-                        </a>
-                        <a class="mui-control-item " href="#">
-                            <span class="text">健康</span><span class="bg"></span>
-                        </a>
+                        <!--<a class="mui-control-item" href="#">-->
+                            <!--<span class="text">宠物</span><span class="bg"></span>-->
+                        <!--</a>-->
+                        <!--<a class="mui-control-item " href="#">-->
+                            <!--<span class="text">健康</span><span class="bg"></span>-->
+                        <!--</a>-->
                     </div>
                 </div>
             </div>
@@ -231,9 +242,10 @@
             </span>
             <span class="like mui-pull-right">
                 <%if(dat.is_favorite==0){%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>) >
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" id="shareContent<%=dat.id %>" class="img-like"
+                     onclick=collection(<%=dat.id %>) >
                 <%}else{%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt="" class="img-like"  />
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>)  />
                 <%}%>
             </span>
             <span class="share mui-pull-right">
@@ -278,7 +290,7 @@
                 <%if(dat.is_favorite==0){%>
                 <img src="/views/mobile/skin/default/image/jmj/icon/like.png" id="shareContent<%=dat.id %>" alt="" class="img-like" onclick="collection(<%=dat.id %>)" />
                 <%}else{%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like"  />
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" id="shareContent<%=dat.id %>" alt="" class="img-like" onclick=collection(<%=dat.id %>) />
                 <%}%>
             </span>
         </div>
@@ -312,7 +324,7 @@
                <%if(dat.is_favorite==0){%>
                 <img src="/views/mobile/skin/default/image/jmj/icon/like.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>) />
                 <%}else{%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt=""  class="img-like"  />
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png" alt="" id="shareContent<%=dat.id %>" class="img-like" onclick=collection(<%=dat.id %>)  />
                 <%}%>
             </span>
             <span class="share mui-pull-right">
@@ -342,7 +354,6 @@
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/time.js"></script>
 <script>
-    mui.init();
     var pageData = {
         page:1
     };
@@ -351,32 +362,38 @@
         $("#loading").fadeOut(300);
         getIndex();
         pullupRefresh();
-    }
-    //解决tab选项卡a标签无法跳转的问题
-    mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
-    mui('body').on('tap','a',function(){
-        document.location.href=this.href;
-    });
-    mui('body').on('tap','video',function(){
-        var self=this;
-        if(this.paused){
-            self.setAttribute("controls",'controls');
-            $(self).next().addClass('hide');
-            self.play();
-        }else{
-            self.setAttribute("controls",false);
-            self.pause();
-        }
-    });
-    mui('body').on('tap','.img-click',function(){
-        var self=this;
-        var self_Aid=self.parentNode;
+        //解决tab选项卡a标签无法跳转的问题
+        mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
+        mui('body').on('tap','a',function(){
+            document.location.href=this.href;
+        });
+        mui('body').on('tap','video',function(){
+            var self=this;
+            if(this.paused){
+                self.setAttribute("controls",'controls');
+                $(self).next().addClass('hide');
+                self.play();
+            }else{
+                self.setAttribute("controls",false);
+                self.pause();
+            }
+        });
+        mui('body').on('tap','.img-click',function(){
+            var self=this;
+            var self_Aid=self.parentNode;
 //        self_Aid.previousSiblingNode.play();
-        $(self_Aid).prev().addClass("hide");
-        $(self_Aid).prev().prev()[0].play();
+            $(self_Aid).prev().addClass("hide");
+            $(self_Aid).prev().prev()[0].play();
 
 
-    });
+        });
+        //点击直达顶部
+        mui("body").on("tap",".fix-toTop",function(){
+            $("html,body").animate({scrollTop:0},0);
+            return false;
+        });
+    }
+
     document.getElementById("searth").addEventListener('focus',function(){
         document.getElementById("modalid-searth").className="show";
         document.body.style.overflow = 'hidden';
@@ -419,11 +436,7 @@
                 $(".fix-toTop").css("position","fixed");
             }
         });
-        //点击直达顶部
-        mui("body").on("tap",".fix-toTop",function(){
-            $("html,body").animate({scrollTop:0},0);
-            return false;
-        });
+
     function pullupRefresh() {
         mui.ajax('index.php?controller=apic&action=article_list',{
             data:pageData,
@@ -431,6 +444,7 @@
             type:'post',		// HTTP请求类型
             timeout:10000,		// 超时时间设置为10秒；
             success:function(data){
+                console.log(data);
                 var pageAlbum={};
                 pageAlbum.data=data;
                 var html3=template('albumPage',pageAlbum);
@@ -440,7 +454,6 @@
 //               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
                 if(data[0].totalpage>pageData.page){
                     stop = true;
-                    console.log(data);
                 }else{
                     stop = false;
                 }
@@ -523,13 +536,15 @@
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
+                console.log(data);
+                var num=document.getElementById("favorite"+id);
+                var share=document.getElementById("shareContent"+id);
                if(data.message=="收藏成功"){
-                    var num=document.getElementById("favorite"+id);
                         num.innerHTML=parseInt(num.innerHTML)+1;
-                    var share=document.getElementById("shareContent"+id);
                         share.src="/views/mobile/skin/default/image/jmj/icon/like-ed.png";
                }else{
-                    console.log("已经收藏");
+                   num.innerHTML=parseInt(num.innerHTML)-1;
+                   share.src="/views/mobile/skin/default/image/jmj/icon/like.png";
                }
             },
             error:function(xhr,type,errorThrown){
