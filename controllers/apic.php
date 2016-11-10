@@ -654,7 +654,7 @@ class Apic extends IController
                 $where .= 'category_id = '.$categorys[$i].' or ';
             }
         }
-        $goods_query->fields = 'id,title,image,visit_num,favorite';
+        $goods_query->fields = 'id,title,image,visit_num,favorite,category_id';
         $goods_query->where = $where;
         $goods_query->limit = 10;
         $goods_data_tbtj =$goods_query->find();
@@ -726,6 +726,13 @@ class Apic extends IController
                 $data[$k]['is_favorite'] = 0;
             }
             $data[$k]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
+            $category_query->where = 'id = ' . $data[$k]['category_id'];
+            $temp = $category_query->find();
+            $data[$k]['category_name'] = $temp[0]['name'];
+            $goods_query->where = ' category_id = ' . $data[$k]['category_id'];
+            $goods_query->fields = ' count(*) as nums';
+            $temp = $goods_query->find();
+            $data[$k]['nums'] = $temp[0]['nums'];
         }
         $this->json_echo($data);
 
