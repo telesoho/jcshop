@@ -70,7 +70,7 @@
     var Request = new Object();
     Request = GetRequest();
     var statusOrder=Request["from"];
-    mui.init();
+    var statusOrder1=Request["rev"];
     var pro,cit,are;
     $(window).load(function(){
         $("#loading").fadeOut(300);
@@ -119,6 +119,8 @@
                 success:function(data){
                     if(statusOrder=="cart2"){
                         window.history.back();
+                    }else if(statusOrder1=="cart_order"){
+                        document.location.href="{url:/simple/addresslist}?rev=cart_order1";
                     }else{
                         document.location.href="{url:/simple/addresslist}";
                     }

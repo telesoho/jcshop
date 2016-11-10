@@ -137,7 +137,13 @@
         getAddressInfo();
         var submitaddr=document.getElementById("submitaddr");
         submitaddr.addEventListener('tap',function(){
-            document.location.href="{url:/simple/addaddress}";
+            if(statusOrder=="cart_order"){
+                document.location.href="{url:/simple/addaddress}?rev=cart_order";
+            }else{
+                document.location.href="{url:/simple/addaddress}";
+            }
+
+
         })
     })
     function getAddressInfo(){
@@ -257,8 +263,10 @@
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
-                if(statusOrder){
+                if(statusOrder=="cart_order"){
                     window.history.back();
+                }else if(statusOrder=="cart_order1"){
+                    window.history.go(-3);
                 }else{
                     window.location.reload();
                 }

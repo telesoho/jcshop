@@ -100,7 +100,7 @@
 						<%=goodsList[i].name%>
 					</div>
 					<div class="style">
-						颜色： 红色
+
 					</div>
 					<div class="edit box">
 						<div class="price">￥ <%=goodsList[i].sell_price%></div>
@@ -134,14 +134,14 @@
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
 		getCartInfo();
-	});
-	mui("body").on('tap',"#sum_count",function(){
-		window.location.href='index.php?controller=simple&action=cart2';
-	})
-	mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
-	//定义template方法
-	template.helper('JSONstringify', function(obj){
-		return JSON.stringify(obj);
+		mui("body").on('tap',"#sum_count",function(){
+			window.location.href='index.php?controller=simple&action=cart2';
+		})
+		mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
+		//定义template方法
+		template.helper('JSONstringify', function(obj){
+			return JSON.stringify(obj);
+		});
 	});
 function getCartInfo(){
 	mui.ajax('index.php?controller=apic&action=cart',{
@@ -150,6 +150,7 @@ function getCartInfo(){
 		timeout:10000,//超时时间设置为10秒；
 		headers:{'Content-Type':'application/json'},
 		success:function(data){
+			console.log(data);
 			var html = template('shopCarTemplate',data);
 			document.getElementById("shopcarContent").innerHTML = html;
 		},

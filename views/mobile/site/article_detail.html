@@ -60,7 +60,7 @@
             <div class="ware">
                 <div class="title">{$goods_no_data['name']}</div>
                 <div class="price">
-                    <span class="price1">{$goods_no_data['sell_price']}</span>
+                    <span class="price1">￥{$goods_no_data['sell_price']}</span>
                     <span class="art">日本售价:</span>
                     <span class="price2">{$goods_no_data['sell_price']}</span>
                 </div>
@@ -92,7 +92,7 @@
             <a href="index.php?controller=site&action=products&id=<%=dat.id %>"><div class="img underline"><img src="<%=dat.img %>" alt=""/></div>
                 <div class="name"><%=dat.name %></div>
                 <div class="box">
-                    <div class="price"><%=dat.sell_price %></div>
+                    <div class="sellprice price">￥ <%=dat.sell_price %></div>
                     <div class="buy">立即购买</div>
                 </div></a>
         </div>
@@ -102,15 +102,7 @@
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script>
-    //页面加载完成后调用的功能
-    mui.init();
-    $(window).load(function(){
-        $("#loading").fadeOut(300);
-        pullupRefresh();
-        mui('body').on('tap','a',function(){document.location.href=this.href;});
-    })
-
-     //获取url的商品id
+    //获取url的商品id
     var Request = new Object();
     Request = GetRequest();
     var getId=Request["id"];
@@ -119,6 +111,13 @@
         page:1,
         id:getId
     };
+    //页面加载完成后调用的功能
+    mui.init();
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
+        pullupRefresh();
+        mui('body').on('tap','a',function(){document.location.href=this.href;});
+    })
     var articleItemStr="";
     //上拉加载
     var stop = true;
@@ -126,17 +125,18 @@
         if ($(window).scrollTop() + $(window).height() + 600 >= $(document).height() && $(window).scrollTop() > 50) {
             if (stop == true) {
                 stop = false;
-                pullupRefresh()
+                pullupRefresh(articlePageData)
             }
         }
     });
-    function pullupRefresh() {
+    function pullupRefresh(articlePageData) {
         mui.ajax('index.php?controller=apic&action=article_rel_goods',{
             data:articlePageData,
             dataType:'json',	// 服务器返回json格式数据
             type:'get',		// HTTP请求类型
             timeout:10000,		// 超时时间设置为10秒；
             success:function(data){
+                console.log(articlePageData);
                 articlePageData.page++;
                 var pageArticle={};
                 pageArticle.data=data;
@@ -156,6 +156,19 @@
                 console.log(type);
             }
         });
+    }
+    //	获取url传递过来的参数
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
     }
 </script>
 </body>

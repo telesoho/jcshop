@@ -40,20 +40,20 @@
     </div>
 </section>
 <script type="text/html" id="category_third_temp">
-    <% for(var i=1; i<data.length; i++){%>
+    <% for(var i=0; i<data.length; i++){%>
     <% var category=data[i] %>
         <div class="product_item">
             <a href="index.php?controller=site&action=products&id=<%=category.id %>">
                 <div class="img">
-                    <img src="<%=category.image%>" alt="" />
+                    <img src="<%=category.img%>" alt="" />
                 </div>
                 <div class="content">
                     <div class="name">
                         <%=category.name%>
                     </div>
                     <div class="price">
-                        <span class="sellprice">¥238.49</span>
-                        <span class="openprice">国内价：¥238.49</span>
+                        <span class="sellprice">¥<%=category.sell_price%></span>
+                        <span class="openprice">国内价：¥<%=category.market_price%></span>
                     </div>
                 </div>
             </a>
