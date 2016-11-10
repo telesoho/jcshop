@@ -953,7 +953,31 @@ class Apic extends IController
         $data = array_merge($userRow, $memberRow);
         $this->json_echo($data);
     }
+    function favorite_list(){
+        $favorite_query = new IQuery('favorite as a');
+        $favorite_query->join = 'left join goods as go on go.id = a.rid';
+        $favorite_query->fields = 'a.*,go.id,go.name,go.sell_price,go.market_price,go.img';
 
+        $favorite_query->where = 'user_id = ' . $this->user['user_id'];
+        $data1 = $favorite_query->find();
+        foreach ($data1 as $key=>$value){
+            if (!empty($value['img'])){
+                $data1[$key]['img'] = IWeb::$app->config['image_host'] . '/' . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/200/h/200");
+            }
+        }
+        $favorite_a_query = new IQuery('favorite_article as a');
+        $favorite_a_query->join = 'left join article as aa on aa.id = a.aid';
+        $favorite_a_query->fields = 'a.*,aa.id,aa.title,aa.title,aa.image';
+        $favorite_a_query->where = 'user_id = ' . $this->user['user_id'];
+        $data2 = $favorite_a_query->find();
+        foreach ($data2 as $key=>$value){
+            if (!empty($value['image'])){
+                $temp = explode(',',$value['image']);
+                $data2[$key]['image'] = IWeb::$app->config['image_host'] . '/' . IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
+            }
+        }
+        $this->json_echo(['goods_data'=>$data1,'article_data'=>$data2]);
+    }
 
 
     private function json_echo($data){
