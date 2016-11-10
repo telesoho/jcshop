@@ -637,84 +637,121 @@ class Apic extends IController
     //显示专辑列表（首页）
     public function article_list(){
         if (empty($this->user['user_id'])){
-            // $this->json_echo([]);
+             $this->json_echo([]);
         }
-        //6特别专辑共计十个
+        $goods_query = new IQuery('article');
         $category_query = new IQuery("article_category");
+        /*特别专辑*/
+        $categorys = ['10','11','12','13','14'];
+        $where = '';
+        for ($i=0;$i<count($categorys);$i++){
+            if ($i==count($categorys)-1){
+                $where .= 'category_id = '.$categorys[$i];
+            } else {
+                $where .= 'category_id = '.$categorys[$i].' or ';
+            }
+        }
+        $goods_query->fields = 'id,title,image,visit_num,favorite';
+        $goods_query->where = $where;
+        $goods_query->limit = 10;
+        $goods_data_tbtj =$goods_query->find();
+//        var_dump($goods_data_tbtj);
+
+
+        /*图文专辑*/
         $category_query->where = 'parent_id = 1';
         $category_query->fields='id,name';
         $category_data = $category_query->find();
-//        var_dump($category_data);
-        if (empty(ISession::get('visit_num'))){
+        $visit_num = ISession::get('visit_num');
+        $xb = ISession::get('xb');
+        if (empty($visit_num)){
             $x = 97;
             for ($i=0;$i<count($category_data);$i++){
-                $goods_query = new IQuery('article');
                 $goods_query->where = 'category_id = ' . $category_data[$i]['id'];
-                $goods_query->fields = 'id';
                 ISession::set(chr($x), $goods_query->find());
                 $x++;
             }
+            ISession::set('visit_num',1);
+            ISession::set('x',1);
         } else {
-            $visit_num = ISession::get('visit_num');
-            $x = 97;
-//            $temp = '';
-            $category_data_1 = [];
-            for ($i=0;$i<count($category_data);$i++){
-//                $temp = ISession::get(chr($x));
-                switch (chr($x)){
-                    case 'a':
-//                        array_merge($category_data_1, array_splice(ISession::get(chr($x)),   ,4));
-                }
-                $x++;
+            ISession::set('visit_num', $visit_num+1);
+            ISession::set('xb',$xb + 1);
+        }
+        $x = 97;
+        $goods_data_twzj = [];
+        for ($i=0;$i<count($category_data);$i++){
+            switch (chr($x)){
+                case 'a':
+                    $start = 4*($visit_num-1);
+                    $length = 4;
+                    $temp = ISession::get(chr($x));
+                    $splice = array_splice($temp, $start, $length);
+                    if (empty($splice)){
+                        ISession::set('visit_num',2);
+                        $splice = array_splice($temp, 0, 4);
+                    }
+                    $goods_data_twzj = array_merge($goods_data_twzj, $splice);
+                    break;
+                default:
+                    $start = $xb-1;
+                    $length = 1;
+                    $temp = ISession::get(chr($x));
+                    $splice = array_splice($temp, $start, $length);
+                    if (empty($splice)){
+                        ISession::set('xb',2);
+                        $splice = array_splice($temp, 0, 1);
+                    }
+                    $goods_data_twzj = array_merge($goods_data_twzj, $splice);
             }
-
+            $x++;
         }
-//                var_dump(ISession::get('a'));
-//        $a = array_splice($a,0,4);
-//        $a = ISession::get();
-//            var_dump($a);
-        var_dump($_SESSION);
-        ISession::set('visit_num',1);
-        ISession::clear('if_visit');
+//        echo ISession::get('visit_num');
+//        ISession::clear('visit_num');
+        $page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+        if ($page == 1){
+            $this->json_echo($goods_data_tbtj);
+        } else {
+            $this->json_echo($goods_data_twzj);
+        }
 
 
-exit();
-        $type = IFilter::act(IReq::get('type'),'int');
-        $query = new IQuery("article as ar");
-        $query->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
-        $query->pagesize = 3;
-        $query->join = "left join article_category as ac on ac.id = ar.category_id";
-        switch ($type){
-            case 1:
-                $query->where = "ar.category_id = " . $type;
-                break;
-            case 2:
-                $query->where = "ar.category_id = " . $type;
-                break;
-            case 3:
-                $query->where = "ar.category_id = " . $type;
-                break;
-            default:
-                break;
-        }
-//        $query->order = "ar.sort asc,ar.id desc";
-        $query->order = "ar.sort desc";
-        $query->fields = "ar.id,ar.title,ar.content,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ar.category_id,ar.image,ar.visit_num,ar.favorite,ac.name";
-        $items = $query->find();
-        foreach ($items as $key => $value){
-            $items[$key]['nums'] = count(Api::run('getArticleGoods',array("#article_id#",$value['id'])));
-            $items[$key]['totalpage'] = $query->getTotalPage();
-            $favorite_article = new IQuery('favorite_article');
-            $favorite_article->where = 'user_id='.$this->user['user_id'].' and aid='.$value['id'];
-            $fdata = $favorite_article->find();
-            if (!empty($fdata)){
-                $items[$key]['is_favorite'] = 1;
-            } else {
-                $items[$key]['is_favorite'] = 0;
-            }
-            $items[$key]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/750/h/380");
-        }
-        $this->json_echo($items);
+//exit();
+//        $type = IFilter::act(IReq::get('type'),'int');
+//        $query = new IQuery("article as ar");
+//        $query->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+//        $query->pagesize = 3;
+//        $query->join = "left join article_category as ac on ac.id = ar.category_id";
+//        switch ($type){
+//            case 1:
+//                $query->where = "ar.category_id = " . $type;
+//                break;
+//            case 2:
+//                $query->where = "ar.category_id = " . $type;
+//                break;
+//            case 3:
+//                $query->where = "ar.category_id = " . $type;
+//                break;
+//            default:
+//                break;
+//        }
+////        $query->order = "ar.sort asc,ar.id desc";
+//        $query->order = "ar.sort desc";
+//        $query->fields = "ar.id,ar.title,ar.content,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ar.category_id,ar.image,ar.visit_num,ar.favorite,ac.name";
+//        $items = $query->find();
+//        foreach ($items as $key => $value){
+//            $items[$key]['nums'] = count(Api::run('getArticleGoods',array("#article_id#",$value['id'])));
+//            $items[$key]['totalpage'] = $query->getTotalPage();
+//            $favorite_article = new IQuery('favorite_article');
+//            $favorite_article->where = 'user_id='.$this->user['user_id'].' and aid='.$value['id'];
+//            $fdata = $favorite_article->find();
+//            if (!empty($fdata)){
+//                $items[$key]['is_favorite'] = 1;
+//            } else {
+//                $items[$key]['is_favorite'] = 0;
+//            }
+//            $items[$key]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/750/h/380");
+//        }
+//        $this->json_echo($items);
     }
     //通过专辑获取相关商品
     public function article_rel_goods()
