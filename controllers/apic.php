@@ -573,6 +573,16 @@ class Apic extends IController
 
         $goods_info['spec_array'] = json_decode($goods_info['spec_array']);
 //        $this->setRenderData($goods_info);
+            $favorite = new IQuery('favorite');
+            $favorite->where = 'user_id='.$this->user['user_id'].' and rid='.$goods_info['id'];
+            $fdata = $favorite->find();
+            if (!empty($fdata)){
+                $goods_info['is_favorite'] = 1;
+            } else {
+                $goods_info['is_favorite'] = 0;
+            }
+
+
         $this->json_echo($goods_info);
     }
     //商品详情的补充信息内容
@@ -766,7 +776,7 @@ class Apic extends IController
         $article_id = IFilter::act(IReq::get('id'),'int');
         $article = new IQuery('relation as r');
         $article->join = 'left join goods as go on r.goods_id = go.id';
-        $article->where = sprintf('r.article_id = %s and go.id is not null', $article_id);
+        $article->where = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $article_id);
         $article->filds = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price';
         $article->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
         $article->pagesize = 4;
@@ -776,7 +786,7 @@ class Apic extends IController
             $relationList = [];
         }
         foreach($relationList as $key => $value){
-            $relationList[$key]['img'] = IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
+            $relationList[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
         }
         $this->json_echo($relationList);
     }
@@ -860,8 +870,8 @@ class Apic extends IController
                     $second[$k]['banner_image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['banner_image']."/w/154/h/154");
                 }
                 if (!empty($v['image'])){
-                    $temp = explode(',',$v['image']);
-                    $second[$key]['image'] = IWeb::$app->config['image_host'] . '/' . $temp[0];
+//                    $temp = explode(',',$v['image']);
+                    $second[$k]['image'] = IWeb::$app->config['image_host'] . '/' . $v['image'];
                 }
             }
             $data[$key]['child'] = $second;
@@ -957,7 +967,31 @@ class Apic extends IController
         $data = array_merge($userRow, $memberRow);
         $this->json_echo($data);
     }
+    function favorite_list(){
+        $favorite_query = new IQuery('favorite as a');
+        $favorite_query->join = 'left join goods as go on go.id = a.rid';
+        $favorite_query->fields = 'a.*,go.id,go.name,go.sell_price,go.market_price,go.img';
 
+        $favorite_query->where = 'user_id = ' . $this->user['user_id'];
+        $data1 = $favorite_query->find();
+        foreach ($data1 as $key=>$value){
+            if (!empty($value['img'])){
+                $data1[$key]['img'] = IWeb::$app->config['image_host'] . '/' . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/200/h/200");
+            }
+        }
+        $favorite_a_query = new IQuery('favorite_article as a');
+        $favorite_a_query->join = 'left join article as aa on aa.id = a.aid';
+        $favorite_a_query->fields = 'a.*,aa.id,aa.title,aa.title,aa.image,aa.description';
+        $favorite_a_query->where = 'user_id = ' . $this->user['user_id'];
+        $data2 = $favorite_a_query->find();
+        foreach ($data2 as $key=>$value){
+            if (!empty($value['image'])){
+                $temp = explode(',',$value['image']);
+                $data2[$key]['image'] = IWeb::$app->config['image_host'] . '/' . IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
+            }
+        }
+        $this->json_echo(['goods_data'=>$data1,'article_data'=>$data2]);
+    }
 
 
     private function json_echo($data){
