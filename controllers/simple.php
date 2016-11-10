@@ -994,7 +994,8 @@ class Simple extends IController
     		$goodsRow    = $favoriteObj->getObj('user_id = '.$this->user['user_id'].' and rid = '.$goods_id);
     		if($goodsRow)
     		{
-    			$message = '您已经收藏过此件商品';
+//    			$message = '您已经收藏过此件商品';
+                $favoriteObj->del('user_id = '.$this->user['user_id'].' and rid = '.$goods_id);
     		}
     		else
     		{
