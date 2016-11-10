@@ -860,8 +860,8 @@ class Apic extends IController
                     $second[$k]['banner_image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['banner_image']."/w/154/h/154");
                 }
                 if (!empty($v['image'])){
-                    $temp = explode(',',$v['image']);
-                    $second[$key]['image'] = IWeb::$app->config['image_host'] . '/' . $temp[0];
+//                    $temp = explode(',',$v['image']);
+                    $second[$k]['image'] = IWeb::$app->config['image_host'] . '/' . $v['image'];
                 }
             }
             $data[$key]['child'] = $second;
@@ -971,7 +971,7 @@ class Apic extends IController
         }
         $favorite_a_query = new IQuery('favorite_article as a');
         $favorite_a_query->join = 'left join article as aa on aa.id = a.aid';
-        $favorite_a_query->fields = 'a.*,aa.id,aa.title,aa.title,aa.image';
+        $favorite_a_query->fields = 'a.*,aa.id,aa.title,aa.title,aa.image,aa.description';
         $favorite_a_query->where = 'user_id = ' . $this->user['user_id'];
         $data2 = $favorite_a_query->find();
         foreach ($data2 as $key=>$value){
