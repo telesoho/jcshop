@@ -609,29 +609,14 @@ class Apic extends IController
         $this->json_echo($data);
     }
     function tag_goods(){
-        $this->string = IFilter::act(IReq::get('tag'),'string');
-        $goods_query = new IQuery('goods');
-        $goods_query->where = 'keywords';
-
-        if($this->catId == 0)
-        {
-//            IError::show(403,'缺少分类ID');
-            $this->json_echo([]);
-        }
-
-        //查找分类信息
-        $catObj       = new IModel('category');
-        $this->catRow = $catObj->getObj('id = '.$this->catId);
-
-        $data = $this->catRow;
-        if($this->catRow == null)
-        {
-//            IError::show(403,'此分类不存在');
-            $this->json_echo([]);
-        }
-        $goodsObj = search_goods::find(array('category_extend' => goods_class::catChild($this->catId)),20);
-        $resultData = $goodsObj->find();
-        $this->json_echo($resultData);
+//        echo urlencode(base64_encode('a'));
+//        $this->tag = IFilter::act(IReq::get('tag'),'string');
+//        $this->tag = base64_decode( urldecode($this->tag) );
+//        $tag_query =
+//        $goods_query = new IQuery('goods');
+//        $goods_query->where = 'search_words like ' . '"%,' . $this->tag . ',%"';
+//        $data = $goods_query->find();
+//        $this->json_echo($data);
     }
     /**
      * ---------------------------------------------------专辑---------------------------------------------------*
