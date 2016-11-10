@@ -244,3 +244,8 @@ iframe{
   font-size:0.3rem;
   color:#fff900;
 }
+.hidewrap{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

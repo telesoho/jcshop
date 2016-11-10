@@ -236,7 +236,68 @@ input[type='search']{
     color:#3d4225;
     font-size:0.26rem;
 }
-/*相关推荐商品*/
+/*相关图片*/
+.prolistItem{
+    background:#fff;
+}
+.bannerImg img{
+    height:3.8rem;
+}
+.prolistItem .new{
+    height:0.72rem;
+}
+.prolistItem .left .logo{
+    display:inline-block;
+    background:#ff4aa0;
+    width:0.06rem;
+    height:0.36rem;
+    margin:0.2rem 0.16rem;
+    vertical-align: middle;
+}
+.prolistItem .left .name{
+    display:inline-block;
+    font-size:0.32rem;
+    color:#3d4245;
+    position:relative;
+    top:0.05rem;
+}
+.prolistItem .right span{
+    font-size:0.28rem;
+    color:#bbbbbb;
+    line-height:0.72rem;
+    margin-right:0.1rem;
+}
+.prolistItem .right img{
+    width:0.14rem;
+    margin-right:0.23rem;
+    line-height:0.72rem;
+}
+.prolistItem .product{
+    display: -webkit-flex;
+    -webkit-justify-content:space-between;
+    margin:0.12rem;
+}
+.prolistItem .product .item{
+    width:2.32rem;
+}
+.prolistItem .product .item img{
+    border:1px solid #eee;
+    width:2.32rem;
+    height:2.32rem;
+}
+.prolistItem .product .item .name{
+    font-size:0.24rem;
+    color:#3d4245;
+    letter-spacing:0.04rem;
+    line-height:0.35rem;
+    text-align:left;
+}
+.prolistItem .product .item .price{
+    padding-left:0.03rem;
+    font-size:0.26rem;
+    margin-bottom:0.2rem;
+}
+    /*相关推荐商品*/
 #relate_product .title{
     font-size:0.28rem;
     color:#bbbbbb;
