@@ -125,11 +125,11 @@
         if ($(window).scrollTop() + $(window).height() + 600 >= $(document).height() && $(window).scrollTop() > 50) {
             if (stop == true) {
                 stop = false;
-                pullupRefresh(articlePageData)
+                pullupRefresh()
             }
         }
     });
-    function pullupRefresh(articlePageData) {
+    function pullupRefresh() {
         mui.ajax('index.php?controller=apic&action=article_rel_goods',{
             data:articlePageData,
             dataType:'json',	// 服务器返回json格式数据

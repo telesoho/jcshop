@@ -136,7 +136,9 @@
 	<input name="radio_address" type="hidden" value="<%=addressList[0].id%>"/>
 	<input type="hidden" name="delivery_id" value="<%=delivery[0].id%>" />
 	<input type='hidden'  name='accept_time' value='任意' />
+	<%if(payment[0]){%>
 	<input name="payment"  type="hidden" value="<%=payment[0].id%>" />
+	<%}%>
 	<div class="totalButton box">
 		<div class="totalSumPrice"><span>合计：</span><span id="totalPrice_sum">¥<%=final_sum%></span></div>
 		<input class="toPayOrder" type="submit" value="提交订单">

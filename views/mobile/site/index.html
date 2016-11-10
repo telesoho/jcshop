@@ -427,7 +427,7 @@
         //上拉加载
          var stop=true;
         $(window).bind('scroll', function() {
-            if ($(window).scrollTop() + $(window).height() +600 >= $(document).height() && $(window).scrollTop() > 50) {
+            if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
                 if(stop==true){
                     stop=false;
                     pullupRefresh()
@@ -457,11 +457,8 @@
                 div.innerHTML=html3;
                 document.getElementById("pullContainer").appendChild(div);
 //               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
-                if(data[0].totalpage>pageData.page){
                     stop = true;
-                }else{
-                    stop = false;
-                }
+
                 pageData.page++;
             },
             error:function(xhr,type,errorThrown){
