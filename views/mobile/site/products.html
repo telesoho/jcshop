@@ -180,7 +180,7 @@
 			<a href="#"><span><%=name %></span></a>
 			<div class="titleIcon">
 				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png"/></a>
-				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon02.png"/></a>
+				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon02.png" onclick="Collection(<%=id %>)"/></a>
 			</div>
 		</div>
 		<div class="salePrice">
@@ -328,6 +328,7 @@
 				timeout:10000,//超时时间设置为10秒；
 				success:function(data){
 					//轮播图展示页面
+                    console.log(data);
 					var html=template('product_carousel',data);
 					document.getElementById('carousel').innerHTML=html;
 					var carousel  = mui("#carousel");
@@ -408,6 +409,24 @@
 				}
 			});
 		}
+		function Collection(id){
+            mui.ajax('/simple/favorite_add/_paramKey_/_paramVal_',{
+                data:{
+					goods_id:id,
+					random:Math.random()
+                },
+                dataType:'json',//服务器返回json格式数据
+                type:'get',//HTTP请求类型
+                timeout:10000,//超时时间设置为10秒；
+                success:function(data){
+                   console.log(data);
+                },
+                error:function(xhr,type,errorThrown){
+                    //异常处理；
+                    console.log(type);
+                }
+            });
+        }
 	</script>
 </body>
 </html>

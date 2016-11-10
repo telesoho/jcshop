@@ -128,130 +128,8 @@ input[type='search']{
 .mui-control-item.mui-active .bg{
     display:block;
     z-index:2 !important;
+}
 
-
-}
-/*底部导航样式*/
-.icon-home{
-    background:url('../../image/jmj/icon/home.png') no-repeat 100%;
-    background-size:100% 100%;
-}
-.icon-classification{
-    background:url('../../image/jmj/icon/mune.png') no-repeat 100% ;
-    background-size:100% 100%;
-}
-.icon-shopcar{
-    background:url('../../image/jmj/icon/buy.png') no-repeat 100% ;
-    background-size:100% 100%;
-}
-.icon-my{
-    background:url('../../image/jmj/icon/my.png') no-repeat 100% ;
-    background-size:100% 100%;
-}
-.icon-vedio{
-    display:inline-block;
-    position:absolute;
-    bottom:0;
-    left:0;
-    width:1.31rem;
-    height:1.31rem;
-    border-radius:50%;
-    background:#fff;
-    box-shadow: 0 0 0.01rem rgba(0, 0, 0, .2);
-}
-.tab-mark{
-    display:inline-block;
-    position:absolute;
-    height:0.98rem;
-    width:1.4rem;
-    z-index:3;
-    left:0;
-    bottom:0;
-    background:#fff;
-}
-.img-move02{
-    position:relative;
-    z-index:24;
-    width:1.06rem;
-    margin-top:0.125rem;
-}
-.img-move02{
-    position:relative;
-    z-index:24;
-    width:0.79rem;
-    margin-top:0.125rem;
-
-}
-.mui-tab-item .grow{
-    position:relative;
-    margin-top:0.08rem;
-    z-index:23;
-    color:#929292;
-}
-.mui-tab-item.mui-active .grow{
-    color:#ff4aa0;
-}
-.mui-tab-item.mui-active .icon-home{
-    background:url('../../image/jmj/icon/home-ed.png') no-repeat 100%;
-    background-size:100% 100%;
-}
-.mui-tab-item.mui-active .icon-classification{
-    background:url('../../image/jmj/icon/mune-ed.png') no-repeat 100%;
-    background-size:100% 100%;
-}
-.mui-tab-item.mui-active .icon-shopcar{
-    background:url('../../image/jmj/icon/buy-ed.png') no-repeat 100%;
-    background-size:100% 100%;
-}
-.mui-tab-item.mui-active .icon-my{
-    background:url('../../image/jmj/icon/my-ed.png') no-repeat 100%;
-    background-size:100% 100%;
-}
-.mui-tab-item.mui-active{
-    color:#ff4aa0 !important;
-}
-.mui-control-content {
-    display: block;
-}
-.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
-    background-color: #fff;
-}
-.site-control-item{
-    display:block;
-    height:0.86rem;
-    line-height:0.86rem;
-    text-align:center;
-    font-size:0.28rem;
-    color:#3d4245;
-}
-.site-control-item.mui-active{
-    color:#ff4aa0 !important;
-    background:#fff;
-}
-.mui-control-content{
-    display:-webkit-flex;
-    justify-content:flex-start;
-    flex-wrap: wrap;
-    padding:1% 2% 0;
-}
-.mui-control-content .item{
-    margin:2% 1% 0 0 ;
-    width:32%;
-    /*background:#fff;*/
-}
-.mui-control-content .title{
-    width:100%;
-    background:pink;
-    line-height:1rem;
-    text-align:center;
-}
-.mui-control-content .item .name{
-    display:block;
-    text-align:center;
-    margin:0.14rem 0;
-    color:#3d4225;
-    font-size:0.26rem;
-}
 /*分类样式*/
 #left-scroll{
     width:2.19rem;
@@ -266,8 +144,8 @@ input[type='search']{
     height:1rem;
 }
 #left-scroll li .icon{
-    width:0.6rem;
-    height:0.6rem;
+    width:0.5rem;
+    height:0.5rem;
 }
 #left-scroll li .content{
     position:relative;
@@ -279,7 +157,7 @@ input[type='search']{
     border-bottom:0.01rem solid transparent;
 }
 #left-scroll li img{
-    margin-top:0.2rem;
+    margin-top:0.25rem;
     display:inline-block;
 }
 #left-scroll li.active .bg{
