@@ -197,7 +197,7 @@
                 console.log(data);
                 var dat={};
                 dat.data=data;
-                dat.state=getSession("favoriteState");
+                dat.state=getSession("favoriteState")?getSession("favoriteState"):0;
                 var html = template('favoriteTemp',dat);
                 document.getElementById("favorite").innerHTML=html;
             },
@@ -261,7 +261,8 @@
     }
     function getSession(key){
         if(window.sessionStorage){
-            return sessionStorage.getItem(key);
+            var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+            return state;
         }else{
             console.log("无法使用缓存");
             return "";

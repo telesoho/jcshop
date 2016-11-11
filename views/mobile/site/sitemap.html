@@ -112,57 +112,37 @@
 <script type="text/html" id="controlTopTemp">
 	<% var allstring =JSONreduce(data) %>
 	<% var string =JSONstringfly(data[0].image) %>
-	<li class="controlItem controlItem<%=data[0].id%> active" onclick="changeSite(<%=data[0].id%>,0,<%=allstring%>)">
-		<div class="content">
-			<%if(data[0].image){%>
-			<img src="<%=JSONsplit(data[0].image)[0]%>" alt="" class="icon img-red icon_first" id="icon_first_<%=data[0].id%>">
-			<%}%>
-			<span class="name"><%=data[0].name%></span>
-			<span class="bg"></span>
-		</div>
-	</li>
-	<% for(var i=1; i<data.length; i++){%>
+	<% for(var i=0; i<data.length; i++){%>
 	<% var Fsite =data[i] %>
 	<% var string1 =JSONstringfly(Fsite.image) %>
+		<!--判定状态开始-->
+		<%if(state==Fsite.id){%>
+		<li class="controlItem controlItem<%=Fsite.id%> active" onclick="changeSite(<%=Fsite.id%>,<%=i%>,<%=allstring%>)">
+			<div class="content">
+				<div class="flexbox">
+					<img src="<%=JSONsplit(Fsite.image)[0]%>" alt="" class="icon img-dark icon_first" id="icon_first_<%=Fsite.id%>">
+		<%}else{%>
 		<li class="controlItem controlItem<%=Fsite.id%>" onclick="changeSite(<%=Fsite.id%>,<%=i%>,<%=allstring%>)">
 			<div class="content">
-				<%if(Fsite.image){%>
-				<img src="<%=JSONsplit(Fsite.image)[1]%>" alt="" class="icon img-dark icon_first" id="icon_first_<%=Fsite.id%>">
-				<%}%>
-				<span class="name"><%=Fsite.name %></span>
+				<div class="flexbox">
+					<img src="<%=JSONsplit(Fsite.image)[1]%>" alt="" class="icon img-dark icon_first" id="icon_first_<%=Fsite.id%>">
+		<%}%>
+		<!--判定状态结束-->
+					<span class="name"><%=Fsite.name %></span>
+				</div>
 				<span class="bg"></span>
 			</div>
 		</li>
 	<%}%>
 </script>
 <script type="text/html" id="contentToptemp">
-	<!--首个二级分类-->
-	<div class="siteid site<%=data[0].id%>">
-		<%if(data[0].banner_image){%>
-		<div class="banner">
-			<img src="<%=data[0].banner_image %>" alt="">
-		</div>
-		<%}%>
-		<div class="S_classification">
-			<% for(var j=0; j<data[0].child.length; j++){%>
-			<% var Ssite =data[0].child[j] %>
-			<div class="type">
-				<a href="index.php?controller=site&action=category_third&id=<%=Ssite.id %>">
-					<div class="img">
-					<img src="<%=Ssite.image %>" alt="" width="1.54rem" height="1.54rem" style=""/>
-					</div>
-					<div class="name">
-						<%=Ssite.name %>
-					</div>
-				</a>
-			</div>
-			<%}%>
-		</div>
-	</div>
-	<!--其余二级分类-->
-	<% for(var i=1; i<data.length; i++){%>
+	<% for(var i=0; i<data.length; i++){%>
 	<% var Fsite =data[i] %>
-	<div class="siteid site<%=Fsite.id%> hide">
+		<%if(state==Fsite.id){%>
+		<div class="siteid site<%=Fsite.id%>">
+		<%}else{%>
+		<div class="siteid site<%=Fsite.id%> hide">
+		<%}%>
 		<%if(Fsite.banner_image){%>
 			<div class="banner">
 				<img src="<%=Fsite.banner_image %>" alt="">
@@ -238,6 +218,7 @@
 				console.log(data);
 				var dat={};
 				dat.data=data;
+				dat.state=getSession("siteMapState")?getSession("siteMapState"):data[0].id;
 				var html = template('controlTopTemp',dat);
 				document.getElementById("controlTop").innerHTML=html;
 				var html2 = template('contentToptemp',dat);
@@ -250,6 +231,7 @@
 		});
 	}
 	function changeSite(eid,num,obj){
+		pushSession("siteMapState",eid);
 		$(".controlItem").removeClass("active");
 		$(".controlItem"+eid).addClass("active");
 		$(".siteid").addClass("hide");
@@ -271,6 +253,23 @@
 		}
 		if(num>=6){
 			mui('#left-scroll').scroll().scrollToBottom();
+		}
+	}
+	function pushSession(key,value){
+		if(window.sessionStorage){
+			sessionStorage.setItem(key,value);
+		}else{
+			console.log("无法使用缓存");
+			return "";
+		}
+	}
+	function getSession(key){
+		if(window.sessionStorage){
+			var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+			return state;
+		}else{
+			console.log("无法使用缓存");
+			return "";
 		}
 	}
 </script>

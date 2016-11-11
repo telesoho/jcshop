@@ -180,7 +180,11 @@
 			<a href="#"><span><%=name %></span></a>
 			<div class="titleIcon">
 				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png"/></a>
-				<a href="#"><img src="/views/mobile/skin/default/image/jmj/img/title_icon02.png" onclick="Collection(<%=id %>)"/></a>
+				<%if(is_favorite==0){%>
+				<a href="#"><img src="/views/mobile/skin/default/image/jmj/icon/like_off.png" id="pro_fav<%=id %>" onclick="Collection(<%=id %>)"/></a>
+				<%}else{%>
+				<a href="#"><img src="/views/mobile/skin/default/image/jmj/icon/like_on.png" id="pro_fav<%=id %>" onclick="Collection(<%=id %>)"/></a>
+				<%}%>
 			</div>
 		</div>
 		<div class="salePrice">
@@ -419,7 +423,12 @@
                 type:'get',//HTTP请求类型
                 timeout:10000,//超时时间设置为10秒；
                 success:function(data){
-                   console.log(data);
+                   if(data.message==""){
+                   	   console.log("取消收藏")
+					   $("#pro_fav"+id).attr("src","/views/mobile/skin/default/image/jmj/icon/like_off.png");
+				   }else{
+				   	 $("#pro_fav"+id).attr("src","/views/mobile/skin/default/image/jmj/icon/like_on.png");
+				   }
                 },
                 error:function(xhr,type,errorThrown){
                     //异常处理；
