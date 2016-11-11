@@ -626,6 +626,7 @@ class Apic extends IController
         $word = $keyword->find()[0]['word'];
         $goods_query = new IQuery('goods');
         $goods_query->where = 'search_words like ' . '"%,' . $word . ',%"';
+        $goods_query->order = 'create_time desc';
         $data = $goods_query->find();
         $this->json_echo($data);
     }
@@ -725,7 +726,7 @@ class Apic extends IController
         }
         $page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
         $favorite_article = new IQuery('favorite_article');
-        if ($page == 1){
+        if ($page == 1 || ISession::get('is_first')){
             if (empty(ISession::get('visit_article_id'))){
                 $data = $article_data_tbtj;
             } else {
@@ -777,9 +778,20 @@ class Apic extends IController
             $data[$k]['nums'] = count($relation->find());
             $data[$k]['visit_num'] = $visit_num;
             $data[$k]['xb'] = $xb;
-
+            $data[$k]['goods_list'] = [];
 
         }
+        for ($i=0;$i<3;$i++){
+            $a = rand(0,7);
+            $article = new IQuery('relation as r');
+            $article->join = 'left join goods as go on r.goods_id = go.id';
+            $article->where = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $data[$i]['id']);
+            $article->filds = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price';
+            $article->limit = 3;
+            $relationList = $article->find();
+            $data[$i]['goods_list'] = $relationList;
+        }
+
 //        echo $visit_num;
 //        echo '<a href="http://192.168.0.156:8080/index.php?controller=site&action=article_detail&id='.$data[0]['id'].'">aa</a>';
 //        var_dump($data);
