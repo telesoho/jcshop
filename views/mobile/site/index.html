@@ -244,7 +244,7 @@
                 <%}%>
             </span>
         </div>
-        <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>">
+        <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>&vn=<%=dat.visit_num%>&xb=<%=dat.xb%>">
             <div class="content">
                 <div class="img">
                     <img src="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
@@ -272,7 +272,7 @@
         }
     });
     var pageData = {
-        page:1
+        page:2
     };
     //页面加载完成后调用的功能
     window.onload=function(){

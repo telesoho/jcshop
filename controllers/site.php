@@ -283,6 +283,9 @@ class Site extends IController
 	function article_detail()
 	{
 		$this->article_id = IFilter::act(IReq::get('id'),'int');
+		$this->vn = IFilter::act(IReq::get('vn'),'int');
+        ISession::clear('visit_article_id');
+        ISession::set('visit_article_id', $this->article_id.','.$this->vn.','.$this->xb);
 		if($this->article_id == '')
 		{
 			IError::show(403,'缺少咨询ID参数');
@@ -300,6 +303,7 @@ class Site extends IController
 			$articleObj->update('id = '.$this->article_id);
 			//关联商品
 			$this->relationList = Api::run('getArticleGoods',array("#article_id#",$this->article_id));
+
 			$this->redirect('article_detail');
 		}
 	}
