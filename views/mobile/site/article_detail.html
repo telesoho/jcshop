@@ -52,6 +52,7 @@
         $goods_no = $y[0];
         if (!empty($goods_no)){
         $goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
+        if(!empty($goods_no_data)){
         ?>
         <div class="content_ware">
             <div class="img">
@@ -69,6 +70,7 @@
         </div>
 
         <?php
+        }
                         echo $y[1];
                     } else {
                         echo $content;
