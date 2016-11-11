@@ -80,7 +80,14 @@
                 echo $content;
             }
         ?>
+        <?php $favorite_article = new IQuery('favorite_article'); $favorite_article->where='user_id = ' . $this->user['user_id'] . ' and aid=' . $this->articleRow['id']; if(!empty($favorite_article->find())){ ?>
+            <p>已经种草</p>
+        <?php } else { ?>
+            <p>未种草</p>
+        <?php } ?>
+
     </div>
+
     <div class="articledetail_ware">
         <div class="title"><span>~</span><span>推荐商品</span>~</div>
         <div class="content" id="getArticleWare">

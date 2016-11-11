@@ -619,14 +619,15 @@ class Apic extends IController
         $this->json_echo($data);
     }
     function tag_goods(){
-//        echo urlencode(base64_encode('a'));
-//        $this->tag = IFilter::act(IReq::get('tag'),'string');
-//        $this->tag = base64_decode( urldecode($this->tag) );
-//        $tag_query =
-//        $goods_query = new IQuery('goods');
-//        $goods_query->where = 'search_words like ' . '"%,' . $this->tag . ',%"';
-//        $data = $goods_query->find();
-//        $this->json_echo($data);
+        $keyword_id = IFilter::act(IReq::get('id'),'int');
+        if (empty($keyword_id)){$this->json_echo([]);}
+        $keyword = new IQuery('keyword');
+        $keyword->where = 'id = ' . $keyword_id;
+        $word = $keyword->find()[0]['word'];
+        $goods_query = new IQuery('goods');
+        $goods_query->where = 'search_words like ' . '"%,' . $word . ',%"';
+        $data = $goods_query->find();
+        $this->json_echo($data);
     }
     /**
      * ---------------------------------------------------专辑---------------------------------------------------*
@@ -900,25 +901,9 @@ class Apic extends IController
      */
     public function category_child()
     {
-        $this->catId = IFilter::act(IReq::get('id'),'int');//分类id
-
-        if($this->catId == 0)
-        {
-//            IError::show(403,'缺少分类ID');
-            $this->json_echo([]);
-        }
-
-        //查找分类信息
-        $catObj       = new IModel('category');
-        $this->catRow = $catObj->getObj('id = '.$this->catId);
-
-        $data = $this->catRow;
-        if($this->catRow == null)
-        {
-//            IError::show(403,'此分类不存在');
-            $this->json_echo([]);
-        }
-        $goodsObj = search_goods::find(array('category_extend' => goods_class::catChild($this->catId)),20);
+        $catId = IFilter::act(IReq::get('id'),'int');//分类id
+        if($catId == 0){$this->json_echo([]);}
+        $goodsObj = search_goods::find(array('category_extend' => goods_class::catChild($catId)),99999);
         $resultData = $goodsObj->find();
         $this->json_echo($resultData);
     }
