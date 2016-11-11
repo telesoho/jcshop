@@ -726,12 +726,12 @@ class Apic extends IController
         }
         $page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
         $favorite_article = new IQuery('favorite_article');
-        if ($page == 1 || ISession::get('is_first')){
-            if (empty(ISession::get('visit_article_id'))){
-                $data = $article_data_tbtj;
-            } else {
+        if ($page == 1 ){
+//            if (empty(ISession::get('visit_article_id'))){
+//                $data = $article_data_tbtj;
+//            } else {
                 $data = $article_data_twzj;
-            }
+//            }
         } else {
             $data = $article_data_twzj;
         }
