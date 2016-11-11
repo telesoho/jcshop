@@ -277,12 +277,18 @@ class jcshopCsvImport extends pluginBase
 			$field = trim($val[$titleToCols['name_jp']], '"\' ');
 			if('' !== $field) {
 				$theData['name_jp'] = IFilter::act($field, "string");
+				if(!isset($theData['name']) && ($the_goods?'' == $the_goods['name']:true)) {
+					$theData['name'] = $theData['name_jp'];
+				}
 			}
 
 			// 商品详情日文
 			$field = trim($val[$titleToCols['content_jp']], '"\' ');
 			if('' !== $field) {
 				$theData['content_jp'] = IFilter::addSlash($field);
+				if(!isset($theData['content']) && ($the_goods?'' == $the_goods['content']:true)) {
+					$theData['content'] = $theData['content_jp'];
+				}
 			}
 
 			// 处理上下架状态
@@ -322,6 +328,31 @@ class jcshopCsvImport extends pluginBase
 			$field = trim($val[$titleToCols['is_zh_content']]);
 			if('' !== $field) {
 				$theData['is_zh_content'] = IFilter::act($field, 'bool');
+			}
+			
+			// 主图
+			$mainPic = array();
+
+			$goodsImgDir = $this->imageDir . "/" . "mainPic" . "/" . $goods_no;
+
+			if(is_dir($goodsImgDir)) {
+
+				$handle = opendir($goodsImgDir);
+
+				while($file = readdir($handle))
+				{
+					if($file != '.' && $file != '..'){
+						$source_file =  $goodsImgDir . "/" . $file;
+						if(is_file($source_file)) {
+							$mainPic[] = $source_file;
+						}
+					}
+				}
+			}
+
+			// 设置商品主图
+			if($mainPic) {
+				$theData['img'] = $mainPic[0];
 			}
 
 			if( $the_goods ) {
@@ -387,27 +418,7 @@ class jcshopCsvImport extends pluginBase
 				}
 			}
 
-			//处理商品图片
-			
-			// 主图
-			$mainPic = array();
-
-
-			$goodsImgDir = $this->imageDir . "/" . "mainPic" . "/" . $goods_no;
-
-			if(is_dir($goodsImgDir)) {
-
-				$handle = opendir($goodsImgDir);
-
-				while($file = readdir($handle))
-				{
-					if($file != '.' && $file != '..'){
-						$source_file =  $goodsImgDir . "/" . $file;
-						$mainPic[] = $source_file;
-					}
-				}
-			}
-
+			//处理商品图片关联
 			foreach($mainPic as $photoFile) {
 				if(!is_file($photoFile))
 				{

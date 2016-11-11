@@ -974,7 +974,7 @@ class Apic extends IController
 
         $favorite_query->where = 'user_id = ' . $this->user['user_id'];
         $data1 = $favorite_query->find();
-        foreach ($data1 as $key=>$value){
+        if($data1) foreach ($data1 as $key=>$value){
             if (!empty($value['img'])){
                 $data1[$key]['img'] = IWeb::$app->config['image_host'] . '/' . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/200/h/200");
             }
@@ -984,7 +984,7 @@ class Apic extends IController
         $favorite_a_query->fields = 'a.*,aa.id,aa.title,aa.title,aa.image,aa.description';
         $favorite_a_query->where = 'user_id = ' . $this->user['user_id'];
         $data2 = $favorite_a_query->find();
-        foreach ($data2 as $key=>$value){
+        if($data2) foreach ($data2 as $key=>$value){
             if (!empty($value['image'])){
                 $temp = explode(',',$value['image']);
                 $data2[$key]['image'] = IWeb::$app->config['image_host'] . '/' . IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
