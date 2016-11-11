@@ -24,7 +24,10 @@ class Site extends IController
 
 	function index()
 	{
-		$this->index_slide = Api::run('getBannerList');
+        if (empty($_SERVER['REDIRECT_PATH_INFO'])){
+            ISession::set('is_first',true);
+        }
+//		$this->index_slide = Api::run('getBannerList');
 		$this->redirect('index');
 	}
 
@@ -282,6 +285,10 @@ class Site extends IController
 	//文章详情页面
 	function article_detail()
 	{
+        $this->action = IFilter::act(IReq::get('action'),'string');
+        if ($this->action == 'article_detail'){
+            ISession::set('is_first',false);
+        }
 		$this->article_id = IFilter::act(IReq::get('id'),'int');
 		$this->vn = IFilter::act(IReq::get('vn'),'int');
         ISession::clear('visit_article_id');
