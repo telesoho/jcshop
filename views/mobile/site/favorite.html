@@ -37,17 +37,6 @@
 <!--loading页结束-->
 <!--收藏页面-->
 <section id="favorite">
-    <div class="empty">
-        <img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt="" />
-        <div class="content">收藏的内容和商品都在这里哦，赶紧去种草吧！</div>
-        <a href="{url:/site/index}" class="gotoFind">去种草</a>
-    </div>
-    <!--<div class="favorite_content">-->
-        <!--<div class="head">-->
-            <!--<div class="item left active">商品</div>-->
-            <!--<div class="item right">专辑</div>-->
-        <!--</div>-->
-    <!--</div>-->
 
 </section>
 <footer>
@@ -80,81 +69,97 @@
 <!--<span class="mui-icon-extra mui-icon-extra-top" id="pagetop"></span>-->
 <!--头信息结束-->
 <!--一级分类-->
-<script type="text/html" id="controlTopTemp">
-    <% var allstring =JSONreduce(data) %>
-    <% var string =JSONstringfly(data[0].image) %>
-    <li class="controlItem controlItem<%=data[0].id%> active" onclick="changeSite(<%=data[0].id%>,0,<%=allstring%>)">
-        <div class="content">
-            <%if(data[0].image){%>
-            <img src="<%=JSONsplit(data[0].image)[0]%>" alt="" class="icon img-red icon_first" id="icon_first_<%=data[0].id%>">
-            <%}%>
-            <span class="name"><%=data[0].name%></span>
-            <span class="bg"></span>
-        </div>
-    </li>
-    <% for(var i=1; i<data.length; i++){%>
-    <% var Fsite =data[i] %>
-    <% var string1 =JSONstringfly(Fsite.image) %>
-    <li class="controlItem controlItem<%=Fsite.id%>" onclick="changeSite(<%=Fsite.id%>,<%=i%>,<%=allstring%>)">
-        <div class="content">
-            <%if(Fsite.image){%>
-            <img src="<%=JSONsplit(Fsite.image)[1]%>" alt="" class="icon img-dark icon_first" id="icon_first_<%=Fsite.id%>">
-            <%}%>
-            <span class="name"><%=Fsite.name %></span>
-            <span class="bg"></span>
-        </div>
-    </li>
-    <%}%>
-</script>
-<script type="text/html" id="contentToptemp">
-    <!--首个二级分类-->
-    <div class="siteid site<%=data[0].id%>">
-        <%if(data[0].banner_image){%>
-        <div class="banner">
-            <img src="<%=data[0].banner_image %>" alt="">
-        </div>
-        <%}%>
-        <div class="S_classification">
-            <% for(var j=0; j<data[0].child.length; j++){%>
-            <% var Ssite =data[0].child[j] %>
-            <div class="type">
-                <a href="index.php?controller=site&action=category_third&id=<%=Ssite.id %>">
-                    <div class="img">
-                        <img src="<%=Ssite.image %>" alt="" width="1.54rem" height="1.54rem" style=""/>
-                    </div>
-                    <div class="name">
-                        <%=Ssite.name %>
-                    </div>
-                </a>
+<script type="text/html" id="favoriteTemp">
+    <%if(data.goods_data.length||data.article_data.length){%>
+        <div class="favorite_content">
+            <div class="head">
+                <!--判断初始状态-->
+                <%if(state==0){%>
+                <div class="item itemTop0 left active" onclick="changeFavorite(0)">商品</div>
+                <div class="item itemTop1 right" onclick="changeFavorite(1)">专辑</div>
+                <%}else{%>
+                <div class="item itemTop0 left" onclick="changeFavorite(0)">商品</div>
+                <div class="item itemTop1 right active" onclick="changeFavorite(1)">专辑</div>
+                <%}%>
+                <!--判断初始状态结束-->
             </div>
-            <%}%>
-        </div>
-    </div>
-    <!--其余二级分类-->
-    <% for(var i=1; i<data.length; i++){%>
-    <% var Fsite =data[i] %>
-    <div class="siteid site<%=Fsite.id%> hide">
-        <%if(Fsite.banner_image){%>
-        <div class="banner">
-            <img src="<%=Fsite.banner_image %>" alt="">
-        </div>
-        <%}%>
-        <div class="S_classification">
-            <% for(var j=0; j<Fsite.child.length; j++){%>
-            <% var Ssite =Fsite.child[j] %>
-            <div class="type">
-                <a href="index.php?controller=site&action=category_third&id=<%=Ssite.id %>">
-                    <div class="img">
-                        <img src="<%=Ssite.image %>" alt="" width="1.54rem" height="1.54rem" style=""/>
+            <div class="bg"></div>
+            <!--判断初始状态-->
+                <%if(state==0){%>
+                <div class="favorite_item favorite_product">
+                <%}else{%>
+                <div class="favorite_item favorite_product hide">
+                <%}%>
+                <!--判断初始状态结束-->
+                <%if(data.goods_data.length){%>
+                    <% for(var i=0; i<data.goods_data.length; i++){%>
+                    <% var product =data.goods_data[i] %>
+                    <div class="item favoriteProduct<%=product.id%>">
+                        <div class="left">
+                            <a href="index.php?controller=site&action=products&id=<%=product.id%>"><img src="<%=product.img%>" alt="" /></a>
+                        </div>
+                        <div class="right">
+                            <div class="top box">
+                                <a href="index.php?controller=site&action=products&id=<%=product.id%>"><div class="name"><%=product.name%></div></a>
+                                <div class="del" onclick="delFavoriteProduct(<%=product.id%>)">
+                                    <img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt=""  />
+                                </div>
+                            </div>
+                            <a href="index.php?controller=site&action=products&id=<%=product.id%>"><div class="sellprice">￥ <%=product.sell_price%></div></a>
+                        </div>
                     </div>
-                    <div class="name">
-                        <%=Ssite.name %>
+                    <%}%>
+                <%}else{%>
+                    <div class="emptyFavorite">
+                        <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;"/>
+                        <div class="content">
+                            <span>~</span>
+                            <span>还没有关注的商品</span>
+                            <span>~</span>
+                        </div>
                     </div>
-                </a>
+                <%}%>
             </div>
+            <!--判断初始状态-->
+            <%if(state==0){%>
+                <div class="favorite_item favorite_article hide">
+            <%}else{%>
+                <div class="favorite_item favorite_article">
             <%}%>
+            <!--判断初始状态结束-->
+                <%if(data.article_data.length){%>
+                    <% for(var m=0; m<data.article_data.length; m++){%>
+                    <% var article=data.article_data[m] %>
+                    <div class="item box favoriteArticle<%=article.id%>">
+                        <div class="left">
+                            <a href="index.php?controller=site&action=article_detail&id=<%=article.id%>"><img src="<%=article.image%>" alt="" /></a>
+                        </div>
+                        <div class="name">
+                            <a href="index.php?controller=site&action=article_detail&id=<%=article.id%>"><%=article.title%></a>
+                        </div>
+                        <div class="del" onclick="delFavoriteArticle(<%=article.id%>)">
+                            <img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt=""  />
+                        </div>
+                    </div>
+                    <%}%>
+                <%}else{%>
+                    <div class="emptyFavorite">
+                        <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;"/>
+                        <div class="content">
+                            <span>~</span>
+                            <span>还没有关注的专辑呢</span>
+                            <span>~</span>
+                        </div>
+                    </div>
+                <%}%>
+            </div>
         </div>
-    </div>
+    <%}else{%>
+        <div class="empty">
+            <img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt="" />
+            <div class="content">收藏的内容和商品都在这里哦，赶紧去种草吧！</div>
+            <a href="{url:/site/index}" class="gotoFind">去种草</a>
+        </div>
     <%}%>
 </script>
 <script src="/views/mobile/javascript/mui.js"></script>
@@ -169,12 +174,6 @@
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
         mui('body').on('tap','a',function(){document.location.href=this.href;});
-        $(".head .item").each(function(){
-            $(this).click(function(){
-                $(".head .item").removeClass("active");
-                $(this).addClass("active");
-            })
-        })
     })
     template.helper('JSONsplit', function(obj){
         return obj.split(",")
@@ -198,14 +197,81 @@
                 console.log(data);
                 var dat={};
                 dat.data=data;
-//                var html = template('controlTopTemp',dat);
-//                document.getElementById("controlTop").innerHTML=html;
+                dat.state=getSession("favoriteState");
+                var html = template('favoriteTemp',dat);
+                document.getElementById("favorite").innerHTML=html;
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
                 console.log(type);
             }
         });
+    }
+    function changeFavorite(index){
+        pushSession("favoriteState",index);
+        changeState(index)
+
+    }
+    function delFavoriteArticle(eid){
+        mui.ajax('index.php?controller=apic&action=favorite_article_add',{
+            data:{
+                id:eid
+            },
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+//                $(".favoriteArticle"+eid).remove();
+//                console.log("删除成功");
+                window.location.reload();
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+    function delFavoriteProduct(eid){
+        mui.ajax('/simple/favorite_add/_paramKey_/_paramVal_',{
+            data:{
+                goods_id:eid,
+                random:Math.random()
+            },
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+//                $(".favoriteProduct"+eid).remove();
+//                console.log("删除成功");
+                window.location.reload();
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+    function pushSession(key,value){
+        if(window.sessionStorage){
+            sessionStorage.setItem(key,value);
+        }else{
+            console.log("无法使用缓存");
+            return "";
+        }
+    }
+    function getSession(key){
+        if(window.sessionStorage){
+            return sessionStorage.getItem(key);
+        }else{
+            console.log("无法使用缓存");
+            return "";
+        }
+    }
+    function changeState(index){
+        $(".head .item").removeClass("active");
+        $(".itemTop"+index).addClass("active");
+        $(".favorite_item").addClass("hide");
+        $(".favorite_item").eq(index).removeClass("hide");
     }
 </script>
 </body>
