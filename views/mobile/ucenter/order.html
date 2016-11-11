@@ -219,25 +219,29 @@
 		$("#loading").fadeOut(300);
 		//	ajax 请求
 		getOrder();
-	})
-	mui('body').on('tap','.toOrderDetail',function(){
-		document.location.href=this.href;
-	});
-	mui('body').on('tap','.testClick',function(){
-		var attr=this.getAttribute("data-v");
-		getDelivery(attr);
-		mui("#logistics").popover('show');
-		$('.mui-backdrop').hide();
-	});
+		mui.init();
+		mui('body').on('tap','.orderToDetaile',function(){
+			document.location.href=this.href;
+		});
+		mui('body').on('tap','.toOrderDetail',function(){
+			document.location.href=this.href;
+		});
+		mui('body').on('tap','.testClick',function(){
+			var attr=this.getAttribute("data-v");
+			getDelivery(attr);
+			mui("#logistics").popover('show');
+			$('.mui-backdrop').hide();
+		});
 //	mui('body').on('tap','.testClick1',function(){
 //		mui("#logistics").popover('hide');
 //	});
-	mui('body').on('tap','.delOrder',function(){
-		document.location.href=this.href;
-	});
-	mui('body').on('tap','.button2',function(){
-		document.location.href=this.href;
-	});
+		mui('body').on('tap','.delOrder',function(){
+			document.location.href=this.href;
+		});
+		mui('body').on('tap','.button2',function(){
+			document.location.href=this.href;
+		});
+	})
 //	接收页面传过来的状态值
 	var Request = new Object();
 	Request = GetRequest();
@@ -247,15 +251,6 @@
 	$('.mui-control-item'+statusOrder).addClass('mui-active');
 	$('.mui-slider-item').removeClass('mui-active')
 	$('#itemmobile'+statusOrder).addClass('mui-active');
-
-
-
-	mui.init();
-	mui('body').on('tap','.orderToDetaile',function(){
-		document.location.href=this.href;
-	});
-
-
 	(function($) {
 		var pageNum={
 			pageNum0:0,

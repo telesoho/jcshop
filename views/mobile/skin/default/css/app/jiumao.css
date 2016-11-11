@@ -540,6 +540,23 @@ input[type='search']{
 	font-size:0.22rem;
 }
 /*文章专辑页面*/
+.articleState{
+	margin:0.2rem auto 0;
+	background:#ff44a0;
+	box-shadow:0 0.04rem 0.11rem 0 rgba(255,67,160,0.50);
+	border-radius:0.08rem;
+	width:3.63rem;
+	height:0.65rem;
+	font-size:0.3rem;
+	color:#fff;
+	letter-spacing:0.056rem;
+	text-align:center;
+	line-height:0.65rem;
+}
+.articleState.active{
+	background:#bbb;
+	box-shadow:0 0 0 0 #fff;
+}
 .article_body{
 	background:#fff;
 	overflow-x: hidden;
@@ -651,71 +668,51 @@ input[type='search']{
 	font-size:0.28rem;
 	color:#bbbbbb;
 }
-.articledetail_ware .content{
-	margin-right:1.5%;
-	display:-webkit-flex;
-	display:flex;
-	justify-content:flex-start;
-	flex-wrap: wrap;
+.articledetail_ware .content .imgWare{
+	width:2.28rem;
+	height:2.28rem;
+	margin-left:0.2rem;
+}
+.articledetail_ware .content .text{
+	margin-left:0.35rem;
 }
 .articledetail_ware .content .item{
-	margin-left:1.5%;
-	width:48.5%;
+	margin-bottom:0.14rem;
 	background:#fff;
-	margin-bottom:0.16rem;
-}
-.articledetail_ware .content .item .img{
-	width:100%;
-	display:flex;
-	align-items: center;
-	justify-content: center;
-	border-bottom:1px solid #eee;
-	height:3.5rem;
-}
-.articledetail_ware .content .item .img img{
-	width:3.5rem;
-	height:3.5rem;
 }
 .articledetail_ware .content .item .name{
-	margin-top:0.18rem;
-	padding-left:0.15rem;
-	height:0.7rem;
+	width:4.4rem;
 	font-size:0.32rem;
 	color:#3d4245;
-	letter-spacing:0.006rem;
-	line-height:0.36rem;
-	overflow : hidden;
-	text-overflow: ellipsis;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-}
-.articledetail_ware .content .item .price{
-	font-family:'HelveticaNeueLt';
-	font-size:0.34rem;
-	color:#ff44a0;
-	padding:0.21rem 0.15rem 0.15rem 0.2rem;
-
-}
-.articledetail_ware .content .item .box{
-	display: flex;
-	flex-wrap: nowrap;
-	justify-content: space-between;
+	letter-spacing:1px;
+	margin:0.19rem 0 1rem 0;
 }
 .articledetail_ware .content .item .buy{
-	margin-top:0.16rem;
-	margin-right:0.16rem;
-	/*margin:0.16rem 0.16rem 0.17rem 0.25rem;*/
+	margin-right:0.12rem;
 	background:#ff4aa0;
 	box-shadow:0 0.02rem 0.04rem 0 rgba(255,73,160,0.50);
 	border-radius:0.04rem;
 	width:1.36rem;
 	height:0.48rem;
-	font-size:0.24rem;
-	color:#ffffff;
-	letter-spacing:0;
-	line-height:0.48rem;
 	text-align:center;
+	line-height:0.48rem;
+	color:#fff;
+}
+.empty_product img{
+	width:0.73rem;
+	margin-top:0.65rem;
+}
+.empty_product .content{
+	margin-top:0.25rem;
+	margin-bottom:0.65rem;
+	width:100%;
+	text-align:center;
+	font-size:0.28rem;
+
+}
+.empty_product .content span{
+	color:#bbbbbb;
+	padding-left:0.32rem;
 }
 /*限时购活动*/
 .timePurchasePage .top{

@@ -48,6 +48,11 @@ color:#ef4145 !important;}
   flex-wrap: nowrap;
   justify-content: space-between;
 }
+.box1{
+  display:-webkit-flex;
+  -webkit-flex-wrap: nowrap;
+  -webkit-justify-content: flex-start;
+}
 *{margin:0;padding:0;}
 /*页面加载动画*/
 #loading {
@@ -247,6 +252,12 @@ iframe{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.flexbox{
+  display:-webkit-flex;
+  -webkit-flex-wrap: wrap;
+  -webkit-align-items: center;
+  -webkit-justify-content: center;
 }
 /*底部导航样式*/
 .icon-home{

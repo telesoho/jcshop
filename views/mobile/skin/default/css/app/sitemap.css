@@ -157,9 +157,9 @@ input[type='search']{
     border-bottom:0.01rem solid transparent;
 }
 #left-scroll li .flexbox{
-    display:inline-flex;
-    justify-content: center;
-    align-items: center;
+    display:-webkit-inline-flex;
+    -webkit-justify-content: center;
+    -webkit-align-items: center;
 }
 #left-scroll li img{
     margin-top:0.25rem;
