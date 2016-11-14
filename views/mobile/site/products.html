@@ -303,11 +303,13 @@
 	<script src="/views/mobile/javascript/template-native.js"></script>
     <script src="/views/mobile/javascript/mui.js"></script>
 	<script src="/views/mobile/javascript/products.js"></script>
+	<script src="/views/mobile/javascript/jiumao/common.js"></script>
     <script type="text/javascript" charset="utf-8">
 		//	接收页面传过来的状态值
 		var Request = new Object();
 		Request = GetRequest();
 		var statusOrder=Request["id"];
+		setItem("product",statusOrder);
 		$(window).load(function(){
 			$("#loading").fadeOut(300);
 			getProductDetail(statusOrder);

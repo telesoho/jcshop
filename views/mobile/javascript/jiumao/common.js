@@ -21,6 +21,19 @@ template.helper('cal', function(obj){
 template.helper('Base64', function(obj){
     return Base64.encode(obj);
 })
+template.helper('JSONsplit', function(obj){
+    return obj.split(",")
+});
+template.helper('JSONreduce', function(obj){
+    var arr=[];
+    for(var m=0;m<obj.length;m++){
+        arr.push(obj[m].image);
+    }
+    return JSON.stringify(arr)
+});
+template.helper('JSONstringfly', function(obj){
+    return JSON.stringify(obj)
+});
 //本地缓存函数
 function setItem(key,value){
     var val=JSON.stringify(value)?JSON.stringify(value):[];
@@ -29,6 +42,9 @@ function setItem(key,value){
 function getItem(key){
     var getter= window.localStorage.getItem(key);
     return JSON.parse(getter);
+}
+function removeItem(key){
+    window.localStorage.removeItem(key);
 }
 //搜索处理函数
 function getSearth(){
@@ -65,7 +81,7 @@ function getIndex(){
         success:function(data){
             console.log(data);
             setItem("placeHolder",data.goods_nums);
-            $(".mui-placeholder span").eq(1).html(data.goods_nums+"件商品等你来搜")
+            $(".mui-placeholder span").eq(1).html(data.goods_nums+"件商品等你来搜");
             var html = template('C_slider',data);
             document.getElementById("slider1").innerHTML = html;
             var gallery = mui('#slider1');

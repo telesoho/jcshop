@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>分类子页面</title>
+    <title></title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css" />
 </head>
@@ -42,7 +42,7 @@
 <script type="text/html" id="category_third_temp">
     <% for(var i=0; i<data.length; i++){%>
     <% var category=data[i] %>
-        <div class="product_item">
+        <div class="product_item" id="product_item<%=category.id %>">
             <a href="index.php?controller=site&action=products&id=<%=category.id %>">
                 <div class="img">
                     <img src="<%=category.img%>" alt="" />
@@ -63,11 +63,14 @@
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script>
     //页面加载动画的调用
     $(window).load(function(){
         $("#loading").fadeOut(300);
-        getcategory_thirdInfo();
+        var getinfo=getItem("siteMap");
+        getcategory_thirdInfo(getinfo.id);
+        document.title = getinfo.name;
     })
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','a',function(){document.location.href=this.href;});
@@ -75,10 +78,33 @@
     var Request = new Object();
     Request = GetRequest();
     var getId=Request["id"];
+    function getPosition(){
+        var pid=getItem('product');
+        var eid=document.getElementById("product_item"+pid);
+        var scroll=eid?eid:"";
+        console.log(scroll.offsetTop);
+       return scroll.offsetTop;
+
+    }
+    function getScrollTop()
+    {
+        var position=getPosition();
+        if(document.documentElement&&document.documentElement.scrollTop)
+        {
+            document.documentElement.scrollTop=position-9;
+        }
+        else if(document.body)
+        {
+            document.body.scrollTop=position-9;
+        }
+        removeItem('product');
+//        console.log(position);
+    }
+
     //文章商品分类
-    function getcategory_thirdInfo(){
+    function getcategory_thirdInfo(id){
         mui.ajax('/apic/category_child',{
-            data:{id:getId},
+            data:{id:id},
             dataType:'json',
             type:'get',
             timeout:10000,
@@ -88,6 +114,7 @@
                 console.log(data);
             var html = template('category_third_temp',dat);
             document.getElementById("category_third").innerHTML=html;
+                getScrollTop();
             },
             error:function(xhr,type,errorThrown){
                 //异常处理；
