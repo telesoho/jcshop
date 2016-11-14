@@ -10,6 +10,9 @@
 <body>
 <div class="pop_win" style="width:690px;height:550px;overflow-y:scroll">
 	<div class="content">
+		<div class="aui_buttons">
+			<button type="button" onclick="a('上架中')">上架中</button>&nbsp;|&nbsp;<button type="button" class=" aui_state_highlight" onclick="a('已经下架')">已经下架</button>
+		</div>
 		<table class="border_table" style="width:100%">
 			<colgroup>
 				<col width="150px" />
@@ -49,7 +52,7 @@
 						<?php
 						 switch($item['is_del']){
 						 case 0:
-						 	echo '正常';
+						 	echo '上架中';
 						 	break;
 						 case 1:
 						 	echo '已删除';
@@ -74,5 +77,18 @@
 		</table>
 	</div>
 </div>
+<script type="application/javascript">
+	function a(v) {
+//		$('tr').attr('dispaly','block');
+		$('tr').each(function(){
+			var msg=$(this).children().eq(4).text();
+			if (msg.trim() == v){
+				$(this).show();
+			} else {
+				$(this).hide();
+			}
+		});
+	}
+</script>
 </body>
 </html>
