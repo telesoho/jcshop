@@ -576,7 +576,7 @@ return array(
 			'name'   => 'relation as r',
 			'join'   => 'left join goods as go on r.goods_id = go.id',
 			'where'  => 'r.article_id in (#article_id#) and go.id is not null',
-			'fields' => 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price',
+			'fields' => 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price,go.is_del',
 		)
 	),
 	//获取全部特价商品活动

@@ -68,7 +68,7 @@
 					<th>关联相关商品：</th>
 					<td>
 						<table class='border_table' style='width:70%;margin-bottom:10px;'>
-							<thead><tr><th>商品货号</th><th>商品名称</th><th>操作</th></tr></thead>
+							<thead><tr><th>商品货号</th><th>商品名称</th><th>商品状态</th><th>操作</th></tr></thead>
 							<tbody id="goodsListBox"></tbody>
 						</table>
 						<button class='btn' type='button' onclick="searchGoods('{url:/block/search_goods/type/checkbox}',searchGoodsCallback);"><span>选择商品</span></button>
@@ -134,6 +134,21 @@
 		<input type='hidden' name='goods_id[]' value='<%=templateData['goods_id']%>' />
 		<img src="{webroot:<%=templateData['img']%>}" style="width:80px;" />
 		<%=templateData['name']%>
+	</td>
+	<td>
+
+		    <%if(templateData['is_del'] =='0'){%> :
+		        正常
+			<%}%>
+            <%if(templateData['is_del'] =='1'){%> :
+				已删除
+			<%}%>
+            <%if(templateData['is_del'] =='2'){%>
+				已下架
+			<%}%>
+            <%if(templateData['is_del'] =='3'){%>
+				申请上架
+			<%}%>
 	</td>
 	<td style="text-align:center"><img src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" onclick="$(this).parent().parent().remove();" /></td>
 </tr>

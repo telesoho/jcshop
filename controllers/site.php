@@ -839,4 +839,7 @@ class Site extends IController
     function favorite(){
         $this->redirect('favorite');
     }
+    function show(){
+        $this->redirect('show');
+    }
 }
