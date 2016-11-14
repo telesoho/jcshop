@@ -71,70 +71,9 @@
         var getinfo=getItem("siteMap");
         getcategory_thirdInfo(getinfo.id);
         document.title = getinfo.name;
+        //解决tab选项卡a标签无法跳转的问题
+        mui('body').on('tap','a',function(){document.location.href=this.href;});
     })
-    //解决tab选项卡a标签无法跳转的问题
-    mui('body').on('tap','a',function(){document.location.href=this.href;});
-    //获取url的商品id
-    var Request = new Object();
-    Request = GetRequest();
-    var getId=Request["id"];
-    function getPosition(){
-        var pid=getItem('product');
-        var eid=document.getElementById("product_item"+pid);
-        var scroll=eid?eid:"";
-        console.log(scroll.offsetTop);
-       return scroll.offsetTop;
-
-    }
-    function getScrollTop()
-    {
-        var position=getPosition();
-        if(document.documentElement&&document.documentElement.scrollTop)
-        {
-            document.documentElement.scrollTop=position-9;
-        }
-        else if(document.body)
-        {
-            document.body.scrollTop=position-9;
-        }
-        removeItem('product');
-//        console.log(position);
-    }
-
-    //文章商品分类
-    function getcategory_thirdInfo(id){
-        mui.ajax('/apic/category_child',{
-            data:{id:id},
-            dataType:'json',
-            type:'get',
-            timeout:10000,
-            success:function(data){
-                var dat={};
-                dat.data=data;
-                console.log(data);
-            var html = template('category_third_temp',dat);
-            document.getElementById("category_third").innerHTML=html;
-                getScrollTop();
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
-            }
-        });
-    }
-    //	获取url传递过来的参数
-    function GetRequest() {
-        var url = location.search; //获取url中"?"符后的字串
-        var theRequest = new Object();
-        if (url.indexOf("?") != -1) {
-            var str = url.substr(1);
-            strs = str.split("&");
-            for(var i = 0; i < strs.length; i ++) {
-                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
-            }
-        }
-        return theRequest;
-    }
 </script>
 </body>
 </html>

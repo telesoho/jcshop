@@ -46,6 +46,24 @@ function getItem(key){
 function removeItem(key){
     window.localStorage.removeItem(key);
 }
+function pushSession(key,value){
+    if(window.sessionStorage){
+        sessionStorage.setItem(key,value);
+    }else{
+        console.log("无法使用缓存");
+        return "";
+    }
+}
+function getSession(key){
+    if(window.sessionStorage){
+        var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+        return state;
+    }else{
+        console.log("无法使用缓存");
+        return "";
+    }
+}
+//功能函数
 //搜索处理函数
 function getSearth(){
     document.getElementById("searth").value="";
@@ -70,6 +88,59 @@ function searthSubmit(){
     }else{
         window.location.href="/site/search_list";
     }
+}
+//分类页面处理函数
+function toPageThird(obj){
+    setItem("siteMap",obj)
+    window.location.href="/site/category_third";
+}
+function changeSite(eid,num,obj){
+    pushSession("siteMapState",eid);
+    $(".controlItem").removeClass("active");
+    $(".controlItem"+eid).addClass("active");
+    $(".siteid").addClass("hide");
+    $(".site"+eid).removeClass("hide");
+    var height=$(".controlItem"+eid).height();
+    var totalHeight=$("#left-scroll").height();
+    var offsetTop=$(".controlItem"+eid).offset().top;//相对于容器的高度
+//		点击改变图标状态
+    var img_arr=[];
+    for(var i=0,m=obj.length;i<m;i++){
+        img_arr.push(obj[i].split(","));
+        $(".icon_first").eq(i).attr("src",img_arr[i][1])
+    }
+
+    $("#icon_first_"+eid).attr("src",img_arr[num][0])
+//		一级分类位置判定
+    if(num<6){
+        mui('#left-scroll').scroll().scrollTo(0,0,100);
+    }
+    if(num>=6){
+        mui('#left-scroll').scroll().scrollToBottom();
+    }
+}
+//记录三级页面位置函数
+function getPosition(){
+    var pid=getItem('product');
+    var eid=document.getElementById("product_item"+pid);
+    var scroll=eid?eid:"";
+    console.log(scroll.offsetTop);
+    return scroll.offsetTop;
+
+}
+function getScrollTop()
+{
+    var position=getPosition();
+    if(document.documentElement&&document.documentElement.scrollTop)
+    {
+        document.documentElement.scrollTop=position-9;
+    }
+    else if(document.body)
+    {
+        document.body.scrollTop=position-9;
+    }
+    removeItem('product');
+//        console.log(position);
 }
 // api接口请求
 // 首页请求
@@ -162,6 +233,49 @@ function collection(id){
                 num.html(parseInt(num.html())-1);
                 share.attr("src","/views/mobile/skin/default/image/jmj/icon/like.png");
             }
+        },
+        error:function(xhr,type,errorThrown){
+            //异常处理；
+            console.log(type);
+        }
+    });
+}
+//分类页面接口
+function getSitemapInfo(){
+    mui.ajax('/apic/category_top',{
+        dataType:'json',
+        type:'get',
+        timeout:10000,
+        success:function(data){
+            console.log(data);
+            var dat={};
+            dat.data=data;
+            dat.state=getSession("siteMapState")?getSession("siteMapState"):data[0].id;
+            var html = template('controlTopTemp',dat);
+            document.getElementById("controlTop").innerHTML=html;
+            var html2 = template('contentToptemp',dat);
+            document.getElementById("contentTop").innerHTML=html2;
+        },
+        error:function(xhr,type,errorThrown){
+            //异常处理；
+            console.log(type);
+        }
+    });
+}
+//获得分类三级商品
+function getcategory_thirdInfo(id){
+    mui.ajax('/apic/category_child',{
+        data:{id:id},
+        dataType:'json',
+        type:'get',
+        timeout:10000,
+        success:function(data){
+            var dat={};
+            dat.data=data;
+            console.log(data);
+            var html = template('category_third_temp',dat);
+            document.getElementById("category_third").innerHTML=html;
+            getScrollTop();
         },
         error:function(xhr,type,errorThrown){
             //异常处理；

@@ -137,7 +137,12 @@ input[type='search']{
     padding-right:0.19rem;
     background:#fff !important;
 }
-
+#left-scroll ul::-webkit-scrollbar{
+    display:none
+}
+.mui-scrollbar-vertical{
+    display:none;
+}
 #left-scroll li{
     background:#f8f8f8;
     width:2rem;
