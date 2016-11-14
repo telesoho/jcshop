@@ -39,7 +39,8 @@ class Block extends IController
 	function goods_list()
 	{
 		//商品检索条件
-		$show_num    = IFilter::act( IReq::get('show_num'),'int');
+		$show_num    = 200;
+//		$show_num    = IFilter::act( IReq::get('show_num'),'int');
 		$keywords    = IFilter::act( IReq::get('keywords') );
 		$cat_id      = IFilter::act( IReq::get('category_id'),'int');
 		$min_price   = IFilter::act( IReq::get('min_price'),'float');
@@ -67,9 +68,10 @@ class Block extends IController
 
 		//查询条件
 		$table_name = 'goods as go';
-		$fields     = 'go.id as goods_id,go.name,go.img,go.store_nums,go.goods_no,go.sell_price,go.spec_array';
+		$fields     = 'go.id as goods_id,go.name,go.img,go.store_nums,go.goods_no,go.sell_price,go.spec_array,go.is_del';
 
-		$where   = 'go.is_del = 0';
+//		$where   = 'go.is_del = 0';
+		$where   = ' 1=1 ';
 		$where  .= $goods_id  ? ' and go.id          in ('.$goods_id.')' : '';
 		$where  .= $seller_id ? ' and go.seller_id    = '.$seller_id     : '';
 		$where  .= $goods_no  ? ' and go.goods_no     = "'.$goods_no.'"' : '';

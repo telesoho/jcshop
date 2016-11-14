@@ -16,6 +16,7 @@
 				<col />
 				<col width="90px" />
 				<col width="70px" />
+				<col width="70px" />
 			</colgroup>
 			<tbody>
 				{if:$this->data}
@@ -44,6 +45,24 @@
 					</td>
 					<td>￥{$item['sell_price']}</td>
 					<td><img src="{webroot:$item[img]}" width="40px" class="img_border" /></td>
+					<td>
+						<?php
+						 switch($item['is_del']){
+						 case 0:
+						 	echo '正常';
+						 	break;
+						 case 1:
+						 	echo '已删除';
+						 	break;
+						 case '2':
+						 	echo '已经下架';
+						 	break;
+						 case 3:
+						 	echo '申请上架';
+						 	break;
+						 }
+						?>
+						</td>
 				</tr>
 				{/foreach}
 				{else:}
