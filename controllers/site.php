@@ -310,7 +310,11 @@ class Site extends IController
 			$articleObj->update('id = '.$this->article_id);
 			//关联商品
 			$this->relationList = Api::run('getArticleGoods',array("#article_id#",$this->article_id));
-
+            if (in_array($this->articleRow['category_id'],['10','11','12','13','14'])){
+                ISession::set('tbtj_visited',true);
+            } else {
+                ISession::set('tbtj_visited',false);
+            }
 			$this->redirect('article_detail');
 		}
 	}

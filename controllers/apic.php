@@ -627,9 +627,28 @@ class Apic extends IController
         $goods_query = new IQuery('goods');
         $goods_query->where = 'search_words like ' . '"%,' . $word . ',%"';
         $goods_query->order = 'create_time desc';
-        $data = $goods_query->find();
+        $data['new'] = $goods_query->find();
+
+        $commend_goods = new IQuery('commend_goods as co');
+        $commend_goods->join = 'left join goods as go on co.goods_id = go.id';
+        $commend_goods->where = 'co.commend_id = 3 and go.is_del = 0 AND go.id is not null'.' and go.search_words like ' . '"%,' . $word . ',%"';
+        $commend_goods ->fields = 'go.img,go.sell_price,go.name,go.id,go.market_price';
+        $commend_goods->limit=3;
+        $commend_goods->order='sort asc';
+        $data['hot'] = $commend_goods->find();
+
         $this->json_echo($data);
     }
+    function tag_hot_list(){
+        $keyword_query = new IQuery('keyword');
+        $keyword_query->where = 'hot = 1';
+//        $keyword_query->order = 'order asc';
+        $keyword_query->limit = 10;
+        $data = $keyword_query->find();
+        $this->json_echo($data);
+    }
+
+
     /**
      * ---------------------------------------------------专辑---------------------------------------------------*
      */
@@ -655,12 +674,13 @@ class Apic extends IController
         $article_query->where = $where;
         $article_query->limit = 10;
         $article_data_tbtj =$article_query->find();
-        $category_query = new IQuery("article_category");
-        foreach ($article_data_tbtj as $key=>$value){
-            $category_query->where = 'id = ' . $value['category_id'];
-            $temp = $category_query->find();
-            $article_data_tbtj[$key]['category_name'] = $temp[0]['name'];
-        }
+//        $category_query = new IQuery("article_category");
+//        foreach ($article_data_tbtj as $key=>$value){
+//            $category_query->where = 'id = ' . $value['category_id'];
+//            $temp = $category_query->find();
+//            $article_data_tbtj[$key]['category_name'] = $temp[0]['name'];
+//            $article_data_tbtj[$key]['article_type'] = 'tbtj';
+//        }
 
         /*图文专辑*/
         $category_query = new IQuery("article_category");
@@ -727,17 +747,16 @@ class Apic extends IController
         $page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
         $favorite_article = new IQuery('favorite_article');
         if ($page == 1 ){
-//            if (empty(ISession::get('visit_article_id'))){
-//                $data = $article_data_tbtj;
-//            } else {
+            if ( ISession::get('is_first') || ISession::get('tbtj_visited') ){
+                $data = $article_data_tbtj;
+            } else {
                 $data = $article_data_twzj;
-//            }
+            }
         } else {
             $data = $article_data_twzj;
         }
         //专辑4*1*1*1中后三者为空时的随机填补
         if ($visit_article_id){
-
             $if_find = false;
             for ($i=0;$i<count($data);$i++){
                 if ($data[$i]['id'] == $visit_article_id){
@@ -748,8 +767,6 @@ class Apic extends IController
                 }
             }
             if (!$if_find){
-//                $article_query = new IQuery('article');
-//                $article_query->fields = 'id,title,image,visit_num,favorite,category_id';
                 $article_query->where = 'id = ' . $visit_article_id;
                 $temp = $data[0];
                 $data[0] = $article_query->find()[0];
@@ -758,6 +775,7 @@ class Apic extends IController
         }
         //返回数据格式化
         foreach ($data as $k=>$v){
+            //用户是否对专辑点赞
             $favorite_article->where = 'user_id='.$this->user['user_id'].' and aid='.$v['id'];
             $fdata = $favorite_article->find();
             if (!empty($fdata)){
@@ -765,22 +783,23 @@ class Apic extends IController
             } else {
                 $data[$k]['is_favorite'] = 0;
             }
+            //专辑封面的缩略图
             $data[$k]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
+            //专辑所在分类的名称
             $category_query->where = 'id = ' . $data[$k]['category_id'];
             $temp = $category_query->find();
             $data[$k]['category_name'] = $temp[0]['name'];
-
-
+            //专辑关联商品的数量
             $relation = new IQuery('relation as r');
             $relation->join = 'left join goods as go on r.goods_id = go.id';
             $relation->where = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $v['id']);
-//            $relation->filds = 'count(go.id) as nums';
             $data[$k]['nums'] = count($relation->find());
+
             $data[$k]['visit_num'] = $visit_num;
             $data[$k]['xb'] = $xb;
             $data[$k]['goods_list'] = [];
-
         }
+        //专辑中的随机推荐三个关联商品
         for ($i=0;$i<3;$i++){
             $a = rand(0,7);
             $article = new IQuery('relation as r');
@@ -798,7 +817,7 @@ class Apic extends IController
 //        echo $visit_num;
 //        echo '<a href="http://192.168.0.156:8080/index.php?controller=site&action=article_detail&id='.$data[0]['id'].'">aa</a>';
 //        var_dump($data);
-        ISession::clear('visit_num');
+//        ISession::clear('visit_num');
 
         $this->json_echo($data);
     }
@@ -920,6 +939,9 @@ class Apic extends IController
         if($catId == 0){$this->json_echo([]);}
         $goodsObj = search_goods::find(array('category_extend' => goods_class::catChild($catId)),99999);
         $resultData = $goodsObj->find();
+        foreach ($resultData as $key=>$value){
+            $resultData[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
+        }
         $this->json_echo($resultData);
     }
     /**
