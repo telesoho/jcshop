@@ -789,13 +789,16 @@ class Apic extends IController
             $article->filds = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price';
             $article->limit = 3;
             $relationList = $article->find();
+            foreach ($relationList as $key => $value){
+                $relationList[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/180/h/180");
+            }
             $data[$a]['goods_list'] = $relationList;
         }
 
 //        echo $visit_num;
 //        echo '<a href="http://192.168.0.156:8080/index.php?controller=site&action=article_detail&id='.$data[0]['id'].'">aa</a>';
 //        var_dump($data);
-//        ISession::clear('visit_num');
+        ISession::clear('visit_num');
 
         $this->json_echo($data);
     }
