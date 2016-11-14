@@ -34,53 +34,53 @@ class Site extends IController
 	//[首页]商品搜索
 	function search_list()
 	{
-		$this->word = IFilter::act(IReq::get('word'),'text');
-		$cat_id     = IFilter::act(IReq::get('cat'),'int');
-
-		if(preg_match("|^[\w\x7f\s*-\xff*]+$|",$this->word))
-		{
-			//搜索关键字
-			$tb_sear     = new IModel('search');
-			$search_info = $tb_sear->getObj('keyword = "'.$this->word.'"','id');
-
-			//如果是第一页，相应关键词的被搜索数量才加1
-			if($search_info && intval(IReq::get('page')) < 2 )
-			{
-				//禁止刷新+1
-				$allow_sep = "30";
-				$flag = false;
-				$time = ICookie::get('step');
-				if(isset($time))
-				{
-					if (time() - $time > $allow_sep)
-					{
-						ICookie::set('step',time());
-						$flag = true;
-					}
-				}
-				else
-				{
-					ICookie::set('step',time());
-					$flag = true;
-				}
-				if($flag)
-				{
-					$tb_sear->setData(array('num'=>'num + 1'));
-					$tb_sear->update('id='.$search_info['id'],'num');
-				}
-			}
-			elseif( !$search_info )
-			{
-				//如果数据库中没有这个词的信息，则新添
-				$tb_sear->setData(array('keyword'=>$this->word,'num'=>1));
-				$tb_sear->add();
-			}
-		}
-		else
-		{
-			IError::show(403,'请输入正确的查询关键词');
-		}
-		$this->cat_id = $cat_id;
+//		$this->word = IFilter::act(IReq::get('word'),'text');
+//		$cat_id     = IFilter::act(IReq::get('cat'),'int');
+//
+//		if(preg_match("|^[\w\x7f\s*-\xff*]+$|",$this->word))
+//		{
+//			//搜索关键字
+//			$tb_sear     = new IModel('search');
+//			$search_info = $tb_sear->getObj('keyword = "'.$this->word.'"','id');
+//
+//			//如果是第一页，相应关键词的被搜索数量才加1
+//			if($search_info && intval(IReq::get('page')) < 2 )
+//			{
+//				//禁止刷新+1
+//				$allow_sep = "30";
+//				$flag = false;
+//				$time = ICookie::get('step');
+//				if(isset($time))
+//				{
+//					if (time() - $time > $allow_sep)
+//					{
+//						ICookie::set('step',time());
+//						$flag = true;
+//					}
+//				}
+//				else
+//				{
+//					ICookie::set('step',time());
+//					$flag = true;
+//				}
+//				if($flag)
+//				{
+//					$tb_sear->setData(array('num'=>'num + 1'));
+//					$tb_sear->update('id='.$search_info['id'],'num');
+//				}
+//			}
+//			elseif( !$search_info )
+//			{
+//				//如果数据库中没有这个词的信息，则新添
+//				$tb_sear->setData(array('keyword'=>$this->word,'num'=>1));
+//				$tb_sear->add();
+//			}
+//		}
+//		else
+//		{
+//			IError::show(403,'请输入正确的查询关键词');
+//		}
+//		$this->cat_id = $cat_id;
 		$this->redirect('search_list');
 	}
 

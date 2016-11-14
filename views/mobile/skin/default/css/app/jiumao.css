@@ -47,6 +47,7 @@
 }
 input[type='search']{
 	background:#fff !important;
+	color:#3d4245;
 	height:0.64rem !important;
 }
 .mui-icon-search:before{
@@ -343,6 +344,10 @@ input[type='search']{
 	color:#fff;
 	font-size:0.22rem;
 }
+.albumn_index .content .img img{
+	position:relative;
+	z-index:1;
+}
 .albumn_index .content .mark2{
 	position:absolute;
 	width:1.52rem;
@@ -382,6 +387,38 @@ input[type='search']{
 	top:0.05rem;
 	margin-right:0.15rem;
 }
+.albumn_index .product{
+	position:relative;
+	background:#fff;
+	margin-top:-0.06rem;
+	border-bottom:0.01rem solid #eee;
+	padding:0.26rem 0.47rem 0.1rem;
+}
+.albumn_index .product .img img{
+	width:1.8rem;
+	height:1.8rem;
+}
+.albumn_index .product .name{
+	width:1.8rem;
+	font-size:0.22rem;
+	color:#3d4225;
+	margin-bottom:0.1rem;
+	margin-top:0.17rem;
+}
+.albumn_index .product:after{
+	background:transparent;
+	position:absolute;
+	content:'';
+	left:3.5rem;
+	top:-0.23rem;
+	z-index:24;
+	width: 0;
+	height: 0;
+	border-left: 0.25rem solid transparent;
+	border-right: 0.25rem solid transparent;
+	border-bottom: 0.25rem solid #fff;
+}
+
 .fix-nav{
 	position:fixed;
 	right:0.1rem;
@@ -417,84 +454,6 @@ input[type='search']{
 	position:absolute;
 	width:0.84rem;
 }
-/*搜索页面*/
-#modalid-searth{
-	position:fixed;
-	top:1.2rem;
-	left:0;
-	width:100%;
-	height:100%;
-	background:#fff;
-	z-index:999;
-}
-#modalid-searth .title{
-	background:#f8f8f8;
-	border:1px solid #eeeeee;
-	width:100%;
-	height:0.5rem;
-	font-family:AdobeHeitiStd-Regular;
-	font-size:0.28rem;
-	color:#bbbbbb;
-	text-align:left;
-	padding:0 0.15rem;
-	line-height:0.5rem;
-}
-#modalid-searth .searth-content{
-	width:100%;
-	padding: 0 5% 6% 5%;
-	display:flex;
-	flex-flow: wrap;
-	justify-content: flex-start;
-}
-#modalid-searth .searth-content a{
-	display:block;
-	width:auto;
-	padding:0.1rem 0.2rem;
-	text-align:center;
-	border:1px solid #dcdcdc;
-	margin:0.2rem 0.2rem 0 0;
-	color:#3d4245;
-	border-radius:1rem;
-	font-size:0.3rem;
-}
-.no_margin{margin:0 !important;}
-#modalid-searth .searth-content a.content_red{border:1px solid #ff4aa0;color:#ff4aa0;}
-.no_margin_right{margin-right:0 !important;}
-.search_element{width:100%;overflow:hidden;padding:0 1%;}
-.search_element li{border-bottom:1px solid #eee;padding:5% .41rem;}
-.search_element li a{
-	margin-left:0.67rem;
-	display:inline-block;
-	font-family:AdobeHeitiStd-Regular;
-	font-size:0.3rem;
-	color:#3d4245;
-	text-align:left;
-
-}
-#button-submit{
-	display:block;
-	width:80%;
-	border-radius:33px ;
-	border:1px solid #e53e42;
-	margin:0.24rem auto;
-	color:#e53e42;
-}
-#button-cancel{
-	display:block;
-	width:80%;
-	margin:0 auto;
-	border-radius:33px ;
-}
-.remove{
-		width:80%;
-		border:1px solid #bbbbbb !important;
-		border-radius:10px !important;;
-		height:0.96rem;
-		border-radius:5px;
-		font-family:AdobeHeitiStd-Regular;
-		font-size:0.3rem;
-		color:#bbbbbb !important;
-		}
 /*视频专辑*/
 .vedio{
 	position:relative;
