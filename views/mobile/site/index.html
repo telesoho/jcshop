@@ -40,10 +40,10 @@
 <!--<div id="pullrefresh" class="mui-content mui-scroll-wrapper">-->
     <!--<div class="mui-scroll" id="muiScroll">-->
         <!--头部-->
-    <section class="homeHeader">
+    <section class="homeHeader" id="homeHeader">
         <div class="nav-header">
             <div class="mui-input-row mui-search">
-                <input type="search" id="searth"  placeholder="">
+                <input type="search" id="searth"  placeholder="" onfocus="getSearth()">
             </div>
         </div>
         <img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon">
@@ -161,7 +161,7 @@
         猫猫都在搜
     </div>
     <div class="searth-content">
-        <a href="#">万圣节</a>
+        <a href="#" onclick="ToSearthPage('万圣节')">万圣节</a>
         <a href="#">爱丽小屋</a>
         <a href="#">吃饱撑着</a>
         <a href="#">哈哈哈</a>
@@ -256,6 +256,20 @@
                     <%=cal(dat.visit_num) %></div>
             </div>
         </a>
+        <%if(dat.goods_list.length==3){%>
+            <div class="product box">
+                <% for(var m=0; m<dat.goods_list.length; m++){%>
+                <% var goodsitem =dat.goods_list[m] %>
+                <div class="item">
+                    <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>">
+                    <div class="img"><img src="<%=goodsitem.img %>" alt="" /></div>
+                    <div class="name hidewrap"><%=goodsitem.name %></div>
+                    <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
+                    </a>
+                </div>
+                <%}%>
+            </div>
+        <%}%>
     </section>
     <%}%>
 </script>
@@ -263,14 +277,11 @@
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/lazyload.js"></script>
-<script src="/views/mobile/javascript/time.js"></script>
+<!--<script src="/views/mobile/javascript/lazyload.js"></script>-->
+<!--<script src="/views/mobile/javascript/time.js"></script>-->
+<script src="/views/mobile/javascript/base64.js"></script>
+<script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script>
-    $(function(){
-        if(typeof (ds) == "function") {
-            ds = function(){};
-        }
-    });
     var pageData = {
         page:1
     };
@@ -278,12 +289,9 @@
     window.onload=function(){
         $("#loading").fadeOut(300);
         getIndex();
-        pullupRefresh();
+        pullupIndexRefresh();
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
-        mui('body').on('tap','a',function(){
-            document.location.href=this.href;
-        });
         mui('body').on('tap','video',function(){
             var self=this;
             if(this.paused){
@@ -310,129 +318,23 @@
             return false;
         });
     }
-
-    document.getElementById("searth").addEventListener('focus',function(){
-        document.getElementById("modalid-searth").className="show";
-        document.body.style.overflow = 'hidden';
-    });
-    //处理分享数据
-        template.helper('cal', function(obj){
-            if(obj>=1000000){
-                return parseInt(obj/1000000)+"万";
-            }
-            if(obj>=100000){
-                return (obj/100000).toFixed(1)+"万";
-            }
-            if(obj>=10000){
-                return (obj/10000).toFixed(2)+"万";
-            }
-            if(obj<10000){
-                return obj;
-            }
-            return JSON.stringify(obj);
-        });
-//    mui.init({
-//        pullRefresh: {
-//            container: '#pullrefresh',
-//        }
-//    });
-        //上拉加载
-         var stop=true;
-        $(window).bind('scroll', function() {
-            if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
-                if(stop==true){
-                    stop=false;
-                    pullupRefresh()
-                }
-            }
-            if($(window).scrollTop()>100){
-                $(".fix-toTop").show();
-                $(".fix-toTop").css("position","fixed");
-            }else{
-                $(".fix-toTop").hide();
-                $(".fix-toTop").css("position","fixed");
-            }
-        });
-
-    function pullupRefresh() {
-        mui.ajax('index.php?controller=apic&action=article_list',{
-            data:pageData,
-            dataType:'json',	// 服务器返回json格式数据
-            type:'post',		// HTTP请求类型
-            timeout:10000,		// 超时时间设置为10秒；
-            success:function(data){
-                console.log(data);
-                var pageAlbum={};
-                pageAlbum.data=data;
-                var html3=template('albumPage',pageAlbum);
-                var div = document.createElement('div');
-                div.innerHTML=html3;
-                document.getElementById("pullContainer").appendChild(div);
-//               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
-                    stop = true;
-
-                pageData.page++;
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
-
-            }
-        });
-    }
-    function searthCancel(){
-        document.getElementById("modalid-searth").className="hide";
-        document.body.style.overflow = 'auto';
-    }
-    function searthSubmit(){
-        var subContent=document.getElementById("searth").value;
-        if(subContent==""){
-            searthCancel();
-        }else{
-            window.location.href="home.html?item="+subContent;
+//上拉加载
+ var stop=true;
+$(window).bind('scroll', function() {
+    if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+        if(stop==true){
+            stop=false;
+            pullupIndexRefresh()
         }
     }
-    function getIndex(){
-        mui.ajax('index.php?controller=apic&action=banner_list',{
-            dataType:'json',//服务器返回json格式数据
-            type:'get',//HTTP请求类型
-            timeout:10000,//超时时间设置为10秒；
-            success:function(data){
-                console.log(data);
-                $(".mui-placeholder span").eq(1).html(data.goods_nums+"件商品等你来搜")
-                var html = template('C_slider',data);
-                document.getElementById("slider1").innerHTML = html;
-                var gallery = mui('#slider1');
-                gallery.slider({
-                    interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
-                });
-//                获取限时购数据
-//                getTimePurchase();
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-            }
-        });
+    if($(window).scrollTop()>100){
+        $(".fix-toTop").show();
+        $(".fix-toTop").css("position","fixed");
+    }else{
+        $(".fix-toTop").hide();
+        $(".fix-toTop").css("position","fixed");
     }
-//    function getTimePurchase(){
-//        var url1='index.php?controller=apic&action=pro_speed_list';
-//        mui.ajax(url1,{
-//            dataType:'json',//服务器返回json格式数据
-//            type:'get',//HTTP请求类型
-//            timeout:10000,//超时时间设置为10秒；
-//            success:function(data1){
-//                //服务器返回响应，根据响应结果，分析是否登录成功；
-//                document.getElementById("timer").setAttribute("data_timer",data1.end_time);
-//                var html2=template('timeWare',data1);
-//                document.getElementById("timePurchase_body").innerHTML = html2;
-//                timer('timer');
-//            },
-//            error:function(xhr,type,errorThrown){
-//                //异常处理；
-//                console.log(type);
-//            }
-//        });
-//    }
+});
     function checkPause(obj){
         var self=obj;
         $(self).next().next().removeClass("hide");
@@ -441,35 +343,6 @@
         var self=obj;
         $(self).next().next().addClass("hide");
     }
-    function collection(id){
-        mui.ajax('index.php?controller=apic&action=favorite_article_add',{
-            data:{
-                id:id
-            },
-            dataType:'json',//服务器返回json格式数据
-            type:'get',//HTTP请求类型
-            timeout:10000,//超时时间设置为10秒；
-            success:function(data){
-                console.log(data);
-                var num=$(".favorite"+id);
-                var share=$(".shareContent"+id);
-               if(data.message=="收藏成功"){
-//                        num.innerHTML=parseInt(num.innerHTML)+1;
-                        num.html(parseInt(num.html())+1);
-                        share.attr("src","/views/mobile/skin/default/image/jmj/icon/like-ed.png");
-               }else{
-//                   num.innerHTML=parseInt(num.innerHTML)-1;
-                   num.html(parseInt(num.html())-1);
-                   share.attr("src","/views/mobile/skin/default/image/jmj/icon/like.png");
-               }
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
-            }
-        });
-    }
-
 </script>
 </body>
 </html>

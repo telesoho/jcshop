@@ -798,7 +798,7 @@ class Apic extends IController
 //        echo $visit_num;
 //        echo '<a href="http://192.168.0.156:8080/index.php?controller=site&action=article_detail&id='.$data[0]['id'].'">aa</a>';
 //        var_dump($data);
-        ISession::clear('visit_num');
+//        ISession::clear('visit_num');
 
         $this->json_echo($data);
     }
