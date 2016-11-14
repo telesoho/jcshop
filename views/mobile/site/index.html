@@ -54,27 +54,27 @@
         <div  class="mui-slider">
             <div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
                 <div class="mui-scroll">
-                    <a class="mui-control-item mui-active" href="{url:/site/index}">
+                    <a class="mui-control-item mui-active locationA" href="{url:/site/index}">
                         <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg1.png" alt=""  />
                         <span class="text">推荐</span>
                         <span class="bg"></span>
                     </a>
-                    <a class="mui-control-item mui-control-item2" href="{url:/site/pro_list}?cat=2">
+                    <a class="mui-control-item mui-control-item2 locationA" href="{url:/site/pro_list}?cat=2">
                         <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg2.png" alt=""/>
                         <span class="text">药妆</span>
                         <span class="bg"></span>
                     </a>
-                    <a class="mui-control-item mui-control-item3" href="{url:/site/pro_list}?cat=3">
+                    <a class="mui-control-item mui-control-item3 locationA" href="{url:/site/pro_list}?cat=3">
                         <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg3.png" alt=""  />
                         <span class="text">个护</span>
                         <span class="bg"></span>
                     </a>
-                    <a class="mui-control-item mui-control-item4" href="{url:/site/pro_list}?cat=4">
+                    <a class="mui-control-item mui-control-item4 locationA" href="{url:/site/pro_list}?cat=4">
                         <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg4.png" alt="" />
                         <span class="text">宠物</span>
                         <span class="bg"></span>
                     </a>
-                    <a class="mui-control-item mui-control-item5" href="{url:/site/pro_list}?cat=5">
+                    <a class="mui-control-item mui-control-item5 locationA" href="{url:/site/pro_list}?cat=5">
                         <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg5.png" alt="" />
                         <span class="text">健康</span>
                         <span class="bg"></span>
@@ -244,7 +244,7 @@
                 <%}%>
             </span>
         </div>
-        <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>&vn=<%=dat.visit_num%>&xb=<%=dat.xb%>">
+        <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>&vn=<%=dat.visit_num%>&xb=<%=dat.xb%>" class="locationA">
             <div class="content">
                 <div class="img">
                     <img src="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
@@ -292,6 +292,7 @@
         pullupIndexRefresh();
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
+        mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
         mui('body').on('tap','video',function(){
             var self=this;
             if(this.paused){
