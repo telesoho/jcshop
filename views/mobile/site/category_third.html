@@ -38,6 +38,16 @@
 <section>
     <div id="category_third">
     </div>
+    <div class="flexbox empty_product">
+        <div class="img">
+            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+        </div>
+        <div class="content">
+            <span>~</span>
+            <span>憋拉了，到底了</span>
+            <span>~</span>
+        </div>
+    </div>
 </section>
 <script type="text/html" id="category_third_temp">
     <% for(var i=0; i<data.length; i++){%>
@@ -45,7 +55,7 @@
         <div class="product_item" id="product_item<%=category.id %>">
             <a href="index.php?controller=site&action=products&id=<%=category.id %>">
                 <div class="img">
-                    <img src="<%=category.img%>" alt="" />
+                    <img src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg" dataimg="<%=category.img%>" />
                 </div>
                 <div class="content">
                     <div class="name">
@@ -63,6 +73,7 @@
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script>
     //页面加载动画的调用

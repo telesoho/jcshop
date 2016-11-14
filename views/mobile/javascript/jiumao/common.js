@@ -276,6 +276,10 @@ function getcategory_thirdInfo(id){
             var html = template('category_third_temp',dat);
             document.getElementById("category_third").innerHTML=html;
             getScrollTop();
+            lazyload.init({
+                anim:false,
+                selectorName:".samLazyImg"
+            });
         },
         error:function(xhr,type,errorThrown){
             //异常处理；

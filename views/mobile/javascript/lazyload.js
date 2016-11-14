@@ -34,7 +34,6 @@
                 // 判断元素，是否在当前窗口，或者当前窗口延伸400像素内
                 return elTop >= top && elTop - n.extend_height <= btm;
               }
-        
               // 滚动事件里判断，加载图片
                $(window).on('scroll', function() {
                   $(selectorName).each(function(index,node) {
@@ -73,7 +72,3 @@
          * extend_height  扩展高度
          * anim  是否开启动画
          * realSrcAtr  图片真正地址*/
-        lazyload.init({
-            anim:false,
-            selectorName:".samLazyImg"
-        });

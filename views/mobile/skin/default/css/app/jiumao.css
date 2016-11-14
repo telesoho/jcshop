@@ -346,7 +346,6 @@ input[type='search']{
 }
 .albumn_index .content .img img{
 	position:relative;
-	z-index:1;
 }
 .albumn_index .content .mark2{
 	position:absolute;
@@ -656,22 +655,6 @@ input[type='search']{
 	text-align:center;
 	line-height:0.48rem;
 	color:#fff;
-}
-.empty_product img{
-	width:0.73rem;
-	margin-top:0.65rem;
-}
-.empty_product .content{
-	margin-top:0.25rem;
-	margin-bottom:0.65rem;
-	width:100%;
-	text-align:center;
-	font-size:0.28rem;
-
-}
-.empty_product .content span{
-	color:#bbbbbb;
-	padding-left:0.32rem;
 }
 /*限时购活动*/
 .timePurchasePage .top{
