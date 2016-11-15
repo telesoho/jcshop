@@ -285,8 +285,10 @@ class Site extends IController
 	//文章详情页面
 	function article_detail()
 	{
-        require_once __DIR__ . '/../plugins/wechat/wechat.php';
-        $this->wechat = new wechat();
+        if(IClient::isWechat() == true){
+            require_once __DIR__ . '/../plugins/wechat/wechat.php';
+            $this->wechat = new wechat();
+        }
 
         $this->action = IFilter::act(IReq::get('action'),'string');
         if ($this->action == 'article_detail'){
