@@ -194,7 +194,7 @@
 			</div>
 			<div class="other_price box">
 				<span class="japen hidewrap">国内价: <%=market_price %></span>
-				<span class="china hidewrap">日本价: <%=jp_price %></span>
+				<span class="china hidewrap">日本价: <%=parseInt(jp_price) %>日元</span>
 			</div>
 		</div>
 	</script>
@@ -322,9 +322,12 @@
 	<script src="/views/mobile/javascript/jiumao/common.js"></script>
     <script type="text/javascript" charset="utf-8">
 		//	接收页面传过来的状态值
+		//	接收页面传过来的状态值
 		var Request = new Object();
 		Request = GetRequest();
 		var statusOrder=Request["id"];
+		//记录访问位置的id
+		setItem("product",statusOrder);
 		$(window).load(function(){
 			$("#loading").fadeOut(300);
 			getProductDetail(statusOrder);

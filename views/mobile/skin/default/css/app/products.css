@@ -55,10 +55,11 @@ ul li{
 #goods_detaile .price .sell img{
     width:0.79rem;
     vertical-align: middle;
+    display:inline-block;
 }
 #goods_detaile .price .other_price{
     width:4.5rem;
-    line-height:0.62rem;
+    line-height:0.54rem;
 }
 #goods_detaile .price .other_price span{
     font-size:0.26rem;
@@ -129,14 +130,14 @@ ul li{
 }
 .footerBox #joinButton{
     display:block;
-    width:3rem;
+    min-width:3rem;
     background:#eee;
     color:#ff4aa0;
     font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;
 }
 .footerBox #buyBottom{
     display:block;
-    width:3rem;
+    min-width:3rem;
     background:#f3026a;
     color:#fff;
     font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;

@@ -108,7 +108,7 @@ class jcshopCsvImport extends pluginBase
 
 		$this->goodsCsvImport($zipDir, $imageDir);
 
-		// $this->productsCsvImport($zipDir, $imageDir);
+// 		$this->productsCsvImport($zipDir, $imageDir);
 		
 		//清理csv文件数据
 		IFile::rmdir($uploadCsvDir,true);
@@ -186,14 +186,22 @@ class jcshopCsvImport extends pluginBase
 			'jp_price'   		=> '日本价格',
 			'is_zh_title' 		=> '商品标题是中文',
 			'is_zh_content' 	=> '商品详情是中文',
+			'tag' 				=> '标签',
+			'new_item' 			=> '最新商品',
+			'hot_item' 			=> '热卖商品',
+			'recommend_item' 	=> '推荐商品',
 		);
 
 		//实例化商品
-		$goodsObject     = new IModel('goods');
-		$photoRelationDB = new IModel('goods_photo_relation');
-		$photoDB         = new IModel('goods_photo');
-		$cateExtendDB    = new IModel('category_extend');
-		$brandDB 		 = new IModel('brand');
+		$goodsObject     	= new IModel('goods');
+		$photoRelationDB 	= new IModel('goods_photo_relation');
+		$photoDB         	= new IModel('goods_photo');
+		$cateExtendDB    	= new IModel('category_extend');
+		$brandDB 		 	= new IModel('brand');
+		$commendDB			= new IModel('commend_goods');
+		
+
+		
 
 		//插入商品表
 		foreach($collectData as $key => $val)
@@ -241,7 +249,7 @@ class jcshopCsvImport extends pluginBase
 				$jp_market_price = IFilter::act($field,'float');
 				$theData['jp_market_price']  = $jp_market_price;
 				$theData['sell_price']  = $jp_market_price / $this->exchange_rate_jp;
-				$theData['market_price']  = $theData['sell_price'] ;
+				$theData['market_price']  = $theData['sell_price']*2 ;
 			}
 
 			// 处理库存数
@@ -256,6 +264,15 @@ class jcshopCsvImport extends pluginBase
 				$theData['content'] = IFilter::addSlash($field);
 			}
 
+
+			//处理商品关键词
+			$tag 					= trim($val[$titleToCols['tag']]);
+			if(!empty($tag)){
+				$theData['search_words'] = $tag;
+				keywords::add($tag);
+			}
+			
+			
 			// 销售属性
 
 			// 商家编码
@@ -390,6 +407,22 @@ class jcshopCsvImport extends pluginBase
 					continue;
 				}
 			}
+			
+			
+			//处理商品促销
+			$goods_commend 			= array(); //1:最新商品 2:特价商品 3:热卖商品 4:推荐商品
+			$new_item 				= trim($val[$titleToCols['new_item']]);
+			$hot_item 				= trim($val[$titleToCols['hot_item']]);
+			$recommend_item 		= trim($val[$titleToCols['recommend_item']]);
+			if($new_item>0) $goods_commend[] = 1;
+			if($hot_item>0) $goods_commend[] = 3;
+			if($recommend_item>0) $goods_commend[] = 4;
+			$commendDB->del('goods_id = '.$goods_id);
+			foreach($goods_commend as $v){
+				$commendDB->setData(array('goods_id' => $goods_id,'commend_id' => $v));
+				$commendDB->add();
+			}
+			
 
 			// 如果存在分类名，则商品是否已经与该分类关联，如果没有关联，则将其关联
 			$field = trim($val[$titleToCols['category.name']]);
