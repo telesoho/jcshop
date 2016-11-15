@@ -181,9 +181,12 @@
 	<!--商品详情模板引擎-->
 	<script id="product_goodsDetail" type="text/html">
 		<div class="top box">
+            <div class="head_logo">
+                <img src="/views/mobile/skin/default/image/jmj/product/jpan.png" alt="" />
+            </div>
 			<div class="name"><%=name %></div>
 			<div class="log">
-				<img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png" alt="">
+				<img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png" alt="" />
 			</div>
 		</div>
 		<div class="mark">AD<%=goods_no %></div>
@@ -194,7 +197,7 @@
 			</div>
 			<div class="other_price box">
 				<span class="japen hidewrap">国内价: <%=market_price %></span>
-				<span class="china hidewrap">日本价: <%=parseInt(jp_price) %>日元</span>
+				<span class="china hidewrap">日本价: <%=parseInt(jp_price) %>円</span>
 			</div>
 		</div>
 	</script>
@@ -342,6 +345,9 @@
             mui('body').on("tap",".test11",function(){
                 window.location.href=this.href;
             })
+            mui('.mui-scroll-wrapper').scroll({
+                deceleration: 0.0005
+            });
 		});
 		function getProductDetail(obj){
 			var product_detail=obj;

@@ -25,6 +25,9 @@ ul li{
 #goods_detaile{
     background:#fff;
 }
+#goods_detaile .top .head_logo img{
+    width:0.53rem;
+}
 #goods_detaile .top .name{
     width:5.89rem;
     font-size:0.32rem;
@@ -98,8 +101,12 @@ ul li{
 /*.footerBox div:first-child{color: #ff4aa0;background:#eee;}*/
 /*.footerBox div:last-child{color:#fff;background:#f3026a;}*/
 /*.footerBox div:last-child a{color: #fff	;}*/
+#goodsContent{
+    font-size:0.28rem;
+    color:#bbbbbb;
+    text-align:justify;
+}
 .footerBox{
-
     position:fixed;bottom:0;z-index:2;
     display:inline-flex;
     width:100%;
