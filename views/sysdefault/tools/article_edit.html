@@ -137,17 +137,17 @@
 	</td>
 	<td>
 
-		    <%if(templateData['is_del'] =='0'){%> :
-		        正常
+		    <%if(templateData['is_del'] =='0'){%>
+		        已上架
 			<%}%>
-            <%if(templateData['is_del'] =='1'){%> :
+            <%if(templateData['is_del'] =='1'){%>
 				已删除
 			<%}%>
             <%if(templateData['is_del'] =='2'){%>
 				已下架
 			<%}%>
             <%if(templateData['is_del'] =='3'){%>
-				申请上架
+				申请上架中
 			<%}%>
 	</td>
 	<td style="text-align:center"><img src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" onclick="$(this).parent().parent().remove();" /></td>
