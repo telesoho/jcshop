@@ -59,6 +59,11 @@
                         <span class="text">推荐</span>
                         <span class="bg"></span>
                     </a>
+                    <a class="mui-control-item locationA" href="{url:/site/show}">
+                        <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg1.png" alt=""  />
+                        <span class="text">逛</span>
+                        <span class="bg"></span>
+                    </a>
                     <a class="mui-control-item mui-control-item2 locationA" href="{url:/site/pro_list}?cat=2">
                         <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg2.png" alt=""/>
                         <span class="text">药妆</span>
@@ -77,6 +82,11 @@
                     <a class="mui-control-item mui-control-item5 locationA" href="{url:/site/pro_list}?cat=5">
                         <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg5.png" alt="" />
                         <span class="text">健康</span>
+                        <span class="bg"></span>
+                    </a>
+                    <a class="mui-control-item mui-control-item5 locationA" href="{url:/site/pro_list}?cat=6">
+                        <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg6.png" alt="" />
+                        <span class="text">零食</span>
                         <span class="bg"></span>
                     </a>
                     <!--<a class="mui-control-item" href="#">-->
@@ -180,20 +190,20 @@
 <script id="C_slider" type="text/html">
     <div class="mui-slider-group mui-slider-loop">
         <div class="mui-slider-item mui-slider-item-duplicate">
-            <a href="<%=banner[banner.length-1].url %>">
+            <a href="<%=banner[banner.length-1].url %>" class="locationA">
                 <img src="<%=banner[banner.length-1].img %>">
             </a>
         </div>
         <% for(var i=0; i<banner.length; i++){%>
         <% var dat =banner[i] %>
         <div class="mui-slider-item">
-            <a href="<%=dat.url %>">
+            <a href="<%=dat.url %>" class="locationA">
                 <img src="<%=dat.img %>" class="samLazyImg">
             </a>
         </div>
         <%}%>
         <div class="mui-slider-item mui-slider-item-duplicate">
-            <a href="<%=banner[0].url %>">
+            <a href="<%=banner[0].url %>" class="locationA">
                 <img src="<%=banner[0].img %>">
             </a>
         </div>

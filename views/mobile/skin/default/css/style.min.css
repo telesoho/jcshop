@@ -1,3 +1,47 @@
+@charset "utf-8";
+
+/*.goodsTitle{padding:0.1rem 0.29rem 0.1rem 0.21rem;background:#fff;overflow:hidden;display: flex;flex-direction: row;justify-content: space-between;}*/
+/*.goodsTitle a:first-child{align-self: center;;}*/
+/*.goodsTitle span:first-child{display:inline-block;font-size:0.32rem;color:#3d4245;text-align:left;white-space: nowrap;width:5rem;;overflow: hidden;text-overflow: ellipsis;}*/
+/*.titleIcon{}*/
+.titleIcon a{display:inline-block;float:left;}
+.titleIcon a:first-child img{width:1.1rem;height:0.55rem;}
+.titleIcon a:last-child img{width:0.6rem;height:0.6rem;margin-left:0.14rem;}
+.salePrice{padding:0 0.29rem 0 0.21rem;background:#fff;}
+.salePrice span:nth-child(2){font-size:0.26rem;color:#bbb;margin-left:0.52rem;}
+.salePrice span:last-child{font-family:HelveticaNeueLt;color:#bbb;font-size:0.26rem;}
+.postMethod{padding:0 0.13rem;overflow:hidden;background:#fff;}
+.postMethod ul{border-top:1px solid #eee;float:left;width:100%;margin:0.2rem 0;padding-top:0.2rem;}
+.postMethod ul li{float:left;font-size:0.26rem;color:#bbb;margin-right:0.2rem;height:0.32rem;line-height:0.32rem;text-align:center;}
+.postMethod ul li:first-child img{margin-right:0.1rem;width:0.41rem;height:0.2rem;}
+.postMethod ul li:nth-child(2) img{vertical-align:top;margin-right:0.1rem;width:0.32rem;height:0.32rem;}
+.postMethod ul li:last-child{float:right;}
+.postMethod ul li:last-child span{font-size:0.32rem;color:#bbb;}
+.relatedContent{background:#fff;margin-top:0.16rem;padding:0 0.1rem;border-top:1px solid #eee;border-bottom:1px solid #eee;}
+.relatedContent .title{font-size:0.32rem;border-bottom:1px solid #eee;}
+.contentInfo{padding:0.2rem 0.1rem 0 0;}
+.contentInfo .info01{display:inline-block;}
+.contentInfo .info01 img{width:2.49rem;height:1.4rem;margin-left:0.2rem;}
+.contentInfo .info02{display:inline-block;margin-left:0.2rem;width:3.3rem;position:relative;top:-0.1rem;}
+.contentInfo .info02 p:first-child{font-size:0.26rem;color:#3d4245;letter-spacing:0px;width:2.5rem;text-align:left;padding-left:0.2rem;
+}
+.contentInfo .info02 p:nth-child(2){font-size:0.26rem;color:#bbbbbb;letter-spacing:0px;white-space: nowrap;width: 2.5rem;overflow: hidden;text-overflow: ellipsis;  text-align:left;padding-left:0.2rem;}
+.contentInfo .info02 p:last-child{font-size:0.22rem;color:#bbb;width:2.5rem;text-align:left;padding-left:0.2rem;}
+.contentInfo .info02 p:last-child img{width:0.32rem;height:0.19rem;margin-right:0.3rem;}
+.evaluateBox{padding:0.1rem 0.13rem;background:#fff;margin-top:0.2rem;border-top:1px solid #eee;border-bottom: 1px solid #eee;}
+.evaluateBox .title01{font-size:0.3rem;color:#3d4245;overflow:hidden;padding:0.1rem 0;}
+.evaluateBox .title01 div{float:right;margin-right:0.2rem;}
+.evaluateBox .title01 div span{font-size:0.24rem;color:#bbb;}
+.evaluateBox .title01 div span:last-child{font-size:0.32rem;}
+.concreteContent{border-top:1px solid #eee;padding:0.1rem 0;}
+.concreteContent div p:first-child{height:0.6rem;line-height:0.6rem;}
+.concreteContent div p:first-child img{width:0.6rem;height:0.6rem;vertical-align:middle;margin-right:0.2rem;}
+.concreteContent div p:first-child span{float:right;color:#bbb;font-size:0.26rem;margin-right:0.3rem;}
+.concreteContent div p:last-child{margin-top:0.2rem;color:#3d4245;font-size:0.26rem;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+
+
+
+
 /**
 新增地址样式
 **/

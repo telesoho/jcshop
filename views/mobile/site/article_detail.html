@@ -119,9 +119,9 @@
             }
         ?>
         <?php $favorite_article = new IQuery('favorite_article'); $favorite_article->where='user_id = ' . $this->user['user_id'] . ' and aid=' . $this->articleRow['id']; if(!empty($favorite_article->find())){ ?>
-            <div onclick="growGrass({$this->articleRow['id']})" class="articleState active">已拔草</div>
+            <div onclick="growGrass({$this->articleRow['id']})" class="articleState active">已种草</div>
         <?php } else { ?>
-            <div onclick="growGrass({$this->articleRow['id']})" class="articleState">立即拔草</div>
+            <div onclick="growGrass({$this->articleRow['id']})" class="articleState">点我种草吧</div>
         <?php } ?>
     </div>
 
@@ -246,10 +246,10 @@
                 console.log(data);
                 if(data.message=="收藏成功"){
                     $(".articleState").addClass("active")
-                    $(".articleState").html("已拔草");
+                    $(".articleState").html("已种草");
                 }else{
                     $(".articleState").removeClass("active")
-                    $(".articleState").html("立即拔草");
+                    $(".articleState").html("点我种草吧");
                 }
             },
             error:function(xhr,type,errorThrown){

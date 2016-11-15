@@ -34,6 +34,16 @@ template.helper('JSONreduce', function(obj){
 template.helper('JSONstringfly', function(obj){
     return JSON.stringify(obj)
 });
+template.helper('JSONparse', function(obj){
+    return JSON.parse(obj);
+});
+template.helper('JSONarray', function(obj){
+    var arr=[];
+    for(var i in obj){
+        arr.push(obj[i])
+    }
+    return arr;
+});
 //本地缓存函数
 function setItem(key,value){
     var val=JSON.stringify(value)?JSON.stringify(value):[];
@@ -286,4 +296,22 @@ function getcategory_thirdInfo(id){
             console.log(type);
         }
     });
+}
+
+
+
+
+
+//	获取url传递过来的参数
+function GetRequest() {
+    var url = location.search; //获取url中"?"符后的字串
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        strs = str.split("&");
+        for(var i = 0; i < strs.length; i ++) {
+            theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+        }
+    }
+    return theRequest;
 }

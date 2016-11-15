@@ -1,52 +1,72 @@
-@charset "utf-8";
-ul li{padding:0;margin:0;list-style:none;}
-header{background:#000;color:#fff;text-align:center;font-size:0.36rem;height:0.72rem;line-height:0.72rem;}
-header span{color:#fff;float:left;margin-top:0.1rem;}
+/*轮播图样式*/
+ul li{
+    list-style: none;
+}
+/*覆盖mui样式*/
+.mui-slider-indicator.mui-segmented-control{background:#fff !important;}
+.mui-segmented-control.mui-scroll-wrapper{height:3.5rem;}
+.mui-segmented-control.mui-scroll-wrapper .mui-scroll{height:3.5rem;}
+.mui-segmented-control.mui-scroll-wrapper .mui-control-item{padding:0.125rem 0;}
+.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{border:none;}
 #carousel{background:#fff;padding-bottom: 0.17rem;width:7.5rem;height:7.5rem;}
 #carousel img{
     width:6rem;
     height:6rem;
     margin:0.75rem;
 }
-.goodsTitle{padding:0.1rem 0.29rem 0.1rem 0.21rem;background:#fff;overflow:hidden;display: flex;flex-direction: row;justify-content: space-between;}
-.goodsTitle a:first-child{align-self: center;;}
-.goodsTitle span:first-child{display:inline-block;font-size:0.32rem;color:#3d4245;text-align:left;white-space: nowrap;width:5rem;;overflow: hidden;text-overflow: ellipsis;}
-.titleIcon{}
-.titleIcon a{display:inline-block;float:left;}
-.titleIcon a:first-child img{width:1.1rem;height:0.55rem;}
-.titleIcon a:last-child img{width:0.6rem;height:0.6rem;margin-left:0.14rem;}
-.salePrice{padding:0 0.29rem 0 0.21rem;background:#fff;}
-.bargainPrice{font-family:WickedMouseDemo;font-size:0.34rem;color:#fff900;text-align:left;text-shadow: 0.03rem 0.03rem 0 #0104f0, 0.03rem -0.03rem 0 #0104f0, -0.03rem -0.03rem 0 #0104f0, -0.03rem 0.03rem 0 #0104f0, 0.03rem 0.02rem 0 #0104f0, 0.03rem -0.02rem 0 #0104f0, -0.03rem -0.02rem 0 #0104f0, -0.03rem 0.02rem 0 #0104f0, 0.03rem 0.01rem 0 #0104f0, 0.03rem -0.01rem 0 #0104f0, -0.03rem -0.01rem 0 #0104f0, -0.03rem 0.01rem 0 #0104f0, 0.03rem 0px 0 #0104f0, 0.03rem 0px 0 #0104f0, -0.03rem 0px 0 #0104f0, -0.03rem 0px 0 #0104f0, 0.02rem 0.03rem 0 #0104f0, 0.02rem -0.03rem 0 #0104f0, -0.02rem -0.03rem 0 #0104f0, -0.02rem 0.03rem 0 #0104f0, 0.02rem 0.02rem 0 #0104f0, 0.02rem -0.02rem 0 #0104f0, -0.02rem -0.02rem 0 #0104f0, -0.02rem 0.02rem 0 #0104f0, 0.02rem 0.01rem 0 #0104f0, 0.02rem -0.01rem 0 #0104f0, -0.02rem -0.01rem 0 #0104f0, -0.02rem 0.01rem 0 #0104f0, 0.02rem 0px 0 #0104f0, 0.02rem 0px 0 #0104f0, -0.02rem 0px 0 #0104f0, -0.02rem 0px 0 #0104f0, 0.01rem 0.03rem 0 #0104f0, 0.01rem -0.03rem 0 #0104f0, -0.01rem -0.03rem 0 #0104f0, -0.01rem 0.03rem 0 #0104f0, 0.01rem 0.02rem 0 #0104f0, 0.01rem -0.02rem 0 #0104f0, -0.01rem -0.02rem 0 #0104f0, -0.01rem 0.02rem 0 #0104f0, 0.01rem 0.01rem 0 #0104f0, 0.01rem -0.01rem 0 #0104f0, -0.01rem -0.01rem 0 #0104f0, -0.01rem 0.01rem 0 #0104f0, 0.01rem 0px 0 #0104f0, 0.01rem 0px 0 #0104f0, -0.01rem 0px 0 #0104f0, -0.01rem 0px 0 #0104f0, 0px 0.03rem 0 #0104f0, 0px -0.03rem 0 #0104f0, 0px -0.03rem 0 #0104f0, 0px 0.03rem 0 #0104f0, 0px 0.02rem 0 #0104f0, 0px -0.02rem 0 #0104f0, 0px -0.02rem 0 #0104f0, 0px 0.02rem 0 #0104f0, 0px 0.01rem 0 #0104f0, 0px -0.01rem 0 #0104f0, 0px -0.01rem 0 #0104f0, 0px 0.01rem 0 #0104f0, 0px 0px 0 #0104f0, 0px 0px 0 #0104f0, 0px 0px 0 #0104f0, 0px 0px 0 #0104f0, 0 0 0 #0104f0;}
-.salePrice span:nth-child(2){font-size:0.26rem;color:#bbb;margin-left:0.52rem;}
-.salePrice span:last-child{font-family:HelveticaNeueLt;color:#bbb;font-size:0.26rem;}
-.postMethod{padding:0 0.13rem;overflow:hidden;background:#fff;}
-.postMethod ul{border-top:1px solid #eee;float:left;width:100%;margin:0.2rem 0;padding-top:0.2rem;}
-.postMethod ul li{float:left;font-size:0.26rem;color:#bbb;margin-right:0.2rem;height:0.32rem;line-height:0.32rem;text-align:center;}
-.postMethod ul li:first-child img{margin-right:0.1rem;width:0.41rem;height:0.2rem;}
-.postMethod ul li:nth-child(2) img{vertical-align:top;margin-right:0.1rem;width:0.32rem;height:0.32rem;}
-.postMethod ul li:last-child{float:right;}
-.postMethod ul li:last-child span{font-size:0.32rem;color:#bbb;}
-.relatedContent{background:#fff;margin-top:0.16rem;padding:0 0.1rem;border-top:1px solid #eee;border-bottom:1px solid #eee;}
-.relatedContent .title{font-size:0.32rem;border-bottom:1px solid #eee;}
-.contentInfo{padding:0.2rem 0.1rem 0 0;}
-.contentInfo .info01{display:inline-block;}
-.contentInfo .info01 img{width:2.49rem;height:1.4rem;margin-left:0.2rem;}
-.contentInfo .info02{display:inline-block;margin-left:0.2rem;width:3.3rem;position:relative;top:-0.1rem;}
-.contentInfo .info02 p:first-child{font-size:0.26rem;color:#3d4245;letter-spacing:0px;width:2.5rem;text-align:left;padding-left:0.2rem;
+.mui-slider-indicator .mui-indicator{
+    margin:0.1rem 0.1rem 0 0;
 }
-.contentInfo .info02 p:nth-child(2){font-size:0.26rem;color:#bbbbbb;letter-spacing:0px;white-space: nowrap;width: 2.5rem;overflow: hidden;text-overflow: ellipsis;  text-align:left;padding-left:0.2rem;}
-.contentInfo .info02 p:last-child{font-size:0.22rem;color:#bbb;width:2.5rem;text-align:left;padding-left:0.2rem;}
-.contentInfo .info02 p:last-child img{width:0.32rem;height:0.19rem;margin-right:0.3rem;}
-.evaluateBox{padding:0.1rem 0.13rem;background:#fff;margin-top:0.2rem;border-top:1px solid #eee;border-bottom: 1px solid #eee;}
-.evaluateBox .title01{font-size:0.3rem;color:#3d4245;overflow:hidden;padding:0.1rem 0;}
-.evaluateBox .title01 div{float:right;margin-right:0.2rem;}
-.evaluateBox .title01 div span{font-size:0.24rem;color:#bbb;}
-.evaluateBox .title01 div span:last-child{font-size:0.32rem;}
-.concreteContent{border-top:1px solid #eee;padding:0.1rem 0;}
-.concreteContent div p:first-child{height:0.6rem;line-height:0.6rem;}
-.concreteContent div p:first-child img{width:0.6rem;height:0.6rem;vertical-align:middle;margin-right:0.2rem;}
-.concreteContent div p:first-child span{float:right;color:#bbb;font-size:0.26rem;margin-right:0.3rem;}
-.concreteContent div p:last-child{margin-top:0.2rem;color:#3d4245;font-size:0.26rem;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+.mui-slider-indicator .mui-indicator:nth-child(1){
+    margin-left:0.1rem;
+    margin-right:0.03rem !important;
+}
+/*商品简介样式*/
+#goods_detaile{
+    background:#fff;
+}
+#goods_detaile .top .name{
+    width:5.89rem;
+    font-size:0.32rem;
+    color:#3d4245;
+    letter-spacing:0.06rem;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-left:0.2rem;
+}
+#goods_detaile .top img{
+    width:1.2rem;
+    margin-right:0.25rem;
+}
+#goods_detaile .mark{
+    margin-top:0.1rem;
+    font-size:0.3rem;
+    color:#3d4245;
+    letter-spacing:0.0056rem;
+    line-height:0.35rem;
+    margin-left:0.2rem;
+}
+#goods_detaile .price{
+    margin-top:0.2rem;
+    padding:0 0.2rem;
+}
+#goods_detaile .price .sell img{
+    width:0.79rem;
+    vertical-align: middle;
+}
+#goods_detaile .price .other_price{
+    width:4.5rem;
+    line-height:0.62rem;
+}
+#goods_detaile .price .other_price span{
+    font-size:0.26rem;
+    color:#bbbbbb;
+    display:inline-block;
+    width:2.2rem;
+}
 .graphicDetailsBox{background:#fff;margin-top:0.2rem;border-top: 1px solid #eee;border-bottom: 1px solid #eee;padding:0 0.13rem;}
 .graphicDetailsBox .title01{font-size:0.3rem;color:#3d4245;padding:0.1rem 0 0.2rem;border-bottom: 1px solid #eee;}
 .graphicDetailsBox .title01 div{font-size:0.24rem;color:#bbb;float:right;}
@@ -61,12 +81,7 @@ header span{color:#fff;float:left;margin-top:0.1rem;}
 .brandDetail{position:absolute;top:0.3rem;left:1.2rem;}
 .brandDetail p:first-child{color:#3d4245;font-size: 0.28rem;margin-bottom:0.1rem;}
 .brandDetail p:last-child{color:#bbb;font-size: 0.26rem;width:3rem;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
-/*覆盖mui样式*/
-.mui-slider-indicator.mui-segmented-control{background:#fff !important;}
-.mui-segmented-control.mui-scroll-wrapper{height:3.5rem;}
-.mui-segmented-control.mui-scroll-wrapper .mui-scroll{height:3.5rem;}
-.mui-segmented-control.mui-scroll-wrapper .mui-control-item{padding:0.125rem 0;}
-.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{border:none;}
+
 
 .goodsList{width:100%;height:6rem;}
 .goodsList .mui-control-item img{width:1.8rem;height:1.8rem;}
@@ -78,11 +93,58 @@ header span{color:#fff;float:left;margin-top:0.1rem;}
 .servicePromise ul li{width:33.333%;float:left;text-align:center;}
 .servicePromise ul li img{width:0.64rem;height:0.64rem;}
 .servicePromise ul li p{color:#bbb;font-size: 0.28rem;}
-.footerBox{clear:both;width:100%;float:left;overflow: hidden;position:fixed;bottom:0;z-index:2;}
-.footerBox div{width:50%;float:left;font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;}
-.footerBox div:first-child{color: #ff4aa0;background:#eee;}
-.footerBox div:last-child{color:#fff;background:#f3026a;}
-.footerBox div:last-child a{color: #fff	;}
+/*.footerBox{clear:both;width:100%;float:left;overflow: hidden;}*/
+/*.footerBox div{width:50%;float:left;font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;}*/
+/*.footerBox div:first-child{color: #ff4aa0;background:#eee;}*/
+/*.footerBox div:last-child{color:#fff;background:#f3026a;}*/
+/*.footerBox div:last-child a{color: #fff	;}*/
+.footerBox{
+
+    position:fixed;bottom:0;z-index:2;
+    display:inline-flex;
+    width:100%;
+    -webkit-justify-content: flex-start;
+}
+.footerBox div{
+    flex:1;
+}
+.footerBox .collection{
+    height:1.2rem;
+    background:#fff;
+    font-size:0.24rem;
+    color:#979797;
+    display:-webkit-flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.footerBox .collection img{
+    margin-top:0.2rem;
+    width:0.4rem;
+}
+.footerBox .collection span{
+    display:inline-block;
+    width:100%;
+    text-align:center;
+    color:#979797;
+}
+.footerBox #joinButton{
+    display:block;
+    width:3rem;
+    background:#eee;
+    color:#ff4aa0;
+    font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;
+}
+.footerBox #buyBottom{
+    display:block;
+    width:3rem;
+    background:#f3026a;
+    color:#fff;
+    font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;
+}
+
+
+
 
 /*弹出框样式*/
 #serviceDescription{background:#fff;width: 100%;}
