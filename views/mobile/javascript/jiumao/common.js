@@ -44,6 +44,9 @@ template.helper('JSONarray', function(obj){
     }
     return arr;
 });
+template.helper('parseInt', function(obj){
+   return parseInt(obj);
+});
 //本地缓存函数
 function setItem(key,value){
     var val=JSON.stringify(value)?JSON.stringify(value):[];
@@ -285,11 +288,11 @@ function getcategory_thirdInfo(id){
             console.log(data);
             var html = template('category_third_temp',dat);
             document.getElementById("category_third").innerHTML=html;
-            getScrollTop();
             lazyload.init({
                 anim:false,
                 selectorName:".samLazyImg"
             });
+            getScrollTop();
         },
         error:function(xhr,type,errorThrown){
             //异常处理；

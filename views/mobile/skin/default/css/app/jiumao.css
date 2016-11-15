@@ -547,6 +547,10 @@ input[type='search']{
 	margin:0.5rem 0;
 	width:100%;
 }
+.article_body>div>img{
+	margin:0.5rem 0;
+	width:100%;
+}
 .article_body .content_ware{
 	display:flex;
 	display:-webkit-flex;
