@@ -800,7 +800,7 @@ class Apic extends IController
             $relation->where = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $v['id']);
             $data[$k]['nums'] = count($relation->find());
 
-            $data[$k]['visit_num'] = $visit_num;
+//            $data[$k]['visit_num_n'] = $visit_num;
             $data[$k]['xb'] = $xb;
             $data[$k]['goods_list'] = [];
         }
