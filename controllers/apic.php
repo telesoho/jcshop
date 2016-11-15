@@ -654,11 +654,15 @@ class Apic extends IController
      */
     //显示专辑列表（首页）
     public function article_list(){
-//        ISession::clearAll();
-        if (empty($this->user['user_id'])){
-             $this->json_echo([]);
-        }
+        if (empty($this->user['user_id'])){$this->json_echo([]);}
         $goods_query = new IQuery("goods");
+        /*视频专辑*/
+        $category = 3;
+        $article_query = new IQuery('article');
+        $article_query->fields = 'id,title,image,visit_num,favorite,category_id';
+        $article_query->where = ' category_id = ' . $category;
+        $article_data_spzj = $article_query->find();
+
         /*特别专辑*/
         $categorys = ['10','11','12','13','14'];
         $where = '';
@@ -773,6 +777,7 @@ class Apic extends IController
                 $data[count($data)] = $temp;
             }
         }
+        array_push($data, $article_data_spzj[array_rand($article_data_spzj,1)]);
         //返回数据格式化
         foreach ($data as $k=>$v){
             //用户是否对专辑点赞
@@ -813,6 +818,8 @@ class Apic extends IController
             }
             $data[$a]['goods_list'] = $relationList;
         }
+
+
 
 //        echo $visit_num;
 //        echo '<a href="http://192.168.0.156:8080/index.php?controller=site&action=article_detail&id='.$data[0]['id'].'">aa</a>';
