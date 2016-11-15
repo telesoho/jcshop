@@ -285,6 +285,11 @@ class Site extends IController
 	//文章详情页面
 	function article_detail()
 	{
+        if(IClient::isWechat() == true){
+            require_once __DIR__ . '/../plugins/wechat/wechat.php';
+            $this->wechat = new wechat();
+        }
+
         $this->action = IFilter::act(IReq::get('action'),'string');
         if ($this->action == 'article_detail'){
             ISession::set('is_first',false);
@@ -301,6 +306,7 @@ class Site extends IController
 		{
 			$articleObj       = new IModel('article');
 			$this->articleRow = $articleObj->getObj('id = '.$this->article_id);
+//            var_dump($this->articleRow);
 			if(empty($this->articleRow))
 			{
 				IError::show(403,'资讯文章不存在');
@@ -308,6 +314,8 @@ class Site extends IController
 			}
             $articleObj->setData(array("visit_num"=>$this->articleRow['visit_num']+1));
 			$articleObj->update('id = '.$this->article_id);
+//            $this->articleRow['link'] = IWeb::$app->config['image_host'] . '/site/article_detail/id/' . $this->article_id;
+//            $this->articleRow['share_img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$this->articleRow['image']."/w/200/h/200");
 			//关联商品
 			$this->relationList = Api::run('getArticleGoods',array("#article_id#",$this->article_id));
             if (in_array($this->articleRow['category_id'],['10','11','12','13','14'])){
