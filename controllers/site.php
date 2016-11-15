@@ -850,4 +850,7 @@ class Site extends IController
     function show(){
         $this->redirect('show');
     }
+    function goods_more(){
+        $this->redirect('goods_more');
+    }
 }
