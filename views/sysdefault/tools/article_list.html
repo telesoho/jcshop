@@ -9,6 +9,7 @@
 		<form action="{url:/tools/article_list}" method="post" name="searchListForm">
 			<input class="small" name="article_title" type="text" value="<?php echo IFilter::act(IReq::get('article_title'),'string')?>">
 			<select class="auto" name="type" >
+				<option value="0" selected>全部</option>
 				{query: name=article_category order=path}
 					<option value="{$item['id']}" <?php if(isset($_POST['type']) && $_POST['type'] == $item['id']) echo 'selected'; ?> >{$item['name']}</option>
 				{/query}

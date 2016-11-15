@@ -55,10 +55,11 @@ ul li{
 #goods_detaile .price .sell img{
     width:0.79rem;
     vertical-align: middle;
+    display:inline-block;
 }
 #goods_detaile .price .other_price{
     width:4.5rem;
-    line-height:0.62rem;
+    line-height:0.54rem;
 }
 #goods_detaile .price .other_price span{
     font-size:0.26rem;
@@ -86,7 +87,7 @@ ul li{
 .goodsList .mui-control-item img{width:1.8rem;height:1.8rem;}
 .goodsList .mui-control-item p{color:#3d4245;font-size:0.24rem;width:2rem;overflow: hidden;text-overflow: ellipsis;}
 .goodsList .mui-control-item p:last-child{color:#fe0000;}
-.servicePromise{background:#fff;margin-top:0.2rem;padding:0 0.13rem;border-top: 1px solid #eee;overflow:hidden;margin-bottom:1.2rem;}
+.servicePromise{background:#fff;margin-top:0.2rem;padding:0 0.13rem;border-top: 1px solid #eee;overflow:hidden;height:3.5rem;}
 .servicePromise p:first-child{padding:0.1rem 0;font-size:0.3rem;color:#3d4245;border-bottom: 1px solid #eee;}
 .servicePromise ul{width:100%;float:left;padding:0.3rem 0;}
 .servicePromise ul li{width:33.333%;float:left;text-align:center;}
@@ -129,14 +130,14 @@ ul li{
 }
 .footerBox #joinButton{
     display:block;
-    width:3rem;
+    min-width:3rem;
     background:#eee;
     color:#ff4aa0;
     font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;
 }
 .footerBox #buyBottom{
     display:block;
-    width:3rem;
+    min-width:3rem;
     background:#f3026a;
     color:#fff;
     font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;
