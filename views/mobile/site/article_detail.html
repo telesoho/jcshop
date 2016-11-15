@@ -64,7 +64,7 @@
                 <div class="price">
                     <span class="price1">￥{$goods_no_data['sell_price']}</span>
                     <span class="art">日本售价:</span>
-                    <span class="price2">{$goods_no_data['jp_price']}</span>
+                    <span class="price2"><?php echo explode('.',$goods_no_data['jp_price'])[0]; ?>日元</span>
                 </div>
                 <a href="{url:/site/products?id=$goods_no_data['goods_id']}"><div class="buy">立即购买</div></a>
             </div>
