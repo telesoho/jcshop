@@ -668,7 +668,6 @@ input[type='search']{
 }
 .albumn_index .product .slider{
   height:3.56rem;
-  width:100%;
   overflow: scroll;
   display: -webkit-flex;
   -webkit-justify-content: flex-start;
