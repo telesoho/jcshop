@@ -659,18 +659,22 @@ input[type='search']{
   margin-right:0.15rem;
 }
 .albumn_index .product{
+  z-index:11;
   position:relative;
-  height:3.5rem;
+  height:3.56rem;
   overflow-y: hidden;
-  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
   background:#fff;
   margin-top:-0.06rem;
-  border-bottom:0.01rem solid #eee;
+}
+.albumn_index .product .slider{
+  z-index:13;
+  position:absolute;
+  height:3.56rem;
   display: -webkit-flex;
   -webkit-justify-content: flex-start;
   -webkit-overflow-scrolling: touch;
 }
-
 .single{
   width:100%;
   position:relative;
@@ -689,8 +693,8 @@ input[type='search']{
   border-bottom: 0.25rem solid #fff;
 }
 
-.albumn_index .product .item{
-  width:2rem;
+.albumn_index .product .slider .item{
+  width:1.8rem;
   height:3rem;
   margin-top:0.2rem;
   margin-left:0.5rem;
