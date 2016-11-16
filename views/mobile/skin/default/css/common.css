@@ -659,20 +659,20 @@ input[type='search']{
   margin-right:0.15rem;
 }
 .albumn_index .product{
-  width:7.5rem;
   height:3.4rem;
   overflow-y: hidden;
+  overflow-x: scroll;
   background:#fff;
   margin-top:-0.06rem;
   border-bottom:0.01rem solid #eee;
 }
 .albumn_index .product .slider{
   height:3.56rem;
-  overflow-x: scroll;
+  width:100%;
+  overflow: scroll;
   display: -webkit-flex;
-  justify-content: flex-start;
   -webkit-justify-content: flex-start;
-  /*-webkit-overflow-scrolling: touch;*/
+  -webkit-overflow-scrolling: touch;
 }
 .single{
   width:100%;
