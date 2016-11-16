@@ -190,7 +190,7 @@ return array(
 	    	'name'  => 'category',
 	    	'where' => ' parent_id = 0 and visibility = 1 ',
 	    	'order' => ' sort asc',
-	    	'limit' => 20,
+//	    	'limit' => 20,
 	    )
 	),
 	//根据一级分类输出二级分类列表
@@ -199,7 +199,7 @@ return array(
 	    	'name'  => 'category',
 	    	'where' => ' parent_id = #parent_id# and visibility = 1 ',
 	    	'order' => ' sort asc',
-	    	'limit' => 10,
+//	    	'limit' => 10,
 	    )
 	),
 	//所有品牌列表

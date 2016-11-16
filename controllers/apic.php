@@ -923,6 +923,9 @@ class Apic extends IController
             }
             $data[$key]['child'] = [];
             $second = Api::run('getCategoryByParentid',array('#parent_id#',$value['id']));
+            if ($value['id'] == 126){
+                var_dump($second);
+            }
             if(!empty($second)) foreach ($second as $k=>$v){
                 if (!empty($v['banner_image'])){
                     $second[$k]['banner_image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['banner_image']."/w/154/h/154");
