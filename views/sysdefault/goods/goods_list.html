@@ -138,7 +138,7 @@
 					</td>
 					<td><input type="text" class="tiny" value="{$item['sort']}" onchange="changeSort({$item['id']},this);" /></td>
 					<td>
-						<a href="{url:/goods/goods_edit/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" /></a>
+						<a href="{url:/goods/goods_edit/id/$item[id]}" target="_blank"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" /></a>
 						<a href="javascript:void(0)" onclick="delModel({link:'{url:/goods/goods_del/id/$item[id]}'})" ><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
 						{if:$item['seller_id']}
 						<a href="{url:/site/home/id/$item[seller_id]}" target="_blank"><img src="{skin:images/admin/seller_ico.png}" /></a>
