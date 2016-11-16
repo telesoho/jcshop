@@ -267,7 +267,7 @@ class jcshopCsvImport extends pluginBase
 
 			//处理商品关键词
 			$tag 					= trim($val[$titleToCols['tag']]);
-			if(!empty($tag)){
+			if($tag != ''){
 				$theData['search_words'] = $tag;
 				keywords::add($tag);
 			}
