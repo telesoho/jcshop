@@ -1371,4 +1371,11 @@ class Simple extends IController
 		$result = array('data' => $sqlData);
 		die(JSON::encode($result));
 	}
+	function credit(){
+        if(IClient::isWechat() == true){
+            require_once __DIR__ . '/../plugins/wechat/wechat.php';
+            $this->wechat = new wechat();
+        }
+	    $this->redirect('credit');
+    }
 }
