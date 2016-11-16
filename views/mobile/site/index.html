@@ -261,21 +261,23 @@
                     <%=cal(dat.visit_num) %></div>
             </div>
         </a>
-        <%if(dat.goods_list.length==3){%>
-        <div id="wrapper">
-            <div class="product box">
-                <% for(var m=0; m<dat.goods_list.length; m++){%>
-                <% var goodsitem =dat.goods_list[m] %>
-                <div class="item">
-                    <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
-                        <div class="img"><img src="<%=goodsitem.img %>" alt="" /></div>
-                        <div class="name hidewrap"><%=goodsitem.name %></div>
-                        <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
-                    </a>
+        <%if(dat.goods_list.length>=3){%>
+            <div class="single"></div>
+            <div class="product">
+                <div class="slider">
+                    <% for(var m=0; m<dat.goods_list.length; m++){%>
+                    <% var goodsitem =dat.goods_list[m] %>
+                    <div class="item">
+                        <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
+                            <div class="img"><img src="<%=goodsitem.img %>" alt="" /></div>
+                            <div class="name hidewrap"><%=goodsitem.name %></div>
+                            <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
+                        </a>
+                    </div>
+                    <div class="singleline"></div>
+                    <%}%>
                 </div>
-                <%}%>
             </div>
-        </div>
         <%}%>
     </section>
     <%}%>
