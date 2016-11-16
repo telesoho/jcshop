@@ -29,16 +29,18 @@
         <div class="credit_info" v-else>
             <div class="content">
                 <div class="top">
-                    <div class="name">名字</div>
-                    <div class="cardId">42***************17</div>
+                    <div class="name" v-cloak>名字</div>
+                    <div class="cardId" v-cloak>42***************17</div>
                 </div>
                 <div class="test box">
                     <div class="img box">
                         <div class="img_1">
                             <img src="111" alt=""  style="width:1.1rem;height:1.1rem" />
+                            <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
                         </div>
-                        <div class="img2">
+                        <div class="img_2">
                             <img src="111" alt=""  style="width:1.1rem;height:1.1rem" />
+                            <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
                         </div>
                     </div>
                     <div class="action box">
@@ -60,7 +62,7 @@
                 <span>身份信息</span><span>请确保身份信息真实有效，否则无法通过审核</span>
             </div>
             <input type="text" class="mui-input-clear"  placeholder="请输入姓名" id="cardName" name="cardName" />
-            <input type="text" class="mui-input-clear"  placeholder="输入身份证账号" id="cardId" name="cardId" />
+            <input type="text" class="mui-input-clear"  placeholder="输入身份证账号" id="cardId" name="cardId"  />
             <div class="title">
                 <span>身份证正反面照片</span><span>上传身份证正反面照片让通关更便捷</span>
             </div>
@@ -96,7 +98,7 @@
                     </div>
                 </template>
             </div>
-            <div class="fix-buttom">
+            <div class="fix-bottom">
                 <input type="submit" value="提交" id="submitMessage">
             </div>
         </form>
@@ -110,11 +112,12 @@
     var vm = new Vue({
         el: '#credit_app',
         data: {
-            message:getItem("localcredit"),
+            message:getItem("localcredit")
         },
         methods: {
             addNewCard: turnEdit,
             getData:getCreditInfo,
+            uploadImg:getImgLoad,
         }
     })
 //    vm.getData();
@@ -124,6 +127,9 @@
             this.className="card_info_left";
             document.querySelector(".card_edit").className="card_edit card_edit_left";
         })
+    }
+    function getImgLoad(){
+
     }
     function getCreditInfo() {
         var self=this;
