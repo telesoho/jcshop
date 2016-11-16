@@ -659,20 +659,18 @@ input[type='search']{
   margin-right:0.15rem;
 }
 .albumn_index .product{
-  height:3.4rem;
+  position:relative;
+  height:3.5rem;
   overflow-y: hidden;
   overflow-x: scroll;
   background:#fff;
   margin-top:-0.06rem;
   border-bottom:0.01rem solid #eee;
-}
-.albumn_index .product .slider{
-  height:3.56rem;
-  overflow: scroll;
   display: -webkit-flex;
   -webkit-justify-content: flex-start;
   -webkit-overflow-scrolling: touch;
 }
+
 .single{
   width:100%;
   position:relative;
@@ -691,7 +689,7 @@ input[type='search']{
   border-bottom: 0.25rem solid #fff;
 }
 
-.albumn_index .product .slider .item{
+.albumn_index .product .item{
   width:2rem;
   height:3rem;
   margin-top:0.2rem;

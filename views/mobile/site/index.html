@@ -264,19 +264,17 @@
         <%if(dat.goods_list.length>=3){%>
             <div class="single"></div>
             <div class="product">
-                <div class="slider">
-                    <% for(var m=0; m<dat.goods_list.length; m++){%>
-                    <% var goodsitem =dat.goods_list[m] %>
-                    <div class="item">
-                        <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
-                            <div class="img"><img src="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;s"/></div>
-                            <div class="name hidewrap"><%=goodsitem.name %></div>
-                            <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
-                        </a>
-                    </div>
-                    <div class="singleline"></div>
-                    <%}%>
+                <% for(var m=0; m<dat.goods_list.length; m++){%>
+                <% var goodsitem =dat.goods_list[m] %>
+                <div class="item">
+                    <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
+                        <div class="img"><img src="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;s"/></div>
+                        <div class="name hidewrap"><%=goodsitem.name %></div>
+                        <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
+                    </a>
                 </div>
+                <div class="singleline"></div>
+                <%}%>
             </div>
         <%}%>
     </section>
