@@ -1,1 +1,146 @@
-<?php if(isset($this->wechat)){ $this->wechat->config['wechat_jsApiSDK']=1; $this->wechat->jsApiSDK();}?>
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>身份证认证信息</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/credit.css" />
+    <script src="/views/mobile/javascript/vue.js"></script>
+</head>
+<body>
+<div id="credit_app">
+    <div class="container card_info">
+        <template v-if="message==''">
+            <section class="nodata">
+                <div class="emptyCart">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;"/>
+                </div>
+                <div class="content">
+                    <span>~</span>
+                    <span>你还未填写身份证信息</span>
+                    <span>~</span>
+                </div>
+                <div @click="addNewCard" class="addNewCard">添加身份证信息</div>
+        </template>
+        <div class="credit_info" v-else>
+            <div class="content">
+                <div class="top">
+                    <div class="name">名字</div>
+                    <div class="cardId">42***************17</div>
+                </div>
+                <div class="test box">
+                    <div class="img box">
+                        <div class="img_1">
+                            <img src="111" alt=""  style="width:1.1rem;height:1.1rem" />
+                        </div>
+                        <div class="img2">
+                            <img src="111" alt=""  style="width:1.1rem;height:1.1rem" />
+                        </div>
+                    </div>
+                    <div class="action box">
+                        <div class="edit" @click="addNewCard">
+                            <img src="/views/mobile/skin/default/image/jmj/product/edit.png" alt="" />
+                            <span>编辑</span></div>
+                        <div class="del">
+                            <img src="/views/mobile/skin/default/image/jmj/product/del.png" alt="" />
+                            <span>删除</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="container card_edit">
+        <form action="" type="post">
+            <div class="title">
+                <span>身份信息</span><span>请确保身份信息真实有效，否则无法通过审核</span>
+            </div>
+            <input type="text" class="mui-input-clear"  placeholder="请输入姓名" id="cardName" name="cardName" />
+            <input type="text" class="mui-input-clear"  placeholder="输入身份证账号" id="cardId" name="cardId" />
+            <div class="title">
+                <span>身份证正反面照片</span><span>上传身份证正反面照片让通关更便捷</span>
+            </div>
+            <div class="editImg">
+                <template v-if="message==''">
+                    <div class="left" @click="uploadImg">
+                        <div class="img">
+                            <img src="/views/mobile/skin/default/image/jmj/product/add.png" alt="" class="pic pic_no" />
+                        </div>
+                        <div class="mark">请上传照片</div>
+                    </div>
+                    <div class="right" @click="uploadImg">
+                        <div class="img">
+                            <img src="/views/mobile/skin/default/image/jmj/product/add.png" alt="" class="pic pic_no" />
+                        </div>
+                        <div class="mark">请上传照片</div>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="left" @click="uploadImg">
+                        <div class="img">
+                            <img src="" alt="" class="pic pic_yes" />
+                            <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
+                        </div>
+                        <div class="mark">点击更换照片</div>
+                    </div>
+                    <div class="right" @click="uploadImg">
+                        <div class="img">
+                            <img src="" alt="" class="pic pic_yes" />
+                            <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
+                        </div>
+                        <div class="mark">点击更换照片</div>
+                    </div>
+                </template>
+            </div>
+            <div class="fix-buttom">
+                <input type="submit" value="提交" id="submitMessage">
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/views/mobile/javascript/template-native.js"></script>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/javascript/jiumao/common.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#credit_app',
+        data: {
+            message:getItem("localcredit"),
+        },
+        methods: {
+            addNewCard: turnEdit,
+            getData:getCreditInfo,
+        }
+    })
+//    vm.getData();
+
+    function turnEdit(){
+        document.querySelector(".card_info").addEventListener("click",function(){
+            this.className="card_info_left";
+            document.querySelector(".card_edit").className="card_edit card_edit_left";
+        })
+    }
+    function getCreditInfo() {
+        var self=this;
+        mui.ajax('index.php?controller=apic&action=cart', {
+            dataType: 'json',//服务器返回json格式数据
+            type: 'post',//HTTP请求类型
+            timeout: 10000,//超时时间设置为10秒；
+            success: function (data) {
+                setItem("localcredit",data)
+                console.log(data);
+            },
+            error: function (xhr, type, errorThrown) {
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+</script>
+</body>
+</html>

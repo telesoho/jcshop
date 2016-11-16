@@ -1,0 +1,200 @@
+html,body{
+    position:relative;
+    width:100%;
+    height:100%;
+    overflow-x: hidden;
+}
+/*css动画*/
+.card_info{
+    position:absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    width:100%;
+    height:100%;
+    background:#f8f8f8;
+}
+.card_info_left{
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+    -webkit-transition: -webkit-transform 300ms ease;
+    transition: transform 300ms ease;
+}
+.card_edit{
+    position:absolute;
+    top:0;
+    left:100%;
+    bottom:0;
+    right:0;
+    width:100%;
+    height:100%;
+    background:#f8f8f8;
+}
+.card_edit_left{
+    left:0;
+    -webkit-transition: left 300ms ease;
+    transition: left 300ms ease;
+}
+/*身份证信息为空*/
+.nodata{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top:1.77rem;
+    background:#f8f8f8;
+}
+.nodata .content{
+    width:100%;
+    margin-top:0.27rem;
+    display:flex;
+    justify-content: center;
+}
+.nodata .content span{
+    font-size:0.28rem;
+    color:#bbbbbb;
+}
+.nodata .content span:nth-child(2){
+    padding:0 0.37rem;
+}
+.addNewCard{
+    margin-top:2rem;
+    background:#ff44a0;
+    border-radius:0.08rem;
+    width:5.5rem;
+    height:0.9rem;
+    text-align: center;
+    line-height:0.9rem;
+    font-size:0.32rem;
+    color:#fff;
+}
+.credit_info .content{
+    margin:0.4rem auto;
+    width:6.84rem;
+    height:2.52rem;
+    background:#fff;
+}
+.credit_info .content .top{
+    margin:0.24rem 0 0.63rem 0.34rem;
+    display:-webkit-inline-flex;
+}
+.credit_info .content .top .name{
+    font-size:0.3rem;
+    color:#979797;
+}
+.credit_info .content .top .cardId{
+    font-size:0.3rem;
+    color:#979797;
+    margin-left:1.1rem;
+}
+.credit_info .content .test .img .img_1{
+    margin-left:0.26rem;
+}
+.credit_info .content .test .img img{
+    margin-left:0.13rem;
+}
+.credit_info .content .test .action{
+    width:2.6rem;
+    margin-right:0.26rem;
+    margin-bottom:0.1rem;
+    align-items:flex-end;
+}
+.credit_info .content .test .action img{
+    width:0.32rem;
+}
+.credit_info .content .test .action .edit span{
+    display:inline-block;
+    margin-left:0.12rem;
+    position:relative;
+    top:-0.05rem;
+    /*margin-bottom:0.1rem;*/
+    /*padding-bottom:0.1rem;*/
+    font-size:0.26rem;
+    color:#979797;
+}
+.credit_info .content .test .action .del span{
+    display:inline-block;
+    margin-left:0.12rem;
+    position:relative;
+    top:-0.05rem;
+    /*margin-bottom:0.1rem;*/
+    /*padding-bottom:0.1rem;*/
+    font-size:0.26rem;
+    color:#f3026a;
+}
+/*编辑页面*/
+.card_edit .title{
+    height:0.92rem;
+    line-height:0.92rem;
+}
+.card_edit .title span:nth-child(1){
+    font-weight:bold;
+    font-size:0.26rem;
+    color:#3d4225;
+    margin-left:0.28rem;
+}
+.card_edit .title span:nth-child(2){
+    font-size:0.2rem;
+    color:#f3026a;
+   margin-left:0.17rem;
+}
+.card_edit .editImg{
+    display:-webkit-flex;
+    -webkit-align-items: center;
+    -webkit-justify-content: center;
+    width:100%;
+    height:4.47rem;
+    background:#fff;
+}
+.card_edit .editImg .left{
+    position:relative;
+    width:2.81rem;
+    margin-right:0.66rem;
+}
+.card_edit .editImg .img{
+    width:2.81rem;
+    height:2.01rem;
+    border-radius: 0.2rem;
+    border:1px solid #eee;
+    display:-webkit-flex;
+    -webkit-align-items: center;
+    -webkit-justify-content: center;
+}
+.card_edit .editImg .pic_log{
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:3;
+}
+.card_edit .editImg .pic_no{
+    width:0.98rem;
+    height:0.98rem;
+}
+.card_edit .editImg img{
+    width:2.81rem;
+    height:2.01rem;
+    border-radius: 0.2rem;
+}
+.card_edit .editImg .right{
+    position:relative;
+    width:2.81rem;
+}
+.card_edit .editImg .mark{
+    font-size:0.26rem;
+    color:#bbbbbb;
+    text-align:center;
+    margin-top:0.29rem;
+}
+input[type='text']{
+     border: 0.01rem solid #eee;
+     border-radius: 0;
+    padding-left:0.29rem;
+}
+#cardId{
+    margin-top:-1px;
+}
+#submitMessage{
+    position:absolute;
+
+}
