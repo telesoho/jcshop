@@ -164,27 +164,17 @@ class Site extends IController
 			IError::show(403,'缺少分类ID');
 		}
 
-		//分类
-		switch($this->catId){
-			case 2:
-				$this->tag 	 	= '药妆';
-				break;
-			case 3:
-				$this->tag 	 	= '个护';
-				break;
-			case 4:
-				$this->tag 	 	= '宠物';
-				break;
-			case 5:
-				$this->tag 	 	= '健康';
-				break;
-			case 6:
-				$this->tag 	 	= '零食';
-				break;
-			default:
-				IError::show(403,'此分类不存在');
+		//查找分类信息
+		$catObj       = new IModel('category');
+		$this->catRow = $catObj->getObj('id = '.$this->catId);
+
+		if($this->catRow == null)
+		{
+			IError::show(403,'此分类不存在');
 		}
-		
+
+		//获取子分类
+		$this->childId = goods_class::catChild($this->catId);
 		$this->redirect('pro_list');
 	}
 	//咨询
