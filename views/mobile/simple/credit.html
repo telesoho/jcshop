@@ -1,1 +1,25 @@
-<?php if(isset($this->wechat)){ $this->wechat->config['wechat_jsApiSDK']=1; $this->wechat->jsApiSDK();}?>
+<html>
+<header></header>
+<body>
+<button id="picSelect" with="100">选择图片</button>
+</body>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<?php if(isset($this->wechat)){ $this->wechat->config['wechat_jsApiSDK']=1; $this->wechat->jsApiSDK();?>
+<script>
+    wx.ready(function() {
+        $('#picSelect').click(function () {
+            wx.chooseImage({
+                count: 2, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    $('#picSelect').after('<img src="'+localIds[0]+'">');
+                    $('#picSelect').after('<img src="'+localIds[1]+'">');
+                }
+            });
+        })
+    })
+</script>
+<?php } ?>
+</html>
