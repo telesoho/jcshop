@@ -659,17 +659,17 @@ input[type='search']{
   margin-right:0.15rem;
 }
 .albumn_index .product{
-  width:100%;
+  width:7.5rem;
   height:3.4rem;
-  overflow: hidden;
+  overflow-y: hidden;
   background:#fff;
   margin-top:-0.06rem;
   border-bottom:0.01rem solid #eee;
-  /*padding:0.26rem 0.47rem 0.1rem;*/
 }
 .albumn_index .product .slider{
   height:3.56rem;
   min-width:100%;
+  flex-wrap: nowrap;
   overflow-x: auto;
   display: -webkit-flex;
   justify-content: flex-start;
@@ -695,6 +695,8 @@ input[type='search']{
 }
 
 .albumn_index .product .slider .item{
+  flex:1;
+  flex-basis:2.1rem;
   display: inline-block;
   width:2rem;
   height:3rem;
@@ -711,6 +713,7 @@ input[type='search']{
   height:1.8rem;
 }
 .albumn_index .product .name{
+  background:red;
   width:1.8rem;
   font-size:0.22rem;
   color:#3d4225;
@@ -718,7 +721,7 @@ input[type='search']{
   margin-top:0.17rem;
 }
 .singleline{
-  margin:0.2rem 0 0 0.2rem;
+  margin:0.2rem 0 0 0.5rem;
   width:1px;
   border-left:0.01rem solid #eee;
   height:2.5rem;
