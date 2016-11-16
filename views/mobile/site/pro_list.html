@@ -94,23 +94,26 @@
 				<span class="name">最新品</span>
 			</div>
 			<div class="right">
-				<a href="">
+				<a href="{url:/site/goods_more?commend_id=1&category_id=$this->childId}">
 					<span>更多</span>
 					<img src="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" />
 				</a>
 			</div>
 		</div>
 		<div class="product">
-
-			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as e on e.goods_id eq m.id where=e.category_id in ($this->childId) and d.commend_id eq 1 limit=3 order=m.id desc}
+			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as e on e.goods_id eq m.id 
+				where=e.category_id in ($this->childId) and d.commend_id eq 1 
+				fields=m.id,m.name,m.sell_price,m.img 
+				limit=3 
+				order=m.id desc}
 			<a href="{url:/site/products?id=$item['id']}">
 				<div class="item">
 					<div class="img">
-						<img src="{set:echo IWeb::$app->config['image_host'].'/'.$item['img']}" alt="" />
+						<img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/240/h/240')}" alt="" />
 					</div>
 					<div class="content">
 						<div class="name hidewrap">{$item['name']}</div>
-						<div class="sellprice price">{$item['sell_price']}</div>
+						<div class="sellprice price">¥{$item['sell_price']}</div>
 					</div>
 				</div>
 			</a>
@@ -124,22 +127,26 @@
 				<span class="name">最热卖</span>
 			</div>
 			<div class="right">
-				<a href="">
+				<a href="{url:/site/goods_more?commend_id=3&category_id=$this->childId}">
 					<span>更多</span>
 					<img src="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" />
 				</a>
 			</div>
 		</div>
 		<div class="product">
-			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as e on e.goods_id eq m.id where=e.category_id in ($this->childId) and d.commend_id eq 3 limit=3 order=m.id desc}
+			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as e on e.goods_id eq m.id 
+				where=e.category_id in ($this->childId) and d.commend_id eq 3 
+				fields=m.id,m.name,m.sell_price,m.img 
+				limit=3 
+				order=m.id desc}
 			<a href="{url:/site/products?id=$item['id']}">
 				<div class="item">
 					<div class="img">
-						<img src="{set:echo IWeb::$app->config['image_host'].'/'.$item['img']}" alt="" />
+						<img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/240/h/240')}" alt="" />
 					</div>
 					<div class="content">
 						<div class="name hidewrap">{$item['name']}</div>
-						<div class="sellprice price">{$item['sell_price']}</div>
+						<div class="sellprice price">¥{$item['sell_price']}</div>
 					</div>
 				</div>
 			</a>
@@ -153,12 +160,16 @@
 <section id="relate_product">
 	<div class="title"><span>~</span><span>推荐商品</span>~</div>
 	<div class="content" id="getRelateWare">
-		{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as e on e.goods_id eq m.id where=e.category_id in ($this->childId) and d.commend_id eq 4 limit=4 order=m.id desc}
+		{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as e on e.goods_id eq m.id 
+			where=e.category_id in ($this->childId) and d.commend_id eq 4 
+			fields=m.id,m.name,m.sell_price,m.img 
+			limit=100 
+			order=m.id desc}
 		<div class="item">
-			<a href="{url:/site/products?id=$item['id']}"><div class="img underline"><img src="{set:echo IWeb::$app->config['image_host'].'/'.$item['img']}" alt=""/></div>
+			<a href="{url:/site/products?id=$item['id']}"><div class="img underline"><img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt=""/></div>
 				<div class="name">{$item['name']}</div>
 				<div class="box">
-					<div class="price">{$item['sell_price']}</div>
+					<div class="price">¥{$item['sell_price']}</div>
 					<div class="buy">立即购买</div>
 				</div></a>
 		</div>
