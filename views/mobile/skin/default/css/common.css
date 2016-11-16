@@ -672,11 +672,11 @@ input[type='search']{
   height:3.56rem;
   position:relative;
   width:100%;
-  overflow-x: auto;
-  display: -webkit-inline-flex;
-  display: inline-flex;
+  /*overflow-x: auto;*/
+  display: -webkit-flex;
   justify-content: flex-start;
   -webkit-justify-content: flex-start;
+  -webkit-overflow-scrolling: touch;
 }
 .single{
   width:100%;
