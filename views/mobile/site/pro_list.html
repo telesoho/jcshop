@@ -59,27 +59,27 @@
 					<span class="text">推荐</span>
 					<span class="bg"></span>
 				</a>
-				<a class="mui-control-item mui-control-item2" href="{url:/site/pro_list}?cat=2">
+				<a class="mui-control-item mui-control-item126" href="{url:/site/pro_list}?cat=126">
 					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg2.png" alt=""/>
 					<span class="text">药妆</span>
 					<span class="bg"></span>
 				</a>
-				<a class="mui-control-item mui-control-item3" href="{url:/site/pro_list}?cat=3">
+				<a class="mui-control-item mui-control-item134" href="{url:/site/pro_list}?cat=134">
 					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg3.png" alt=""  />
 					<span class="text">个护</span>
 					<span class="bg"></span>
 				</a>
-				<a class="mui-control-item mui-control-item4" href="{url:/site/pro_list}?cat=4">
+				<a class="mui-control-item mui-control-item6" href="{url:/site/pro_list}?cat=6">
 					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg4.png" alt="" />
 					<span class="text">宠物</span>
 					<span class="bg"></span>
 				</a>
-				<a class="mui-control-item mui-control-item5" href="{url:/site/pro_list}?cat=5">
+				<a class="mui-control-item mui-control-item2" href="{url:/site/pro_list}?cat=2">
 					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg5.png" alt="" />
 					<span class="text">健康</span>
 					<span class="bg"></span>
 				</a>
-                <a class="mui-control-item mui-control-item5" href="{url:/site/pro_list}?cat=6">
+                <a class="mui-control-item mui-control-item7" href="{url:/site/pro_list}?cat=7">
                     <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg6.png" alt="" />
                     <span class="text">零食</span>
                     <span class="bg"></span>
@@ -106,8 +106,8 @@
 			</div>
 		</div>
 		<div class="product">
-			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id 
-				where=m.search_words like '%,$this->tag,%' and d.commend_id eq 1 
+			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
+				where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 1 
 				fields=m.id,m.name,m.sell_price,m.img 
 				limit=3 
 				order=m.id desc}
@@ -139,8 +139,8 @@
 			</div>
 		</div>
 		<div class="product">
-			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id 
-				where=m.search_words like '%,$this->tag,%' and d.commend_id eq 3 
+			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
+				where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 3 
 				fields=m.id,m.name,m.sell_price,m.img 
 				limit=3 
 				order=m.id desc}
@@ -165,8 +165,8 @@
 <section id="relate_product">
 	<div class="title"><span>~</span><span>推荐商品</span>~</div>
 	<div class="content" id="getRelateWare">
-			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id 
-				where=m.search_words like '%,$this->tag,%' and d.commend_id eq 4 
+		{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
+			where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 4 
 			fields=m.id,m.name,m.sell_price,m.img 
 			limit=100 
 			order=m.id desc}
@@ -235,10 +235,6 @@
 	<button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
 </div>
 <!--专辑分页模板-->
-<script id="pro_list_temp" type="text/html">
-	<% for(var i=0; i<data.length; i++){%>
-	<%}%>
-</script>
 <!--头信息结束-->
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>

@@ -1376,6 +1376,16 @@ class Simple extends IController
             require_once __DIR__ . '/../plugins/wechat/wechat.php';
             $this->wechat = new wechat();
         }
+        $sfz_name = IFilter::act(IReq::get('sfz_name'),'string');
+        $sfz_num = IFilter::act(IReq::get('sfz_num'),'string');
+        $image1 = IFilter::act(IReq::get('image1'),'string');
+        $image2 = IFilter::act(IReq::get('image2'),'string');
+        if (!empty($sfz_name)){
+            $user_id     = $this->user['user_id'];
+            $user_model = new IModel('user');
+            $user_model->setData(['sfz_name'=>$sfz_name,'sfz_num'=>$sfz_num,'sfz_image1'=>$image1,'sfz_image2'=>$image2]);
+            $user_model->update('id = ' . $user_id);
+        }
 	    $this->redirect('credit');
     }
 }

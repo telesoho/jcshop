@@ -422,9 +422,9 @@ class jcshopCsvImport extends pluginBase
 			$new_item 				= trim($val[$titleToCols['new_item']]);
 			$hot_item 				= trim($val[$titleToCols['hot_item']]);
 			$recommend_item 		= trim($val[$titleToCols['recommend_item']]);
-			if($new_item>0) $goods_commend[] = 1;
-			if($hot_item>0) $goods_commend[] = 3;
-			if($recommend_item>0) $goods_commend[] = 4;
+			if($new_item == 1) $goods_commend[] = 1;
+			if($hot_item == 1) $goods_commend[] = 3;
+			if($recommend_item == 1) $goods_commend[] = 4;
 			if(!empty($goods_commend)){
 				$commendDB->del('goods_id = '.$goods_id);
 				foreach($goods_commend as $v){
