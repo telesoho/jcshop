@@ -372,6 +372,7 @@ class Goods extends IController implements adminAuthorization
 		//搜索条件
 		$search = IReq::get('search');
 		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+		$search['pagesize'] = isset($search['pagesize'])?IFilter::act($search['pagesize'],'int'):20;
 
 		//条件筛选处理
 		list($join,$where) = goods_class::getSearchCondition($search);
@@ -381,6 +382,7 @@ class Goods extends IController implements adminAuthorization
 		$goodsHandle->order    = "go.id desc";
 		$goodsHandle->fields   = "distinct go.id,go.name,go.sell_price,go.market_price,go.store_nums,go.img,go.is_del,go.seller_id,go.is_share,go.sort";
 		$goodsHandle->page     = $page;
+		$goodsHandle->pagesize = $search['pagesize'] ;
 		$goodsHandle->where    = $where;
 		$goodsHandle->join     = $join;
 
@@ -399,7 +401,7 @@ class Goods extends IController implements adminAuthorization
 		//拼接sql
 		$goodsHandle = new IQuery('goods as go');
 		$goodsHandle->order    = "go.id desc";
-		$goodsHandle->fields   = "go.id, go.name,go.sell_price,go.store_nums,go.sale,go.is_del,go.create_time";
+		$goodsHandle->fields   = "go.id, go.goods_no, go.name,go.sell_price,go.store_nums,go.sale,go.is_del,go.create_time";
 		$goodsHandle->join     = $join;
 		$goodsHandle->where    = $where;
 		$goodsList = $goodsHandle->find();
@@ -407,6 +409,7 @@ class Goods extends IController implements adminAuthorization
 		//构建 Excel table;
 		$strTable ='<table width="500" border="1">';
 		$strTable .= '<tr>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="60">JAN</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品名称</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="160">分类</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="60">售价</td>';
@@ -418,6 +421,7 @@ class Goods extends IController implements adminAuthorization
 
 		foreach($goodsList as $k=>$val){
 			$strTable .= '<tr>';
+			$strTable .= '<td style="text-align:center;font-size:12px;">'.$val['goods_no'].'</td>';
 			$strTable .= '<td style="text-align:center;font-size:12px;">&nbsp;'.$val['name'].'</td>';
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.goods_class::getGoodsCategory($val['id']).' </td>';
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['sell_price'].' </td>';

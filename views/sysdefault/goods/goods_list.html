@@ -25,7 +25,7 @@
 				<option value="!=0">商户商品</option>
 			</select>
 			<select class="auto" name="search[is_del]">
-				<option value="">选择上下架</option>
+				<option value="">上下架</option>
 				<option value="0">上架</option>
 				<option value="2">下架</option>
 				<option value="3">待审</option>
@@ -38,7 +38,7 @@
 				<option value="go.store_nums >= 100">100以上</option>
 			</select>
 			<select class="auto" name="search[commend_id]">
-				<option value="">选择商品标签</option>
+				<option value="">商品标签</option>
 				<option value="1">最新商品</option>
 				<option value="2">特价商品</option>
 				<option value="3">热卖商品</option>
@@ -50,23 +50,23 @@
 				<option value="seller.true_name">商户真实名称</option>
 			</select>
 			<select class="auto" name="search[is_zh_title]">
-				<option value="">标题是否为中文</option>
+				<option value="">标题为中文</option>
 				<option value="0">否</option>
 				<option value="1">是</option>
 			</select>
 			<select class="auto" name="search[is_zh_content]">
-				<option value="">内容是否为中文</option>
+				<option value="">内容为中文</option>
 				<option value="0">否</option>
 				<option value="1">是</option>
 			</select>
 			<input class="small" name="search[keywords]" type="text" value="" />
-
 			<!--分类数据显示-->
 			<span id="__categoryBox" style="margin-bottom:8px"></span>
 			<button class="btn" type="button" name="_goodsCategoryButton"><span class="add">设置分类</span></button>
 			{set:plugin::trigger('goodsCategoryWidget',array("name" => "search[category_id]","value" => isset($this->search['category_id']) ? $this->search['category_id'] : ""))}
 
 			<button class="btn" type="button" onclick='initSearchbar(1)'><span class="add">更 多</span></button>
+			<input class="small" name="search[pagesize]" type="text" value = "" style="width:30px"/>
 			<button class="btn" type="submit"  onclick='changeAction(false)'><span class="sel">筛 选</span></button>
 			<button class="btn" onclick='changeAction(true)'><span class="sel">导出Excel</span></button>
 			<input type="hidden" name="search[adv_search]" value="" />
