@@ -177,7 +177,7 @@ class jcshopCsvImport extends pluginBase
 			'jp_market_price' 	=> '日本市场价格',
 			'store_nums' 		=> '库存数量',
 			'content'    		=> '商品详情',
-			'img'        		=> '图片',
+			'reset_img'        		=> '重设图片',
 			'spec_array' 		=> '销售属性',
 			'weight'     		=> '物流重量',
 			'name_jp'	 		=> '商品名称日文',
@@ -208,7 +208,6 @@ class jcshopCsvImport extends pluginBase
 		{
 			//更新GOODS表数据
 			$theData = array(
-				'img'          => isset($val['mainPic']) ? current($val['mainPic']) : '',
 				'seller_id'    => $this->seller_id,
 			);
 		
@@ -248,8 +247,13 @@ class jcshopCsvImport extends pluginBase
 			if('' !== $field) {
 				$jp_market_price = IFilter::act($field,'float');
 				$theData['jp_market_price']  = $jp_market_price;
-				$theData['sell_price']  = $jp_market_price / $this->exchange_rate_jp;
-				$theData['market_price']  = $theData['sell_price']*2 ;
+				$sell_price = $jp_market_price / $this->exchange_rate_jp;
+				$theData['sell_price']  =$sell_price;
+				if ($sell_price <= 200) {
+					$theData['market_price']  = $theData['sell_price'] * 2 ;
+				} else {
+					$theData['market_price']  = $theData['sell_price']* 1.5 ;					
+				}
 			}
 
 			// 处理库存数
@@ -348,29 +352,34 @@ class jcshopCsvImport extends pluginBase
 			}
 			
 			// 主图
-			$mainPic = array();
+			$mainPic = array();			
 
-			$goodsImgDir = $this->imageDir . "/" . "mainPic" . "/" . $goods_no;
+			$field = trim($val[$titleToCols['reset_img']]);
+			if('' !== $field) {
 
-			if(is_dir($goodsImgDir)) {
+				$goodsImgDir = $this->imageDir . "/" . "mainPic" . "/" . $goods_no;
 
-				$handle = opendir($goodsImgDir);
+				if(is_dir($goodsImgDir)) {
 
-				while($file = readdir($handle))
-				{
-					if($file != '.' && $file != '..'){
-						$source_file =  $goodsImgDir . "/" . $file;
-						if(is_file($source_file)) {
-							$mainPic[] = $source_file;
+					$handle = opendir($goodsImgDir);
+
+					while($file = readdir($handle))
+					{
+						if($file != '.' && $file != '..'){
+							$source_file =  $goodsImgDir . "/" . $file;
+							if(is_file($source_file)) {
+								$mainPic[] = $source_file;
+							}
 						}
 					}
 				}
+
+				// 设置商品主图
+				if($mainPic) {
+					$theData['img'] = $mainPic[0];
+				}
 			}
 
-			// 设置商品主图
-			if($mainPic) {
-				$theData['img'] = $mainPic[0];
-			}
 
 			if( $the_goods ) {
 				// 商品已经存在
