@@ -372,6 +372,7 @@ class Goods extends IController implements adminAuthorization
 		//搜索条件
 		$search = IReq::get('search');
 		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+		$search['pagesize'] = isset($search['pagesize'])?IFilter::act($search['pagesize'],'int'):20;
 
 		//条件筛选处理
 		list($join,$where) = goods_class::getSearchCondition($search);
@@ -381,7 +382,7 @@ class Goods extends IController implements adminAuthorization
 		$goodsHandle->order    = "go.id desc";
 		$goodsHandle->fields   = "distinct go.id,go.name,go.sell_price,go.market_price,go.store_nums,go.img,go.is_del,go.seller_id,go.is_share,go.sort";
 		$goodsHandle->page     = $page;
-		$goodsHandle->pagesize = $search['pagesize'];
+		$goodsHandle->pagesize = $search['pagesize'] ;
 		$goodsHandle->where    = $where;
 		$goodsHandle->join     = $join;
 
