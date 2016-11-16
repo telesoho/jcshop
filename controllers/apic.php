@@ -802,22 +802,35 @@ class Apic extends IController
 
 //            $data[$k]['visit_num_n'] = $visit_num;
             $data[$k]['xb'] = $xb;
-            $data[$k]['goods_list'] = [];
-        }
-        //专辑中的随机推荐三个关联商品
-        for ($i=0;$i<3;$i++){
-            $a = rand(0,7);
+//            $data[$k]['goods_list'] = [];
+
             $article = new IQuery('relation as r');
             $article->join = 'left join goods as go on r.goods_id = go.id';
-            $article->where = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $data[$a]['id']);
+            $article->where = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $data[$k]['id']);
             $article->filds = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price';
-            $article->limit = 3;
+//            $article->limit = 3;
             $relationList = $article->find();
             foreach ($relationList as $key => $value){
                 $relationList[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/180/h/180");
             }
-            $data[$a]['goods_list'] = $relationList;
+            $data[$k]['goods_list'] = $relationList;
+
         }
+
+        //专辑中的随机推荐三个关联商品
+//        for ($i=0;$i<3;$i++){
+//            $a = rand(0,7);
+//            $article = new IQuery('relation as r');
+//            $article->join = 'left join goods as go on r.goods_id = go.id';
+//            $article->where = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $data[$a]['id']);
+//            $article->filds = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price';
+//            $article->limit = 3;
+//            $relationList = $article->find();
+//            foreach ($relationList as $key => $value){
+//                $relationList[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/180/h/180");
+//            }
+//            $data[$a]['goods_list'] = $relationList;
+//        }
 
 
 
