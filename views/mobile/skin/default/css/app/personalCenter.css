@@ -9,7 +9,7 @@ ul,li{margin:0;padding:0;list-style: none;}
 .ico-pull{color:#bbb;}
 .ico-pull span{color:#bbb;}
 .order{background:#fff;padding:0.2rem 0;border-bottom: 1px solid #eee;}
-.order img{width:0.7rem;height: 0.7rem;}
+.order img{width:0.5rem;height: 0.5rem;}
 .order .mui-media-body{font-size: 0.24rem;}
 
 /*订单详情页面样式*/

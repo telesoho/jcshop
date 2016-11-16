@@ -54,29 +54,34 @@
 	<div  class="mui-slider">
 		<div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 			<div class="mui-scroll">
-				<a class="mui-control-item" href="{url:/site/index}">
+				<a class="mui-control-item locationA" href="{url:/site/index}">
 					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg1.png" alt=""  />
 					<span class="text">推荐</span>
 					<span class="bg"></span>
 				</a>
-				<a class="mui-control-item mui-control-item2" href="{url:/site/pro_list}?cat=2">
+				<a class="mui-control-item mui-control-item2 locationA" href="{url:/site/pro_list}?cat=2">
 					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg2.png" alt=""/>
 					<span class="text">药妆</span>
 					<span class="bg"></span>
 				</a>
-				<a class="mui-control-item mui-control-item3" href="{url:/site/pro_list}?cat=3">
+				<a class="mui-control-item mui-control-item3 locationA" href="{url:/site/pro_list}?cat=3">
 					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg3.png" alt=""  />
 					<span class="text">个护</span>
 					<span class="bg"></span>
 				</a>
-				<a class="mui-control-item mui-control-item4" href="{url:/site/pro_list}?cat=4">
+				<a class="mui-control-item mui-control-item4 locationA" href="{url:/site/pro_list}?cat=4">
 					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg4.png" alt="" />
 					<span class="text">宠物</span>
 					<span class="bg"></span>
 				</a>
-				<a class="mui-control-item mui-control-item5" href="{url:/site/pro_list}?cat=5">
+				<a class="mui-control-item mui-control-item5 locationA" href="{url:/site/pro_list}?cat=5">
 					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg5.png" alt="" />
 					<span class="text">健康</span>
+					<span class="bg"></span>
+				</a>
+				<a class="mui-control-item mui-control-item6 locationA" href="{url:/site/pro_list}?cat=6">
+					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg6.png" alt="" />
+					<span class="text">零食</span>
 					<span class="bg"></span>
 				</a>
 			</div>
@@ -169,7 +174,7 @@
 			<a href="{url:/site/products?id=$item['id']}"><div class="img underline"><img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt=""/></div>
 				<div class="name">{$item['name']}</div>
 				<div class="box">
-					<div class="price">¥{$item['sell_price']}</div>
+					<div class="sellprice price">¥{$item['sell_price']}</div>
 					<div class="buy">立即购买</div>
 				</div></a>
 		</div>
@@ -230,10 +235,6 @@
 	<button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
 </div>
 <!--专辑分页模板-->
-<script id="pro_list_temp" type="text/html">
-	<% for(var i=0; i<data.length; i++){%>
-	<%}%>
-</script>
 <!--头信息结束-->
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
