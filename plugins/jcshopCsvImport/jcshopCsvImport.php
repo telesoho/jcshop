@@ -268,7 +268,7 @@ class jcshopCsvImport extends pluginBase
 			//处理商品关键词
 			$tag 					= trim($val[$titleToCols['tag']]);
 			if($tag != ''){
-				$theData['search_words'] = $tag;
+				$theData['search_words'] = ','.$tag.',';
 				keywords::add($tag);
 			}
 			
@@ -408,7 +408,6 @@ class jcshopCsvImport extends pluginBase
 				}
 			}
 			
-			
 			//处理商品促销
 			$goods_commend 			= array(); //1:最新商品 2:特价商品 3:热卖商品 4:推荐商品
 			$new_item 				= trim($val[$titleToCols['new_item']]);
@@ -417,12 +416,13 @@ class jcshopCsvImport extends pluginBase
 			if($new_item>0) $goods_commend[] = 1;
 			if($hot_item>0) $goods_commend[] = 3;
 			if($recommend_item>0) $goods_commend[] = 4;
-			$commendDB->del('goods_id = '.$goods_id);
-			foreach($goods_commend as $v){
-				$commendDB->setData(array('goods_id' => $goods_id,'commend_id' => $v));
-				$commendDB->add();
+			if(!empty($goods_commend)){
+				$commendDB->del('goods_id = '.$goods_id);
+				foreach($goods_commend as $v){
+					$commendDB->setData(array('goods_id' => $goods_id,'commend_id' => $v));
+					$commendDB->add();
+				}
 			}
-			
 
 			// 如果存在分类名，则商品是否已经与该分类关联，如果没有关联，则将其关联
 			$field = trim($val[$titleToCols['category.name']]);
