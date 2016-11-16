@@ -668,13 +668,11 @@ input[type='search']{
 }
 .albumn_index .product .slider{
   height:3.56rem;
-  min-width:100%;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  overflow-x: scroll;
   display: -webkit-flex;
   justify-content: flex-start;
   -webkit-justify-content: flex-start;
-  -webkit-overflow-scrolling: touch;
+  /*-webkit-overflow-scrolling: touch;*/
 }
 .single{
   width:100%;
@@ -695,9 +693,6 @@ input[type='search']{
 }
 
 .albumn_index .product .slider .item{
-  flex:1;
-  flex-basis:2.1rem;
-  display: inline-block;
   width:2rem;
   height:3rem;
   margin-top:0.2rem;
