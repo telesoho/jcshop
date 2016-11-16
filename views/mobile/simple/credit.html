@@ -29,17 +29,17 @@
         <div class="credit_info" v-else>
             <div class="content">
                 <div class="top">
-                    <div class="name" v-cloak>名字</div>
-                    <div class="cardId" v-cloak>42***************17</div>
+                    <div class="name" v-cloak>{{message.sfz_name}}</div>
+                    <div class="cardId" v-cloak>{{message.sfz_num}}</div>
                 </div>
                 <div class="test box">
                     <div class="img box">
                         <div class="img_1">
-                            <img src="111" alt=""  style="width:1.1rem;height:1.1rem" />
+                            <img :src="message.sfz_image1" alt=""  style="width:1.1rem;height:1.1rem" />
                             <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
                         </div>
                         <div class="img_2">
-                            <img src="111" alt=""  style="width:1.1rem;height:1.1rem" />
+                            <img :src="message.sfz_image2" alt=""  style="width:1.1rem;height:1.1rem" />
                             <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
                         </div>
                     </div>
@@ -57,43 +57,47 @@
 
     </div>
     <div class="container card_edit">
-        <form action="" type="post">
+        <form action="" method="post">
             <div class="title">
                 <span>身份信息</span><span>请确保身份信息真实有效，否则无法通过审核</span>
             </div>
-            <input type="text" class="mui-input-clear"  placeholder="请输入姓名" id="cardName" name="cardName" />
-            <input type="text" class="mui-input-clear"  placeholder="输入身份证账号" id="cardId" name="cardId"  />
+            <input type="text" class="mui-input-clear"  placeholder="请输入姓名" id="cardName" name="sfz_name" v-model="message.sfz_name" />
+            <input type="text" class="mui-input-clear"  placeholder="输入身份证账号" id="cardId" name="sfz_num" v-model="message.sfz_num"  />
             <div class="title">
                 <span>身份证正反面照片</span><span>上传身份证正反面照片让通关更便捷</span>
             </div>
             <div class="editImg">
                 <template v-if="message==''">
-                    <div class="left" @click="uploadImg">
-                        <div class="img">
+                    <div class="left">
+                        <div class="img" onclick="uploadImg(this)">
                             <img src="/views/mobile/skin/default/image/jmj/product/add.png" alt="" class="pic pic_no" />
                         </div>
+                        <input type="hidden" name="image1">
                         <div class="mark">请上传照片</div>
                     </div>
-                    <div class="right" @click="uploadImg">
-                        <div class="img">
+                    <div class="right">
+                        <div class="img" onclick="uploadImg(this)">
                             <img src="/views/mobile/skin/default/image/jmj/product/add.png" alt="" class="pic pic_no" />
                         </div>
+                        <input type="hidden" name="image2">
                         <div class="mark">请上传照片</div>
                     </div>
                 </template>
                 <template v-else>
-                    <div class="left" @click="uploadImg">
-                        <div class="img">
-                            <img src="" alt="" class="pic pic_yes" />
+                    <div class="left">
+                        <div class="img" onclick="uploadImg(this)">
+                            <img :src="message.sfz_image1" alt="" class="pic pic_yes" />
                             <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
                         </div>
+                        <input type="hidden" name="image1">
                         <div class="mark">点击更换照片</div>
                     </div>
-                    <div class="right" @click="uploadImg">
-                        <div class="img">
-                            <img src="" alt="" class="pic pic_yes" />
+                    <div class="right">
+                        <div class="img" onclick="uploadImg(this)">
+                            <img :src="message.sfz_image2" alt="" class="pic pic_yes" />
                             <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
                         </div>
+                        <input type="hidden" name="image2">
                         <div class="mark">点击更换照片</div>
                     </div>
                 </template>
@@ -108,19 +112,47 @@
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
+<?php if(isset($this->wechat)){ $this->wechat->config['wechat_jsApiSDK']=1; $this->wechat->jsApiSDK();?>
+<script>var access_token = <?php echo '"' . $this->wechat->getAccessToken() . '"';?></script>
+<script>
+    wx.ready(function() {
+    })
+    function uploadImg(obj) {
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                $(obj).children().attr('src',localIds[0]);
+                wx.uploadImage({
+                    localId: localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        $(obj).next().attr('value',serverId)
+//                        $(obj).next().attr('value','https://api.weixin.qq.com/cgi-bin/media/get?access_token='+access_token+'&media_id='+serverId)
+                    }
+                });
+            }
+        });
+    }
+</script>
+<?php } ?>
+
 <script>
     var vm = new Vue({
         el: '#credit_app',
         data: {
-            message:getItem("localcredit")
+            message:getItem('localcredit')
         },
         methods: {
             addNewCard: turnEdit,
             getData:getCreditInfo,
-            uploadImg:getImgLoad,
+            uploadImg1:getImgLoad,
         }
     })
-//    vm.getData();
+    vm.getData();
 
     function turnEdit(){
         document.querySelector(".card_info").addEventListener("click",function(){
@@ -128,16 +160,17 @@
             document.querySelector(".card_edit").className="card_edit card_edit_left";
         })
     }
-    function getImgLoad(){
-
+    function getImgLoad(event){
     }
     function getCreditInfo() {
         var self=this;
-        mui.ajax('index.php?controller=apic&action=cart', {
+        mui.ajax('index.php?controller=apic&action=user_credit_info', {
             dataType: 'json',//服务器返回json格式数据
             type: 'post',//HTTP请求类型
             timeout: 10000,//超时时间设置为10秒；
             success: function (data) {
+                data.sfz_image1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='+access_token+'&media_id='+data.sfz_image1;
+                data.sfz_image2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='+access_token+'&media_id='+data.sfz_image2;
                 setItem("localcredit",data)
                 console.log(data);
             },

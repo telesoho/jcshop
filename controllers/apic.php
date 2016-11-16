@@ -1050,7 +1050,13 @@ class Apic extends IController
         }
         $this->json_echo(['goods_data'=>$data1,'article_data'=>$data2]);
     }
-
+    function user_credit_info(){
+        $user_id     = $this->user['user_id'];
+        $user_query = new IQuery('user');
+        $user_query->where = 'id = ' . $user_id;
+        $data = $user_query->find()[0];
+        $this->json_echo($data);
+    }
 
     private function json_echo($data){
         echo json_encode($data);

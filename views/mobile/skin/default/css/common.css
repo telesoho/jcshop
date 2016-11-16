@@ -554,3 +554,164 @@ input[type='search']{
   color:#bbbbbb;
   padding-left:0.32rem;
 }
+/*专辑页面*/
+.albumn_index{
+  margin-top:0.22rem;
+  background:#f8f8f8;
+}
+.albumn_index .title{
+  height:0.9rem;
+  font-size:0.3rem;
+  position:relative;
+  line-height:0.9rem;
+  background:#fff;
+}
+.albumn_index .title .logo{
+  display: inline-block;
+  margin-left:0.24rem;
+  position:relative;
+  top:0.05rem;
+}
+.albumn_index .title .paper{
+  margin-left:0.24rem;
+  position:relative;
+  top:0.07rem;
+}
+.albumn_index .title .name{
+  margin-left:0.23rem;
+  color:#3d4245;
+  font-size:0.3rem;
+}
+.albumn_index .title .share{
+  margin-right:0.43rem !important;
+  position:relative;
+  top:0.05rem;
+}
+.albumn_index .title .like{
+  margin-right:0.07rem !important;
+  position:relative;
+  top:0.07rem;
+}
+.albumn_index .title .num{
+  width:0.55rem;
+  margin-right:0.06rem !important;
+  font-family:'HelveticaNeueLt';
+  font-size:0.24rem;
+  color:#979797;
+}
+.albumn_index .content{
+  position:relative;
+  width:7.5rem;
+}
+.albumn_index .content .mark1{
+  position:absolute;
+  width:1.28rem;
+  height:0.38rem;
+  line-height:0.38rem;
+  text-align:center;
+  top:0.24rem;
+  left:4.29rem;
+  background:rgba(0,0,0,0.5);
+  border-radius:0.04rem;
+  color:#fff;
+  font-size:0.22rem;
+}
+.albumn_index .content .img img{
+  position:relative;
+}
+.albumn_index .content .mark2{
+  position:absolute;
+  width:1.52rem;
+  height:0.38rem;
+  line-height:0.38rem;
+  text-align:center;
+  top:0.24rem;
+  right:0.11rem;
+  background:rgba(0,0,0,0.5);
+  border-radius:0.04rem;
+  color:#fff;
+  font-size:0.22rem;
+}
+.albumn_index .content .mark2 img{
+  width:0.33rem;
+  margin-right:0.08rem;
+}
+.albumn_index .title .vedio_name{
+  display:inline-block;
+  position:relative;
+  top:-0.15rem;
+  margin-left:0.23rem;
+  min-width:2rem;
+  color:#3d4245;
+  font-size:0.3rem;
+  width:1.88rem;
+}
+.albumn_index .title .vedio_name span{
+  position:absolute;
+  left:0;
+  top:0.34rem;
+  font-size:0.22rem;
+  color:#bbb;
+}
+.albumn_index .title .vedio_name span img{
+  position:relative;
+  top:0.05rem;
+  margin-right:0.15rem;
+}
+.albumn_index .product{
+  width:100%;
+  height:3.26rem;
+  overflow: hidden;
+  position:relative;
+  background:#fff;
+  margin-top:-0.06rem;
+  border-bottom:0.01rem solid #eee;
+  /*padding:0.26rem 0.47rem 0.1rem;*/
+}
+.albumn_index .product .slider{
+  height:3.46rem;
+  position:relative;
+  width:100%;
+  overflow-x: auto;
+  display: -webkit-inline-flex;
+  -webkit-justify-content: flex-start;
+}
+.single{
+  width:100%;
+  position:relative;
+}
+.single:after{
+  background:transparent;
+  position:absolute;
+  content:'';
+  left:3.5rem;
+  top:-0.23rem;
+  z-index:24;
+  width: 0;
+  height: 0;
+  border-left: 0.25rem solid transparent;
+  border-right: 0.25rem solid transparent;
+  border-bottom: 0.25rem solid #fff;
+}
+
+.albumn_index .product .slider .item{
+  margin-top:0.2rem;
+  margin-left:0.5rem;
+}
+.albumn_index .product .img img{
+  width:1.8rem;
+  height:1.8rem;
+}
+.albumn_index .product .name{
+  width:1.8rem;
+  font-size:0.22rem;
+  color:#3d4225;
+  margin-bottom:0.1rem;
+  margin-top:0.17rem;
+}
+.singleline{
+  margin:0.2rem 0 0 0.2rem;
+  width:1px;
+  border-left:0.01rem solid #eee;
+  height:2.5rem;
+}
