@@ -13,7 +13,7 @@
 .postMethod{padding:0 0.13rem;overflow:hidden;background:#fff;}
 .postMethod ul{border-top:1px solid #eee;float:left;width:100%;margin:0.2rem 0;padding-top:0.2rem;}
 .postMethod ul li{float:left;font-size:0.26rem;color:#bbb;margin-right:0.2rem;height:0.32rem;line-height:0.32rem;text-align:center;}
-.postMethod ul li:first-child img{margin-right:0.1rem;width:0.41rem;height:0.2rem;}
+.postMethod ul li:first-child img{margin-right:0.1rem;width:0.32rem;height:0.32rem;vertical-align: top;}
 .postMethod ul li:nth-child(2) img{vertical-align:top;margin-right:0.1rem;width:0.32rem;height:0.32rem;}
 .postMethod ul li:last-child{float:right;}
 .postMethod ul li:last-child span{font-size:0.32rem;color:#bbb;}
