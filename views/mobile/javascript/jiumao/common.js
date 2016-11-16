@@ -287,7 +287,7 @@ function getcategory_thirdInfo(id){
             dat.data=data;
             console.log(data);
             var html = template('category_third_temp',dat);
-            document.getElementById("category_third").innerHTML=html;
+            document.getElementById("category").innerHTML=html;
             lazyload.init({
                 anim:false,
                 selectorName:".samLazyImg"

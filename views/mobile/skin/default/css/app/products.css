@@ -25,8 +25,12 @@ ul li{
 #goods_detaile{
     background:#fff;
 }
+#goods_detaile .top .head_logo img{
+    width:0.53rem;
+    margin:0.1rem 0.05rem 0 0.2rem;
+}
 #goods_detaile .top .name{
-    width:5.89rem;
+    width:5rem;
     font-size:0.32rem;
     color:#3d4245;
     overflow : hidden;
@@ -46,7 +50,7 @@ ul li{
     color:#3d4245;
     letter-spacing:0.0056rem;
     line-height:0.35rem;
-    margin-left:0.2rem;
+    margin-left:0.95rem;
 }
 #goods_detaile .price{
     margin-top:0.2rem;
@@ -87,19 +91,33 @@ ul li{
 .goodsList .mui-control-item img{width:1.8rem;height:1.8rem;}
 .goodsList .mui-control-item p{color:#3d4245;font-size:0.24rem;width:2rem;overflow: hidden;text-overflow: ellipsis;}
 .goodsList .mui-control-item p:last-child{color:#fe0000;}
-.servicePromise{background:#fff;margin-top:0.2rem;padding:0 0.13rem;border-top: 1px solid #eee;overflow:hidden;height:3.5rem;}
+.servicePromise{background:#fff;margin-top:0.2rem;padding:0 0.13rem;border-top: 1px solid #eee;overflow:hidden;height:4.5rem;}
 .servicePromise p:first-child{padding:0.1rem 0;font-size:0.3rem;color:#3d4245;border-bottom: 1px solid #eee;}
-.servicePromise ul{width:100%;float:left;padding:0.3rem 0;}
-.servicePromise ul li{width:33.333%;float:left;text-align:center;}
-.servicePromise ul li img{width:0.64rem;height:0.64rem;}
-.servicePromise ul li p{color:#bbb;font-size: 0.28rem;}
-/*.footerBox{clear:both;width:100%;float:left;overflow: hidden;}*/
-/*.footerBox div{width:50%;float:left;font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;}*/
-/*.footerBox div:first-child{color: #ff4aa0;background:#eee;}*/
-/*.footerBox div:last-child{color:#fff;background:#f3026a;}*/
-/*.footerBox div:last-child a{color: #fff	;}*/
+.servicePromise ul{
+    display:-webkit-flex;
+    -webkit-align-items: center;
+    -webkit-justify-content: center;
+    flex-wrap: nowrap;
+}
+.servicePromise ul li{
+    flex:1;
+    text-align: center;
+}
+.servicePromise ul li img{
+    margin-top:0.4rem;
+    width:0.7rem;
+}
+.servicePromise ul li p{
+    font-size:0.24rem;
+    margin-top:0.14rem;
+    color:#bbb;
+}
+#goodsContent{
+    font-size:0.28rem;
+    color:#bbbbbb;
+    text-align:justify;
+}
 .footerBox{
-
     position:fixed;bottom:0;z-index:2;
     display:inline-flex;
     width:100%;
@@ -108,7 +126,15 @@ ul li{
 .footerBox div{
     flex:1;
 }
+.joinButton{
+    min-width:3rem;
+}
+.buyBottom{
+    min-width:3rem;
+
+}
 .footerBox .collection{
+    border-top:0.01rem solid #eee;
     height:1.2rem;
     background:#fff;
     font-size:0.24rem;

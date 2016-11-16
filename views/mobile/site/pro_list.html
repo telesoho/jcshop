@@ -101,39 +101,20 @@
 			</div>
 		</div>
 		<div class="product">
+
+			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as e on e.goods_id eq m.id where=e.category_id in ($this->childId) and d.commend_id eq 1 limit=3 order=m.id desc}
 			<a href="">
 				<div class="item">
 					<div class="img">
-						<img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
+						<img src="{$item['img']}" alt="" />
 					</div>
 					<div class="content">
-						<div class="name hidewrap">这是商品的名称这是商品的名称这是商品的名称</div>
-						<div class="sellprice price">199.32</div>
+						<div class="name hidewrap">{$item['name']}</div>
+						<div class="sellprice price">{$item['sell_price']}</div>
 					</div>
 				</div>
 			</a>
-			<a href="">
-				<div class="item">
-					<div class="img">
-						<img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
-					</div>
-					<div class="content">
-						<div class="name hidewrap">这是商品的名称这是商品的名称这是商品的名称</div>
-						<div class="sellprice price">199.32</div>
-					</div>
-				</div>
-			</a>
-			<a href="">
-				<div class="item">
-					<div class="img">
-						<img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
-					</div>
-					<div class="content">
-						<div class="name hidewrap">这是商品的名称这是商品的名称这是商品的名称</div>
-						<div class="sellprice price">199.32</div>
-					</div>
-				</div>
-			</a>
+			{/query}
 		</div>
 	</div>
 	<div class="prolistItem" style="margin-top:0.12rem;">
@@ -150,39 +131,19 @@
 			</div>
 		</div>
 		<div class="product">
+			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as e on e.goods_id eq m.id where=e.category_id in ($this->childId) and d.commend_id eq 3 limit=3 order=m.id desc}
 			<a href="">
 				<div class="item">
 					<div class="img">
-						<img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
+						<img src="{$item['img']}" alt="" />
 					</div>
 					<div class="content">
-						<div class="name hidewrap">这是商品的名称这是商品的名称这是商品的名称</div>
-						<div class="sellprice price">199.32</div>
+						<div class="name hidewrap">{$item['name']}</div>
+						<div class="sellprice price">{$item['sell_price']}</div>
 					</div>
 				</div>
 			</a>
-			<a href="">
-				<div class="item">
-					<div class="img">
-						<img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
-					</div>
-					<div class="content">
-						<div class="name hidewrap">这是商品的名称这是商品的名称这是商品的名称</div>
-						<div class="sellprice price">199.32</div>
-					</div>
-				</div>
-			</a>
-			<a href="">
-				<div class="item">
-					<div class="img">
-						<img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
-					</div>
-					<div class="content">
-						<div class="name hidewrap">这是商品的名称这是商品的名称这是商品的名称</div>
-						<div class="sellprice price">199.32</div>
-					</div>
-				</div>
-			</a>
+			{/query}
 		</div>
 		<div class="bannerImg">
 			<img src="/views/mobile/skin/default/image/jmj/img/banner01.png" alt=""/>
@@ -192,38 +153,16 @@
 <section id="relate_product">
 	<div class="title"><span>~</span><span>推荐商品</span>~</div>
 	<div class="content" id="getRelateWare">
+		{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as e on e.goods_id eq m.id where=e.category_id in ($this->childId) and d.commend_id eq 4 limit=4 order=m.id desc}
 		<div class="item">
-			<a href="index.php?controller=site&action=products&id=<%=dat.id %>"><div class="img underline"><img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""/></div>
-				<div class="name">名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称</div>
+			<a href="index.php?controller=site&action=products&id=<%=dat.id %>"><div class="img underline"><img src="{$item['img']}" alt=""/></div>
+				<div class="name">{$item['name']}</div>
 				<div class="box">
-					<div class="price">1889.5</div>
+					<div class="price">{$item['sell_price']}</div>
 					<div class="buy">立即购买</div>
 				</div></a>
 		</div>
-		<div class="item">
-			<a href="index.php?controller=site&action=products&id=<%=dat.id %>"><div class="img underline"><img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""/></div>
-				<div class="name">名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称</div>
-				<div class="box">
-					<div class="price">1889.5</div>
-					<div class="buy">立即购买</div>
-				</div></a>
-		</div>
-		<div class="item">
-			<a href="index.php?controller=site&action=products&id=<%=dat.id %>"><div class="img underline"><img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""/></div>
-				<div class="name">名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称</div>
-				<div class="box">
-					<div class="price">1889.5</div>
-					<div class="buy">立即购买</div>
-				</div></a>
-		</div>
-		<div class="item">
-			<a href="index.php?controller=site&action=products&id=<%=dat.id %>"><div class="img underline"><img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""/></div>
-				<div class="name">名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称名称</div>
-				<div class="box">
-					<div class="price">1889.5</div>
-					<div class="buy">立即购买</div>
-				</div></a>
-		</div>
+		{/query}
 	</div>
 </section>
 

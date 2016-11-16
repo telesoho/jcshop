@@ -35,21 +35,12 @@
 </div>
 <!--loading页结束-->
 <!--三级分类-->
-<section>
-    <div id="category_third">
-    </div>
-    <div class="flexbox empty_product">
-        <div class="img">
-            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
-        </div>
-        <div class="content">
-            <span>~</span>
-            <span>憋拉了，到底了</span>
-            <span>~</span>
-        </div>
-    </div>
+<section id="category">
+
+
 </section>
 <script type="text/html" id="category_third_temp">
+    <div id="category_third">
     <% for(var i=0; i<data.length; i++){%>
     <% var category=data[i] %>
         <div class="product_item" id="product_item<%=category.id %>">
@@ -69,6 +60,17 @@
             </a>
         </div>
     <%}%>
+    </div>
+    <div class="flexbox empty_product">
+        <div class="img">
+            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+        </div>
+        <div class="content">
+            <span>~</span>
+            <span>憋拉了，到底了</span>
+            <span>~</span>
+        </div>
+    </div>
 </script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>

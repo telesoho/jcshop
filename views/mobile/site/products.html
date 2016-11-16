@@ -89,21 +89,24 @@
     <section>
     	<div class="servicePromise">
     		<p class="title01">服务承诺</p>
-    		<ul>
+    		<ul class="box">
+                <li>
+                    <img src="/views/mobile/skin/default/image/jmj/product/zhi_you.png"/>
+                    <p>每日直邮<br/>安全快捷</p>
+                </li>
     		    <li>
-    		    	<img src="/views/mobile/skin/default/image/jmj/img/Zheng_icon.png"/>
-    		    	<p>正品</p>
+    		    	<img src="/views/mobile/skin/default/image/jmj/product/renbao.png"/>
+    		    	<p>产品<br/>质量保障</p>
     		    </li>
     		    <li>
-    		    	<img src="/views/mobile/skin/default/image/jmj/img/price_icon.png"/>
-    		    	<p>同价</p>
+    		    	<img src="/views/mobile/skin/default/image/jmj/product/tongjia.png"/>
+    		    	<p>东京同价<br/>拒绝猫腻</p>
     		    </li>
     		    <li>
-    		    	<img src="/views/mobile/skin/default/image/jmj/img/hegui_icon.png"/>
-    		    	<p>合规</p>
+    		    	<img src="/views/mobile/skin/default/image/jmj/product/zheng_icon.png"/>
+    		    	<p>自营自采<br/>只有正品</p>
     		    </li>
     		</ul>
-            <div style="clear:both;margin-bottom:0.01rem;"></div>
     	</div>
     </section>
 	<!--加入购物车-->
@@ -112,8 +115,8 @@
 			<div class="collection" id="collection_state"  onclick="Collection()" >
 
 			</div>
-    		<div><a href="#select_product" id="joinButton">加入购物车</a></div>
-    		<div><a href="#select_product" id="buyBottom">立即购买</a></div>
+    		<div class="joinButton"><a href="#select_product" id="joinButton">加入购物车</a></div>
+    		<div class="buyBottom"><a href="#select_product" id="buyBottom">立即购买</a></div>
     	</div>
     </section>
 	<!--服务说明-->
@@ -181,20 +184,23 @@
 	<!--商品详情模板引擎-->
 	<script id="product_goodsDetail" type="text/html">
 		<div class="top box">
+            <div class="head_logo">
+                <img src="/views/mobile/skin/default/image/jmj/product/jpan.png" alt="" />
+            </div>
 			<div class="name"><%=name %></div>
 			<div class="log">
-				<img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png" alt="">
+				<img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png" alt="" />
 			</div>
 		</div>
-		<div class="mark">AD<%=goods_no %></div>
+		<div class="mark"><%=goods_no %></div>
 		<div class="price box">
 			<div class="sell">
 				<img src="/views/mobile/skin/default/image/jmj/product/jiumaoprice.png" alt="" />
 				<span class="sellprice">￥ <%=sell_price %></span>
 			</div>
 			<div class="other_price box">
-				<span class="japen hidewrap">国内价: <%=market_price %></span>
-				<span class="china hidewrap">日本价: <%=parseInt(jp_price) %>日元</span>
+				<span class="japen hidewrap">国内价:￥<%=market_price %></span>
+				<span class="china hidewrap">日本价: <%=parseInt(jp_price) %>円</span>
 			</div>
 		</div>
 	</script>
@@ -342,6 +348,9 @@
             mui('body').on("tap",".test11",function(){
                 window.location.href=this.href;
             })
+            mui('.mui-scroll-wrapper').scroll({
+                deceleration: 0.0005
+            });
 		});
 		function getProductDetail(obj){
 			var product_detail=obj;
