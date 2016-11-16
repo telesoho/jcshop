@@ -674,6 +674,8 @@ input[type='search']{
   width:100%;
   overflow-x: auto;
   display: -webkit-inline-flex;
+  display: inline-flex;
+  justify-content: flex-start;
   -webkit-justify-content: flex-start;
 }
 .single{
@@ -695,6 +697,9 @@ input[type='search']{
 }
 
 .albumn_index .product .slider .item{
+  display: inline-block;
+  width:2rem;
+  height:3rem;
   margin-top:0.2rem;
   margin-left:0.5rem;
 }
