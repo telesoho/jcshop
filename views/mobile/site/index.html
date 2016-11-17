@@ -252,7 +252,7 @@
         <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>&vn=<%=dat.visit_num%>&xb=<%=dat.xb%>" class="locationA">
             <div class="content">
                 <div class="img">
-                    <img src="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" />
+                    <img dataimg="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg"  class="samLazyImg"  />
                 </div>
                 <div class="mark1"><%=dat.nums %>件商品
                 </div>
@@ -269,7 +269,7 @@
                     <% var goodsitem =dat.goods_list[m] %>
                     <div class="item">
                         <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
-                            <div class="img"><img src="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;s"/></div>
+                            <div class="img"><img dataimg="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg" /></div>
                             <div class="name hidewrap"><%=goodsitem.name %></div>
                             <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
                         </a>
@@ -277,6 +277,7 @@
                     <div class="singleline"></div>
                     <%}%>
                 </div>
+                <div class="mark"></div>
             </div>
         <%}%>
     </section>
@@ -286,7 +287,7 @@
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
-<!--<script src="/views/mobile/javascript/lazyload.js"></script>-->
+<script src="/views/mobile/javascript/lazyload.js"></script>
 <!--<script src="/views/mobile/javascript/time.js"></script>-->
 <script src="/views/mobile/javascript/base64.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
