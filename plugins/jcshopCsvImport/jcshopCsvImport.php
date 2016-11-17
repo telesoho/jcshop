@@ -361,10 +361,10 @@ class jcshopCsvImport extends pluginBase
 
 				if(is_dir($goodsImgDir)) {
 
-					$handle = opendir($goodsImgDir);
+					// 以升序排序 - 默认
+					$img_files = scandir($goodsImgDir);
 
-					while($file = readdir($handle))
-					{
+					foreach($img_files as $file) {
 						if($file != '.' && $file != '..'){
 							$source_file =  $goodsImgDir . "/" . $file;
 							if(is_file($source_file)) {
