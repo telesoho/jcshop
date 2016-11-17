@@ -25,7 +25,7 @@
   'commission' => '',
   'store_num_warning' => '1',
   'reg_option' => '0',
-  'index_slide' => 'a:5:{i:0;a:3:{s:4:"name";s:6:"正品";s:3:"url";s:24:"http://www.jiumaojia.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831282.jpg";}i:1;a:3:{s:4:"name";s:12:"万种商品";s:3:"url";s:24:"http://www.jiumaojia.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831882.jpg";}i:2;a:3:{s:4:"name";s:12:"日本直邮";s:3:"url";s:24:"http://www.jiumaojia.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831212.jpg";}i:3;a:3:{s:4:"name";s:12:"挑到花眼";s:3:"url";s:24:"http://www.jiumaojia.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831873.jpg";}i:4;a:3:{s:4:"name";s:12:"九猫卧底";s:3:"url";s:24:"http://www.jiumaojia.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831939.jpg";}}',
+  'index_slide' => 'a:5:{i:0;a:3:{s:4:"name";s:6:"正品";s:3:"url";s:211:"http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=100000021&idx=1&sn=5fdb0e149001831242d616090c0ad549&chksm=6b23f0d65c5479c03816d4d8b04cec7635847914686a023dbc2a1d0e17f1012e7d4d9fee59bf&scene=0#wechat_redirect";s:3:"img";s:39:"upload/2016/11/04/20161104093831282.jpg";}i:1;a:3:{s:4:"name";s:6:"假货";s:3:"url";s:191:"http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=2247483661&idx=1&sn=078860bf96ca22f5c36e3ac6f5c96e49&chksm=eb23f0cedc5479d83fe464bb9b37c8a7aa86fb987503cf3da279fadad098762d5f8dd4b3db5a#rd";s:3:"img";s:39:"upload/2016/11/16/20161116052927198.jpg";}i:2;a:3:{s:4:"name";s:9:"保税区";s:3:"url";s:191:"http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=2247483661&idx=7&sn=035b5b6ee7a6bde60e099b49d18117ac&chksm=eb23f0cedc5479d8b83e8847e69832e017086a6d5a8f8c1ce6c3d268a528be0ffa708af203fa#rd";s:3:"img";s:39:"upload/2016/11/16/20161116053141546.jpg";}i:3;a:3:{s:4:"name";s:6:"代购";s:3:"url";s:191:"http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=2247483661&idx=4&sn=f424c969b486cb7ca2808b600a087cef&chksm=eb23f0cedc5479d83ebac693b6100ea09b824f43670045248d83a2132d04a66da4a4111e85ef#rd";s:3:"img";s:39:"upload/2016/11/16/20161116053235157.jpg";}i:4;a:3:{s:4:"name";s:6:"淘宝";s:3:"url";s:191:"http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=2247483661&idx=2&sn=b501d0665d67ab6d1c3e05ad755a6100&chksm=eb23f0cedc5479d89647e79d7b9da6d5258238560c24b683ed2db37d8d430db9b94cd432b183#rd";s:3:"img";s:39:"upload/2016/11/16/20161116053309951.jpg";}}',
   'logo' => 'upload/2016/11/04/20161104104034474.png',
   'guide_name' => 
   array (
@@ -39,5 +39,5 @@
     1 => 'systemadmin/index',
     2 => 'seller/index',
   ),
-  'exchange_rate_jp' => '15.26', //四位
+  'exchange_rate_jp' => '15.2693',
 )?>
