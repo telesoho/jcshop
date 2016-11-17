@@ -176,10 +176,12 @@ input[type='search']{
     width:100%;
 }
 .categroyHot .banner{
+    width:100%;
     z-index:2;
     background:#fff;
     position:relative;
     overflow-y: hidden;
+    overflow-x: scroll;
     height:2.5rem;
     -webkit-overflow-scrolling: touch;
 }
@@ -187,10 +189,8 @@ input[type='search']{
     z-index:4;
     position:absolute;
     height:2.5rem;
-    width:100%;
     display: -webkit-flex;
     -webkit-justify-content: flex-start;
-    -webkit-overflow-scrolling: touch;
 }
 .categroyHot .banner .wrapper .item{
     flex:1;
