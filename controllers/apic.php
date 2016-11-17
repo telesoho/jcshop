@@ -1065,7 +1065,12 @@ class Apic extends IController
         $data['sfz_image2x'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/281/h/207");
         $this->json_echo($data);
     }
-
+    function promotion_list(){
+        $query = new IQuery("promotion");
+        $query->where = "type = 0 and seller_id = 0 and award_type = 6";
+        $items = $query->find()[0];
+        $this->json_echo($items);
+    }
     private function json_echo($data){
         echo json_encode($data);
         exit();
