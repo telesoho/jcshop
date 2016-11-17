@@ -475,7 +475,7 @@ input[type='search']{
 }
 .article_body .content_ware .ware .buy{
 	background:#ff4aa0;
-	box-shadow:0 0.02rem 0.04rem 0 rgba(255,73,160,0.50);
+	/*box-shadow:0 0.02rem 0.04rem 0 rgba(255,73,160,0.50);*/
 	border-radius:0.04rem;
 	width:1.36rem;
 	height:0.48rem;
@@ -486,7 +486,7 @@ input[type='search']{
 	text-align:center;
     position:absolute;
     right:0.36rem;
-    bottom:0.17rem;
+    bottom:0.28rem;
 }
 .articledetail_ware .title{
 	font-size:0.28rem;
@@ -580,7 +580,7 @@ input[type='search']{
 /*}*/
 .articledetail_ware .content .item .buy{
 	background:#ff4aa0;
-	box-shadow:0 0.02rem 0.04rem 0 rgba(255,73,160,0.50);
+	/*box-shadow:0 0.02rem 0.04rem 0 rgba(255,73,160,0.50);*/
 	border-radius:0.04rem;
 	width:1.14rem;
 	height:0.48rem;
@@ -588,7 +588,7 @@ input[type='search']{
 	line-height:0.48rem;
 	color:#fff;
     position:absolute;
-    bottom:0.17rem;
+    bottom:0.2rem;
     right:0.1rem;
 }
 /*限时购活动*/
