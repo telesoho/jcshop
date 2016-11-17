@@ -361,10 +361,10 @@ class jcshopCsvImport extends pluginBase
 
 				if(is_dir($goodsImgDir)) {
 
-					$handle = opendir($goodsImgDir);
+					// 以升序排序 - 默认
+					$img_files = scandir($goodsImgDir);
 
-					while($file = readdir($handle))
-					{
+					foreach($img_files as $file) {
 						if($file != '.' && $file != '..'){
 							$source_file =  $goodsImgDir . "/" . $file;
 							if(is_file($source_file)) {
@@ -461,6 +461,10 @@ class jcshopCsvImport extends pluginBase
 			}
 
 			//处理商品图片关联
+			if($mainPic) {
+				$photoRelationDB->del('goods_id = '.$goods_id);
+			}
+
 			foreach($mainPic as $photoFile) {
 				if(!is_file($photoFile))
 				{
@@ -477,10 +481,10 @@ class jcshopCsvImport extends pluginBase
 				}
 
 				// 关联商品主图
-				if($photoRelationDB->get_count('goods_id =' . $goods_id . " and photo_id ='" . $md5Code . "'") == 0) {
+				//if($photoRelationDB->get_count('goods_id =' . $goods_id . " and photo_id ='" . $md5Code . "'") == 0) {
 					$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
 					$photoRelationDB->add();
-				}
+				//}
 			}
 		}
 	}
