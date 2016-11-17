@@ -660,7 +660,7 @@ input[type='search']{
 }
 .albumn_index .mark{
   margin-top:-0.06rem;
-  z-index:13;
+  z-index:12;
   height:3.07rem;
   overflow-y: hidden;
   width:100%;

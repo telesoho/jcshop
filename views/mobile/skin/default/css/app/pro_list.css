@@ -173,20 +173,24 @@ input[type='search']{
     height:2.3rem;
     z-index:3;
     position:relative;
+    width:100%;
 }
 .categroyHot .banner{
     z-index:2;
     background:#fff;
     position:relative;
-    overflow-x: auto;
     overflow-y: hidden;
     height:2.5rem;
+    -webkit-overflow-scrolling: touch;
 }
 .categroyHot .banner .wrapper{
+    z-index:4;
     position:absolute;
+    height:2.5rem;
     width:100%;
-    display:-webkit-inline-flex;
+    display: -webkit-flex;
     -webkit-justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
 }
 .categroyHot .banner .wrapper .item{
     flex:1;
