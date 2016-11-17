@@ -36,6 +36,9 @@ class Apic extends IController
         $query = new IQuery("promotion");
         $query->where = "type = 0 and seller_id = 0 and award_type = 6";
         $result['condition_price'] = $query->find()[0]['condition'];
+        foreach ($result['goodsList'] as $key=>$value){
+            $result['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$result['goodsList'][$key]['img']."/w/500/h/500");
+        }
         $this->json_echo($result);
     }
 
