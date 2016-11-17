@@ -99,7 +99,7 @@ ul li{
 .goodsList .mui-control-item img{width:1.8rem;height:1.8rem;}
 .goodsList .mui-control-item p{color:#3d4245;font-size:0.24rem;width:2rem;overflow: hidden;text-overflow: ellipsis;}
 .goodsList .mui-control-item p:last-child{color:#fe0000;}
-.servicePromise{background:#fff;margin-top:0.2rem;padding:0 0.13rem;border-top: 1px solid #eee;overflow:hidden;height:4.5rem;}
+.servicePromise{background:#fff;margin-top:0.2rem;padding:0 0.13rem;border-top: 1px solid #eee;overflow:hidden;height:3.5rem;}
 .servicePromise p:first-child{padding:0.1rem 0;font-size:0.3rem;color:#3d4245;border-bottom: 1px solid #eee;}
 .servicePromise ul{
     display:-webkit-flex;
@@ -119,6 +119,17 @@ ul li{
     font-size:0.24rem;
     margin-top:0.14rem;
     color:#bbb;
+}
+.tips{
+    width:100%;
+    overflow-x: hidden;
+    display: -webkit-flex;
+    /*align-items: center;*/
+    justify-items: center;
+    margin-bottom:2rem;
+}
+.tips img{
+    width:7.25rem;
 }
 #goodsContent{
     font-size:0.28rem;

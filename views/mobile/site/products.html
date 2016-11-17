@@ -109,6 +109,9 @@
     		    </li>
     		</ul>
     	</div>
+		<div class="tips">
+			<img src="/views/mobile/skin/default/image/jmj/product/tip.png" alt="" />
+		</div>
     </section>
 	<!--加入购物车-->
     <section>
@@ -240,7 +243,8 @@
 				<div class="select_top_right">
 					<div class="sel_title">
 						<a href="#"><%=name %></a>
-						<span>￥<%=sell_price %></span>
+						<span class="storeNum" data-store="<%=store_nums %>">库存数量:<%=store_nums %></span>
+						<span class="price">￥<%=sell_price %></span>
 					</div>
 					<a href="#select_product" class="a_da"><span class="mui-icon mui-icon-closeempty"></span></a>
 				</div>
