@@ -139,6 +139,7 @@ class Apic extends IController
         //商品展示
         foreach ($data['goodsList'] as $key => $value){
             if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
+            $data['goodsList']['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$data['goodsList']['img']."/w/500/h/500");
         }
 
         $this->json_echo($data);
@@ -472,6 +473,7 @@ class Apic extends IController
         foreach ($goods_info['photo'] as $key => $value){
             $goods_info['photo'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/600/h/600");
         }
+        $goods_info['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$goods_info['img']."/w/500/h/500");
 
         //商品是否参加促销活动(团购，抢购)
         $goods_info['promo']     = IReq::get('promo')     ? IReq::get('promo') : '';
