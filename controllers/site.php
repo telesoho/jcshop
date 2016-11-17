@@ -159,22 +159,100 @@ class Site extends IController
 	{
 		$this->catId = IFilter::act(IReq::get('cat'),'int');//分类id
 
-		if($this->catId == 0)
-		{
-			IError::show(403,'缺少分类ID');
+		switch($this->catId){
+			//药妆
+			case 126:
+				$this->ac_id = 15;
+				break;
+			//个护
+			case 134:
+				$this->ac_id = 18;
+				break;
+			//宠物
+			case 6:
+				$this->ac_id = 17;
+				break;
+			//健康
+			case 2:
+				$this->ac_id = 16;
+				break;
+			//零食
+			case 7:
+				$this->ac_id = 19;
+				break;
+			default:
+				IError::show(403,'分类不存在');
+		}
+		/* 专辑 */
+		$db_article 					= new IQuery('article as m');
+		$db_article->join 				= 'left join article_category as c on c.id=m.category_id';
+		$db_article->where 				= 'm.visibility=1 and m.category_id='.$this->ac_id;
+		$db_article->fields 			= 'm.id,m.title,m.visit_num,m.favorite,m.image,c.name';
+		$db_article->order 				= 'm.top desc,m.sort desc';
+		$db_article->limit 				= 2;
+		$data_article 					= $db_article->find();
+		if(!empty($data_article)){
+			$db_goods 					= new IQuery('goods as m');
+			$db_goods->join 			= 'left join relation as r on r.goods_id=m.id';
+			$db_goods->fields 			= 'm.id,m.name,m.sell_price,m.img';
+			$db_goods->order 			= 'm.sort desc';
+			$db_goods->limit 			= 1000;
+			$db_favorite 				= new IQuery('favorite_article');
+			$db_favorite->field 		= 'count(id)';
+			foreach($data_article as $k => $v){
+				$data_article[$k]['image'] 		= IWeb::$app->config['image_host'] .'/'. $v['image'];
+				//是否已收藏
+				$data_article[$k]['is_favorite'] 	= 0;
+				if(!empty($this->user['user_id'])){
+					$db_favorite->where 		= 'aid='.$v['id'].' and user_id='.$this->user['user_id'];
+					$data_favorite 				= $db_favorite->find();
+					if(!empty($data_favorite)) $data_article[$k]['is_favorite'] = 1;
+				}
+				//相关商品
+				$db_goods->where 				= 'm.is_del=0 and r.article_id='.$v['id'];
+				$goods_list 					= $db_goods->find();
+				if(!empty($goods_list)){
+					foreach($goods_list as $k1 => $v1){
+						$goods_list[$k1]['img'] 		= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/240/h/240");
+					}
+				}
+				$data_article[$k]['goods_list'] = $goods_list;
+			}
+		}
+		//商品分类
+		$this->childId 					= goods_class::catChild($this->catId);
+		
+		/* 品牌 */
+		//关联的品牌分类
+		$db_brand_category 				= new IQuery('brand_category');
+		$db_brand_category->where 		= 'goods_category_id in ('.$this->childId.')';
+		$db_brand_category->fields 		= 'id';
+		$db_brand_category->limit 		= 1000;
+		$data_brand_category 			= $db_brand_category->find();
+		$data_brand 					= array();
+		if(!empty($data_brand_category)){
+			//关联的品牌
+			$db_brand 					= new IQuery('brand');
+			$where 						= '';
+			foreach($data_brand_category as $k => $v){
+				$where 		.= 'category_ids like "%,'.$v['id'].',%"';
+				if(count($data_brand_category)-1 != $k) $where .= ' OR ';
+			}
+			$db_brand->where 			= $where;
+			$db_brand->fields 			= 'id,name,logo,url';
+			$db_brand->order 			= 'sort desc';
+			$db_brand->limit 			= 20;
+			$data_brand 				= $db_brand->find();
+			if(!empty($data_brand)){
+				foreach ($data_brand as $k => $v){
+					$data_brand[$k]['logo'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['logo']."/w/200/h/120");
+				}
+			}
 		}
 
-		//查找分类信息
-		$catObj       = new IModel('category');
-		$this->catRow = $catObj->getObj('id = '.$this->catId);
-
-		if($this->catRow == null)
-		{
-			IError::show(403,'此分类不存在');
-		}
-
-		//获取子分类
-		$this->childId = goods_class::catChild($this->catId);
+		/* 模板赋值 */
+		$this->article_list 		= $data_article; 	//文章列表
+		$this->data_brand 			= $data_brand; 		//品牌
 		$this->redirect('pro_list');
 	}
 	//咨询

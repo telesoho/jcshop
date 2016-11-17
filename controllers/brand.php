@@ -150,7 +150,7 @@ class Brand extends IController implements adminAuthorization
 		if($category && is_array($category))
 		{
 			$categorys = join(',',$category);
-			$brand['category_ids'] = $categorys;
+			$brand['category_ids'] = ','.$categorys.',';
 		}
 		else
 		{
