@@ -188,9 +188,9 @@
 	<!--商品详情模板引擎-->
 	<script id="product_goodsDetail" type="text/html">
 		<div class="top box">
-            <div class="head_logo">
-                <img src="/views/mobile/skin/default/image/jmj/product/jpan.png" alt="" />
-            </div>
+            <!--<div class="head_logo">-->
+                <!--<img src="/views/mobile/skin/default/image/jmj/product/jpan.png" alt="" />-->
+            <!--</div>-->
 			<div class="name"><%=name %></div>
 			<div class="log">
 				<img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png" alt="" />
@@ -203,8 +203,9 @@
 				<span class="sellprice">￥ <%=sell_price %></span>
 			</div>
 			<div class="other_price box">
-				<span class="japen hidewrap">国内价:￥<%=market_price %></span>
-				<span class="china hidewrap">日本价: <%=parseInt(jp_price) %>円</span>
+				<span class="china hidewrap">国内价:￥<%=market_price %></span>
+				<span class="japen hidewrap"><img src="/views/mobile/skin/default/image/jmj/product/riya-logo.png" alt=""style="width:1.08rem;height:0.34rem" />
+					<%=parseInt(jp_price) %>円</span>
 			</div>
 		</div>
 	</script>
