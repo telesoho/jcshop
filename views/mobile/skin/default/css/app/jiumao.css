@@ -513,9 +513,16 @@ input[type='search']{
     margin-bottom:0.14rem;
     background:#fff;
 }
+.articledetail_ware .content .item .img{
+	width:3.4rem;
+	height:3.4rem;
+	display:-webkit-flex;
+	-webkit-justify-content: center;
+	-webkit-align-items: center;
+}
 .articledetail_ware .content .item img{
-    width:3.4rem;
-    height:3.4rem;
+    width:2.9rem;
+    height:2.9rem;
 }
 .articledetail_ware .content .item .price{
     margin-left:0.11rem;
@@ -1077,6 +1084,38 @@ input[type='search']{
 	line-height:0.69rem;
 	font-size:0.3rem;
 	color:#fff;
+}
+#shopcarContent .bottom{
+	background:#f8f8f8;
+	display: -webkit-flex;
+	-webkit-align-items: center;
+	-webkit-justify-content: center;
+}
+#shopcarContent .bottom a{
+	position:relative;
+	display:inline-block;
+	background:#fff7b6;
+	border-radius:0.08rem;
+	width:6.96rem;
+	height:0.9rem;
+	text-align:center;
+	line-height:0.9rem;
+	color:#ff4949;
+	font-size:0.26rem;
+	margin-top:0.15rem;
+}
+#shopcarContent .bottom a:after{
+	background:transparent;
+	position:absolute;
+	content:'';
+	left:3.5rem;
+	top:-0.12rem;
+	z-index:24;
+	width: 0;
+	height: 0;
+	border-left: 0.22rem solid transparent;
+	border-right: 0.22rem solid transparent;
+	border-bottom: 0.15rem solid #fff7b6;
 }
 /*订单确认页面*/
 .mui-poppicker-btn-ok{

@@ -33,6 +33,12 @@ class Apic extends IController
 //            IError::show($result,403);
             $this->log->addError('$result变量错误');
         }
+        $query = new IQuery("promotion");
+        $query->where = "type = 0 and seller_id = 0 and award_type = 6";
+        $result['condition_price'] = $query->find()[0]['condition'];
+        foreach ($result['goodsList'] as $key=>$value){
+            $result['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$result['goodsList'][$key]['img']."/w/500/h/500");
+        }
         $this->json_echo($result);
     }
 
@@ -139,7 +145,7 @@ class Apic extends IController
         //商品展示
         foreach ($data['goodsList'] as $key => $value){
             if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
-            $data['goodsList']['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$data['goodsList']['img']."/w/500/h/500");
+            if($data['goodsList'][$key]['img']) $data['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$data['goodsList'][$key]['img']."/w/500/h/500");
         }
 
         $this->json_echo($data);

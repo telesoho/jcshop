@@ -36,7 +36,7 @@
 	</div>
 </div>
 <!--loading页结束-->
-<div id="shopcarContent">
+<div id="shopcarContent" style="margin-bottom:1.2rem;">
 
 
 </div>
@@ -98,7 +98,7 @@
 				</div>
 				<div class="goodsContent">
 					<div class="name">
-						<%=goodsList[i].name%>
+						<%=goodsList[i].name%>这是商品的名称这是商品的名称这是商品的名称这是商品的名称这是商品的名称这是商品的名称这是商品的名称这是商品的名称这是商品的名称这是商品的名称这是商品的名称这是商品的名称这是商品的名称
 					</div>
 					<div class="style">
 
@@ -116,7 +116,7 @@
 			</div>
 		</div>
 	<%}%>
-		<div class="box total" style="margin-bottom:1rem;">
+		<div class="box total">
 			<div class="totalPrice">
 				<span class="text">合计: </span>
 				<span class="price" id="sum_price">¥ <%=final_sum%></span>
@@ -124,6 +124,16 @@
 			<div class="btn_pay">
 				<span id="sum_count">结算(<%=count%>)</span>
 			</div>
+		</div>
+	<% var check =checkPostage(condition_price,final_sum) %>
+		<div class="bottom">
+			<a href="{url:/site/index}" class="condition_price">
+				<%if(check>0){%>
+				还差¥<%=check%>元可享包邮，去凑单
+				<%}else{%>
+				我们帮你免邮费了,去逛逛
+				<%}%>
+			</a>
 		</div>
 	<%}%>
 
@@ -140,10 +150,13 @@
 		})
 		mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
 		//定义template方法
-		template.helper('JSONstringify', function(obj){
-			return JSON.stringify(obj);
-		});
 	});
+template.helper('JSONstringify', function(obj){
+	return JSON.stringify(obj);
+});
+template.helper('checkPostage', function(obj1,obj2){
+	return (parseFloat(obj1)-parseFloat(obj2)).toFixed(2);
+});
 function getCartInfo(){
 	mui.ajax('index.php?controller=apic&action=cart',{
 		dataType:'json',//服务器返回json格式数据
@@ -152,6 +165,7 @@ function getCartInfo(){
 		headers:{'Content-Type':'application/json'},
 		success:function(data){
 			console.log(data);
+			setItem("condition_price",data.condition_price);
 			var html = template('shopCarTemplate',data);
 			document.getElementById("shopcarContent").innerHTML = html;
 		},
@@ -232,6 +246,14 @@ function cartCount(obj)
 						$('#cart_prompt li').remove();
 						$('#cart_prompt').hide();
 					}
+					console.log(content);
+					var getcondition_price=getItem("condition_price");
+					var coun=(parseFloat(getcondition_price)-parseFloat(content.final_sum)).toFixed(2)
+					if(coun>0){
+						$(".condition_price").html("还差"+coun+"元可享包邮，去凑单");
+					}else{
+						$(".condition_price").html("我们帮你免邮费了,去逛逛");
+					}
 
 					/*开始更新数据*/
 					$('#weight').html(content.weight);
@@ -290,4 +312,13 @@ function removeCartByJSON(obj)
 		window.location.reload();
 	});
 }
+	//本地缓存函数
+	function setItem(key,value){
+		var val=JSON.stringify(value)?JSON.stringify(value):[];
+		window.localStorage.setItem(key,val);
+	}
+	function getItem(key){
+		var getter= window.localStorage.getItem(key);
+		return JSON.parse(getter);
+	}
 </script>

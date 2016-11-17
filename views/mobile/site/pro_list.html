@@ -103,36 +103,18 @@
 		</div>
 		<div class="banner">
 			<div class="wrapper">
-				<div class="item">
-					<img src=/views/mobile/skin/default/image/jmj/img/ware1.png alt="" />
+				{query:name=category 
+					where=parent_id eq $this->catId 
+					fields=id,name,image 
+					limit=1000 
+					order=sort asc}
+				<div class="item" onclick='toPageThird({echo:json_encode( array('id'=>$item['id']))})'>
+					<img src="{echo:IWeb::$app->config['image_host'].'/'.$item['image']}" alt="" />
 					<div class="name hidewrap">
-						分类名称
+						{$item['name']}
 					</div>
 				</div>
-				<div class="item">
-					<img src=/views/mobile/skin/default/image/jmj/img/ware1.png alt="" />
-					<div class="name hidewrap">
-						分类名称
-					</div>
-				</div>
-				<div class="item">
-					<img src=/views/mobile/skin/default/image/jmj/img/ware1.png alt="" />
-					<div class="name hidewrap">
-						分类名称
-					</div>
-				</div>
-				<div class="item">
-					<img src=/views/mobile/skin/default/image/jmj/img/ware1.png alt="" />
-					<div class="name hidewrap">
-						分类名称
-					</div>
-				</div>
-				<div class="item">
-					<img src=/views/mobile/skin/default/image/jmj/img/ware1.png alt="" />
-					<div class="name hidewrap">
-						分类名称
-					</div>
-				</div>
+				{/query}
 			</div>
 		</div>
 	</div>
@@ -153,7 +135,7 @@
 			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
 				where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 1 
 				fields=m.id,m.name,m.sell_price,m.img 
-				limit=3 
+				limit=6 
 				order=m.id desc}
 			<a href="{url:/site/products?id=$item['id']}">
 				<div class="item">
@@ -169,59 +151,61 @@
 			{/query}
 		</div>
 	</div>
-	<!--随机专辑-->
+	<!--随机专辑1-->
+	{if:!empty($this->article_list[0])}
 	<section class="recommended line albumn_index">
 		<div class="title">
             <span class="logo" >
                 <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
             </span>
 			<span class="name">
-				名称
+				{$this->article_list[0]['name']}
             </span>
-			<span class="num mui-pull-right favorite<%=dat.id %>">
-            <!--<%=cal(dat.favorite) %>-->
+			<span class="num mui-pull-right favorite{$this->article_list[0]['id']}">
+            	{$this->article_list[0]['favorite']}
             </span>
 			<span class="like mui-pull-right">
-                <!--<%if(dat.is_favorite==0){%>-->
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png"  alt="" class="img-like shareContent<%=dat.id %>" onclick="collection(<%=dat.id %>)" />
-                <!--<%}else{%>-->
-                <!--<img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like shareContent<%=dat.id %>" onclick=collection(<%=dat.id %>) />-->
-                <!--<%}%>-->
+				{if:$this->article_list[0]['is_favorite'] == 0}
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png"  alt="" class="img-like shareContent{$this->article_list[0]['id']}" onclick="collection({$this->article_list[0]['id']})" />
+                {else:}
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like shareContent{$this->article_list[0]['id']}" onclick=collection({$this->article_list[0]['id']}) />
+                {/if}
             </span>
 		</div>
-		<a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>&vn=<%=dat.visit_num%>&xb=<%=dat.xb%>" class="locationA">
+		<a href="index.php?controller=site&action=article_detail&id={$this->article_list[0]['id']}" class="locationA">
 			<div class="content">
 				<div class="img">
-					<img dataimg="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" src="/views/mobile/skin/default/image/jmj/icon/big_lazy.jpg"  class="samLazyImg"  />
+					<img dataimg="{$this->article_list[0]['image']}" alt="" width="100%" style="height:3.8rem;" src="{$this->article_list[0]['image']}"  class="samLazyImg"  />
 				</div>
-				<div class="mark1"><%=dat.nums %>件商品
+				<div class="mark1">{echo:count($this->article_list[0]['goods_list'])}件商品
 				</div>
 				<div class="mark2">
 					<img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-					<%=cal(dat.visit_num) %></div>
+					{$this->article_list[0]['visit_num']}</div>
 			</div>
 		</a>
-		<%if(dat.goods_list.length>=3){%>
+		{if:count($this->article_list[0]['goods_list']) > 3}
 		<div class="single"></div>
 		<div class="product">
 			<div class="slider">
-				<% for(var m=0; m<dat.goods_list.length; m++){%>
-				<% var goodsitem =dat.goods_list[m] %>
+				{foreach:items=$this->article_list[0]['goods_list']}
 				<div class="item">
-					<a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
-						<div class="img"><img dataimg="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg" /></div>
-						<div class="name hidewrap"><%=goodsitem.name %></div>
-						<div class="sellprice">￥ <%=goodsitem.sell_price %></div>
+					<a href="index.php?controller=site&action=products&id={$item['id']}" class="locationA">
+						<div class="img"><img dataimg="{$item['img']}" alt="" style="width:1.8rem;height:1.8rem;" src="{$item['img']}" alt="" class="samLazyImg" /></div>
+						<div class="name hidewrap">{$item['name']}</div>
+						<div class="sellprice">￥ {$item['sell_price']}</div>
 					</a>
 				</div>
 				<div class="singleline"></div>
-				<%}%>
+				{/foreach}
 			</div>
 			<div class="mark"></div>
 		</div>
-		<%}%>
+		{/if}
 	</section>
+	{/if}
 	<!--品牌-->
+	{if:!empty($this->data_brand)}
 	<div class="relateBrand">
 		<div class="title">
 			<div class="top">
@@ -234,26 +218,14 @@
 			</div>
 		</div>
 		<div class="banner">
+			{foreach:items=$this->data_brand}
 			<div class="item">
-				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
+				<a href="{echo:empty($item['url']) ? 'javascript:;' : $item['url']}"><img src="{$item['logo']}" alt="" style="width:1.61rem;height:1.03rem" /></a>
 			</div>
-			<div class="item">
-				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
-			</div>
-			<div class="item">
-				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
-			</div>
-			<div class="item">
-				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
-			</div>
-			<div class="item">
-				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
-			</div>
-			<div class="item">
-				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
-			</div>
+			{/foreach}
 		</div>
 	</div>
+	{/if}
 	<!--最热卖-->
 	<div class="prolistItem" style="margin-top:0.12rem;">
 		<div class="box new">
@@ -271,7 +243,7 @@
 			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
 				where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 3 
 				fields=m.id,m.name,m.sell_price,m.img 
-				limit=3 
+				limit=6 
 				order=m.id desc}
 			<a href="{url:/site/products?id=$item['id']}">
 				<div class="item">
@@ -287,7 +259,59 @@
 			{/query}
 		</div>
 	</div>
-	<!--随机专辑你自己放一下-->
+	<!--随机专辑2-->
+	{if:!empty($this->article_list[1])}
+	<section class="recommended line albumn_index">
+		<div class="title">
+            <span class="logo" >
+                <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
+            </span>
+			<span class="name">
+				{$this->article_list[1]['name']}
+            </span>
+			<span class="num mui-pull-right favorite{$this->article_list[1]['id']}">
+            	{$this->article_list[1]['favorite']}
+            </span>
+			<span class="like mui-pull-right">
+				{if:$this->article_list[1]['is_favorite'] == 0}
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png"  alt="" class="img-like shareContent{$this->article_list[1]['id']}" onclick="collection({$this->article_list[1]['id']})" />
+                {else:}
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like shareContent{$this->article_list[1]['id']}" onclick=collection({$this->article_list[1]['id']}) />
+                {/if}
+            </span>
+		</div>
+		<a href="index.php?controller=site&action=article_detail&id={$this->article_list[1]['id']}" class="locationA">
+			<div class="content">
+				<div class="img">
+					<img dataimg="{$this->article_list[1]['image']}" alt="" width="100%" style="height:3.8rem;" src="{$this->article_list[1]['image']}"  class="samLazyImg"  />
+				</div>
+				<div class="mark1">{echo:count($this->article_list[1]['goods_list'])}件商品
+				</div>
+				<div class="mark2">
+					<img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
+					{$this->article_list[1]['visit_num']}</div>
+			</div>
+		</a>
+		{if:count($this->article_list[1]['goods_list']) > 3}
+		<div class="single"></div>
+		<div class="product">
+			<div class="slider">
+				{foreach:items=$this->article_list[1]['goods_list']}
+				<div class="item">
+					<a href="index.php?controller=site&action=products&id={$item['id']}" class="locationA">
+						<div class="img"><img dataimg="{$item['img']}" alt="" style="width:1.8rem;height:1.8rem;" src="{$item['img']}" alt="" class="samLazyImg" /></div>
+						<div class="name hidewrap">{$item['name']}</div>
+						<div class="sellprice">￥ {$item['sell_price']}</div>
+					</a>
+				</div>
+				<div class="singleline"></div>
+				{/foreach}
+			</div>
+			<div class="mark"></div>
+		</div>
+		{/if}
+	</section>
+	{/if}
 </section>
 <!--推荐商品-->
 <section id="relate_product">
@@ -373,6 +397,7 @@
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script>
 	//获取url的商品id
 	var Request = new Object();
