@@ -658,6 +658,13 @@ input[type='search']{
   top:0.05rem;
   margin-right:0.15rem;
 }
+.albumn_index .mark{
+  margin-top:-0.06rem;
+  z-index:12;
+  height:3.07rem;
+  overflow-y: hidden;
+  width:100%;
+}
 .albumn_index .product{
   z-index:11;
   position:relative;

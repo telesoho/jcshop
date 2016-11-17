@@ -101,21 +101,23 @@
 				ヒット分類
 			</div>
 		</div>
+        <div class="mark">
 		<div class="banner">
-			<div class="wrapper">
-				{query:name=category 
-					where=parent_id eq $this->catId 
-					fields=id,name,image 
-					limit=1000 
-					order=sort asc}
-				<div class="item" onclick='toPageThird({echo:json_encode( array('id'=>$item['id']))})'>
-					<img src="{echo:IWeb::$app->config['image_host'].'/'.$item['image']}" alt="" />
-					<div class="name hidewrap">
-						{$item['name']}
-					</div>
-				</div>
-				{/query}
-			</div>
+                <div class="wrapper">
+                    {query:name=category
+                        where=parent_id eq $this->catId
+                        fields=id,name,image
+                        limit=1000
+                        order=sort asc}
+                    <div class="item" onclick='toPageThird({echo:json_encode( array('id'=>$item['id']))})'>
+                        <img src="{echo:IWeb::$app->config['image_host'].'/'.$item['image']}" alt="" />
+                        <div class="name hidewrap">
+                            {$item['name']}
+                        </div>
+                    </div>
+                    {/query}
+                </div>
+            </div>
 		</div>
 	</div>
 	<!--最新品-->
@@ -186,20 +188,22 @@
 		</a>
 		{if:count($this->article_list[0]['goods_list']) > 3}
 		<div class="single"></div>
-		<div class="product">
-			<div class="slider">
-				{foreach:items=$this->article_list[0]['goods_list']}
-				<div class="item">
-					<a href="index.php?controller=site&action=products&id={$item['id']}" class="locationA">
-						<div class="img"><img dataimg="{$item['img']}" alt="" style="width:1.8rem;height:1.8rem;" src="{$item['img']}" alt="" class="samLazyImg" /></div>
-						<div class="name hidewrap">{$item['name']}</div>
-						<div class="sellprice">¥{$item['sell_price']}</div>
-					</a>
+		<div class="mark">
+			<div class="product">
+				<div class="slider">
+					{foreach:items=$this->article_list[0]['goods_list']}
+					<div class="item">
+						<a href="index.php?controller=site&action=products&id={$item['id']}" class="locationA">
+							<div class="img"><img dataimg="{$item['img']}" alt="" style="width:1.8rem;height:1.8rem;" src="{$item['img']}" alt="" class="samLazyImg" /></div>
+							<div class="name hidewrap">{$item['name']}</div>
+							<div class="sellprice">¥{$item['sell_price']}</div>
+						</a>
+					</div>
+					<div class="singleline"></div>
+					{/foreach}
 				</div>
-				<div class="singleline"></div>
-				{/foreach}
+				<div class="mark"></div>
 			</div>
-			<div class="mark"></div>
 		</div>
 		{/if}
 	</section>
@@ -294,6 +298,7 @@
 		</a>
 		{if:count($this->article_list[1]['goods_list']) > 3}
 		<div class="single"></div>
+	<div class="mark">
 		<div class="product">
 			<div class="slider">
 				{foreach:items=$this->article_list[1]['goods_list']}
@@ -309,6 +314,7 @@
 			</div>
 			<div class="mark"></div>
 		</div>
+	</div>
 		{/if}
 	</section>
 	{/if}

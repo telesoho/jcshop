@@ -4,3 +4,4 @@ backup/
 upload/
 .idea/
 .DS_Store
+config/

@@ -668,7 +668,7 @@ class Apic extends IController
         $category = 3;
         $article_query = new IQuery('article');
         $article_query->fields = 'id,title,image,visit_num,favorite,category_id';
-        $article_query->where = ' category_id = ' . $category;
+        $article_query->where = ' category_id = ' . $category . ' and visibility = 1';
         $article_data_spzj = $article_query->find();
 
         /*特别专辑*/
@@ -683,7 +683,7 @@ class Apic extends IController
         }
         $article_query = new IQuery('article');
         $article_query->fields = 'id,title,image,visit_num,favorite,category_id';
-        $article_query->where = $where;
+        $article_query->where = $where . ' and visibility = 1';
         $article_query->limit = 10;
         $article_data_tbtj =$article_query->find();
 //        $category_query = new IQuery("article_category");
@@ -714,7 +714,7 @@ class Apic extends IController
             $article_query = new IQuery('article');
             $article_query->fields = 'id,title,image,visit_num,favorite,category_id';
             for ($i=0;$i<count($category_data);$i++){
-                $article_query->where = 'category_id = ' . $category_data[$i]['id'];
+                $article_query->where = 'category_id = ' . $category_data[$i]['id'] . ' and visibility = 1';
                 ISession::set(chr($x), $article_query->find());
                 $x++;
             }
@@ -779,7 +779,7 @@ class Apic extends IController
                 }
             }
             if (!$if_find){
-                $article_query->where = 'id = ' . $visit_article_id;
+                $article_query->where = 'id = ' . $visit_article_id . ' and visibility = 1';
                 $temp = $data[0];
                 $data[0] = $article_query->find()[0];
                 $data[count($data)] = $temp;
@@ -1071,7 +1071,22 @@ class Apic extends IController
         $data['sfz_image2x'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/281/h/207");
         $this->json_echo($data);
     }
-
+    function qrcode(){
+        if(IClient::isWechat() == true){
+            require_once __DIR__ . '/../plugins/wechat/wechat.php';
+            require_once __DIR__ . '/../plugins/curl/Curl.php';
+            $this->wechat = new wechat();
+            $curl = new \Wenpeng\Curl\Curl();
+            $access_token = $this->wechat->getAccessToken();
+            $url = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=' . $access_token;
+            $curl->post(json_encode(['action_name'=>'QR_LIMIT_SCENE','action_info'=>['scene'=>['scene_id'=>'chenbo']]]))->url($url);
+            $ret = json_decode($curl->data());
+            echo 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . urlencode($ret->ticket);
+            echo '<br>';
+            echo $ret->url;
+//            var_dump($curl->data());
+        }
+    }
     private function json_echo($data){
         echo json_encode($data);
         exit();

@@ -168,16 +168,28 @@ input[type='search']{
     font-size:0.2rem;
     color:#bbbbbb;
 }
-.categroyHot .banner{
-    position:relative;
-    overflow-x: auto;
+.categroyHot .mark{
     overflow-y: hidden;
+    height:2.3rem;
+    z-index:3;
+    position:relative;
+    width:100%;
+}
+.categroyHot .banner{
+    width:100%;
+    z-index:2;
+    background:#fff;
+    position:relative;
+    overflow-y: hidden;
+    overflow-x: scroll;
     height:2.5rem;
+    -webkit-overflow-scrolling: touch;
 }
 .categroyHot .banner .wrapper{
+    z-index:4;
     position:absolute;
-    width:100%;
-    display:-webkit-inline-flex;
+    height:2.5rem;
+    display: -webkit-flex;
     -webkit-justify-content: flex-start;
 }
 .categroyHot .banner .wrapper .item{
