@@ -168,7 +168,15 @@ input[type='search']{
     font-size:0.2rem;
     color:#bbbbbb;
 }
+.categroyHot .mark{
+    overflow-y: hidden;
+    height:2.3rem;
+    z-index:3;
+    position:relative;
+}
 .categroyHot .banner{
+    z-index:2;
+    background:#fff;
     position:relative;
     overflow-x: auto;
     overflow-y: hidden;

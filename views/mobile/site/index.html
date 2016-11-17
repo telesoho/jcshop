@@ -263,21 +263,23 @@
         </a>
         <%if(dat.goods_list.length>=3){%>
             <div class="single"></div>
-            <div class="product">
-                <div class="slider">
-                    <% for(var m=0; m<dat.goods_list.length; m++){%>
-                    <% var goodsitem =dat.goods_list[m] %>
-                    <div class="item">
-                        <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
-                            <div class="img"><img dataimg="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg" /></div>
-                            <div class="name hidewrap"><%=goodsitem.name %></div>
-                            <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
-                        </a>
+            <div class="mark">
+                <div class="product">
+                    <div class="slider">
+                        <% for(var m=0; m<dat.goods_list.length; m++){%>
+                        <% var goodsitem =dat.goods_list[m] %>
+                        <div class="item">
+                            <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
+                                <div class="img"><img dataimg="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg" /></div>
+                                <div class="name hidewrap"><%=goodsitem.name %></div>
+                                <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
+                            </a>
+                        </div>
+                        <div class="singleline"></div>
+                        <%}%>
                     </div>
-                    <div class="singleline"></div>
-                    <%}%>
+                    <div class="mark"></div>
                 </div>
-                <div class="mark"></div>
             </div>
         <%}%>
     </section>
