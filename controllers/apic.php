@@ -1034,7 +1034,7 @@ class Apic extends IController
         $data1 = $favorite_query->find();
         if($data1) foreach ($data1 as $key=>$value){
             if (!empty($value['img'])){
-                $data1[$key]['img'] = IWeb::$app->config['image_host'] . '/' . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/200/h/200");
+                $data1[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/200/h/200");
             }
         }
         $favorite_a_query = new IQuery('favorite_article as a');
@@ -1045,7 +1045,7 @@ class Apic extends IController
         if($data2) foreach ($data2 as $key=>$value){
             if (!empty($value['image'])){
                 $temp = explode(',',$value['image']);
-                $data2[$key]['image'] = IWeb::$app->config['image_host'] . '/' . IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
+                $data2[$key]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
             }
         }
         $this->json_echo(['goods_data'=>$data1,'article_data'=>$data2]);
@@ -1055,6 +1055,12 @@ class Apic extends IController
         $user_query = new IQuery('user');
         $user_query->where = 'id = ' . $user_id;
         $data = $user_query->find()[0];
+        $image1 = $data['sfz_image1'];
+        $image2 = $data['sfz_image2'];
+        $data['sfz_image1'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image1."/w/110/h/110");
+        $data['sfz_image2'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/110/h/110");
+        $data['sfz_image1x'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image1."/w/281/h/207");
+        $data['sfz_image2x'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/281/h/207");
         $this->json_echo($data);
     }
 
