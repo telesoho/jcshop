@@ -33,6 +33,9 @@ class Apic extends IController
 //            IError::show($result,403);
             $this->log->addError('$result变量错误');
         }
+        $query = new IQuery("promotion");
+        $query->where = "type = 0 and seller_id = 0 and award_type = 6";
+        $result['condition_price'] = $query->find()[0]['condition'];
         $this->json_echo($result);
     }
 
@@ -139,6 +142,7 @@ class Apic extends IController
         //商品展示
         foreach ($data['goodsList'] as $key => $value){
             if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
+            if($data['goodsList'][$key]['img']) $data['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$data['goodsList'][$key]['img']."/w/500/h/500");
         }
 
         $this->json_echo($data);
@@ -472,6 +476,7 @@ class Apic extends IController
         foreach ($goods_info['photo'] as $key => $value){
             $goods_info['photo'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/600/h/600");
         }
+        $goods_info['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$goods_info['img']."/w/500/h/500");
 
         //商品是否参加促销活动(团购，抢购)
         $goods_info['promo']     = IReq::get('promo')     ? IReq::get('promo') : '';
@@ -777,7 +782,7 @@ class Apic extends IController
                 $data[count($data)] = $temp;
             }
         }
-        array_push($data, $article_data_spzj[array_rand($article_data_spzj,1)]);
+        if(!empty($article_data_spzj)) array_push($data, $article_data_spzj[array_rand($article_data_spzj,1)]);
         //返回数据格式化
         foreach ($data as $k=>$v){
             //用户是否对专辑点赞
@@ -1034,7 +1039,7 @@ class Apic extends IController
         $data1 = $favorite_query->find();
         if($data1) foreach ($data1 as $key=>$value){
             if (!empty($value['img'])){
-                $data1[$key]['img'] = IWeb::$app->config['image_host'] . '/' . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/200/h/200");
+                $data1[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/200/h/200");
             }
         }
         $favorite_a_query = new IQuery('favorite_article as a');
@@ -1045,7 +1050,7 @@ class Apic extends IController
         if($data2) foreach ($data2 as $key=>$value){
             if (!empty($value['image'])){
                 $temp = explode(',',$value['image']);
-                $data2[$key]['image'] = IWeb::$app->config['image_host'] . '/' . IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
+                $data2[$key]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
             }
         }
         $this->json_echo(['goods_data'=>$data1,'article_data'=>$data2]);
@@ -1055,6 +1060,12 @@ class Apic extends IController
         $user_query = new IQuery('user');
         $user_query->where = 'id = ' . $user_id;
         $data = $user_query->find()[0];
+        $image1 = $data['sfz_image1'];
+        $image2 = $data['sfz_image2'];
+        $data['sfz_image1'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image1."/w/110/h/110");
+        $data['sfz_image2'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/110/h/110");
+        $data['sfz_image1x'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image1."/w/281/h/207");
+        $data['sfz_image2x'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/281/h/207");
         $this->json_echo($data);
     }
 

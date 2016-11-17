@@ -1381,11 +1381,40 @@ class Simple extends IController
         $image1 = IFilter::act(IReq::get('image1'),'string');
         $image2 = IFilter::act(IReq::get('image2'),'string');
         if (!empty($sfz_name)){
+            $access_token = $this->wechat->getAccessToken();
+            $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
+            $dir .= '/'.date('Y/m/d');
+            $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
+            $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
+            $image1 = $this->saveMedia($url1,$dir);
+            $image2 = $this->saveMedia($url2,$dir);
             $user_id     = $this->user['user_id'];
             $user_model = new IModel('user');
             $user_model->setData(['sfz_name'=>$sfz_name,'sfz_num'=>$sfz_num,'sfz_image1'=>$image1,'sfz_image2'=>$image2]);
             $user_model->update('id = ' . $user_id);
         }
 	    $this->redirect('credit');
+    }
+    function saveMedia($url,$dirname){
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_NOBODY, 0);    //对body进行输出。
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $package = curl_exec($ch);
+        $httpinfo = curl_getinfo($ch);
+
+        curl_close($ch);
+        $media = array_merge(array('mediaBody' => $package), $httpinfo);
+
+        //求出文件格式
+        preg_match('/\w\/(\w+)/i', $media["content_type"], $extmatches);
+        $fileExt = $extmatches[1];
+        $fileExt = 'jpg';
+        $filename = time().rand(100,999).".{$fileExt}";
+        if(!file_exists($dirname)){
+            mkdir($dirname,0777,true);
+        }
+        file_put_contents($dirname.$filename,$media['mediaBody']);
+        return $dirname.$filename;
     }
 }

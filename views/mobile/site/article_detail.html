@@ -62,9 +62,9 @@
             <div class="ware">
                 <div class="title">{$goods_no_data['name']}</div>
                 <div class="price">
-                    <span class="price1">￥{$goods_no_data['sell_price']}</span>
-                    <span class="art">日本售价:</span>
-                    <span class="price2"><?php echo explode('.',$goods_no_data['jp_price'])[0]; ?>日元</span>
+                    <span class="price1 sellprice">九猫价:￥{$goods_no_data['sell_price']}</span>
+                    <span class="price2">日本价:<?php echo explode('.',$goods_no_data['jp_price'])[0]; ?>円</span>
+                    <span class="price3">国内价: ￥{$goods_no_data['market_price']}</span>
                 </div>
                 <a href="{url:/site/products?id=$goods_no_data['goods_id']}"><div class="buy">立即购买</div></a>
             </div>
@@ -91,6 +91,7 @@
     <div class="articledetail_ware">
         <div class="title"><span>~</span><span>推荐商品</span>~</div>
         <div class="content" id="getArticleWare">
+
         </div>
     </div>
 </section>
@@ -100,21 +101,24 @@
     <% var dat =data[i] %>
         <div class="item">
             <a href="index.php?controller=site&action=products&id=<%=dat.id %>">
-                <div class="box1">
+                <!--<div class="box1">-->
                     <div class="img"><img class="imgWare" src="<%=dat.img %>" alt=""/></div>
                     <div class="text">
-                        <div class="name"><%=dat.name %></div>
+                        <div class="name"><%=dat.name %>资生堂商品标题商资生堂商品标题商资生堂商标180ml</div>
                         <div class="box">
-                            <div class="sellprice price">￥ <%=dat.sell_price %></div>
+                            <div class="price">
+                                <div class="sellprice price1">国内价: ￥<%=dat.market_price %></div>
+                                <div class="sellprice price2">九猫价: ￥<%=dat.sell_price %></div>
+                            </div>
                             <div class="buy">立即购买</div>
                         </div>
                     </div>
-                </div>
+                <!--</div>-->
             </a>
         </div>
     <%}%>
     <%}else{%>
-       <div class="flexbox empty_product">
+       <div class="flexbox empty_product" style="width:100%;">
             <div class="img">
                 <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
             </div>
