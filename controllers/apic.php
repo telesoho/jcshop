@@ -777,7 +777,7 @@ class Apic extends IController
                 $data[count($data)] = $temp;
             }
         }
-        array_push($data, $article_data_spzj[array_rand($article_data_spzj,1)]);
+        if(!empty($article_data_spzj)) array_push($data, $article_data_spzj[array_rand($article_data_spzj,1)]);
         //返回数据格式化
         foreach ($data as $k=>$v){
             //用户是否对专辑点赞
