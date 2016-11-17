@@ -193,6 +193,10 @@ function pullupIndexRefresh() {
             var div = document.createElement('div');
             div.innerHTML=html3;
             document.getElementById("pullContainer").appendChild(div);
+            lazyload.init({
+                anim:false,
+                selectorName:".samLazyImg"
+            });
 //               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
             stop = true;
 

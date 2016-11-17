@@ -661,7 +661,7 @@ input[type='search']{
 .albumn_index .product{
   z-index:11;
   position:relative;
-  height:3.56rem;
+  height:3.3rem;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   background:#fff;
@@ -670,7 +670,7 @@ input[type='search']{
 .albumn_index .product .slider{
   z-index:13;
   position:absolute;
-  height:3.56rem;
+  height:3.3rem;
   display: -webkit-flex;
   -webkit-justify-content: flex-start;
   -webkit-overflow-scrolling: touch;
@@ -697,7 +697,7 @@ input[type='search']{
   width:1.8rem;
   height:3rem;
   margin-top:0.2rem;
-  margin-left:0.5rem;
+  margin-left:0.4rem;
 }
 .albumn_index .product .img{
   margin:0 auto;
@@ -716,7 +716,7 @@ input[type='search']{
   margin-top:0.17rem;
 }
 .singleline{
-  margin:0.2rem 0 0 0.5rem;
+  margin:0.2rem 0 0 0.4rem;
   width:1px;
   border-left:0.01rem solid #eee;
   height:2.5rem;
