@@ -230,13 +230,19 @@ input[type='search']{
     color:#bbbbbb;
 }
 .relateBrand .banner{
+    width:100%;
     padding:0.19rem 0;
     display: -webkit-flex;
     -webkit-justify-content: flex-start;
     flex-wrap: wrap;
 
 }
+/*.relateBrand .banner a{*/
+    /*display: block;*/
+/*}*/
 .relateBrand .banner .item{
+    width:1.61rem;
+    height:1.03rem;
     margin-bottom:0.16rem;
     margin-left:0.17rem;
 }
