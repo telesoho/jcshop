@@ -513,9 +513,16 @@ input[type='search']{
     margin-bottom:0.14rem;
     background:#fff;
 }
+.articledetail_ware .content .item .img{
+	width:3.4rem;
+	height:3.4rem;
+	display:-webkit-flex;
+	-webkit-justify-content: center;
+	-webkit-align-items: center;
+}
 .articledetail_ware .content .item img{
-    width:3.4rem;
-    height:3.4rem;
+    width:2.9rem;
+    height:2.9rem;
 }
 .articledetail_ware .content .item .price{
     margin-left:0.11rem;
