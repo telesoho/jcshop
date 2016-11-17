@@ -113,6 +113,7 @@ function changeSite(eid,num,obj){
     $(".controlItem"+eid).addClass("active");
     $(".siteid").addClass("hide");
     $(".site"+eid).removeClass("hide");
+    mui('#right-scroll').scroll().scrollTo(0,0,100);
     var height=$(".controlItem"+eid).height();
     var totalHeight=$("#left-scroll").height();
     var offsetTop=$(".controlItem"+eid).offset().top;//相对于容器的高度
