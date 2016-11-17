@@ -89,14 +89,58 @@
 	</div>
 </section>
 <section id="pro_list" >
-	<div class="prolistItem">
-		<div class="bannerImg">
-			<img src="/views/mobile/skin/default/image/jmj/img/banner01.png" alt=""/>
+	<!--热门分类-->
+	<div class="categroyHot">
+		<div class="title">
+			<div class="top">
+				<span class="line-h"></span>
+				<span>热门分类</span>
+				<span class="line-h"></span>
+			</div>
+			<div class="middle">
+				ヒット分類
+			</div>
 		</div>
+		<div class="banner">
+			<div class="wrapper">
+				<div class="item">
+					<img src=/views/mobile/skin/default/image/jmj/img/ware1.png alt="" />
+					<div class="name hidewrap">
+						分类名称
+					</div>
+				</div>
+				<div class="item">
+					<img src=/views/mobile/skin/default/image/jmj/img/ware1.png alt="" />
+					<div class="name hidewrap">
+						分类名称
+					</div>
+				</div>
+				<div class="item">
+					<img src=/views/mobile/skin/default/image/jmj/img/ware1.png alt="" />
+					<div class="name hidewrap">
+						分类名称
+					</div>
+				</div>
+				<div class="item">
+					<img src=/views/mobile/skin/default/image/jmj/img/ware1.png alt="" />
+					<div class="name hidewrap">
+						分类名称
+					</div>
+				</div>
+				<div class="item">
+					<img src=/views/mobile/skin/default/image/jmj/img/ware1.png alt="" />
+					<div class="name hidewrap">
+						分类名称
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--最新品-->
+	<div class="prolistItem">
 		<div class="box new">
 			<div class="left">
-				<span class="logo"></span>
-				<span class="name">最新品</span>
+				<img src="/views/mobile/skin/default/image/jmj/product/new.png" alt="" style="width:3.07rem;height:0.66rem" />
 			</div>
 			<div class="right">
 				<a href="{url:/site/goods_more?commend_id=1&category_id=$this->childId}">
@@ -125,11 +169,101 @@
 			{/query}
 		</div>
 	</div>
+	<!--随机专辑-->
+	<section class="recommended line albumn_index">
+		<div class="title">
+            <span class="logo" >
+                <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
+            </span>
+			<span class="name">
+				名称
+            </span>
+			<span class="num mui-pull-right favorite<%=dat.id %>">
+            <!--<%=cal(dat.favorite) %>-->
+            </span>
+			<span class="like mui-pull-right">
+                <!--<%if(dat.is_favorite==0){%>-->
+                <img src="/views/mobile/skin/default/image/jmj/icon/like.png"  alt="" class="img-like shareContent<%=dat.id %>" onclick="collection(<%=dat.id %>)" />
+                <!--<%}else{%>-->
+                <!--<img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like shareContent<%=dat.id %>" onclick=collection(<%=dat.id %>) />-->
+                <!--<%}%>-->
+            </span>
+		</div>
+		<a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>&vn=<%=dat.visit_num%>&xb=<%=dat.xb%>" class="locationA">
+			<div class="content">
+				<div class="img">
+					<img dataimg="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" src="/views/mobile/skin/default/image/jmj/icon/big_lazy.jpg"  class="samLazyImg"  />
+				</div>
+				<div class="mark1"><%=dat.nums %>件商品
+				</div>
+				<div class="mark2">
+					<img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
+					<%=cal(dat.visit_num) %></div>
+			</div>
+		</a>
+		<%if(dat.goods_list.length>=3){%>
+		<div class="single"></div>
+		<div class="product">
+			<div class="slider">
+				<% for(var m=0; m<dat.goods_list.length; m++){%>
+				<% var goodsitem =dat.goods_list[m] %>
+				<div class="item">
+					<a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
+						<div class="img"><img dataimg="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg" /></div>
+						<div class="name hidewrap"><%=goodsitem.name %></div>
+						<div class="sellprice">￥ <%=goodsitem.sell_price %></div>
+					</a>
+				</div>
+				<div class="singleline"></div>
+				<%}%>
+			</div>
+			<div class="mark"></div>
+		</div>
+		<%}%>
+	</section>
+	<!--品牌-->
+	<div class="relateBrand">
+		<div class="title">
+			<div class="top">
+				<span class="line-h"></span>
+				<span>热门品牌</span>
+				<span class="line-h"></span>
+			</div>
+			<div class="middle">
+				ヒットブランド
+			</div>
+		</div>
+		<div class="banner">
+			<div class="item">
+				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
+			</div>
+			<div class="item">
+				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
+			</div>
+			</div>
+			<div class="item">
+				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
+			</div>
+			</div>
+			<div class="item">
+				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
+			</div>
+			</div>
+			<div class="item">
+				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
+			</div>
+			</div>
+			<div class="item">
+				<a href=""><img src="/views/mobile/skin/default/image/jmj/icon/brand.png" alt="" style="width:1.61rem;height:1.03rem" /></a>
+			</div>
+			</div>
+		</div>
+	</div>
+	<!--最热卖-->
 	<div class="prolistItem" style="margin-top:0.12rem;">
 		<div class="box new">
 			<div class="left">
-				<span class="logo"></span>
-				<span class="name">最热卖</span>
+				<img src="/views/mobile/skin/default/image/jmj/product/hot.png" alt="" style="width:3.06rem;height:0.66rem" />
 			</div>
 			<div class="right">
 				<a href="{url:/site/goods_more?commend_id=3&category_id=$this->childId}">
@@ -157,13 +291,24 @@
 			</a>
 			{/query}
 		</div>
-		<div class="bannerImg">
-			<img src="/views/mobile/skin/default/image/jmj/img/banner01.png" alt=""/>
+	</div>
+	<!--随机专辑你自己放一下-->
+</section>
+<!--推荐商品-->
+<section id="relate_product">
+	<div class="title">
+		<div class="box new">
+			<div class="left">
+				<img src="/views/mobile/skin/default/image/jmj/product/gou.png" alt="" style="width:3.75rem;height:0.66rem" />
+			</div>
+			<div class="right">
+				<a href="{url:/site/goods_more?commend_id=1&category_id=$this->childId}">
+					<span>更多</span>
+					<img src="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" />
+				</a>
+			</div>
 		</div>
 	</div>
-</section>
-<section id="relate_product">
-	<div class="title"><span>~</span><span>推荐商品</span>~</div>
 	<div class="content" id="getRelateWare">
 		{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
 			where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 4 
@@ -174,8 +319,7 @@
 			<a href="{url:/site/products?id=$item['id']}"><div class="img underline"><img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt=""/></div>
 				<div class="name">{$item['name']}</div>
 				<div class="box">
-					<div class="price">¥{$item['sell_price']}</div>
-					<div class="buy">立即购买</div>
+					<div class="sellprice price">¥{$item['sell_price']}</div>
 				</div></a>
 		</div>
 		{/query}
@@ -216,7 +360,7 @@
 <!--模态框-->
 <div id="modalid-searth" class="hide">
 	<div class="title">
-		大家都在搜
+		猫猫都在搜
 	</div>
 	<div class="searth-content">
 		<a href="#">万圣节</a>
@@ -225,11 +369,6 @@
 		<a href="#">哈哈哈</a>
 		<a href="#">英文</a>
 		<a href="#">数字</a>
-		<a href="#">万圣节</a>
-		<a href="#">万圣节</a>
-		<a href="#">万圣节</a>
-		<a href="#">万圣节</a>
-		<a href="#">万圣节</a>
 	</div>
 	<button type="button" id="button-submit" class="mui-btn  mui-btn-outlined buttom-submit" onclick="searthSubmit();">确定</button>
 	<button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
@@ -258,10 +397,10 @@
 			document.location.href=this.href;
 		});
 		//点击直达顶部
-		mui("body").on("tap",".fix-toTop",function(){
-			$("html,body").animate({scrollTop:0},0);
-			return false;
-		});
+//		mui("body").on("tap",".fix-toTop",function(){
+//			$("html,body").animate({scrollTop:0},0);
+//			return false;
+//		});
 	}
 
 	document.getElementById("searth").addEventListener('focus',function(){
@@ -295,9 +434,9 @@
 				console.log(data);
 				var pageAlbum={};
 				pageAlbum.data=data;
-				var html3=template('albumPage',pageAlbum);
-				var div = document.createElement('div');
-				div.innerHTML=html3;
+				<!--var html3=template('albumPage',pageAlbum);-->
+				<!--var div = document.createElement('div');-->
+				<!--div.innerHTML=html3;-->
 //				document.getElementById("pullContainer").appendChild(div);
 //               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
 				if(data[0].totalpage>pageData.page){
@@ -332,7 +471,7 @@
 			type:'get',//HTTP请求类型
 			timeout:10000,//超时时间设置为10秒；
 			success:function(data){
-				console.log(data);
+//				console.log(data);
 				$(".mui-placeholder span").eq(1).html(data.goods_nums+"件商品等你来搜")
 			},
 			error:function(xhr,type,errorThrown){
