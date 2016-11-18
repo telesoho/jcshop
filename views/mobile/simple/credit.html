@@ -26,7 +26,7 @@
                 </div>
                 <div @click="addNewCard" class="addNewCard">添加身份证信息</div>
         </template>
-        <template v-else>
+        <div class="credit_info" v-else>
             <div class="content">
                 <div class="top">
                     <div class="name" v-cloak>{{message.sfz_name}}</div>
@@ -53,7 +53,8 @@
                     </div>
                 </div>
             </div>
-        </template>
+        </div>
+
     </div>
     <div class="container card_edit">
         <form action="" method="post">
@@ -83,7 +84,7 @@
                         <div class="mark">请上传照片</div>
                     </div>
                 </template>
-                <div v-else>
+                <template v-else>
                     <div class="left">
                         <div class="img" onclick="uploadImg(this)">
                             <img :src="message.sfz_image1y" alt="" class="pic pic_yes" />
@@ -102,7 +103,7 @@
                         <input type="hidden" name="image_saved2" :value="message.sfz_image2">
                         <div class="mark">点击更换照片</div>
                     </div>
-                </div>
+                </template>
             </div>
             <div class="fix-bottom">
                 <input type="submit" value="提交" id="submitMessage">
@@ -196,7 +197,7 @@
         var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
         if(reg.test(card) === false)
         {
-
+            alert("你输入的身份证信息有误");
             $("#cardId").val("");
             return  false;
         }
