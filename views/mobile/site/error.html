@@ -38,8 +38,12 @@
     </style>
 </head>
 <body>
+    {set:$msg = IReq::get('msg') ? IReq::get('msg') : '/views/mobile/skin/default/image/xinzeng/error.png'}
     <div class="content">
-        <img src="/views/mobile/skin/default/image/xinzeng/error.png" alt="">
+        <?php if( strpos($msg,'/') ) { ?>
+            <img src="{$msg}" alt="">
+        <?php } else { echo $msg; } ?>
+        <!--<img src="/views/mobile/skin/default/image/xinzeng/error.png" alt="">-->
         <a href="{url:/site/index}">去逛逛</a>
     </div>
 

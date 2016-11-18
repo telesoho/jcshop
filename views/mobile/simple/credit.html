@@ -106,7 +106,7 @@
                 </template>
             </div>
             <div class="fix-bottom">
-                <input type="button" value="提交" id="submitMessage" onclick="checkfalse()">
+                <input type="submit" value="提交" id="submitMessage">
             </div>
         </form>
     </div>
@@ -151,10 +151,11 @@
 <?php } ?>
 
 <script>
+
     var vm = new Vue({
         el: '#credit_app',
         data: {
-            message:getItem('localcredit')
+            message:''
         },
         watch: {
             example2:{
@@ -187,6 +188,7 @@
             type: 'post',//HTTP请求类型
             timeout: 10000,//超时时间设置为10秒；
             success: function (data) {
+                this.message=data;
 //                data.sfz_image1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='+access_token+'&media_id='+data.sfz_image1;
 //                data.sfz_image2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='+access_token+'&media_id='+data.sfz_image2;
                 setItem("localcredit",data)
