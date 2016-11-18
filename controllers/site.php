@@ -938,8 +938,22 @@ class Site extends IController
         $this->redirect('show');
     }
     function goods_more(){
+    	//获取商品
+    	$category_id 				= IFilter::act(IReq::get('category_id'));
+    	$commend_id 				= IFilter::act(IReq::get('commend_id'));
     	$db_goods 					= new IQuery('goods as m');
+    	$db_goods->join 			= 'left join commend_goods as d on d.goods_id=m.id left join category_extend as e on e.goods_id=m.id';
+    	$db_goods->where 			= 'e.category_id in ('.$category_id.') and d.commend_id='.$commend_id;
+    	$db_goods->fields 			= 'm.id,m.name,m.sell_price,m.img,m.market_price';
+    	$db_goods->limit 			= 1000;
+    	$db_goods->order 			= 'm.id desc';
+    	$data_goods 				= $db_goods->find();
+    	//处理为偶数数量
+    	if(count($data_goods)%2 == 1){
+    		$data_goods[] 			= $data_goods[0];
+    	}
     	
+    	$this->data_goods 			= $data_goods;
         $this->redirect('goods_more');
     }
 }

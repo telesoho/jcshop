@@ -966,6 +966,12 @@ class Apic extends IController
         $catId = IFilter::act(IReq::get('id'),'int');//分类id
         if($catId == 0){$this->json_echo([]);}
         $goodsObj = search_goods::find(array('category_extend' => goods_class::catChild($catId)),99999);
+        //获取汇率
+        $siteConfig 		= new Config('site_config');
+        $exchange_rate_jp 	= $siteConfig->exchange_rate_jp;
+        $ratio 				= ',go.sell_price*'.$exchange_rate_jp.'/go.jp_price as ratio';
+        $goodsObj->fields 	.= $ratio;
+        $goodsObj->order 	= 'ratio asc';//根据折扣力度排序
         $resultData = $goodsObj->find();
         foreach ($resultData as $key=>$value){
             $resultData[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
