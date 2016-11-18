@@ -169,7 +169,7 @@ ul li{
 }
 .footerBox .collection{
     border-top:0.01rem solid #eee;
-    height:1.2rem;
+    height:1rem;
     background:#fff;
     font-size:0.24rem;
     color:#979797;
@@ -193,14 +193,14 @@ ul li{
     min-width:3rem;
     background:#eee;
     color:#ff4aa0;
-    font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;
+    font-size:0.3rem;text-align: center;height:1rem;line-height: 1rem;
 }
 .footerBox #buyBottom{
     display:block;
     min-width:3rem;
     background:#f3026a;
     color:#fff;
-    font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;
+    font-size:0.3rem;text-align: center;height:1rem;line-height: 1rem;
 }
 
 
