@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-
 /**
  * @brief CSV商品导入插件
  * @author nswe
@@ -460,7 +458,7 @@ class jcshopCsvImport extends pluginBase
 				}
 			}
 
-			//处理商品图片关联
+			// 如果已经存在图片，则处理商品图片关联
 			if($mainPic) {
 				$photoRelationDB->del('goods_id = '.$goods_id);
 			}
@@ -480,11 +478,9 @@ class jcshopCsvImport extends pluginBase
 					$photoDB->add();
 				}
 
-				// 关联商品主图
-				//if($photoRelationDB->get_count('goods_id =' . $goods_id . " and photo_id ='" . $md5Code . "'") == 0) {
-					$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
-					$photoRelationDB->add();
-				//}
+				// 关联商品图
+				$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
+				$photoRelationDB->add();
 			}
 		}
 	}
