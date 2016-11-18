@@ -151,16 +151,15 @@
 <?php } ?>
 
 <script>
-
     var vm = new Vue({
         el: '#credit_app',
         data: {
-            message:''
+            message:getItem('localcredit')
         },
         watch: {
             example2:{
                 handler(message){
-                    return message;
+                    setItem('localcredit',message);
                 },
                 deep:true
             }
@@ -171,8 +170,7 @@
             uploadImg1:getImgLoad,
         }
     })
-    vm.getData();
-
+    console.log(vm.message);
     function turnEdit(){
         document.querySelector(".card_info").addEventListener("click",function(){
             this.className="card_info_left";
@@ -182,17 +180,16 @@
     function getImgLoad(event){
     }
     function getCreditInfo() {
-        var self=this;
         mui.ajax('index.php?controller=apic&action=user_credit_info', {
             dataType: 'json',//服务器返回json格式数据
             type: 'post',//HTTP请求类型
             timeout: 10000,//超时时间设置为10秒；
             success: function (data) {
-                this.message=data;
+                self.message=data;
 //                data.sfz_image1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='+access_token+'&media_id='+data.sfz_image1;
 //                data.sfz_image2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='+access_token+'&media_id='+data.sfz_image2;
                 setItem("localcredit",data)
-                console.log(data);
+//                console.log(data);
             },
             error: function (xhr, type, errorThrown) {
                 //异常处理；
