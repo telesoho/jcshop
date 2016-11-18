@@ -318,7 +318,7 @@ class Apic extends IController
      */
     public function order_list()
     {
-        $ret0 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 '); // 全部订单
+        $ret0 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status != 3 and status != 4'); // 全部订单
         $ret1 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 1 and pay_type != 0'); // 待支付
         $ret2 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
         $ret3 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 1'); // 待收货
@@ -354,8 +354,11 @@ class Apic extends IController
                 $temp3 = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
                 foreach ($temp3 as $key1 => $value1){
                     $temp3[$key1]['goods_array'] = json_decode($value1['goods_array'],true);
+                    $temp3[$key1]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$temp3[$key1]['img']."/w/160/h/160");
                 }
                 $data[$k][$key]['goodslist'] = $temp3;
+                $orderObj = new order_class();
+                $data[$k][$key]['order_info'] = $orderObj->getOrderShow($data[$k][$key]['id'],$this->user['user_id']);
 
 //                $data[$k][$key]['goodslist'] = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
                 if (!empty($v)) switch ($k) {
@@ -409,6 +412,7 @@ class Apic extends IController
         $order_goods = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$order_info['id']));
         foreach ($order_goods as $key => $value){
             $order_goods[$key]['goods_array'] = json_decode($value['goods_array'],true);
+            $order_goods[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$order_goods[$key]['img']."/w/160/h/160");
         }
         $data = array('order_info'=>$order_info, 'orderStatus'=>$orderStatusT,"order_step"=>Order_Class::orderStep($order_info), "order_goods"=>$order_goods);
 

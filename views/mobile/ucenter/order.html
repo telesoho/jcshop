@@ -183,7 +183,7 @@
 		</div>
 		</a>
 		<div class="total">
-			共计<%=order.goodslist.length%>件商品  合计 <%=order.order_amount%>（含运费10元）
+			共计<%=order.goodslist.length%>件商品  合计 <%=order.order_amount%>（含运费<%=order.real_freight%>元）
 		</div>
 		<%}%>
 		<!--不同的按钮状态-->
