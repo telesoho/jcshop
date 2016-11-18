@@ -109,7 +109,7 @@
                         fields=id,name,image
                         limit=1000
                         order=sort asc}
-                    <div class="item" onclick='toPageThird({echo:json_encode( array('id'=>$item['id']))})'>
+                    <div class="item" onclick='toPageThird({echo:json_encode( array('id'=>$item['id'],'name'=>$item['name']))})'>
                         <img src="{echo:IWeb::$app->config['image_host'].'/'.$item['image']}" alt="" />
                         <div class="name hidewrap">
                             {$item['name']}
