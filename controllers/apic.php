@@ -797,6 +797,8 @@ class Apic extends IController
             } else {
                 $data[$k]['is_favorite'] = 0;
             }
+            //icon
+            $data[$k]['icon'] 	= IWeb::$app->config['image_host'].'/upload/category/article_icon/'.$v['category_id'].'.png';
             //专辑封面的缩略图
             $data[$k]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
             //专辑所在分类的名称
@@ -846,7 +848,6 @@ class Apic extends IController
 //        echo $visit_num;
 //        echo '<a href="http://192.168.0.156:8080/index.php?controller=site&action=article_detail&id='.$data[0]['id'].'">aa</a>';
 //        var_dump($data);
-
 
         $this->json_echo($data);
     }
