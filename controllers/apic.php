@@ -39,6 +39,8 @@ class Apic extends IController
         foreach ($result['goodsList'] as $key=>$value){
             $result['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$result['goodsList'][$key]['img']."/w/500/h/500");
         }
+        //配送方式
+        $result['delivery'] = Api::run('getDeliveryList');
         $this->json_echo($result);
     }
 
@@ -147,6 +149,17 @@ class Apic extends IController
             if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
             if($data['goodsList'][$key]['img']) $data['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$data['goodsList'][$key]['img']."/w/500/h/500");
         }
+
+        //满包邮
+        $promotion_query = new IQuery("promotion");
+        $promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
+        $condition_price = $promotion_query->find()[0]['condition'];
+        if ($data['sum'] > $condition_price){
+            $data['delivery'][0]['first_price'] = '0';
+        } else {
+            $data['sum'] += $data['delivery'][0]['first_price'];
+        }
+
 
         $this->json_echo($data);
     }
@@ -797,6 +810,8 @@ class Apic extends IController
             } else {
                 $data[$k]['is_favorite'] = 0;
             }
+            //icon
+            $data[$k]['icon'] 	= IWeb::$app->config['image_host'].'/upload/category/article_icon/'.$v['category_id'].'.png';
             //专辑封面的缩略图
             $data[$k]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
             //专辑所在分类的名称
@@ -846,7 +861,6 @@ class Apic extends IController
 //        echo $visit_num;
 //        echo '<a href="http://192.168.0.156:8080/index.php?controller=site&action=article_detail&id='.$data[0]['id'].'">aa</a>';
 //        var_dump($data);
-
 
         $this->json_echo($data);
     }

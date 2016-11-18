@@ -111,7 +111,7 @@
 	<div class="distribution">
 		<div class="box title">
 			<div class="left">配送方式</div>
-			<div class="right">EMS</div>
+			<div class="right"><%=delivery[0].name%>(含运费<%=delivery[0].first_price%>元)</div>
 		</div>
 	</div>
 	<div class="orderTotal" style="margin-bottom:1.5rem;">
@@ -140,7 +140,7 @@
 	<input name="payment"  type="hidden" value="<%=payment[0].id%>" />
 	<%}%>
 	<div class="totalButton box">
-		<div class="totalSumPrice"><span>合计：</span><span id="totalPrice_sum">¥<%=final_sum%></span></div>
+		<div class="totalSumPrice"><span>合计：</span><span id="totalPrice_sum">¥<%=sum%></span></div>
 		<input class="toPayOrder" type="submit" value="提交订单">
 	</div>
 </script>

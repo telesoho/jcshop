@@ -1567,7 +1567,8 @@ class Order_Class
 
 	    		if($nowBuy == $isBuyed)
 	    		{
-					return "您所提交的订单重复，频率太高，请稍候再试...";
+//					return "您所提交的订单重复，频率太高，请稍候再试...";
+                    return "/views/mobile/skin/default/image/xinzeng/tjpl.png";
 	    		}
 			}
     	}
