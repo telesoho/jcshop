@@ -157,7 +157,7 @@
 	<!--随机专辑1-->
 	{if:!empty($this->article_list[0])}
 	<section class="recommended line albumn_index">
-		<div class="title">
+		<!-- <div class="title">
             <span class="logo" >
                 <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
             </span>
@@ -174,7 +174,7 @@
                 <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like shareContent{$this->article_list[0]['id']}" onclick=collection({$this->article_list[0]['id']}) />
                 {/if}
             </span>
-		</div>
+		</div> -->
 		<a href="index.php?controller=site&action=article_detail&id={$this->article_list[0]['id']}" class="locationA">
 			<div class="content">
 				<div class="img">
@@ -189,23 +189,23 @@
 		</a>
 		{if:count($this->article_list[0]['goods_list']) > 3}
 		<div class="single"></div>
-        <div class="mark">
-            <div class="product">
-                <div class="slider">
-                    {foreach:items=$this->article_list[0]['goods_list']}
-                    <div class="item">
-                        <a href="index.php?controller=site&action=products&id={$item['id']}" class="locationA">
-                            <div class="img"><img dataimg="{$item['img']}" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" /></div>
-                            <div class="name hidewrap">{$item['name']}</div>
-                            <div class="sellprice">￥ {$item['sell_price']}</div>
-                        </a>
-                    </div>
-                    <div class="singleline"></div>
-                    {/foreach}
-                </div>
-                <div class="mark"></div>
-            </div>
-        </div>
+		<div class="mark">
+			<div class="product">
+				<div class="slider">
+					{foreach:items=$this->article_list[0]['goods_list']}
+					<div class="item">
+						<a href="index.php?controller=site&action=products&id={$item['id']}" class="locationA">
+							<div class="img"><img dataimg="{$item['img']}" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
+							<div class="name hidewrap">{$item['name']}</div>
+							<div class="sellprice">¥{$item['sell_price']}</div>
+						</a>
+					</div>
+					<div class="singleline"></div>
+					{/foreach}
+				</div>
+				<div class="mark"></div>
+			</div>
+		</div>
 		{/if}
 	</section>
 	{/if}
@@ -225,7 +225,7 @@
 		<div class="banner">
 			{foreach:items=$this->data_brand}
 			<div class="item">
-				<a href="{echo:empty($item['url']) ? 'javascript:;' : $item['url']}"><img src="{$item['logo']}" alt="" style="width:1.61rem;height:1.03rem" /></a>
+				<a href="{echo:empty($item['url']) ? 'javascript:;' : $item['url']}"><img src="{$item['logo']}" alt="{$item['name']}" style="width:1.61rem;height:1.03rem" /></a>
 			</div>
 			{/foreach}
 		</div>
@@ -268,7 +268,7 @@
 	<!--随机专辑2-->
 	{if:!empty($this->article_list[1])}
 	<section class="recommended line albumn_index">
-		<div class="title">
+		<!-- <div class="title">
             <span class="logo" >
                 <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
             </span>
@@ -285,7 +285,7 @@
                 <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like shareContent{$this->article_list[1]['id']}" onclick=collection({$this->article_list[1]['id']}) />
                 {/if}
             </span>
-		</div>
+		</div> -->
 		<a href="index.php?controller=site&action=article_detail&id={$this->article_list[1]['id']}" class="locationA">
 			<div class="content">
 				<div class="img">
@@ -300,6 +300,7 @@
 		</a>
 		{if:count($this->article_list[1]['goods_list']) > 3}
 		<div class="single"></div>
+	<div class="mark">
 		<div class="product">
 			<div class="slider">
 				{foreach:items=$this->article_list[1]['goods_list']}
@@ -307,7 +308,7 @@
 					<a href="index.php?controller=site&action=products&id={$item['id']}" class="locationA">
 						<div class="img"><img dataimg="{$item['img']}" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" /></div>
 						<div class="name hidewrap">{$item['name']}</div>
-						<div class="sellprice">￥ {$item['sell_price']}</div>
+						<div class="sellprice">¥{$item['sell_price']}</div>
 					</a>
 				</div>
 				<div class="singleline"></div>
@@ -315,6 +316,7 @@
 			</div>
 			<div class="mark"></div>
 		</div>
+	</div>
 		{/if}
 	</section>
 	{/if}
@@ -324,7 +326,7 @@
 	<div class="title">
 		<div class="box new">
 			<div class="left">
-				<img src="/views/mobile/skin/default/image/jmj/product/gou.png" alt="" style="width:3.75rem;height:0.66rem" />
+				<img src="/views/mobile/skin/default/image/jmj/product/{$this->pic}.png" alt="" style="width:3.75rem;height:0.66rem" />
 			</div>
 			<div class="right">
 				<a href="{url:/site/goods_more?commend_id=1&category_id=$this->childId}">
@@ -338,7 +340,7 @@
 		{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
 			where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 4 
 			fields=m.id,m.name,m.sell_price,m.img 
-			limit=100 
+			limit=50 
 			order=m.id desc}
 		<div class="item">
 			<a href="{url:/site/products?id=$item['id']}"><div class="img underline"><img dataimg="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" /></div>

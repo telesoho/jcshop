@@ -301,7 +301,6 @@ input[type='search']{
     width:2.32rem;
 }
 .prolistItem .product .item img{
-    border:1px solid #eee;
     width:2.32rem;
     height:2.32rem;
 }
@@ -382,9 +381,10 @@ input[type='search']{
 }
 #relate_product .content .item .price{
     width:3.5rem;
+    padding-left:0.15rem;
     margin:0.11rem 0 0.15rem 0;
     /*padding:0.21rem 0.15rem 0.15rem 0.2rem;*/
-    text-align: center;
+    text-align: left;
     font-size:0.26rem;
 }
 #relate_product .content .item .box{
