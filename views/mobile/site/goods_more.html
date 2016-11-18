@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title></title>
+    <title>{echo:IReq::get('title')}</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css" />
 </head>
@@ -86,7 +86,6 @@
         $("#loading").fadeOut(300);
         var getinfo=getItem("siteMap");
         getcategory_thirdInfo(getinfo.id);
-        document.title = getinfo.name;
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','a',function(){document.location.href=this.href;});
     })

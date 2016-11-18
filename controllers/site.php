@@ -160,28 +160,28 @@ class Site extends IController
 		$this->catId = IFilter::act(IReq::get('cat'),'int');//分类id
 
 		switch($this->catId){
-			//药妆-个性美妆
 			case 126:
+				$this->name 	= '药妆'; //个性美妆
 				$this->ac_id 	= 15;
 				$this->pic 		= 'gou'; //狗子推荐
 				break;
-			//个护-基础护肤
 			case 134:
+				$this->name 	= '个护'; //基础护肤
 				$this->ac_id 	= 18;
 				$this->pic 		= 'nai'; //奶瓶推荐
 				break;
-			//宠物-宠物用品
 			case 6:
+				$this->name 	= '宠物'; //宠物用品
 				$this->ac_id 	= 17;
 				$this->pic 		= 'tui'; //腿毛推荐
 				break;
-			//健康-居家药品
 			case 2:
+				$this->name 	= '健康'; //居家药品
 				$this->ac_id 	= 16;
 				$this->pic 		= 'xi'; //昔君推荐
 				break;
-			//零食-日式美食
 			case 7:
+				$this->name 	= '零食'; //日式美食
 				$this->ac_id 	= 19;
 				$this->pic 		= 'yi'; //一哥推荐
 				break;
@@ -934,6 +934,8 @@ class Site extends IController
         $this->redirect('show');
     }
     function goods_more(){
+    	$db_goods 					= new IQuery('goods as m');
+    	
         $this->redirect('goods_more');
     }
 }

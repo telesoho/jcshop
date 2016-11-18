@@ -109,7 +109,7 @@
                         fields=id,name,image
                         limit=1000
                         order=sort asc}
-                    <div class="item" onclick='toPageThird({echo:json_encode( array('id'=>$item['id']))})'>
+                    <div class="item" onclick='toPageThird({echo:json_encode( array('id'=>$item['id'],'name'=>$item['name']))})'>
                         <img dataimg="{echo:IWeb::$app->config['image_host'].'/'.$item['image']}" alt=""  src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
                         <div class="name hidewrap">
                             {$item['name']}
@@ -126,12 +126,12 @@
 			<div class="left">
 				<img src="/views/mobile/skin/default/image/jmj/product/new.png" alt="" style="width:3.07rem;height:0.66rem" />
 			</div>
-			<div class="right">
-				<a href="{url:/site/goods_more?commend_id=1&category_id=$this->childId}">
+			<a href="{url:/site/goods_more}?commend_id=1&category_id={$this->childId}&title={$this->name}-最新品">
+				<div class="right">
 					<span>更多</span>
 					<img src="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" />
-				</a>
-			</div>
+				</div>
+			</a>
 		</div>
 		<div class="product">
 			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
@@ -238,7 +238,7 @@
 				<img src="/views/mobile/skin/default/image/jmj/product/hot.png" alt="" style="width:3.06rem;height:0.66rem" />
 			</div>
 			<div class="right">
-				<a href="{url:/site/goods_more?commend_id=3&category_id=$this->childId}">
+				<a href="{url:/site/goods_more}?commend_id=1&category_id={$this->childId}&title={$this->name}-最热卖">
 					<span>更多</span>
 					<img dataimg="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
 				</a>
