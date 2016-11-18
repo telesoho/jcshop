@@ -16,6 +16,14 @@ ul li{
      left:0.4rem;
      top:0.6rem;
 }
+.bottomlog{
+    position:absolute;
+    width:2.09rem;
+    height:1.72rem;
+    z-index:2;
+    right:0.1rem;
+    bottom:0.30rem;
+}
 #carousel{background:#fff}
 #carousel img{
     width:6rem;
@@ -125,6 +133,8 @@ ul li{
     color:#bbb;
 }
 .tips{
+    position:relative;
+    height:2.5rem;
     width:100%;
     overflow-x: hidden;
     display: -webkit-flex;
@@ -135,6 +145,12 @@ ul li{
 .tips img{
     width:7.25rem;
     height:2.34rem;
+}
+.tips .text{
+    position: absolute;
+    color:#ff44a0;
+    font-size:0.3rem;
+    top:1rem;
 }
 
 #goodsContent{

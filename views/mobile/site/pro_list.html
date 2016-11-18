@@ -503,7 +503,7 @@
 		mui.ajax('index.php?controller=apic&action=banner_list',{
 			dataType:'json',//服务器返回json格式数据
 			type:'get',//HTTP请求类型
-			timeout:10000,//超时时间设置为10秒；
+			timeout:10000,//超时时间设置为10秒
 			success:function(data){
 //				console.log(data);
 				$(".mui-placeholder span").eq(1).html(data.goods_nums+"件商品等你来搜")
