@@ -101,8 +101,9 @@
                     </div>
                     <div class="mui-input-row row_margin row_b_t">
                         <input type="hidden" class="mui-input-clear" value="<%=data[i].id%>" id="addressid">
-                        <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" id="userphone" onkeyup=checkPhone() >
-                        <input type="text" class="mui-input-clear" value="<%=data[i].province_val%> <%=data[i].city_val%> <%=data[i].area_val%>" id="usercity<%=data[i].id%>" onfocus=checkcity(<%=data[i].id%>)>
+                        <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" id="userphone">
+                        <input type="text" data-city="<%=data[i].city%>" data-province="<%=data[i].province%>" data-area="<%=data[i].area%>"
+                               class="mui-input-clear" value="<%=data[i].province_val%> <%=data[i].city_val%> <%=data[i].area_val%>" id="usercity<%=data[i].id%>" onfocus=checkcity(<%=data[i].id%>)>
                         <input type="text" class="mui-input-clear" value="<%=data[i].address%>" id="useraddr" onkeyup=check()>
                         <input type="text" class="mui-input-clear" value="<%=data[i].zip%>" id="useryoubian" onkeyup=check()>
                     </div>
@@ -111,7 +112,7 @@
             <footer>
                 <div id="footer-fixed1">
                     <div class="newAddrSub newAddrSub_position" style="text-align:center">
-                        <button id="submitaddr1" onclick="changeAddr();" class="submit_suc">完成</button>
+                        <button id="submitaddr1" onclick="changeAddr(<%=data[i].id%>);" class="submit_suc">完成</button>
                     </div>
                 </div>
             </footer>
@@ -187,36 +188,43 @@
     }
 
 
-    function changeAddr(){
-        var username=document.getElementById("username");
-        var phone=document.getElementById("userphone");
-        var address=document.getElementById("useraddr");
-        var useryoubian=document.getElementById("useryoubian");
-        var addressid=document.getElementById("addressid");
-        var addaddressInfo={
-            accept_name:username.value,
-            province:pro,
-            city:cit,
-            area:are,
-            address:address.value,
-            mobile:phone.value,
-            zip:useryoubian.value
-        };
-        var self=this;
-        mui.ajax('index.php?controller=apic&action=address_add',{
-            data:addaddressInfo,
-            dataType:'json',	// 服务器返回json格式数据
-            type:'post',		// HTTP请求类型
-            timeout:10000,		// 超时时间设置为10秒；
-            success:function(data){
-                document.location.href="{url:/simple/addresslist}";
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
-            }
-        });
-
+    function changeAddr(id){
+        var showCityPickerInput=document.getElementById('usercity'+id);
+        pro=showCityPickerInput.getAttribute("data-province");
+        cit=showCityPickerInput.getAttribute("data-city");
+        are=showCityPickerInput.getAttribute('data-area');
+        if(!checkPhone()){
+            var username=document.getElementById("username");
+            var phone=document.getElementById("userphone");
+            var address=document.getElementById("useraddr");
+            var useryoubian=document.getElementById("useryoubian");
+            var addressid=document.getElementById("addressid");
+            var addaddressInfo={
+                accept_name:username.value,
+                province:pro,
+                city:cit,
+                area:are,
+                address:address.value,
+                mobile:phone.value,
+                zip:useryoubian.value
+            };
+            var self=this;
+            mui.ajax('index.php?controller=apic&action=address_add',{
+                data:addaddressInfo,
+                dataType:'json',	// 服务器返回json格式数据
+                type:'post',		// HTTP请求类型
+                timeout:10000,		// 超时时间设置为10秒；
+                success:function(data){
+                    document.location.href="{url:/simple/addresslist}";
+                },
+                error:function(xhr,type,errorThrown){
+                    //异常处理；
+                    console.log(type);
+                }
+            });
+        }else{
+            checkPhone()
+        }
     }
     function checkPhone(){
         var phone = document.getElementById('userphone').value;
