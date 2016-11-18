@@ -63,7 +63,7 @@
             </div>
             <input type="text" class="mui-input-clear"  placeholder="请输入姓名" id="cardName" name="sfz_name" v-model="message.sfz_name"
             />
-            <input type="text" class="mui-input-clear"  placeholder="输入身份证账号" id="cardId" name="sfz_num" v-model="message.sfz_num"  />
+            <input type="text" class="mui-input-clear"  placeholder="输入身份证账号" id="cardId" name="sfz_num" v-model="message.sfz_num" onchange="isCardNo()" />
             <div class="title">
                 <span>身份证正反面照片</span><span>上传身份证正反面照片让通关更便捷</span>
             </div>
@@ -151,9 +151,6 @@
 <?php } ?>
 
 <script>
-    window.onload=function(){
-        getCreditInfo();
-    }
     var vm = new Vue({
         el: '#credit_app',
         data: {
@@ -163,10 +160,30 @@
         },
         methods: {
             addNewCard: turnEdit,
-            getData:getCreditInfo,
+            getData:function(){
+                var self=this;
+                mui.ajax('index.php?controller=apic&action=user_credit_info', {
+                    dataType: 'json',//服务器返回json格式数据
+                    type: 'post',//HTTP请求类型
+                    timeout: 10000,//超时时间设置为10秒；
+                    success: function (data) {
+                        self.message=data;
+                        self.sfz_num=data.sfz_num;
+//                data.sfz_image1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='+access_token+'&media_id='+data.sfz_image1;
+//                data.sfz_image2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='+access_token+'&media_id='+data.sfz_image2;
+//                        setItem("localcredit",data)
+//                console.log(data);
+                    },
+                    error: function (xhr, type, errorThrown) {
+                        //异常处理；
+                        console.log(type);
+                    }
+                });
+            },
             uploadImg1:getImgLoad,
         }
     })
+    vm.getData();
     function turnEdit(){
         document.querySelector(".card_info").addEventListener("click",function(){
             this.className="card_info_left";
@@ -176,23 +193,7 @@
     function getImgLoad(event){
     }
     function getCreditInfo() {
-        mui.ajax('index.php?controller=apic&action=user_credit_info', {
-            dataType: 'json',//服务器返回json格式数据
-            type: 'post',//HTTP请求类型
-            timeout: 10000,//超时时间设置为10秒；
-            success: function (data) {
-                vm.message=data;
-                vm.sfz_num=data.sfz_num;
-//                data.sfz_image1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='+access_token+'&media_id='+data.sfz_image1;
-//                data.sfz_image2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='+access_token+'&media_id='+data.sfz_image2;
-                setItem("localcredit",data)
-//                console.log(data);
-            },
-            error: function (xhr, type, errorThrown) {
-                //异常处理；
-                console.log(type);
-            }
-        });
+
     }
     function isCardNo()
     {

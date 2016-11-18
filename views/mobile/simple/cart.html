@@ -94,7 +94,7 @@
 			</div>
 			<div class="box middle">
 				<div>
-					<img src="<%=goodsList[i].img%>" alt="{$item['name']}" />
+					<a href="index.php?controller=site&action=products&id=<%=goodsList[i].goods_id %>" class="classA"><img src="<%=goodsList[i].img%>" alt="{$item['name']}" /></a>
 				</div>
 				<div class="goodsContent">
 					<div class="name">
@@ -127,7 +127,7 @@
 		</div>
 	<% var check =checkPostage(condition_price,final_sum) %>
 		<div class="bottom">
-			<a href="{url:/site/index}" class="condition_price">
+			<a href="{url:/site/index}" class="condition_price classA">
 				<%if(check>0){%>
 				还差¥<%=check%>元可享包邮，去凑单
 				<%}else{%>
@@ -149,6 +149,7 @@
 			window.location.href='index.php?controller=simple&action=cart2';
 		})
 		mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
+		mui('body').on('tap','.classA',function(){document.location.href=this.href;});
 		//定义template方法
 	});
 template.helper('JSONstringify', function(obj){
