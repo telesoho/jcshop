@@ -663,6 +663,7 @@ class Apic extends IController
     //显示专辑列表（首页）
     public function article_list(){
         if (empty($this->user['user_id'])){$this->json_echo([]);}
+        if (empty($_SERVER['REDIRECT_PATH_INFO'])){ISession::clear('visit_num');}
         $goods_query = new IQuery("goods");
         /*视频专辑*/
         $category = 3;
@@ -683,7 +684,7 @@ class Apic extends IController
         }
         $article_query = new IQuery('article');
         $article_query->fields = 'id,title,image,visit_num,favorite,category_id';
-        $article_query->where = $where . ' and visibility = 1';
+        $article_query->where = '(' . $where . ') and visibility = 1';
         $article_query->limit = 10;
         $article_data_tbtj =$article_query->find();
 //        $category_query = new IQuery("article_category");
@@ -845,7 +846,7 @@ class Apic extends IController
 //        echo $visit_num;
 //        echo '<a href="http://192.168.0.156:8080/index.php?controller=site&action=article_detail&id='.$data[0]['id'].'">aa</a>';
 //        var_dump($data);
-//        ISession::clear('visit_num');
+
 
         $this->json_echo($data);
     }
