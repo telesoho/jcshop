@@ -166,17 +166,11 @@
         猫猫都在搜
     </div>
     <div class="searth-content">
-        <a href="#" onclick="ToSearthPage('万圣节')">万圣节</a>
-        <a href="#">爱丽小屋</a>
-        <a href="#">吃饱撑着</a>
-        <a href="#">哈哈哈</a>
-        <a href="#">英文</a>
-        <a href="#">数字</a>
-        <a href="#">万圣节</a>
-        <a href="#">万圣节</a>
-        <a href="#">万圣节</a>
-        <a href="#">万圣节</a>
-        <a href="#">万圣节</a>
+        <a href="{url:/site/error}" class="locationA">万圣节</a>
+        <a href="{url:/site/error}" class="locationA">爱丽小屋</a>
+        <a href="{url:/site/error}" class="locationA">吃饱撑着</a>
+        <a href="{url:/site/error}" class="locationA">英文</a>
+        <a href="{url:/site/error}" class="locationA">数字</a>
     </div>
     <button type="button" id="button-submit" class="mui-btn  mui-btn-outlined buttom-submit" onclick="searthSubmit();">确定</button>
     <button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
@@ -263,21 +257,23 @@
         </a>
         <%if(dat.goods_list.length>=3){%>
             <div class="single"></div>
-            <div class="product">
-                <div class="slider">
-                    <% for(var m=0; m<dat.goods_list.length; m++){%>
-                    <% var goodsitem =dat.goods_list[m] %>
-                    <div class="item">
-                        <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
-                            <div class="img"><img dataimg="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg" /></div>
-                            <div class="name hidewrap"><%=goodsitem.name %></div>
-                            <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
-                        </a>
+            <div class="mark">
+                <div class="product">
+                    <div class="slider">
+                        <% for(var m=0; m<dat.goods_list.length; m++){%>
+                        <% var goodsitem =dat.goods_list[m] %>
+                        <div class="item">
+                            <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
+                                <div class="img"><img dataimg="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg" /></div>
+                                <div class="name hidewrap"><%=goodsitem.name %></div>
+                                <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
+                            </a>
+                        </div>
+                        <div class="singleline"></div>
+                        <%}%>
                     </div>
-                    <div class="singleline"></div>
-                    <%}%>
+                    <div class="mark"></div>
                 </div>
-                <div class="mark"></div>
             </div>
         <%}%>
     </section>
@@ -355,5 +351,37 @@ $(window).bind('scroll', function() {
         $(self).next().next().addClass("hide");
     }
 </script>
+<?php if(isset($this->wechat)){ $this->wechat->config['wechat_jsApiSDK']=1; $this->wechat->jsApiSDK();?>
+<script>
+    wx.ready(function(){
+        wx.onMenuShareAppMessage({
+            title: '九猫家商城', // 分享标题
+            desc: '欢迎来到九猫家', // 分享描述
+            link: '', // 分享链接
+            imgUrl: <?php echo '"' . IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png' . '"' ?>, // 分享图标
+            type: 'link', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+        wx.onMenuShareTimeline({
+            title: '九猫家商城', // 分享标题
+            link: '', // 分享链接
+            imgUrl: <?php echo '"' . IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png' . '"' ?>, // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+    })
+</script>
+<?php } ?>
+
 </body>
 </html>

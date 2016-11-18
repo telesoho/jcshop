@@ -8,64 +8,55 @@
     <title>身份证认证信息</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <style>
-        html,body{
-            position:relative;
-            width:100%;
-            height:100%;
-            overflow-x: hidden;
-        }
-        .card_info{
-            position:absolute;
-            top:0;
-            left:0;
-            bottom:0;
-            right:0;
-            width:100%;
-            height:100%;
-            background:#aa4ff0;
-        }
-        .card_info_left{
-            -webkit-transform: translate3d(-100%, 0, 0);
-            transform: translate3d(-100%, 0, 0);
-            -webkit-transition: -webkit-transform 300ms ease;
-            transition: transform 300ms ease;
-        }
-        .card_edit{
-            position:absolute;
-            top:0;
-            left:100%;
-            bottom:0;
-            right:0;
-            width:100%;
-            height:100%;
-            background:red;
-            border:1px solid red;
-        }
-        .card_edit_left{
-            left:0;
-            -webkit-transition: left 300ms ease;
-            transition: left 300ms ease;
-        }
-
-    </style>
 </head>
+<style>
+    .mui-popover-action{
+        top:10%;
+        width:70% !important;
+        left:15%;
+    }
+</style>
 <body>
-<div class="container card_info">
-1111
-</div>
-<div class="container card_edit" style="border:1px solid red;">
-22222
-    hajjlkk;llllllllllllllllllllllllllllllllllllllllllllllllll
-</div>
- <script>
-  document.querySelector(".card_info").addEventListener("click",function(){
-      this.className="card_info_left";
-      document.querySelector(".card_edit").className="card_edit card_edit_left";
-  })
- </script>
+    <div id="sheet1" class="mui-popover mui-popover-action">
+        <!-- 可选择菜单 -->
+        <ul class="mui-table-view">
+                <a href="#">hahah</a>
+            <div>
+                <a href="#">hahah</a>
+            </div>
+            <div>
+                <a href="#">hahah</a>
+            </div>
+            <div>
+                <a href="#">hahah</a>
+            </div>
+            <div>
+                <a href="#">hahah</a>
+            </div>
+            <div>
+                <a href="#">hahah</a>
+            </div>
+            <a href="#">hahah</a>
+            <a href="#">hahah</a>
+            <a href="#">hahah</a>
+            <a href="#">hahah</a>
+            <a href="#">hahah</a>
+
+        </ul>
+    </div>
+    <div id="rest">
+            点击我弹出
+    </div>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
+    <script>
+        $(function(){
+            $("#rest").click(function(){
+                mui('#sheet1').popover('toggle');
+            })
+        })
+
+    </script>
 </body>
 </html>

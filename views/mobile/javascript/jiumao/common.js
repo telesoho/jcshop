@@ -99,7 +99,7 @@ function searthSubmit(){
     if(subContent==""){
         searthCancel();
     }else{
-        window.location.href="/site/search_list";
+        window.location.href="/site/error";
     }
 }
 //分类页面处理函数

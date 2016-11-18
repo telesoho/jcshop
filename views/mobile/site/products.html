@@ -21,8 +21,10 @@
 </head>
 <body>
 	<!--轮播-->
-    <section>
+    <section style="width:7.5rem;height:7.5rem;position:relative;background:#fff">
         <!--轮播开始-->
+		<img src="/views/mobile/skin/default/image/jmj/product/left-logo.png" alt="" class="leftlog">
+		<img src="/views/mobile/skin/default/image/jmj/product/tokyo.png" alt="" class="bottomlog">
         <div id="carousel" class="mui-slider">
 
         </div>
@@ -37,7 +39,8 @@
         	<a href="#serviceDescription">
 	            <ul>
 	                <li><img src="/views/mobile/skin/default/image/jmj/img/plane_icon.png"/>日本直邮</li>
-	                <li><img src="/views/mobile/skin/default/image/jmj/img/man_icon.png"/>满288包邮</li>
+	                <li><img src="/views/mobile/skin/default/image/jmj/img/man_icon.png"/>满
+						<img src="/views/mobile/skin/default/image/jmj/product/288.png" style="width:0.64rem;"/>包邮</li>
 	                <li><span class="mui-icon mui-icon-arrowright"></span></li>
 	            </ul>
 	        </a>
@@ -79,6 +82,7 @@
     		<section>
 	    		<div class="title01">
 	    			商品图文详情
+					<!--<img src="/views/mobile/skin/default/image/jmj/product/fanyi.png" class="mui-pull-right fanyiImg" />-->
 	    		</div>
 				<div id="goodsContent">
 				</div>
@@ -108,6 +112,9 @@
     		    </li>
     		</ul>
     	</div>
+		<div class="tips">
+			<img src="/views/mobile/skin/default/image/jmj/product/tip.png" alt="" />
+		</div>
     </section>
 	<!--加入购物车-->
     <section>
@@ -129,14 +136,14 @@
 					<img src="/views/mobile/skin/default/image/jmj/img/plane_icon.png"/>
 					<span>海外直邮</span>
 				</p>
-				<p>海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮</p>
+				<p>海外直邮</p>
 			</div>
 			<div class="descContent">
 				<p>
 					<img src="/views/mobile/skin/default/image/jmj/img/man_icon.png"/>
-					<span>新手满188包邮</span>
+					<span>新手满288包邮</span>
 				</p>
-				<p>新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮</p>
+				<p>新手满288包邮</p>
 			</div>
 		</div>
     </section>
@@ -184,9 +191,9 @@
 	<!--商品详情模板引擎-->
 	<script id="product_goodsDetail" type="text/html">
 		<div class="top box">
-            <div class="head_logo">
-                <img src="/views/mobile/skin/default/image/jmj/product/jpan.png" alt="" />
-            </div>
+            <!--<div class="head_logo">-->
+                <!--<img src="/views/mobile/skin/default/image/jmj/product/jpan.png" alt="" />-->
+            <!--</div>-->
 			<div class="name"><%=name %></div>
 			<div class="log">
 				<img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png" alt="" />
@@ -199,8 +206,9 @@
 				<span class="sellprice">￥ <%=sell_price %></span>
 			</div>
 			<div class="other_price box">
-				<span class="japen hidewrap">国内价:￥<%=market_price %></span>
-				<span class="china hidewrap">日本价: <%=parseInt(jp_price) %>円</span>
+				<span class="china hidewrap">国内价:￥<%=market_price %></span>
+				<span class="japen hidewrap"><img src="/views/mobile/skin/default/image/jmj/product/riya-logo.png" alt=""style="width:1.08rem;height:0.34rem" />
+					<%=parseInt(jp_price) %>円</span>
 			</div>
 		</div>
 	</script>
@@ -239,7 +247,8 @@
 				<div class="select_top_right">
 					<div class="sel_title">
 						<a href="#"><%=name %></a>
-						<span>￥<%=sell_price %></span>
+						<span class="storeNum" data-store="<%=store_nums %>">库存数量:<%=store_nums %></span>
+						<span class="price">￥<%=sell_price %></span>
 					</div>
 					<a href="#select_product" class="a_da"><span class="mui-icon mui-icon-closeempty"></span></a>
 				</div>
@@ -351,6 +360,9 @@
             mui('.mui-scroll-wrapper').scroll({
                 deceleration: 0.0005
             });
+//			$(".fanyiImg").click(function(){
+//				mui('#sheet').popover('toggle');
+//			})
 		});
 		function getProductDetail(obj){
 			var product_detail=obj;

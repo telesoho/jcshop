@@ -8,7 +8,23 @@ ul li{
 .mui-segmented-control.mui-scroll-wrapper .mui-scroll{height:3.5rem;}
 .mui-segmented-control.mui-scroll-wrapper .mui-control-item{padding:0.125rem 0;}
 .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{border:none;}
-#carousel{background:#fff;padding-bottom: 0.17rem;width:7.5rem;height:7.5rem;}
+ .leftlog{
+    position:absolute;
+    width:1.4rem;
+    height:0.81rem;
+    z-index:2;
+     left:0.4rem;
+     top:0.6rem;
+}
+.bottomlog{
+    position:absolute;
+    width:2.09rem;
+    height:1.72rem;
+    z-index:2;
+    right:0.1rem;
+    bottom:0.30rem;
+}
+#carousel{background:#fff}
 #carousel img{
     width:6rem;
     height:6rem;
@@ -38,7 +54,7 @@ ul li{
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    margin-left:0.2rem;
+    margin-left:0.3rem;
 }
 #goods_detaile .top img{
     width:1.2rem;
@@ -50,7 +66,7 @@ ul li{
     color:#3d4245;
     letter-spacing:0.0056rem;
     line-height:0.35rem;
-    margin-left:0.95rem;
+    margin-left:0.35rem;
 }
 #goods_detaile .price{
     margin-top:0.2rem;
@@ -71,8 +87,19 @@ ul li{
     display:inline-block;
     width:2.2rem;
 }
+#goods_detaile .price .other_price .japen img{
+    position:relative;
+    top:0.1rem;
+}
 .graphicDetailsBox{background:#fff;margin-top:0.2rem;border-top: 1px solid #eee;border-bottom: 1px solid #eee;padding:0 0.13rem;}
 .graphicDetailsBox .title01{font-size:0.3rem;color:#3d4245;padding:0.1rem 0 0.2rem;border-bottom: 1px solid #eee;}
+.fanyiImg{
+    width:1.44rem;height:0.37rem;
+    position:relative;
+    top:0.1rem;
+    right:0.1rem;
+
+}
 .graphicDetailsBox .title01 div{font-size:0.24rem;color:#bbb;float:right;}
 .graphicDetailsBox .title01 div span:first-child{color:red;}
 .graphicDetailsBox .title01 div span:last-child{color:#bbb;font-size:0.32rem;}
@@ -91,7 +118,7 @@ ul li{
 .goodsList .mui-control-item img{width:1.8rem;height:1.8rem;}
 .goodsList .mui-control-item p{color:#3d4245;font-size:0.24rem;width:2rem;overflow: hidden;text-overflow: ellipsis;}
 .goodsList .mui-control-item p:last-child{color:#fe0000;}
-.servicePromise{background:#fff;margin-top:0.2rem;padding:0 0.13rem;border-top: 1px solid #eee;overflow:hidden;height:4.5rem;}
+.servicePromise{background:#fff;margin-top:0.2rem;padding:0 0.13rem;border-top: 1px solid #eee;overflow:hidden;height:3.5rem;}
 .servicePromise p:first-child{padding:0.1rem 0;font-size:0.3rem;color:#3d4245;border-bottom: 1px solid #eee;}
 .servicePromise ul{
     display:-webkit-flex;
@@ -111,6 +138,20 @@ ul li{
     font-size:0.24rem;
     margin-top:0.14rem;
     color:#bbb;
+}
+.tips{
+    height:4.5rem;
+    width:100%;
+    overflow-x: hidden;
+    display: -webkit-flex;
+    /*align-items: center;*/
+    justify-content: center;
+    padding-bottom:2rem;
+    background:#fff;
+}
+.tips img{
+    width:7.25rem;
+    height:2.34rem;
 }
 #goodsContent{
     font-size:0.28rem;
@@ -135,7 +176,7 @@ ul li{
 }
 .footerBox .collection{
     border-top:0.01rem solid #eee;
-    height:1.2rem;
+    height:1rem;
     background:#fff;
     font-size:0.24rem;
     color:#979797;
@@ -159,14 +200,14 @@ ul li{
     min-width:3rem;
     background:#eee;
     color:#ff4aa0;
-    font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;
+    font-size:0.3rem;text-align: center;height:1rem;line-height: 1rem;
 }
 .footerBox #buyBottom{
     display:block;
     min-width:3rem;
     background:#f3026a;
     color:#fff;
-    font-size:0.34rem;text-align: center;height:1.2rem;line-height: 1.2rem;
+    font-size:0.3rem;text-align: center;height:1rem;line-height: 1rem;
 }
 
 
