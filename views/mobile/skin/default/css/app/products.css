@@ -93,6 +93,13 @@ ul li{
 }
 .graphicDetailsBox{background:#fff;margin-top:0.2rem;border-top: 1px solid #eee;border-bottom: 1px solid #eee;padding:0 0.13rem;}
 .graphicDetailsBox .title01{font-size:0.3rem;color:#3d4245;padding:0.1rem 0 0.2rem;border-bottom: 1px solid #eee;}
+.fanyiImg{
+    width:1.44rem;height:0.37rem;
+    position:relative;
+    top:0.1rem;
+    right:0.1rem;
+
+}
 .graphicDetailsBox .title01 div{font-size:0.24rem;color:#bbb;float:right;}
 .graphicDetailsBox .title01 div span:first-child{color:red;}
 .graphicDetailsBox .title01 div span:last-child{color:#bbb;font-size:0.32rem;}
