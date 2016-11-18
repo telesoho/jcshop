@@ -570,6 +570,11 @@ font-size: .12rem;
 	padding:.1rem 5%;
 	line-height: .16rem;
 }
+.cardTip {
+	margin:0.2rem;
+	color:#ff4aa0;
+	font-size:0.26rem;
+}
 
 
 
