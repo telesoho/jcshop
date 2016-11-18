@@ -257,15 +257,22 @@ body{
     background:#ffffff;
     border-radius:0.2rem;
     width:3.5rem;
-    height:5.32rem;
+    height:5.92rem;
     margin-right:0.09rem;
     margin-bottom:0.2rem;
 }
-#category_third .product_item img{
+#category_third .product_item .img{
     width:3.5rem;
     height:3.5rem;
     border-radius:0.2rem 0.2rem 0 0;
     border-bottom:0.01rem solid #eee;
+    display:-webkit-flex;
+    -webkit-align-items: center;
+    -webkit-justify-content: center;
+}
+#category_third .product_item .img img{
+    width:2.9rem;
+    height:2.9rem;
 }
 #category_third .product_item .name{
     margin-top:0.1rem;
@@ -287,6 +294,16 @@ body{
     padding-left:0.1rem;
 }
 #category_third .product_item .openprice{
+    display: block;
+    margin-top:0.1rem;
+    font-family:'HelveticaNeueLt';
+    font-size:0.26rem;
+    color:#bbb;
+    letter-spacing:0;
+    padding-left:0.1rem;
+}
+#category_third .product_item .japanprice{
+    display: block;
     margin-top:0.1rem;
     font-family:'HelveticaNeueLt';
     font-size:0.26rem;

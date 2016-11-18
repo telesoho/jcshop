@@ -400,6 +400,13 @@ function productClass(goods_id,user_id,promo,active_id)
 
 		//设置必要参数
 		var buyNums = parseInt($.trim($('#buyNums').val()));
+		var storeNum=parseInt($.trim($('.storeNum').attr("data-store")));
+		if(storeNum==0||buyNums>storeNum){
+			alert("你所购买的商品库存不足")
+			$('#buyNums').val(storeNum);
+			return;
+		}
+		alert(storeNum)
 		var id      = _self.goods_id;
 		var type    = 'goods';
 

@@ -85,12 +85,21 @@ sit_products.css更改
 .select_photo img{width:100%;height:auto;}
 .select_top_right{float:left;width:100%;padding:0.3rem 0;}
 .sel_title{overflow:hidden;margin-left:2.3rem;}
-.sel_title a{display:block;font-size:0.3rem;color:#3d4245;line-height:0.35rem;text-align:left;width:3.75rem;}
+.sel_title a{display:block;font-size:0.28rem;color:#3d4245;line-height:0.35rem;text-align:left;width:3.75rem;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-left:0.2rem;}
 .a_da{position:absolute;top:0;right:0;}
-.sel_title span{display:block;font-size:0.3rem;margin-top:0.29rem;padding-left:0.1rem;
-    font-family:'HelveticaNeueLt';
-    font-size:0.34rem;
-    color:#ff44a0;}
+.sel_title .storeNum
+{display:block;font-size:0.26rem;margin-top:0.1rem;padding-left:0.15rem;
+    color:#3d4245;}
+.sel_title .price{
+    display:block;font-size:0.26rem;margin-top:0.1rem;padding-left:0.15rem;color:#ff4aa0;
+}
+
 .select_center{width:100%;overflow:hidden;background:#fff;border-top:1px solid #eee;padding:0.4rem 0.31rem;}
 .select_h3{width:100%;font-size:0.28rem;color:#3d4245;line-height:0.4rem;}
 .select_center_a{width:100%;overflow:hidden;margin-top:0.32rem;}

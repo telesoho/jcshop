@@ -250,7 +250,7 @@ iframe{
 }
 /*特殊处理样式*/
 .sellprice{
-  font-family:'HelveticaNeueLt';
+  /*font-family:'HelveticaNeueLt';*/
   font-size:0.34rem;
   color:#ff44a0;
 }
