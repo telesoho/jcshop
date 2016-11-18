@@ -1065,10 +1065,10 @@ class Apic extends IController
         $data = $user_query->find()[0];
         $image1 = $data['sfz_image1'];
         $image2 = $data['sfz_image2'];
-        $data['sfz_image1'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image1."/w/110/h/110");
-        $data['sfz_image2'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/110/h/110");
-        $data['sfz_image1x'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image1."/w/281/h/207");
-        $data['sfz_image2x'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/281/h/207");
+        $data['sfz_image1x'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image1."/w/110/h/110");
+        $data['sfz_image2x'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/110/h/110");
+        $data['sfz_image1y'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image1."/w/281/h/207");
+        $data['sfz_image2y'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/281/h/207");
         $this->json_echo($data);
     }
     function qrcode(){

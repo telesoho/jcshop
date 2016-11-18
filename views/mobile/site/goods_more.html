@@ -63,17 +63,18 @@
             </a>
         </div>
         {/query}
+
     </div>
-    <div class="flexbox empty_product">
-        <div class="img">
-            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
-        </div>
-        <div class="content">
-            <span>~</span>
-            <span>憋拉了，到底了</span>
-            <span>~</span>
-        </div>
-    </div>
+    <!--<div class="flexbox empty_product">-->
+        <!--<div class="img">-->
+            <!--<img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>-->
+        <!--</div>-->
+        <!--<div class="content">-->
+            <!--<span>~</span>-->
+            <!--<span>憋拉了，到底了</span>-->
+            <!--<span>~</span>-->
+        <!--</div>-->
+    <!--</div>-->
 </script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
@@ -82,6 +83,16 @@
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script>
     //页面加载动画的调用
+    var stop=true;
+    $(window).bind('scroll', function() {
+        if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+            stop=true;
+            if(stop==true){
+                $("#category_third").clone().appendTo("#category");
+                stop=false;
+            }
+        }
+    });
     $(window).load(function(){
         $("#loading").fadeOut(300);
         var getinfo=getItem("siteMap");

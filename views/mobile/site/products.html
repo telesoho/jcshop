@@ -24,6 +24,7 @@
     <section style="width:7.5rem;height:7.5rem;position:relative;background:#fff">
         <!--轮播开始-->
 		<img src="/views/mobile/skin/default/image/jmj/product/left-logo.png" alt="" class="leftlog">
+		<img src="/views/mobile/skin/default/image/jmj/product/tokyo.png" alt="" class="bottomlog">
         <div id="carousel" class="mui-slider">
 
         </div>
@@ -38,7 +39,8 @@
         	<a href="#serviceDescription">
 	            <ul>
 	                <li><img src="/views/mobile/skin/default/image/jmj/img/plane_icon.png"/>日本直邮</li>
-	                <li><img src="/views/mobile/skin/default/image/jmj/img/man_icon.png"/>满288包邮</li>
+	                <li><img src="/views/mobile/skin/default/image/jmj/img/man_icon.png"/>满
+						<img src="/views/mobile/skin/default/image/jmj/product/288.png" style="width:0.64rem;"/>包邮</li>
 	                <li><span class="mui-icon mui-icon-arrowright"></span></li>
 	            </ul>
 	        </a>
@@ -80,6 +82,7 @@
     		<section>
 	    		<div class="title01">
 	    			商品图文详情
+					<!--<img src="/views/mobile/skin/default/image/jmj/product/fanyi.png" class="mui-pull-right fanyiImg" />-->
 	    		</div>
 				<div id="goodsContent">
 				</div>
@@ -133,14 +136,14 @@
 					<img src="/views/mobile/skin/default/image/jmj/img/plane_icon.png"/>
 					<span>海外直邮</span>
 				</p>
-				<p>海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮海外直邮</p>
+				<p>海外直邮</p>
 			</div>
 			<div class="descContent">
 				<p>
 					<img src="/views/mobile/skin/default/image/jmj/img/man_icon.png"/>
-					<span>新手满188包邮</span>
+					<span>新手满288包邮</span>
 				</p>
-				<p>新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮新手满188包邮</p>
+				<p>新手满288包邮</p>
 			</div>
 		</div>
     </section>
@@ -357,6 +360,9 @@
             mui('.mui-scroll-wrapper').scroll({
                 deceleration: 0.0005
             });
+//			$(".fanyiImg").click(function(){
+//				mui('#sheet').popover('toggle');
+//			})
 		});
 		function getProductDetail(obj){
 			var product_detail=obj;

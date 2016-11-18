@@ -334,6 +334,7 @@ function productClass(goods_id,user_id,promo,active_id)
 	 */
 	this.modified = function(code)
 	{
+		var storeNum=parseInt($.trim($('.storeNum').attr("data-store")));
 		var buyNums = parseInt($.trim($('#buyNums').val()));
 		switch(code)
 		{
@@ -348,6 +349,10 @@ function productClass(goods_id,user_id,promo,active_id)
 				buyNums--;
 			}
 			break;
+		}
+		if(buyNums>storeNum){
+			buyNums=storeNum;
+			alert("你所购买的商品不能超出库存");
 		}
 		$('#buyNums').val(buyNums);
 		$('#buyNums').trigger('change');
@@ -406,7 +411,7 @@ function productClass(goods_id,user_id,promo,active_id)
 			$('#buyNums').val(storeNum);
 			return;
 		}
-		alert(storeNum)
+		// alert(storeNum)
 		var id      = _self.goods_id;
 		var type    = 'goods';
 

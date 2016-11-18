@@ -27,6 +27,10 @@ class Site extends IController
         if (empty($_SERVER['REDIRECT_PATH_INFO'])){
             ISession::set('is_first',true);
         }
+        if(IClient::isWechat() == true){
+            require_once __DIR__ . '/../plugins/wechat/wechat.php';
+            $this->wechat = new wechat();
+        }
 //		$this->index_slide = Api::run('getBannerList');
 		$this->redirect('index');
 	}

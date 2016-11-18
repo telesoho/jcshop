@@ -14,7 +14,7 @@
 <body>
 <div id="credit_app">
     <div class="container card_info">
-        <template v-if="message.sfz_image1x==''">
+        <template v-if="message.sfz_num==null">
             <section class="nodata">
                 <div class="emptyCart">
                     <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;"/>
@@ -35,11 +35,11 @@
                 <div class="test box">
                     <div class="img box">
                         <div class="img_1" onclick="perview(this)">
-                            <img :src="message.sfz_image1" alt=""  style="width:1.1rem;height:1.1rem" />
+                            <img :src="message.sfz_image1x" alt=""  style="width:1.1rem;height:1.1rem" />
                             <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
                         </div>
                         <div class="img_2" onclick="perview(this)">
-                            <img :src="message.sfz_image2" alt=""  style="width:1.1rem;height:1.1rem" />
+                            <img :src="message.sfz_image2x" alt=""  style="width:1.1rem;height:1.1rem" />
                             <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
                         </div>
                     </div>
@@ -61,13 +61,14 @@
             <div class="title">
                 <span>身份信息</span><span>请确保身份信息真实有效，否则无法通过审核</span>
             </div>
-            <input type="text" class="mui-input-clear"  placeholder="请输入姓名" id="cardName" name="sfz_name" v-model="message.sfz_name" />
-            <input type="text" class="mui-input-clear"  placeholder="输入身份证账号" id="cardId" name="sfz_num" v-model="message.sfz_num"  />
+            <input type="text" class="mui-input-clear"  placeholder="请输入姓名" id="cardName" name="sfz_name" v-model="message.sfz_name"
+            />
+            <input type="text" class="mui-input-clear"  placeholder="输入身份证账号" id="cardId" name="sfz_num" v-model="message.sfz_num" onchange="isCardNo()" />
             <div class="title">
                 <span>身份证正反面照片</span><span>上传身份证正反面照片让通关更便捷</span>
             </div>
             <div class="editImg">
-                <template v-if="message.sfz_image1x==''">
+                <template v-if="message.sfz_num==null">
                     <div class="left">
                         <div class="img" onclick="uploadImg(this)">
                             <img src="/views/mobile/skin/default/image/jmj/product/add.png" alt="" class="pic pic_no" />
@@ -86,18 +87,20 @@
                 <template v-else>
                     <div class="left">
                         <div class="img" onclick="uploadImg(this)">
-                            <img :src="message.sfz_image1x" alt="" class="pic pic_yes" />
+                            <img :src="message.sfz_image1y" alt="" class="pic pic_yes" />
                             <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
                         </div>
                         <input type="hidden" name="image1">
+                        <input type="hidden" name="image_saved1" :value="message.sfz_image1">
                         <div class="mark">点击更换照片</div>
                     </div>
                     <div class="right">
                         <div class="img" onclick="uploadImg(this)">
-                            <img :src="message.sfz_image2x" alt="" class="pic pic_yes" />
+                            <img :src="message.sfz_image2y" alt="" class="pic pic_yes" />
                             <img src="/views/mobile/skin/default/image/jmj/product/pic.png" alt="" class="pic pic_log" />
                         </div>
                         <input type="hidden" name="image2">
+                        <input type="hidden" name="image_saved2" :value="message.sfz_image2">
                         <div class="mark">点击更换照片</div>
                     </div>
                 </template>
@@ -186,6 +189,18 @@
                 console.log(type);
             }
         });
+    }
+    function isCardNo()
+    {
+        var card=$("#cardId").val();
+        // 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
+        var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        if(reg.test(card) === false)
+        {
+
+            $("#cardId").val("");
+            return  false;
+        }
     }
 </script>
 </body>
