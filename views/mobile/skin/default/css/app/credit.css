@@ -235,3 +235,9 @@ input[type='text']{
     text-align:center;
 
 }
+input[type='button']{
+    color:#fff;
+    font-size:0.3rem;
+    font-weight:bold;
+    border:1px solid transparent;
+}

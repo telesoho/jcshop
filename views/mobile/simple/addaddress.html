@@ -109,6 +109,7 @@
             mobile:phone.value,
             zip:useryoubian.value
         };
+        console.log(addaddressInfo);
             var self=this;
             mui.ajax('index.php?controller=apic&action=address_add',{
                 data:addaddressInfo,
@@ -116,6 +117,7 @@
                 type:'post',		// HTTP请求类型
                 timeout:10000,		// 超时时间设置为10秒；
                 success:function(data){
+                    console.log(data);
                     if(statusOrder=="cart2"){
                         window.history.back();
                     }else if(statusOrder1=="cart_order"){
