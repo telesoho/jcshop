@@ -196,9 +196,9 @@ class wap_wechat extends paymentPlugin
 
 			//签名结果与签名方式加入请求提交参数组中
 			$return['paySign']    = $mysign;
-			$return['successUrl'] = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode('支付成功！'));
+			$return['successUrl'] = IUrl::getHost().IUrl::creatUrl('/site/success?message='.urlencode('支付成功！'));
 //			$return['failUrl']    = IUrl::getHost().IUrl::creatUrl('/site/error/msg/'.urlencode('支付失败！'));
-			$return['failUrl']    = IUrl::getHost().IUrl::creatUrl('/site/error/msg/'.urlencode('/views/mobile/skin/default/image/xinzeng/zfsb.png'));
+			$return['failUrl']    = IUrl::getHost().IUrl::creatUrl('/site/error?msg='.urlencode('/views/mobile/skin/default/image/xinzeng/zfsb.png'));
 
 			include(dirname(__FILE__).'/template/pay.php');
 		}
