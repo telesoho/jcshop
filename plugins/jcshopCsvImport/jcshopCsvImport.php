@@ -198,9 +198,10 @@ class jcshopCsvImport extends pluginBase
 		$brandDB 		 	= new IModel('brand');
 		$commendDB			= new IModel('commend_goods');
 		
-
+		//默认图片路径
+		$default_img 		= 'upload/goods_pic/nopic.jpg';
 		
-
+		
 		//插入商品表
 		foreach($collectData as $key => $val)
 		{
@@ -370,6 +371,10 @@ class jcshopCsvImport extends pluginBase
 							}
 						}
 					}
+				}else{
+					//不存在图片时，保存默认图片
+					$theData['img'] 	= $default_img;
+					$theData['ad_img'] 	= $default_img;
 				}
 
 				// 设置商品主图
