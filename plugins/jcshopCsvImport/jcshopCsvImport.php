@@ -371,15 +371,14 @@ class jcshopCsvImport extends pluginBase
 							}
 						}
 					}
-				}else{
-					//不存在图片时，保存默认图片
-					$theData['img'] 	= $default_img;
-					$theData['ad_img'] 	= $default_img;
 				}
 
 				// 设置商品主图
 				if($mainPic) {
 					$theData['img'] = $mainPic[0];
+				}else{
+					//不存在图片时，保存默认图片
+					$theData['img'] 	= $default_img;
 				}
 			}
 
@@ -463,29 +462,47 @@ class jcshopCsvImport extends pluginBase
 				}
 			}
 
-			// 如果已经存在图片，则处理商品图片关联
-			if($mainPic) {
-				$photoRelationDB->del('goods_id = '.$goods_id);
-			}
-
-			foreach($mainPic as $photoFile) {
-				if(!is_file($photoFile))
-				{
-					continue;
+			//图片后续处理
+			$field = trim($val[$titleToCols['reset_img']]);
+			if('' !== $field) {
+				// 如果已经存在图片，则处理商品图片关联
+				if($mainPic) {
+					$photoRelationDB->del('goods_id = '.$goods_id);
+					foreach($mainPic as $photoFile) {
+						if(!is_file($photoFile))
+						{
+							continue;
+						}
+						$md5Code = md5_file($photoFile);
+						$photoRow= $photoDB->getObj('id = "'.$md5Code.'"');
+						if(!$photoRow || !is_file($photoRow['img']))
+						{
+							// 如果数据库中找不到对应的图片或者原来的图片已经不存在
+							$photoDB->del('id = "'.$md5Code.'"');
+							$photoDB->setData(array("id" => $md5Code,"img" => $photoFile));
+							$photoDB->add();
+						}
+					
+						// 关联商品图
+						$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
+						$photoRelationDB->add();
+					}
+				}else{
+					//默认图片
+					$md5Code 		= md5_file($default_img);
+					$photoRow 		= $photoDB->getObj('id = "'.$md5Code.'"');
+					if(!$photoRow || !is_file($photoRow['img'])){
+						$photoDB->setData(array("id" => $md5Code,"img" => $default_img));
+						$photoDB->add();
+					}
+					// 关联商品图
+					$photoRelationRow 		= $photoRelationDB->getObj('goods_id="'.$goods_id.'" and photo_id="'.$md5Code.'"');
+					if(empty($photoRelationRow)){
+						$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
+						$photoRelationDB->add();
+					}
+					
 				}
-				$md5Code = md5_file($photoFile);
-				$photoRow= $photoDB->getObj('id = "'.$md5Code.'"');
-				if(!$photoRow || !is_file($photoRow['img']))
-				{
-					// 如果数据库中找不到对应的图片或者原来的图片已经不存在
-					$photoDB->del('id = "'.$md5Code.'"');
-					$photoDB->setData(array("id" => $md5Code,"img" => $photoFile));
-					$photoDB->add();
-				}
-
-				// 关联商品图
-				$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
-				$photoRelationDB->add();
 			}
 		}
 	}
