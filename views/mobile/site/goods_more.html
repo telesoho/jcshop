@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title></title>
+    <title>{echo:IReq::get('title')}</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css" />
 </head>
@@ -40,12 +40,7 @@
 </section>
 <script type="text/html" id="category_third_temp">
     <div id="category_third">
-		{set:$category_id=IReq::get('category_id');$commend_id=IReq::get('commend_id');}
-    	{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as e on e.goods_id eq m.id 
-    		where=e.category_id in ($category_id) and d.commend_id eq $commend_id 
-    		fields=m.id,m.name,m.sell_price,m.img,m.market_price 
-    		limit=1000 
-    		order=m.id desc}
+        {foreach:items=$this->data_goods}
         <div class="product_item" id="product_item{$item['id']}">
             <a href="{url:/site/products?id=$item['id']}">
                 <div class="img">
@@ -57,13 +52,13 @@
                     </div>
                     <div class="price">
                         <span class="sellprice">¥{$item['sell_price']}</span>
+                        <span class="japanprice">日本价：{$item['jp_price']}円</span>
                         <span class="openprice">国内价：¥{$item['market_price']}</span>
                     </div>
                 </div>
             </a>
         </div>
-        {/query}
-
+        {/foreach}
     </div>
     <!--<div class="flexbox empty_product">-->
         <!--<div class="img">-->
@@ -82,7 +77,7 @@
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script>
-    //页面加载动画的调用
+    // 页面加载动画的调用
     var stop=true;
     $(window).bind('scroll', function() {
         if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
@@ -97,7 +92,6 @@
         $("#loading").fadeOut(300);
         var getinfo=getItem("siteMap");
         getcategory_thirdInfo(getinfo.id);
-        document.title = getinfo.name;
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','a',function(){document.location.href=this.href;});
     })

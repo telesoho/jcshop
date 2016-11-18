@@ -26,7 +26,7 @@
                 </div>
                 <div @click="addNewCard" class="addNewCard">添加身份证信息</div>
         </template>
-        <template v-else>
+        <div class="credit_info" v-else>
             <div class="content">
                 <div class="top">
                     <div class="name" v-cloak>{{message.sfz_name}}</div>
@@ -53,16 +53,17 @@
                     </div>
                 </div>
             </div>
-        </template>
+        </div>
+
     </div>
     <div class="container card_edit">
-        <form action="" method="post">
+        <form action="" method="post" id="formsub">
             <div class="title">
                 <span>身份信息</span><span>请确保身份信息真实有效，否则无法通过审核</span>
             </div>
             <input type="text" class="mui-input-clear"  placeholder="请输入姓名" id="cardName" name="sfz_name" v-model="message.sfz_name"
             />
-            <input type="text" class="mui-input-clear"  placeholder="输入身份证账号" id="cardId" name="sfz_num" v-model="message.sfz_num" onchange="isCardNo()" />
+            <input type="text" class="mui-input-clear"  placeholder="输入身份证账号" id="cardId" name="sfz_num" v-model="message.sfz_num"  />
             <div class="title">
                 <span>身份证正反面照片</span><span>上传身份证正反面照片让通关更便捷</span>
             </div>
@@ -83,7 +84,7 @@
                         <div class="mark">请上传照片</div>
                     </div>
                 </template>
-                <div v-else>
+                <template v-else>
                     <div class="left">
                         <div class="img" onclick="uploadImg(this)">
                             <img :src="message.sfz_image1y" alt="" class="pic pic_yes" />
@@ -102,10 +103,10 @@
                         <input type="hidden" name="image_saved2" :value="message.sfz_image2">
                         <div class="mark">点击更换照片</div>
                     </div>
-                </div>
+                </template>
             </div>
             <div class="fix-bottom">
-                <input type="submit" value="提交" id="submitMessage">
+                <input type="button" value="提交" id="submitMessage" onclick="checkfalse()">
             </div>
         </form>
     </div>
@@ -155,6 +156,14 @@
         data: {
             message:getItem('localcredit')
         },
+        watch: {
+            example2:{
+                handler(message){
+                    return message;
+                },
+                deep:true
+            }
+        },
         methods: {
             addNewCard: turnEdit,
             getData:getCreditInfo,
@@ -196,9 +205,17 @@
         var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
         if(reg.test(card) === false)
         {
-
+            alert("你输入的身份证信息有误");
             $("#cardId").val("");
             return  false;
+        }else{
+            return true;
+        }
+    }
+    function checkfalse(){
+        if(isCardNo()){
+            document.getElementById("formsub").submit();
+            window.location.reload();
         }
     }
 </script>

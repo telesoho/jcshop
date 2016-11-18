@@ -145,6 +145,7 @@
 	</div>
 </script>
 <script>
+	setItem("cart2url",location.search);
 	var addr=true;//判断用户是否提供地址
 	var Request = new Object();
 	Request = GetRequest();
@@ -169,6 +170,7 @@
 	//	获取url传递过来的参数
 	function GetRequest() {
 		var url = location.search; //获取url中"?"符后的字串
+//		alert(location.search);
 		var theRequest = new Object();
 		if (url.indexOf("?") != -1) {
 			var str = url.substr(1);
@@ -211,7 +213,14 @@
 			}
 		});
 	}
-
+	function setItem(key,value){
+		var val=JSON.stringify(value)?JSON.stringify(value):[];
+		window.localStorage.setItem(key,val);
+	}
+	function getItem(key){
+		var getter= window.localStorage.getItem(key);
+		return JSON.parse(getter);
+	}
 </script>
 </body>
 </html>

@@ -164,28 +164,28 @@ class Site extends IController
 		$this->catId = IFilter::act(IReq::get('cat'),'int');//分类id
 
 		switch($this->catId){
-			//药妆-个性美妆
 			case 126:
+				$this->name 	= '药妆'; //个性美妆
 				$this->ac_id 	= 15;
 				$this->pic 		= 'gou'; //狗子推荐
 				break;
-			//个护-基础护肤
 			case 134:
+				$this->name 	= '个护'; //基础护肤
 				$this->ac_id 	= 18;
 				$this->pic 		= 'nai'; //奶瓶推荐
 				break;
-			//宠物-宠物用品
 			case 6:
+				$this->name 	= '宠物'; //宠物用品
 				$this->ac_id 	= 17;
 				$this->pic 		= 'tui'; //腿毛推荐
 				break;
-			//健康-居家药品
 			case 2:
+				$this->name 	= '健康'; //居家药品
 				$this->ac_id 	= 16;
 				$this->pic 		= 'xi'; //昔君推荐
 				break;
-			//零食-日式美食
 			case 7:
+				$this->name 	= '零食'; //日式美食
 				$this->ac_id 	= 19;
 				$this->pic 		= 'yi'; //一哥推荐
 				break;
@@ -938,6 +938,22 @@ class Site extends IController
         $this->redirect('show');
     }
     function goods_more(){
+    	//获取商品
+    	$category_id 				= IFilter::act(IReq::get('category_id'));
+    	$commend_id 				= IFilter::act(IReq::get('commend_id'));
+    	$db_goods 					= new IQuery('goods as m');
+    	$db_goods->join 			= 'left join commend_goods as d on d.goods_id=m.id left join category_extend as e on e.goods_id=m.id';
+    	$db_goods->where 			= 'e.category_id in ('.$category_id.') and d.commend_id='.$commend_id;
+    	$db_goods->fields 			= 'm.id,m.name,m.sell_price,m.img,m.market_price';
+    	$db_goods->limit 			= 1000;
+    	$db_goods->order 			= 'm.id desc';
+    	$data_goods 				= $db_goods->find();
+    	//处理为偶数数量
+    	if(count($data_goods)%2 == 1){
+    		$data_goods[] 			= $data_goods[0];
+    	}
+    	
+    	$this->data_goods 			= $data_goods;
         $this->redirect('goods_more');
     }
 }

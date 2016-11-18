@@ -102,7 +102,7 @@
                     <div class="mui-input-row row_margin row_b_t">
                         <input type="hidden" class="mui-input-clear" value="<%=data[i].id%>" id="addressid">
                         <input type="text" class="mui-input-clear" value="<%=data[i].mobile%>" id="userphone" onkeyup=checkPhone() >
-                        <input type="text" class="mui-input-clear" value="<%=data[i].province_val%> <%=data[i].city_val%> <%=data[i].area_val%>" id="usercity" onfocus=checkcity()>
+                        <input type="text" class="mui-input-clear" value="<%=data[i].province_val%> <%=data[i].city_val%> <%=data[i].area_val%>" id="usercity<%=data[i].id%>" onfocus=checkcity(<%=data[i].id%>)>
                         <input type="text" class="mui-input-clear" value="<%=data[i].address%>" id="useraddr" onkeyup=check()>
                         <input type="text" class="mui-input-clear" value="<%=data[i].zip%>" id="useryoubian" onkeyup=check()>
                     </div>
@@ -130,6 +130,7 @@
     Request = GetRequest();
     var statusOrder=Request["rev"];
     //	模拟高亮画面
+//    alert(getItem("cart2url"));
     var submitaddr1,pro,cit,are;
     $(window).load(function(){
         $("#loading").fadeOut(300);
@@ -151,8 +152,9 @@
             dataType:'json',//服务器返回json格式数据
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
-            headers:{'Content-Type':'application/json'},
+//            headers:{'Content-Type':'application/json'},
             success:function(data){
+                console.log(data);
                 //服务器返回响应，根据响应结果，分析是否登录成功；
                 var dat={};
                 dat.data=data;
@@ -170,11 +172,11 @@
     var cityPicker3 = new mui.PopPicker({
         layer: 3
     });
-    function checkcity(){
+    function checkcity(id){
         document.activeElement.blur();//去除软键盘
         cityPicker3.setData(cityData3);
         cityPicker3.show(function(items) {
-            var showCityPickerInput=document.getElementById('usercity');
+            var showCityPickerInput=document.getElementById('usercity'+id);
             showCityPickerInput.value = (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;
             //返回 false 可以阻止选择框的关闭
             pro=(items[0] || {}).value;
@@ -264,9 +266,9 @@
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
                 if(statusOrder=="cart_order"){
-                    window.history.back();
+                    window.location.href="index.php"+getItem("cart2url");
                 }else if(statusOrder=="cart_order1"){
-                    window.history.go(-3);
+                    window.location.href="index.php"+getItem("cart2url");
                 }else{
                     window.location.reload();
                 }
@@ -303,11 +305,19 @@
         if (url.indexOf("?") != -1) {
             var str = url.substr(1);
             strs = str.split("&");
-            for(var i = 0; i < strs.length; i ++) {
-                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
             }
         }
         return theRequest;
+    }
+    function setItem(key,value){
+        var val=JSON.stringify(value)?JSON.stringify(value):[];
+        window.localStorage.setItem(key,val);
+    }
+    function getItem(key){
+        var getter= window.localStorage.getItem(key);
+        return JSON.parse(getter);
     }
 </script>
 </body>

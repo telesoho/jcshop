@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-
 /**
  * @brief CSV商品导入插件
  * @author nswe
@@ -200,9 +198,10 @@ class jcshopCsvImport extends pluginBase
 		$brandDB 		 	= new IModel('brand');
 		$commendDB			= new IModel('commend_goods');
 		
-
+		//默认图片路径
+		$default_img 		= 'upload/goods_pic/nopic.jpg';
 		
-
+		
 		//插入商品表
 		foreach($collectData as $key => $val)
 		{
@@ -372,6 +371,10 @@ class jcshopCsvImport extends pluginBase
 							}
 						}
 					}
+				}else{
+					//不存在图片时，保存默认图片
+					$theData['img'] 	= $default_img;
+					$theData['ad_img'] 	= $default_img;
 				}
 
 				// 设置商品主图
@@ -460,7 +463,7 @@ class jcshopCsvImport extends pluginBase
 				}
 			}
 
-			//处理商品图片关联
+			// 如果已经存在图片，则处理商品图片关联
 			if($mainPic) {
 				$photoRelationDB->del('goods_id = '.$goods_id);
 			}
@@ -480,11 +483,9 @@ class jcshopCsvImport extends pluginBase
 					$photoDB->add();
 				}
 
-				// 关联商品主图
-				//if($photoRelationDB->get_count('goods_id =' . $goods_id . " and photo_id ='" . $md5Code . "'") == 0) {
-					$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
-					$photoRelationDB->add();
-				//}
+				// 关联商品图
+				$photoRelationDB->setData(array('goods_id' => $goods_id,'photo_id' => $md5Code));
+				$photoRelationDB->add();
 			}
 		}
 	}
