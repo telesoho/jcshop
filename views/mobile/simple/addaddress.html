@@ -45,7 +45,7 @@
             <input type="text" class="mui-input-clear"  placeholder="输入收货人的姓名" id="username" onkeyup=check()>
         </div>
         <div class="inputContent">
-            <input type="text" class="mui-input-clear" placeholder="输入手机号"  id="userphone" onchange=checkPhone()>
+            <input type="text" class="mui-input-clear" placeholder="输入手机号"  id="userphone">
             <input type="text" class="mui-input-clear"  placeholder="选择城市"  id="usercity">
             <input type="text" class="mui-input-clear" placeholder="详细收货地址"  id="useraddr" onkeyup=check()>
             <input type="text" class="mui-input-clear" placeholder="邮编"  id="useryoubian" onkeyup=check()>
@@ -100,16 +100,16 @@
     var useryoubian=document.getElementById("useryoubian");
     var submitaddr=document.getElementById("submitAdd");
     submitaddr.addEventListener('tap',function(){
-        var addaddressInfo={
-            accept_name:username.value,
-            province:pro,
-            city:cit,
-            area:are,
-            address:address.value,
-            mobile:phone.value,
-            zip:useryoubian.value
-        };
-        console.log(addaddressInfo);
+        if(checkPhone()==true){
+            var addaddressInfo={
+                accept_name:username.value,
+                province:pro,
+                city:cit,
+                area:are,
+                address:address.value,
+                mobile:phone.value,
+                zip:useryoubian.value
+            };
             var self=this;
             mui.ajax('index.php?controller=apic&action=address_add',{
                 data:addaddressInfo,
@@ -131,14 +131,18 @@
                     console.log(type);
                 }
             });
-
+        }else{
+            return false;
+        }
     });
     function checkPhone(){
         var phone = document.getElementById('userphone').value;
         if(!(/^1[34578]\d{9}$/.test(phone))){
-            mui.alert('', '请输出正确的电话号码');
+            alert( '请输出正确的电话号码');
             document.getElementById('userphone').value="";
             return false;
+        }else{
+            return true;
         }
     }
     function check(){
