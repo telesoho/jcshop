@@ -1384,10 +1384,18 @@ class Simple extends IController
             $access_token = $this->wechat->getAccessToken();
             $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
             $dir .= '/'.date('Y/m/d');
-            $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
-            $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
-            $image1 = $this->saveMedia($url1,$dir);
-            $image2 = $this->saveMedia($url2,$dir);
+            if (!empty($image1)){
+                $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
+                $image1 = $this->saveMedia($url1,$dir);
+            } else {
+                $image1 = IFilter::act(IReq::get('image_saved1'),'string');
+            }
+            if (!empty($image2)){
+                $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
+                $image2 = $this->saveMedia($url2,$dir);
+            } else {
+                $image2 = IFilter::act(IReq::get('image_saved2'),'string');
+            }
             $user_id     = $this->user['user_id'];
             $user_model = new IModel('user');
             $user_model->setData(['sfz_name'=>$sfz_name,'sfz_num'=>$sfz_num,'sfz_image1'=>$image1,'sfz_image2'=>$image2]);
