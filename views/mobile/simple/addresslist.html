@@ -130,6 +130,7 @@
     Request = GetRequest();
     var statusOrder=Request["rev"];
     //	模拟高亮画面
+//    alert(getItem("cart2url"));
     var submitaddr1,pro,cit,are;
     $(window).load(function(){
         $("#loading").fadeOut(300);
@@ -265,9 +266,9 @@
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
                 if(statusOrder=="cart_order"){
-                    window.history.back();
+                    window.location.href="index.php"+getItem("cart2url");
                 }else if(statusOrder=="cart_order1"){
-                    window.history.go(-3);
+                    window.location.href="index.php"+getItem("cart2url");
                 }else{
                     window.location.reload();
                 }
@@ -304,11 +305,19 @@
         if (url.indexOf("?") != -1) {
             var str = url.substr(1);
             strs = str.split("&");
-            for(var i = 0; i < strs.length; i ++) {
-                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
             }
         }
         return theRequest;
+    }
+    function setItem(key,value){
+        var val=JSON.stringify(value)?JSON.stringify(value):[];
+        window.localStorage.setItem(key,val);
+    }
+    function getItem(key){
+        var getter= window.localStorage.getItem(key);
+        return JSON.parse(getter);
     }
 </script>
 </body>
