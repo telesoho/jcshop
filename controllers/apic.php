@@ -663,6 +663,7 @@ class Apic extends IController
     //显示专辑列表（首页）
     public function article_list(){
         if (empty($this->user['user_id'])){$this->json_echo([]);}
+        if (empty($_SERVER['REDIRECT_PATH_INFO'])){ISession::clear('visit_num');}
         $goods_query = new IQuery("goods");
         /*视频专辑*/
         $category = 3;
@@ -683,7 +684,7 @@ class Apic extends IController
         }
         $article_query = new IQuery('article');
         $article_query->fields = 'id,title,image,visit_num,favorite,category_id';
-        $article_query->where = $where . ' and visibility = 1';
+        $article_query->where = '(' . $where . ') and visibility = 1';
         $article_query->limit = 10;
         $article_data_tbtj =$article_query->find();
 //        $category_query = new IQuery("article_category");
@@ -845,7 +846,7 @@ class Apic extends IController
 //        echo $visit_num;
 //        echo '<a href="http://192.168.0.156:8080/index.php?controller=site&action=article_detail&id='.$data[0]['id'].'">aa</a>';
 //        var_dump($data);
-//        ISession::clear('visit_num');
+
 
         $this->json_echo($data);
     }
@@ -966,6 +967,12 @@ class Apic extends IController
         $catId = IFilter::act(IReq::get('id'),'int');//分类id
         if($catId == 0){$this->json_echo([]);}
         $goodsObj = search_goods::find(array('category_extend' => goods_class::catChild($catId)),99999);
+        //获取汇率
+        $siteConfig 		= new Config('site_config');
+        $exchange_rate_jp 	= $siteConfig->exchange_rate_jp;
+        $ratio 				= ',go.sell_price*'.$exchange_rate_jp.'/go.jp_price as ratio';
+        $goodsObj->fields 	.= $ratio;
+        $goodsObj->order 	= 'ratio asc';//根据折扣力度排序
         $resultData = $goodsObj->find();
         foreach ($resultData as $key=>$value){
             $resultData[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
