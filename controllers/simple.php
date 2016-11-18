@@ -693,6 +693,7 @@ class Simple extends IController
 		$this->payment     = $paymentName;
 		$this->paymentType = $paymentType;
 		$this->delivery    = $deliveryRow['name'];
+		$this->delivery_price    = $deliveryRow['first_price'];
 		$this->tax_title   = $tax_title;
 		$this->deliveryType= $deliveryRow['type'];
 		plugin::trigger('setCallback','/ucenter/order');
