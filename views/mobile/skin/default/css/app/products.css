@@ -133,26 +133,19 @@ ul li{
     color:#bbb;
 }
 .tips{
-    position:relative;
-    height:2.5rem;
+    height:4.5rem;
     width:100%;
     overflow-x: hidden;
     display: -webkit-flex;
     /*align-items: center;*/
     justify-content: center;
-    margin-bottom:2rem;
+    padding-bottom:2rem;
+    background:#fff;
 }
 .tips img{
     width:7.25rem;
     height:2.34rem;
 }
-.tips .text{
-    position: absolute;
-    color:#ff44a0;
-    font-size:0.3rem;
-    top:1rem;
-}
-
 #goodsContent{
     font-size:0.28rem;
     color:#3d4245;

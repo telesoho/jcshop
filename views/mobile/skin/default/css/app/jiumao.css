@@ -402,18 +402,20 @@ input[type='search']{
 	letter-spacing:0.0107rem;
 	line-height:0.38rem;
 	text-align:justify !important;
+	width:100%;
 }
 .article_body p img{
-	margin:0.5rem 0;
-	width:100%;
+	display: block;
+	margin:0.5rem auto;
+	max-width:100%;
 }
 .article_body>img{
 	margin:0.5rem 0;
 	width:100%;
 }
 .article_body>div>img{
-	margin:0.5rem 0;
-	width:100%;
+	margin:0.5rem auto;
+	max-width:100%;
 }
 .article_body .content_ware{
 	display:flex;
