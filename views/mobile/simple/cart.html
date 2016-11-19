@@ -5,11 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="x5-orientation" content="portrait">
 	<title>九猫商城</title>
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
 </head>
 <body>
 <!--loading页开始-->
@@ -44,28 +45,36 @@
 
 <!--</div>-->
 <footer>
-	<nav class="mui-bar mui-bar-tab">
+	<nav class="mui-bar mui-bar-tab"  style="z-index:25">
 		<a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">
-			<span class="mui-icon nav-icon icon-home"></span>
+                <span class="mui-icon nav-icon icon-home">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/home.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
 			<div class="mui-tab-label">首页</div>
 		</a>
 		<a class="mui-tab-item" href="{url:/site/sitemap}">
-			<span class="mui-icon nav-icon icon-classification"></span>
+                <span class="mui-icon nav-icon icon-classification">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/mune.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
 			<div class="mui-tab-label">分类</div>
 		</a>
-		<a class="mui-tab-item" href="{url:/site/favorite}">
-			<span class="nav-icon icon-vedio">
-				<img src="/views/mobile/skin/default/image/jmj/icon/grass.png" alt="" class="img-move02">
-				<div class="grow">种草</div>
-				<span class="tab-mark"></span>
-			</span>
+		<a class="mui-tab-item " href="{url:/site/favorite}">
+                <span class="nav-icon icon-vedio">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/grass.png" alt="" class="img-move02">
+                    <div class="grow">种草</div>
+                    <span class="tab-mark"></span>
+                </span>
 		</a>
 		<a class="mui-tab-item  mui-active" href="{url:simple/cart}">
-			<span class="mui-icon nav-icon icon-shopcar"></span>
+                <span class="mui-icon nav-icon icon-shopcar">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/buy-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
 			<div class="mui-tab-label">购物车</div>
 		</a>
 		<a class="mui-tab-item" href="{url:/ucenter/index}">
-			<span class="mui-icon nav-icon icon-my"></span>
+                <span class="mui-icon nav-icon icon-my">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/my.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
 			<div class="mui-tab-label">我的</div>
 		</a>
 	</nav>

@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="x5-orientation" content="portrait">
     <title>九猫商城</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/favorite.css" />
+    <script src="/views/mobile/javascript/vue.js"></script>
 </head>
 <body>
 <!--loading页开始-->
@@ -37,140 +39,249 @@
 <!--loading页结束-->
 <!--收藏页面-->
 <section id="favorite">
+    <template v-if="infoMessage.goods_data==''&&infoMessage.article_data==''">
+        <div class="empty">
+            <img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt="" />
+            <div class="content">收藏的内容和商品都在这里哦，赶紧去种草吧！</div>
+            <a href="{url:/site/index}" class="gotoFind">去种草</a>
+        </div>
+    </template>
+    <div class="favorite_content" v-else>
+        <div class="head">
+            <template v-if="state==0">
+            <div class="item itemTop0 left active"   @click="changeFavorite(0)">商品</div>
+            <div class="item itemTop1 right"   @click="changeFavorite(1)">专辑</div>
+            </template>
+            <template v-else>
+                <div class="item itemTop0 left"   @click="changeFavorite(0)">商品</div>
+                <div class="item itemTop1 right active"   @click="changeFavorite(1)">专辑</div>
+            </template>
+            <!--判断初始状态结束-->
+        </div>
+        <div class="bg"></div>
+            <template v-if="state==0">
+                <div class="favorite_item favorite_product">
+                    <template v-if="infoMessage.goods_data==''">
+                        <div class="emptyFavorite">
+                            <img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt="" style="width:1.82rem;height:1.65rem;" />
+                            <div class="content">
+                                <span>~</span>
+                                <span>收藏的商品都在这里哦，赶紧去种草吧！</span>
+                                <span>~</span>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div :class="item.cls" v-for="item in new_info_goods">
+                            <div class="left">
+                                <a :href="item.url"><img :src="item.img" alt="" /></a>
+                            </div>
+                            <div class="right">
+                                <div class="top box">
+                                    <a :href="item.url"><div class="name">{{item.name}}</div></a>
+                                    <div class="del" @click="delFavoriteProduct(item)">
+                                        <img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt=""  />
+                                    </div>
+                                </div>
+                                <a :href="item.url"><div class="sellprice">￥ {{item.sell_price}}</div></a>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <template v-else>
+                <div class="favorite_item favorite_article">
+                    <template v-if="infoMessage.article_data==''">
+                        <div class="emptyFavorite">
+                            <img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt="" style="width:1.82rem;height:1.65rem;"/>
+                            <div class="content">
+                                <span>~</span>
+                                <span>收藏的内容都在这里哦，赶紧去种草吧！</span>
+                                <span>~</span>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div :class="item.cls" v-for="item in new_article_goods">
+                            <div class="left">
+                                <a :href="item.url"><img :src="item.img" alt="" /></a>
+                            </div>
+                            <div >
+                                <a :href="item.url">
+                                    <div class="name hidewrap">{{item.title}}</div>
+                                    <div class="discribtion">{{item.description}}</div>
+                                </a>
+                            </div>
+                            <div class="del"  @click="delFavoriteArticle(item)">
+                                <img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt=""  />
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+    </div>
 
 </section>
 <footer>
-    <nav class="mui-bar mui-bar-tab">
+    <nav class="mui-bar mui-bar-tab"  style="z-index:25">
         <a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">
-            <span class="mui-icon nav-icon icon-home"></span>
+                <span class="mui-icon nav-icon icon-home">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/home.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
             <div class="mui-tab-label">首页</div>
         </a>
         <a class="mui-tab-item" href="{url:/site/sitemap}">
-            <span class="mui-icon nav-icon icon-classification"></span>
+                <span class="mui-icon nav-icon icon-classification">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/mune.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
             <div class="mui-tab-label">分类</div>
         </a>
-        <a class="mui-tab-item  mui-active" href="{url:/site/favorite}">
-			<span class="nav-icon icon-vedio">
-				<img src="/views/mobile/skin/default/image/jmj/icon/grass.png" alt="" class="img-move02">
-				<div class="grow">种草</div>
-				<span class="tab-mark"></span>
-			</span>
+        <a class="mui-tab-item mui-active" href="{url:/site/favorite}">
+                <span class="nav-icon icon-vedio">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/grass.png" alt="" class="img-move02">
+                    <div class="grow">种草</div>
+                    <span class="tab-mark"></span>
+                </span>
         </a>
         <a class="mui-tab-item" href="{url:simple/cart}">
-            <span class="mui-icon nav-icon icon-shopcar"></span>
+                <span class="mui-icon nav-icon icon-shopcar">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/buy.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
             <div class="mui-tab-label">购物车</div>
         </a>
         <a class="mui-tab-item" href="{url:/ucenter/index}">
-            <span class="mui-icon nav-icon icon-my"></span>
+                <span class="mui-icon nav-icon icon-my">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/my.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
             <div class="mui-tab-label">我的</div>
         </a>
     </nav>
 </footer>
 <!--<span class="mui-icon-extra mui-icon-extra-top" id="pagetop"></span>-->
 <!--头信息结束-->
-<!--一级分类-->
-<script type="text/html" id="favoriteTemp">
-    <%if(data.goods_data.length||data.article_data.length){%>
-        <div class="favorite_content">
-            <div class="head">
-                <!--判断初始状态-->
-                <%if(state==0){%>
-                <div class="item itemTop0 left active" onclick="changeFavorite(0)">商品</div>
-                <div class="item itemTop1 right" onclick="changeFavorite(1)">专辑</div>
-                <%}else{%>
-                <div class="item itemTop0 left" onclick="changeFavorite(0)">商品</div>
-                <div class="item itemTop1 right active" onclick="changeFavorite(1)">专辑</div>
-                <%}%>
-                <!--判断初始状态结束-->
-            </div>
-            <div class="bg"></div>
-            <!--判断初始状态-->
-                <%if(state==0){%>
-                <div class="favorite_item favorite_product">
-                <%}else{%>
-                <div class="favorite_item favorite_product hide">
-                <%}%>
-                <!--判断初始状态结束-->
-                <%if(data.goods_data.length){%>
-                    <% for(var i=0; i<data.goods_data.length; i++){%>
-                    <% var product =data.goods_data[i] %>
-                    <div class="item favoriteProduct<%=product.id%>">
-                        <div class="left">
-                            <a href="index.php?controller=site&action=products&id=<%=product.id%>"><img src="<%=product.img%>" alt="" /></a>
-                        </div>
-                        <div class="right">
-                            <div class="top box">
-                                <a href="index.php?controller=site&action=products&id=<%=product.id%>"><div class="name"><%=product.name%></div></a>
-                                <div class="del" onclick="delFavoriteProduct(<%=product.id%>)">
-                                    <img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt=""  />
-                                </div>
-                            </div>
-                            <a href="index.php?controller=site&action=products&id=<%=product.id%>"><div class="sellprice">￥ <%=product.sell_price%></div></a>
-                        </div>
-                    </div>
-                    <%}%>
-                <%}else{%>
-                    <div class="emptyFavorite">
-                        <img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt="" style="width:1.82rem;height:1.65rem;" />
-                        <div class="content">
-                            <span>~</span>
-                            <span>收藏的商品都在这里哦，赶紧去种草吧！</span>
-                            <span>~</span>
-                        </div>
-                    </div>
-                <%}%>
-            </div>
-            <!--判断初始状态-->
-            <%if(state==0){%>
-                <div class="favorite_item favorite_article hide">
-            <%}else{%>
-                <div class="favorite_item favorite_article">
-            <%}%>
-            <!--判断初始状态结束-->
-                <%if(data.article_data.length){%>
-                    <% for(var m=0; m<data.article_data.length; m++){%>
-                    <% var article=data.article_data[m] %>
-                    <div class="item box favoriteArticle<%=article.id%>">
-                        <div class="left">
-                            <a href="index.php?controller=site&action=article_detail&id=<%=article.id%>"><img src="<%=article.image%>" alt="" /></a>
-                        </div>
-                        <div class="name">
-                            <a href="index.php?controller=site&action=article_detail&id=<%=article.id%>"><%=article.title%></a>
-                        </div>
-                        <div class="del" onclick="delFavoriteArticle(<%=article.id%>)">
-                            <img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt=""  />
-                        </div>
-                    </div>
-                    <%}%>
-                <%}else{%>
-                    <div class="emptyFavorite">
-                        <img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt="" style="width:1.82rem;height:1.65rem;"/>
-                        <div class="content">
-                            <span>~</span>
-                            <span>收藏的内容都在这里哦，赶紧去种草吧！</span>
-                            <span>~</span>
-                        </div>
-                    </div>
-                <%}%>
-            </div>
-        </div>
-    <%}else{%>
-        <div class="empty">
-            <img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt="" />
-            <div class="content">收藏的内容和商品都在这里哦，赶紧去种草吧！</div>
-            <a href="{url:/site/index}" class="gotoFind">去种草</a>
-        </div>
-    <%}%>
-</script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 
 <script>
+    var vm = new Vue({
+        el: '#favorite',
+        data: {
+            infoMessage:'',
+            state:getSession('favoriteState')
+        },
+        computed: {
+            // 读取和设置
+            new_info_goods: function() {
+                    var self=this.infoMessage.goods_data;
+                    if(this.infoMessage.goods_data){
+                        this.infoMessage.goods_data.map(function(item){
+                            item.url="/site/products?id="+item.id;
+                            item.cls="item favoriteProduct"+item.id;
+                        });
+                    }
+                    return  this.infoMessage.goods_data;
+            },
+            new_article_goods: function() {
+                var self=this.infoMessage.article_data;
+                if(this.infoMessage.goods_data){
+                    this.infoMessage.article_data.map(function(item){
+                        item.url="/site/article_detail?id="+item.id;
+                        item.cls="item box favoriteArticle"+item.id;
+                    });
+                }
+                return  this.infoMessage.article_data;
+            }
+        },
+        methods: {
+            getData: function () {
+                var self = this;
+                mui.ajax('/apic/favorite_list', {
+                    dataType: 'json',
+                    type: 'get',
+                    timeout: 10000,
+                    success: function (data) {
+                        console.log(data);
+                        self.infoMessage = data;
+                        self.state = getSession("favoriteState") ? getSession("favoriteState") : 0;
+//
+//                console.log(self.infoMessage);
+//                var html = template('favoriteTemp',dat);
+//                document.getElementById("favorite").innerHTML=html;
+                    },
+                    error: function (xhr, type, errorThrown) {
+                        //异常处理；
+                        console.log(type);
+                    }
+                });
+            },
+            changeFavorite: function (sta) {
+                this.state = sta;
+                pushSession("favoriteState", sta);
+                changeState(sta)
+            },
+            delFavoriteProduct: function (item) {
+                var self=this;
+                var btnArray = ['取消', '确认'];
+                mui.confirm('您确定要删除本商品吗？', '删除商品', btnArray, function(e) {
+                    if (e.index == 1) {
+                        mui.ajax('/simple/favorite_add/_paramKey_/_paramVal_', {
+                            data: {
+                                goods_id: item.id,
+                                random: Math.random()
+                            },
+                            dataType: 'json',//服务器返回json格式数据
+                            type: 'get',//HTTP请求类型
+                            timeout: 10000,//超时时间设置为10秒；
+                            success: function (data) {
+                                var index=self.infoMessage.goods_data.indexOf(item);
+                                self.infoMessage.goods_data.splice(index,1);
+                            },
+                            error: function (xhr, type, errorThrown) {
+                                //异常处理；
+                                console.log(type);
+                            }
+                        });
+                    } else {
+
+                    }
+                })
+            },
+            delFavoriteArticle: function (item) {
+                var self=this;
+                var btnArray = ['取消', '确认'];
+                mui.confirm('您确定要删除本专辑吗？', '删除专辑', btnArray, function(e) {
+                    if (e.index == 1) {
+                        mui.ajax('index.php?controller=apic&action=favorite_article_add',{
+                            data:{
+                                id:item.id
+                            },
+                            dataType:'json',//服务器返回json格式数据
+                            type:'get',//HTTP请求类型
+                            timeout:10000,//超时时间设置为10秒；
+                            success:function(data){
+                                var index=self.infoMessage.article_data.indexOf(item);
+                                self.infoMessage.article_data.splice(index,1);
+                                //                $(".favoriteArticle"+eid).remove();
+                                console.log("删除成功");
+                            },
+                            error:function(xhr,type,errorThrown){
+                                //异常处理；
+                                console.log(type);
+                            }
+                        });
+                    } else {
+
+                    }
+                })
+
+            }
+        }
+    })
+    vm.getData();
     //页面加载动画的调用
     $(window).load(function(){
         $("#loading").fadeOut(300);
-        getFavoriteInfo();
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
         mui('body').on('tap','a',function(){document.location.href=this.href;});
@@ -188,69 +299,6 @@
     template.helper('JSONstringfly', function(obj){
         return JSON.stringify(obj)
     });
-    function getFavoriteInfo(){
-        mui.ajax('/apic/favorite_list',{
-            dataType:'json',
-            type:'get',
-            timeout:10000,
-            success:function(data){
-                console.log(data);
-                var dat={};
-                dat.data=data;
-                dat.state=getSession("favoriteState")?getSession("favoriteState"):0;
-                var html = template('favoriteTemp',dat);
-                document.getElementById("favorite").innerHTML=html;
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
-            }
-        });
-    }
-    function changeFavorite(index){
-        pushSession("favoriteState",index);
-        changeState(index)
-
-    }
-    function delFavoriteArticle(eid){
-        mui.ajax('index.php?controller=apic&action=favorite_article_add',{
-            data:{
-                id:eid
-            },
-            dataType:'json',//服务器返回json格式数据
-            type:'get',//HTTP请求类型
-            timeout:10000,//超时时间设置为10秒；
-            success:function(data){
-//                $(".favoriteArticle"+eid).remove();
-//                console.log("删除成功");
-                window.location.reload();
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
-            }
-        });
-    }
-    function delFavoriteProduct(eid){
-        mui.ajax('/simple/favorite_add/_paramKey_/_paramVal_',{
-            data:{
-                goods_id:eid,
-                random:Math.random()
-            },
-            dataType:'json',//服务器返回json格式数据
-            type:'get',//HTTP请求类型
-            timeout:10000,//超时时间设置为10秒；
-            success:function(data){
-//                $(".favoriteProduct"+eid).remove();
-//                console.log("删除成功");
-                window.location.reload();
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
-            }
-        });
-    }
     function pushSession(key,value){
         if(window.sessionStorage){
             sessionStorage.setItem(key,value);
@@ -271,8 +319,8 @@
     function changeState(index){
         $(".head .item").removeClass("active");
         $(".itemTop"+index).addClass("active");
-        $(".favorite_item").addClass("hide");
-        $(".favorite_item").eq(index).removeClass("hide");
+//        $(".favorite_item").addClass("hide");
+//        $(".favorite_item").eq(index).removeClass("hide");
     }
 </script>
 </body>

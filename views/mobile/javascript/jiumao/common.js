@@ -273,6 +273,10 @@ function getSitemapInfo(){
             document.getElementById("controlTop").innerHTML=html;
             var html2 = template('contentToptemp',dat);
             document.getElementById("contentTop").innerHTML=html2;
+            lazyload.init({
+                anim:false,
+                selectorName:".samLazyImg"
+            });
         },
         error:function(xhr,type,errorThrown){
             //异常处理；

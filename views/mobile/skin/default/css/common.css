@@ -266,22 +266,22 @@ iframe{
   -webkit-justify-content: center;
 }
 /*底部导航样式*/
-.icon-home{
-  background:url('../image/jmj/icon/home.png') no-repeat 100%;
-  background-size:100% 100%;
-}
-.icon-classification{
-  background:url('../image/jmj/icon/mune.png') no-repeat 100% ;
-  background-size:100% 100%;
-}
-.icon-shopcar{
-  background:url('../image/jmj/icon/buy.png') no-repeat 100% ;
-  background-size:100% 100%;
-}
-.icon-my{
-  background:url('../image/jmj/icon/my.png') no-repeat 100% ;
-  background-size:100% 100%;
-}
+/*.icon-home{*/
+  /*background:url('../image/jmj/icon/home.png') no-repeat 100%;*/
+  /*background-size:100% 100%;*/
+/*}*/
+/*.icon-classification{*/
+  /*background:url('../image/jmj/icon/mune.png') no-repeat 100% ;*/
+  /*background-size:100% 100%;*/
+/*}*/
+/*.icon-shopcar{*/
+  /*background:url('../image/jmj/icon/buy.png') no-repeat 100% ;*/
+  /*background-size:100% 100%;*/
+/*}*/
+/*.icon-my{*/
+  /*background:url('../image/jmj/icon/my.png') no-repeat 100% ;*/
+  /*background-size:100% 100%;*/
+/*}*/
 .icon-vedio{
   display:inline-block;
   position:absolute;
@@ -325,22 +325,22 @@ iframe{
 .mui-tab-item.mui-active .grow{
   color:#ff4aa0;
 }
-.mui-tab-item.mui-active .icon-home{
-  background:url('../image/jmj/icon/home-ed.png') no-repeat 100%;
-  background-size:100% 100%;
-}
-.mui-tab-item.mui-active .icon-classification{
-  background:url('../image/jmj/icon/mune-ed.png') no-repeat 100%;
-  background-size:100% 100%;
-}
-.mui-tab-item.mui-active .icon-shopcar{
-  background:url('../image/jmj/icon/buy-ed.png') no-repeat 100%;
-  background-size:100% 100%;
-}
-.mui-tab-item.mui-active .icon-my{
-  background:url('../image/jmj/icon/my-ed.png') no-repeat 100%;
-  background-size:100% 100%;
-}
+/*.mui-tab-item.mui-active .icon-home{*/
+  /*background:url('../image/jmj/icon/home-ed.png') no-repeat 100%;*/
+  /*background-size:100% 100%;*/
+/*}*/
+/*.mui-tab-item.mui-active .icon-classification{*/
+  /*background:url('../image/jmj/icon/mune-ed.png') no-repeat 100%;*/
+  /*background-size:100% 100%;*/
+/*}*/
+/*.mui-tab-item.mui-active .icon-shopcar{*/
+  /*background:url('../image/jmj/icon/buy-ed.png') no-repeat 100%;*/
+  /*background-size:100% 100%;*/
+/*}*/
+/*.mui-tab-item.mui-active .icon-my{*/
+  /*background:url('../image/jmj/icon/my-ed.png') no-repeat 100%;*/
+  /*background-size:100% 100%;*/
+/*}*/
 .mui-tab-item.mui-active{
   color:#ff4aa0 !important;
 }
