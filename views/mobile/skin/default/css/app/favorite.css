@@ -39,7 +39,7 @@ body{
     -webkit-flex-wrap: nowrap;
 }
 .favorite_content .head .left{
-    border:0.01rem solid #ff44a0;
+    border:1px solid #ff44a0;
     border-radius:5px 0 0 5px;
     width:2.86rem;
     height:0.64rem;
@@ -73,7 +73,7 @@ body{
 }
 .favorite_content .favorite_product .item{
     width:100%;
-    border-bottom:0.01rem solid #eee;
+    border-bottom:1px solid #eee;
     display:inline-flex;
 }
 .favorite_content .favorite_product .item .left img{
@@ -105,7 +105,7 @@ body{
 /*文章专辑收藏*/
 .favorite_content .favorite_article .item{
     width:100%;
-    border-bottom:0.01rem solid #eee;
+    border-bottom:1px solid #eee;
 }
 .favorite_content .favorite_article .item .left img{
     width:2.1rem;

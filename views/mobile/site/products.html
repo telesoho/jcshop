@@ -82,7 +82,8 @@
     		<section>
 	    		<div class="title01">
 	    			商品图文详情
-					<!--<img src="/views/mobile/skin/default/image/jmj/product/fanyi.png" class="mui-pull-right fanyiImg" />-->
+					<img src="/views/mobile/skin/default/image/jmj/product/fanyi.png" class="mui-pull-right fanyiImg"
+					onclick="getActionSheet()"/>
 	    		</div>
 				<div id="goodsContent">
 				</div>
@@ -303,6 +304,18 @@
 			<!--<%}%>-->
 		<!--<%}%>-->
 	<!--</script>-->
+	<!--翻译弹出-->
+	<div id="sheet1" class="mui-popover mui-popover-action">
+		<div class="title flexbox">
+			翻译结果
+		</div>
+		<div class="text">
+			这里填写翻译后的内容这里填写翻译后的内容这里填写翻译后的内容这里填写翻译后的内容这里填写翻译后的内容,
+
+			下面的按钮做好图替换掉
+		</div>
+		<a href="#sheet1" class="button-action"><img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt=""  /></a>
+	</div>
 	<!--关联品牌-->
 	<script id="relateTemp" type="text/html">
 		<%if(brand_good_data){%>
@@ -450,6 +463,9 @@
                 }
             });
         }
+        function getActionSheet(){
+			mui('#sheet1').popover('toggle');
+		}
 	</script>
 </body>
 </html>
