@@ -83,9 +83,9 @@
     		<section>
 	    		<div class="title01">
 	    			商品图文详情
-					<a href="#sheet" onclick="getActionSheet()">
+					<div onclick="getActionSheet()">
 						<img src="/views/mobile/skin/default/image/jmj/product/fanyi.png" class="mui-pull-right fanyiImg" />
-					</a>
+					</div>
 	    		</div>
 				<div id="goodsContent">
 				</div>
@@ -466,8 +466,8 @@
             });
         }
         function getActionSheet(){
+           mui("#sheet").popover('toggle');
         	translate.start();
-			window.location.href=this.href;
 		}
 		//在线翻译
 		var translate 	= {
@@ -490,7 +490,7 @@
 			},
 			end 				: function(data){
 				if(data == false) data = '翻译失败';
-				$('#modal').find('.text').text(data);
+				$('#sheet').find('.text').text(data);
 			}
 		}
 	</script>
