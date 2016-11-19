@@ -962,4 +962,12 @@ class Site extends IController
     	$this->data_goods 			= $data_goods;
         $this->redirect('goods_more');
     }
+    
+    function translate(){
+    	$text 						= IFilter::act(IReq::get('text'));
+    	$data 						= translate::exec($text,'jp','zh');
+    	echo json_encode(array($data));
+    }
+    
+    
 }

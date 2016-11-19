@@ -309,7 +309,7 @@
 	<div id="modal" class="modal-demo" style="display: none">
 		<h4 class="title">翻译结果</h4>
 		<div class="text">
-			这里放翻译结果，这里放翻译结果这里放翻译结果这里放翻译结果这里放翻译结果这里放翻译结果这里放翻译结果
+			正在翻译，请稍等...
 		</div>
 		<button type="button" class="close" onclick="Custombox.close();" id="closeBottom" style="display:none">
 			<span>&times;</span><span class="sr-only">Close</span>
@@ -464,11 +464,37 @@
             });
         }
         function getActionSheet(){
+        	translate.start();
 			document.getElementById("closeBottom").style.display='block';
 			Custombox.open({
 				target: '#modal',
 				effect: 'fadein'
 			});
+
+		}
+		//在线翻译
+		var translate 	= {
+			loading 	 		: false,
+			start 				: function(){
+				var thisContentObj 		= $('#goodsContent');
+				var text 				= thisContentObj.text(); //原内容
+				translate.getTranslateApi(text);
+			},
+			getTranslateApi 	: function(text){
+				var url 			= '{url:site/translate}';
+				if(translate.loading == true) return false; 
+				translate.loading = true;
+				$.post(url,{text:text},function(data,status){
+					if(status == 'success'){
+						translate.end(data);
+					}
+					translate.loading = false;
+				},'json');
+			},
+			end 				: function(data){
+				if(data == false) data = '翻译失败';
+				$('#modal').find('.text').text(data);
+			}
 		}
 	</script>
 </body>
