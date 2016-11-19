@@ -944,7 +944,7 @@ class Site extends IController
     	$db_goods 					= new IQuery('goods as m');
     	$db_goods->join 			= 'left join commend_goods as d on d.goods_id=m.id left join category_extend as e on e.goods_id=m.id';
     	$db_goods->where 			= 'm.is_del=0 and e.category_id in ('.$category_id.') and d.commend_id='.$commend_id;
-    	$db_goods->fields 			= 'm.id,m.name,m.sell_price,m.img,m.market_price';
+    	$db_goods->fields 			= 'm.id,m.name,m.sell_price,m.img,m.market_price,m.jp_price';
     	$db_goods->limit 			= 1000;
     	$db_goods->order 			= 'm.id desc';
     	$db_goods->group 			= 'm.id';

@@ -202,7 +202,6 @@ class Tools extends IController implements adminAuthorization
 			exit;
 		}
 	}
-
 	//[文章]删除
 	function article_del()
 	{
@@ -389,7 +388,7 @@ class Tools extends IController implements adminAuthorization
 	{
 		$id        = IFilter::act( IReq::get('id','post') );
 		$parent_id = IFilter::act( IReq::get('parent_id','post') ) ;
-
+		
 		$catObj    = new IModel('article_category');
 		$DataArray = array(
 			'parent_id' => $parent_id,
@@ -397,6 +396,15 @@ class Tools extends IController implements adminAuthorization
 			'issys'     => IFilter::act( IReq::get('issys','post') ),
 			'sort'      => IFilter::act( IReq::get('sort','post') ),
 		);
+		
+		//上传icon
+		if(!empty($_FILES['icon']['name'])){
+			$upload 		= new IUpload(10000,array('jpg','gif','png'));
+			$rel 			= $upload->setDir('upload/category/article_icon')->execute();
+			if($rel['icon'][0]['flag'] != 1) die(IUpload::errorMessage($rel['icon'][0]['flag']));
+			$icon 			= 'upload/category/article_icon/'.$rel['icon'][0]['name'];
+		}
+		if(!empty($icon)) $DataArray['icon'] = $icon;
 
 		/*开始--获取path信息*/
 		//1,修改操作

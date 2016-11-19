@@ -60,11 +60,12 @@
 						</td>
 					</tr>
 					<tr>
-						<th>是否上架：</th>
+						<th>商品状态：</th>
 						<td>
-							<label class='attr'><input type="radio" name="is_del" value="0" checked> 是</label>
-							<label class='attr'><input type="radio" name="is_del" value="2"> 否</label>
-							<label>只有上架的商品才会在前台显示出来，客户是无法看到下架商品</label>
+							<label class='attr'><input type="radio" name="is_del" value="0" checked> 上架</label>
+							<label class='attr'><input type="radio" name="is_del" value="2"> 下架</label>
+							<label class='attr'><input type="radio" name="is_del" value="3"> 待审</label>							
+							<label>只有上架的商品才会在前台显示出来，客户是无法看到下架和待审商品</label>
 						</td>
 					</tr>
 					<tr>
@@ -117,6 +118,7 @@
 										<th>市场价格</th>
 										<th>销售价格</th>
 										<th>成本价格</th>
+										<th>日本价格</th>										
 										<th>重量(克)</th>
 										<%if(isProduct == true){%>
 										<th>操作</th>
@@ -155,6 +157,7 @@
 											<button class="btn" type="button" onclick="memberPrice(this);"><span class="add <%if(item['groupPrice']){%>orange<%}%>">会员组价格</span></button>
 										</td>
 										<td><input class="tiny" name="_cost_price[<%=i%>]" type="text" pattern="float" empty value="<%=item['cost_price']%>" /></td>
+										<td><input class="tiny" name="_jp_price[<%=i%>]" type="text" pattern="float" empty value="<%=item['jp_price']%>" /></td>
 										<td><input class="tiny" name="_weight[<%=i%>]" type="text" pattern="float" empty value="<%=item['weight']%>" /></td>
 										<%if(isProduct == true){%>
 										<td><a href="javascript:void(0)" onclick="delProduct(this);"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a></td>
