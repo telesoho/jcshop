@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/custombox.min.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/products.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css" />
@@ -305,7 +306,15 @@
 		<!--<%}%>-->
 	<!--</script>-->
 	<!--翻译弹出-->
-
+	<div id="modal" class="modal-demo">
+		<h4 class="title">翻译结果</h4>
+		<div class="text">
+			这里放翻译结果，这里放翻译结果这里放翻译结果这里放翻译结果这里放翻译结果这里放翻译结果这里放翻译结果
+		</div>
+		<button type="button" class="close" onclick="Custombox.close();" id="closeBottom">
+			<span>&times;</span><span class="sr-only">Close</span>
+		</button>
+	</div>
 	<!--关联品牌-->
 	<script id="relateTemp" type="text/html">
 		<%if(brand_good_data){%>
@@ -338,6 +347,7 @@
     <script src="/views/mobile/javascript/mui.js"></script>
 	<script src="/views/mobile/javascript/products.js"></script>
 	<script src="/views/mobile/javascript/jiumao/common.js"></script>
+	<script src="/views/mobile/javascript/jiumao/custombox.min.js"></script>
     <script type="text/javascript" charset="utf-8">
 		//	接收页面传过来的状态值
 		//	接收页面传过来的状态值
@@ -454,7 +464,11 @@
             });
         }
         function getActionSheet(){
-			console.log("失败");
+			document.getElementById("closeBottom").style.display='block';
+			Custombox.open({
+				target: '#modal',
+				effect: 'fadein'
+			});
 		}
 	</script>
 </body>
