@@ -147,6 +147,7 @@ class goods_class
 		$goodsUpdateData['market_price'] = isset($postData['_market_price']) ? current($postData['_market_price']) : 0;
 		$goodsUpdateData['sell_price']   = isset($postData['_sell_price'])   ? current($postData['_sell_price'])   : 0;
 		$goodsUpdateData['cost_price']   = isset($postData['_cost_price'])   ? current($postData['_cost_price'])   : 0;
+		$goodsUpdateData['jp_price']     = isset($postData['_jp_price'])     ? current($postData['_jp_price'])     : 0;
 		$goodsUpdateData['weight']       = isset($postData['_weight'])       ? current($postData['_weight'])       : 0;
 
 		//处理商品
