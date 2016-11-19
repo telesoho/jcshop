@@ -653,7 +653,7 @@ input[type='search']{
 	margin:0.25rem 0 0 0.4rem;
 }
 .timePurchaseContent .contentItem{
-	border-bottom:0.01rem solid #eee;
+	border-bottom:1px solid #eee;
 }
 .timePurchaseContent .content .name{
 	overflow : hidden;
@@ -833,7 +833,7 @@ input[type='search']{
 	justify-content: flex-end;
 }
 .order_menu_list .button1{
-	border:0.01rem solid #3d4245;
+	border:1px solid #3d4245;
 	border-radius:0.04rem;
 	width:1.49rem;
 	height:0.5rem;
@@ -844,7 +844,7 @@ input[type='search']{
 	margin:0.18rem 0.47rem 0.18rem 0;
 }
 .order_menu_list .button2{
-	border:0.01rem solid #f3026a;
+	border:1px solid #f3026a;
 	border-radius:0.04rem;
 	width:1.49rem;
 	height:0.5rem;
@@ -896,7 +896,7 @@ input[type='search']{
 	font-size:0.28rem;
 	color:#bbbbbb;
 	padding:0.7rem 0 0.26rem 0.33rem;
-	border-bottom:0.01rem solid #eee;
+	border-bottom:1px solid #eee;
 }
 .menuList .is_default img{
 	width:0.4rem;
@@ -984,7 +984,7 @@ input[type='search']{
 }
 #shopcarContent .middle{
 	background:#f8f8f8;
-	border-bottom:0.01rem solid #eee;
+	border-bottom:1px solid #eee;
 }
 #shopcarContent .middle img{
 	width:1.62rem;
@@ -1040,7 +1040,7 @@ input[type='search']{
 	width:0.77rem;
 	height:0.56rem;
 	line-height:0.56rem;
-	border:0.01rem solid #eeeeee;
+	border:1px solid #eeeeee;
 	background:#f8f8f8;
 	border-radius: 0 !important;
 	position:absolute;

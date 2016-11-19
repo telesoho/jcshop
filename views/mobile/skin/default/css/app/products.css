@@ -175,7 +175,7 @@ ul li{
 
 }
 .footerBox .collection{
-    border-top:0.01rem solid #eee;
+    border-top:1px solid #eee;
     height:1rem;
     background:#fff;
     font-size:0.24rem;
