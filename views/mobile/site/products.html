@@ -83,8 +83,9 @@
     		<section>
 	    		<div class="title01">
 	    			商品图文详情
-					<img src="/views/mobile/skin/default/image/jmj/product/fanyi.png" class="mui-pull-right fanyiImg"
-					onclick="getActionSheet()"/>
+					<a href="#sheet" onclick="getActionSheet()">
+						<img src="/views/mobile/skin/default/image/jmj/product/fanyi.png" class="mui-pull-right fanyiImg" />
+					</a>
 	    		</div>
 				<div id="goodsContent">
 				</div>
@@ -306,14 +307,15 @@
 		<!--<%}%>-->
 	<!--</script>-->
 	<!--翻译弹出-->
-	<div id="modal" class="modal-demo" style="display: none">
-		<h4 class="title">翻译结果</h4>
-		<div class="text">
-			正在翻译，请稍等...
-		</div>
-		<button type="button" class="close" onclick="Custombox.close();" id="closeBottom" style="display:none">
-			<span>&times;</span><span class="sr-only">Close</span>
-		</button>
+	<div id="sheet" class="mui-popover mui-popover-action mui-popover-bottom">
+		<ul class="mui-table-view">
+			<div class="title">
+                翻译结果
+			</div>
+			<div class="text">
+                正在翻译，请稍等...
+			</div>
+		</ul>
 	</div>
 	<!--关联品牌-->
 	<script id="relateTemp" type="text/html">
@@ -465,12 +467,7 @@
         }
         function getActionSheet(){
         	translate.start();
-			document.getElementById("closeBottom").style.display='block';
-			Custombox.open({
-				target: '#modal',
-				effect: 'fadein'
-			});
-
+			window.location.href=this.href;
 		}
 		//在线翻译
 		var translate 	= {
@@ -482,7 +479,7 @@
 			},
 			getTranslateApi 	: function(text){
 				var url 			= '{url:site/translate}';
-				if(translate.loading == true) return false; 
+				if(translate.loading == true) return false;
 				translate.loading = true;
 				$.post(url,{text:text},function(data,status){
 					if(status == 'success'){

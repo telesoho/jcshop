@@ -224,41 +224,30 @@ ul li{
 .descContent p:last-child{padding:0.2rem 0.2rem 0.2rem 0.6rem;font-size: 0.26rem;color:#979797;}
 #serviceDescription .descContent:last-child p:first-child img{width:0.3rem;height:0.3rem;}
 /*弹出2样式*/
-.modal-demo{
-    width:90%;
-    height:100% !important;
-    background:#fff;
-    border-radius:0.3rem;
+#sheet{
 
 }
-.custombox-modal-wrapper{
-    width:100% !important;
+#sheet .mui-table-view{
+    border-radius:0.3rem;
+    margin-left:10%;
+    width:80%;
+    height:10rem;
+    background:#fff;
 }
-.custombox-modal-container{
-    position:relative;
-    margin:20% 5% !important;
-    height:60% !important;
-}
-.custombox-modal{
-    height:100% !important;
-    /*overflow-y: auto;*/
-}
-.custombox-modal .title{
-    width:100%;
+#sheet .mui-table-view .title{
     height:1rem;
+    line-height:1rem;
     border-radius:0.3rem 0.3rem 0 0;
     background:#ff4aa0;
     color:#fff;
-    line-height:1rem;
-    text-align:center;
+    font-size:0.3rem;
 }
-.custombox-modal .text{
+#sheet .mui-table-view .text{
+    text-align:left !important;
+    font-size:0.26rem;
     padding:0.2rem;
-    font-size:0.3rem !important;
     color:#3d4245;
 }
-.modal-demo button{
-   position:absolute;
-    bottom:-15%;
-    left:40%;
+#sheet.mui-popover {
+    bottom:20% !important;
 }
