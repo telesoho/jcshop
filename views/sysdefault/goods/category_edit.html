@@ -5,7 +5,7 @@
 </div>
 <div class="content_box">
 	<div class="content form_content">
-		<form action="{url:/goods/category_save}" method="post">
+		<form action="{url:/goods/category_save}" method="post" enctype="multipart/form-data">
 			<input name="id" value="" type="hidden" />
 			<table class="form_table" cellpadding="0" cellspacing="0">
 				<colgroup>
@@ -69,6 +69,15 @@
 						</span>
 					</script>
 				</tr>
+
+				<tr>
+					<th>分类icon图片：</th>
+					<td>
+						<input type="file" name="icon" accept="image/gif,image/jpg,image/png"/>
+						{if:!empty($this->categoryRow['icon'])}<img  src="/{$this->categoryRow['icon']}" style="display:block;margin:5px; border:1px solid gray; opacity:1;max-width:100px;max-height:100px"/>{/if}
+					</td>
+				</tr>
+
 				<tr>
 					<th>排序：</th><td><input class="normal" name="sort" pattern='int' empty alt='排序必须是一个数字' type="text" value=""/></td>
 				</tr>

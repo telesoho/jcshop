@@ -484,8 +484,18 @@ class Goods extends IController implements adminAuthorization
 			'descript'  => $descript,
 			'title'     => $title,
 //			'image'     => $image,
-            'banner_image' => $banner_image
+            'banner_image' => $banner_image,
 		);
+		
+		//上传icon
+		if(!empty($_FILES['icon']['name'])){
+			$upload 		= new IUpload(10000,array('jpg','gif','png'));
+			$rel 			= $upload->setDir('upload/category/category_icon')->execute();
+			if($rel['icon'][0]['flag'] != 1) die(IUpload::errorMessage($rel['icon'][0]['flag']));
+			$icon 			= 'upload/category/category_icon/'.$rel['icon'][0]['name'];
+		}
+		if(!empty($icon)) $category_info['icon'] = $icon;
+		
 		$tb_category->setData($category_info);
 		if($category_id)									//保存修改分类信息
 		{
