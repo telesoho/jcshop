@@ -48,32 +48,32 @@
 	<nav class="mui-bar mui-bar-tab"  style="z-index:25">
 		<a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">
                 <span class="mui-icon nav-icon icon-home">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/home.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                    <img src="/views/mobile/skin/default/image/jmj/icon/home.png" data-img="home-ed.png"  alt="" style="width:0.5rem;height:0.5rem;"/>
                 </span>
 			<div class="mui-tab-label">首页</div>
 		</a>
 		<a class="mui-tab-item" href="{url:/site/sitemap}">
                 <span class="mui-icon nav-icon icon-classification">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/mune.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                    <img src="/views/mobile/skin/default/image/jmj/icon/mune.png" data-img="mune-ed.png"  alt="" style="width:0.5rem;height:0.5rem;"/>
                 </span>
 			<div class="mui-tab-label">分类</div>
 		</a>
 		<a class="mui-tab-item " href="{url:/site/favorite}">
                 <span class="nav-icon icon-vedio">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/grass.png" alt="" class="img-move02">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/grass.png"  data-img="grass.png"  alt="" class="img-move02">
                     <div class="grow">种草</div>
                     <span class="tab-mark"></span>
                 </span>
 		</a>
 		<a class="mui-tab-item  mui-active" href="{url:simple/cart}">
                 <span class="mui-icon nav-icon icon-shopcar">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/buy-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                    <img src="/views/mobile/skin/default/image/jmj/icon/buy-ed.png"  data-img="buy-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
                 </span>
 			<div class="mui-tab-label">购物车</div>
 		</a>
 		<a class="mui-tab-item" href="{url:/ucenter/index}">
                 <span class="mui-icon nav-icon icon-my">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/my.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                    <img src="/views/mobile/skin/default/image/jmj/icon/my.png"  data-img="my-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
                 </span>
 			<div class="mui-tab-label">我的</div>
 		</a>
@@ -157,7 +157,11 @@
 		mui("body").on('tap',"#sum_count",function(){
 			window.location.href='index.php?controller=simple&action=cart2';
 		})
-		mui('body').on('tap','.mui-tab-item',function(){document.location.href=this.href;});
+		mui('body').on('tap','.mui-tab-item',function(){
+			var srcimg= $(this).find('img').attr("data-img");
+			$(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
+			document.location.href=this.href;
+		});
 		mui('body').on('tap','.classA',function(){document.location.href=this.href;});
 		//定义template方法
 	});
