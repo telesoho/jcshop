@@ -1509,28 +1509,28 @@ class Order extends IController implements adminAuthorization
 			$strGoods="";
 			foreach($orderGoods as $good)
 			{
-				$strGoods .= "商品编号：".$good['goodsno'];
+				$strGoods .= $good['goodsno'];
 				$strGoods .= "<br />";
 			}
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
 			$strGoods="";
 			foreach($orderGoods as $good)
 			{
-				$strGoods .= "商品名称：".$good['name'];
+				$strGoods .= $good['name'];
 				$strGoods .= "<br />";
 			}
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
 			$strGoods="";
 			foreach($orderGoods as $good)
 			{
-				$strGoods .= "商品数量：".$good['goods_nums'];
+				$strGoods .= $good['goods_nums'];
 				$strGoods .= "<br />";
 			}
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
 			$strGoods="";
 			foreach($orderGoods as $good)
 			{
-				$strGoods .= empty($good['value']) ? '' : "规格：".$good['value'];
+				$strGoods .= $good['value'];
 				$strGoods .= "<br />";
 			}
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
