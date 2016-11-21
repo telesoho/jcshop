@@ -1305,3 +1305,8 @@ input[type='search']{
 	margin-left:0.2rem;
 	color:#bbbbbb;
 }
+
+#close {
+	text-align: center;
+	margin-top: 0.1rem;
+}
