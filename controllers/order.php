@@ -1464,6 +1464,7 @@ class Order extends IController implements adminAuthorization
 	{
 		//搜索条件
 		$search = IFilter::act(IReq::get('search'),'strict');
+		
 		//条件筛选处理
 		list($join,$where) = order_class::getSearchCondition($search);
 		//拼接sql
@@ -1471,7 +1472,7 @@ class Order extends IController implements adminAuthorization
 		$orderHandle->order  = "o.id desc";
 		$orderHandle->fields = "o.*,d.name as distribute_name,p.name as payment_name";
 		$orderHandle->join   = $join;
-		$orderHandle->where  = $where;
+		$orderHandle->where  = $where.' and ';
 		$orderList = $orderHandle->find();
 
 		$strTable ='<table width="500" border="1">';
@@ -1485,9 +1486,12 @@ class Order extends IController implements adminAuthorization
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付方式</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付状态</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">发货状态</td>';
-		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品信息</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品编号</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品名称</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">规格</td>';
 		$strTable .= '</tr>';
-
+		
 		foreach($orderList as $k=>$val){
 			$strTable .= '<tr>';
 			$strTable .= '<td style="text-align:center;font-size:12px;">&nbsp;'.$val['order_no'].'</td>';
@@ -1501,19 +1505,39 @@ class Order extends IController implements adminAuthorization
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.Order_Class::getOrderDistributionStatusText($val).' </td>';
 
 			$orderGoods = Order_class::getOrderGoods($val['id']);
+			
 			$strGoods="";
 			foreach($orderGoods as $good)
 			{
-				$strGoods .= "商品编号：".$good['goodsno']." 商品名称：".$good['name']." 商品数量：".$good['goods_nums'];
-				if ( isset($good['value']) && $good['value'] )
-				{
-					$strGoods .= " 规格：".$good['value'];
-				}
+				$strGoods .= "商品编号：".$good['goodsno'];
 				$strGoods .= "<br />";
 			}
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
+			$strGoods="";
+			foreach($orderGoods as $good)
+			{
+				$strGoods .= "商品名称：".$good['name'];
+				$strGoods .= "<br />";
+			}
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
+			$strGoods="";
+			foreach($orderGoods as $good)
+			{
+				$strGoods .= "商品数量：".$good['goods_nums'];
+				$strGoods .= "<br />";
+			}
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
+			$strGoods="";
+			foreach($orderGoods as $good)
+			{
+				$strGoods .= empty($good['value']) ? '' : "规格：".$good['value'];
+				$strGoods .= "<br />";
+			}
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
+			
+			
 			unset($orderGoods);
 
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
 			$strTable .= '</tr>';
 		}
 		$strTable .='</table>';

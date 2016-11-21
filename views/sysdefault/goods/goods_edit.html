@@ -289,7 +289,7 @@
 					{set:plugin::trigger("onSystemGoodsDetail");}
 					<tr>
 						<th>产品描述：</th>
-						<td><textarea id="content" name="content" style="width:700px;height:400px;"></textarea></td>
+						<td><textarea id="content" name="content" style="width:700px;height:400px;" ></textarea></td>
 					</tr>
 				</table>
 			</div>
@@ -379,7 +379,13 @@ $(function()
 
 	//编辑器载入
 	KindEditorObj = KindEditor.create('#content',{"filterMode":false});
+
+
+
 });
+
+
+
 
 //初始化货品表格
 function initProductTable()
@@ -753,4 +759,35 @@ function delSpec(specId)
 	var specIsHere = getIsHereSpec();
 	createProductList(specIsHere.specData,specIsHere.specValueData);
 }
+
+// window.onload=function(){
+// 	$('.ke-container').find('.ke-edit-textarea,.ke-content').on({
+// 		'click':function(){
+// 			//var html = $('.ke-container').find('.ke-edit').find('ke-edit-iframe').find('.ke-content').html();
+// 			// alert($('#content').val());
+// 			var text = $('#content').val();
+// 			page.cleanhtml(text);
+// 			// alert(text);
+// 		},
+// 		'paste' : function(){
+// 			alert('asdasd');
+// 		}
+// 	});
+// }
+var page = {
+	loading 			: false,
+	cleanhtml 			: function(text){
+		if(page.loading == true) return false; page.loading = true;
+		$.post('{url:goods/cleanhtml}',{str:text},function(data,status){
+			if(status == 'success'){
+				alert(data);
+			}
+			page.loading = false;
+		},'json');
+	}
+}
+
+
+
+
 </script>
