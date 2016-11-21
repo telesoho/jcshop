@@ -19,7 +19,9 @@ class Site extends IController
 
 	function init()
 	{
-
+		//必须微信客户端
+// 		$isWechat 				= IClient::isWechat();
+// 		if($isWechat == false) exit('请使用微信访问我们的页面：）');
 	}
 
 	function index()
@@ -962,11 +964,21 @@ class Site extends IController
     	$this->data_goods 			= $data_goods;
         $this->redirect('goods_more');
     }
-    
+    //一键翻译
     function translate(){
     	$text 						= IFilter::act(IReq::get('text'));
-    	$data 						= translate::exec($text,'jp','zh');
-    	echo json_encode(array($data));
+    	$text 						= strip_tags($text);
+    	if(!empty($text)){
+    		$num 					= ceil(mb_strlen($text,'utf-8')/1000);
+    		$data 					= '';
+    		for($i=0; $i<$num; $i++){
+    			$content 			= mb_substr($text,$i*1000,$i*1000+1000,'utf-8');
+    			$data 				.= translate::exec($content,'jp','zh');
+    			if($data == false) exit( '翻译失败了，再重新试试吧' );
+    		}
+	    	exit( json_encode($data) );
+    	}
+    	exit( '' );
     }
     
     

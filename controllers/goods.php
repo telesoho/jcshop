@@ -469,8 +469,7 @@ class Goods extends IController implements adminAuthorization
 		$descript = IFilter::act(IReq::get('descript'));
         $banner_image = explode(',',IFilter::act(IReq::get('_imgList')))[0];
 
-		if(!$name)
-		{
+		if(!$name){
 			$this->redirect('category_list');
 		}
 
@@ -492,9 +491,12 @@ class Goods extends IController implements adminAuthorization
 			$upload 		= new IUpload(10000,array('jpg','gif','png'));
 			$rel 			= $upload->setDir('upload/category/category_icon')->execute();
 			if($rel['icon'][0]['flag'] != 1) die(IUpload::errorMessage($rel['icon'][0]['flag']));
-			$icon 			= 'upload/category/category_icon/'.$rel['icon'][0]['name'];
+			if(!empty($rel['icon'][1]) && $rel['icon'][1]['flag'] != 1) die(IUpload::errorMessage($rel['icon'][1]['flag']));
+			$icon 			= array('upload/category/category_icon/'.$rel['icon'][0]['name']);
+			if(!empty($rel['icon'][1])) $icon[] = 'upload/category/category_icon/'.$rel['icon'][1]['name'];
+			$icon 			= implode(',',$icon);
 		}
-		if(!empty($icon)) $category_info['icon'] = $icon;
+		if(!empty($icon)) $category_info['image'] = $icon;
 		
 		$tb_category->setData($category_info);
 		if($category_id)									//保存修改分类信息
@@ -561,7 +563,7 @@ class Goods extends IController implements adminAuthorization
 		if(!$data)
 		{
 			$goods = new goods_class();
-			$data = $goods->sortdata($tb_category->query(false,'*','sort asc'));
+			$data = $goods->sortdata($tb_category->query(false,'*','sort desc'));
 			$isCache ? $cacheObj->set('sortdata',$data) : "";
 		}
 		$this->data['category'] = $data;

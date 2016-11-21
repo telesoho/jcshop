@@ -1465,4 +1465,24 @@ class System extends IController implements adminAuthorization
 		$paymentDB->update('class_name = "freight_collect"');
 		$this->redirect('payment_list');
 	}
+	
+	//重置库存
+	function resetInventory(){
+		$db_goods 				= new IModel('goods');
+		$db_goods->setData(array('store_nums'=>5));
+		$where 					= 'is_del=0 and store_nums<5';
+		//商品数量
+		$num 					= $db_goods->get_count($where);
+		if($num <= 0) exit( json_encode(array('code'=>100,'msg'=>'没有商品需要更新')) );
+		//执行更新
+		$rel 				= $db_goods->update($where);
+		//返回结果
+		if($rel>0){
+			exit( json_encode(array('code'=>0,'msg'=>'更新成功，有"'.$num.'"件商品库存已更新')) );
+		}else{
+			exit( json_encode(array('code'=>100,'msg'=>'更新失败')) );
+		}
+	}
+	
+	
 }
