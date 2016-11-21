@@ -24,6 +24,17 @@ class Site extends IController
 
 	function index()
 	{
+	    $identify_id = IFilter::act(IReq::get('iid'),'int');
+        if ($identify_id){
+            $shop_query = new IQuery('shop');
+            $shop_query->where = 'identify_id = ' . $identify_id;
+            $this->shop_data = $shop_query->find()[0];
+            $user_query = new IQuery('user as a');
+            $user_query->join = 'left join shop as b on a.shop_id = b.identify_id';
+            $user_query->where = 'a.id = ' . $this->user['user_id'];
+            $user_query->fields = 'a.username as user_name,b.*';
+            $this->user_data = $user_query->find()[0];
+        }
         if (empty($_SERVER['REDIRECT_PATH_INFO'])){
             ISession::set('is_first',true);
         }

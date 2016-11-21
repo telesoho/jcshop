@@ -112,6 +112,21 @@
                     </a>
                 </li>
             </ul>
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell">
+                    {if:$this->user_data}
+                        <a class="mui-navigate-right" href="{url:/ucenter/shop_index}">
+                            <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
+                            店铺信息
+                        </a>
+                    {else:}
+                        <a class="mui-navigate-right" href="{url:/ucenter/shop_register}">
+                            <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
+                                申请开店
+                        </a>
+                    {/if}
+            </li>
+        </ul>
         <ul class="mui-table-view" style="margin-top: 0.12rem;margin-bottom:1.1rem;">
             <li class="mui-table-view-cell">
                 <a class="mui-navigate-right" href="{url:/simple/credit}">

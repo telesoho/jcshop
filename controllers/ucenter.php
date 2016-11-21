@@ -4,6 +4,8 @@
  * @class Ucenter
  * @note  前台
  */
+require_once __DIR__ . '/../plugins/vendor/autoload.php';
+use  Endroid\QrCode\QrCode;
 class Ucenter extends IController implements userAuthorization
 {
 	public $layout = 'ucenter';
@@ -36,6 +38,10 @@ class Ucenter extends IController implements userAuthorization
 			"propData"   => $propData,
 		));
 
+        $user_query = new IQuery('user as a');
+        $user_query->join = 'right join shop as b on a.id = b.own_id';
+        $user_query->where = 'a.id = ' . $this->user['user_id'];
+        $this->user_data = $user_query->find();
         $this->initPayment();
         $this->redirect('index');
     }
@@ -934,5 +940,59 @@ class Ucenter extends IController implements userAuthorization
 		$propIds     = $propIds ? $propIds : 0;
 		$this->setRenderData(array('propId' => $propIds));
 		$this->redirect('redpacket');
+    }
+
+    //申请开店
+    function shop_register(){
+        $license = IFilter::act(IReq::get('license'),'string');
+        $name = IFilter::act(IReq::get('name'),'string');
+        $address = IFilter::act(IReq::get('address'),'string');
+        $shop_model = new IModel('shop');
+        if ($shop_model->getObj('own_id = '.$this->user['user_id'])){$this->redirect('shop_index');}
+        if ($license){
+            $license_query = new IQuery('license');
+            $license_query->where = ' license = "' . $license . '" and status = 0';
+            $license_data = $license_query->find()[0];
+            if ($license_data){
+                if (!$shop_model->getObj('own_id = '.$this->user['user_id'])){
+                    $identify = rand(000, 999) . date('His',time());
+                    $shop_model->setData(['name'=>$name,'address'=>$address,'own_id'=>$this->user['user_id'],'register_license'=>$license,'register_time'=>date('Y-m-d H:i:s', time()),'identify_id'=>$identify]);
+                    $ret = $shop_model->add();
+                    if ($ret){
+                        $license_model = new IModel('license');
+                        $license_model->setData(['status'=>1]);
+                        $license_model->update('license = "' . $license . '"');
+                    }
+                }
+            } else {
+                IError::show('');
+            }
+        }
+        $this->redirect('shop_register');
+    }
+    function shop_index(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'own_id = ' . $this->user['user_id'];
+        $shop_data = $shop_query->find()[0];
+        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
+        $this->shop_data = $shop_data;
+//        var_dump($this->shop_data);
+        $this->redirect('shop_index');
+    }
+    function qrcode(){
+        $identify_id = IFilter::act(IReq::get('identify_id'),'int');
+        $qrCode = new QrCode();
+        $qrCode
+            ->setText(IWeb::$app->config['image_host'] . '?iid=' . $identify_id)
+            ->setSize(150)
+            ->setPadding(10)
+            ->setErrorCorrection('high')
+            ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+            ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+            ->setLabel('')
+            ->setLabelFontSize(16)
+            ->setImageType(QrCode::IMAGE_TYPE_PNG);
+        header('Content-Type: '.$qrCode->getContentType());
+        $qrCode->render();
     }
 }

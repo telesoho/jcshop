@@ -1096,22 +1096,27 @@ class Apic extends IController
         $data['sfz_image2y'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/281/h/207");
         $this->json_echo($data);
     }
-    function qrcode(){
-        if(IClient::isWechat() == true){
-            require_once __DIR__ . '/../plugins/wechat/wechat.php';
-            require_once __DIR__ . '/../plugins/curl/Curl.php';
-            $this->wechat = new wechat();
-            $curl = new \Wenpeng\Curl\Curl();
-            $access_token = $this->wechat->getAccessToken();
-            $url = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=' . $access_token;
-            $curl->post(json_encode(['action_name'=>'QR_LIMIT_SCENE','action_info'=>['scene'=>['scene_id'=>'chenbo']]]))->url($url);
-            $ret = json_decode($curl->data());
-            echo 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . urlencode($ret->ticket);
-            echo '<br>';
-            echo $ret->url;
-//            var_dump($curl->data());
-        }
-    }
+//    function follow_shop(){
+//        $identify_id = IFilter::act(IReq::get('identify_id'),'int');
+//        $user_query = new IQuery('user as a');
+//        $user_query->join = 'left join shop as b on a.shop_id = b.identify_id';
+//        $user_query->where = 'a.id = ' . $this->user['user_id'];
+//        $user_query->fields = 'b.name';
+//        $user_data = $user_query->find()[0];
+//        if ($user_data['name']){
+//            $this->json_echo(['ret' => false,'msg'=>'您已经关注' . $user_data['name']]);
+//        } else {
+//            $user_model = new IModel('user');
+//            $user_model->setData(['shop_id'=>$identify_id]);
+//            $ret = $user_model->update('id = ' . $this->user['user_id']);
+//            if ($ret){
+//                $this->json_echo(['ret' => true,'msg'=>'成功关注' . $user_data['name']]);
+//            } else {
+//                $this->json_echo(['ret' => false,'msg'=>'关注' . $user_data['name'].'失败']);
+//            }
+//        }
+//    }
+
     private function json_echo($data){
         echo json_encode($data);
         exit();
