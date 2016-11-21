@@ -508,7 +508,7 @@ class Goods extends IController implements adminAuthorization
 		{
 			$tb_category->add();
 		}
-		$this->redirect('category_list');
+		$this->redirect('category_ list');
 	}
 
 	/**
