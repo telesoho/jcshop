@@ -1472,7 +1472,7 @@ class Order extends IController implements adminAuthorization
 		$orderHandle->order  = "o.id desc";
 		$orderHandle->fields = "o.*,d.name as distribute_name,p.name as payment_name";
 		$orderHandle->join   = $join;
-		$orderHandle->where  = $where.' and ';
+		$orderHandle->where  = $where;
 		$orderList = $orderHandle->find();
 
 		$strTable ='<table width="500" border="1">';
@@ -1534,8 +1534,7 @@ class Order extends IController implements adminAuthorization
 				$strGoods .= "<br />";
 			}
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
-			
-			
+
 			unset($orderGoods);
 
 			$strTable .= '</tr>';
