@@ -10,6 +10,7 @@
 		<li><a href="javascript:select_tab('other_conf');">其他设置</a></li>
 		<li><a href="javascript:select_tab('mail_conf');">邮箱设置</a></li>
 		<li><a href="javascript:select_tab('system_conf');">系统设置</a></li>
+		<li><a href="javascript:select_tab('custom');">自定义设置</a></li>
 	</ul>
 </div>
 <div class="content_box">
@@ -416,10 +417,37 @@
 
 				<tr>
 					<th></th>
-					<td><button class="submit" type='submit'><span>保存系统设置</span></button></td>
+					<td>
+						<button class="submit" type='submit'><span>保存系统设置</span></button>
+					</td>
 				</tr>
 			</table>
 		</form>
+
+		<form action="{url:/system/save_conf/form_index/system_conf}" method="post" name='custom'>
+			<table class="form_table">
+				<colgroup>
+					<col width="150px" />
+					<col />
+				</colgroup>
+				<tr>
+					<th>重置库存：</th>
+					<td>
+						<button type='button' onclick="page.resetInventory();"><span>开始操作</span></button>
+						<label>将已上架不足5件的商品重置为5</label>
+					</td>
+				</tr>
+				
+				<!-- <tr>
+					<th></th>
+					<td>
+						<button class="submit" type='submit'><span>保存系统设置</span></button>
+					</td>
+				</tr> -->
+			</table>
+		</form>
+
+
 	</div>
 </div>
 
@@ -627,4 +655,22 @@ function show_mail(checkedVal)
 	else
 		$('table tr[name="smtp"] *').hide();
 }
+
+
+var page = {
+	loading 				: false,
+	//重置库存
+	resetInventory 			: function(){
+		_confirm('确认更新库存？',function(){
+			if(page.loading == true) return false;
+			$.get('{url:system/resetInventory}',{},function(data,status){
+				if(status == 'success') _inform(data.msg);
+				page.loading = false;
+			},'json');
+		});
+	},
+
+}
+
+
 </script>
