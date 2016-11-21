@@ -73,8 +73,14 @@
 				<tr>
 					<th>分类icon图片：</th>
 					<td>
-						<input type="file" name="icon" accept="image/gif,image/jpg,image/png"/>
-						{if:!empty($this->categoryRow['icon'])}<img  src="/{$this->categoryRow['icon']}" style="display:block;margin:5px; border:1px solid gray; opacity:1;max-width:100px;max-height:100px"/>{/if}
+						{set:$icon=explode(',',$this->categoryRow['image'])}
+						<input type="file" name="icon[]" accept="image/gif,image/jpg,image/png"/>
+						{if:$this->categoryRow['parent_id'] == 0}<input type="file" name="icon[]" accept="image/gif,image/jpg,image/png"/>{/if}
+						<div style="display:block;">
+							{if:!empty($icon[0])}<img  src="{echo:IWeb::$app->config['image_host'].'/'.$icon[0]}" style="margin:5px; border:1px solid gray; opacity:1;max-width:100px;max-height:100px"/>{/if}
+							{if:!empty($icon[1])}<img  src="{echo:IWeb::$app->config['image_host'].'/'.$icon[1]}" style="margin:5px; border:1px solid gray; opacity:1;max-width:100px;max-height:100px"/>{/if}
+						</div>
+						{if:$this->categoryRow['parent_id'] == 0}<label>左图为选中后图片，右图为未选中图片</label>{/if}
 					</td>
 				</tr>
 

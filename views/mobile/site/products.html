@@ -61,7 +61,6 @@
     <!--</section>-->
 	<!--心得页面-->
     <section id="evaluateBox">
-
     </section>
 	<!--品牌介绍-->
     <section>
@@ -316,7 +315,13 @@
                 正在翻译，请稍等...
 			</div>
 		</ul>
+		<div id="close" >
+
+			<a href="#sheet" ><img src="/views/mobile/skin/default/image/jmj/icon/close.png"   ></a>
+		</div>
+
 	</div>
+
 	<!--关联品牌-->
 	<script id="relateTemp" type="text/html">
 		<%if(brand_good_data){%>
@@ -375,9 +380,7 @@
             mui('.mui-scroll-wrapper').scroll({
                 deceleration: 0.0005
             });
-//			$(".fanyiImg").click(function(){
-//				mui('#sheet').popover('toggle');
-//			})
+//
 		});
 		function getProductDetail(obj){
 			var product_detail=obj;
@@ -489,7 +492,6 @@
 				},'json');
 			},
 			end 				: function(data){
-				if(data == false) data = '翻译失败';
 				$('#sheet').find('.text').text(data);
 			}
 		}

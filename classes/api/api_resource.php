@@ -189,7 +189,7 @@ return array(
 	    'query'=>array(
 	    	'name'  => 'category',
 	    	'where' => ' parent_id = 0 and visibility = 1 ',
-	    	'order' => ' sort asc',
+	    	'order' => ' sort desc',
 //	    	'limit' => 20,
 	    )
 	),
