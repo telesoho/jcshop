@@ -292,6 +292,7 @@
     $(window).bind('scroll', function() {
         if ($(window).scrollTop() + $(window).height() +600 >= $(document).height() && $(window).scrollTop() > 50) {
             if(stop==true){
+                stop=false;
                 getSearthList(vm);
             }
         }
