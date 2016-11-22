@@ -47,7 +47,7 @@
     <img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower">
 </section>
 <div id="searth_container">
-    <template v-if="infoMessage.goods==''&&infoMessage.article==''">
+    <template v-if="infoMessage.goods==''&&infoMessage.article==''" v-cloak>
         <div class="empty">
             <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;">
             <div class="content">暂时没有你想要搜索的商品</div>
@@ -78,7 +78,7 @@
                         </div>
                     </div>
                 </template>
-                <template v-else>
+                <template v-else v-cloak>
                     <div class="searth_goods">
                         <div class="product_item" :id="item.idName" v-for="item in new_info_goods">
                             <a :href="item.url" class="locationA">
@@ -122,7 +122,7 @@
                         </div>
                     </div>
                 </template>
-                <template v-else>
+                <template v-else v-cloak>
                     <div class="searth_article">
                         <div class="article_item" v-for="item in new_article_goods">
                             <div class="text">
@@ -233,7 +233,10 @@
     var vm = new Vue({
         el: '#searth_container',
         data: {
-            infoMessage:'',
+            infoMessage:{
+                goods:[],
+                article:[]
+            },
             state:getSession('searthState')
         },
         computed: {
@@ -262,26 +265,7 @@
         methods: {
             getData: function () {
                 var self = this;
-                mui.ajax('/apic/search', {
-                    data:{
-                        word:getItem("searth_word"),
-                        gpage:page.page1,
-                        apage:page.page2
-                    },
-                    dataType: 'json',
-                    type: 'get',
-                    timeout: 10000,
-                    success: function (data) {
-                        console.log(data);
-                        self.infoMessage = data;
-//                        self.state = getSession("searthState") ? getSession("searthState") : 0;
-//
-                    },
-                    error: function (xhr, type, errorThrown) {
-                        //异常处理；
-                        console.log(type);
-                    }
-                });
+                getSearthList(self);
             },
             changeSearth: function (sta) {
                 var wndObj=document.getElementsByTagName("body");
@@ -306,20 +290,45 @@
     //上拉加载
     var stop=true;
     $(window).bind('scroll', function() {
-        if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+        if ($(window).scrollTop() + $(window).height() +600 >= $(document).height() && $(window).scrollTop() > 50) {
             if(stop==true){
-                stop=false;
-                pullupIndexRefresh()
+                getSearthList(vm);
             }
         }
-        if($(window).scrollTop()>100){
-            $(".fix-toTop").show();
-            $(".fix-toTop").css("position","fixed");
-        }else{
-            $(".fix-toTop").hide();
-            $(".fix-toTop").css("position","fixed");
-        }
     });
+    function getSearthList(self){
+        mui.ajax('/apic/search', {
+            data:{
+                word:getItem("searth_word"),
+                gpage:page.page1,
+                apage:page.page2
+            },
+            dataType: 'json',
+            type: 'get',
+            timeout: 10000,
+            success: function (data) {
+                console.log(data);
+                for(var i=0;i<data.goods.length;i++){
+                    self.$data.infoMessage.goods.push(data.goods[i]);
+                }
+                for(var j=0;j<data.article.length;j++){
+                    self.$data.infoMessage.article.push(data.article[j]);
+                }
+                if(data.goods.length==0&&data.article.length==0){
+                    stop=false;
+                }else{
+                    stop=true;
+                }
+                page.page1++;
+                page.page2++;
+//
+            },
+            error: function (xhr, type, errorThrown) {
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
 </script>
 </body>
 </html>

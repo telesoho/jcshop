@@ -158,17 +158,19 @@ body{
     /*-webkit-justify-content: center;*/
 }
 .searth_article .article_item .img{
-    display:flex;
+    display:block;
     width:3.5rem;
     height:2.6rem;
     border-radius:0.2rem 0.2rem 0 0;
     overflow: hidden;
-    text-align:center;
-    justify-content: center;
+    /*text-align:center;*/
+    /*justify-content: center;*/
 }
 .searth_article .article_item .img img{
     width:auto;
     height:2.6rem;
+    position:relative;
+    left:-0.4rem;
 }
 .searth_article .article_item .name{
     padding:0.1rem 0.16rem;
