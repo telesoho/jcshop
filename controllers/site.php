@@ -22,6 +22,8 @@ class Site extends IController
 		//必须微信客户端
 // 		$isWechat 				= IClient::isWechat();
 // 		if($isWechat == false) exit('请使用微信访问我们的页面：）');
+        $action = IFilter::act(IReq::get('action'),'string');
+        if ($action!='article_detail' || $action='index'){ISession::clear('visit_num');}
 	}
 
 	function index()
