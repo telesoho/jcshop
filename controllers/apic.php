@@ -1044,7 +1044,7 @@ class Apic extends IController
     	$data_goods 				= $query_goods->find();
     	if(!empty($data_goods)){
     		foreach($data_goods as $k => $v){
-    			$data_goods[$k]['img'] 		= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/290/h/290");
+    			$data_goods[$k]['img'] 		= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/290/h/290");
     		}
     	}
     	/* 专辑 */
