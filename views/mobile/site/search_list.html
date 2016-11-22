@@ -98,7 +98,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flexbox empty_product">
+                    <div class="flexbox empty_product" v-if="overMessage.goods==''">
                         <div class="img">
                             <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
                         </div>
@@ -132,7 +132,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flexbox empty_product over-article">
+                    <div class="flexbox empty_product over-article" v-if="overMessage.article==''">
                         <div class="img">
                             <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
                         </div>
@@ -146,6 +146,9 @@
                 </template>
         </template>
     </div>
+</div>
+<div class="fix-toTop hide">
+    <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt=""  />
 </div>
 <footer>
     <nav class="mui-bar mui-bar-tab"  style="z-index:25">
@@ -229,6 +232,11 @@
         }else{
             wndObj[0].setAttribute("style","background:#fff");
         }
+        //点击直达顶部
+        mui("body").on("tap",".fix-toTop",function(){
+            $("html,body").animate({scrollTop:0},0);
+            return false;
+        });
     };
     var vm = new Vue({
         el: '#searth_container',
@@ -238,6 +246,7 @@
                 goods:[],
                 article:[]
             },
+            overMessage:'',
             state:getSession('searthState')
         },
         computed: {
@@ -297,6 +306,13 @@
                 getSearthList(vm);
             }
         }
+        if($(window).scrollTop()>100){
+            $(".fix-toTop").show();
+            $(".fix-toTop").css("position","fixed");
+        }else{
+            $(".fix-toTop").hide();
+            $(".fix-toTop").css("position","fixed");
+        }
     });
     function getSearthList(self){
         mui.ajax('/apic/search', {
@@ -310,6 +326,7 @@
             timeout: 10000,
             success: function (data) {
                 console.log(data);
+                self.$data.overMessage=data;
                 for(var i=0;i<data.goods.length;i++){
                     self.$data.infoMessage.goods.push(data.goods[i]);
                 }
