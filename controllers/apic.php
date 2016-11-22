@@ -664,14 +664,6 @@ class Apic extends IController
 
         $this->json_echo($data);
     }
-    function tag_hot_list(){
-        $keyword_query = new IQuery('keyword');
-        $keyword_query->where = 'hot = 1';
-//        $keyword_query->order = 'order asc';
-        $keyword_query->limit = 10;
-        $data = $keyword_query->find();
-        $this->json_echo($data);
-    }
 
 
     /**
@@ -1031,6 +1023,7 @@ class Apic extends IController
     public function search(){
     	//接收参数
         $word 						= IFilter::act(IReq::get('word'),'string');
+        if(empty($word)) $this->json_echo();
         $gpage 						= IFilter::act(IReq::get('gpage'),'int');
         $apage 						= IFilter::act(IReq::get('apage'),'int');
         /* 商品 */
@@ -1064,7 +1057,7 @@ class Apic extends IController
     	$data_article				= $query_article->find();
     	if(!empty($data_article)){
     		foreach($data_article as $k => $v){
-    			$data_article[$k]['img'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/513/h/260");
+    			$data_article[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/513/h/260");
     		}
     	}
         $this->json_echo(array('goods'=>$data_goods,'article'=>$data_article));
