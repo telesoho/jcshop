@@ -966,7 +966,7 @@ class Site extends IController
     }
     //一键翻译
     function translate(){
-    	$text 						= IFilter::act(IReq::get('text'));
+    	$text 						= IReq::get('text');
     	$text 						= strip_tags($text);
     	if(!empty($text)){
     		$num 					= ceil(mb_strlen($text,'utf-8')/1000);

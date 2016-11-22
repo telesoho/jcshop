@@ -1506,35 +1506,20 @@ class Order extends IController implements adminAuthorization
 
 			$orderGoods = Order_class::getOrderGoods($val['id']);
 			
-			$strGoods="";
-			foreach($orderGoods as $good)
-			{
-				$strGoods .= $good['goodsno'];
-				$strGoods .= "<br />";
+			$strGoods 			= array(
+				'goodsno' 		=> '',
+				'name' 			=> '',
+				'goods_nums' 	=> '',
+				);
+			foreach($orderGoods as $v){
+				$strGoods['goodsno'] 		.= $v['goodsno'].'<br />';
+				$strGoods['name'] 			.= $v['name'].'<br />';
+				$strGoods['goods_nums'] 	.= $v['goods_nums'].'<br />';
 			}
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
-			$strGoods="";
-			foreach($orderGoods as $good)
-			{
-				$strGoods .= $good['name'];
-				$strGoods .= "<br />";
-			}
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
-			$strGoods="";
-			foreach($orderGoods as $good)
-			{
-				$strGoods .= $good['goods_nums'];
-				$strGoods .= "<br />";
-			}
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
-			$strGoods="";
-			foreach($orderGoods as $good)
-			{
-				$strGoods .= $good['value'];
-				$strGoods .= "<br />";
-			}
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
-
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['goodsno'].' </td>';
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['name'].' </td>';
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['goods_nums'].' </td>';
+			
 			unset($orderGoods);
 
 			$strTable .= '</tr>';
