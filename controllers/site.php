@@ -19,24 +19,41 @@ class Site extends IController
 
 	function init()
 	{
-		//必须微信客户端
+
+        //必须微信客户端
 // 		$isWechat 				= IClient::isWechat();
 // 		if($isWechat == false) exit('请使用微信访问我们的页面：）');
-	}
+    }
 
 	function index()
 	{
-	    $identify_id = IFilter::act(IReq::get('iid'),'int');
-        if ($identify_id){
-            $shop_query = new IQuery('shop');
-            $shop_query->where = 'identify_id = ' . $identify_id;
-            $this->shop_data = $shop_query->find()[0];
+        //用户登陆
+        if ($this->user['user_id']){
             $user_query = new IQuery('user as a');
-            $user_query->join = 'left join shop as b on a.shop_id = b.identify_id';
+            $user_query->join = 'right join shop as b on a.shop_identify_id = b.identify_id';
             $user_query->where = 'a.id = ' . $this->user['user_id'];
-            $user_query->fields = 'a.username as user_name,b.*';
-            $this->user_data = $user_query->find()[0];
+            $user_data = $user_query->find()[0];
+            if ($user_data){
+                ISession::set('shop_name',$user_data['name']);
+                ISession::set('shop_identify_id',$user_data['identify_id']);
+            } else {
+                $identify_id = IFilter::act(IReq::get('iid'),'int');
+                if ($identify_id){
+                    $shop_query = new IQuery('shop');
+                    $shop_query->where = 'identify_id = ' . $identify_id;
+                    $this->shop_data = $shop_query->find()[0];
+                    ISession::set('shop_name',$this->shop_data['name']);
+                    ISession::set('shop_identify_id',$this->shop_data['identify_id']);
+    //            $user_query = new IQuery('user as a');
+    //            $user_query->join = 'left join shop as b on a.shop_id = b.identify_id';
+    //            $user_query->where = 'a.id = ' . $this->user['user_id'];
+    //            $user_query->fields = 'a.username as user_name,b.*';
+    //            $this->user_data = $user_query->find()[0];
+                }
+            }
         }
+
+
         if (empty($_SERVER['REDIRECT_PATH_INFO'])){
             ISession::set('is_first',true);
         }
@@ -44,6 +61,7 @@ class Site extends IController
             require_once __DIR__ . '/../plugins/wechat/wechat.php';
             $this->wechat = new wechat();
         }
+        ISession::clear('visit_num');
 //		$this->index_slide = Api::run('getBannerList');
 		$this->redirect('index');
 	}

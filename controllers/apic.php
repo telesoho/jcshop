@@ -318,11 +318,24 @@ class Apic extends IController
      */
     public function order_list()
     {
-        $ret0 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status != 3 and status != 4'); // 全部订单
-        $ret1 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 1 and pay_type != 0'); // 待支付
-        $ret2 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
-        $ret3 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 1'); // 待收货
-        $ret4 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 5 '); // 已完成
+        $shop_query = new IQuery('shop');
+        $user_query = new IQuery('user');
+        $shop_query->where = 'own_id = ' . $this->user['user_id'];
+        $shop_data = $shop_query->find()[0];
+        $temp = '';
+        if ($shop_data){
+            $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+        }
+
+        $ret0 = Api::run('getOrderList','(user_id = ' . $this->user['user_id'] . $temp . ')', 'pay_type != 0 and status != 3 and status != 4'); // 全部订单
+        $ret1 = Api::run('getOrderList','(user_id = ' . $this->user['user_id'] . $temp . ')', 'pay_type != 0 and status = 1 and pay_type != 0'); // 待支付
+        $ret2 = Api::run('getOrderList','(user_id = ' . $this->user['user_id'] . $temp . ')', 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
+        $ret3 = Api::run('getOrderList','(user_id = ' . $this->user['user_id'] . $temp . ')', 'pay_type != 0 and status = 2 and distribution_status = 1'); // 待收货
+        $ret4 = Api::run('getOrderList','(user_id = ' . $this->user['user_id'] . $temp . ')', 'pay_type != 0 and status = 5 '); // 已完成
         $data['state0'] = $ret0->find();
         $data['state1'] = $ret1->find();
         $data['state2'] = $ret2->find();

@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
-    <title>九猫商城</title>
+    <title>九猫家的<?php echo ISession::get('shop_name')?>商城</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
@@ -366,10 +366,11 @@ $(window).bind('scroll', function() {
 </script>
 <?php if(isset($this->wechat)){ $this->wechat->config['wechat_jsApiSDK']=1; $this->wechat->jsApiSDK();?>
 <script>
+    var shop_name = "{ISession::get('shop_name')}"
     wx.ready(function(){
         wx.onMenuShareAppMessage({
-            title: '九猫家商城', // 分享标题
-            desc: '欢迎来到九猫家', // 分享描述
+            title: '九猫家'+shop_name+'商城', // 分享标题
+            desc: '欢迎来到九猫家'+shop_name+'商城', // 分享描述
             link: '', // 分享链接
             imgUrl: <?php echo '"' . IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png' . '"' ?>, // 分享图标
             type: 'link', // 分享类型,music、video或link，不填默认为link
@@ -382,7 +383,7 @@ $(window).bind('scroll', function() {
             }
         });
         wx.onMenuShareTimeline({
-            title: '九猫家商城', // 分享标题
+            title: '九猫家'+shop_name+'商城', // 分享标题
             link: '', // 分享链接
             imgUrl: <?php echo '"' . IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png' . '"' ?>, // 分享图标
             success: function () {
