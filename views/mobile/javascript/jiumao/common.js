@@ -90,16 +90,16 @@ function searthCancel(){
     document.getElementById("homeHeader").style.position="static";
 }
 function ToSearthPage(item){
-    setItem("word",item);
+    setItem("searth_word",item);
     window.location.href="/site/search_list";
 }
 function searthSubmit(){
     var subContent=document.getElementById("searth").value;
-    setItem("word",subContent);
+    setItem("searth_word",subContent);
     if(subContent==""){
         searthCancel();
     }else{
-        window.location.href="/site/error";
+        window.location.href="/site/search_list";
     }
 }
 //分类页面处理函数
@@ -251,6 +251,24 @@ function collection(id){
                 num.html(parseInt(num.html())-1);
                 share.attr("src","/views/mobile/skin/default/image/jmj/icon/like.png");
             }
+        },
+        error:function(xhr,type,errorThrown){
+            //异常处理；
+            console.log(type);
+        }
+    });
+}
+function hotSearth(){
+    mui.ajax('/apic/search_words',{
+        dataType:'json',//服务器返回json格式数据
+        type:'get',//HTTP请求类型
+        timeout:10000,//超时时间设置为10秒；
+        success:function(data){
+            var dat={};
+            dat.data=data;
+            console.log(data);
+            var html = template('searth_keyword',dat);
+            $(".searth-content").html(html);
         },
         error:function(xhr,type,errorThrown){
             //异常处理；

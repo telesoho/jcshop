@@ -45,7 +45,8 @@
         <div class="product_item" id="product_item{$item['id']}">
             <a href="{url:/site/products?id=$item['id']}">
                 <div class="img">
-                    <img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt="" class="samLazyImg" dataimg="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" />
+                    <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"  />
+                    <img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt="" class="samLazyImg img-ware" dataimg="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" />
                 </div>
                 <div class="content">
                     <div class="name">
