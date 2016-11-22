@@ -80,23 +80,26 @@
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script>
 //     页面加载动画的调用
-    var stop=true;
-    $(window).bind('scroll', function() {
-        if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
-            stop=true;
-            if(stop==true){
-                $("#category_third").clone().appendTo("#category");
-                stop=false;
-            }
-        }
-    });
+//    var stop=true;
+//    $(window).bind('scroll', function() {
+//        if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+//            stop=true;
+//            if(stop==true){
+//                $("#category_third").clone().appendTo("#category");
+//                stop=false;
+//            }
+//        }
+//    });
     $(window).load(function(){
+        var url = location.href;
+        alert(url);
         $("#loading").fadeOut(300);
         var getinfo=getItem("siteMap");
         getcategory_thirdInfo(getinfo.id);
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','a',function(){document.location.href=this.href;});
     })
+
 </script>
 </body>
 </html>
