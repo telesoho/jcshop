@@ -1023,7 +1023,7 @@ class Apic extends IController
     public function search(){
     	//接收参数
         $word 						= IFilter::act(IReq::get('word'),'string');
-        if(empty($word)) $this->json_echo();
+        if(empty($word)) $this->json_echo(array());
         $gpage 						= IFilter::act(IReq::get('gpage'),'int');
         $apage 						= IFilter::act(IReq::get('apage'),'int');
         /* 商品 */
@@ -1042,11 +1042,14 @@ class Apic extends IController
     	$query_goods->page 			= empty($gpage) ? 1 : $gpage;
     	$query_goods->pagesize 		= 20;
     	$data_goods 				= $query_goods->find();
+    	$total_page 				= $query_goods->getTotalPage();
     	if(!empty($data_goods)){
     		foreach($data_goods as $k => $v){
     			$data_goods[$k]['img'] 		= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/290/h/290");
     		}
     	}
+    	if ($gpage > $total_page) $data_goods = array();
+    	
     	/* 专辑 */
     	$query_article 				= new IQuery('article');
     	$query_article->where 		= 'visibility=1 AND (`title` LIKE "%'.$word.'%" OR `keywords`="'.$word.'")';
@@ -1054,12 +1057,15 @@ class Apic extends IController
     	$query_article->fields 		= 'id,title,image';
     	$query_article->page 		= empty($apage) ? 1 : $apage;
     	$query_article->pagesize 	= 20;
-    	$data_article				= $query_article->find();
+    	$data_article  				= $query_article->find();
+    	$total_page 				= $query_article->getTotalPage();
     	if(!empty($data_article)){
     		foreach($data_article as $k => $v){
     			$data_article[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/513/h/260");
     		}
     	}
+    	if ($apage > $total_page) $data_article = array();
+    	
         $this->json_echo(array('goods'=>$data_goods,'article'=>$data_article));
     }
     /**
