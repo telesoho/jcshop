@@ -212,8 +212,7 @@
     //页面加载完成后调用的功能
     window.onload=function(){
        document.getElementById("loading").remove();
-        $(".mui-placeholder span").eq(1).html(getItem("placeHolder")+"件商品等你来搜");
-        document.getElementById('searth').placeHolder=getItem("searth_word");
+        $(".mui-placeholder span").eq(1).html(getItem("searth_word")).css("color","#3d4225");
 //        $("#searth").val(getItem("searth_word"));
         hotSearth();
         mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
@@ -230,7 +229,6 @@
         }else{
             wndObj[0].setAttribute("style","background:#fff");
         }
-
     };
     var vm = new Vue({
         el: '#searth_container',
@@ -305,6 +303,23 @@
 //        $(".favorite_item").addClass("hide");
 //        $(".favorite_item").eq(index).removeClass("hide");
     }
+    //上拉加载
+    var stop=true;
+    $(window).bind('scroll', function() {
+        if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+            if(stop==true){
+                stop=false;
+                pullupIndexRefresh()
+            }
+        }
+        if($(window).scrollTop()>100){
+            $(".fix-toTop").show();
+            $(".fix-toTop").css("position","fixed");
+        }else{
+            $(".fix-toTop").hide();
+            $(".fix-toTop").css("position","fixed");
+        }
+    });
 </script>
 </body>
 </html>
