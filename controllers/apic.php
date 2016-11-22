@@ -1040,7 +1040,7 @@ class Apic extends IController
     	$query_goods->order 		= '(CASE WHEN `search_words` LIKE "%,'.$word.',%" THEN 0 ELSE 1 END) asc';
     	$query_goods->fields 		= 'id,name,sell_price,jp_price,market_price,img';
     	$query_goods->page 			= empty($gpage) ? 1 : $gpage;
-    	$query_goods->pagesize 		= 10;
+    	$query_goods->pagesize 		= 20;
     	$data_goods 				= $query_goods->find();
     	if(!empty($data_goods)){
     		foreach($data_goods as $k => $v){
@@ -1053,7 +1053,7 @@ class Apic extends IController
     	$query_article->order 		= '(CASE WHEN `keywords`="'.$word.'" THEN 0 ELSE 1 END) asc,top desc,sort desc';
     	$query_article->fields 		= 'id,title,image';
     	$query_article->page 		= empty($apage) ? 1 : $apage;
-    	$query_article->pagesize 	= 10;
+    	$query_article->pagesize 	= 20;
     	$data_article				= $query_article->find();
     	if(!empty($data_article)){
     		foreach($data_article as $k => $v){
