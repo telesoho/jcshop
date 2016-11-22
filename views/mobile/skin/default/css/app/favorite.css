@@ -69,9 +69,9 @@ body{
     background:#f8f8f8;
 }
 /*商品专辑收藏*/
-.favorite_content{
-    margin-bottom:1.2rem;
-}
+/*.favorite_content{*/
+    /*margin-bottom:1.2rem;*/
+/*}*/
 .favorite_content .favorite_product .item{
     background:#fff;
     width:100%;
@@ -139,8 +139,8 @@ body{
     margin:0.28rem 0.33rem 0 0;
 }
 .favorite_content .favorite_article .item .del img{
-    width:0.39rem;
-    height:0.39rem;
+    width:0.29rem;
+    height:0.35rem;
 }
 /*专辑或者商品为空的样式*/
 .emptyFavorite{
