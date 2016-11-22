@@ -126,8 +126,8 @@
                     <div class="searth_article">
                         <div class="article_item" v-for="item in new_article_goods">
                             <div class="text">
-                                <a :href="item.url"><img :src="item.image" alt="" /></a>
-                                <div class="name">{{item.title}}</div>
+                                <a :href="item.url" class="locationA img"><img :src="item.image" alt="" />
+                                <div class="name">{{item.title}}</div></a>
                             </div>
                         </div>
                     </div>
@@ -221,12 +221,13 @@
             $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
             document.location.href=this.href;
         });
-//        lazyload.init({
-//            anim:false,
-//            selectorName:".samLazyImg"
-//        });
-//        判定初始状态，body的背景
-         var state=getSession('searthState');
+        var state=getSession('searthState');
+        var wndObj=document.getElementsByTagName("body");
+        if(state==0){
+            wndObj[0].setAttribute("style","background:#f8f8f8")
+        }else{
+            wndObj[0].setAttribute("style","background:#fff");
+        }
 
     };
     var vm = new Vue({
@@ -270,9 +271,6 @@
                         self.infoMessage = data;
 //                        self.state = getSession("searthState") ? getSession("searthState") : 0;
 //
-//                console.log(self.infoMessage);
-//                var html = template('favoriteTemp',dat);
-//                document.getElementById("favorite").innerHTML=html;
                     },
                     error: function (xhr, type, errorThrown) {
                         //异常处理；
