@@ -37,16 +37,13 @@
 <!--loading页结束-->
 <!--三级分类-->
 <section id="category">
-
-</section>
-<script type="text/html" id="category_third_temp">
     <div id="category_third">
         {foreach:items=$this->data_goods}
         <div class="product_item" id="product_item{$item['id']}">
             <a href="{url:/site/products?id=$item['id']}">
                 <div class="img">
                     <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"  />
-                    <img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt="" class="samLazyImg img-ware" dataimg="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" />
+                    <img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt="" class="samLazyImg img-ware" />
                 </div>
                 <div class="content">
                     <div class="name">
@@ -62,17 +59,7 @@
         </div>
         {/foreach}
     </div>
-    <!--<div class="flexbox empty_product">-->
-        <!--<div class="img">-->
-            <!--<img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>-->
-        <!--</div>-->
-        <!--<div class="content">-->
-            <!--<span>~</span>-->
-            <!--<span>憋拉了，到底了</span>-->
-            <!--<span>~</span>-->
-        <!--</div>-->
-    <!--</div>-->
-</script>
+</section>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
@@ -92,11 +79,10 @@
     });
     $(window).load(function(){
         $("#loading").fadeOut(300);
-        var getinfo=getItem("siteMap");
-        getcategory_thirdInfo(getinfo.id);
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','a',function(){document.location.href=this.href;});
     })
+
 </script>
 </body>
 </html>
