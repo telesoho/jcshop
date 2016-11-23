@@ -693,7 +693,8 @@ class Apic extends IController
     //显示专辑列表（首页）
     public function article_list(){
         if (empty($this->user['user_id'])){$this->json_echo([]);}
-        if (empty($_SERVER['REDIRECT_PATH_INFO'])){ISession::clear('visit_num');}
+//        if (empty($_SERVER['REDIRECT_PATH_INFO'])){ISession::clear('visit_num');}
+
         $goods_query = new IQuery("goods");
         /*视频专辑*/
         $category = 3;
@@ -857,28 +858,6 @@ class Apic extends IController
             $data[$k]['goods_list'] = $relationList;
 
         }
-
-        //专辑中的随机推荐三个关联商品
-//        for ($i=0;$i<3;$i++){
-//            $a = rand(0,7);
-//            $article = new IQuery('relation as r');
-//            $article->join = 'left join goods as go on r.goods_id = go.id';
-//            $article->where = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $data[$a]['id']);
-//            $article->filds = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price';
-//            $article->limit = 3;
-//            $relationList = $article->find();
-//            foreach ($relationList as $key => $value){
-//                $relationList[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/180/h/180");
-//            }
-//            $data[$a]['goods_list'] = $relationList;
-//        }
-
-
-
-//        echo $visit_num;
-//        echo '<a href="http://192.168.0.156:8080/index.php?controller=site&action=article_detail&id='.$data[0]['id'].'">aa</a>';
-//        var_dump($data);
-
         $this->json_echo($data);
     }
     //通过专辑获取相关商品
