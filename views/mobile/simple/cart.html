@@ -37,10 +37,11 @@
 	</div>
 </div>
 <!--loading页结束-->
-<div id="shopcarContent" style="margin-bottom:1.2rem;">
+<div id="shopcarContent">
 
 
 </div>
+<div style="height:0.2rem;margin-bottom:1.8rem"></div>
 <!--<div id="shopcarContainer">-->
 
 <!--</div>-->
@@ -317,14 +318,24 @@ function cart_reduce(obj){
 }
 
 //移除购物车
-function removeCartByJSON(obj)
-{
-	var goods_id   = obj.product_id > 0 ? obj.product_id : obj.goods_id;
-	var goods_type = obj.product_id > 0 ? "product"      : "goods";
-	$.getJSON("{url:/simple/removeCart}",{"goods_id":goods_id,"type":goods_type,"random":Math.random()},function()
-	{
-		window.location.reload();
-	});
+function removeCartByJSON(obj) {
+	var goods_id = obj.product_id > 0 ? obj.product_id : obj.goods_id;
+	var goods_type = obj.product_id > 0 ? "product" : "goods";
+	var btnArray = ['取消', '移除'];
+	mui.confirm('您确定要移除本商品吗？', '移除购物车', btnArray, function (e) {
+		if (e.index == 1) {
+			$.getJSON("{url:/simple/removeCart}", {
+				"goods_id": goods_id,
+				"type": goods_type,
+				"random": Math.random()
+			}, function () {
+				window.location.reload();
+			});
+		} else {
+
+		}
+
+	})
 }
 	//本地缓存函数
 	function setItem(key,value){

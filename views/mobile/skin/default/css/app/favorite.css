@@ -165,15 +165,3 @@ body{
 .sellprice{
     font-size:0.30rem;
 }
-/*弹出样式*/
-.mui-popup-button{
-    color:#ff4aa0;
-    font-size:0.34rem;
-
-}
-.mui-popup-button:first-child{
-    color:#3d4245;
-}
-.mui-popup-button.mui-popup-button-bold{
-    font-weight:normal !important;
-}

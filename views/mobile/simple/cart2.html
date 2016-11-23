@@ -55,7 +55,7 @@
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/lazyload.js"></script>
+<script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script id="test" type="text/html">
 	<%if(addressList.length==0){%>
 	<!--如果没有收货地址-->
@@ -133,12 +133,15 @@
 	</div>
 </script>
 <script id="testFormTemp" type="text/html">
+	<% var jAddr =JSONstringfly(addressList)%>
 	<input type='hidden' name='direct_gid' value='<%=gid%>' />
 	<input type='hidden' name='direct_type' value='<%=type%>' />
 	<input type='hidden' name='direct_num' value='<%=num%>' />
 	<input type='hidden' name='direct_promo' value='<%=promo%>' />
 	<input type='hidden' name='direct_active_id' value='<%=active_id%>' />
+	<%if(addressList[0]){%>
 	<input name="radio_address" type="hidden" value="<%=addressList[0].id%>"/>
+	<%}%>
 	<input type="hidden" name="delivery_id" value="<%=delivery[0].id%>" />
 	<input type='hidden'  name='accept_time' value='任意' />
 	<%if(payment[0]){%>
@@ -146,7 +149,7 @@
 	<%}%>
 	<div class="totalButton box">
 		<div class="totalSumPrice"><span>合计：</span><span id="totalPrice_sum">¥<%=sum%></span></div>
-		<input class="toPayOrder" type="submit" value="提交订单">
+		<input class="toPayOrder" type="button" value="提交订单" onclick="formSubmit(<%=jAddr%>)">
 	</div>
 </script>
 <script>
@@ -225,6 +228,21 @@
 	function getItem(key){
 		var getter= window.localStorage.getItem(key);
 		return JSON.parse(getter);
+	}
+	function formSubmit(obj) {
+		if (obj.length!=0) {
+			document.getElementById("testForm").submit();
+		} else {
+			var btnArray = ['取消', '确定'];
+			mui.confirm('是否需要新增收货地址', '无收货地址', btnArray, function (e) {
+				if (e.index == 1) {
+					window.location.href = "/simple/addaddress?from=cart2";
+				} else {
+
+				}
+
+			})
+		}
 	}
 </script>
 </body>
