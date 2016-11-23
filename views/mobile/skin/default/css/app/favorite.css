@@ -98,11 +98,22 @@ body{
     margin:0.31rem 0 0 0.39rem;
 }
 .favorite_content .favorite_product .item .del img{
-    width:0.39rem;
-    height:0.39rem;
+    width:0.29rem;
+    height:0.35rem;
 }
 .favorite_content .favorite_product .item .sellprice{
     margin-top:0.49rem;
+}
+.favorite_content .favorite_product .item .buy{
+    margin-top:0.49rem;
+    background:#ff4aa0;
+    color:#fff;
+    border-radius: 0.04rem;
+    width: 1.36rem;
+    height: 0.48rem;
+    font-size: 0.24rem;
+    line-height: 0.48rem;
+    text-align: center;
 }
 /*文章专辑收藏*/
 .favorite_content .favorite_article .item{

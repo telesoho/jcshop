@@ -83,7 +83,10 @@
                                         <img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt=""  />
                                     </div>
                                 </div>
-                                <a :href="item.url"><div class="sellprice">￥ {{item.sell_price}}</div></a>
+                                <div class="box">
+                                    <a :href="item.url"><div class="sellprice">￥ {{item.sell_price}}</div></a>
+                                    <a :href="item.url"><div class="buy">立即购买</div></a>
+                                </div>
                             </div>
                         </div>
                     </template>
