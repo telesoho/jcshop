@@ -106,7 +106,7 @@
 		<div class="banner">
                 <div class="wrapper">
                     {query:name=category
-                        where=parent_id eq $this->catId
+                        where=parent_id eq $this->catId and visibility eq 1 
                         fields=id,name,image
                         limit=1000
                         order=sort asc}

@@ -20,8 +20,13 @@ class Site extends IController
 	function init()
 	{
 		//必须微信客户端
-// 		$isWechat 				= IClient::isWechat();
+		$isWechat 				= IClient::isWechat();
 // 		if($isWechat == false) exit('请使用微信访问我们的页面：）');
+		
+		if($isWechat == true){
+			require_once __DIR__ . '/../plugins/wechat/wechat.php';
+			$this->wechat = new wechat();
+		}
         $action = IFilter::act(IReq::get('action'),'string');
         if ($action!='article_detail' || $action='index'){ISession::clear('visit_num');}
 	}
@@ -426,6 +431,7 @@ class Site extends IController
 	//商品展示
 	function products()
 	{
+		
 		$goods_id = IFilter::act(IReq::get('id'),'int');
 
 		if(!$goods_id)
@@ -558,7 +564,7 @@ class Site extends IController
 			$visit = $visit === null ? $checkStr : $visit.$checkStr;
 			ISafe::set('visit',$visit);
 		}
-
+		
 		$this->setRenderData($goods_info);
 		$this->redirect('products');
 	}

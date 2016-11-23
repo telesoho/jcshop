@@ -291,6 +291,12 @@
 						<th>产品描述：</th>
 						<td><textarea id="content" name="content" style="width:700px;height:400px;" ></textarea></td>
 					</tr>
+
+<!-- <tr>
+	<th></th>
+	<td><div id='editableDiv' contenteditable='true' style="border:1px solid blue;"  onpaste="page.handlePaste(event);">Paste</div></td>
+</tr> -->
+
 				</table>
 			</div>
 
@@ -312,7 +318,8 @@
 				<col />
 				<tr>
 					<td></td>
-					<td><button class="submit" type="submit" onclick="return checkForm()"><span>发布商品</span></button></td>
+					<td><button class="submit" type="submit" onclick="return checkForm()"><span>发布商品</span></button>
+					</td>
 				</tr>
 			</table>
 		</form>
@@ -760,34 +767,62 @@ function delSpec(specId)
 	createProductList(specIsHere.specData,specIsHere.specValueData);
 }
 
-// window.onload=function(){
-// 	$('.ke-container').find('.ke-edit-textarea,.ke-content').on({
-// 		'click':function(){
-// 			//var html = $('.ke-container').find('.ke-edit').find('ke-edit-iframe').find('.ke-content').html();
-// 			// alert($('#content').val());
-// 			var text = $('#content').val();
-// 			page.cleanhtml(text);
-// 			// alert(text);
-// 		},
-// 		'paste' : function(){
-// 			alert('asdasd');
-// 		}
-// 	});
-// }
+
 var page = {
 	loading 			: false,
-	cleanhtml 			: function(text){
-		if(page.loading == true) return false; page.loading = true;
+	//一键转换
+	handlePaste 		: function(e){
+		var clipboardData, pastedData;
+
+		// Stop data actually being pasted into div
+		e.stopPropagation();
+	    e.preventDefault();
+
+		// Get pasted data via clipboard API
+	    clipboardData = e.clipboardData || window.clipboardData;
+
+		if( clipboardData ){
+	        var items = clipboardData.items;
+	        // if( !items ){
+	        //     return;
+	        // }
+
+	        var item = items[0];
+	        // 保存在剪贴板中的数据类型
+	        var types = clipboardData.types || [];
+
+	        for(var i=0 ; i < types.length; i++ ){
+	            if( types[i] === 'Files' ){
+	                item = items[i];
+	                break;
+	            }
+	        }
+alert(item);return;
+
+	        // 判断是否为图片数据
+	        if( item && item.kind === 'file' && item.type.match(/^image\//i) ){
+	            // 读取该图片            
+	            imgReader( item );
+	        }
+	    }
+
+	    pastedData = clipboardData.getData('Text');
+	    alert(pastedData);return false;
+	    page.cleanhtml(pastedData,clipboardData);
+
+	},
+	//去标签
+	cleanhtml 			: function(text,clipboardData){
+		// if(page.loading == true) return false; page.loading = true;
 		$.post('{url:goods/cleanhtml}',{str:text},function(data,status){
 			if(status == 'success'){
-				alert(data);
+				// clipboardData.setData("Text",data);
+				alert(data);return false;
+				// $('#newContent').show().find('textarea').val(data);
 			}
-			page.loading = false;
+			// page.loading = false;
 		},'json');
 	}
 }
-
-
-
 
 </script>
