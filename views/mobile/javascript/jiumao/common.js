@@ -82,7 +82,7 @@ function getSearth(){
     document.getElementById("searth").value="";
     document.getElementById("modalid-searth").className="show";
     document.body.style.overflow = 'hidden';
-    document.getElementById("homeHeader").style.cssText="position:fixed;width:100%;z-index:88;";
+    document.getElementById("homeHeader").style.cssText="position:fixed;width:100%;z-index:88;top:0;left:0";
 }
 function searthCancel(){
     document.getElementById("modalid-searth").className="hide";
