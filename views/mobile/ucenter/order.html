@@ -347,9 +347,11 @@
 		})
 	}
 	function getOrder(){
+		var type="<?php echo IFilter::act(IReq::get('type'),'string')?>"
 		mui.ajax('index.php?controller=apic&action=order_list',{
 			dataType:'json',//服务器返回json格式数据
 			type:'get',//HTTP请求类型
+			data:{'type':type},
 			timeout:10000,//超时时间设置为10秒；
 			success:function(data){
 				console.log(data);

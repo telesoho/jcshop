@@ -37,11 +37,42 @@ class Ucenter extends IController implements userAuthorization
 			"msgNum"     => $msgNum,
 			"propData"   => $propData,
 		));
-
+        //
         $user_query = new IQuery('user as a');
         $user_query->join = 'right join shop as b on a.id = b.own_id';
         $user_query->where = 'a.id = ' . $this->user['user_id'];
-        $this->user_data = $user_query->find();
+        $this->user_shop_data = $user_query->find();
+        if ($this->user_shop_data){
+
+            //待入账金额
+            $shop_query = new IQuery('shop');
+            $user_query = new IQuery('user');
+            $shop_query->where = 'own_id = ' . $this->user['user_id'];
+            $shop_data = $shop_query->find()[0];
+            $temp = '( user_id = ' . $this->user['user_id'];
+            if ($shop_data){
+                $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
+                $user_data = $user_query->find();
+                foreach ($user_data as $key=>$value){
+                    $temp .= ' or user_id = ' . $value['id'];
+                }
+            }
+            $temp .= ')';
+            $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
+            $order_query = new IQuery('order');
+            $order_query->where = $where;
+            $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
+            $this->amount_tobe_booked = $order_query->find()[0]['amount_tobe_booked'];
+            $this->amount_tobe_booked = empty($this->amount_tobe_booked) ? '0.00' : $this->amount_tobe_booked;
+            //账户余额
+            $shop_query = new IQuery('shop');
+            $shop_query->where = 'own_id = ' . $this->user['user_id'];
+            $this->amount_available = $shop_query->find()[0]['amount_available'];
+        }
+
+//        $compelte_data = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ')->find(); // 已完成
+//        var_dump($order_data);
+
         $this->initPayment();
         $this->redirect('index');
     }

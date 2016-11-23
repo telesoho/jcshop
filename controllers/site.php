@@ -30,17 +30,14 @@ class Site extends IController
 	{
 	    if ($this->user['user_id']){
             $user_query = new IQuery('user as a');
-            $user_query->join = 'right join shop as b on a.shop_identify_id = b.identify_id';
+            $user_query->join = 'right join shop as b on a.id = b.own_id';
             $user_query->where = 'a.id = ' . $this->user['user_id'];
-            $user_data = $user_query->find()[0];
+            $user_shop_data = $user_query->find()[0];
         }
-//            var_dump($user_data);
-        if ($user_data){
-            ISession::set('shop_name',$user_data['name']);
-            ISession::set('shop_identify_id',$user_data['identify_id']);
+        if ($user_shop_data){
+            ISession::set('shop_name',$user_shop_data['name']);
+            ISession::set('shop_identify_id',$user_shop_data['identify_id']);
         } else {
-            ISession::clear('shop_name');
-            ISession::clear('shop_identify_id');
             $identify_id = IFilter::act(IReq::get('iid'),'int');
             if ($identify_id){
                 $shop_query = new IQuery('shop');
@@ -48,6 +45,9 @@ class Site extends IController
                 $this->shop_data = $shop_query->find()[0];
                 ISession::set('shop_name',$this->shop_data['name']);
                 ISession::set('shop_identify_id',$this->shop_data['identify_id']);
+                $shop_model = new IModel('shop');
+                $shop_model->setData(['own_id'=>$this->user['user_id']]);
+                $ret = $shop_model->update('identify_id='.$identify_id);
                 //            $user_query = new IQuery('user as a');
                 //            $user_query->join = 'left join shop as b on a.shop_id = b.identify_id';
                 //            $user_query->where = 'a.id = ' . $this->user['user_id'];

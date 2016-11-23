@@ -55,6 +55,16 @@
                     </a>
                 </li>
             </ul>
+            {if:$this->user_shop_data}
+                <ul class="myOrders mui-table-view">
+                    <li class="mui-table-view-cell">
+                        <a class="" href="{url:/ucenter/order}?status=0&type=u">
+                            顾客订单<span class="mui-pull-right ico-pull">查看全部订单
+                            <span class="mui-icon mui-icon-arrowright"></span></span>
+                        </a>
+                    </li>
+                </ul>
+            {/if}
             <div class="order">
                 <div class="mui-row">
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
@@ -114,18 +124,18 @@
             </ul>
         <ul class="mui-table-view">
             <li class="mui-table-view-cell">
-                    {if:$this->user_data}
+                    {if:$this->user_shop_data}
                         <a class="mui-navigate-right" href="{url:/ucenter/shop_index}">
                             <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
                             店铺信息
                         </a>
                         <a class="mui-navigate-right" href="{url:/ucenter/shop_index}">
                             <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
-                            账户余额
+                            账户余额{$this->amount_available}
                         </a>
                         <a class="mui-navigate-right" href="{url:/ucenter/shop_index}">
                             <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
-                            待入账金额
+                            待入账金额{$this->amount_tobe_booked}
                         </a>
                         <a class="mui-navigate-right" href="{url:/ucenter/shop_index}">
                             <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
