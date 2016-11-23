@@ -28,7 +28,7 @@
                   // 当前窗口的顶部
                 var top = window.pageYOffset,
                 // 当前窗口的底部
-               btm = window.pageYOffset + window.innerHeight*3,
+               btm = window.pageYOffset + window.innerHeight*5,
                 // 元素所在整体页面内的y轴位置
                elTop = $(el).offset().top;
                   // console.log(window.innerHeight);
