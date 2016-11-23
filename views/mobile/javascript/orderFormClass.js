@@ -259,7 +259,6 @@ function orderFormClass()
 
 		if(addressObj.length == 0)
 		{
-			alert("请选择收件人地址");
 			return false;
 		}
 

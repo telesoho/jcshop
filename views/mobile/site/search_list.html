@@ -47,12 +47,12 @@
     <img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower">
 </section>
 <div id="searth_container">
-    <template v-if="flag && infoMessage.goods==''&&infoMessage.article==''" v-cloak>
-        <div class="empty">
-            <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;">
-            <div class="content">暂时没有你想要搜索的商品</div>
-            <a href="{url:/site/index}" class="gotoFind">去逛逛</a>
-        </div>
+    <template v-if="showMessage && infoMessage.goods==''&&infoMessage.article==''" v-cloak>
+        <!--<div class="empty">-->
+            <!--<img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;">-->
+            <!--<div class="content">暂时没有你想要搜索的商品</div>-->
+            <!--<a href="{url:/site/index}" class="gotoFind">去逛逛</a>-->
+        <!--</div>-->
     </template>
     <div class="searth_container_content" v-else>
         <div class="head">
@@ -68,7 +68,7 @@
         </div>
         <div class="bg"></div>
         <template v-if="state==0">
-                <template v-if="infoMessage.goods==''">
+                <template v-if="showMessage && infoMessage.goods==''">
                     <div class="emptysearth_container">
                         <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;">
                         <div class="content">
@@ -112,7 +112,7 @@
                 </template>
         </template>
         <template v-else>
-                <template v-if="infoMessage.article==''">
+                <template v-if="showMessage && infoMessage.article==''">
                     <div class="emptysearth_container">
                         <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;">
                         <div class="content">
@@ -241,7 +241,7 @@
     var vm = new Vue({
         el: '#searth_container',
         data: {
-            flag:false,
+            showMessage:false,
             infoMessage:{
                 goods:[],
                 article:[]
@@ -333,7 +333,7 @@
                 for(var j=0;j<data.article.length;j++){
                     self.$data.infoMessage.article.push(data.article[j]);
                 }
-                self.$data.flag = true;
+                self.$data.showMessage = true;
                 if(data.goods.length==0&&data.article.length==0){
                     stop=false;
                 }else{
