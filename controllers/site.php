@@ -26,6 +26,8 @@ class Site extends IController
 		if($isWechat == true){
 			require_once __DIR__ . '/../plugins/wechat/wechat.php';
 			$this->wechat = new wechat();
+			$this->wechat->config['wechat_jsApiSDK']=1;
+			$this->wechat->jsApiSDK();
 		}
         $action = IFilter::act(IReq::get('action'),'string');
         if ($action!='article_detail' || $action='index'){ISession::clear('visit_num');}
@@ -550,6 +552,8 @@ class Site extends IController
 			$sellerDB = new IModel('seller');
 			$goods_info['seller'] = $sellerDB->getObj('id = '.$goods_info['seller_id']);
 		}
+		//商品封面
+		$goods_info['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$goods_info['img']."/w/240/h/240");
 
 		//增加浏览次数
 		$visit    = ISafe::get('visit');
