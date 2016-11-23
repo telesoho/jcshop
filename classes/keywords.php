@@ -68,7 +68,7 @@ class keywords
 	{
 		$word     = IFilter::act($word);
 		$goodsObj = new IModel('goods');
-		$countNum = $goodsObj->getObj('name like "%'.$word.'%" or FIND_IN_SET("'.$word.'", search_words) AND is_del=0 ','count(*) as num');
+		$countNum = $goodsObj->getObj('name like "%,'.$word.',%"  AND is_del=0 ','count(*) as num');
 		return isset($countNum['num']) ? $countNum['num'] : 0;
 	}
 }

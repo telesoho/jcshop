@@ -194,12 +194,14 @@
         cit=showCityPickerInput.getAttribute("data-city");
         are=showCityPickerInput.getAttribute('data-area');
         if(!checkPhone()){
+            var addrId=document.getElementById("addressid");
             var username=document.getElementById("username");
             var phone=document.getElementById("userphone");
             var address=document.getElementById("useraddr");
             var useryoubian=document.getElementById("useryoubian");
             var addressid=document.getElementById("addressid");
             var addaddressInfo={
+                id:addrId.value,
                 accept_name:username.value,
                 province:pro,
                 city:cit,

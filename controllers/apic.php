@@ -677,14 +677,6 @@ class Apic extends IController
 
         $this->json_echo($data);
     }
-    function tag_hot_list(){
-        $keyword_query = new IQuery('keyword');
-        $keyword_query->where = 'hot = 1';
-//        $keyword_query->order = 'order asc';
-        $keyword_query->limit = 10;
-        $data = $keyword_query->find();
-        $this->json_echo($data);
-    }
 
 
     /**
@@ -693,8 +685,7 @@ class Apic extends IController
     //显示专辑列表（首页）
     public function article_list(){
         if (empty($this->user['user_id'])){$this->json_echo([]);}
-//        if (empty($_SERVER['REDIRECT_PATH_INFO'])){ISession::clear('visit_num');}
-
+        if (empty($_SERVER['REDIRECT_PATH_INFO']) && (IClient::isAjax() == false) ){ISession::clear('visit_num');}
         $goods_query = new IQuery("goods");
         /*视频专辑*/
         $category = 3;
@@ -1008,14 +999,65 @@ class Apic extends IController
     /**
      * ---------------------------------------------------搜索---------------------------------------------------*
      */
+    /* 热门关键词 */
+    public function search_words(){
+    	/* 热门关键词 */
+    	$query_keyword 				= new IQuery('keyword');
+    	$query_keyword->order 		= 'hot desc,num desc';
+    	$query_keyword->fields 		= 'word';
+    	$query_keyword->limit 		= 20;
+    	$data_keyword 				= $query_keyword->find();
 
+    	$this->json_echo($data_keyword);
+    }
+	/* 开始搜索 */
     public function search(){
-        $word = IFilter::act(IReq::get('word'),'string');
-        $goods_query = new IQuery('goods');
-        $goods_query->where = "name like '%,".$word.",%'";
-//        echo $goods_query->getSql();
-        $goods_data = $goods_query->find();
-        var_dump($goods_data);
+    	//接收参数
+        $word 						= IFilter::act(IReq::get('word'),'string');
+        if(empty($word)) $this->json_echo(array());
+        $gpage 						= IFilter::act(IReq::get('gpage'),'int');
+        $apage 						= IFilter::act(IReq::get('apage'),'int');
+        /* 商品 */
+    	$model_keyword 				= new IModel('keyword');
+    	$data_keyword 				= $model_keyword->get_count('word="'.$word.'"','num');
+    	if( $data_keyword > 0 ){
+    		//关键字搜索次数+1
+    		$model_keyword->setData(array('num'=>'num+1'));
+    		$model_keyword->update('word="'.$word.'"',array('num'));
+    	}
+    	//搜索商品
+    	$query_goods 				= new IQuery('goods');
+    	$query_goods->where 		= 'is_del=0 AND (`name` LIKE "%'.$word.'%" OR `search_words` LIKE "%,'.$word.',%")';
+    	$query_goods->order 		= '(CASE WHEN `search_words` LIKE "%,'.$word.',%" THEN 0 ELSE 1 END) asc';
+    	$query_goods->fields 		= 'id,name,sell_price,jp_price,market_price,img';
+    	$query_goods->page 			= empty($gpage) ? 1 : $gpage;
+    	$query_goods->pagesize 		= 20;
+    	$data_goods 				= $query_goods->find();
+    	$total_page 				= $query_goods->getTotalPage();
+    	if(!empty($data_goods)){
+    		foreach($data_goods as $k => $v){
+    			$data_goods[$k]['img'] 		= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/290/h/290");
+    		}
+    	}
+    	if ($gpage > $total_page) $data_goods = array();
+
+    	/* 专辑 */
+    	$query_article 				= new IQuery('article');
+    	$query_article->where 		= 'visibility=1 AND (`title` LIKE "%'.$word.'%" OR `keywords`="'.$word.'")';
+    	$query_article->order 		= '(CASE WHEN `keywords`="'.$word.'" THEN 0 ELSE 1 END) asc,top desc,sort desc';
+    	$query_article->fields 		= 'id,title,image';
+    	$query_article->page 		= empty($apage) ? 1 : $apage;
+    	$query_article->pagesize 	= 20;
+    	$data_article  				= $query_article->find();
+    	$total_page 				= $query_article->getTotalPage();
+    	if(!empty($data_article)){
+    		foreach($data_article as $k => $v){
+    			$data_article[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/513/h/260");
+    		}
+    	}
+    	if ($apage > $total_page) $data_article = array();
+
+        $this->json_echo(array('goods'=>$data_goods,'article'=>$data_article));
     }
     /**
      * ---------------------------------------------------幻灯片---------------------------------------------------*

@@ -175,15 +175,15 @@
         猫猫都在搜
     </div>
     <div class="searth-content">
-        <a href="{url:/site/error}" class="locationA">万圣节</a>
-        <a href="{url:/site/error}" class="locationA">爱丽小屋</a>
-        <a href="{url:/site/error}" class="locationA">宠物</a>
-        <a href="{url:/site/error}" class="locationA">英文</a>
-        <a href="{url:/site/error}" class="locationA">数字</a>
     </div>
     <button type="button" id="button-submit" class="mui-btn  mui-btn-outlined buttom-submit" onclick="searthSubmit();">确定</button>
     <button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
 </div>
+<script id="searth_keyword" type="text/html">
+    <% for(var i=0; i<data.length; i++){%>
+    <a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
+    <%}%>
+</script>
 <!--轮播图模板引擎-->
 <script id="C_slider" type="text/html">
     <div class="mui-slider-group mui-slider-loop">
@@ -305,6 +305,7 @@
         $("#loading").fadeOut(300);
         getIndex();
         pullupIndexRefresh();
+        hotSearth();
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','.mui-tab-item',function(){
             var srcimg= $(this).find('img').attr("data-img");
@@ -341,7 +342,7 @@
 //上拉加载
  var stop=true;
 $(window).bind('scroll', function() {
-    if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+    if ($(window).scrollTop() + $(window).height() +2000 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
             stop=false;
             pullupIndexRefresh()
@@ -396,5 +397,15 @@ $(window).bind('scroll', function() {
     })
 </script>
 <?php } ?>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?d2ad3676e7aee829748ccde95d3e4d1a";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
 </body>
 </html>

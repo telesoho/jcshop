@@ -19,11 +19,12 @@ class Site extends IController
 
 	function init()
 	{
-
-        //必须微信客户端
+		//必须微信客户端
 // 		$isWechat 				= IClient::isWechat();
 // 		if($isWechat == false) exit('请使用微信访问我们的页面：）');
-    }
+        $action = IFilter::act(IReq::get('action'),'string');
+        if ($action!='article_detail' || $action='index'){ISession::clear('visit_num');}
+	}
 
 	function index()
 	{
@@ -998,7 +999,7 @@ class Site extends IController
     }
     //一键翻译
     function translate(){
-    	$text 						= IFilter::act(IReq::get('text'));
+    	$text 						= IReq::get('text');
     	$text 						= strip_tags($text);
     	if(!empty($text)){
     		$num 					= ceil(mb_strlen($text,'utf-8')/1000);

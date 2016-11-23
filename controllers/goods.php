@@ -485,9 +485,8 @@ class Goods extends IController implements adminAuthorization
 //			'image'     => $image,
             'banner_image' => $banner_image,
 		);
-		
 		//上传icon
-		if(!empty($_FILES['icon']['name'])){
+		if(!empty($_FILES['icon']['name'][0])){
 			$upload 		= new IUpload(10000,array('jpg','gif','png'));
 			$rel 			= $upload->setDir('upload/category/category_icon')->execute();
 			if($rel['icon'][0]['flag'] != 1) die(IUpload::errorMessage($rel['icon'][0]['flag']));
@@ -508,7 +507,7 @@ class Goods extends IController implements adminAuthorization
 		{
 			$tb_category->add();
 		}
-		$this->redirect('category_ list');
+		$this->redirect('category_list');
 	}
 
 	/**
@@ -973,4 +972,25 @@ class Goods extends IController implements adminAuthorization
 		$goodsObject->multiUpdate($idArray, $_POST);
 		die('<script type="text/javascript">parent.artDialogCallback();</script>');
 	}
+	
+	/**
+	 * 过滤html标签
+	 * @param unknown $str
+	 * @param string $tags
+	 * @return unknown
+	 */
+    public function cleanhtml($tags='<img><a>'){
+    	$str 			= IReq::get('str', 'post');
+        $search = array(
+			'@<script[^>]*?>.*?</script>@si',  // Strip out javascript
+/*          '@<[\/\!]*?[^<>]*?>@si',            // Strip out HTML tags*/
+			'@<style[^>]*?>.*?</style>@siU',    // Strip style tags properly
+			'@<![\s\S]*?--[ \t\n\r]*>@'         // Strip multi-line comments including CDATA
+        );
+        $str = preg_replace($search, '', $str);
+        $str = strip_tags($str,$tags);
+		exit( json_encode($str) );
+    }
+	
+	
 }
