@@ -672,7 +672,7 @@ class Apic extends IController
     //显示专辑列表（首页）
     public function article_list(){
         if (empty($this->user['user_id'])){$this->json_echo([]);}
-        if (empty($_SERVER['REDIRECT_PATH_INFO'])){ISession::clear('visit_num');}
+        if (empty($_SERVER['REDIRECT_PATH_INFO']) && (IClient::isAjax() == false) ){ISession::clear('visit_num');}
         $goods_query = new IQuery("goods");
         /*视频专辑*/
         $category = 3;
