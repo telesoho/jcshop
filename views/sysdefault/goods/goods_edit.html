@@ -292,10 +292,10 @@
 						<td><textarea id="content" name="content" style="width:700px;height:400px;" ></textarea></td>
 					</tr>
 
-<!-- <tr>
-	<th></th>
-	<td><div id='editableDiv' contenteditable='true' style="border:1px solid blue;"  onpaste="page.handlePaste(event);">Paste</div></td>
-</tr> -->
+					<tr>
+						<th></th>
+						<td><textarea id='editable' onpaste="page.handlePaste(event);" style="width:700px;height:100px;resize:none;"></textarea></td>
+					</tr>
 
 				</table>
 			</div>
@@ -780,34 +780,7 @@ var page = {
 
 		// Get pasted data via clipboard API
 	    clipboardData = e.clipboardData || window.clipboardData;
-
-		if( clipboardData ){
-	        var items = clipboardData.items;
-	        // if( !items ){
-	        //     return;
-	        // }
-
-	        var item = items[0];
-	        // 保存在剪贴板中的数据类型
-	        var types = clipboardData.types || [];
-
-	        for(var i=0 ; i < types.length; i++ ){
-	            if( types[i] === 'Files' ){
-	                item = items[i];
-	                break;
-	            }
-	        }
-alert(item);return;
-
-	        // 判断是否为图片数据
-	        if( item && item.kind === 'file' && item.type.match(/^image\//i) ){
-	            // 读取该图片            
-	            imgReader( item );
-	        }
-	    }
-
-	    pastedData = clipboardData.getData('Text');
-	    alert(pastedData);return false;
+	    pastedData = clipboardData.getData('text/html');
 	    page.cleanhtml(pastedData,clipboardData);
 
 	},
@@ -816,9 +789,7 @@ alert(item);return;
 		// if(page.loading == true) return false; page.loading = true;
 		$.post('{url:goods/cleanhtml}',{str:text},function(data,status){
 			if(status == 'success'){
-				// clipboardData.setData("Text",data);
-				alert(data);return false;
-				// $('#newContent').show().find('textarea').val(data);
+				$('#editable').val(data);
 			}
 			// page.loading = false;
 		},'json');

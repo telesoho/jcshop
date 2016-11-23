@@ -981,7 +981,6 @@ class Goods extends IController implements adminAuthorization
 	 */
     public function cleanhtml($tags='<img>'){
     	$str 			= IReq::get('str', 'post');
-    	exit( json_encode($str) );
         $search = array(
 			'@<script[^>]*?>.*?</script>@si',  // Strip out javascript
 /*          '@<[\/\!]*?[^<>]*?>@si',            // Strip out HTML tags*/
