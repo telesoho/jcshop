@@ -48,11 +48,11 @@
 </section>
 <div id="searth_container">
     <template v-if="showMessage && infoMessage.goods==''&&infoMessage.article==''" v-cloak>
-        <!--<div class="empty">-->
-            <!--<img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;">-->
-            <!--<div class="content">暂时没有你想要搜索的商品</div>-->
-            <!--<a href="{url:/site/index}" class="gotoFind">去逛逛</a>-->
-        <!--</div>-->
+        <div class="empty">
+            <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;">
+            <div class="content">暂时没有你想要搜索的商品</div>
+            <a href="{url:/site/index}" class="gotoFind">去逛逛</a>
+        </div>
     </template>
     <div class="searth_container_content" v-else>
         <div class="head">
@@ -185,18 +185,18 @@
         </a>
     </nav>
 </footer>
-<!--模态框-->
+<!--搜索模态框-->
 <div id="modalid-searth" class="hide">
     <div class="title">
         猫猫都在搜
     </div>
     <div class="searth-content">
     </div>
-    <button type="button" id="button-submit" class="mui-btn  mui-btn-outlined buttom-submit" onclick="searthSubmit();">确定</button>
-    <button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
+    <button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
+    <button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
 </div>
 <script id="searth_keyword" type="text/html">
-    <% for(var i=0; i<data.length; i++){%>
+    <% for(var i=0; i<data.length&&i<10; i++){%>
     <a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
     <%}%>
 </script>

@@ -168,7 +168,7 @@
 	<%}%>
 </script>
 <script id="searth_keyword" type="text/html">
-	<% for(var i=0; i<data.length; i++){%>
+	<% for(var i=0; i<data.length&&i<10; i++){%>
 	<a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
 	<%}%>
 </script>

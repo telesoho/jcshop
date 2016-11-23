@@ -476,7 +476,6 @@ input[type='search']{
   border:1px solid #eeeeee;
   width:100%;
   height:0.5rem;
-  font-family:AdobeHeitiStd-Regular;
   font-size:0.28rem;
   color:#bbbbbb;
   text-align:left;
@@ -495,11 +494,12 @@ input[type='search']{
   width:auto;
   padding:0.1rem 0.2rem;
   text-align:center;
-  border:1px solid #dcdcdc;
-  margin:0.2rem 0.2rem 0 0;
-  color:#3d4245;
-  border-radius:1rem;
+  margin:0.24rem 0.2rem 0 0;
   font-size:0.3rem;
+  background:#f8f8f8;
+  border-radius:0.04rem;
+  height:0.62rem;
+  color:#979797;
 }
 .no_margin{margin:0 !important;}
 #modalid-searth .searth-content a.content_red{border:1px solid #ff4aa0;color:#ff4aa0;}
@@ -515,18 +515,20 @@ input[type='search']{
 
 }
 #button-submit{
-  display:block;
-  width:80%;
-  border-radius:33px ;
-  border:1px solid #e53e42;
-  margin:0.24rem auto;
-  color:#e53e42;
+  border:1px solid #ff44a0;
+  border-radius:0.1rem;
+  width:78%;
+  height:0.96rem;
+  margin:1.74rem 11% 0;
+  color:#ff44a0;
 }
 #button-cancel{
-  display:block;
-  width:80%;
-  margin:0 auto;
-  border-radius:33px ;
+  border:1px solid #bbb;
+  border-radius:0.1rem;
+  width:78%;
+  height:0.96rem;
+  margin:0.49rem 11% 1.2rem;
+  color:#bbb;
 }
 .remove{
   width:80%;
