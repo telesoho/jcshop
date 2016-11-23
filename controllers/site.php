@@ -23,12 +23,6 @@ class Site extends IController
 		$isWechat 				= IClient::isWechat();
 // 		if($isWechat == false) exit('请使用微信访问我们的页面：）');
 		
-		if($isWechat == true){
-			require_once __DIR__ . '/../plugins/wechat/wechat.php';
-			$this->wechat = new wechat();
-			$this->wechat->config['wechat_jsApiSDK']=1;
-			$this->wechat->jsApiSDK();
-		}
         $action = IFilter::act(IReq::get('action'),'string');
         if ($action!='article_detail' || $action='index'){ISession::clear('visit_num');}
 	}
@@ -433,7 +427,6 @@ class Site extends IController
 	//商品展示
 	function products()
 	{
-		
 		$goods_id = IFilter::act(IReq::get('id'),'int');
 
 		if(!$goods_id)
