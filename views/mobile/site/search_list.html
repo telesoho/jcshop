@@ -83,7 +83,7 @@
                         <div class="product_item" :id="item.idName" v-for="item in new_info_goods">
                             <a :href="item.url" class="locationA">
                                 <div class="img">
-                                    <img  :src="item.img" alt=""/>
+                                    <img  src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" :dataimg="item.img"  class="samLazyImg" />
                                 </div>
                                 <div class="content">
                                     <div class="name">
@@ -98,7 +98,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flexbox empty_product" v-if="overMessage.goods==''">
+                    <div class="flexbox empty_product">
                         <div class="img">
                             <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
                         </div>
@@ -132,7 +132,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flexbox empty_product over-article" v-if="overMessage.article==''">
+                    <div class="flexbox empty_product over-article">
                         <div class="img">
                             <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
                         </div>
@@ -204,14 +204,14 @@
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
-<!--<script src="/views/mobile/javascript/lazyload.js"></script>-->
+<script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/base64.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script>
-    var page={
-        page1:1,
-        page2:1
-    }
+//    var page={
+//        page1:1,
+//        page2:1
+//    }
     //页面加载完成后调用的功能
     window.onload=function(){
        document.getElementById("loading").remove();
@@ -246,7 +246,6 @@
                 goods:[],
                 article:[]
             },
-            overMessage:'',
             state:getSession('searthState')
         },
         computed: {
@@ -271,6 +270,12 @@
                 }
                 return  this.infoMessage.article;
             }
+        },
+        updated:function() {
+            lazyload.init({
+                anim:false,
+                selectorName:".samLazyImg"
+            });
         },
         methods: {
             getData: function () {
@@ -317,30 +322,29 @@
     function getSearthList(self){
         mui.ajax('/apic/search', {
             data:{
-                word:getItem("searth_word"),
-                gpage:page.page1,
-                apage:page.page2
+                word:getItem("searth_word")
             },
             dataType: 'json',
             type: 'get',
             timeout: 10000,
             success: function (data) {
-                console.log(data);
-                self.$data.overMessage=data;
-                for(var i=0;i<data.goods.length;i++){
-                    self.$data.infoMessage.goods.push(data.goods[i]);
-                }
-                for(var j=0;j<data.article.length;j++){
-                    self.$data.infoMessage.article.push(data.article[j]);
-                }
-                self.$data.showMessage = true;
-                if(data.goods.length==0&&data.article.length==0){
-                    stop=false;
-                }else{
-                    stop=true;
-                }
-                page.page1++;
-                page.page2++;
+                  self. infoMessage =data;
+//                console.log(data);
+//                self.$data.overMessage=data;
+//                for(var i=0;i<data.goods.length;i++){
+//                    self.$data.infoMessage.goods.push(data.goods[i]);
+//                }
+//                for(var j=0;j<data.article.length;j++){
+//                    self.$data.infoMessage.article.push(data.article[j]);
+//                }
+//                self.$data.showMessage = true;
+//                if(data.goods.length==0&&data.article.length==0){
+//                    stop=false;
+//                }else{
+//                    stop=true;
+//                }
+//                page.page1++;
+//                page.page2++;
 //
             },
             error: function (xhr, type, errorThrown) {
