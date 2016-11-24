@@ -37,7 +37,7 @@ class Apic extends IController
         $query->where = "type = 0 and seller_id = 0 and award_type = 6";
         $result['condition_price'] = $query->find()[0]['condition'];
         foreach ($result['goodsList'] as $key=>$value){
-            $result['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$result['goodsList'][$key]['img']."/w/500/h/500");
+            $result['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$result['goodsList'][$key]['img']."/w/120/h/120");
         }
         //配送方式
         $result['delivery'] = Api::run('getDeliveryList');
@@ -55,7 +55,23 @@ class Apic extends IController
         $active_id = IFilter::act(IReq::get('active_id'),'int');
         $buy_num   = IReq::get('num') ? IFilter::act(IReq::get('num'),'int') : 1;
         $tourist   = IReq::get('tourist');//游客方式购物
-
+        $code 	   = IFilter::act(IReq::get('code'),'int');
+        
+        if(!empty($code)){
+        	if($code<=0 || $code>999999) $this->json_echo(array('error'=>'请输入正确的折扣券号'));
+        	/* 获取折扣券数据 */
+        	$query 				 		= new IQuery('ticket_discount');
+        	$query->where 				= 'code='.$code;
+        	$query->fields 				= 'id,name,ratio,start_time,end_time,status';
+        	$query->limit 				= 1;
+        	$ticket_data 				= $query->find();
+        	if(empty($data)) $this->json_echo(array('error'=>'折扣券不存在'));
+        	if($data[0]['start_time']>time() || $data[0]['end_time']<time()) $this->json_echo(array('error'=>'折扣券已过期'));
+        	if($data[0]['status'] == 2) $this->json_echo(array('error'=>'折扣券已使用'));
+        	if($data[0]['status'] != 1) $this->json_echo(array('error'=>'折扣券无法使用'));
+        }
+        
+        
         //必须为登录用户
         if($tourist === null && $this->user['user_id'] == null)
         {
@@ -149,20 +165,43 @@ class Apic extends IController
             if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
             if($data['goodsList'][$key]['img']) $data['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$data['goodsList'][$key]['img']."/w/500/h/500");
         }
-
+        
+		/* 使用折扣券 */
+        if(!empty($code)){
+        	$data['sum'] 		= $data['sum'] * $ticket_data['ratio'];
+        }
+        
         //满包邮
-        $promotion_query = new IQuery("promotion");
+        $promotion_query 		= new IQuery("promotion");
         $promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
-        $condition_price = $promotion_query->find()[0]['condition'];
+        $condition_price 		= $promotion_query->find()[0]['condition'];
         if ($data['sum'] > $condition_price){
             $data['delivery'][0]['first_price'] = '0';
         } else {
             $data['sum'] += $data['delivery'][0]['first_price'];
         }
 
+        //满减规则
+        $query = new IQuery("promotion");
+        $query->where = "type = 0 and seller_id = 0 and award_type = 6";
+        $data['condition_price'] = $query->find()[0]['condition'];
+        
+        //折扣券
+        $data['kicket'] 		= empty($code) ? array() : array(
+        	'id' 		=> $ticket_data['id'], 		//折扣券ID
+        	'name' 		=> $ticket_data['name'], 	//折扣券名称
+        	);
 
         $this->json_echo($data);
     }
+    /**
+     * ---------------------------------------------------折扣券---------------------------------------------------*
+     */
+    //折扣券详情 TODO:暂不需要
+    public function get_ticket_discount(){
+    	$code          				= IFilter::act(IReq::get('code'),'int');//折扣券code
+    }
+    
     /**
      * ---------------------------------------------------购物车-收货地址---------------------------------------------------*
      */
