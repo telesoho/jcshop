@@ -382,24 +382,24 @@ class Simple extends IController
 	 */
     function cart3()
     {
-    	$address_id    = IFilter::act(IReq::get('radio_address'),'int');
-    	$delivery_id   = IFilter::act(IReq::get('delivery_id'),'int');
-    	$accept_time   = IFilter::act(IReq::get('accept_time'));
+    	$address_id    = IFilter::act(IReq::get('radio_address'),'int');//收货地址ID
+    	$delivery_id   = IFilter::act(IReq::get('delivery_id'),'int');//快递ID
+    	$accept_time   = IFilter::act(IReq::get('accept_time'));//收货时间
     	$payment       = IFilter::act(IReq::get('payment'),'int');
     	$order_message = IFilter::act(IReq::get('message'));
     	$ticket_id     = IFilter::act(IReq::get('ticket_id'),'int');
     	$taxes         = IFilter::act(IReq::get('taxes'),'float');
     	$tax_title     = IFilter::act(IReq::get('tax_title'));
-    	$gid           = IFilter::act(IReq::get('direct_gid'),'int');
-    	$num           = IFilter::act(IReq::get('direct_num'),'int');
+    	$gid           = IFilter::act(IReq::get('direct_gid'),'int');//商品ID
+    	$num           = IFilter::act(IReq::get('direct_num'),'int');//商品数量
     	$type          = IFilter::act(IReq::get('direct_type'));//商品或者货品
-    	$promo         = IFilter::act(IReq::get('direct_promo'));
-    	$active_id     = IFilter::act(IReq::get('direct_active_id'),'int');
+    	$promo         = IFilter::act(IReq::get('direct_promo'));//促销
+    	$active_id     = IFilter::act(IReq::get('direct_active_id'),'int');//活动ID
     	$takeself      = IFilter::act(IReq::get('takeself'),'int');
     	$order_type    = 0;
     	$dataArray     = array();
     	$user_id       = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
-
+    	
 		//获取商品数据信息
     	$countSumObj = new CountSum($user_id);
 		$goodsResult = $countSumObj->cart_count($gid,$type,$num,$promo,$active_id);
