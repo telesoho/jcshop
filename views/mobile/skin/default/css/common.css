@@ -492,7 +492,7 @@ input[type='search']{
   justify-content: flex-start;
 }
 #modalid-searth .searth-content a{
-  display:block;
+  display:inline-block;
   width:auto;
   padding:0.11rem 0.43rem;
   text-align:center;

@@ -233,84 +233,22 @@
 			mui("#logistics").popover('show');
 			$('.mui-backdrop').hide();
 		});
-//	mui('body').on('tap','.testClick1',function(){
-//		mui("#logistics").popover('hide');
-//	});
 		mui('body').on('tap','.delOrder',function(){
 			document.location.href=this.href;
 		});
 		mui('body').on('tap','.button2',function(){
 			document.location.href=this.href;
 		});
-	})
-//	接收页面传过来的状态值
-	var Request = new Object();
-	Request = GetRequest();
-	var statusOrder=Request["status"];
+		//	接收页面传过来的状态值
+		var Request = new Object();
+		Request = GetRequest();
+		var statusOrder=Request["status"];
 //	模拟高亮画面
-	$('.mui-control-item').removeClass('mui-active')
-	$('.mui-control-item'+statusOrder).addClass('mui-active');
-	$('.mui-slider-item').removeClass('mui-active')
-	$('#itemmobile'+statusOrder).addClass('mui-active');
-	(function($) {
-		var pageNum={
-			pageNum0:0,
-			pageNum1:0,
-			pageNum2:0,
-			pageNum3:0,
-			pageNum4:0
-		}
-		//阻尼系数
-		var deceleration = mui.os.ios?0.003:0.0009;
-		$('.mui-scroll-wrapper').scroll({
-			bounce: false,
-			indicators: true, //是否显示滚动条
-			deceleration:deceleration
-		});
-		$.ready(function() {
-			//循环初始化所有下拉刷新，上拉加载。
-			$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
-				$(pullRefreshEl).pullToRefresh({
-					down: {
-						callback: function() {
-							var self = this;
-							setTimeout(function() {
-								self.endPullDownToRefresh();
-							}, 1000);
-						}
-					},
-					up: {
-						callback: function() {
-							var self = this;
-							var div = self.element.querySelector('.mui-table-view');
-							var num=++pageNum['pageNum'+index];
-							 pullRefreshOrder(num,div)
-							self.endPullUpToRefresh();
-						}
-					}
-				});
-			});
-			var createFragment = function(div, pageNum) {
-				var fragment = document.createDocumentFragment();
-				//	ajax 请求
-				mui.ajax('index.php?controller=apic&action=order_list',{
-					dataType:'json',//服务器返回json格式数据
-					type:'get',//HTTP请求类型
-					timeout:10000,//超时时间设置为10秒；
-					success:function(data){
-						var html1 = template('test',data);
-						fragment.innerHTML = html1;
-						return fragment;
-					},
-					error:function(xhr,type,errorThrown){
-						//异常处理；
-						console.log(type);
-					}
-				});
-
-			};
-		});
-	})(mui)
+		$('.mui-control-item').removeClass('mui-active')
+		$('.mui-control-item'+statusOrder).addClass('mui-active');
+		$('.mui-slider-item').removeClass('mui-active')
+		$('#itemmobile'+statusOrder).addClass('mui-active');
+	});
 //	获取url传递过来的参数
 	function GetRequest() {
 		var url = location.search; //获取url中"?"符后的字串
