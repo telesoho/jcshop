@@ -387,6 +387,8 @@ input[type='search']{
 	font-size:0.3rem;
 	color:#3d4245;
 	line-height:0.38rem;
+	margin:0 auto;
+	text-align:justify;
 	padding:0 4% 0.86rem 4%;
 
 }
@@ -411,9 +413,9 @@ input[type='search']{
 	margin:0.5rem auto;
 	max-width:100%;
 }
-.article_body>img{
+.article_body img{
 	margin:0.5rem 0;
-	width:100%;
+	max-width:100%;
 }
 .article_body>div>img{
 	margin:0.5rem auto;
@@ -435,8 +437,8 @@ input[type='search']{
 	align-items: center;
 }
 .article_body .content_ware .img img{
-	width:2rem;
-    height:2rem;
+	width:2rem !important;
+    height:2rem !important;
 
 }
 .article_body .content_ware .ware .title{
