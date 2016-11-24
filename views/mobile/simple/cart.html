@@ -70,12 +70,14 @@
 						<img src="/views/mobile/skin/default/image/jmj/icon/del.png" alt="" style="width:0.36rem;height:0.39rem;" />
 					</div>
 				</div>
-				<div class="box middle">
+                <div class="box middle">
 					<div class="left">
-						<img :src="item.img" alt=""  style="width:1.2rem;height:1.2rem" />
-						<div class="sellprice">
-							￥ {{item.sell_price}}
-						</div>
+                        <a :href="item.url" class="classA">
+                            <img :src="item.img" alt=""  style="width:1.2rem;height:1.2rem" />
+                            <div class="sellprice">
+                                ￥ {{item.sell_price}}
+                            </div>
+                        </a>
 					</div>
 					<div class="right">
 						<img :src="item.count==1?imgReduce:imgReduceA" alt="" style="width:0.5rem;height:0.5rem;" class="reduce" @click="reduceCount(item)" />
@@ -102,17 +104,12 @@
 					<span class="txt">合计: </span>
 					<span class="pri">￥ {{infoMessage.final_sum}}</span>
 				</div>
-				<div class="toPay">结算({{infoMessage.count}})</div>
+				<a  href="{url:/simple/cart2}"  class="toPay classA">结算({{infoMessage.count}})</a>
 			</div>
 		</div>
 	</template>
-
 </div>
-<div id="shopcarContent">
-
-
-</div>
-<div style="height:0.2rem;margin-bottom:1.8rem"></div>
+<div style="height:60px;margin-bottom:120px;"></div>
 <!--<div id="shopcarContainer">-->
 
 <!--</div>-->
@@ -165,13 +162,15 @@
 			imgReduce:'/views/mobile/skin/default/image/jmj/cart/reduce.png',
 			imgReduceA:'/views/mobile/skin/default/image/jmj/cart/ruduceable.png',
 			imgAdd:'/views/mobile/skin/default/image/jmj/cart/add.png',
-			free_ok:''
+			free_ok:'',
+            state:true
 		},
 		computed: {
 			// 读取和设置
 			newGoods: function() {
 				this.infoMessage.goodsList.map(function(item){
 					item.totalPrice=(item.sell_price*item.count).toFixed(2);
+                    item.url="/site/products?id="+item.goods_id;
 				});
 				return  this.infoMessage.goodsList;
 			},
@@ -198,11 +197,12 @@
 				getCartInfo(self);
 			},
 			reduceCount:function(item){
-			    var self=this;
+                var self=this;
 				if(item.count-1<=0){
-				    alert("商品的数量必须大于1");
-					item.count=1;
-				}else{
+                    item.count=1;
+				}
+				if(item.count>1&&this.state){
+                    self.state=false;
 					cartCount(item,-1,self);
 				}
 			},
@@ -210,8 +210,10 @@
 			    var self=this;
 				if(item.count>=item.store_nums){
 					item.count=item.store_nums;
-					alert("商品的库存量不足");
-				}else{
+//					alert("商品的库存量不足");
+				}
+				if(item.count<item.store_nums&&self.state){
+                    this.state=false;
 					cartCount(item,1,self);
 				}
 			},
@@ -270,6 +272,7 @@ function cartCount(item,diff,self) {
         item.count=parseInt(item.count)+diff;
         self.infoMessage.final_sum=(parseFloat(self.infoMessage.final_sum)+parseFloat(item.sell_price)*diff).toFixed(2);
         self.infoMessage.count=parseInt(self.infoMessage.count)+diff;
+        self.state=true;
         if (content.isError == true) {
             alert(content.message);
 

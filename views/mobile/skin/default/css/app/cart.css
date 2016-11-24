@@ -59,7 +59,7 @@
 .goodsInfo .ware .del{
     width:0.9rem;
     height:0.73rem;
-    border-left:2px solid #d3d3d3;
+    border-left:1px solid #d3d3d3;
 }
 .goodsInfo .ware .middle img{
     margin:0.28rem 0.28rem 0.28rem 0.48rem;
@@ -126,8 +126,8 @@
     z-index:24;
     width: 0;
     height: 0;
-    border-left: 0.22rem solid transparent;
-    border-right: 0.22rem solid transparent;
+    border-left: 0.21rem solid transparent;
+    border-right: 0.21rem solid transparent;
     border-top: 0.18rem solid #d3d3d3;
 }
 .goodsInfo .ware .bottom:before{
@@ -139,8 +139,8 @@
     z-index:25;
     width: 0;
     height: 0;
-    border-left: 0.21rem solid transparent;
-    border-right: 0.21rem solid transparent;
+    border-left: 0.2rem solid transparent;
+    border-right: 0.2rem solid transparent;
     border-top: 0.16rem solid #fff;
 }
 a.condition_price{
