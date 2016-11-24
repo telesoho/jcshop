@@ -496,6 +496,25 @@
 				$('#sheet').find('.text').text(data);
 			}
 		}
+
 	</script>
+<!-- 微信分享 -->
+<?php 
+if(IClient::isWechat() == true){
+	require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+	$this->wechat = new wechat();
+	$this->wechat->config['wechat_jsApiSDK']=1;
+	$this->wechat->jsApiSDK();
+}
+?>
+<script src="/views/mobile/javascript/jiumao/wechat.share.js"></script>
+<script type="text/javascript">
+var wechat_share = {
+	title 		: '九猫商城', //标题
+	desc 		: '{$name}', //描述
+	imgUrl 		: '{$img}', //图片
+}
+</script>
+
 </body>
 </html>

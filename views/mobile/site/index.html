@@ -176,11 +176,11 @@
     </div>
     <div class="searth-content">
     </div>
-    <button type="button" id="button-submit" class="mui-btn  mui-btn-outlined buttom-submit" onclick="searthSubmit();">确定</button>
-    <button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
+    <button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
+    <button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
 </div>
 <script id="searth_keyword" type="text/html">
-    <% for(var i=0; i<data.length; i++){%>
+    <% for(var i=0,m=data.length; i<m&&i<10; i++){%>
     <a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
     <%}%>
 </script>

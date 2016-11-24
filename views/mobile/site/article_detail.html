@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
-    <title>九猫商城</title>
+    <title>{$this->articleRow['title']}</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
@@ -153,7 +153,7 @@
     //上拉加载
     var stop = true;
     $(window).bind('scroll', function() {
-        if ($(window).scrollTop() + $(window).height() + 600 >= $(document).height() && $(window).scrollTop() > 50) {
+        if ($(window).scrollTop() + $(window).height() + 4000 >= $(document).height() && $(window).scrollTop() > 50) {
             if (stop == true) {
                 stop = false;
                 pullupRefresh()

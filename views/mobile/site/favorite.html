@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
-    <title>九猫商城</title>
+    <title>九猫大百货</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/favorite.css" />
@@ -83,7 +83,10 @@
                                         <img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt=""  />
                                     </div>
                                 </div>
-                                <a :href="item.url"><div class="sellprice">￥ {{item.sell_price}}</div></a>
+                                <div class="box">
+                                    <a :href="item.url"><div class="sellprice">￥ {{item.sell_price}}</div></a>
+                                    <a :href="item.url"><div class="buy">立即购买</div></a>
+                                </div>
                             </div>
                         </div>
                     </template>

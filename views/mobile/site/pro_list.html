@@ -6,7 +6,7 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="x5-orientation" content="portrait">
-	<title>九猫商城</title>
+	<title>九猫百货</title>
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
@@ -106,7 +106,7 @@
 		<div class="banner">
                 <div class="wrapper">
                     {query:name=category
-                        where=parent_id eq $this->catId
+                        where=parent_id eq $this->catId and visibility eq 1 
                         fields=id,name,image
                         limit=1000
                         order=sort asc}
@@ -406,7 +406,7 @@
 <!--专辑分页模板-->
 <!--头信息结束-->
 <script id="searth_keyword" type="text/html">
-	<% for(var i=0; i<data.length; i++){%>
+	<% for(var i=0; i<data.length&&i<10; i++){%>
 	<a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
 	<%}%>
 </script>

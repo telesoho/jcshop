@@ -867,7 +867,7 @@ class Apic extends IController
         $article->where = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $article_id);
         $article->filds = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price';
         $article->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
-        $article->pagesize = 4;
+        $article->pagesize = 1000;
         $relationList = $article->find();
         $total_page = $article->getTotalPage();
         if ($article->page > $total_page){

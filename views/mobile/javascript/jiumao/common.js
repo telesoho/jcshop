@@ -78,16 +78,21 @@ function getSession(key){
 }
 //功能函数
 //搜索处理函数
+function handler() {
+    event.preventDefault();
+}
 function getSearth(){
     document.getElementById("searth").value="";
     document.getElementById("modalid-searth").className="show";
+    document.getElementById("homeHeader").style.cssText="position:absolute;width:100%;z-index:88;top:0;left:0";
     document.body.style.overflow = 'hidden';
-    document.getElementById("homeHeader").style.cssText="position:fixed;width:100%;z-index:88;";
+    document.body.addEventListener('touchmove', handler, false)
 }
 function searthCancel(){
     document.getElementById("modalid-searth").className="hide";
     document.body.style.overflow = 'auto';
     document.getElementById("homeHeader").style.position="static";
+    document.body.removeEventListener('touchmove', handler, false)
 }
 function ToSearthPage(item){
     setItem("searth_word",item);

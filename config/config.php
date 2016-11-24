@@ -1,34 +1,32 @@
 <?php return array (
-  'logs' =>
+  'logs' => 
   array (
     'path' => 'backup/logs',
     'type' => 'file',
   ),
-  'DB' =>
+  'DB' => 
   array (
     'type' => 'mysqli',
     'tablePre' => 'iwebshop_',
-    'read' =>
+    'read' => 
     array (
-      0 =>
+      0 => 
       array (
-         'host' => '192.168.0.172:32771',
-//        'host' => '101.201.232.15:32768',
+        'host' => '192.168.0.172:32771',
         'user' => 'root',
         'passwd' => '123456',
         'name' => 'jmj',
       ),
     ),
-    'write' =>
+    'write' => 
     array (
-       'host' => '192.168.0.172:32771',
-//      'host' => '101.201.232.15:32768',
+      'host' => '192.168.0.172:32771',
       'user' => 'root',
       'passwd' => '123456',
       'name' => 'jmj',
     ),
   ),
-  'interceptor' =>
+  'interceptor' => 
   array (
     0 => 'themeroute@onCreateController',
     1 => 'layoutroute@onCreateView',
@@ -39,15 +37,15 @@
   'skinPath' => 'skin',
   'classes' => 'classes.*',
   'rewriteRule' => 'pathinfo',
-  'theme' =>
+  'theme' => 
   array (
-    'pc' =>
+    'pc' => 
     array (
       'default' => 'default',
       'sysdefault' => 'green',
       'sysseller' => 'green',
     ),
-    'mobile' =>
+    'mobile' => 
     array (
       'mobile' => 'default',
       'sysdefault' => 'default',
@@ -61,12 +59,12 @@
   'sqlDebug' => '0',
   'safe' => 'cookie',
   'lang' => 'zh_sc',
-  'debug' => '1',
-  'configExt' =>
+  'debug' => '2',
+  'configExt' => 
   array (
     'site_config' => 'config/site_config.php',
   ),
   'encryptKey' => '693db335771319c04d195cca4f907fa9',
   'authorizeCode' => '201610093145',
-  'image_host' => 'http://192.168.0.156:8080'
+  'image_host' => 'http://m.jiumaojia.com',
 )?>

@@ -1095,7 +1095,7 @@ input[type='search']{
 	-webkit-align-items: center;
 	-webkit-justify-content: center;
 	height:0.9rem;
-	margin-bottom:1.2rem;
+	/*margin-bottom:1.2rem;*/
 }
 #shopcarContent .bottom a{
 	position:relative;
