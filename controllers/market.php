@@ -323,7 +323,7 @@ class Market extends IController implements adminAuthorization
 			/* 生成折扣券 */
 			$num 						= 0;
 			$model 						= new IModel('ticket_discount');
-			$count 						= $model->get_count();
+			$count 						= $model->get_count('');
 			if($count+$num >= 899999) exit( '所有号段已用完，请扩展号段' );
 			while( $num<$_POST['num'] ){
 				//检查没有重复
