@@ -523,7 +523,7 @@ class Simple extends IController
     		$data_ticket 			= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'type,ratio,money');
     		if(empty($data_ticket)) IError::show(403,"折扣券无效");
     		//折扣券已使用状态
-    		$model_ticket->setData(array('status'=>2,'suer_id'=>$user_id));
+    		$model_ticket->setData(array('status'=>2,'user_id'=>$user_id));
     		$model_ticket->update('`id`='.$ticket_did);
     		$ticket_type_id 		= $data_ticket['type'];
     	}

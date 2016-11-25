@@ -199,9 +199,9 @@ class Apic extends IController
         $data['condition_price'] = $query->find()[0]['condition'];
         
         //优惠券
-        $data['kicket'] 		= empty($ticket_data) ? array() : array(
-        	'id' 		=> $ticket_data[0]['id'], 		//折扣券ID
-        	'name' 		=> $ticket_data[0]['name'], 	//折扣券名称
+        $data['kicket'] 		= array(
+        	'id' 		=> empty($ticket_data[0]['id']) ? '' : $ticket_data[0]['id'], 		//折扣券ID
+        	'name' 		=> empty($ticket_data[0]['name']) ? '' : $ticket_data[0]['name'], 	//折扣券名称
         	'msg' 		=> empty($msg) ? '' : $msg,
         	);
         $this->json_echo($data);
@@ -1155,7 +1155,7 @@ class Apic extends IController
     function favorite_list(){
         $favorite_query = new IQuery('favorite as a');
         $favorite_query->join = 'left join goods as go on go.id = a.rid';
-        $favorite_query->fields = 'a.*,go.id,go.name,go.sell_price,go.market_price,go.img';
+        $favorite_query->fields = 'a.*,go.id,go.name,go.sell_price,go.market_price,go.img,go.jp_price';
 
         $favorite_query->where = 'user_id = ' . $this->user['user_id'];
         $data1 = $favorite_query->find();

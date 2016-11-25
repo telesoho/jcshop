@@ -309,7 +309,7 @@ class Market extends IController implements adminAuthorization
 			$_POST['start_time'] 		= strtotime($_POST['start_time']); 	//开始时间
 			$_POST['end_time'] 			= strtotime($_POST['end_time']); 	//结束时间
 			if($_POST['end_time']<=time() || $_POST['start_time']>=$_POST['end_time'])  exit( '有效时间不合理' );
-			if($_POST['num']>100) exit( '每次请勿生成超过100张' );
+			if($_POST['num']>500) exit( '每次请勿生成超过500张' );
 			switch ($_POST['type']){
 				case 1:
 					if($_POST['ratio']<=0 || $_POST['ratio']>=1) exit( '折扣比例必须为0~1之间的数值' );
@@ -323,7 +323,7 @@ class Market extends IController implements adminAuthorization
 			/* 生成折扣券 */
 			$num 						= 0;
 			$model 						= new IModel('ticket_discount');
-			$count 						= $model->get_count();
+			$count 						= $model->get_count('');
 			if($count+$num >= 899999) exit( '所有号段已用完，请扩展号段' );
 			while( $num<$_POST['num'] ){
 				//检查没有重复
@@ -370,14 +370,14 @@ class Market extends IController implements adminAuthorization
 	function ticket_discount_excel()
 	{
 		
-			$excelStr = '<table><tr>
-					<th>卷码</th>
-					<th>名称</th>
-					<th>类型</th>
-					<th>优惠内容</th>
-					<th>状态</th>
-					<th>开始时间</th>
-					<th>结束时间</th></tr>';
+			$excelStr = '<table width="500" border="1"><tr>
+					<th style="text-align:center;font-size:12px;width:120px;">卷码</th>
+					<th style="text-align:center;font-size:12px;width:120px;">名称</th>
+					<th style="text-align:center;font-size:12px;width:120px;">类型</th>
+					<th style="text-align:center;font-size:12px;width:120px;">优惠内容</th>
+					<th style="text-align:center;font-size:12px;width:120px;">状态</th>
+					<th style="text-align:center;font-size:12px;width:120px;">开始时间</th>
+					<th style="text-align:center;font-size:12px;width:120px;">结束时间</th></tr>';
 	
 			$query_ticket 		 	= new IQuery('ticket_discount');
 			$query_ticket->limit 	= 10000;
@@ -389,20 +389,20 @@ class Market extends IController implements adminAuthorization
 				$content 			= '';
 				switch($val['type']){
 					case 1:
-						$content 	= '打'.($item['ratio']*10).'折';
+						$content 	= '打'.($val['ratio']*10).'折';
 						break;
 					case 2:
 						$content 	= '抵'.$val['money'].'元';
 						break;
 				}
 				$excelStr 			.='<tr>';
-				$excelStr 			.='<td>'.$val['code'].'</td>';
-				$excelStr 			.='<td>'.$val['name'].'</td>';
-				$excelStr 			.='<td>'.$text_type[$val['type']].'</td>';
-				$excelStr 			.='<td>'.$content.'</td>';
-				$excelStr 			.='<td>'.$text_status[$val['status']].'</td>';
-				$excelStr 			.='<td>'.date('Y-m-d H:i',$val['start_time']).'</td>';
-				$excelStr 			.='<td>'.date('Y-m-d H:i',$val['end_time']).'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$val['code'].'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$val['name'].'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$text_type[$val['type']].'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$content.'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$text_status[$val['status']].'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.date('Y-m-d H:i',$val['start_time']).'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.date('Y-m-d H:i',$val['end_time']).'</td>';
 				$excelStr 			.='</tr>';
 			}
 			$excelStr 				.='</table>';
