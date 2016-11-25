@@ -230,6 +230,8 @@
 			img2:'/views/mobile/skin/default/image/jmj/cart/uncho.png',
 			bg:'background:rgba(255,68,160,0.5)',
 			bg1:'background:rgba(255,68,160)',
+			showMsg1:false,
+			showMsg2:false,
 			promo:{
 				val:'',
 				buttonBg:'opacity:1',
@@ -271,6 +273,7 @@
 				var self=this;
 				if(this.promo.val){
 					getCouponInfo(self,this.promo.val);
+
 				}
 			}
 		}
@@ -343,17 +346,26 @@
 				//服务器返回响应，根据响应结果，分析是否登录成功；
 				this_.promo.val='';
 				if(data.error){
+					this_.showMsg1=true;
 					this_.error=data.error;
 					mui("#sheet3").popover('toggle');
-					setTimeout(function(){
-						mui("#sheet3").popover('toggle');
-					},2000)
+					if(this_.showMsg1){
+						setTimeout(function(){
+							mui("#sheet3").popover('toggle');
+
+						},2000)
+						this_.showMsg1=false;
+					}
 				}else{
+					this_.showMsg2=true;
 					this_.infoMessage=data;
 					mui("#sheet2").popover('toggle');
-					setTimeout(function(){
-						mui("#sheet2").popover('toggle');
-					},2000)
+					if(this_.showMsg2){
+						setTimeout(function(){
+							mui("#sheet2").popover('toggle');
+						},2000)
+						this_.showMsg2=false;
+					}
 				}
 			}
 		});
