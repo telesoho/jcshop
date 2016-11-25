@@ -232,6 +232,7 @@
 			bg1:'background:rgba(255,68,160)',
 			showMsg1:false,
 			showMsg2:false,
+			state:true,
 			promo:{
 				val:'',
 				buttonBg:'opacity:1',
@@ -271,9 +272,9 @@
 			},
 			proSub: function(){
 				var self=this;
-				if(this.promo.val){
+				if(this.promo.val&&this.state){
+					this.state=false;
 					getCouponInfo(self,this.promo.val);
-
 				}
 			}
 		}
@@ -329,7 +330,6 @@
 	}
 	//	获取用户输入激活码的信息
 	function getCouponInfo(obj,val) {
-		mui("#sheet1").popover('toggle');
 		var this_val=val;
 		var this_=obj;
 		mui.ajax('/apic/cart2',{
@@ -345,27 +345,30 @@
 			success:function(data){
 				//服务器返回响应，根据响应结果，分析是否登录成功；
 				this_.promo.val='';
+				mui("#sheet1").popover('toggle');
+				this_.state=true;
 				if(data.error){
 					this_.showMsg1=true;
 					this_.error=data.error;
-					mui("#sheet3").popover('toggle');
 					if(this_.showMsg1){
+						mui("#sheet3").popover('toggle');
 						setTimeout(function(){
 							mui("#sheet3").popover('toggle');
-
+							this_.showMsg1=false;
 						},2000)
-						this_.showMsg1=false;
 					}
 				}else{
 					this_.showMsg2=true;
 					this_.infoMessage=data;
-					mui("#sheet2").popover('toggle');
 					if(this_.showMsg2){
+						mui("#sheet2").popover('toggle');
 						setTimeout(function(){
 							mui("#sheet2").popover('toggle');
+							this_.showMsg2=false;
 						},2000)
-						this_.showMsg2=false;
 					}
+
+
 				}
 			}
 		});
@@ -389,9 +392,9 @@
 		}
 	}
 	$('#promoInput').bind('focus',function(){
-		$('#testForm').css('position','static');
+		$('#testForm').css({'position':'static','display':'none'});
 	}).bind('blur',function(){
-		$('#testForm').css({'position':'fixed','bottom':'0','left':0});
+		$('#testForm').css({'position':'fixed','bottom':'0','left':0,'display':'block'});
 	});
 </script>
 </body>
