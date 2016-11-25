@@ -382,26 +382,6 @@ class Simple extends IController
 	 */
     function cart3()
     {
-
-    	$ticket_did    = IFilter::act(IReq::get('ticket_did'),'int'); //折扣券ID
-
-    	if($ticket_did > 0){
-    		$model_ticket 			= new IModel('ticket_discount');
-    		$data_ticket 			= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'ratio');
-    		if(empty($data_ticket)) IError::show(403,"折扣券无效");
-    	}
-    	$ratio 						= empty($data_ticket) ? 1 : (float)$data_ticket['ratio'];
-    	var_dump($ratio);exit();
-    	
-    	
-    	$model_ticket 			= new IModel('ticket_discount');
-    	$data_ticket 			= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'ratio');
-    	$sql 			= $model_ticket->getSql();
-    	if(empty($data_ticket)) IError::show(403,"折扣券无效");
-    	$ratio 					= $data_ticket['$ratio'];
-    	var_dump($sql);	var_dump($data_ticket);exit();
-    	
-    	
     	$address_id    = IFilter::act(IReq::get('radio_address'),'int');//收货地址ID
     	$delivery_id   = IFilter::act(IReq::get('delivery_id'),'int');//快递ID
     	$accept_time   = IFilter::act(IReq::get('accept_time'));//收货时间
