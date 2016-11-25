@@ -517,6 +517,7 @@ class Simple extends IController
 		}
 		
 		/* 折扣券 */
+		$ticket_type_id 			= 0;
 		if($ticket_did > 0){
     		$model_ticket 			= new IModel('ticket_discount');
     		$data_ticket 			= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'type,ratio,money');
@@ -524,6 +525,7 @@ class Simple extends IController
     		//折扣券已使用状态
     		$model_ticket->setData(array('status'=>2,'suer_id'=>$user_id));
     		$model_ticket->update('`id`='.$ticket_did);
+    		$ticket_type_id 		= $data_ticket['type'];
     	}
     	
 		
@@ -534,7 +536,7 @@ class Simple extends IController
 		foreach($orderData as $seller_id => $goodsResult)
 		{
 			/* 计算优惠价格 */
-			switch($data_ticket['type']){
+			switch($ticket_type_id){
 				//折扣券
 				case 1 :
 					$order_amount 		= $goodsResult['final_sum']*$data_ticket['ratio']+$goodsResult['deliveryPrice'];
