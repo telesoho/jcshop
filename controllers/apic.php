@@ -1155,7 +1155,7 @@ class Apic extends IController
     function favorite_list(){
         $favorite_query = new IQuery('favorite as a');
         $favorite_query->join = 'left join goods as go on go.id = a.rid';
-        $favorite_query->fields = 'a.*,go.id,go.name,go.sell_price,go.market_price,go.img';
+        $favorite_query->fields = 'a.*,go.id,go.name,go.sell_price,go.market_price,go.img,go.jp_price';
 
         $favorite_query->where = 'user_id = ' . $this->user['user_id'];
         $data1 = $favorite_query->find();
