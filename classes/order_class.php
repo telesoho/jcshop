@@ -1536,7 +1536,7 @@ class Order_Class
     		}
     		$checkWhere[] = "`".$key."` = '".$val."'";
     	}
-    	$checkWhere[] = date('Y:m:d H:i:s',time())." < date_add(create_time,INTERVAL 2 MINUTE) "; //在有限时间段内生成的订单
+    	$checkWhere[] = date('Y-m-d H:i:s',time())." < date_add(create_time,INTERVAL 2 MINUTE) "; //在有限时间段内生成的订单
     	
     	$checkWhere[] = " pay_status != 1 ";//是否付款
 		$where = join(" and ",$checkWhere);
