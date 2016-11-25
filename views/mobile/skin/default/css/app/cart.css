@@ -1,0 +1,205 @@
+.emptyCart{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:1.77rem;
+}
+.nodata{
+    background:#f8f8f8;
+}
+.nodata .content{
+    margin-top:0.27rem;
+    display:flex;
+    justify-content: center;
+}
+.nodata .content span{
+    font-size:0.28rem;
+    color:#bbbbbb;
+}
+.nodata .content span:nth-child(2){
+    padding:0 0.37rem;
+}
+.goodsInfo{
+    background:#fff;
+    margin-bottom:0.2rem;
+}
+.goodsInfo .top img{
+    vertical-align: middle;
+    margin-left:0.3rem;
+    position:relative;
+    top:-0.05rem;
+}
+.goodsInfo .top{
+    height:0.85rem;
+    line-height:0.85rem;
+    border-bottom:1px solid #eee;
+}
+.goodsInfo .top span{
+    font-size:0.3rem;
+    color:#bbbbbb;
+    padding-left:0.15rem;
+}
+.goodsInfo .ware .head-name{
+    margin-top:0.2rem;
+}
+.goodsInfo .ware .name{
+    width:5.37rem;
+    margin-left:0.36rem;
+    /*border:1px solid red;*/
+    font-size:0.30rem;
+    color:#3d4245;
+    line-height:0.36rem;
+    height:0.72rem;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.goodsInfo .ware .del{
+    width:0.9rem;
+    height:0.73rem;
+    border-left:1px solid #d3d3d3;
+}
+.goodsInfo .ware .middle img{
+    margin:0.28rem 0.28rem 0.28rem 0.48rem;
+    vertical-align: bottom;
+}
+.sellprice{
+    display:inline-block;
+    position:relative;
+    top:-0.4rem;
+    font-size:0.28rem;
+    color:#f3026a;
+}
+.goodsInfo .ware .right{
+    width:1.93rem;
+    height:0.62rem;
+    border-radius:0.62rem;
+    border:1px solid #d3d3d3;
+    position:relative;
+    margin-right:0.41rem;
+    top:0.85rem;
+}
+.goodsInfo .ware input{
+    display: inline-block;
+    position:absolute;
+    width:0.6rem;
+    height:0.5rem;
+    border:none;
+    left:0.65rem;
+    top:0.05rem;
+    text-align: center;
+}
+.goodsInfo .ware .reduce{
+    display: inline-block;
+    position:absolute;
+    left:-0.4rem;
+    top:-0.25rem;
+}
+.goodsInfo .ware .add{
+    display: inline-block;
+    position:absolute;
+    right:-0.2rem;
+    top:-0.25rem;
+}
+.goodsInfo .ware .bottom-left{
+    margin:0.25rem 0.45rem;
+    font-size:0.28rem;
+    color:#bbbbbb;
+}
+.goodsInfo .ware .bottom-right{
+    margin:0.25rem 0.41rem;
+    font-size:0.28rem;
+    color:#3d4245;
+}
+.goodsInfo .ware .bottom{
+    border-top:1px solid #d3d3d3;
+    position:relative;
+}
+.goodsInfo .ware .bottom:after{
+    background:transparent;
+    position:absolute;
+    content:'';
+    left:0.8rem;
+    top:-1px;
+    z-index:24;
+    width: 0;
+    height: 0;
+    border-left: 0.21rem solid transparent;
+    border-right: 0.21rem solid transparent;
+    border-top: 0.18rem solid #d3d3d3;
+}
+.goodsInfo .ware .bottom:before{
+    background:transparent;
+    position:absolute;
+    content:'';
+    left:0.81rem;
+    top:-1px;
+    z-index:25;
+    width: 0;
+    height: 0;
+    border-left: 0.2rem solid transparent;
+    border-right: 0.2rem solid transparent;
+    border-top: 0.16rem solid #fff;
+}
+a.condition_price{
+    position:relative;
+    display:inline-block;
+    background:#fff7b6;
+    border-radius:0.08rem;
+    width:4.56rem;
+    height:0.75rem;
+    text-align:center;
+    line-height:0.75rem;
+    color:#ff4949;
+    font-size:0.26rem;
+    margin-top:0.15rem;
+}
+a.condition_price:after{
+    background:transparent;
+    position:absolute;
+    content:'';
+    left:3.53rem;
+    top:-0.12rem;
+    z-index:24;
+    width: 0;
+    height: 0;
+    border-left: 0.22rem solid transparent;
+    border-right: 0.22rem solid transparent;
+    border-bottom: 0.15rem solid #fff7b6;
+}
+.cal{
+    width:100%;
+    background:#fff;
+    margin-top:-0.2rem;
+    text-align:right;
+    padding:0 0.45rem;
+}
+.calPrice{
+    border-top:1px solid #d3d3d3;
+    margin-top:0.26rem;
+    height:1.04rem;
+    line-height:1.04rem;
+}
+.calPrice .txt{
+    font-size:0.28rem;
+    color:#bbbbbb;
+    margin-right:0.2rem;
+}
+.calPrice .pri{
+    font-size:0.28rem;
+    color:#ff44a0;
+}
+.calPrice .toPay{
+    background:#ff44a0;
+    border-radius:0.65rem;
+    width:1.51rem;
+    height:0.65rem;
+    line-height:0.65rem;
+    text-align:center;
+    color:#fff;
+    font-size:0.28rem;
+    margin-top:0.195rem;
+}
+

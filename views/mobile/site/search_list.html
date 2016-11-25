@@ -276,6 +276,7 @@
                 anim:false,
                 selectorName:".samLazyImg"
             });
+            getScrollTop(); //记录位置函数，有个bug，当拉到底部的时候因位置冲突，滚动无效
         },
         methods: {
             getData: function () {
@@ -328,6 +329,7 @@
             type: 'get',
             timeout: 10000,
             success: function (data) {
+                    console.log(data);
                   self. infoMessage =data;
 //                console.log(data);
 //                self.$data.overMessage=data;

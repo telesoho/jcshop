@@ -1,0 +1,86 @@
+{js:my97date}
+
+<div class="headbar">
+	<div class="position"><span>营销</span><span>></span><span>优惠券管理</span><span>></span><span>批量添加优惠券</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/market/ticket_discount_add}" name='ticket_edit'  method="post">
+			<input type='hidden' name='id' />
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>优惠券名称：</th>
+					<td>
+						<input type='text' name='name' class='normal' pattern='required' alt='请填写折扣券名称' />
+						<label>* 请为此组优惠券命名</label>
+					</td>
+				</tr>
+				<tr>
+					<th>优惠券类型：</th>
+					<td>
+						<label class='attr'><input type='radio' name='type' value='1' checked=checked onchange="changeType(this);"/>折扣券</label>
+						<label class='attr'><input type='radio' name='type' value='2' onchange="changeType(this);"/>抵扣券</label>
+					</td>
+				</tr>
+				<tr id="ratio">
+					<th>折扣比例：</th>
+					<td><input type='text' class='small' pattern='float' alt='必须填写数字' name='ratio' /><label>* 请填写折扣券折扣数（必须0~1之间的数值）例：0.85</label></td>
+				</tr>
+				<tr style="display:none;" id="money">
+					<th>抵扣金额：</th>
+					<td><input type='text' class='small' pattern='int' alt='必须填写数字' name='money' /><label>* 请填写抵扣券抵扣金额</label></td>
+				</tr>
+				<tr>
+					<th>有效时间段：</th>
+					<td>
+						<input type='text' name='start_time' class='Wdate' pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' /> ～
+						<input type='text' name='end_time' class='Wdate' pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' />
+						<label>* 此组折扣券的使用时间段</label>
+					</td>
+				</tr>
+				<tr>
+					<th>优惠券数量：</th>
+					<td><input type='text' class='small' pattern='int' empty alt='必须填写数字' name='num' /><label>生成的折扣券数量</label></td>
+				</tr>
+				<tr><td></td><td><button class="submit" type='submit'><span>确 定</span></button></td></tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	//表单回填
+	var formObj = new Form('ticket_edit');
+	formObj.init
+	({
+		'id':'{$this->ticketRow['id']}',
+		'name':'{$this->ticketRow['name']}',
+		'start_time':'{$this->ticketRow['start_time']}',
+		'end_time':'{$this->ticketRow['end_time']}',
+		'value':'{$this->ticketRow['value']}',
+		'point':'{$this->ticketRow['point']}'
+	});
+
+	//当修改操作时禁止修改金额
+	if($('[name="id"]').val())
+	{
+		$('[name="value"]').attr('readonly',true);
+		$('[name="value"]').css('background','#bbb');
+	}
+
+	function changeType(obj) {
+		var thisObj = $(obj);
+		switch( thisObj.val() ){
+			case '1':
+				$('#ratio').show();
+				$('#money').hide();
+				break;
+			case '2':
+				$('#ratio').hide();
+				$('#money').show();
+				break;
+		}
+	}
+</script>

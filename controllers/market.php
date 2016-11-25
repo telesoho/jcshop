@@ -183,6 +183,7 @@ class Market extends IController implements adminAuthorization
 			Util::showMessage('请选择要删除的id值');
 		}
 	}
+	
 
 	//[代金券详细]删除
 	function ticket_more_del()
@@ -299,6 +300,129 @@ class Market extends IController implements adminAuthorization
 		$ticketObj  = new IModel('ticket');
 		$ticketList = $ticketObj->query();
 		echo JSON::encode($ticketList);
+	}
+	
+	//[优惠券]新增
+	function ticket_discount_add(){
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			/* 检查参数 */
+			$_POST['start_time'] 		= strtotime($_POST['start_time']); 	//开始时间
+			$_POST['end_time'] 			= strtotime($_POST['end_time']); 	//结束时间
+			if($_POST['end_time']<=time() || $_POST['start_time']>=$_POST['end_time'])  exit( '有效时间不合理' );
+			if($_POST['num']>100) exit( '每次请勿生成超过100张' );
+			switch ($_POST['type']){
+				case 1:
+					if($_POST['ratio']<=0 || $_POST['ratio']>=1) exit( '折扣比例必须为0~1之间的数值' );
+					break;
+				case 2:
+					if($_POST['money']<=0 || $_POST['money']>1000) exit( '请输入合理的抵扣金额' );
+					break;
+				default:
+					exit( '优惠券类型不存在' );
+			}
+			/* 生成折扣券 */
+			$num 						= 0;
+			$model 						= new IModel('ticket_discount');
+			$count 						= $model->get_count();
+			if($count+$num >= 899999) exit( '所有号段已用完，请扩展号段' );
+			while( $num<$_POST['num'] ){
+				//检查没有重复
+				$rand 					= rand(100000,999999);
+				$info 					= $model->getObj('code='.$rand,'id');
+				if( !empty($info) ) continue;
+				//写入数据库
+				$model->setData(array(
+					'name' 			=> $_POST['name'],
+					'code' 			=> $rand,
+					'type' 			=> $_POST['type'],
+					'ratio' 		=> $_POST['ratio'],
+					'money' 		=> $_POST['money'],
+					'status' 		=> 1,
+					'start_time' 	=> $_POST['start_time'],
+					'end_time' 		=> $_POST['end_time'],
+					'create_time' 	=> time(),
+				));
+				$model->add();
+				$num++;
+			}
+			$this->redirect('ticket_discount_list');
+		}
+		$this->redirect('ticket_discount_add');
+	}
+	
+	//[优惠券]删除
+	function ticket_discount_del(){
+		//接收参数
+		$id        			= IFilter::act(IReq::get('id'),'int');
+		if(empty($id)){
+			$this->redirect('ticket_discount_list',false);
+			Util::showMessage('请选择要删除的id值');exit();
+		}
+		//执行删除
+		$ticketObj 			= new IModel('ticket_discount');
+		$where 				= is_array($id) ? ' id in ('.join(',',$id).')' : 'id = '.$id;
+		$ticketObj->del($where);
+		$this->redirect('ticket_discount_list',false);
+		Util::showMessage('删除成功');exit();
+	}
+	
+	//[优惠券] 输出excel表格
+	function ticket_discount_excel()
+	{
+		
+			$excelStr = '<table><tr><th>卷码</th><th>名称</th><th>折扣率</th><th>状态</th><th>开始时间</th><th>结束时间</th></tr>';
+	
+			$propObj = new IModel('prop');
+			$where   = 'type = 0';
+			$ticket_id_array = is_array($ticket_id) ? $ticket_id : array($ticket_id);
+	
+			//当代金券数量没有时不允许备份excel
+			foreach($ticket_id_array as $key => $tid)
+			{
+				if(statistics::getTicketCount($tid) == 0)
+				{
+					unset($ticket_id_array[$key]);
+				}
+			}
+	
+			if($ticket_id_array)
+			{
+				$id_num_str = join('","',$ticket_id_array);
+			}
+			else
+			{
+				$this->redirect('ticket_list',false);
+				Util::showMessage('实体代金券数量为0张，无法备份');
+				exit;
+			}
+	
+			$where.= ' and `condition` in("'.$id_num_str.'")';
+	
+			$propList = $propObj->query($where,'*','`condition` asc',10000);
+			foreach($propList as $key => $val)
+			{
+				$is_userd = ($val['is_userd']=='1') ? '是':'否';
+				$is_close = ($val['is_close']=='1') ? '是':'否';
+				$is_send  = ($val['is_send']=='1') ? '是':'否';
+	
+				$excelStr.='<tr>';
+				$excelStr.='<td>'.$val['name'].'</td>';
+				$excelStr.='<td>'.$val['card_name'].'</td>';
+				$excelStr.='<td>'.$val['card_pwd'].'</td>';
+				$excelStr.='<td>'.$val['value'].' 元</td>';
+				$excelStr.='<td>'.$is_userd.'</td>';
+				$excelStr.='<td>'.$is_close.'</td>';
+				$excelStr.='<td>'.$is_send.'</td>';
+				$excelStr.='<td>'.$val['start_time'].'</td>';
+				$excelStr.='<td>'.$val['end_time'].'</td>';
+				$excelStr.='</tr>';
+			}
+			$excelStr.='</table>';
+	
+			$ticketFile = "ticket_".join("_",$ticket_id_array);
+			$reportObj = new report($ticketFile);
+			$reportObj->toDownload($excelStr);
+		
 	}
 
 	//[促销活动] 添加修改 [单页]
@@ -487,8 +611,6 @@ class Market extends IController implements adminAuthorization
     }
 	function pro_speed_edit_act_a()
 	{
-        var_dump($_POST);
-        exit();
 		$id = IFilter::act(IReq::get('id'),'int');
 
 		$condition   = IFilter::act(IReq::get('condition','post'));

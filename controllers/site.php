@@ -261,6 +261,7 @@ class Site extends IController
 			if(!empty($data_brand)){
 				foreach ($data_brand as $k => $v){
 					$data_brand[$k]['logo'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['logo']."/w/200/h/120");
+					if(empty($v['logo'])) unset($data_brand[$k]);
 				}
 			}
 		}

@@ -396,6 +396,7 @@ class Simple extends IController
     	$promo         = IFilter::act(IReq::get('direct_promo'));//促销
     	$active_id     = IFilter::act(IReq::get('direct_active_id'),'int');//活动ID
     	$takeself      = IFilter::act(IReq::get('takeself'),'int');
+    	$ticket_did    = IFilter::act(IReq::get('ticket_did'),'int'); //折扣券ID
     	$order_type    = 0;
     	$dataArray     = array();
     	$user_id       = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
@@ -403,7 +404,7 @@ class Simple extends IController
 		//获取商品数据信息
     	$countSumObj = new CountSum($user_id);
 		$goodsResult = $countSumObj->cart_count($gid,$type,$num,$promo,$active_id);
-
+		
 		if($countSumObj->error)
 		{
 			IError::show(403,$countSumObj->error);
@@ -514,13 +515,40 @@ class Simple extends IController
 			IError::show(403,$orderData);
 			exit;
 		}
-
+		
+		/* 折扣券 */
+		if($ticket_did > 0){
+    		$model_ticket 			= new IModel('ticket_discount');
+    		$data_ticket 			= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'type,ratio,money');
+    		if(empty($data_ticket)) IError::show(403,"折扣券无效");
+    		//折扣券已使用状态
+    		$model_ticket->setData(array('status'=>2,'suer_id'=>$user_id));
+    		$model_ticket->update('`id`='.$ticket_did);
+    	}
+    	
+		
 		//根据商品所属商家不同批量生成订单
 		$orderIdArray  = array();
 		$orderNumArray = array();
 		$final_sum     = 0;
 		foreach($orderData as $seller_id => $goodsResult)
 		{
+			/* 计算优惠价格 */
+			switch($data_ticket['type']){
+				//折扣券
+				case 1 :
+					$order_amount 		= $goodsResult['final_sum']*$data_ticket['ratio']+$goodsResult['deliveryPrice'];
+					$real_amount 		= $goodsResult['final_sum']*$data_ticket['ratio'];
+					break;
+				//抵扣券
+				case 2 :
+					$order_amount 		= $goodsResult['final_sum']-$data_ticket['money']+$goodsResult['deliveryPrice'];
+					$real_amount 		= $goodsResult['final_sum']-$data_ticket['money'];
+					break;
+				default:
+					$order_amount 		= $goodsResult['orderAmountPrice'];
+					$real_amount 		= $goodsResult['final_sum'];
+			}
 			//生成的订单数据
 			$dataArray = array(
 				'order_no'            => Order_Class::createOrderNum(),
@@ -544,7 +572,7 @@ class Simple extends IController
 
 				//商品价格
 				'payable_amount'      => $goodsResult['sum'],
-				'real_amount'         => $goodsResult['final_sum'],
+				'real_amount'         => $real_amount,
 
 				//运费价格
 				'payable_freight'     => $goodsResult['deliveryOrigPrice'],
@@ -562,7 +590,7 @@ class Simple extends IController
 				'promotions'          => $goodsResult['proReduce'] + $goodsResult['reduce'],
 
 				//订单应付总额
-				'order_amount'        => $goodsResult['orderAmountPrice'],
+				'order_amount'        => $order_amount,//$goodsResult['orderAmountPrice'],
 
 				//订单保价
 				'insured'             => $goodsResult['insuredPrice'],
@@ -578,6 +606,9 @@ class Simple extends IController
 
 				//备注信息
 				'note'                => '',
+					
+				//折扣券
+				'ticket_did' 		  => $ticket_did,
 			);
 
 			//获取红包减免金额

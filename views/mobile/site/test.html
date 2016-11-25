@@ -1,80 +1,349 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>身份证认证信息</title>
+    <meta name="x5-orientation" content="portrait">
+    <title>购物车</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
 </head>
-<style>
-    .mui-popover-action{
-        top:10%;
-        width:80%;
-        left:10%;
-    }
-    .mui-popover-action.mui-active{
-        width:80%;
-        height:80%;
-        background:#fff;
-        border-radius:0.3rem;
-    }
-    .mui-popover-action.mui-active .title{
-        width:100%;
-        text-align:center;
-        height:10%;
-        background:#ff4aa0;
-        border-radius:0.3rem 0.3rem 0 0 ;
-        color:#fff;
-        font-size:0.34rem;
-    }
-    .mui-popover-action.mui-active .text{
-        width:100%;
-        height:60%;
-        padding:0.2rem;
-        color:#3d4245;
-        font-size:0.26rem;
-    }
-    .mui-popover-action .button-action img{
-        display:none
-    }
-    .mui-popover-action.mui-active .button-action img{
-        display:block;
-        width:0.7rem;
-        height:0.7rem;
-        position:absolute;
-        bottom:-1rem;
-        left:45%;
-    }
-</style>
 <body>
-    <div id="sheet1" class="mui-popover mui-popover-action">
-        <div class="title flexbox">
-            翻译结果
+<!--loading页开始-->
+<div id="loading">
+    <div class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
         </div>
-        <div class="text">
-            这里填写翻译后的内容这里填写翻译后的内容这里填写翻译后的内容这里填写翻译后的内容这里填写翻译后的内容,
-
-            下面的按钮做好图替换掉
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
         </div>
-        <a href="#sheet1" class="button-action"><img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt=""  /></a>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
     </div>
-    <div id="rest">
-            点击我弹出
-    </div>
+</div>
+<!--loading页结束-->
+<div id="shopcarContent">
 
+
+</div>
+<div style="height:0.2rem;margin-bottom:1.8rem"></div>
+<!--<div id="shopcarContainer">-->
+
+<!--</div>-->
+<footer>
+    <nav class="mui-bar mui-bar-tab"  style="z-index:25">
+        <a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">
+                <span class="mui-icon nav-icon icon-home">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/home.png" data-img="home-ed.png"  alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
+            <div class="mui-tab-label">首页</div>
+        </a>
+        <a class="mui-tab-item" href="{url:/site/sitemap}">
+                <span class="mui-icon nav-icon icon-classification">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/mune.png" data-img="mune-ed.png"  alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
+            <div class="mui-tab-label">分类</div>
+        </a>
+        <a class="mui-tab-item " href="{url:/site/favorite}">
+                <span class="nav-icon icon-vedio">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/grass.png"  data-img="grass.png"  alt="" class="img-move02">
+                    <div class="grow">种草</div>
+                    <span class="tab-mark"></span>
+                </span>
+        </a>
+        <a class="mui-tab-item  mui-active" href="{url:simple/cart}">
+                <span class="mui-icon nav-icon icon-shopcar">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/buy-ed.png"  data-img="buy-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
+            <div class="mui-tab-label">购物车</div>
+        </a>
+        <a class="mui-tab-item" href="{url:/ucenter/index}">
+                <span class="mui-icon nav-icon icon-my">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/my.png"  data-img="my-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
+            <div class="mui-tab-label">我的</div>
+        </a>
+    </nav>
+</footer>
+<script type="text/html" id="shopCarTemplate">
+    <%if(goodsList.length==0){%>
+    <section class="nodata">
+        <div class="emptyCart">
+            <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;"/>
+        </div>
+        <div class="content">
+            <span>~</span>
+            <span>购物车还是空的哦</span>
+            <span>~</span>
+        </div>
+    </section>
+    <%}else{%>
+    <!-- 商品列表 -->
+    <% for(var i=0; i<goodsList.length; i++){%>
+    <% var product =JSONstringify(goodsList[i]) %>
+    <div class="goodItem">
+        <div class="box title">
+            <div class="goodsNo">商品编号：<%=goodsList[i].goods_no%></div>
+            <div class="del" onclick='javascript:removeCartByJSON(<%=product%>);'>
+                <img src="/views/mobile/skin/default/image/jmj/icon/del.png" alt="" /></div>
+        </div>
+        <div class="box middle">
+            <div>
+                <a href="index.php?controller=site&action=products&id=<%=goodsList[i].goods_id %>" class="classA"><img src="<%=goodsList[i].img%>" alt="{$item['name']}" /></a>
+            </div>
+            <div class="goodsContent">
+                <div class="name">
+                    <%=goodsList[i].name%>
+                </div>
+                <div class="style">
+
+                </div>
+                <div class="edit box">
+                    <div class="price">￥ <%=goodsList[i].sell_price%></div>
+                    <div class="num" id="num_<%=goodsList[i].goods_id%>_<%=goodsList[i].product_id%>">x <%=goodsList[i].count%></div>
+                    <div class="count">
+                        <span class="reduce" onclick='cart_reduce(<%=product%>);'>-</span>
+                        <input type="text" onchange='cartCount(<%=product%>);' id="count_<%=goodsList[i].goods_id%>_<%=goodsList[i].product_id%>" value="<%=goodsList[i].count%>">
+                        <span class="add" onclick='cart_increase(<%=product%>);'>+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%}%>
+    <div class="box total">
+        <div class="totalPrice">
+            <span class="text">合计: </span>
+            <span class="price" id="sum_price">¥ <%=final_sum%></span>
+        </div>
+        <div class="btn_pay">
+            <span id="sum_count">结算(<%=count%>)</span>
+        </div>
+    </div>
+    <% var check =checkPostage(condition_price,final_sum) %>
+    <div class="bottom">
+        <a href="{url:/site/index}" class="condition_price classA">
+            <%if(check>0){%>
+            还差¥<%=check%>元可享包邮，去凑单
+            <%}else{%>
+            我们帮你免邮费了,去逛逛
+            <%}%>
+        </a>
+    </div>
+    <%}%>
+
+</script>
+<script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/jiumao/common.js"></script>
-    <script>
-        $(function(){
-            $("#rest").click(function(){
-                mui('#sheet1').popover('toggle');
-            })
+<script>
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
+        getCartInfo();
+        mui("body").on('tap',"#sum_count",function(){
+            window.location.href='index.php?controller=simple&action=cart2';
         })
+        mui('body').on('tap','.mui-tab-item',function(){
+            var srcimg= $(this).find('img').attr("data-img");
+            $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
+            document.location.href=this.href;
+        });
+        mui('body').on('tap','.classA',function(){document.location.href=this.href;});
+        //定义template方法
+    });
+    template.helper('JSONstringify', function(obj){
+        return JSON.stringify(obj);
+    });
+    template.helper('checkPostage', function(obj1,obj2){
+        return (parseFloat(obj1)-parseFloat(obj2)).toFixed(2);
+    });
+    function getCartInfo(){
+        mui.ajax('index.php?controller=apic&action=cart',{
+            dataType:'json',//服务器返回json格式数据
+            type:'post',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            headers:{'Content-Type':'application/json'},
+            success:function(data){
+                console.log(data);
+                setItem("condition_price",data.condition_price);
+                var html = template('shopCarTemplate',data);
+                document.getElementById("shopcarContent").innerHTML = html;
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+    //购物车数量改动计算
+    function cartCount(obj)
+    {
+        var countInput = $('#count_'+obj.goods_id+'_'+obj.product_id);
+        var countInputVal = parseInt(countInput.val());
+        var oldNum = countInput.data('oldNum') ? countInput.data('oldNum') : obj.count;
 
-    </script>
-</body>
-</html>
+        //商品数量大于1件
+        if(isNaN(countInputVal) || (countInputVal <= 0))
+        {
+            alert('购买的数量必须大于1件');
+            countInput.val(1);
+            countInput.change();
+        }
+        //商品数量小于库存量
+        else if(countInputVal > parseInt(obj.store_nums))
+        {
+            alert('购买的数量不能大于此商品的库存量');
+            countInput.val(parseInt(obj.store_nums));
+            countInput.change();
+        }
+        else
+        {
+            var diff = parseInt(countInputVal) - parseInt(oldNum);
+            if(diff == 0)
+            {
+                return;
+            }
+
+            var goods_id   = obj.product_id > 0 ? obj.product_id : obj.goods_id;
+            var goods_type = obj.product_id > 0 ? "product"      : "goods";
+
+            //更新购物车中此商品的数量
+            $.getJSON("{url:/simple/joinCart}",{"goods_id":goods_id,"type":goods_type,"goods_num":diff,"random":Math.random()},function(content){
+                if(content.isError == true)
+                {
+                    alert(content.message);
+                    countInput.val(1);
+                    countInput.change();
+                }
+                else
+                {
+                    var goodsId   = [];
+                    var productId = [];
+                    var num       = [];
+                    $('[id^="count_"]').each(function(i)
+                    {
+                        var idValue = $(this).attr('id');
+                        var dataArray = idValue.split("_");
+
+                        goodsId.push(dataArray[1]);
+                        productId.push(dataArray[2]);
+                        num.push(this.value);
+                    });
+                    countInput.data('oldNum',countInputVal);
+                    $.getJSON("{url:/simple/promotionRuleAjax}",{"goodsId":goodsId,"productId":productId,"num":num,"random":Math.random()},function(content){
+                        if(content.promotion.length > 0)
+                        {
+                            $('#cart_prompt li').remove();
+
+                            for(var i = 0;i < content.promotion.length; i++)
+                            {
+                                $('#cart_prompt ol').append( template.render('promotionTemplate',{"item":content.promotion[i]}) );
+                            }
+                            $('#cart_prompt').show();
+                        }
+                        else
+                        {
+                            $('#cart_prompt li').remove();
+                            $('#cart_prompt').hide();
+                        }
+                        console.log(content);
+                        var getcondition_price=getItem("condition_price");
+                        var coun=(parseFloat(getcondition_price)-parseFloat(content.final_sum)).toFixed(2)
+                        if(coun>0){
+                            $(".condition_price").html("还差"+coun+"元可享包邮，去凑单");
+                        }else{
+                            $(".condition_price").html("我们帮你免邮费了,去逛逛");
+                        }
+
+                        /*开始更新数据*/
+                        $('#weight').html(content.weight);
+                        $('#origin_price').html(content.sum);
+                        $('#discount_price').html(content.reduce);
+                        $('#promotion_price').html(content.proReduce);
+                        $('#sum_price').html("¥ "+content.final_sum);
+                        $('#sum_count').html("结算("+content.count+")");
+                        for(var j = 0;j < content.goodsList.length; j++){
+                            $('#num_'+content.goodsList[j].goods_id+'_'+content.goodsList[j].product_id).html("x "+content.goodsList[j].count);
+                        }
+                        $('#sum_'+obj.goods_id+'_'+obj.product_id).html((obj.sell_price * countInputVal).toFixed(2));
+                    });
+                }
+            });
+        }
+    }
+
+    //增加商品数量
+    function cart_increase(obj){
+        //库存超量检查
+        var countInput = $('#count_'+obj.goods_id+'_'+obj.product_id);
+        if(parseInt(countInput.val()) + 1 > parseInt(obj.store_nums))
+        {
+            alert('购买的数量大于此商品的库存量');
+        }
+        else
+        {
+            countInput.val(parseInt(countInput.val()) + 1);
+            countInput.change();
+        }
+    }
+
+    //减少商品数量
+    function cart_reduce(obj){
+        //库存超量检查
+        var countInput = $('#count_'+obj.goods_id+'_'+obj.product_id);
+        if(parseInt(countInput.val()) - 1 <= 0)
+        {
+            alert('购买的数量必须大于1件');
+        }
+        else
+        {
+            countInput.val(parseInt(countInput.val()) - 1);
+            countInput.change();
+        }
+    }
+
+    //移除购物车
+    function removeCartByJSON(obj) {
+        var goods_id = obj.product_id > 0 ? obj.product_id : obj.goods_id;
+        var goods_type = obj.product_id > 0 ? "product" : "goods";
+        var btnArray = ['取消', '移除'];
+        mui.confirm('您确定要移除本商品吗？', '移除购物车', btnArray, function (e) {
+            if (e.index == 1) {
+                $.getJSON("{url:/simple/removeCart}", {
+                    "goods_id": goods_id,
+                    "type": goods_type,
+                    "random": Math.random()
+                }, function () {
+                    window.location.reload();
+                });
+            } else {
+
+            }
+
+        })
+    }
+    //本地缓存函数
+    function setItem(key,value){
+        var val=JSON.stringify(value)?JSON.stringify(value):[];
+        window.localStorage.setItem(key,val);
+    }
+    function getItem(key){
+        var getter= window.localStorage.getItem(key);
+        return JSON.parse(getter);
+    }
+</script>
