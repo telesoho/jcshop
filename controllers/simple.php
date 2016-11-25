@@ -349,21 +349,21 @@ class Simple extends IController
 		}
 
     	//返回值
-		$this->gid       = $id;
-		$this->type      = $type;
-		$this->num       = $buy_num;
-		$this->promo     = $promo;
-		$this->active_id = $active_id;
-    	$this->final_sum = $result['final_sum'];
-    	$this->promotion = $result['promotion'];
-    	$this->proReduce = $result['proReduce'];
-    	$this->sum       = $result['sum'];
-    	$this->goodsList = $result['goodsList'];
-    	$this->count       = $result['count'];
-    	$this->reduce      = $result['reduce'];
-    	$this->weight      = $result['weight'];
-    	$this->freeFreight = $result['freeFreight'];
-    	$this->seller      = $result['seller'];
+		$this->gid       		= $id;
+		$this->type      		= $type;
+		$this->num       		= $buy_num;
+		$this->promo     		= $promo;
+		$this->active_id 		= $active_id;
+    	$this->final_sum 		= $result['final_sum'];
+    	$this->promotion 		= $result['promotion'];
+    	$this->proReduce 		= $result['proReduce'];
+    	$this->sum       		= $result['sum'];
+    	$this->goodsList 		= $result['goodsList'];
+    	$this->count       		= $result['count'];
+    	$this->reduce      		= $result['reduce'];
+    	$this->weight      		= $result['weight'];
+    	$this->freeFreight 		= $result['freeFreight'];
+    	$this->seller      		= $result['seller'];
 
 		//收货地址列表
 		$this->addressList = $addressList;

@@ -370,58 +370,46 @@ class Market extends IController implements adminAuthorization
 	function ticket_discount_excel()
 	{
 		
-			$excelStr = '<table><tr><th>卷码</th><th>名称</th><th>折扣率</th><th>状态</th><th>开始时间</th><th>结束时间</th></tr>';
+			$excelStr = '<table><tr>
+					<th>卷码</th>
+					<th>名称</th>
+					<th>类型</th>
+					<th>优惠内容</th>
+					<th>状态</th>
+					<th>开始时间</th>
+					<th>结束时间</th></tr>';
 	
-			$propObj = new IModel('prop');
-			$where   = 'type = 0';
-			$ticket_id_array = is_array($ticket_id) ? $ticket_id : array($ticket_id);
-	
-			//当代金券数量没有时不允许备份excel
-			foreach($ticket_id_array as $key => $tid)
+			$query_ticket 		 	= new IQuery('ticket_discount');
+			$query_ticket->limit 	= 10000;
+			$data_ticket 			= $query_ticket->find();
+			$text_type 				= array('','折扣券','抵扣券');
+			$text_status 			= array('','未使用','已使用');
+			foreach($data_ticket as $key => $val)
 			{
-				if(statistics::getTicketCount($tid) == 0)
-				{
-					unset($ticket_id_array[$key]);
+				$content 			= '';
+				switch($val['type']){
+					case 1:
+						$content 	= '打'.($item['ratio']*10).'折';
+						break;
+					case 2:
+						$content 	= '抵'.$val['money'].'元';
+						break;
 				}
+				$excelStr 			.='<tr>';
+				$excelStr 			.='<td>'.$val['code'].'</td>';
+				$excelStr 			.='<td>'.$val['name'].'</td>';
+				$excelStr 			.='<td>'.$text_type[$val['type']].'</td>';
+				$excelStr 			.='<td>'.$content.'</td>';
+				$excelStr 			.='<td>'.$text_status[$val['status']].'</td>';
+				$excelStr 			.='<td>'.date('Y-m-d H:i',$val['start_time']).'</td>';
+				$excelStr 			.='<td>'.date('Y-m-d H:i',$val['end_time']).'</td>';
+				$excelStr 			.='</tr>';
 			}
-	
-			if($ticket_id_array)
-			{
-				$id_num_str = join('","',$ticket_id_array);
-			}
-			else
-			{
-				$this->redirect('ticket_list',false);
-				Util::showMessage('实体代金券数量为0张，无法备份');
-				exit;
-			}
-	
-			$where.= ' and `condition` in("'.$id_num_str.'")';
-	
-			$propList = $propObj->query($where,'*','`condition` asc',10000);
-			foreach($propList as $key => $val)
-			{
-				$is_userd = ($val['is_userd']=='1') ? '是':'否';
-				$is_close = ($val['is_close']=='1') ? '是':'否';
-				$is_send  = ($val['is_send']=='1') ? '是':'否';
-	
-				$excelStr.='<tr>';
-				$excelStr.='<td>'.$val['name'].'</td>';
-				$excelStr.='<td>'.$val['card_name'].'</td>';
-				$excelStr.='<td>'.$val['card_pwd'].'</td>';
-				$excelStr.='<td>'.$val['value'].' 元</td>';
-				$excelStr.='<td>'.$is_userd.'</td>';
-				$excelStr.='<td>'.$is_close.'</td>';
-				$excelStr.='<td>'.$is_send.'</td>';
-				$excelStr.='<td>'.$val['start_time'].'</td>';
-				$excelStr.='<td>'.$val['end_time'].'</td>';
-				$excelStr.='</tr>';
-			}
-			$excelStr.='</table>';
-	
-			$ticketFile = "ticket_".join("_",$ticket_id_array);
-			$reportObj = new report($ticketFile);
+			$excelStr 				.='</table>';
+			$reportObj 				= new report();
+			$reportObj->setFileName('优惠券');
 			$reportObj->toDownload($excelStr);
+			exit();
 		
 	}
 
