@@ -198,13 +198,12 @@ class Apic extends IController
         $query->where = "type = 0 and seller_id = 0 and award_type = 6";
         $data['condition_price'] = $query->find()[0]['condition'];
         
-        //折扣券
+        //优惠券
         $data['kicket'] 		= empty($ticket_data) ? array() : array(
         	'id' 		=> $ticket_data[0]['id'], 		//折扣券ID
         	'name' 		=> $ticket_data[0]['name'], 	//折扣券名称
         	'msg' 		=> empty($msg) ? '' : $msg,
         	);
-
         $this->json_echo($data);
     }
     /**

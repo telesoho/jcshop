@@ -1293,22 +1293,3 @@ input[type='search']{
 	font-size:0.34rem;
 	color:#ffffff;
 }
-.order_addAddr{
-	display:flex;
-	align-items: center;
-	height:1.57rem;
-}
-.order_addAddr img{
-	margin-left:0.26rem;
-	width:0.8rem;
-}
-.order_addAddr .tex{
-	font-size: 0.3rem;
-	margin-left:0.2rem;
-	color:#bbbbbb;
-}
-
-#close {
-	text-align: center;
-	margin-top: 0.3rem;
-}

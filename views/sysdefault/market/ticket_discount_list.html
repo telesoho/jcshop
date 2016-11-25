@@ -3,7 +3,7 @@
 	<div class="operating">
 		<a href="javascript:;" onclick="event_link('{url:/market/ticket_discount_add}')"><button class="operating_btn" type="button"><span class="addition">添加优惠券</span></button></a>
 		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
-		<a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_excel}';delModel({msg:'是否要生成excel表格'});"><button class="operating_btn" type="button"><span class="export">生成EXCEL</span></button></a>
+		<a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_discount_excel}';delModel({msg:'是否要生成excel表格'});"><button class="operating_btn" type="button"><span class="export">生成EXCEL</span></button></a>
 		<a href="javascript:void(0)" onclick="batch_del({link:'{url:/market/ticket_discount_del}'});"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
 	</div>
 </div>
@@ -43,7 +43,7 @@
 					<td>{$item['name']}</td>
 					<td>{set:$text_type=array('','折扣券','抵扣用')}{$text_type[$item['type']]}</td>
 					<td><?php switch($item['type']){
-							case 1: echo ($item['ratio']*100).'%';break;
+							case 1: echo '打'.($item['ratio']*10).'折';break;
 							case 2: echo '抵'.$item['money'].'元';break;
 						} ?></td>
 					<td>{set:$text_status=array('','未使用','已使用')}{$text_status[$item['status']]}</td>
