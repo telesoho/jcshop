@@ -1,9 +1,9 @@
 <div class="headbar">
-	<div class="position"><span>营销</span><span>></span><span>折扣券管理</span><span>></span><span>折扣券列表</span></div>
+	<div class="position"><span>营销</span><span>></span><span>优惠券管理</span><span>></span><span>优惠券列表</span></div>
 	<div class="operating">
-		<a href="javascript:;" onclick="event_link('{url:/market/ticket_discount_add}')"><button class="operating_btn" type="button"><span class="addition">添加折扣券</span></button></a>
+		<a href="javascript:;" onclick="event_link('{url:/market/ticket_discount_add}')"><button class="operating_btn" type="button"><span class="addition">添加优惠券</span></button></a>
 		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
-		<!-- <a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_excel}';delModel({msg:'是否要生成excel表格'});"><button class="operating_btn" type="button"><span class="export">生成EXCEL</span></button></a> -->
+		<a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_excel}';delModel({msg:'是否要生成excel表格'});"><button class="operating_btn" type="button"><span class="export">生成EXCEL</span></button></a>
 		<a href="javascript:void(0)" onclick="batch_del({link:'{url:/market/ticket_discount_del}'});"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
 	</div>
 </div>
@@ -16,6 +16,7 @@
 				<col width="70px" />
 				<col width="40px" />
 				<col width="40px" />
+				<col width="40px" />
 				<col width="180px" />
 				<col width="140px" />
 			</colgroup>
@@ -25,7 +26,8 @@
 					<th>选择</th>
 					<th>券码</th>
 					<th>名称</th>
-					<th>折扣率</th>
+					<th>类型</th>
+					<th>优惠内容</th>
 					<th>状态</th>
 					<th>有效期</th>
 					<th>操作</th>
@@ -39,7 +41,11 @@
 					<td><input type='checkbox' name='id[]' value="{$item['id']}" /></td>
 					<td>{$item['code']}</td>
 					<td>{$item['name']}</td>
-					<td>{echo:$item['ratio']*100}%</td>
+					<td>{set:$text_type=array('','折扣券','抵扣用')}{$text_type[$item['type']]}</td>
+					<td><?php switch($item['type']){
+							case 1: echo ($item['ratio']*100).'%';break;
+							case 2: echo '抵'.$item['money'].'元';break;
+						} ?></td>
 					<td>{set:$text_status=array('','未使用','已使用')}{$text_status[$item['status']]}</td>
 					<td>{echo:date('Y-m-d H:i',$item['start_time'])} ～ {echo:date('Y-m-d H:i',$item['end_time'])}</td>
 					<td>
@@ -56,9 +62,9 @@
 						</a> -->
 
 						
-						<a href='javascript:void(0)' onclick="delModel({msg:'是否要生成excel表格？',link:'{url:/market/ticket_excel/id/$item[id]}'});">
+						<!-- <a href='javascript:void(0)' onclick="delModel({msg:'是否要生成excel表格？',link:'{url:/market/ticket_excel/id/$item[id]}'});">
 							<img class="operator" src="{skin:images/admin/icon_down.gif}" alt="生成EXCEL" title="生成EXCEL" />
-						</a>
+						</a> -->
 						
 
 						<a href='javascript:void(0)' onclick="delModel({link:'{url:/market/ticket_discount_del/id/$item[id]}'});">

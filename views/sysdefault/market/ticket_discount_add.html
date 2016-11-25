@@ -1,7 +1,7 @@
 {js:my97date}
 
 <div class="headbar">
-	<div class="position"><span>营销</span><span>></span><span>折扣券管理</span><span>></span><span>批量添加折扣券</span></div>
+	<div class="position"><span>营销</span><span>></span><span>优惠券管理</span><span>></span><span>批量添加优惠券</span></div>
 </div>
 <div class="content_box">
 	<div class="content form_content">
@@ -11,14 +11,14 @@
 				<col width="150px" />
 				<col />
 				<tr>
-					<th>折扣券名称：</th>
+					<th>优惠券名称：</th>
 					<td>
 						<input type='text' name='name' class='normal' pattern='required' alt='请填写折扣券名称' />
-						<label>* 请为此组折扣券命名</label>
+						<label>* 请为此组优惠券命名</label>
 					</td>
 				</tr>
 				<tr>
-					<th>是否开启：</th>
+					<th>优惠券类型：</th>
 					<td>
 						<label class='attr'><input type='radio' name='type' value='1' checked=checked onchange="changeType(this);"/>折扣券</label>
 						<label class='attr'><input type='radio' name='type' value='2' onchange="changeType(this);"/>抵扣券</label>
@@ -41,7 +41,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th>折扣券数量：</th>
+					<th>优惠券数量：</th>
 					<td><input type='text' class='small' pattern='int' empty alt='必须填写数字' name='num' /><label>生成的折扣券数量</label></td>
 				</tr>
 				<tr><td></td><td><button class="submit" type='submit'><span>确 定</span></button></td></tr>
@@ -73,11 +73,11 @@
 	function changeType(obj) {
 		var thisObj = $(obj);
 		switch( thisObj.val() ){
-			case 1:
+			case '1':
 				$('#ratio').show();
 				$('#money').hide();
 				break;
-			case 2:
+			case '2':
 				$('#ratio').hide();
 				$('#money').show();
 				break;

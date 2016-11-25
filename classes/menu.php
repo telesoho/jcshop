@@ -86,8 +86,8 @@ class Menu
         	'代金券管理'=>array(
         		'/market/ticket_list'       => '代金券列表',
         	),
-			'折扣券管理'=>array(
-        		'/market/ticket_discount_list'   => '折扣券列表',
+			'优惠券管理'=>array(
+        		'/market/ticket_discount_list'   => '优惠券列表',
         	)
 		),
 

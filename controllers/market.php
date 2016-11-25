@@ -302,15 +302,24 @@ class Market extends IController implements adminAuthorization
 		echo JSON::encode($ticketList);
 	}
 	
-	//[折扣券]新增
+	//[优惠券]新增
 	function ticket_discount_add(){
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			/* 检查参数 */
 			$_POST['start_time'] 		= strtotime($_POST['start_time']); 	//开始时间
 			$_POST['end_time'] 			= strtotime($_POST['end_time']); 	//结束时间
 			if($_POST['end_time']<=time() || $_POST['start_time']>=$_POST['end_time'])  exit( '有效时间不合理' );
-			if($_POST['ratio']<=0 || $_POST['ratio']>=1) exit( '折扣比例必须为0~1之间的数值' );
 			if($_POST['num']>100) exit( '每次请勿生成超过100张' );
+			switch ($_POST['type']){
+				case 1:
+					if($_POST['ratio']<=0 || $_POST['ratio']>=1) exit( '折扣比例必须为0~1之间的数值' );
+					break;
+				case 2:
+					if($_POST['money']<=0 || $_POST['money']>1000) exit( '请输入合理的抵扣金额' );
+					break;
+				default:
+					exit( '优惠券类型不存在' );
+			}
 			/* 生成折扣券 */
 			$num 						= 0;
 			$model 						= new IModel('ticket_discount');
@@ -325,7 +334,9 @@ class Market extends IController implements adminAuthorization
 				$model->setData(array(
 					'name' 			=> $_POST['name'],
 					'code' 			=> $rand,
+					'type' 			=> $_POST['type'],
 					'ratio' 		=> $_POST['ratio'],
+					'money' 		=> $_POST['money'],
 					'status' 		=> 1,
 					'start_time' 	=> $_POST['start_time'],
 					'end_time' 		=> $_POST['end_time'],
@@ -339,7 +350,7 @@ class Market extends IController implements adminAuthorization
 		$this->redirect('ticket_discount_add');
 	}
 	
-	//[折扣券]删除
+	//[优惠券]删除
 	function ticket_discount_del(){
 		//接收参数
 		$id        			= IFilter::act(IReq::get('id'),'int');
@@ -355,7 +366,7 @@ class Market extends IController implements adminAuthorization
 		Util::showMessage('删除成功');exit();
 	}
 	
-	//[折扣券] 输出excel表格
+	//[优惠券] 输出excel表格
 	function ticket_discount_excel()
 	{
 		

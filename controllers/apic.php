@@ -67,7 +67,7 @@ class Apic extends IController
         	$query->limit 				= 1;
         	$ticket_data 				= $query->find();
         	if(empty($ticket_data)) $this->json_echo(array('error'=>'折扣券不存在'));
-        	if($ticket_data[0]['start_time']>time() || $data[0]['end_time']<time()) $this->json_echo(array('error'=>'折扣券已过期'));
+        	if($ticket_data[0]['start_time']>time() || $ticket_data[0]['end_time']<time()) $this->json_echo(array('error'=>'折扣券已过期'));
         	if($ticket_data[0]['status'] == 2) $this->json_echo(array('error'=>'折扣券已使用'));
         	if($ticket_data[0]['status'] != 1) $this->json_echo(array('error'=>'折扣券无法使用'));
         }
@@ -172,11 +172,13 @@ class Apic extends IController
 	        switch($ticket_data[0]['type']){
 	        	//折扣券
 	        	case 1 :
-	        		$data['sum'] 		= $data['sum'] * $ticket_data['ratio'];
+	        		$data['sum'] 		= $data['sum'] * $ticket_data[0]['ratio'];
+	        		$msg 				= '已为您优惠'.($ticket_data[0]['ratio']*10).'折';
 	        		break;
 	        		//抵扣券
 	        	case 2 :
-	        		$data['sum'] 		= $data['sum'] - $ticket_data['money'];
+	        		$data['sum'] 		= $data['sum'] - $ticket_data[0]['money'];
+	        		$msg 				= '已为您优惠'.$ticket_data[0]['money'].'元';
 	        		break;
 	        }
         }
@@ -197,9 +199,10 @@ class Apic extends IController
         $data['condition_price'] = $query->find()[0]['condition'];
         
         //折扣券
-        $data['kicket'] 		= empty($code) ? array() : array(
-        	'id' 		=> $ticket_data['id'], 		//折扣券ID
-        	'name' 		=> $ticket_data['name'], 	//折扣券名称
+        $data['kicket'] 		= empty($ticket_data) ? array() : array(
+        	'id' 		=> $ticket_data[0]['id'], 		//折扣券ID
+        	'name' 		=> $ticket_data[0]['name'], 	//折扣券名称
+        	'msg' 		=> empty($msg) ? '' : $msg,
         	);
 
         $this->json_echo($data);
