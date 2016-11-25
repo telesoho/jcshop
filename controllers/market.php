@@ -309,7 +309,7 @@ class Market extends IController implements adminAuthorization
 			$_POST['start_time'] 		= strtotime($_POST['start_time']); 	//开始时间
 			$_POST['end_time'] 			= strtotime($_POST['end_time']); 	//结束时间
 			if($_POST['end_time']<=time() || $_POST['start_time']>=$_POST['end_time'])  exit( '有效时间不合理' );
-			if($_POST['num']>100) exit( '每次请勿生成超过100张' );
+			if($_POST['num']>500) exit( '每次请勿生成超过500张' );
 			switch ($_POST['type']){
 				case 1:
 					if($_POST['ratio']<=0 || $_POST['ratio']>=1) exit( '折扣比例必须为0~1之间的数值' );
