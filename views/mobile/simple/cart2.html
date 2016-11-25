@@ -272,8 +272,8 @@
 				var self=this;
 				if(this.promo.val&&this.state){
 					this.state=false;
-					getCouponInfo(self,this.promo.val);
 					mui("#sheet1").popover('toggle');
+					getCouponInfo(self,this.promo.val);
 				}
 			}
 		}
@@ -298,7 +298,7 @@
 	function getCart2Info(self){
 		mui.ajax('/apic/cart2',{
 			data:{
-				id:null,
+				id:Request["id"],
 				num:Request["num"],
 				type:Request["type"]
 			},
