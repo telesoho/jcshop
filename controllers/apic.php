@@ -199,9 +199,9 @@ class Apic extends IController
         $data['condition_price'] = $query->find()[0]['condition'];
         
         //优惠券
-        $data['kicket'] 		= empty($ticket_data) ? array() : array(
-        	'id' 		=> $ticket_data[0]['id'], 		//折扣券ID
-        	'name' 		=> $ticket_data[0]['name'], 	//折扣券名称
+        $data['kicket'] 		= array(
+        	'id' 		=> empty($ticket_data[0]['id']) ? '' : $ticket_data[0]['id'], 		//折扣券ID
+        	'name' 		=> empty($ticket_data[0]['name']) ? '' : $ticket_data[0]['name'], 	//折扣券名称
         	'msg' 		=> empty($msg) ? '' : $msg,
         	);
         $this->json_echo($data);
