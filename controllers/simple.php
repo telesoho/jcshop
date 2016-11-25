@@ -519,13 +519,13 @@ class Simple extends IController
 		/* 折扣券 */
 		if($ticket_did > 0){
     		$model_ticket 			= new IModel('ticket_discount');
-    		$data_ticket 			= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'ratio');
+    		$data_ticket 			= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'type,ratio,money');
     		if(empty($data_ticket)) IError::show(403,"折扣券无效");
     		//折扣券已使用状态
     		$model_ticket->setData(array('status'=>2,'suer_id'=>$user_id));
     		$model_ticket->update('`id`='.$ticket_did);
     	}
-    	$ratio 						= empty($data_ticket) ? 1 : (float)$data_ticket['ratio'];
+    	
 		
 		//根据商品所属商家不同批量生成订单
 		$orderIdArray  = array();
@@ -533,6 +533,22 @@ class Simple extends IController
 		$final_sum     = 0;
 		foreach($orderData as $seller_id => $goodsResult)
 		{
+			/* 计算优惠价格 */
+			switch($data_ticket['type']){
+				//折扣券
+				case 1 :
+					$order_amount 		= $goodsResult['final_sum']*$data_ticket['ratio']+$goodsResult['deliveryPrice'];
+					$real_amount 		= $goodsResult['final_sum']*$data_ticket['ratio'];
+					break;
+				//抵扣券
+				case 2 :
+					$order_amount 		= $goodsResult['final_sum']-$data_ticket['money']+$goodsResult['deliveryPrice'];
+					$real_amount 		= $goodsResult['final_sum']-$data_ticket['money'];
+					break;
+				default:
+					$order_amount 		= $goodsResult['orderAmountPrice'];
+					$real_amount 		= $goodsResult['final_sum'];
+			}
 			//生成的订单数据
 			$dataArray = array(
 				'order_no'            => Order_Class::createOrderNum(),
@@ -556,7 +572,7 @@ class Simple extends IController
 
 				//商品价格
 				'payable_amount'      => $goodsResult['sum'],
-				'real_amount'         => $goodsResult['final_sum']*$ratio,
+				'real_amount'         => $real_amount,
 
 				//运费价格
 				'payable_freight'     => $goodsResult['deliveryOrigPrice'],
@@ -571,10 +587,10 @@ class Simple extends IController
 				'taxes'               => $goodsResult['taxPrice'],
 
 				//优惠价格
-				'promotions'          => $goodsResult['proReduce'] + $goodsResult['reduce']+$goodsResult['final_sum']*(1-$ratio),
+				'promotions'          => $goodsResult['proReduce'] + $goodsResult['reduce'],
 
 				//订单应付总额
-				'order_amount'        => $goodsResult['final_sum']*$ratio+$goodsResult['deliveryPrice'],//$goodsResult['orderAmountPrice'],
+				'order_amount'        => $order_amount,//$goodsResult['orderAmountPrice'],
 
 				//订单保价
 				'insured'             => $goodsResult['insuredPrice'],

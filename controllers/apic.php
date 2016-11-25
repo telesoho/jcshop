@@ -57,18 +57,19 @@ class Apic extends IController
         $tourist   = IReq::get('tourist');//游客方式购物
         $code 	   = IFilter::act(IReq::get('code'),'int');
         
+        /* 优惠券 */
         if(!empty($code)){
         	if($code<=0 || $code>999999) $this->json_echo(array('error'=>'请输入正确的折扣券号'));
         	/* 获取折扣券数据 */
         	$query 				 		= new IQuery('ticket_discount');
         	$query->where 				= 'code='.$code;
-        	$query->fields 				= 'id,name,ratio,start_time,end_time,status';
+        	$query->fields 				= 'id,name,type,ratio,money,start_time,end_time,status';
         	$query->limit 				= 1;
         	$ticket_data 				= $query->find();
-        	if(empty($data)) $this->json_echo(array('error'=>'折扣券不存在'));
-        	if($data[0]['start_time']>time() || $data[0]['end_time']<time()) $this->json_echo(array('error'=>'折扣券已过期'));
-        	if($data[0]['status'] == 2) $this->json_echo(array('error'=>'折扣券已使用'));
-        	if($data[0]['status'] != 1) $this->json_echo(array('error'=>'折扣券无法使用'));
+        	if(empty($ticket_data)) $this->json_echo(array('error'=>'折扣券不存在'));
+        	if($ticket_data[0]['start_time']>time() || $data[0]['end_time']<time()) $this->json_echo(array('error'=>'折扣券已过期'));
+        	if($ticket_data[0]['status'] == 2) $this->json_echo(array('error'=>'折扣券已使用'));
+        	if($ticket_data[0]['status'] != 1) $this->json_echo(array('error'=>'折扣券无法使用'));
         }
         
         
@@ -166,9 +167,18 @@ class Apic extends IController
             if($data['goodsList'][$key]['img']) $data['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$data['goodsList'][$key]['img']."/w/500/h/500");
         }
         
-		/* 使用折扣券 */
+		/* 使用优惠券 */
         if(!empty($code)){
-        	$data['sum'] 		= $data['sum'] * $ticket_data['ratio'];
+	        switch($ticket_data[0]['type']){
+	        	//折扣券
+	        	case 1 :
+	        		$data['sum'] 		= $data['sum'] * $ticket_data['ratio'];
+	        		break;
+	        		//抵扣券
+	        	case 2 :
+	        		$data['sum'] 		= $data['sum'] - $ticket_data['money'];
+	        		break;
+	        }
         }
         
         //满包邮

@@ -18,8 +18,19 @@
 					</td>
 				</tr>
 				<tr>
+					<th>是否开启：</th>
+					<td>
+						<label class='attr'><input type='radio' name='type' value='1' checked=checked onchange="changeType(this);"/>折扣券</label>
+						<label class='attr'><input type='radio' name='type' value='2' onchange="changeType(this);"/>抵扣券</label>
+					</td>
+				</tr>
+				<tr id="ratio">
 					<th>折扣比例：</th>
 					<td><input type='text' class='small' pattern='float' alt='必须填写数字' name='ratio' /><label>* 请填写折扣券折扣数（必须0~1之间的数值）例：0.85</label></td>
+				</tr>
+				<tr style="display:none;" id="money">
+					<th>抵扣金额：</th>
+					<td><input type='text' class='small' pattern='int' alt='必须填写数字' name='money' /><label>* 请填写抵扣券抵扣金额</label></td>
 				</tr>
 				<tr>
 					<th>有效时间段：</th>
@@ -57,5 +68,19 @@
 	{
 		$('[name="value"]').attr('readonly',true);
 		$('[name="value"]').css('background','#bbb');
+	}
+
+	function changeType(obj) {
+		var thisObj = $(obj);
+		switch( thisObj.val() ){
+			case 1:
+				$('#ratio').show();
+				$('#money').hide();
+				break;
+			case 2:
+				$('#ratio').hide();
+				$('#money').show();
+				break;
+		}
 	}
 </script>
