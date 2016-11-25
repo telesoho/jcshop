@@ -370,14 +370,14 @@ class Market extends IController implements adminAuthorization
 	function ticket_discount_excel()
 	{
 		
-			$excelStr = '<table><tr>
-					<th>卷码</th>
-					<th>名称</th>
-					<th>类型</th>
-					<th>优惠内容</th>
-					<th>状态</th>
-					<th>开始时间</th>
-					<th>结束时间</th></tr>';
+			$excelStr = '<table width="500" border="1"><tr>
+					<th style="text-align:center;font-size:12px;width:120px;">卷码</th>
+					<th style="text-align:center;font-size:12px;width:120px;">名称</th>
+					<th style="text-align:center;font-size:12px;width:120px;">类型</th>
+					<th style="text-align:center;font-size:12px;width:120px;">优惠内容</th>
+					<th style="text-align:center;font-size:12px;width:120px;">状态</th>
+					<th style="text-align:center;font-size:12px;width:120px;">开始时间</th>
+					<th style="text-align:center;font-size:12px;width:120px;">结束时间</th></tr>';
 	
 			$query_ticket 		 	= new IQuery('ticket_discount');
 			$query_ticket->limit 	= 10000;
@@ -389,20 +389,20 @@ class Market extends IController implements adminAuthorization
 				$content 			= '';
 				switch($val['type']){
 					case 1:
-						$content 	= '打'.($item['ratio']*10).'折';
+						$content 	= '打'.($val['ratio']*10).'折';
 						break;
 					case 2:
 						$content 	= '抵'.$val['money'].'元';
 						break;
 				}
 				$excelStr 			.='<tr>';
-				$excelStr 			.='<td>'.$val['code'].'</td>';
-				$excelStr 			.='<td>'.$val['name'].'</td>';
-				$excelStr 			.='<td>'.$text_type[$val['type']].'</td>';
-				$excelStr 			.='<td>'.$content.'</td>';
-				$excelStr 			.='<td>'.$text_status[$val['status']].'</td>';
-				$excelStr 			.='<td>'.date('Y-m-d H:i',$val['start_time']).'</td>';
-				$excelStr 			.='<td>'.date('Y-m-d H:i',$val['end_time']).'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$val['code'].'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$val['name'].'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$text_type[$val['type']].'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$content.'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$text_status[$val['status']].'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.date('Y-m-d H:i',$val['start_time']).'</td>';
+				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.date('Y-m-d H:i',$val['end_time']).'</td>';
 				$excelStr 			.='</tr>';
 			}
 			$excelStr 				.='</table>';
