@@ -120,11 +120,11 @@
 		</div>
 	</div>
 	<!--配送方式-->
-	<div class="box delivery" style="width:100%">
+	<div class="box delivery" style="width:100%" id="deliveryTest">
 		<div class="left" v-cloak>配送方式</div>
 		<div class="right" v-cloak>{{infoMessage.delivery[0].name}}</div>
+		<div style="height:3rem;"></div>
 	</div>
-	<div style="height:3rem;"></div>
 	<!--底部fixed定位-->
 	<form action='{url:/simple/cart3}' class="form" method='post' name='order_form' onsubmit='return orderFormInstance.isSubmit()' id="testForm" v-cloak>
 		<!--输入框要提交项目-->
@@ -386,8 +386,10 @@
 		}
 	}
 	$('#promoInput').bind('focus',function(){
+		$('#deliveryTest').css('display','none');
 		$('#testForm').css({'position':'static','display':'none'});
 	}).bind('blur',function(){
+		$('#deliveryTest').css('display','block');
 		$('#testForm').css({'position':'fixed','bottom':'0','left':0,'display':'block'});
 	});
 </script>
