@@ -224,12 +224,19 @@
 #sheet1.mui-popover {
 	bottom:10% !important;
 }
-.delaction{
-	width:0.26rem;
-	height:0.26rem;
+#sheet1 .cancle_action{
+	width:0.8rem;
+	height:0.8rem;
+	display: inline-block;
 	position:absolute;
 	right:0.32rem;
 	top:0.22rem;
+	text-align: right;
+}
+.delaction{
+	width:0.26rem;
+	height:0.26rem;
+
 }
 #sheet2.mui-popover{
 	bottom:45% !important;

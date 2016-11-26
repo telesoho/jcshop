@@ -34,6 +34,16 @@
 /*}*/
 #order_Total .mui-slider-item{
     overflow-y: scroll !important;
+
+}
+.mui-slider .mui-slider-group .mui-slider-item{
+    font-size: 14px;
+    position: relative;
+     display: inline-block;
+    width: 100%;
+    height: 100%;
+    vertical-align: top;
+    white-space: normal;
 }
 #order_Total .mui-control-content{
     padding:0;

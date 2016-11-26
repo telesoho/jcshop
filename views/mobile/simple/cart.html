@@ -56,7 +56,7 @@
 		<header>
 			<a href="http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=100000021&idx=1&sn=5fdb0e149001831242d616090c0ad549&chksm=6b23f0d65c5479c03816d4d8b04cec7635847914686a023dbc2a1d0e17f1012e7d4d9fee59bf&scene=0#wechat_redirect" class="classA"><img src="/views/mobile/skin/default/image/jmj/cart/cart-banner.png" alt="" style="width:100%"  /></a>
 		</header>
-		<div class="goodsInfo" v-for="item in newGoods">
+		<div class="goodsInfo" v-for="item in newGoods" :style="newGoods.length==1?bottom_check:''">
 			<div class="top">
 				<img src="/views/mobile/skin/default/image/jmj/cart/plane.png" alt="" style="width:0.37rem;height:0.37rem;"/>
 				<span>东京直邮</span>
@@ -96,9 +96,6 @@
 			</div>
 		</div>
 		<div class="cal">
-			<a href="{url:/site/index}" class="condition_price classA">
-				{{freeShipping}}
-			</a>
 			<div class="calPrice box">
 				<div class="text1">
 					<span class="txt">合计: </span>
@@ -106,6 +103,9 @@
 				</div>
 				<a  href="{url:/simple/cart2}"  class="toPay classA">结算({{infoMessage.count}})</a>
 			</div>
+			<a href="{url:/site/index}" class="condition_price classA">
+				{{freeShipping}}
+			</a>
 		</div>
 	</template>
 </div>
@@ -163,7 +163,8 @@
 			imgReduceA:'/views/mobile/skin/default/image/jmj/cart/ruduceable.png',
 			imgAdd:'/views/mobile/skin/default/image/jmj/cart/add.png',
 			free_ok:'',
-            state:true
+            state:true,
+			bottom_check:'margin-bottom:0.2rem'
 		},
 		computed: {
 			// 读取和设置
@@ -226,7 +227,6 @@
 	vm.getData();
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
-//		getCartInfo();
 		mui("body").on('tap',"#sum_count",function(){
 			window.location.href='index.php?controller=simple&action=cart2';
 		})

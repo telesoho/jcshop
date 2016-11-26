@@ -159,7 +159,7 @@
 			<div class="title">
 				输入优惠券
 			</div>
-			<a href="#sheet1"><img src="/views/mobile/skin/default/image/jmj/cart/action.png" alt="" class="delaction"/></a>
+			<a href="#sheet1" class="cancle_action"><img src="/views/mobile/skin/default/image/jmj/cart/action.png" alt="" class="delaction"/></a>
 			<div class="text">
 				<input type="number" v-model="promo.val"  id="promoInput" placeholder="请输入6位数字">
 			</div>
@@ -347,16 +347,21 @@
 				this_.state=true;
 				if(data.error){
 					this_.error=data.error;
-					mui("#sheet3").popover('toggle');
 					setTimeout(function(){
 						mui("#sheet3").popover('toggle');
-					},2000)
+						setTimeout(function(){
+							mui("#sheet3").popover('toggle');
+						},2000)
+					},500);
+
 				}else{
 					this_.infoMessage=data;
-					mui("#sheet2").popover('toggle');
 					setTimeout(function(){
 						mui("#sheet2").popover('toggle');
-					},2000)
+						setTimeout(function(){
+							mui("#sheet2").popover('toggle');
+						},2000)
+					},500);
 				}
 			}
 		});
