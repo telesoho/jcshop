@@ -201,12 +201,16 @@
 	color:#ff44a0;
 	font-size:0.3rem;
 }
+#sheet1 .mui-table-view .text{
+
+}
 #sheet1 .mui-table-view .text #promoInput{
 	border:0;
 	height:0.9rem;
 	margin-top:0.5rem;
 	width:4.49rem;
 	border-bottom:1px solid #d3d3d3;
+	font-size:0.3rem;
 	color:#3d4245;
 }
 #sheet1 .mui-table-view .button_s{
@@ -283,6 +287,9 @@
 	color:#ff44a0;
 	position:relative;
 	top:0.15rem;
+}
+.mui-popover .mui-table-view{
+	max-height:1000px !important;
 }
 
 

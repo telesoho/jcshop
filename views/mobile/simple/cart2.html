@@ -265,7 +265,7 @@
 				}
 			},
 			promoCho: function(){
-				mui("#sheet1").popover('toggle');
+				mui("#sheet1").popover('show');
 				document.getElementById("promoInput").focus();
 			},
 			proSub: function(){
@@ -274,12 +274,14 @@
 					this.state=false;
 					mui("#sheet1").popover('toggle');
 					getCouponInfo(self,this.promo.val);
+					mui('body').on('tap','.mui-backdrop',function(){
+						return false;
+					})
 				}
 			}
 		}
 	})
 	vm.getData();
-
 	var turn=true;
 	//	获取url传递过来的参数
 	function GetRequest() {
@@ -348,18 +350,18 @@
 				if(data.error){
 					this_.error=data.error;
 					setTimeout(function(){
-						mui("#sheet3").popover('toggle');
+						mui("#sheet3").popover('show');
 						setTimeout(function(){
-							mui("#sheet3").popover('toggle');
+							mui("#sheet3").popover('hide');
 						},2000)
 					},500);
 
 				}else{
 					this_.infoMessage=data;
 					setTimeout(function(){
-						mui("#sheet2").popover('toggle');
+						mui("#sheet2").popover('show');
 						setTimeout(function(){
-							mui("#sheet2").popover('toggle');
+							mui("#sheet2").popover('hide');
 						},2000)
 					},500);
 				}
