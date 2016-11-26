@@ -178,3 +178,6 @@
     /*width: 0.73rem !important;*/
     /*margin-top: 0.65rem;*/
 /*}*/
+.mui-slider .mui-segmented-control.mui-segmented-control-inverted ~ .mui-slider-group .mui-slider-item{
+    border-top:1px solid transparent !important;
+}

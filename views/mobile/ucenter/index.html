@@ -205,7 +205,7 @@
             $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
             document.location.href=this.href;
         });
-        mui('body').on("tap",'locationA',function(){
+        mui('body').on("tap",'.locationA',function(){
             window.location.href=this.href;
         })
     })
