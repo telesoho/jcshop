@@ -634,7 +634,7 @@ class wechat extends pluginBase
 			//自动回复
 			default:
 			{
-				$this->textReplay(<<< GUANZHU
+				$this->textReplay('Hey~亲爱的喵们！
  
 欢迎来到九猫家微信服务号
  
@@ -643,8 +643,7 @@ class wechat extends pluginBase
 立刻点击下方“九猫大百货”逛逛逛吧~！
  
 偷偷告诉你：添加九猫个人微信：jiumaojia001 加入九猫VIP群，群里不定期发放优惠券哦~
-GUANZHU
-            );
+');
 			}
 		}
 	}
