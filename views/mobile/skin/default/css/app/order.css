@@ -360,6 +360,11 @@
 }
 .goodsList .order_menu_list{
     border-bottom: 1px solid #eee;
+    margin-top:0.2rem !important;
+}
+.goodsList .order_menu_list .sellpri{
+    font-size: 0.28rem !important;
+    color: #f3026a !important;
 }
 .order_time{
     background:#fff;
@@ -384,7 +389,7 @@
     padding-left:0.6rem;
 }
 .order_buttom{
-    position:absolute;
+    position:fixed;
     bottom:0;
     left:0;
     width:100%;
