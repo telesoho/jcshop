@@ -551,6 +551,8 @@ class Simple extends IController
 					$order_amount 		= $goodsResult['orderAmountPrice'];
 					$real_amount 		= $goodsResult['final_sum'];
 			}
+			//实际邮费
+			$deliveryPrice 				= $goodsResult['deliveryPrice'];
 			//生成的订单数据
 			$dataArray = array(
 				'order_no'            => Order_Class::createOrderNum(),
@@ -726,7 +728,7 @@ class Simple extends IController
 		$this->payment     = $paymentName;
 		$this->paymentType = $paymentType;
 		$this->delivery    = $deliveryRow['name'];
-		$this->delivery_price    = $deliveryRow['first_price'];
+		$this->delivery_price    = $deliveryPrice;
 		$this->tax_title   = $tax_title;
 		$this->deliveryType= $deliveryRow['type'];
 		plugin::trigger('setCallback','/ucenter/order');
