@@ -437,7 +437,7 @@ class wechat extends pluginBase
 		if(isset($wechatUser['subscribe']) && $wechatUser['subscribe'] == 1)
 		{
 			//关注公众账号的处理写到这里...
-
+			
 		}
 		else
 		{
@@ -596,6 +596,8 @@ class wechat extends pluginBase
 			//开始订阅
 			case "subscribe":
 			{
+				$this->textReplay('啊啊啊啊啊
+');
 
 			}
 			break;
