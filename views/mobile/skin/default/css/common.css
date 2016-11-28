@@ -48,10 +48,14 @@ body{
 color:#ef4145 !important;}
 .flexbox{
   display:flex;
+  display:-webkit-flex;
+
 }
 .box{
   display: flex;
-  flex-wrap: nowrap;
+  display:-webkit-flex;
+
+  -webkit-flex-wrap: nowrap;
   justify-content: space-between;
 }
 .box1{
@@ -366,6 +370,7 @@ iframe{
   display:-webkit-flex;
   justify-content:flex-start;
   flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
   padding:1% 2% 0;
 }
 .mui-control-content .item{
@@ -487,8 +492,8 @@ input[type='search']{
 #modalid-searth .searth-content{
   width:100%;
   padding: 0 5% 6% 5%;
-  display:flex;
-  flex-flow: wrap;
+  display:-webkit-flex;
+  -webkit-flex-wrap: wrap;
   justify-content: flex-start;
 }
 #modalid-searth .searth-content a{

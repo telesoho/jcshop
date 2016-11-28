@@ -4,7 +4,7 @@ body{
 #searth_container .empty{
     display:-webkit-flex;
     -webkit-justify-content: center;
-    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
 }
 #searth_container .empty img{
     width:1.82rem;
