@@ -1554,4 +1554,32 @@ class Order extends IController implements adminAuthorization
         }
         $this->redirect('order_list');
     }
+    function order_shop(){
+        $this->shop_query = new IQuery('shop');
+        $page = IFilter::act(IReq::get('page'),'int');
+        $this->shop_query->page = isset($page) ? $page : 1;
+        $this->redirect('order_shop');
+    }
+    function order_shop_settlement(){
+        $model = new IQuery('model');
+        $data = $model->query('select * from iwebshop_user where id in (select b.id as user_id from iwebshop_shop as a left join iwebshop_user as b on b.shop_identify_id = a.identify_id)');
+        var_dump($data);
+        $shop_query = new IQuery('shop');
+        $user_query = new IQuery('user');
+//        $shop_data = $shop_query->find()[0];
+        $temp = '';
+        if ($shop_data){
+            $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+            $temp = explode('or',$temp,2)[1];
+        }
+//        $user_data = $user_query->find();
+//        echo $shop_query->getSql();
+//        var_dump($user_data);
+//        $this->shop_query->page = isset($page) ? $page : 1;
+//        $this->redirect('order_shop');
+    }
 }

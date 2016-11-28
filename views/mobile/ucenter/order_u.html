@@ -10,7 +10,8 @@
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/personalCenter.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/order.css" />
+	<script src="/views/mobile/javascript/vue.js"></script>
 </head>
 <body>
 <div id="loading">
@@ -37,82 +38,273 @@
 </div>
 <!--loading页结束-->
 <!--订单详情页面-->
-<div class="mui-content">
-	<div id="slider" class="mui-slider mui-fullscreen" style="background:#fff;">
+<div class="mui-content" id="order_Total">
+	<div id="slider" class="mui-slider mui-fullscreen" style="background:#eee;">
 		<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" style="height:0.9rem;">
 			<div class="mui-scroll">
-				<a class="order-control-item mui-control-item  mui-control-item0 mui-active" href="#itemmobile0">
+				<a class="order-control-item mui-control-item  mui-control-item0" href="#order_state0" onclick="saveStatus(0)">
 					全部订单
 					<span></span>
 				</a>
-				<a class="order-control-item mui-control-item mui-control-item1" href="#itemmobile1">
+				<a class="order-control-item mui-control-item mui-control-item1" href="#order_state1" onclick="saveStatus(1)">
 					待付款
 					<span></span>
 				</a>
-				<a class="order-control-item mui-control-item mui-control-item2" href="#itemmobile2">
+				<a class="order-control-item mui-control-item mui-control-item2" href="#order_state2" onclick="saveStatus(2)">
 					待发货
 					<span></span>
 				</a>
-				<a class="order-control-item mui-control-item mui-control-item3" href="#itemmobile3">
+				<a class="order-control-item mui-control-item mui-control-item3" href="#order_state3" onclick="saveStatus(3)">
 					待收货
 					<span></span>
 				</a>
-				<a class="order-control-item mui-control-item mui-control-item4" href="#itemmobile4">
+				<a class="order-control-item mui-control-item mui-control-item4" href="#order_state4" onclick="saveStatus(4)">
 					已完成订单
 					<span></span>
 				</a>
 			</div>
 		</div>
 		<div class="mui-slider-group">
-			<div id="itemmobile0" class="mui-slider-item mui-control-content mui-active">
-				<div id="scroll1" class="mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<div class="mui-table-view" id="main_panel0">
-							<div class="order_menu upline">
+			<div id="order_state0" :class="contentClass">
+				<div style="min-height:100%">
+					<template v-if="showMessage && orderInfo_new.state0.length==0" v-cloak>
+						<section class="nodata">
+							<div class="emptyCart">
+								<img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;"/>
+							</div>
+							<div class="content">
+								<span>~</span>
+								<span>暂无订单消息</span>
+								<span>~</span>
+							</div>
+						</section>
+					</template>
+					<div class="order_menu_list" v-for="item in orderInfo_new.state0" v-else v-cloak>
+						<div class="top box">
+							<div class="left">订单编号：{{item.order_no}}</div>
+							<div class="status">{{item.orderStatusText}}</div>
+						</div>
+						<a :href="item.url" class="locationA">
+							<div class="goodsList" v-for="goodsListItem in item.goodslist">
+								<div class="content">
+									<div class="left flexbox">
+										<img :src="goodsListItem.img" alt="" />
+									</div>
+									<div class="right">
+										<div class="name">{{goodsListItem.goods_array.name}}</div>
+										<div class="price">
+											<span class="sellprice">￥{{goodsListItem.real_price}}</span>
+											<span class="num">x{{goodsListItem.goods_nums}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+						<div class="orderToDo box">
+							<div class="left">应付金额：<span style="color:#f3026a;margin-left:0.1rem;">¥{{item.order_amount}}</span></div>
+							<div class="right" v-if="item.orderStatusVal==2">
+								<!--<a :href="item.button1Url" class="locationA button">{{item.button1}}</a>-->
+								<!--<a :href="item.button2Url" class="locationA button">{{item.button2}}</a>-->
+							</div>
+							<div class="right" v-if="item.orderStatusVal==3">
+								<!--<a href="#" class="button" @click="getDelivery(item.goodslist[0].delivery_id)">{{item.button1}}</a>-->
+								<!--<a :href="item.button2Url" class="locationA button">{{item.button2}}</a>-->
+							</div>
+							<div class="right" v-if="item.orderStatusVal==6">
+								<!--<a :href="item.button1Url" class="locationA button">{{item.button1}}</a>-->
 							</div>
 						</div>
 					</div>
+					<div style="height:0.2rem;background:#fff" v-if="showMessage && orderInfo_new.state0.length>0"></div>
+					<div style="height:0.4rem;background:#eee"></div>
 				</div>
 			</div>
-			<div id="itemmobile1" class="mui-slider-item mui-control-content ">
-				<div class="mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<div class="mui-table-view" id="main_panel1">
-							<div class="order_menu upline">
+			<div id="order_state1" :class="contentClass">
+				<div style="min-height:100%">
+					<template v-if="showMessage && orderInfo_new.state1.length==0" v-cloak>
+						<section class="nodata">
+							<div class="emptyCart">
+								<img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;"/>
+							</div>
+							<div class="content">
+								<span>~</span>
+								<span>购物车还是空的哦</span>
+								<span>~</span>
+							</div>
+						</section>
+					</template>
+					<div class="order_menu_list" v-for="item in orderInfo_new.state1"  v-else v-cloak>
+						<div class="top box">
+							<div class="left">订单编号：{{item.order_no}}</div>
+							<div class="status">{{item.orderStatusText}}</div>
+						</div>
+						<a :href="item.url" class="locationA">
+							<div class="goodsList" v-for="goodsListItem in item.goodslist">
+								<div class="content">
+									<div class="left flexbox">
+										<img :src="goodsListItem.img" alt="" />
+									</div>
+									<div class="right">
+										<div class="name">{{goodsListItem.goods_array.name}}</div>
+										<div class="price">
+											<span class="sellprice">￥{{goodsListItem.real_price}}</span>
+											<span class="num">x{{goodsListItem.goods_nums}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+						<div class="orderToDo box">
+							<div class="left">应付金额：<span style="color:#f3026a;margin-left:0.1rem;">¥{{item.order_amount}}</span></div>
+							<div class="right">
+								<!--<a :href="item.button1Url" class="locationA button">{{item.button1}}</a>-->
+								<!--<a :href="item.button2Url" class="locationA button">{{item.button2}}</a>-->
 							</div>
 						</div>
 					</div>
+					<div style="height:0.2rem;background:#fff" v-if="showMessage && orderInfo_new.state1.length>0"></div>
+					<div style="height:0.4rem;background:#eee"></div>
 				</div>
 			</div>
-			<div id="itemmobile2" class="mui-slider-item mui-control-content">
-				<div class="mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<div class="mui-table-view" id="main_panel2">
-							<div class="order_menu upline">
+			<div id="order_state2" :class="contentClass">
+				<div style="min-height:100%">
+					<template v-if="showMessage && orderInfo_new.state2.length==0" v-cloak>
+						<section class="nodata">
+							<div class="emptyCart">
+								<img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;"/>
+							</div>
+							<div class="content">
+								<span>~</span>
+								<span>暂无订单消息</span>
+								<span>~</span>
+							</div>
+						</section>
+					</template>
+					<div class="order_menu_list" v-for="item in orderInfo_new.state2" v-else v-cloak>
+						<div class="top box">
+							<div class="left">订单编号：{{item.order_no}}</div>
+							<div class="status">{{item.orderStatusText}}</div>
+						</div>
+						<a :href="item.url" class="locationA">
+							<div class="goodsList" v-for="goodsListItem in item.goodslist">
+								<div class="content">
+									<div class="left flexbox">
+										<img :src="goodsListItem.img" alt="" />
+									</div>
+									<div class="right">
+										<div class="name">{{goodsListItem.goods_array.name}}</div>
+										<div class="price">
+											<span class="sellprice">￥{{goodsListItem.real_price}}</span>
+											<span class="num">x{{goodsListItem.goods_nums}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+						<div class="orderToDo box">
+							<div class="left">应付金额：<span style="color:#f3026a;margin-left:0.1rem;">¥{{item.order_amount}}</span></div>
+							<div class="right">
 							</div>
 						</div>
 					</div>
+					<div style="height:0.2rem;background:#fff" v-if="showMessage && orderInfo_new.state2.length>0"></div>
+					<div style="height:0.4rem;background:#eee"></div>
+				</div>
+
+			</div>
+			<div id="order_state3" :class="contentClass">
+				<div  style="min-height:100%">
+					<template v-if="showMessage && orderInfo_new.state3.length==0" v-cloak>
+						<section class="nodata">
+							<div class="emptyCart">
+								<img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;"/>
+							</div>
+							<div class="content">
+								<span>~</span>
+								<span>暂无订单消息</span>
+								<span>~</span>
+							</div>
+						</section>
+					</template>
+					<div class="order_menu_list" v-for="item in orderInfo_new.state3" v-else v-cloak>
+						<div class="top box">
+							<div class="left">订单编号：{{item.order_no}}</div>
+							<div class="status">{{item.orderStatusText}}</div>
+						</div>
+						<a :href="item.url" class="locationA">
+							<div class="goodsList" v-for="goodsListItem in item.goodslist">
+								<div class="content">
+									<div class="left flexbox">
+										<img :src="goodsListItem.img" alt="" />
+									</div>
+									<div class="right">
+										<div class="name">{{goodsListItem.goods_array.name}}</div>
+										<div class="price">
+											<span class="sellprice">￥{{goodsListItem.real_price}}</span>
+											<span class="num">x{{goodsListItem.goods_nums}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+						<div class="orderToDo box">
+							<div class="left">应付金额：<span style="color:#f3026a;margin-left:0.1rem;">¥{{item.order_amount}}</span></div>
+							<div class="right">
+								<a href="#" class="button" @click="getDelivery(item.goodslist[0].delivery_id)">{{item.button1}}</a>
+								<!--<a :href="item.button2Url" class="locationA button">{{item.button2}}</a>-->
+							</div>
+						</div>
+					</div>
+					<div style="height:0.2rem;background:#fff" v-if="showMessage && orderInfo_new.state3.length>0"></div>
+					<div style="height:0.4rem;background:#eee"></div>
 				</div>
 			</div>
-			<div id="itemmobile3" class="mui-slider-item mui-control-content">
-				<div class="mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<div class="mui-table-view" id="main_panel3">
-							<div class="order_menu upline">
+			<div id="order_state4" :class="contentClass">
+				<div style="min-height:100%">
+					<template v-if="showMessage && orderInfo_new.state4.length==0" v-cloak>
+						<section class="nodata">
+							<div class="emptyCart">
+								<img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;"/>
+							</div>
+							<div class="content">
+								<span>~</span>
+								<span>暂无订单消息</span>
+								<span>~</span>
+							</div>
+						</section>
+					</template>
+					<div class="order_menu_list" v-for="item in orderInfo_new.state4"  v-else v-cloak>
+						<div class="top box">
+							<div class="left">订单编号：{{item.order_no}}</div>
+							<div class="status">{{item.orderStatusText}}</div>
+						</div>
+						<a :href="item.url" class="locationA">
+							<div class="goodsList" v-for="goodsListItem in item.goodslist">
+								<div class="content">
+									<div class="left flexbox">
+										<img :src="goodsListItem.img" alt="" />
+									</div>
+									<div class="right">
+										<div class="name">{{goodsListItem.goods_array.name}}</div>
+										<div class="price">
+											<span class="sellprice">￥{{goodsListItem.real_price}}</span>
+											<span class="num">x{{goodsListItem.goods_nums}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+						<div class="orderToDo box">
+							<div class="left">应付金额：<span style="color:#f3026a;margin-left:0.1rem;">¥{{item.order_amount}}</span></div>
+							<div class="right">
+								<a :href="item.button1Url" class="locationA button">{{item.button1}}</a>
 							</div>
 						</div>
 					</div>
+					<div style="height:0.2rem;background:#fff" v-if="showMessage && orderInfo_new.state4.length>0"></div>
+					<div style="height:0.4rem;background:#eee"></div>
 				</div>
-			</div>
-			<div id="itemmobile4" class="mui-slider-item mui-control-content">
-				<div class="mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<div class="mui-table-view" id="main_panel4">
-							<div class="order_menu upline">
-							</div>
-						</div>
-					</div>
-				</div>
+
 			</div>
 		</div>
 	</div>
@@ -121,7 +313,7 @@
 	<!--物流弹出菜单-->
 	<div id="logistics" class="mui-modal">
 		<header class="mui-bar mui-bar-nav">
-			<a href="#logistics" class="mui-icon mui-icon-left-nav mui-pull-left testClick1"></a>
+			<a href="#logistics" class="mui-icon mui-icon-left-nav mui-pull-left locationA"></a>
 			<h1 class="mui-title">物流详情</h1>
 		</header>
 		<div class="mui-content" style="height: 100%;" id="container">
@@ -129,206 +321,96 @@
 		</div>
 	</div>
 </section>
-<script id="orderSum" type="text/html">
-	<%if(state.length==0){%>
-		<div class="logoImg">
-			<img src="/views/mobile/skin/default/image/jmj/icon/cat.png" style="width:1.94rem;height:1.33rem" alt="" />
-		</div>
-		<div class="load_text">
-			<span>~</span>
-			<span>暂时还没有订单哦</span>
-			<span>~</span>
-		</div>
-	<%}else{%>
-	<!--存在该订单详情-->
-	<% for(var i=0; i<state.length; i++){%>
-	<% var order =state[i] %>
-	<div class="order_menu_list">
-		<div class="box">
-			<div class="orderNo"><%if(order.is_shop_checkout == 1){%>已结算&nbsp;&nbsp;<%}%>订单编号：<%=order.order_no%></div>
-			<div class="orderstate"><%=order.orderStatusText%></div>
-		</div>
-		<!--展示商品状态-->
-		<!--展示第1件商品-->
-		<a href="{url:/ucenter/order_detail}?id=<%=order.id%>" class="toOrderDetail">
-		<%if(order.goodslist){%>
-		<div class="ware_item box">
-			<div class="img">
-				<img src="<%=order.goodslist[0].img%>" alt="" style="width:1.6rem;height:1.6rem" />
-			</div>
-			<div class="content">
-				<div class="box">
-					<div class="name"><%=order.goodslist[0].goods_array.name%></div>
-					<div class="price">￥ <%=order.goodslist[0].goods_price%></div>
-				</div>
-				<div class="num mui-pull-right">x <%=order.goodslist[0].goods_nums%></div>
-			</div>
-		</div>
-		<!--展示剩余商品-->
-		<div class="last_ware">
-			<% for(var j=1; j<order.goodslist.length; j++){%>
-			<% var goodlist =order.goodslist[j] %>
-			<div class="ware_item box">
-				<div class="img">
-					<img src="<%=goodlist.img%>" alt="" style="width:1.6rem;height:1.6rem" />
-				</div>
-				<div class="content">
-					<div class="box">
-						<div class="name"><%=goodlist.goods_array.name%></div>
-						<div class="price">￥ <%=goodlist.goods_price%></div>
-					</div>
-					<div class="num mui-pull-right">x <%=goodlist.goods_nums%></div>
-				</div>
-			</div>
-			<%}%>
-		</div>
-		</a>
-		<div class="total">
-			共计<%=order.goodslist.length%>件商品  合计 <%=order.order_amount%>（含运费<%=order.real_freight%>元）
-		</div>
-		<%}%>
-		<!--不同的按钮状态-->
-		<%if(order.orderStatusVal==6){%>
-		<div class="action upline">
-			<!--<a href="#" class="button2 evaluate">评价</a>-->
-		</div>
-		<%}%>
-		<%if(order.orderStatusVal==2){%>
-		<div class="action upline">
-			<!--<a href="{url:/ucenter/order_status/order_id/<%=order.id%>/op/cancel}" class="button1 delOrder">取消订单</a>-->
-			<!--<a href="{url:/block/doPay/order_id/<%=order.id%>}" class="button2 evaluate">去付款</a>-->
-		</div>
-		<%}%>
-		<%if(order.orderStatusVal==3){%>
-		<div class="action upline">
-			<a href="#" class="button1 testClick" data-v="<%=order.goodslist[0].delivery_id %>">查看物流</a>
-			<!--<a href="{url:/ucenter/order_status/order_id/<%=order.id%>/op/confirm}" class="button2 evaluate">确认收货</a>-->
-		</div>
-		<%}%>
-	</div>
-	<%}%>
-	<!--存在商品结束-->
-	<%}%>
-</script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/mui.pullToRefresh.js"></script>
-<script src="/views/mobile/javascript/mui.pullToRefresh.material.js"></script>
 <script>
-	$(window).load(function(){
-		$("#loading").fadeOut(300);
-		//	ajax 请求
-		getOrder();
-		mui.init();
-		mui('body').on('tap','.orderToDetaile',function(){
-			document.location.href=this.href;
-		});
-		mui('body').on('tap','.toOrderDetail',function(){
-			document.location.href=this.href;
-		});
-		mui('body').on('tap','.testClick',function(){
-			var attr=this.getAttribute("data-v");
-			getDelivery(attr);
-			mui("#logistics").popover('show');
-			$('.mui-backdrop').hide();
-		});
-//	mui('body').on('tap','.testClick1',function(){
-//		mui("#logistics").popover('hide');
-//	});
-		mui('body').on('tap','.delOrder',function(){
-			document.location.href=this.href;
-		});
-		mui('body').on('tap','.button2',function(){
-			document.location.href=this.href;
-		});
-	})
-//	接收页面传过来的状态值
-	var Request = new Object();
-	Request = GetRequest();
-	var statusOrder=Request["status"];
-//	模拟高亮画面
-	$('.mui-control-item').removeClass('mui-active')
-	$('.mui-control-item'+statusOrder).addClass('mui-active');
-	$('.mui-slider-item').removeClass('mui-active')
-	$('#itemmobile'+statusOrder).addClass('mui-active');
-	(function($) {
-		var pageNum={
-			pageNum0:0,
-			pageNum1:0,
-			pageNum2:0,
-			pageNum3:0,
-			pageNum4:0
-		}
-		//阻尼系数
-		var deceleration = mui.os.ios?0.003:0.0009;
-		$('.mui-scroll-wrapper').scroll({
-			bounce: false,
-			indicators: true, //是否显示滚动条
-			deceleration:deceleration
-		});
-		$.ready(function() {
-			//循环初始化所有下拉刷新，上拉加载。
-			$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
-				$(pullRefreshEl).pullToRefresh({
-					down: {
-						callback: function() {
-							var self = this;
-							setTimeout(function() {
-								self.endPullDownToRefresh();
-							}, 1000);
-						}
-					},
-					up: {
-						callback: function() {
-							var self = this;
-							var div = self.element.querySelector('.mui-table-view');
-							var num=++pageNum['pageNum'+index];
-							 pullRefreshOrder(num,div)
-							self.endPullUpToRefresh();
-						}
-					}
+	var vm = new Vue({
+		el: '#order_Total',
+		data: {
+			showMessage:false,
+			orderInfo:{
+				state0:[],
+				state1:[],
+				state2:[],
+				state3:[],
+				state4:[]
+			},
+			contentClass:'mui-slider-item mui-control-content'
+		},
+		computed: {
+			nowStatus: function (){
+				return getItem('status')?getItem('status'):0;
+			},
+			// 读取和设置
+			orderInfo_new: function() {
+				this.orderInfo.state0.map(function(item){
+					item.url="/ucenter/order_detail?id="+item.id;
+					if(item.orderStatusVal==2){
+						item.button1='取消订单';
+						item.button1Url='/ucenter/order_status/order_id/'+item.id+'/op/cancel';
+						item.button2='去付款';
+						item.button2Url='/block/doPay/order_id/'+item.id;
+					};
+					if(item.orderStatusVal==3){
+						item.button1='查看物流';
+						item.button2='确认收货';
+						item.button2Url='/ucenter/order_status/order_id/'+item.id+'/op/confirm';
+					};
+					if(item.orderStatusVal==6){
+						item.button1='去评价';
+						item.button1Url='/site/error';
+					};
 				});
-			});
-			var createFragment = function(div, pageNum) {
-				var fragment = document.createDocumentFragment();
-				//	ajax 请求
-				mui.ajax('index.php?controller=apic&action=order_list',{
-					dataType:'json',//服务器返回json格式数据
-					type:'get',//HTTP请求类型
-					timeout:10000,//超时时间设置为10秒；
-					success:function(data){
-						var html1 = template('test',data);
-						fragment.innerHTML = html1;
-						return fragment;
-					},
-					error:function(xhr,type,errorThrown){
-						//异常处理；
-						console.log(type);
-					}
+				this.orderInfo.state1.map(function(item){
+					item.url="/ucenter/order_detail?id="+item.id;
+					item.button1='取消订单';
+					item.button1Url='/ucenter/order_status/order_id/'+item.id+'/op/cancel';
+					item.button2='去付款';
+					item.button2Url='/block/doPay/order_id/'+item.id;
 				});
-
-			};
-		});
-	})(mui)
-//	获取url传递过来的参数
-	function GetRequest() {
-		var url = location.search; //获取url中"?"符后的字串
-		var theRequest = new Object();
-		if (url.indexOf("?") != -1) {
-			var str = url.substr(1);
-			strs = str.split("&");
-			for(var i = 0; i < strs.length; i ++) {
-				theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+				this.orderInfo.state3.map(function(item){
+					item.url="/ucenter/order_detail?id="+item.id;
+					item.button1='查看物流';
+					item.button2='确认收货';
+					item.button2Url='/ucenter/order_status/order_id/'+item.id+'/op/confirm';
+				});
+				this.orderInfo.state4.map(function(item){
+					item.url="/ucenter/order_detail?id="+item.id;
+					item.button1='去评价';
+					item.button1Url='/site/error';
+				});
+				return  this.orderInfo;
+			}
+		},
+		mounted:function() {
+			$(".mui-control-item").removeClass('mui-active');
+			$(".mui-control-item"+this.nowStatus).addClass('mui-active');
+			$(".mui-slider-item").removeClass('mui-active');
+			$("#order_state"+this.nowStatus).addClass('mui-active');
+		},
+		methods: {
+			getData: function () {
+				var self = this;
+				getOrder(self);
+			},
+			getDelivery: function(eid){
+				Delivery(eid);
+				mui("#logistics").popover('show');
+				$('.mui-backdrop').hide();
 			}
 		}
-		return theRequest;
-	}
-//	下拉刷新加载项目
-	function pullRefreshOrder(num,div){
-
-
-	}
+	})
+	vm.getData();
+	$(window).load(function(){
+		$("#loading").fadeOut(300);
+		mui('body').on('tap','.locationA',function(){
+			document.location.href=this.href;
+		});
+		mui('body').on('tap','.mui-control-item',function(){
+			this.click();
+		});
+	})
 	//快递跟踪
 	function freightLine(doc_id){
 		mui('.mui-popover').popover('toggle',document.getElementById("logistics_all"));
@@ -336,7 +418,7 @@
 		urlVal = urlVal.replace("@id@", doc_id);
 //		window.location.href=urlVal;
 	}
-	function getDelivery(id){
+	function Delivery(id){
 		//获取物流信息
 		var urlVal = "{url:/block/freight/id/@id@}";
 		urlVal = urlVal.replace("@id@", id);
@@ -346,26 +428,35 @@
 			document.getElementById("container").innerHTML=responseHtml;
 		})
 	}
-	function getOrder(){
-		mui.ajax('index.php?controller=apic&action=order_list',{
+	function getOrder(self){
+		mui.ajax('/apic/order_list',{
 			dataType:'json',//服务器返回json格式数据
 			type:'get',//HTTP请求类型
-			data:{'type':'u'},
 			timeout:10000,//超时时间设置为10秒；
 			success:function(data){
+				self.showMessage=true;
+				self.orderInfo=data;
 				console.log(data);
-				var dat={}
-				for(var i=0;i<5;i++){
-					dat[i]={};
-					dat[i]['state']=data['state'+i];
-					$('#main_panel'+i).append(template('orderSum', dat[i]));
-				}
 			},
 			error:function(xhr,type,errorThrown){
 				//异常处理；
 				console.log(type);
 			}
 		});
+	}
+	//本地缓存函数
+	function setItem(key,value){
+		var val=JSON.stringify(value)?JSON.stringify(value):[];
+		window.localStorage.setItem(key,val);
+	}
+	function getItem(key){
+		var getter= window.localStorage.getItem(key);
+		return JSON.parse(getter);
+	}
+	function saveStatus(num){
+		setItem('status',num);
+//		$(".mui-slider-item").removeClass('mui-active');
+//		$("#order_state"+this.nowStatus).addClass('mui-active');
 	}
 </script>
 </body>

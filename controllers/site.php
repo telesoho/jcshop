@@ -28,7 +28,7 @@ class Site extends IController
 
 	function index()
 	{
-	    if ($this->user['user_id']){
+        if ($this->user['user_id']){
 	        $user_own_shop_data = $this->get_user_own_shop_data();
             if (!empty($user_own_shop_data)){
                 ISession::set('shop_name',$user_own_shop_data['name']);

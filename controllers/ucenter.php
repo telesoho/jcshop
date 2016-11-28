@@ -1005,7 +1005,7 @@ class Ucenter extends IController implements userAuthorization
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
         $shop_data = $shop_query->find()[0];
 //        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
-        $shop_data['identify_qrcode'] = 'http://192.168.0.16:8080/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
+        $shop_data['identify_qrcode'] = 'http://192.168.0.13:8080/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
         $this->shop_data = $shop_data;
 //        var_dump($this->shop_data);
         $this->redirect('shop_index');
@@ -1014,7 +1014,7 @@ class Ucenter extends IController implements userAuthorization
         $identify_id = IFilter::act(IReq::get('identify_id'),'int');
         $qrCode = new QrCode();
         $qrCode
-            ->setText('http://192.168.0.16:8080/?iid=' . $identify_id)
+            ->setText('http://192.168.0.13:8080/?iid=' . $identify_id)
 //            ->setText(IWeb::$app->config['image_host'] . '?iid=' . $identify_id)
             ->setSize(150)
             ->setPadding(10)
@@ -1036,7 +1036,7 @@ class Ucenter extends IController implements userAuthorization
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
         $user_shop_data = $shop_query->find()[0];
 //        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
-        $user_shop_data['identify_qrcode'] = 'http://192.168.0.16:8080/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
+        $user_shop_data['identify_qrcode'] = 'http://192.168.0.13:8080/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
         $this->user_shop_data = $user_shop_data;
         if ($this->user_shop_data){
 
