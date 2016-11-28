@@ -146,6 +146,7 @@ input[type='search']{
     -webkit-align-items: center;
     -webkit-justify-content: center;
     flex-wrap:wrap ;
+    -webkit-flex-wrap: wrap;
 }
 .categroyHot .title .top{
     margin-top:0.1rem;
@@ -223,6 +224,7 @@ input[type='search']{
     -webkit-align-items: center;
     -webkit-justify-content: center;
     flex-wrap:wrap ;
+    -webkit-flex-wrap: wrap;
 }
 .relateBrand .title .top{
     margin-top:0.1rem;
@@ -254,6 +256,7 @@ input[type='search']{
     display: -webkit-flex;
     -webkit-justify-content: flex-start;
     flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
 
 }
 /*.relateBrand .banner a{*/
@@ -302,6 +305,7 @@ input[type='search']{
     display: -webkit-flex;
     -webkit-justify-content:space-between;
     flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
     margin:0.12rem;
 }
 .prolistItem .product .locationA{
@@ -356,6 +360,8 @@ input[type='search']{
     display:flex;
     justify-content:flex-start;
     flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+
 }
 #relate_product .content .item{
     margin-left:1.5%;
