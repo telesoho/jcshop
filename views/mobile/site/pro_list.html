@@ -344,7 +344,7 @@
 			limit=50 
 			order=m.id desc}
 		<div class="item">
-			<a href="{url:/site/products?id=$item['id']}"  class="locationA"><div class="img underline"><img dataimg="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" /></div>
+			<a href="{url:/site/products?id=$item['id']}"  class="locationA"><div class="img"><img dataimg="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" /></div>
 				<div class="name">{$item['name']}</div>
 				<div class="box">
 					<div class="sellprice price">¥{$item['sell_price']}</div>
