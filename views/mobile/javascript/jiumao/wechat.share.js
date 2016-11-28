@@ -26,7 +26,7 @@ wx.ready(function(){
     //发送到朋友圈
     wx.onMenuShareTimeline({
         title       : wechat_share.title, // 分享标题
-        link        : wechat_share.desc, // 分享链接
+        link        : '', // 分享链接
         imgUrl      : wechat_share.imgUrl, // 分享图标
         success     : function () {
             // 用户确认分享后执行的回调函数
