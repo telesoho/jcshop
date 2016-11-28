@@ -1558,31 +1558,76 @@ class Order extends IController implements adminAuthorization
         $this->redirect('order_list');
     }
     function order_shop(){
-        $this->shop_query = new IQuery('shop');
+//        $this->shop_query = new IQuery('shop');
+        $this->shop_query = new IQuery('shop as a');
+        $this->shop_query->join = 'left join  shop_category as b on a.category_id = b.id';
+        $this->shop_query->fields = 'a.*,b.name as category_name, b.rebate';
+
         $page = IFilter::act(IReq::get('page'),'int');
-        $this->shop_query->page = isset($page) ? $page : 1;
+        $this->shop_query->page = !empty($page) ? $page : 1;
+//        $shop_query->find();
         $this->redirect('order_shop');
     }
     function order_shop_settlement(){
+        $id = IFilter::act(IReq::get('id'),'int');
         $model = new IQuery('model');
-        $data = $model->query('select * from iwebshop_user where id in (select b.id as user_id from iwebshop_shop as a left join iwebshop_user as b on b.shop_identify_id = a.identify_id)');
-        var_dump($data);
+        $user_data = $model->query('select * from iwebshop_user where id in (select b.id as user_id from iwebshop_shop as a left join iwebshop_user as b on b.shop_identify_id = a.identify_id where a.id = '.$id.' )');
         $shop_query = new IQuery('shop');
-        $user_query = new IQuery('user');
-//        $shop_data = $shop_query->find()[0];
+        $shop_query->where = 'id = ' . $id;
+        $this->shop_data = $shop_query->find()[0];
         $temp = '';
-        if ($shop_data){
-            $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
-            $user_data = $user_query->find();
-            foreach ($user_data as $key=>$value){
-                $temp .= ' or user_id = ' . $value['id'];
-            }
-            $temp = explode('or',$temp,2)[1];
+        foreach ($user_data as $key=>$value){
+            $temp .= ' or user_id = ' . $value['id'];
         }
-//        $user_data = $user_query->find();
-//        echo $shop_query->getSql();
-//        var_dump($user_data);
-//        $this->shop_query->page = isset($page) ? $page : 1;
-//        $this->redirect('order_shop');
+        $temp = explode('or',$temp,2)[1];
+        $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
+        $ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval); // 已完成
+        $this->order_data = $ret->find();
+        $this->redirect('order_shop_settlement');
+    }
+    function order_shop_category(){
+        $shop_category_query = new IQuery('shop_category');
+        $shop_category_query->page = !empty($page) ? $page : 1;
+        $this->shop_category_data = $shop_category_query->find();
+        $page = IFilter::act(IReq::get('page'),'int');
+        $this->shop_category_pagebar = $shop_category_query->getPageBar();
+        $this->redirect('order_shop_category');
+    }
+    function order_add_shop(){
+        $nums = IFilter::act(IReq::get('nums'),'int');
+        $shop_model = new IModel('shop');
+        $this->shop_category_query = new IQuery('shop_category');
+        $count = $shop_model->get_count('');
+        if (!empty($nums)){
+            $shop_model = new IModel('shop');
+            $name = IFilter::act(IReq::get('name'),'string');
+            $address = IFilter::act(IReq::get('address'),'string');
+            $category_id = IFilter::act(IReq::get('category_id'),'string');
+//            var_dump($category_id);exit();
+            for ($i=1;$i<=$nums;$i++){
+                $shop_model->setData(['name'=>$name . ($count + $i),'register_time'=>date('Y-m-d H:i:s') ,'address'=>$address,'identify_id'=>$i . rand(1000, 9999) . date('is',time()),'category_id'=>$category_id]);
+                $ret = $shop_model->add();
+                if ($ret){
+                    continue;
+                } else {
+                    return;
+                }
+            }
+            $this->redirect('order_shop');
+        }
+        $this->redirect('order_add_shop');
+    }
+    function order_add_shop_category(){
+        $name = IFilter::act(IReq::get('name'),'string');
+        $rebate = IFilter::act(IReq::get('rebate'),'string');
+        $shop_category_model = new IModel('shop_category');
+        $shop_category_model->setData(['name'=>$name,'rebate'=>$rebate]);
+        if (!empty($name) && !empty($rebate)){
+            $ret = $shop_category_model->add();
+            if ($ret){
+                $this->redirect('order_shop_category');
+            }
+        };
+        $this->redirect('order_add_shop_category');
     }
 }

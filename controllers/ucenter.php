@@ -1004,8 +1004,8 @@ class Ucenter extends IController implements userAuthorization
         $shop_query = new IQuery('shop');
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
         $shop_data = $shop_query->find()[0];
-//        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
-        $shop_data['identify_qrcode'] = 'http://192.168.0.13:8080/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
+        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
+//        $shop_data['identify_qrcode'] = 'http://192.168.0.13:8080/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
         $this->shop_data = $shop_data;
 //        var_dump($this->shop_data);
         $this->redirect('shop_index');
@@ -1014,8 +1014,8 @@ class Ucenter extends IController implements userAuthorization
         $identify_id = IFilter::act(IReq::get('identify_id'),'int');
         $qrCode = new QrCode();
         $qrCode
-            ->setText('http://192.168.0.13:8080/?iid=' . $identify_id)
-//            ->setText(IWeb::$app->config['image_host'] . '?iid=' . $identify_id)
+//            ->setText('http://192.168.0.13:8080/?iid=' . $identify_id)
+            ->setText(IWeb::$app->config['image_host'] . '?iid=' . $identify_id)
             ->setSize(150)
             ->setPadding(10)
             ->setErrorCorrection('high')
@@ -1035,8 +1035,8 @@ class Ucenter extends IController implements userAuthorization
         $shop_query = new IQuery('shop');
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
         $user_shop_data = $shop_query->find()[0];
-//        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
-        $user_shop_data['identify_qrcode'] = 'http://192.168.0.13:8080/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
+        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
+//        $user_shop_data['identify_qrcode'] = 'http://192.168.0.13:8080/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
         $this->user_shop_data = $user_shop_data;
         if ($this->user_shop_data){
 
@@ -1069,11 +1069,11 @@ class Ucenter extends IController implements userAuthorization
             $temp = explode('or',$temp,2)[1];
         }
         $temp ='(' . $temp . ')';
-        $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1';
+        $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
         $this->last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
-        $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )';
+        $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
         $this->complete_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval)->find(); // 已完成
-        $date_interval = ' and DATE_FORMAT( create_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )';
+        $date_interval = ' and DATE_FORMAT( create_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
         $this->distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
 //        var_dump($this->distribute_order_ret);
         $this->redirect('shop_amount_tobe_booked');
