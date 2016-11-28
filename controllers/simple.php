@@ -50,7 +50,7 @@ class Simple extends IController
     	if(is_array($result))
     	{
 			//自定义跳转页面
-			$this->redirect('/site/success?message='.urlencode("注册成功！"));
+			$this->redirect('/ucenter/index'.urlencode("注册成功！"));
     	}
     	else
     	{
