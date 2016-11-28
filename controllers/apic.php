@@ -173,11 +173,13 @@ class Apic extends IController
 	        	//折扣券
 	        	case 1 :
 	        		$data['sum'] 		= $data['sum'] * $ticket_data[0]['ratio'];
+	        		$data['final_sum'] 	= $data['sum'];
 	        		$msg 				= '已为您优惠'.($ticket_data[0]['ratio']*10).'折';
 	        		break;
 	        		//抵扣券
 	        	case 2 :
 	        		$data['sum'] 		= $data['sum'] - $ticket_data[0]['money'];
+	        		$data['final_sum'] 	= $data['sum'];
 	        		$msg 				= '已为您优惠'.$ticket_data[0]['money'].'元';
 	        		break;
 	        }
@@ -188,7 +190,7 @@ class Apic extends IController
         $promotion_query 		= new IQuery("promotion");
         $promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
         $condition_price 		= $promotion_query->find()[0]['condition'];
-        if ($data['sum'] > $condition_price){
+        if ($data['sum'] >= $condition_price){
             $data['delivery_money'] 	= 0;
         } else {
         	//首重价格
