@@ -8,8 +8,8 @@
 	background:#fff;
 	height:1.57rem;
 	position:relative;
-	display: flex;
-	align-items: center;
+	display: -webkit-flex;
+	-webkit-align-items: center;
 }
 .order_addAddr .topImage{
 	position:absolute;

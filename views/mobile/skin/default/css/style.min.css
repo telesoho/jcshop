@@ -166,13 +166,14 @@ sit_products.css更改
     margin-right:0.21rem;
 }
 .newAddrSub{
+    width:100%;
     margin-top:2.01rem;
-    display:flex;
-    align-items: center;
-    justify-content: center;
+    display:-webkit-flex;
+    -webkit-align-items: center;
+    -webkit-justify-content: center;
 }
 .newAddrSub #submitaddr{
-    border:0.02rem solid #ff4aa0;
+    border:1px solid #ff4aa0;
     border-radius:0.1rem;
     width:4.96rem;
     height:0.76rem;
