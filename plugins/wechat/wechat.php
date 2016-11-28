@@ -634,7 +634,7 @@ class wechat extends pluginBase
 			//自动回复
 			default:
 			{
-				$this->textReplay('Hey~亲爱的喵们！
+				$this->textReplay('Hey~亲爱的喵们！ 
  
 欢迎来到九猫家微信服务号
  
