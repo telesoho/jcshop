@@ -1464,7 +1464,6 @@ class Order extends IController implements adminAuthorization
 	{
 		//搜索条件
 		$search = IFilter::act(IReq::get('search'),'strict');
-		
 		//条件筛选处理
 		list($join,$where) = order_class::getSearchCondition($search);
 		//拼接sql
@@ -1472,9 +1471,13 @@ class Order extends IController implements adminAuthorization
 		$orderHandle->order  = "o.id desc";
 		$orderHandle->fields = "o.*,d.name as distribute_name,p.name as payment_name";
 		$orderHandle->join   = $join;
+
+		//下单时间
+		if(!empty($_GET['create_time_start'])) $where .= " and o.create_time >= '".$_GET['create_time_start']." 00:00:00'";
+		if(!empty($_GET['create_time_end'])) $where .= " and o.create_time <= '".$_GET['create_time_end']." 23:59:59'";
 		$orderHandle->where  = $where;
 		$orderList = $orderHandle->find();
-
+		
 		$strTable ='<table width="500" border="1">';
 		$strTable .= '<tr>';
 		$strTable .= '<td style="text-align:center;font-size:12px;width:120px;">订单编号</td>';

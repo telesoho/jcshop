@@ -49,7 +49,9 @@
 				<option value="order_no">订单号</option>
 				<option value="seller_name">商户真实名称</option>
 			</select>
-			<input class="small" name="search[keywords]" type="text" value="" />
+			下单：<input class="small" type="text" name="create_time_start" id="create_time_start" onfocus="WdatePicker()" value="" placeholder="开始时间" style="width:70px;"/>-
+			<input class="small" type="text" name="create_time_end" id="create_time_end" onfocus="WdatePicker()" value="" placeholder="结束时间" style="width:70px;"//>
+			<input class="small" name="search[keywords]" type="text" value="" placeholder="搜索关键词"/>
 			<button class="btn" type="button" onclick='initSearchbar(1)'><span class="add">更 多</span></button>
 			<button class="btn" type="submit"  onclick='changeAction(false)'><span class="sel">筛 选</span></button>
 			<button class="btn" onclick='changeAction(true)'><span class="sel">导出Excel</span></button>
@@ -63,8 +65,7 @@
 	<div class="searchbar" id="adv_searchbar" style="display:none;">
 		订单总额：<input type="text" class="tiny" name="order_amount_start" id="order_amount_start" pattern="float" value="" />-
 		<input type="text" class="tiny" name="order_amount_end" id="order_amount_end" pattern="float" value="" />
-		下单：<input class="small" type="text" name="create_time_start" id="create_time_start" onfocus="WdatePicker()" value="" />-
-		<input class="small" type="text" name="create_time_end" id="create_time_end" onfocus="WdatePicker()" value="" />
+		
 		发货：<input class="small" type="text" name="send_time_start" id="send_time_start" onfocus="WdatePicker()" value="" />-
 		<input class="small" type="text" name="send_time_end" id="send_time_end" onfocus="WdatePicker()" value="" />
 		完成：<input class="small" type="text" name="completion_time_start" id="completion_time_start" onfocus="WdatePicker()" value="" />-

@@ -183,14 +183,21 @@ class Apic extends IController
 	        }
         }
         
+        /* 计算邮费 */
         //满包邮
         $promotion_query 		= new IQuery("promotion");
         $promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
         $condition_price 		= $promotion_query->find()[0]['condition'];
         if ($data['sum'] > $condition_price){
-            $data['delivery'][0]['first_price'] = '0';
+            $data['delivery_money'] 	= 0;
         } else {
-            $data['sum'] += $data['delivery'][0]['first_price'];
+        	//首重价格
+        	$data['delivery_money'] 	= $data['delivery'][0]['first_price'];
+        	//续重价格
+        	if($data['weight'] > $data['delivery'][0]['first_weight']){
+        		$data['delivery_money'] += ceil(($data['weight']-$data['delivery'][0]['first_weight'])/$data['delivery'][0]['second_weight'])*$data['delivery'][0]['second_price'];
+        	}
+            $data['sum'] += $data['delivery_money'];
         }
 
         //满减规则

@@ -45,7 +45,7 @@
 			<div class="order_addAddr">
 				<div class="topImage"></div>
 				<div class="img">
-					<img src="/views/mobile/skin/default/image/jmj/icon/add.png" alt="" />
+					<img src="/views/mobile/skin/default/image/jmj/icon/add.png" alt="" style="width:0.62rem;height:0.62rem;margin-left:0.2rem" />
 				</div>
 				<div class="tex">添加收货地址</div>
 				<div class="bottomImage"></div>
@@ -102,7 +102,7 @@
 		</div>
 		<div class="box totalItemCal" style="width:100%">
 			<div class="left">订单邮费</div>
-			<div class="right">￥ {{infoMessage.delivery[0].first_price}}</div>
+			<div class="right">￥ {{infoMessage.delivery_money}}</div>
 		</div>
 		<div class="box totalItemCal" style="width:100%">
 			<div class="left">优惠券</div>
@@ -134,7 +134,10 @@
 		<input type='hidden' name='direct_num'  v-model="infoMessage.num" />
 		<input type='hidden' name='direct_promo'  v-model="infoMessage.promo" />
 		<input type='hidden' name='direct_active_id'  v-model="infoMessage.active_id" />
-		<input name="radio_address" type="hidden"  v-model="infoMessage.addressList[0].id" />
+		<!--解决没有收获地址的bug-->
+		<template v-if="infoMessage.addressList.length>0">
+			<input name="radio_address" type="hidden"  v-model="infoMessage.addressList[0].id" />
+		</template>
 		<input type="hidden" name="delivery_id" v-model="infoMessage.delivery[0].id" />
 		<input type='hidden'  name='accept_time' value='任意'  />
 		<input name="payment"  type="hidden"  v-model="infoMessage.payment[0].id" />
@@ -308,6 +311,7 @@
 			timeout:10000,//超时时间设置为10秒；
 			success:function(data){
 				//服务器返回响应，根据响应结果，分析是否登录成功；
+				console.log(data);
 				self.infoMessage=data;
 				self.showMessage=true;
 				if(data.payment==''){
@@ -371,7 +375,8 @@
 	}
 	//检查是否有地址
 	function checkSubmit(obj) {
-		if (obj.accept_name!='') {
+		console.log(obj);
+		if (obj.length!=0) {
 			document.getElementById("testForm").submit();
 		} else {
 			var btnArray = ['取消', '确定'];

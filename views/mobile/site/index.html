@@ -7,6 +7,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
     <title>九猫家<?php echo !empty(ISession::get('shop_name')) ? '的' . ISession::get('shop_name') : ''?>商城</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>九猫大百货</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
@@ -368,7 +372,7 @@ $(window).bind('scroll', function() {
 
 
 <!-- 微信分享 -->
-<?php
+<?php 
 if(IClient::isWechat() == true){
     require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
     $this->wechat = new wechat();
