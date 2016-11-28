@@ -39,28 +39,41 @@
         </div>
     </div>
 </div>
+<!--loading页结束-->
+<!--<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">个人中心</h1>
+</header>-->
+<section id="user_Info">
+</section>
+<section id="section-user-info">
+    <ul class="mui-table-view" style="margin-top: 1.1em">
+        <li class="mui-table-view-cell">
+            <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />账户余额&nbsp;{$this->amount_available}
+        </li>
+    </ul>
+    <ul class="mui-table-view" style="margin-top: 1.1em">
+        <li class="mui-table-view-cell">
+            <a class="mui-navigate-right" href="{url:/ucenter/shop_amount_tobe_booked}">
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />待入账金额&nbsp;{$this->amount_tobe_booked}
+            </a>
+        </li>
+    </ul>
+    <ul class="mui-table-view" style="margin-top: 1.1em">
+        <li class="mui-table-view-cell">
+            <a class="mui-navigate-right" href="{url:/ucenter/shop_accumulated_income}">
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />累计收益
+            </a>
+        </li>
+    </ul>
 
-<p style="text-align: center;padding-bottom: 2em;padding-top: 2em">商铺信息</p>
-<hr>
-<form action="/ucenter/shop_register" method="post">
-    <div class="mui-input-row">
-        <label>店铺名称</label>
-        <input type="text" class="mui-input-clear" name="name" placeholder="请输入店铺名称" value="{$this->shop_data['name']}">
-    </div>
-    <div class="mui-input-row">
-        <label>地址</label>
-        <input type="text" class="mui-input-clear" name="address" placeholder="请输入地址" value="{$this->shop_data['address']}">
-    </div>
-    <div class="mui-input-row">
+    <p style="text-align: center;margin-top: 1.1em">
         <label>店铺二维码</label>
-        <img src="{$this->shop_data['identify_qrcode']}">
-    </div>
-    <div class="mui-button-row">
-        <!--<button type="submit" class="mui-btn mui-btn-info" >确认</button>-->
-        <a href="{url:/ucenter/index}" class="mui-btn mui-btn-danger" >返回</a>
-    </div>
-</form>
-
+    </p>
+    <p style="text-align: center;margin-top: 1.1em;margin-bottom: 5.1em">
+        <img src="{$this->user_shop_data['identify_qrcode']}">
+    </p>
+</section>
 <footer>
     <nav class="mui-bar mui-bar-tab"  style="z-index:25">
         <a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">
@@ -109,7 +122,7 @@
     <%if(username==null){%>
     <div class="userName">九猫家的小小猫</div>
     <%}else{%>
-    <div class="userName"><%=username %></div>
+    <div class="userName">{$this->user_shop_data['name']}&nbsp;&nbsp;&nbsp;&nbsp;收益信息</div>
     <%}%>
 
 

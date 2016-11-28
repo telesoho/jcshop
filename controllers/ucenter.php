@@ -37,44 +37,37 @@ class Ucenter extends IController implements userAuthorization
 			"msgNum"     => $msgNum,
 			"propData"   => $propData,
 		));
-        //
+
         $user_query = new IQuery('user as a');
         $user_query->join = 'right join shop as b on a.id = b.own_id';
         $user_query->where = 'a.id = ' . $this->user['user_id'];
         $this->user_shop_data = $user_query->find();
-        if ($this->user_shop_data){
-
-            //待入账金额
-            $shop_query = new IQuery('shop');
-            $user_query = new IQuery('user');
-            $shop_query->where = 'own_id = ' . $this->user['user_id'];
-            $shop_data = $shop_query->find()[0];
-            $temp = '( user_id = ' . $this->user['user_id'];
-            if ($shop_data){
-                $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
-                $user_data = $user_query->find();
-                foreach ($user_data as $key=>$value){
-                    $temp .= ' or user_id = ' . $value['id'];
-                }
-            }
-            $temp .= ')';
-            $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
-            $order_query = new IQuery('order');
-            $order_query->where = $where;
-            $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
-            $this->amount_tobe_booked = $order_query->find()[0]['amount_tobe_booked'];
-            $this->amount_tobe_booked = empty($this->amount_tobe_booked) ? '0.00' : $this->amount_tobe_booked;
-            //账户余额
-            $shop_query = new IQuery('shop');
-            $shop_query->where = 'own_id = ' . $this->user['user_id'];
-            $this->amount_available = $shop_query->find()[0]['amount_available'];
-        }
-
-//        $compelte_data = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ')->find(); // 已完成
-//        var_dump($order_data);
 
         $this->initPayment();
         $this->redirect('index');
+    }
+    /*获取待ru'zhang*/
+    private function get_amount_tobe_booked(){
+        $shop_query = new IQuery('shop');
+        $user_query = new IQuery('user');
+        $shop_query->where = 'own_id = ' . $this->user['user_id'];
+        $shop_data = $shop_query->find()[0];
+        $temp = '( user_id = ' . $this->user['user_id'];
+        if ($shop_data){
+            $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+        }
+        $temp .= ')';
+        $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
+        $order_query = new IQuery('order');
+        $order_query->where = $where;
+        $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
+        $this->amount_tobe_booked = $order_query->find()[0]['amount_tobe_booked'];
+        $this->amount_tobe_booked = empty($this->amount_tobe_booked) ? '0.00' : $this->amount_tobe_booked;
+        return;
     }
 
 	//[用户头像]上传
@@ -130,6 +123,12 @@ class Ucenter extends IController implements userAuthorization
     {
         $this->initPayment();
         $this->redirect('order');
+
+    }
+    public function order_u()
+    {
+//        $this->initPayment();
+        $this->redirect('order_u');
 
     }
     /**
@@ -1005,7 +1004,8 @@ class Ucenter extends IController implements userAuthorization
         $shop_query = new IQuery('shop');
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
         $shop_data = $shop_query->find()[0];
-        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
+//        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
+        $shop_data['identify_qrcode'] = 'http://192.168.0.16:8080/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
         $this->shop_data = $shop_data;
 //        var_dump($this->shop_data);
         $this->redirect('shop_index');
@@ -1014,7 +1014,8 @@ class Ucenter extends IController implements userAuthorization
         $identify_id = IFilter::act(IReq::get('identify_id'),'int');
         $qrCode = new QrCode();
         $qrCode
-            ->setText(IWeb::$app->config['image_host'] . '?iid=' . $identify_id)
+            ->setText('http://192.168.0.16:8080/?iid=' . $identify_id)
+//            ->setText(IWeb::$app->config['image_host'] . '?iid=' . $identify_id)
             ->setSize(150)
             ->setPadding(10)
             ->setErrorCorrection('high')
@@ -1025,5 +1026,60 @@ class Ucenter extends IController implements userAuthorization
             ->setImageType(QrCode::IMAGE_TYPE_PNG);
         header('Content-Type: '.$qrCode->getContentType());
         $qrCode->render();
+    }
+    function account_amount(){
+
+    }
+    //收益
+    function shop_income(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'own_id = ' . $this->user['user_id'];
+        $user_shop_data = $shop_query->find()[0];
+//        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
+        $user_shop_data['identify_qrcode'] = 'http://192.168.0.16:8080/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
+        $this->user_shop_data = $user_shop_data;
+        if ($this->user_shop_data){
+
+            //待入账金额
+            $this->get_amount_tobe_booked();
+            //账户余额
+            $shop_query = new IQuery('shop');
+            $shop_query->where = 'own_id = ' . $this->user['user_id'];
+            $this->amount_available = $shop_query->find()[0]['amount_available'];
+        }
+        $this->redirect('shop_income');
+    }
+    //账户余额
+    function shop_balance(){
+        $this->redirect('shop_balance');
+    }
+    //待入账金额
+    function shop_amount_tobe_booked(){
+        $shop_query = new IQuery('shop');
+        $user_query = new IQuery('user');
+        $shop_query->where = 'own_id = ' . $this->user['user_id'];
+        $shop_data = $shop_query->find()[0];
+        $temp = '';
+        if ($shop_data){
+            $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+            $temp = explode('or',$temp,2)[1];
+        }
+        $temp ='(' . $temp . ')';
+        $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1';
+        $this->last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
+        $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )';
+        $this->complete_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval)->find(); // 已完成
+        $date_interval = ' and DATE_FORMAT( create_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )';
+        $this->distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
+//        var_dump($this->distribute_order_ret);
+        $this->redirect('shop_amount_tobe_booked');
+    }
+    //累计收益
+    function shop_accumulated_income(){
+        $this->redirect('shop_accumulated_income');
     }
 }

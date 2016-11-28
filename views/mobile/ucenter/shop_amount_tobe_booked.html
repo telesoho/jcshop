@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/personalCenter.css" />
-
+    
 </head>
 <body>
 <div id="loading">
@@ -39,28 +39,40 @@
         </div>
     </div>
 </div>
-
-<p style="text-align: center;padding-bottom: 2em;padding-top: 2em">商铺信息</p>
-<hr>
-<form action="/ucenter/shop_register" method="post">
-    <div class="mui-input-row">
-        <label>店铺名称</label>
-        <input type="text" class="mui-input-clear" name="name" placeholder="请输入店铺名称" value="{$this->shop_data['name']}">
-    </div>
-    <div class="mui-input-row">
-        <label>地址</label>
-        <input type="text" class="mui-input-clear" name="address" placeholder="请输入地址" value="{$this->shop_data['address']}">
-    </div>
-    <div class="mui-input-row">
-        <label>店铺二维码</label>
-        <img src="{$this->shop_data['identify_qrcode']}">
-    </div>
-    <div class="mui-button-row">
-        <!--<button type="submit" class="mui-btn mui-btn-info" >确认</button>-->
-        <a href="{url:/ucenter/index}" class="mui-btn mui-btn-danger" >返回</a>
-    </div>
-</form>
-
+    <section>
+        <ul class="myOrders mui-table-view" style="text-align: center">
+            <li class="mui-table-view-cell">
+                <h4><?php echo date('m',time())-1?>月份未完成</h4>
+            </li>
+        </ul>
+        <?php foreach($this->last_month_distribute_order_ret as $key=>$value){ ?>
+            <p>{$value['id']}</p>
+        <?php } ?>
+    </section>
+    <section>
+        <ul class="myOrders mui-table-view" style="text-align: center">
+            <li class="mui-table-view-cell">
+                <h4><?php echo date('m',time())?>月交易完成</h4>
+            </li>
+        </ul>
+        <?php foreach($this->complete_order_ret as $key=>$value){ ?>
+        <p>{$value['id']}</p>
+        <?php } ?>
+    </section>
+    <section>
+        <ul class="myOrders mui-table-view" style="text-align: center">
+            <li class="mui-table-view-cell">
+                <h4><?php echo date('m',time())?>月交易未完成</h4>
+            </li>
+        </ul>
+        <?php foreach($this->distribute_order_ret as $key=>$value){ ?>
+        <p>{$value['id']}</p>
+        <?php } ?>
+    </section>
+    <br>
+    <p style="text-align: center">
+        <a href="{url:/ucenter/shop_income}" class="mui-btn mui-btn-danger">返回</a>
+    </p>
 <footer>
     <nav class="mui-bar mui-bar-tab"  style="z-index:25">
         <a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">

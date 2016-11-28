@@ -141,8 +141,11 @@
 						{if:$item['seller_id']}
 						<a href="{url:/site/home/id/$item[seller_id]}" target="_blank"><img src="{skin:images/admin/seller_ico.png}" /></a>
 						{/if}
-
-						<a href="{url:/order/order_settlement/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_check.gif}" title="结算" />结算</a>
+						{if:Order_class::getOrderStatus($item) == 6}
+							{if:$item['is_shop_checkout']==='0'}
+							<a href="{url:/order/order_settlement/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_check.gif}" title="结算" />结算</a>
+							{/if}
+						{/if}
 
 					</td>
 				</tr>

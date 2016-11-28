@@ -29,30 +29,36 @@ class Site extends IController
 	function index()
 	{
 	    if ($this->user['user_id']){
-            $user_query = new IQuery('user as a');
-            $user_query->join = 'right join shop as b on a.id = b.own_id';
-            $user_query->where = 'a.id = ' . $this->user['user_id'];
-            $user_shop_data = $user_query->find()[0];
-        }
-        if ($user_shop_data){
-            ISession::set('shop_name',$user_shop_data['name']);
-            ISession::set('shop_identify_id',$user_shop_data['identify_id']);
-        } else {
-            $identify_id = IFilter::act(IReq::get('iid'),'int');
-            if ($identify_id){
-                $shop_query = new IQuery('shop');
-                $shop_query->where = 'identify_id = ' . $identify_id;
-                $this->shop_data = $shop_query->find()[0];
-                ISession::set('shop_name',$this->shop_data['name']);
-                ISession::set('shop_identify_id',$this->shop_data['identify_id']);
-                $shop_model = new IModel('shop');
-                $shop_model->setData(['own_id'=>$this->user['user_id']]);
-                $ret = $shop_model->update('identify_id='.$identify_id);
-                //            $user_query = new IQuery('user as a');
-                //            $user_query->join = 'left join shop as b on a.shop_id = b.identify_id';
-                //            $user_query->where = 'a.id = ' . $this->user['user_id'];
-                //            $user_query->fields = 'a.username as user_name,b.*';
-                //            $this->user_data = $user_query->find()[0];
+	        $user_own_shop_data = $this->get_user_own_shop_data();
+            if (!empty($user_own_shop_data)){
+                ISession::set('shop_name',$user_own_shop_data['name']);
+                ISession::set('shop_identify_id',$user_own_shop_data['identify_id']);
+            } else {
+                $user_rel_shop_data = $this->get_user_rel_shop_data();
+                if ($user_rel_shop_data){
+                    ISession::set('shop_name',$user_rel_shop_data['name']);
+                    ISession::set('shop_identify_id',$user_rel_shop_data['identify_id']);
+                } else {
+                    $identify_id = IFilter::act(IReq::get('iid'),'int');
+                    if ($identify_id){
+                        $shop_data = $this->get_shop_data_by_identify_id($identify_id);
+                        ISession::set('shop_name',$shop_data['name']);
+                        ISession::set('shop_identify_id',$shop_data['identify_id']);
+                        $if_shop_register = $this->if_shop_register($identify_id);
+                        if ($if_shop_register){
+
+                        } else {
+                            $shop_model = new IModel('shop');
+                            $shop_model->setData(['own_id'=>$this->user['user_id']]);
+                            $ret = $shop_model->update('identify_id='.$identify_id);
+                            if ($ret){
+                                $user_model = new IModel('user');
+                                $user_model->setData(['shop_identify_id' => $identify_id]);
+                                $user_model->update('id = ' . $this->user['user_id']);
+                            }
+                        }
+                    }
+                }
             }
         }
         //用户登陆
@@ -68,6 +74,37 @@ class Site extends IController
 //		$this->index_slide = Api::run('getBannerList');
 		$this->redirect('index');
 	}
+
+	private function get_user_own_shop_data(){
+        $user_query = new IQuery('user as a');
+        $user_query->join = 'right join shop as b on a.id = b.own_id';
+        $user_query->where = 'a.id = ' . $this->user['user_id'];
+        $user_shop_data = !empty($user_query->find()) ? $user_query->find()[0] : null;
+        return $user_shop_data;
+    }
+    private function get_user_rel_shop_data(){
+        $user_query = new IQuery('user as a');
+        $user_query->join = 'inner join shop as b on a.shop_identify_id = b.identify_id';
+        $user_query->where = 'a.id = ' . $this->user['user_id'];
+        $user_rel_shop_data = !empty($user_query->find()) ? $user_query->find()[0] : null;
+        return $user_rel_shop_data;
+    }
+    private function if_shop_register($identify_id){
+        $shop_query = new IQuery('shop as a');
+        $shop_query->join = 'inner join user as b on a.own_id = b.id';
+        $shop_query->where = 'identify_id = ' . $identify_id;
+        if (!empty($shop_query->find())){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    private function get_shop_data_by_identify_id($identify_id){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'identify_id = ' . $identify_id;
+        $shop_data = !empty($shop_query->find()) ? $shop_query->find()[0] : null;
+        return $shop_data;
+    }
 
 	//[首页]商品搜索
 	function search_list()

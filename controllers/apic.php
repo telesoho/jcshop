@@ -323,20 +323,19 @@ class Apic extends IController
             $user_query = new IQuery('user');
             $shop_query->where = 'own_id = ' . $this->user['user_id'];
             $shop_data = $shop_query->find()[0];
-            $temp = '(';
+            $temp = '';
             if ($shop_data){
                 $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
                 $user_data = $user_query->find();
                 foreach ($user_data as $key=>$value){
                     $temp .= ' or user_id = ' . $value['id'];
                 }
-                $temp = explode('or',$temp)[1];
+                $temp = explode('or',$temp,2)[1];
             }
         } else {
             $temp = 'user_id = ' . $this->user['user_id'];
         }
         $temp ='(' . $temp . ')';
-
 
         $ret0 = Api::run('getOrderList', $temp, 'pay_type != 0 and status != 3 and status != 4'); // 全部订单
         $ret1 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 1 and pay_type != 0'); // 待支付

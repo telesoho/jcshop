@@ -1535,19 +1535,22 @@ class Order extends IController implements adminAuthorization
         $order_id = IFilter::act(IReq::get('id'),'int');
         $order_model = new IModel('order');
         $real_amount = $order_model->getObj('id = ' . $order_id)['real_amount'];
+        $user_id = $order_model->getObj('id = ' . $order_id)['user_id'];
         $order_model->setData(['is_shop_checkout'=>1]);
         $ret = $order_model->update('id = ' . $order_id);
         if ($ret) {
             $user_shop_query = new IQuery('user as a');
             $user_shop_query->join = 'right join shop as b on a.shop_identify_id = b.identify_id';
             $user_shop_query->fields = 'identify_id,amount_available';
-            $identify_id = $user_shop_query->find()[0]['identify_id'];
-            $amount_avaliable = $user_shop_query->find()[0]['amount_avaliable'];
-            $shop_model = new IModel('shop');
-//            var_dump($amount_avaliable);
-//            var_dump($real_amount);
-            $shop_model->setData(['amount_available'=>intval($amount_avaliable+$real_amount)]);
-            $shop_model->update('identify_id = ' . $identify_id);
+            $user_shop_query->where = 'a.id = ' . $user_id;
+            if ($user_shop_query->find()){
+                $user_shop_data = $user_shop_query->find()[0];
+                $identify_id = $user_shop_data['identify_id'];
+                $amount_available = $user_shop_data['amount_available'];
+                $shop_model = new IModel('shop');
+                $shop_model->setData(['amount_available'=>$amount_available+$real_amount]);
+                $shop_model->update('identify_id = ' . $identify_id);
+            }
         }
         $this->redirect('order_list');
     }
