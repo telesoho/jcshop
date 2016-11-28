@@ -52,8 +52,8 @@
 			</div>
 		</section>
 	</template>
-	<template v-else>
-		<header>
+	<template v-else v-cloak>
+		<header v-if="showMessage">
 			<a href="http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=100000021&idx=1&sn=5fdb0e149001831242d616090c0ad549&chksm=6b23f0d65c5479c03816d4d8b04cec7635847914686a023dbc2a1d0e17f1012e7d4d9fee59bf&scene=0#wechat_redirect" class="classA"><img src="/views/mobile/skin/default/image/jmj/cart/cart-banner.png" alt="" style="width:100%"  /></a>
 		</header>
 		<div class="goodsInfo" v-for="item in newGoods" :style="newGoods.length==1?bottom_check:''">
@@ -95,7 +95,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="cal">
+		<div class="cal" v-if="showMessage">
 			<div class="calPrice box">
 				<div class="text1">
 					<span class="txt">合计: </span>
