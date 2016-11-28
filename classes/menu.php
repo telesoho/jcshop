@@ -83,9 +83,9 @@ class Menu
         		'/market/regiment_list' => '团购',
         		'/market/sale_list' => '特价',
         	),
-        	'代金券管理'=>array(
-        		'/market/ticket_list'       => '代金券列表',
-        	),
+        	// '代金券管理'=>array(
+        	// 	'/market/ticket_list'       => '代金券列表',
+        	// ),
 			'优惠券管理'=>array(
         		'/market/ticket_discount_list'   => '优惠券列表',
         	)
