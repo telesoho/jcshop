@@ -596,8 +596,15 @@ class wechat extends pluginBase
 			//开始订阅
 			case "subscribe":
 			{
-				$this->textReplay('啊啊啊啊啊
-');
+				$this->textReplay('Hey~亲爱的喵们！
+ 
+欢迎来到九猫家微信服务号~
+ 
+九猫家是提供官方直供、东京直邮的跨境电商平台，我们承诺全场100%正品，同时为您提供更具优势的价格。
+ 
+立刻点击下方“九猫大百货”逛逛逛吧~！
+ 
+偷偷告诉你：添加九猫个人微信：jiumaojia001 加入九猫VIP群，群里不定期发放优惠券哦~');
 
 			}
 			break;
