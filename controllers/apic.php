@@ -37,7 +37,7 @@ class Apic extends IController
         $query->where = "type = 0 and seller_id = 0 and award_type = 6";
         $result['condition_price'] = $query->find()[0]['condition'];
         foreach ($result['goodsList'] as $key=>$value){
-            $result['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$result['goodsList'][$key]['img']."/w/500/h/500");
+            $result['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$result['goodsList'][$key]['img']."/w/120/h/120");
         }
         //配送方式
         $result['delivery'] = Api::run('getDeliveryList');
@@ -55,7 +55,24 @@ class Apic extends IController
         $active_id = IFilter::act(IReq::get('active_id'),'int');
         $buy_num   = IReq::get('num') ? IFilter::act(IReq::get('num'),'int') : 1;
         $tourist   = IReq::get('tourist');//游客方式购物
-
+        $code 	   = IFilter::act(IReq::get('code'),'int');
+        
+        /* 优惠券 */
+        if(!empty($code)){
+        	if($code<=0 || $code>999999) $this->json_echo(array('error'=>'请输入正确的折扣券号'));
+        	/* 获取折扣券数据 */
+        	$query 				 		= new IQuery('ticket_discount');
+        	$query->where 				= 'code='.$code;
+        	$query->fields 				= 'id,name,type,ratio,money,start_time,end_time,status';
+        	$query->limit 				= 1;
+        	$ticket_data 				= $query->find();
+        	if(empty($ticket_data)) $this->json_echo(array('error'=>'折扣券不存在'));
+        	if($ticket_data[0]['start_time']>time() || $ticket_data[0]['end_time']<time()) $this->json_echo(array('error'=>'折扣券已过期'));
+        	if($ticket_data[0]['status'] == 2) $this->json_echo(array('error'=>'折扣券已使用'));
+        	if($ticket_data[0]['status'] != 1) $this->json_echo(array('error'=>'折扣券无法使用'));
+        }
+        
+        
         //必须为登录用户
         if($tourist === null && $this->user['user_id'] == null)
         {
@@ -149,20 +166,54 @@ class Apic extends IController
             if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
             if($data['goodsList'][$key]['img']) $data['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$data['goodsList'][$key]['img']."/w/500/h/500");
         }
-
+        
+		/* 使用优惠券 */
+        if(!empty($code)){
+	        switch($ticket_data[0]['type']){
+	        	//折扣券
+	        	case 1 :
+	        		$data['sum'] 		= $data['sum'] * $ticket_data[0]['ratio'];
+	        		$msg 				= '已为您优惠'.($ticket_data[0]['ratio']*10).'折';
+	        		break;
+	        		//抵扣券
+	        	case 2 :
+	        		$data['sum'] 		= $data['sum'] - $ticket_data[0]['money'];
+	        		$msg 				= '已为您优惠'.$ticket_data[0]['money'].'元';
+	        		break;
+	        }
+        }
+        
         //满包邮
-        $promotion_query = new IQuery("promotion");
+        $promotion_query 		= new IQuery("promotion");
         $promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
-        $condition_price = $promotion_query->find()[0]['condition'];
+        $condition_price 		= $promotion_query->find()[0]['condition'];
         if ($data['sum'] > $condition_price){
             $data['delivery'][0]['first_price'] = '0';
         } else {
             $data['sum'] += $data['delivery'][0]['first_price'];
         }
 
-
+        //满减规则
+        $query = new IQuery("promotion");
+        $query->where = "type = 0 and seller_id = 0 and award_type = 6";
+        $data['condition_price'] = $query->find()[0]['condition'];
+        
+        //优惠券
+        $data['kicket'] 		= array(
+        	'id' 		=> empty($ticket_data[0]['id']) ? '' : $ticket_data[0]['id'], 		//折扣券ID
+        	'name' 		=> empty($ticket_data[0]['name']) ? '' : $ticket_data[0]['name'], 	//折扣券名称
+        	'msg' 		=> empty($msg) ? '' : $msg,
+        	);
         $this->json_echo($data);
     }
+    /**
+     * ---------------------------------------------------折扣券---------------------------------------------------*
+     */
+    //折扣券详情 TODO:暂不需要
+    public function get_ticket_discount(){
+    	$code          				= IFilter::act(IReq::get('code'),'int');//折扣券code
+    }
+    
     /**
      * ---------------------------------------------------购物车-收货地址---------------------------------------------------*
      */
@@ -1037,7 +1088,7 @@ class Apic extends IController
     	$query_goods->order 		= '(CASE WHEN `search_words` LIKE "%,'.$word.',%" THEN 0 ELSE 1 END) asc';
     	$query_goods->fields 		= 'id,name,sell_price,jp_price,market_price,img';
     	$query_goods->page 			= empty($gpage) ? 1 : $gpage;
-    	$query_goods->pagesize 		= 20;
+    	$query_goods->pagesize 		= 1000;
     	$data_goods 				= $query_goods->find();
     	$total_page 				= $query_goods->getTotalPage();
     	if(!empty($data_goods)){
@@ -1053,7 +1104,7 @@ class Apic extends IController
     	$query_article->order 		= '(CASE WHEN `keywords`="'.$word.'" THEN 0 ELSE 1 END) asc,top desc,sort desc';
     	$query_article->fields 		= 'id,title,image';
     	$query_article->page 		= empty($apage) ? 1 : $apage;
-    	$query_article->pagesize 	= 20;
+    	$query_article->pagesize 	= 1000;
     	$data_article  				= $query_article->find();
     	$total_page 				= $query_article->getTotalPage();
     	if(!empty($data_article)){
@@ -1101,7 +1152,7 @@ class Apic extends IController
     function favorite_list(){
         $favorite_query = new IQuery('favorite as a');
         $favorite_query->join = 'left join goods as go on go.id = a.rid';
-        $favorite_query->fields = 'a.*,go.id,go.name,go.sell_price,go.market_price,go.img';
+        $favorite_query->fields = 'a.*,go.id,go.name,go.sell_price,go.market_price,go.img,go.jp_price';
 
         $favorite_query->where = 'user_id = ' . $this->user['user_id'];
         $data1 = $favorite_query->find();

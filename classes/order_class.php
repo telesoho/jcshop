@@ -1536,7 +1536,8 @@ class Order_Class
     		}
     		$checkWhere[] = "`".$key."` = '".$val."'";
     	}
-    	$checkWhere[] = " NOW() < date_add(create_time,INTERVAL 2 MINUTE) "; //在有限时间段内生成的订单
+    	$checkWhere[] = "'".date('Y-m-d H:i:s',time())."' < date_add(create_time,INTERVAL 2 MINUTE) "; //在有限时间段内生成的订单
+    	
     	$checkWhere[] = " pay_status != 1 ";//是否付款
 		$where = join(" and ",$checkWhere);
 
@@ -1567,7 +1568,7 @@ class Order_Class
 
 	    		if($nowBuy == $isBuyed)
 	    		{
-//					return "您所提交的订单重复，频率太高，请稍候再试...";
+// 					return "您所提交的订单重复，频率太高，请稍候再试...";
                     return "/views/mobile/skin/default/image/xinzeng/tjpl.png";
 	    		}
 			}

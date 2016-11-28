@@ -49,7 +49,7 @@
     <section id="section-user-info">
             <ul class="myOrders mui-table-view">
                 <li class="mui-table-view-cell">
-                    <a class="" href="{url:/ucenter/order}?status=0">
+                    <a class="" href="#" onclick="setState(0)">
                         我的订单<span class="mui-pull-right ico-pull">查看全部订单
                         <span class="mui-icon mui-icon-arrowright"></span></span>
                     </a>
@@ -68,22 +68,22 @@
             <div class="order">
                 <div class="mui-row">
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
-                        <a  href="{url:/ucenter/order/}?status=1">
+                        <a  href="#" onclick="setState(1)">
                         <img src="/views/mobile/skin/default/image/jmj/img/order-icon03.png"/>
                         <div class="mui-media-body">待付款</div></a>
                     </div>
                     <div class="mui-col-xs-3 mui-col-sm-3" style="text-align:center">
-                        <a href="{url:/ucenter/order}?status=2">
+                        <a href="#" onclick="setState(2)">
                         <img src="/views/mobile/skin/default/image/jmj/img/order-icon02.png"/>
                         <div class="mui-media-body">待发货</div></a>
                     </div>
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
-                        <a href="{url:/ucenter/order}?status=3">
+                        <a href="#" onclick="setState(3)">
                         <img src="/views/mobile/skin/default/image/jmj/img/order-icon01.png"/>
                             <div class="mui-media-body">待收货</div></a>
                     </div>
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
-                        <a href="{url:/ucenter/order}?status=4">
+                        <a href="#" onclick="setState(4)">
                         <img src="/views/mobile/skin/default/image/jmj/img/order-icon04.png"/>
                         <div class="mui-media-body">交易完成</div></a>
                     </div>
@@ -108,7 +108,7 @@
             </ul>-->
             <ul class="mui-table-view" style="margin-top:0.15rem">
                 <li class="mui-table-view-cell">
-                    <a class="mui-navigate-right" href="{url:/simple/addresslist}">
+                    <a class="mui-navigate-right locationA" href="{url:/simple/addresslist}">
                         <img src="/views/mobile/skin/default/image/jmj/icon/address-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
                         收货地址
                     </a>
@@ -116,7 +116,7 @@
             </ul>
             <ul class="mui-table-view">
                 <li class="mui-table-view-cell">
-                    <a class="mui-navigate-right" href="{url:/site/favorite}">
+                    <a class="mui-navigate-right locationA" href="{url:/site/favorite}">
                         <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
                         我的收藏
                     </a>
@@ -150,7 +150,7 @@
         </ul>
         <ul class="mui-table-view" style="margin-top: 0.12rem;margin-bottom:1.1rem;">
             <li class="mui-table-view-cell">
-                <a class="mui-navigate-right" href="{url:/simple/credit}">
+                <a class="mui-navigate-right locationA" href="{url:/simple/credit}">
                     <img src="/views/mobile/skin/default/image/jmj/product/user_card.png" alt=""  style="vertical-align: middle;width:0.5rem" />
                     身份证实名认证
                 </a>
@@ -230,6 +230,7 @@
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script>
     $(window).load(function(){
         $("#loading").fadeOut(300);
@@ -240,7 +241,7 @@
             $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
             document.location.href=this.href;
         });
-        mui('body').on("tap",'a',function(){
+        mui('body').on("tap",'.locationA',function(){
             window.location.href=this.href;
         })
     })
@@ -267,7 +268,10 @@
             }
         });
     }
-
+    function setState(sta){
+        setItem('status',sta);
+        document.location.href='/ucenter/order';
+    }
 </script>
 </body>
 </html>

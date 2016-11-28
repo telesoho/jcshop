@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
-    <title>九猫大百货</title>
+    <title>我的种草</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/favorite.css" />
@@ -48,19 +48,19 @@
     </template>
     <div class="favorite_content" v-else>
         <div class="head">
-            <template v-if="state==0">
-            <div class="item itemTop0 left active"   @click="changeFavorite(0)">商品</div>
-            <div class="item itemTop1 right"   @click="changeFavorite(1)">专辑</div>
-            </template>
-            <template v-else>
-                <div class="item itemTop0 left"   @click="changeFavorite(0)">商品</div>
-                <div class="item itemTop1 right active"   @click="changeFavorite(1)">专辑</div>
-            </template>
+            <div class="left flexbox"   @click="changeFavorite(0)">
+                <img :src="state==0?head_state.left_red:head_state.left_black" alt="" :style="head_state.img" />
+                <span :style="state==0?head_state.bg2:head_state.bg1">商品</span>
+            </div>
+            <div class="right flexbox"   @click="changeFavorite(1)">
+                <img :src="state==1?head_state.right_red:head_state.right_black" alt=""  :style="head_state.img" />
+                <span :style="state==1?head_state.bg2:head_state.bg1">专辑</span>
+            </div>
             <!--判断初始状态结束-->
         </div>
         <div class="bg"></div>
             <template v-if="state==0">
-                <div class="favorite_item favorite_product">
+                <div class="favorite_item favorite_product" :style="changeBgcolor">
                     <template v-if="infoMessage.goods_data==''">
                         <div class="emptyFavorite">
                             <img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt="" style="width:1.82rem;height:1.65rem;" />
@@ -84,7 +84,12 @@
                                     </div>
                                 </div>
                                 <div class="box">
-                                    <a :href="item.url"><div class="sellprice">￥ {{item.sell_price}}</div></a>
+                                    <a :href="item.url"><div class="price">
+                                        <div class="sellprice">￥ {{item.sell_price}}</div>
+                                        <div class="jpprice">
+                                            日本价：{{item.jp_price}} 円
+                                        </div>
+                                    </div></a>
                                     <a :href="item.url"><div class="buy">立即购买</div></a>
                                 </div>
                             </div>
@@ -93,7 +98,7 @@
                 </div>
             </template>
             <template v-else>
-                <div class="favorite_item favorite_article">
+                <div class="favorite_item favorite_article" :style="changeBgcolor">
                     <template v-if="infoMessage.article_data==''">
                         <div class="emptyFavorite">
                             <img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt="" style="width:1.82rem;height:1.65rem;"/>
@@ -122,7 +127,7 @@
                     </template>
                 </div>
             </template>
-        <div style="margin-bottom:0.5rem;height:1rem"></div>
+        <div style="height:1rem;"></div>
     </div>
 </section>
 <footer>
@@ -171,9 +176,28 @@
         el: '#favorite',
         data: {
             infoMessage:'',
-            state:getSession('favoriteState')
+            state:getSession('favoriteState'),
+            head_state: {
+                left_red:'/views/mobile/skin/default/image/jmj/favorite/ware_red.png',
+                left_black:'/views/mobile/skin/default/image/jmj/favorite/ware_black.png',
+                right_red:'/views/mobile/skin/default/image/jmj/favorite/cate_red.png',
+                right_black:'/views/mobile/skin/default/image/jmj/favorite/cate_black.png',
+                bg1:'color:#3d4225',
+                bg2:'color:#ff44a0',
+                img:'width:0.31rem;height:0.31rem;margin-right:0.22rem;'
+            }
         },
         computed: {
+            changeBgcolor: function(){
+                if(this.state==0&&this.infoMessage.goods_data!=''){
+                    return "background:#eee";
+                }
+                else if(this.state==1&&this.infoMessage.article_data!=''){
+                    return "background:#eee";
+                }else{
+                    return "background:#fff";
+                }
+            },
             // 读取和设置
             new_info_goods: function() {
                     var self=this.infoMessage.goods_data;
@@ -206,11 +230,6 @@
                     success: function (data) {
                         console.log(data);
                         self.infoMessage = data;
-                        self.state = getSession("favoriteState") ? getSession("favoriteState") : 0;
-//
-//                console.log(self.infoMessage);
-//                var html = template('favoriteTemp',dat);
-//                document.getElementById("favorite").innerHTML=html;
                     },
                     error: function (xhr, type, errorThrown) {
                         //异常处理；
@@ -221,7 +240,6 @@
             changeFavorite: function (sta) {
                 this.state = sta;
                 pushSession("favoriteState", sta);
-                changeState(sta)
             },
             delFavoriteProduct: function (item) {
                 var self=this;
@@ -267,10 +285,6 @@
                                 self.infoMessage.article_data.splice(index,1);
                                 //                $(".favoriteArticle"+eid).remove();
                                 console.log("删除成功");
-                            },
-                            error:function(xhr,type,errorThrown){
-                                //异常处理；
-                                console.log(type);
                             }
                         });
                     } else {
@@ -293,19 +307,6 @@
         });
         mui('body').on('tap','a',function(){document.location.href=this.href;});
     })
-    template.helper('JSONsplit', function(obj){
-        return obj.split(",")
-    });
-    template.helper('JSONreduce', function(obj){
-        var arr=[];
-        for(var m=0;m<obj.length;m++){
-            arr.push(obj[m].image);
-        }
-        return JSON.stringify(arr)
-    });
-    template.helper('JSONstringfly', function(obj){
-        return JSON.stringify(obj)
-    });
     function pushSession(key,value){
         if(window.sessionStorage){
             sessionStorage.setItem(key,value);
@@ -322,12 +323,6 @@
             console.log("无法使用缓存");
             return "";
         }
-    }
-    function changeState(index){
-        $(".head .item").removeClass("active");
-        $(".itemTop"+index).addClass("active");
-//        $(".favorite_item").addClass("hide");
-//        $(".favorite_item").eq(index).removeClass("hide");
     }
 </script>
 </body>

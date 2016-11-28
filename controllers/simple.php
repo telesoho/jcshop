@@ -349,21 +349,21 @@ class Simple extends IController
 		}
 
     	//返回值
-		$this->gid       = $id;
-		$this->type      = $type;
-		$this->num       = $buy_num;
-		$this->promo     = $promo;
-		$this->active_id = $active_id;
-    	$this->final_sum = $result['final_sum'];
-    	$this->promotion = $result['promotion'];
-    	$this->proReduce = $result['proReduce'];
-    	$this->sum       = $result['sum'];
-    	$this->goodsList = $result['goodsList'];
-    	$this->count       = $result['count'];
-    	$this->reduce      = $result['reduce'];
-    	$this->weight      = $result['weight'];
-    	$this->freeFreight = $result['freeFreight'];
-    	$this->seller      = $result['seller'];
+		$this->gid       		= $id;
+		$this->type      		= $type;
+		$this->num       		= $buy_num;
+		$this->promo     		= $promo;
+		$this->active_id 		= $active_id;
+    	$this->final_sum 		= $result['final_sum'];
+    	$this->promotion 		= $result['promotion'];
+    	$this->proReduce 		= $result['proReduce'];
+    	$this->sum       		= $result['sum'];
+    	$this->goodsList 		= $result['goodsList'];
+    	$this->count       		= $result['count'];
+    	$this->reduce      		= $result['reduce'];
+    	$this->weight      		= $result['weight'];
+    	$this->freeFreight 		= $result['freeFreight'];
+    	$this->seller      		= $result['seller'];
 
 		//收货地址列表
 		$this->addressList = $addressList;
@@ -382,28 +382,29 @@ class Simple extends IController
 	 */
     function cart3()
     {
-    	$address_id    = IFilter::act(IReq::get('radio_address'),'int');
-    	$delivery_id   = IFilter::act(IReq::get('delivery_id'),'int');
-    	$accept_time   = IFilter::act(IReq::get('accept_time'));
+    	$address_id    = IFilter::act(IReq::get('radio_address'),'int');//收货地址ID
+    	$delivery_id   = IFilter::act(IReq::get('delivery_id'),'int');//快递ID
+    	$accept_time   = IFilter::act(IReq::get('accept_time'));//收货时间
     	$payment       = IFilter::act(IReq::get('payment'),'int');
     	$order_message = IFilter::act(IReq::get('message'));
     	$ticket_id     = IFilter::act(IReq::get('ticket_id'),'int');
     	$taxes         = IFilter::act(IReq::get('taxes'),'float');
     	$tax_title     = IFilter::act(IReq::get('tax_title'));
-    	$gid           = IFilter::act(IReq::get('direct_gid'),'int');
-    	$num           = IFilter::act(IReq::get('direct_num'),'int');
+    	$gid           = IFilter::act(IReq::get('direct_gid'),'int');//商品ID
+    	$num           = IFilter::act(IReq::get('direct_num'),'int');//商品数量
     	$type          = IFilter::act(IReq::get('direct_type'));//商品或者货品
-    	$promo         = IFilter::act(IReq::get('direct_promo'));
-    	$active_id     = IFilter::act(IReq::get('direct_active_id'),'int');
+    	$promo         = IFilter::act(IReq::get('direct_promo'));//促销
+    	$active_id     = IFilter::act(IReq::get('direct_active_id'),'int');//活动ID
     	$takeself      = IFilter::act(IReq::get('takeself'),'int');
+    	$ticket_did    = IFilter::act(IReq::get('ticket_did'),'int'); //折扣券ID
     	$order_type    = 0;
     	$dataArray     = array();
     	$user_id       = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
-
+    	
 		//获取商品数据信息
     	$countSumObj = new CountSum($user_id);
 		$goodsResult = $countSumObj->cart_count($gid,$type,$num,$promo,$active_id);
-
+		
 		if($countSumObj->error)
 		{
 			IError::show(403,$countSumObj->error);
@@ -514,13 +515,42 @@ class Simple extends IController
 			IError::show(403,$orderData);
 			exit;
 		}
-
+		
+		/* 折扣券 */
+		$ticket_type_id 			= 0;
+		if($ticket_did > 0){
+    		$model_ticket 			= new IModel('ticket_discount');
+    		$data_ticket 			= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'type,ratio,money');
+    		if(empty($data_ticket)) IError::show(403,"折扣券无效");
+    		//折扣券已使用状态
+    		$model_ticket->setData(array('status'=>2,'user_id'=>$user_id));
+    		$model_ticket->update('`id`='.$ticket_did);
+    		$ticket_type_id 		= $data_ticket['type'];
+    	}
+    	
+		
 		//根据商品所属商家不同批量生成订单
 		$orderIdArray  = array();
 		$orderNumArray = array();
 		$final_sum     = 0;
 		foreach($orderData as $seller_id => $goodsResult)
 		{
+			/* 计算优惠价格 */
+			switch($ticket_type_id){
+				//折扣券
+				case 1 :
+					$order_amount 		= $goodsResult['final_sum']*$data_ticket['ratio']+$goodsResult['deliveryPrice'];
+					$real_amount 		= $goodsResult['final_sum']*$data_ticket['ratio'];
+					break;
+				//抵扣券
+				case 2 :
+					$order_amount 		= $goodsResult['final_sum']-$data_ticket['money']+$goodsResult['deliveryPrice'];
+					$real_amount 		= $goodsResult['final_sum']-$data_ticket['money'];
+					break;
+				default:
+					$order_amount 		= $goodsResult['orderAmountPrice'];
+					$real_amount 		= $goodsResult['final_sum'];
+			}
 			//生成的订单数据
 			$dataArray = array(
 				'order_no'            => Order_Class::createOrderNum(),
@@ -544,7 +574,7 @@ class Simple extends IController
 
 				//商品价格
 				'payable_amount'      => $goodsResult['sum'],
-				'real_amount'         => $goodsResult['final_sum'],
+				'real_amount'         => $real_amount,
 
 				//运费价格
 				'payable_freight'     => $goodsResult['deliveryOrigPrice'],
@@ -562,7 +592,7 @@ class Simple extends IController
 				'promotions'          => $goodsResult['proReduce'] + $goodsResult['reduce'],
 
 				//订单应付总额
-				'order_amount'        => $goodsResult['orderAmountPrice'],
+				'order_amount'        => $order_amount,//$goodsResult['orderAmountPrice'],
 
 				//订单保价
 				'insured'             => $goodsResult['insuredPrice'],
@@ -578,6 +608,9 @@ class Simple extends IController
 
 				//备注信息
 				'note'                => '',
+					
+				//折扣券
+				'ticket_did' 		  => $ticket_did,
 			);
 
 			//获取红包减免金额

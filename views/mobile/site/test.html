@@ -1,80 +1,174 @@
-<!doctype html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>身份证认证信息</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-</head>
-<style>
-    .mui-popover-action{
-        top:10%;
-        width:80%;
-        left:10%;
-    }
-    .mui-popover-action.mui-active{
-        width:80%;
-        height:80%;
-        background:#fff;
-        border-radius:0.3rem;
-    }
-    .mui-popover-action.mui-active .title{
-        width:100%;
-        text-align:center;
-        height:10%;
-        background:#ff4aa0;
-        border-radius:0.3rem 0.3rem 0 0 ;
-        color:#fff;
-        font-size:0.34rem;
-    }
-    .mui-popover-action.mui-active .text{
-        width:100%;
-        height:60%;
-        padding:0.2rem;
-        color:#3d4245;
-        font-size:0.26rem;
-    }
-    .mui-popover-action .button-action img{
-        display:none
-    }
-    .mui-popover-action.mui-active .button-action img{
-        display:block;
-        width:0.7rem;
-        height:0.7rem;
-        position:absolute;
-        bottom:-1rem;
-        left:45%;
-    }
-</style>
-<body>
-    <div id="sheet1" class="mui-popover mui-popover-action">
-        <div class="title flexbox">
-            翻译结果
+<!--订单详情页面-->
+<div class="mui-content">
+    <div id="slider" class="mui-slider mui-fullscreen" style="background:#fff;">
+        <div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" style="height:0.9rem;">
+            <div class="mui-scroll">
+                <a class="order-control-item mui-control-item  mui-control-item0 mui-active" href="#itemmobile0">
+                    全部订单
+                    <span></span>
+                </a>
+                <a class="order-control-item mui-control-item mui-control-item1" href="#itemmobile1">
+                    待付款
+                    <span></span>
+                </a>
+                <a class="order-control-item mui-control-item mui-control-item2" href="#itemmobile2">
+                    待发货
+                    <span></span>
+                </a>
+                <a class="order-control-item mui-control-item mui-control-item3" href="#itemmobile3">
+                    待收货
+                    <span></span>
+                </a>
+                <a class="order-control-item mui-control-item mui-control-item4" href="#itemmobile4">
+                    已完成订单
+                    <span></span>
+                </a>
+            </div>
         </div>
-        <div class="text">
-            这里填写翻译后的内容这里填写翻译后的内容这里填写翻译后的内容这里填写翻译后的内容这里填写翻译后的内容,
-
-            下面的按钮做好图替换掉
+        <div class="mui-slider-group">
+            <div id="itemmobile0" class="mui-slider-item mui-control-content mui-active">
+                <div id="scroll1" class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-table-view" id="main_panel0">
+                            <div class="order_menu upline">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="itemmobile1" class="mui-slider-item mui-control-content ">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-table-view" id="main_panel1">
+                            <div class="order_menu upline">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="itemmobile2" class="mui-slider-item mui-control-content">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-table-view" id="main_panel2">
+                            <div class="order_menu upline">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="itemmobile3" class="mui-slider-item mui-control-content">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-table-view" id="main_panel3">
+                            <div class="order_menu upline">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="itemmobile4" class="mui-slider-item mui-control-content">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-table-view" id="main_panel4">
+                            <div class="order_menu upline">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <a href="#sheet1" class="button-action"><img src="/views/mobile/skin/default/image/jmj/icon/empty_grow.png" alt=""  /></a>
     </div>
-    <div id="rest">
-            点击我弹出
+</div>
+<section>
+    <!--物流弹出菜单-->
+    <div id="logistics" class="mui-modal">
+        <header class="mui-bar mui-bar-nav">
+            <a href="#logistics" class="mui-icon mui-icon-left-nav mui-pull-left testClick1"></a>
+            <h1 class="mui-title">物流详情</h1>
+        </header>
+        <div class="mui-content" style="height: 100%;" id="container">
+
+        </div>
     </div>
-
-<script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/jiumao/common.js"></script>
-    <script>
-        $(function(){
-            $("#rest").click(function(){
-                mui('#sheet1').popover('toggle');
-            })
-        })
-
-    </script>
-</body>
-</html>
+</section>
+<script id="orderSum" type="text/html">
+    <%if(state.length==0){%>
+    <div class="logoImg">
+        <img src="/views/mobile/skin/default/image/jmj/icon/cat.png" style="width:1.94rem;height:1.33rem" alt="" />
+    </div>
+    <div class="load_text">
+        <span>~</span>
+        <span>暂时还没有订单哦</span>
+        <span>~</span>
+    </div>
+    <%}else{%>
+    <!--存在该订单详情-->
+    <% for(var i=0; i<state.length; i++){%>
+    <% var order =state[i] %>
+    <div class="order_menu_list">
+        <div class="box">
+            <div class="orderNo">订单编号：<%=order.order_no%></div>
+            <div class="orderstate"><%=order.orderStatusText%></div>
+        </div>
+        <!--展示商品状态-->
+        <!--展示第1件商品-->
+        <a href="{url:/ucenter/order_detail}?id=<%=order.id%>" class="toOrderDetail">
+            <%if(order.goodslist){%>
+            <div class="ware_item box">
+                <div class="img">
+                    <img src="<%=order.goodslist[0].img%>" alt="" style="width:1.6rem;height:1.6rem" />
+                </div>
+                <div class="content">
+                    <div class="box">
+                        <div class="name"><%=order.goodslist[0].goods_array.name%></div>
+                        <div class="price">￥ <%=order.goodslist[0].goods_price%></div>
+                    </div>
+                    <div class="num mui-pull-right">x <%=order.goodslist[0].goods_nums%></div>
+                </div>
+            </div>
+            <!--展示剩余商品-->
+            <div class="last_ware">
+                <% for(var j=1; j<order.goodslist.length; j++){%>
+                <% var goodlist =order.goodslist[j] %>
+                <div class="ware_item box">
+                    <div class="img">
+                        <img src="<%=goodlist.img%>" alt="" style="width:1.6rem;height:1.6rem" />
+                    </div>
+                    <div class="content">
+                        <div class="box">
+                            <div class="name"><%=goodlist.goods_array.name%></div>
+                            <div class="price">￥ <%=goodlist.goods_price%></div>
+                        </div>
+                        <div class="num mui-pull-right">x <%=goodlist.goods_nums%></div>
+                    </div>
+                </div>
+                <%}%>
+            </div>
+        </a>
+        <div class="total">
+            共计<%=order.goodslist.length%>件商品  合计 <%=order.order_amount%>（含运费<%=order.real_freight%>元）
+        </div>
+        <%}%>
+        <!--不同的按钮状态-->
+        <%if(order.orderStatusVal==6){%>
+        <div class="action upline">
+            <a href="#" class="button2 evaluate">评价</a>
+        </div>
+        <%}%>
+        <%if(order.orderStatusVal==2){%>
+        <div class="action upline">
+            <a href="{url:/ucenter/order_status/order_id/<%=order.id%>/op/cancel}" class="button1 delOrder">取消订单</a>
+            <a href="{url:/block/doPay/order_id/<%=order.id%>}" class="button2 evaluate">去付款</a>
+        </div>
+        <%}%>
+        <%if(order.orderStatusVal==3){%>
+        <div class="action upline">
+            <a href="#" class="button1 testClick" data-v="<%=order.goodslist[0].delivery_id %>">查看物流</a>
+            <a href="{url:/ucenter/order_status/order_id/<%=order.id%>/op/confirm}" class="button2 evaluate">确认收货</a>
+        </div>
+        <%}%>
+    </div>
+    <%}%>
+    <!--存在商品结束-->
+    <%}%>
+</script>

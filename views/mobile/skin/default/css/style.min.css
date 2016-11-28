@@ -109,3 +109,75 @@ sit_products.css更改
 .select_center span{display:inline-block;float:left;width:0.56rem;height:0.56rem;text-align:center;line-height:0.56rem;background:#eee;}
 .select_center input{width:0.94rem;height:0.56rem;float:left;text-align:center;border:1px solid #eee;border-left:0;border-right:0;}
 .select_btn{width:100%;overflow:hidden;height:1rem;background:#f3026a;font-size:0.36rem;color:#fff;border:0;}
+
+#addressList{
+    margin-top:0.31rem;
+}
+.menuList{
+    margin-top:0.11rem;
+    background:#fff;
+}
+.menuList .name{
+    font-size:0.3rem;
+    color:#3d4245;
+    margin:0.22rem 0 0 0.33rem;
+}
+.menuList .phone{
+    font-family:'HelveticaNeueLt';
+    font-size:0.3rem;
+    color:#3d4245;
+    margin:0.25rem 0.25rem 0 0;
+}
+.menuList .addr{
+    font-size:0.28rem;
+    color:#bbbbbb;
+    padding:0.7rem 0 0.26rem 0.33rem;
+    border-bottom:1px solid #eee;
+}
+.menuList .is_default img{
+    width:0.4rem;
+    margin:0.17rem 0 0.18rem 0.33rem;
+    vertical-align: middle;
+}
+.menuList .is_default span{
+    font-size:0.28rem;
+    color:#f3026a;
+    margin-left:0.17rem;
+}
+.menuList .no_default img{
+    width:0.4rem;
+    margin:0.17rem 0 0.18rem 0.33rem;
+    vertical-align: middle;
+}
+.menuList .no_default span{
+    font-size:0.28rem;
+    color:#bbbbbb;
+    margin-left:0.17rem;
+}
+.menuList .isEdit img{
+    width:0.46rem;
+    margin:0.10rem 0 0.18rem 0.33rem;
+    vertical-align: middle;
+}
+.menuList .isEdit span{
+    font-size:0.28rem;
+    color:#bbbbbb;
+    margin-left:0.08rem;
+    margin-right:0.21rem;
+}
+.newAddrSub{
+    margin-top:2.01rem;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.newAddrSub #submitaddr{
+    border:0.02rem solid #ff4aa0;
+    border-radius:0.1rem;
+    width:4.96rem;
+    height:0.76rem;
+    line-height:0.76rem;
+    text-align:center;
+    font-size:0.32rem;
+    color:#ff4aa0;
+}

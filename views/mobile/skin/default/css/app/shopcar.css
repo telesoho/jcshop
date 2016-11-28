@@ -1,161 +1,344 @@
-/*购物车页面样式*/
-.mui-action-back{
-	color:#e53e42;
+/*订单确认样式*/
+#wareListShop{
+	margin-top:0.28rem;
 }
-.delall{
-	color:#e53e42;
-	font-size:0.12rem;
-	line-height: 44px;
+#wareListShop .order_addAddr{
 }
-.empty{
-	padding-top:0.2rem;
-	display:-webkit-flex;
-	-webkit-align-items: center;
-	-webkit-justify-content: center;
-	-webkit-flex-direction:column ;
-	font-size: 0.12rem;
-}
-.empty img{
-	width:24%;
-}
-.empty p{
-	font-size:0.12rem;
-	color:#959595;
-}
-.empty-state{
-	display:none;
-}
-.mui-checkbox{
-	display:-webkit-flex;
-	height:1rem;
-}
-.mui-input-group{
-	display:-webkit-flex;
-	-webkit-align-items: center;
-	-webkit-justify-content: center;
-	-webkit-flex-wrap: wrap;
-}
-.mui-input-group .shopcar-list{
-	width:100%;
-	border-bottom: 1px solid #eee;
-	height:auto !important;
-	display:-webkit-flex;
-	-webkit-flex-wrap:nowrap;
+.order_addAddr{
+	background:#fff;
+	height:1.57rem;
 	position:relative;
-	}
+	display: flex;
+	align-items: center;
+}
+.order_addAddr .topImage{
+	position:absolute;
+	width:7.5rem;
+	height:0.07rem;
+	background:url("../../image/jmj/cart/line.png");
+	top:0;
+	left:0;
+}
+.bottomImage{
+	position:absolute;
+	width:7.5rem;
+	height:0.07rem;
+	background:url("../../image/jmj/cart/line.png");
+	bottom:0;
+	left:0;
+}
+.order_addAddr .right{
+	width:1.57rem;
+	height:1.57rem;
+}
+.order_addAddr .left .name{
+	display: inline-block;
+	margin:0.34rem 0 0 0.23rem;
+	font-size:0.30rem;
+	color:#3d4245;
+}
+.order_addAddr .left .phone{
+	display: inline-block;
+	font-size:0.30rem;
+	color:#3d4245;
+	margin-left:0.82rem;
+}
+.order_addAddr .left .bottom{
+	font-size:0.26rem;
+	color:#bbbbbb;
+	width:5.77rem;
+	margin:0.23rem 0 0 0.23rem;
+}
+/*part2样式*/
+.part2{
+	margin-top:0.2rem;
+	background:#fff;
+}
+.goodsInfo .top img{
+	vertical-align: middle;
+	margin-left:0.3rem;
+	position:relative;
+	top:-0.05rem;
+}
+.goodsInfo .top{
+	height:0.85rem;
+	line-height:0.85rem;
+	border-bottom:1px solid #eee;
+}
+.goodsInfo .top span{
+	font-size:0.3rem;
+	color:#bbbbbb;
+	padding-left:0.15rem;
+}
+.goodsList{
+	height:1.79rem;
+	border-bottom:1px solid #eee;
+}
+.goodsList .leftImg{
+	height:1.79rem;
+	width:1.7rem;
+	display: -webkit-flex;
+	-webkit-align-items: center;
 
-.shopcar-list input{
-	-webkit-flex:2;
+}
+.goodsList .leftImg img{
+	display: block;
+	margin-left:0.32rem;
+}
+.boxItem{
+	position:relative;
+	display: -webkit-flex;
+	-webkit-justify-content: flex-start;
+}
+.goodsList .right .name{
+	margin-top:0.2rem;
+	font-size:0.28rem;
+	color:#3d4245;
+	line-height:0.36rem;
+	width:5.5rem;
+	overflow : hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+.goodsList .right .text{
+	position:absolute;
+	bottom:0.29rem;
+}
+.goodsList .right .text .sellprice{
+	font-size:0.28rem;
+	color:#f3026a;
+}
+.goodsList .right .text .num{
+	display: inline-block;
+	font-size:0.28rem;
+	color:#bbbbbb;
+	margin-left:0.54rem;
+}
+.totalItemCal{
+	height:0.87rem;
+	line-height:0.87rem;
+	border-bottom:1px solid #eee;
+}
+.totalItemCal .left{
+	margin-left:0.23rem;
+	font-size:0.28rem;
+	color:#3d4245;
+}
+.totalItemCal .right{
+	margin-right:0.41rem;
+	font-size:0.28rem;
+	color:#ff44a0;
+}
+.tips{
+	padding:0.2rem;
+	font-size:0.22rem;
+	color:#bbb;
+	line-height:0.3rem;
+}
+.tips .first{
+	color:#ff44a0;
+}
+.delivery{
+	height:0.87rem;
+	line-height:0.87rem;
+	background:#fff;
+	margin-top:0.2rem;
+}
+.delivery .left{
+	margin-left:0.23rem;
+	font-size:0.28rem;
+	color:#3d4245;
+}
+.delivery .right{
+	margin-right:0.41rem;
+	font-size:0.28rem;
+	color:#3d4245;
+}
+#testForm{
+	width:100%;
+	height:2.3rem;
+	background:#fff;
+	position: fixed;
+	bottom:0;
+	left:0;
+}
+#testForm .top{
+	width:100%;
 	text-align:center;
-	margin-top:0.5rem
+	font-size:0.2rem;
+	color:#3d4245;
+	position:relative;
+	top:0.05rem;
 }
-.shopcar-list .ware-list{
-	margin-left:0.2rem;
-	width:75%;
+#testForm .top img{
+	width:0.25rem;height:0.25rem;vertical-align: middle;margin-right:0.1rem;
 }
-.shopcar-list .shop-action{
-	-webkit-flex:2;
+#testForm .bottom{
+	background:#ff44a0;
+	border-radius:0.72rem;
+	width:5.93rem;
+	height:0.72rem;
+	text-align: center;
+	line-height:0.72rem;
+	font-size:0.32rem;
+	color:#ffffff;
+	position:relative;
+	top:-0.05rem;
+}
+/*弹出框样式*/
+#sheet1 .mui-table-view{
+	border-radius:0.3rem;
+	margin-left:10%;
+	width:80%;
+	height:4.38rem;
+	background:#fff;
+}
+#sheet1 .mui-table-view .title{
+	height:0.9rem;
+	padding-top:0.12rem;
+	color:#ff44a0;
+	font-size:0.3rem;
+}
+#sheet1 .mui-table-view .text{
+
+}
+#sheet1 .mui-table-view .text #promoInput{
+	border:0;
+	height:0.9rem;
+	margin-top:0.5rem;
+	width:4.49rem;
+	border-bottom:1px solid #d3d3d3;
+	font-size:0.3rem;
+	color:#3d4245;
+}
+#sheet1 .mui-table-view .button_s{
+	display: inline-block;
+	opacity:0.5;
+	background:#ff44a0;
+	border-radius:0.72rem;
+	width:4.6rem;
+	height:0.72rem;
+	font-size:0.32rem;
+	color:#ffffff;
+	line-height:0.72rem;
+	margin-top:0.8rem;
+}
+#sheet1.mui-popover {
+	bottom:10% !important;
+}
+#sheet1 .cancle_action{
+	width:0.8rem;
+	height:0.8rem;
+	display: inline-block;
+	position:absolute;
+	right:0.32rem;
+	top:0.22rem;
 	text-align: right;
 }
-.shopcar-list .ware-list-title{
-	margin-top:0.1rem;
-	line-height: 0.16rem;
-    text-align: left;
-    font-size: 0.12rem;
+.delaction{
+	width:0.26rem;
+	height:0.26rem;
+
 }
-.ware-list-body{
-	display:-webkit-inline-flex;
-	-webkit-align-items: center;
+#sheet2.mui-popover{
+	bottom:45% !important;
+}
+#sheet2 .mui-table-view{
+	border-radius:0.1rem;
+	margin-left:10%;
+	width:80%;
+	height:2.53rem;
+	background:#fff;
+}
+#sheet2 .mui-table-view .top{
+	margin-top:0.35rem;
+}
+#sheet2 .mui-table-view .top span{
+	display: inline-block;
+	font-size:0.36rem;
+	color:#ff44a0;
+	position:relative;
+	left:0.3rem;
+	top:-0.1rem;
+}
+#sheet2 .mui-table-view .bottom{
+	font-size:0.26rem;
+	color:#bbbbbb;
+	margin-top:0.2rem;
+}
+#sheet3.mui-popover{
+	bottom:45% !important;
+}
+#sheet3 .mui-table-view{
+	border-radius:0.1rem;
+	margin-left:10%;
+	width:80%;
+	height:1.95rem;
+	background:#fff;
+}
+#sheet3 .mui-table-view img{
+	margin-right:0.25rem;
+}
+#sheet3 .mui-table-view span{
+	text-align: left;
+	font-size:0.36rem;
+	color:#ff44a0;
+	position:relative;
+	top:0.15rem;
+}
+.mui-popover .mui-table-view{
+	max-height:1000px !important;
 }
 
-.ware-img img{
-	margin:0.1rem;
-	margin-left:0;
-	max-height: 0.5rem;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.order_addAddr .tex{
+	font-size: 0.3rem;
+	margin-left:0.2rem;
+	color:#bbbbbb;
 }
-.ware-content span{
-	display:block;
-	font-size:0.12rem;
-	color:#959595;
+
+#close {
+	text-align: center;
+	margin-top: 0.3rem;
 }
-.ware-content .price{
-	font-size:0.13rem;
-	color:#e53e42;
-}
-.shop-action span{
-	margin-top:0.07rem;
-	padding:0 0.05rem;
-	border-left:0.02rem solid #eee;
-}
-.mui-numbox{
-	position:absolute;
-	bottom:0.2rem;
-	right:0.05rem;
-}
-#shopcar{
-	position: relative;
-}
-/*三角下标*/
-#shopcar:after /*div:after*/{
-  content:"";
-  position:absolute;
-  bottom:-0.08rem;
-  left:0.3rem;
-  width:0px;
-  height:0px;
-  border-left: 0.05rem solid transparent;
-  border-right: 0.05rem solid transparent;
-  border-top: 0.1rem solid #fff;
-  z-index:10 
-}
-#shopcar:before{
-	content:"";
-  position:absolute;
-  bottom:-0.1rem;
-  left:0.29rem;
-  width:0px;
-  height:0px;
-  border-left: 0.06rem solid transparent;
-  border-right: 0.06rem solid transparent;
-  border-top: 0.12rem solid #ccc;
-  z-index:9;	
-}
-#shopcar-cal li{
-	display:-webkit-flex;
-	-webkit-align-items: center;
-}
-#shopcar-cal li div{
-	
-}
-#shopcar-cal li div:nth-child(1){
-	-webkit-flex:1;
-	color: #959595;
-    font-size: 0.13rem;
-}
-#shopcar-cal li div:nth-child(2){
-	-webkit-flex:2;
-	color: #959595;
-    font-size: 0.12rem;
-    text-align: right;
-}
-#shopcar-cal li div p:nth-child(2){
-	border: 0.01rem solid transparent;
-    background-color: #faf6a6;
-    border-radius: 0.02rem;
-    color: #f69c3d;
-    padding: 0.04rem 0.08rem;
-    position: relative;
-    display: inline-block;
-    margin-top: 0.08rem;
-    width: initial;
-}
-#shopcar-cal li div p:nth-child(2) a{
-	color:#f69c3d;
-}
-#shopcar-cal li:last-child{
-	height:0.5rem
-}
-/*订单确认样式*/
+
+
+
+
+
+
+
+
+
+
+
+
 #address{
 	display:-webkit-flex;
 	-webkit-align-items: center;
@@ -232,9 +415,7 @@
 	font-size: 0.1rem;
 	text-align: center;
 }
-#wareListShop img{
-	width:0.6rem !important;
-}
+
 #collapse-wareList {
 	text-align:center;
 }

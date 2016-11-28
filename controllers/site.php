@@ -67,10 +67,6 @@ class Site extends IController
         if (empty($_SERVER['REDIRECT_PATH_INFO'])){
             ISession::set('is_first',true);
         }
-        if(IClient::isWechat() == true){
-            require_once __DIR__ . '/../plugins/wechat/wechat.php';
-            $this->wechat = new wechat();
-        }
 //		$this->index_slide = Api::run('getBannerList');
 		$this->redirect('index');
 	}
@@ -331,6 +327,7 @@ class Site extends IController
 			if(!empty($data_brand)){
 				foreach ($data_brand as $k => $v){
 					$data_brand[$k]['logo'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['logo']."/w/200/h/120");
+					if(empty($v['logo'])) unset($data_brand[$k]);
 				}
 			}
 		}

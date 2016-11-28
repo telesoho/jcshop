@@ -131,7 +131,6 @@
     Request = GetRequest();
     var statusOrder=Request["rev"];
     //	模拟高亮画面
-//    alert(getItem("cart2url"));
     var submitaddr1,pro,cit,are;
     $(window).load(function(){
         $("#loading").fadeOut(300);
@@ -276,9 +275,9 @@
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
                 if(statusOrder=="cart_order"){
-                    window.location.href="index.php"+getItem("cart2url");
+                    window.location.href=getItem("cart2url");
                 }else if(statusOrder=="cart_order1"){
-                    window.location.href="index.php"+getItem("cart2url");
+                    window.location.href=getItem("cart2url");
                 }else{
                     window.location.reload();
                 }
