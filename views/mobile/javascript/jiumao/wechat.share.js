@@ -25,9 +25,9 @@ wx.ready(function(){
     });
     //发送到朋友圈
     wx.onMenuShareTimeline({
-        title       : '标题2', // 分享标题
-        link        : '描述2', // 分享链接
-        imgUrl      : '', // 分享图标
+        title       : wechat_share.title, // 分享标题
+        link        : wechat_share.desc, // 分享链接
+        imgUrl      : wechat_share.imgUrl, // 分享图标
         success     : function () {
             // 用户确认分享后执行的回调函数
         },
