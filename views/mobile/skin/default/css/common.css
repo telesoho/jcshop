@@ -729,7 +729,7 @@ input[type='search']{
 .singleline{
   margin:0.2rem 0 0 0.4rem;
   width:1px;
-  border-left:0.01rem solid #eee;
+  border-left:1px solid #eee;
   height:2.5rem;
 }
 /*弹出样式*/
