@@ -238,9 +238,10 @@ class Apic extends IController
         $addressList = $addressObj->query('user_id = '.$user_id,"*","is_default desc");
         foreach ($addressList as $key => $data){
             $temp = area::name($data['province'],$data['city'],$data['area']);
-            $addressList[$key]['province_val'] =$temp[$data['province']];
-            $addressList[$key]['city_val'] =$temp[$data['city']];
-            $addressList[$key]['area_val'] =$temp[$data['area']];
+            $temp_k = array_keys($temp);
+            $addressList[$key]['province_val'] = in_array($data['province'],$temp_k) ? $temp[$data['province']] : '';
+            $addressList[$key]['city_val'] = in_array($data['city'],$temp_k) ? $temp[$data['city']] : '';
+            $addressList[$key]['area_val'] = in_array($data['area'],$temp_k) ? $temp[$data['area']] : '';
         }
         $this->json_echo($addressList);
     }
@@ -291,7 +292,7 @@ class Apic extends IController
         );
 
         $checkArray = $sqlData;
-        unset($checkArray['zip'],$checkArray['user_id']);
+        unset($checkArray['zip'],$checkArray['user_id'],$checkArray['area']);
 //        unset($checkArray['telphone'],$checkArray['zip'],$checkArray['user_id']);
         foreach($checkArray as $key => $val)
         {
@@ -327,9 +328,10 @@ class Apic extends IController
         }
 
         $areaList = area::name($province,$city,$area);
-        $sqlData['province_val'] = $areaList[$province];
-        $sqlData['city_val']     = $areaList[$city];
-        $sqlData['area_val']     = $areaList[$area];
+        $areaList_k = array_keys($areaList);
+        $sqlData['province_val'] = in_array($province,$areaList_k) ? $areaList[$province] : '';
+        $sqlData['city_val']     = in_array($city,$areaList_k) ? $areaList[$city] : '';
+        $sqlData['area_val']     = in_array($area,$areaList_k) ? $areaList[$area] : '';
         $result = array('data' => $sqlData);
 
         $this->json_echo($result);
