@@ -1,6 +1,6 @@
 {js:my97date}
 <div class="headbar">
-	<div class="position">订单<span>></span><span>订单管理</span><span>></span><span>订单列表</span></div>
+	<div class="position">店铺<span>></span><span>店铺管理</span><span>></span><span>店铺列表</span></div>
 	<div class="operating">
 		<a href="javascript:void(0);">
 			<button class="operating_btn" type="button" onclick="window.location='{url:/order/order_edit}'">
@@ -20,6 +20,7 @@
 				<col width="20px" />
 				<col width="20px" />
 				<col width="20px" />
+				<col width="20px" />
 			</colgroup>
 
 			<thead>
@@ -28,14 +29,15 @@
 				<th>订单付款时间</th>
 				<th>订单完成时间</th>
 				<th>下单时间</th>
-				<th>订单总金额</th>
+				<th>订单总金额(含邮费)</th>
 				<th>实际付款金额</th>
+				<th>返利金额({$this->rebate})</th>
 				<th>操作</th>
 			</tr>
 			</thead>
 
 			<tbody>
-			{foreach:items = $this->order_data}
+			{if:$this->order_data}{foreach:items = $this->order_data}
 			<tr>
 				<td title="{$item['order_no']}">{$item['order_no']}</td>
 				<td title="{$item['pay_time']}">{$item['pay_time']}</td>
@@ -43,11 +45,13 @@
 				<td title="{$item['create_time']}">{$item['create_time']}</td>
 				<td title="{$item['order_amount']}">{$item['order_amount']}</td>
 				<td title="{$item['real_amount']}">{$item['real_amount']}</td>
+				<td title="{$this->rebate}"><?php echo $item['real_amount']*$this->rebate;?></td>
 				<td title="结算">
 					<a href="{url:/order/order_shop_settlement/id/$item['id']}">结算</a>
 				</td>
 			</tr>
 			{/foreach}
+			{/if}
 			</tbody>
 		</table>
 	</div>

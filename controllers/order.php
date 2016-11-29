@@ -1574,15 +1574,47 @@ class Order extends IController implements adminAuthorization
         $user_data = $model->query('select * from iwebshop_user where id in (select b.id as user_id from iwebshop_shop as a left join iwebshop_user as b on b.shop_identify_id = a.identify_id where a.id = '.$id.' )');
         $shop_query = new IQuery('shop');
         $shop_query->where = 'id = ' . $id;
-        $this->shop_data = $shop_query->find()[0];
-        $temp = '';
-        foreach ($user_data as $key=>$value){
-            $temp .= ' or user_id = ' . $value['id'];
+        //利率
+        $shop_query_rebate = new IQuery('shop as a');
+        $shop_query_rebate->join = 'left join shop_category as b on a.category_id=b.id';
+        $shop_query_rebate->where = 'a.id = ' . $id;
+        $this->rebate = $shop_query_rebate->find()[0]['rebate'];
+        if ($shop_query->find()){
+            $this->shop_data = $shop_query->find()[0];
+            $temp = '';
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+            $temp = explode('or',$temp,2)[1];
+            $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
+            $ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval); // 已完成
+            $this->order_data = $ret->find();
+        } else {
+            $this->shop_data = null;
+            $this->order_data = null;
         }
-        $temp = explode('or',$temp,2)[1];
-        $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
-        $ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval); // 已完成
-        $this->order_data = $ret->find();
+
+        $url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers';
+        $nonce_str = $this->generate_password(30);
+        $params = array(
+            'appid' => 'jmj20161111',
+            'mchid' => '1406917802',
+            'device_info' => '',
+            'nonce_str' => $nonce_str,
+            'sign' => '',
+            'partner_trade_no' => '321654987',
+            'openid' => '',
+            'check_name' => '',
+            're_user_name' => '',
+            'amount' => '',
+            'desc' => '',
+            'spbill_create_ip' => '',
+        );
+//        sort($params);
+        ksort($params,SORT_STRING);
+//        $data = $this->curl_post_ssl('https://api.mch.weixin.qq.com/secapi/pay/refund', 'merchantid=1001000');
+        $data = $this->curl_post_ssl('https://api.mch.weixin.qq.com/secapi/pay/refund', $params);
+        var_dump($data);
         $this->redirect('order_shop_settlement');
     }
     function order_shop_category(){
@@ -1618,6 +1650,12 @@ class Order extends IController implements adminAuthorization
         $this->redirect('order_add_shop');
     }
     function order_add_shop_category(){
+        $id = IFilter::act(IReq::get('id'),'string');
+        if ($id){
+            $shop_category_query = new IQuery('shop_category');
+            $shop_category_query->get;
+        }
+
         $name = IFilter::act(IReq::get('name'),'string');
         $rebate = IFilter::act(IReq::get('rebate'),'string');
         $shop_category_model = new IModel('shop_category');
@@ -1629,5 +1667,73 @@ class Order extends IController implements adminAuthorization
             }
         };
         $this->redirect('order_add_shop_category');
+    }
+    function order_shop_info(){
+        $shop_query = new IQuery('shop');
+        $id = IFilter::act(IReq::get('id'),'int');
+        $shop_query->where = 'id = ' . $id;
+        $this->shop_data = $shop_query->find();
+        $this->redirect('order_shop_info');
+    }
+    function generate_password( $length = 8 ) {
+        // 密码字符集，可任意添加你需要的字符
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $password = '';
+        for ( $i = 0; $i < $length; $i++ )
+        {
+            // 这里提供两种字符获取方式
+            //// 第一种是使用 substr 截取$chars中的任意一位字符；
+            //// 第二种是取字符数组 $chars 的任意元素
+            //// $password .= substr($chars, mt_rand(0, strlen($chars) – 1), 1);
+            $password .= $chars[ mt_rand(0, strlen($chars) - 1) ];
+        }
+        return $password;
+    }
+    /*
+    请确保您的libcurl版本是否支持双向认证，版本高于7.20.1
+    */
+    function curl_post_ssl($url, $vars, $second=30,$aHeader=array())
+    {
+        $ch = curl_init();
+        //超时时间
+        curl_setopt($ch,CURLOPT_TIMEOUT,$second);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+        //这里设置代理，如果有的话
+        //curl_setopt($ch,CURLOPT_PROXY, '10.206.30.98');
+        //curl_setopt($ch,CURLOPT_PROXYPORT, 8080);
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
+
+        //以下两种方式需选择一种
+
+        //第一种方法，cert 与 key 分别属于两个.pem文件
+        //默认格式为PEM，可以注释
+        //curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
+        //curl_setopt($ch,CURLOPT_SSLCERT,getcwd().'/cert.pem');
+        //默认格式为PEM，可以注释
+        //curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
+        //curl_setopt($ch,CURLOPT_SSLKEY,getcwd().'/private.pem');
+
+        //第二种方式，两个文件合成一个.pem文件
+        curl_setopt($ch,CURLOPT_SSLCERT,getcwd().'/all.pem');
+
+        if( count($aHeader) >= 1 ){
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $aHeader);
+        }
+
+        curl_setopt($ch,CURLOPT_POST, 1);
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$vars);
+        $data = curl_exec($ch);
+        if($data){
+            curl_close($ch);
+            return $data;
+        }
+        else {
+            $error = curl_errno($ch);
+            echo "call faild, errorCode:$error\n";
+            curl_close($ch);
+            return false;
+        }
     }
 }

@@ -17,7 +17,7 @@
 			<hr>
 			店铺类别：<select name="category_id">
 				{foreach:items = $this->shop_category_query->find()}
-				<option value="{$item['id']}">{$item['name']}</option>
+				<option value="{$item['id']}">{$item['name']} / {$item['rebate']}</option>
 				{/foreach}
 			</select>
 			<input type="submit">

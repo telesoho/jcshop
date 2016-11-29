@@ -15,6 +15,7 @@
 			<col width="70px" />
 			<col width="70px" />
 			<col width="70px" />
+			<col width="70px" />
 		</colgroup>
 
 		<thead>
@@ -23,6 +24,7 @@
 			<th>注册开店时间</th>
 			<th>店铺二维码</th>
 			<th>店铺类别</th>
+			<th>状态</th>
 			<th>操作</th>
 		</tr>
 		</thead>
@@ -30,14 +32,22 @@
 		<tbody>
 		{foreach:items = $this->shop_query->find()}
 		<tr>
-			<td title="{$item['name']}">{$item['name']}</td>
+			<td title="{$item['name']}">
+				<a href="{url:/order/order_shop_info/id/$item['id']}">
+					{$item['name']}
+				</a>
+			</td>
 			<td title="{$item['register_time']}">{$item['register_time']}</td>
 			<td title="{$item['register_time']}">
-				<img src="<?php echo IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $item['identify_id'];?>">
+				<img width="50" src="<?php echo IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $item['identify_id'];?>">
 			</td>
 			<td title="{$item['category_name']}">{$item['category_name']} / {$item['rebate']}</td>
+			<td title="{$item['register_time']}">{if:$item['own_id']}已经被使用{else:}无人使用{/if}</td>
 			<td title="结算">
-				<a href="{url:/order/order_shop_settlement}">结算</a>
+				{if:$item['own_id']}
+				<a href="{url:/order/order_shop_settlement/id/$item['id']}">结算</a>
+				{else:}
+				{/if}
 			</td>
 		</tr>
 		{/foreach}

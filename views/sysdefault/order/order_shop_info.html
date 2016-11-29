@@ -1,0 +1,16 @@
+{js:my97date}
+<div class="content">
+
+	<div class="headbar">
+		<div class="position">店铺<span>></span><span>店铺管理</span><span>></span><span>店铺详情</span></div>
+		<div class="operating">
+			<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="window.location='{url:/order/order_add_shop}'"><span class="addition">添加店铺</span></button></a>
+		</div>
+	</div>
+	{if:$this->shop_data}
+	店铺名称：{$this->shop_data[0]['name']}<br>
+	<hr>
+	店铺二维码：
+	<img src="<?php echo IWeb::$app->config['image_host'] . '/ucenter/qrcode/identify_id/' . $this->shop_data[0]['identify_id'];?>">
+	{/if}
+</div>
