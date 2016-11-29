@@ -479,12 +479,12 @@ class Simple extends IController
 		{
 			$takeself = 0;
 		}
-
-		if(!$gid)
-		{
-			//清空购物车
-			IInterceptor::reg("cart@onFinishAction");
-		}
+		//不清空购物车
+// 		if(!$gid)
+// 		{
+// 			//清空购物车
+// 			IInterceptor::reg("cart@onFinishAction");
+// 		}
 
     	//判断商品是否存在
     	if(is_string($goodsResult) || empty($goodsResult['goodsList']))
@@ -627,6 +627,9 @@ class Simple extends IController
 					
 				//折扣券
 				'ticket_did' 		  => $ticket_did,
+				
+				//订单购买类型
+				'type_source' 		  => empty($gid) ? 2 : 1, //1单个商品购买-2购物车购买
 			);
 
 			//获取红包减免金额
@@ -753,8 +756,10 @@ class Simple extends IController
 		}
 		else
 		{
-			$this->setRenderData($dataArray);
-			$this->redirect('cart3');
+			//直接跳转到支付页面
+			$this->redirect('/block/doPay/order_id/'.$order_id);
+// 			$this->setRenderData($dataArray);
+// 			$this->redirect('cart3');
 		}
     }
 
