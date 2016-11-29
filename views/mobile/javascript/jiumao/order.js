@@ -1,6 +1,3 @@
-/**
- * Created by yb on 2016/11/29.
- */
 var vm = new Vue({
     el: '#order_Total',
     data: {
@@ -81,7 +78,7 @@ var vm = new Vue({
     }
 })
 vm.getData();
-window.onload=function(){
+$(window).load(function(){
     $("#loading").fadeOut(300);
     mui('body').on('tap','.locationA',function(){
         document.location.href=this.href;
@@ -89,7 +86,7 @@ window.onload=function(){
     mui('body').on('tap','.mui-control-item',function(){
         this.click();
     });
-};
+});
 //快递跟踪
 function freightLine(doc_id){
     mui('.mui-popover').popover('toggle',document.getElementById("logistics_all"));
@@ -116,6 +113,10 @@ function getOrder(self){
             self.showMessage=true;
             self.orderInfo=data;
             console.log(data);
+        },
+        error:function(xhr,type,errorThrown){
+            //异常处理；
+            console.log(type);
         }
     });
 }

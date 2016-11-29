@@ -63,7 +63,7 @@
 				</a>
 			</div>
 		</div>
-		<div class="mui-slider-group" v-show="showMessage">
+		<div class="mui-slider-group">
 			<div id="order_state0" :class="contentClass">
 				<div style="min-height:100%">
 					<template v-if="showMessage && orderInfo_new.state0.length==0" v-cloak>
@@ -127,7 +127,7 @@
 							</div>
 							<div class="content">
 								<span>~</span>
-								<span>暂无订单消息</span>
+								<span>购物车还是空的哦</span>
 								<span>~</span>
 							</div>
 						</section>
@@ -320,9 +320,11 @@
 		</div>
 	</div>
 </section>
-<script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/vue.js"></script>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/jiumao/order.js?v=1.0.1"></script>
+<script src="/views/mobile/javascript/jiumao/order.js"></script>
+
 </body>
 </html>
