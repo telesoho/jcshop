@@ -17,7 +17,10 @@ var vm = new Vue({
             state:'state_item',
             img_little:'/views/mobile/skin/default/image/jmj/order/cat_small.png',
             img_big:'/views/mobile/skin/default/image/jmj/order/catbig.png'
-        }
+        },
+        showContainer:false,
+        leftClass:'showWrapper1',
+        rightClass:'hideWrapper1'
     },
     computed: {
         goods_new: function (){
@@ -59,6 +62,7 @@ var vm = new Vue({
         },
         getDelivery: function(eid){
             Delivery(eid);
+            this.showContainer=true;
             mui("#logistics").popover('show');
             $('.mui-backdrop').hide();
         }
@@ -108,6 +112,6 @@ function Delivery(id){
     $.get(urlVal,function(response){
         var responseHtml=response.substring(response.indexOf('<div class="container">'),response.indexOf("</body>"));
         console.log(responseHtml);
-        document.getElementById("container").innerHTML=responseHtml;
+        document.getElementById("div_text").innerHTML=responseHtml;
     })
 }
