@@ -103,8 +103,8 @@ function GetRequest() {
 }
 function Delivery(id){
     //获取物流信息
-    var urlVal = "{url:/block/freight/id/@id@}";
-    urlVal = urlVal.replace("@id@", id);
+    var urlVal = "/block/freight/id/"+id;
+    // urlVal = urlVal.replace("@id@", id);
     $.get(urlVal,function(response){
         var responseHtml=response.substring(response.indexOf('<div class="container">'),response.indexOf("</body>"));
         console.log(responseHtml);

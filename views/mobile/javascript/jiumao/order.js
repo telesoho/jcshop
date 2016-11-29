@@ -71,6 +71,7 @@ var vm = new Vue({
             getOrder(self);
         },
         getDelivery: function(eid){
+            console.log(eid);
             Delivery(eid);
             mui("#logistics").popover('show');
             $('.mui-backdrop').hide();
@@ -90,14 +91,15 @@ $(window).load(function(){
 //快递跟踪
 function freightLine(doc_id){
     mui('.mui-popover').popover('toggle',document.getElementById("logistics_all"));
-    var urlVal = "{url:/block/freight/id/@id@}";
-    urlVal = urlVal.replace("@id@", doc_id);
+    var urlVal = "url:/block/freight/id/"+doc_id;
+    // urlVal = urlVal.replace("@id@", doc_id);
 //		window.location.href=urlVal;
 }
 function Delivery(id){
     //获取物流信息
-    var urlVal = "{url:/block/freight/id/@id@}";
-    urlVal = urlVal.replace("@id@", id);
+    console.log(id);
+    var urlVal = "/block/freight/id/"+id;
+    // urlVal = urlVal.replace("@id@", id);
     $.get(urlVal,function(response){
         var responseHtml=response.substring(response.indexOf('<div class="container">'),response.indexOf("</body>"));
         console.log(responseHtml);
