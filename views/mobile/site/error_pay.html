@@ -7,7 +7,7 @@
     <meta name="x5-orientation" content="portrait">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <title>{echo:IReq::get('heading')}</title>
+    <title>页面不存在</title>
     <style>
         .content{
             width:100%;
@@ -39,9 +39,9 @@
     </style>
 </head>
 <body>
+    {set:$msg = IReq::get('msg') ? IReq::get('msg') : '/views/mobile/skin/default/image/xinzeng/error.png'}
     <div class="content">
-            <img src="{/views/mobile/skin/default/image/xinzeng/error_default.png}" alt="">
-
+            <img src="{$msg}" alt="">
         <!--<img src="/views/mobile/skin/default/image/xinzeng/error.png" alt="">-->
         <a href="{url:/site/index}">去逛逛</a>
     </div>

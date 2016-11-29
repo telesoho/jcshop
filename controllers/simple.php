@@ -516,6 +516,7 @@ class Simple extends IController
 			exit;
 		}
 		
+		//=======================================
 		/* 优惠券券 */
 		$ticket_type 	 			= 0;
 		if($ticket_did > 0){
@@ -527,32 +528,45 @@ class Simple extends IController
     		$model_ticket->update('`id`='.$ticket_did);
     		$ticket_type_id 		= $data_ticket['type'];
     	}
+    	//满包邮
+    	$promotion_query 			= new IQuery("promotion");
+    	$promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
+    	$condition_price 			= $promotion_query->find()[0]['condition'];
+    	//配送方式
+    	$delivery 					= Api::run('getDeliveryList');
+    	//=======================================
     	
-		
 		//根据商品所属商家不同批量生成订单
 		$orderIdArray  = array();
 		$orderNumArray = array();
 		$final_sum     = 0;
 		foreach($orderData as $seller_id => $goodsResult)
 		{
+			//====================================
 			/* 计算优惠价格 */
 			switch($ticket_type){
 				//折扣券
 				case 1 :
-					$order_amount 		= $goodsResult['final_sum']*$data_ticket['ratio']+$goodsResult['deliveryPrice'];
-					$real_amount 		= $goodsResult['final_sum']*$data_ticket['ratio'];
+					$goodsResult['sum'] = $goodsResult['sum']*$data_ticket['ratio'];
 					break;
 				//抵扣券
 				case 2 :
-					$order_amount 		= $goodsResult['final_sum']-$data_ticket['money']+$goodsResult['deliveryPrice'];
-					$real_amount 		= $goodsResult['final_sum']-$data_ticket['money'];
+					$goodsResult['sum'] = $goodsResult['sum']-$data_ticket['money'];
 					break;
-				default:
-					$order_amount 		= $goodsResult['orderAmountPrice'];
-					$real_amount 		= $goodsResult['final_sum'];
 			}
-			//实际邮费
-			$deliveryPrice 				= $goodsResult['deliveryPrice'];
+			/* 计算邮费 */
+			if ($goodsResult['sum'] >= $condition_price){
+				$deliveryPrice 			= 0;
+			} else {
+				//首重价格
+				$deliveryPrice 			= $delivery[0]['first_price'];
+				//续重价格
+				if($goodsResult['weight'] > $delivery[0]['first_weight']){
+					$deliveryPrice 		+= ceil(($goodsResult['weight']-$delivery[0]['first_weight'])/$delivery[0]['second_weight'])*$delivery[0]['second_price'];
+				}
+			}
+			//====================================
+			
 			//生成的订单数据
 			$dataArray = array(
 				'order_no'            => Order_Class::createOrderNum(),
@@ -576,7 +590,7 @@ class Simple extends IController
 
 				//商品价格
 				'payable_amount'      => $goodsResult['sum'],
-				'real_amount'         => $real_amount,
+				'real_amount'         => $goodsResult['sum'], //$goodsResult['final_sum']
 
 				//运费价格
 				'payable_freight'     => $goodsResult['deliveryOrigPrice'],
@@ -594,7 +608,7 @@ class Simple extends IController
 				'promotions'          => $goodsResult['proReduce'] + $goodsResult['reduce'],
 
 				//订单应付总额
-				'order_amount'        => $order_amount,//$goodsResult['orderAmountPrice'],
+				'order_amount'        => $goodsResult['sum']+$deliveryPrice,//$goodsResult['orderAmountPrice'],
 
 				//订单保价
 				'insured'             => $goodsResult['insuredPrice'],
