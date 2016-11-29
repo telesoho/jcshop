@@ -404,6 +404,7 @@ class Goods extends IController implements adminAuthorization
 		$goodsHandle->fields   = "go.id, go.goods_no, go.name,go.sell_price,go.store_nums,go.sale,go.is_del,go.create_time";
 		$goodsHandle->join     = $join;
 		$goodsHandle->where    = $where;
+		$goodsHandle->limit    = "all";
 		$goodsList = $goodsHandle->find();
 
 		//构建 Excel table;
