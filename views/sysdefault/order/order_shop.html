@@ -39,7 +39,7 @@
 			</td>
 			<td title="{$item['register_time']}">{$item['register_time']}</td>
 			<td title="{$item['register_time']}">
-				<img width="50" src="<?php echo IWeb::$app->config['image_host1'] . '/ucenter/qrcode/identify_id/' . $item['identify_id'];?>">
+				<img width="50" src="<?php echo IWeb::$app->config['image_host1'] . '/order/qrcode/identify_id/' . $item['identify_id'];?>">
 			</td>
 			<td title="{$item['category_name']}">{$item['category_name']} / {$item['rebate']}</td>
 			<td title="{$item['register_time']}">{if:$item['own_id']}已经被使用{else:}无人使用{/if}</td>

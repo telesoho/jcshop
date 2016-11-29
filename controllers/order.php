@@ -4,6 +4,8 @@
  * @class Order
  * @note  后台
  */
+require_once __DIR__ . '/../plugins/vendor/autoload.php';
+use  Endroid\QrCode\QrCode;
 class Order extends IController implements adminAuthorization
 {
 	public $checkRight  = 'all';
@@ -1735,5 +1737,22 @@ class Order extends IController implements adminAuthorization
             curl_close($ch);
             return false;
         }
+    }
+    function qrcode(){
+        $identify_id = IFilter::act(IReq::get('identify_id'),'int');
+        $qrCode = new QrCode();
+        $qrCode
+//            ->setText('http://192.168.0.13:8080/?iid=' . $identify_id)
+            ->setText(IWeb::$app->config['image_host1'] . '?iid=' . $identify_id)
+            ->setSize(150)
+            ->setPadding(10)
+            ->setErrorCorrection('high')
+            ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+            ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+            ->setLabel('')
+            ->setLabelFontSize(16)
+            ->setImageType(QrCode::IMAGE_TYPE_PNG);
+        header('Content-Type: '.$qrCode->getContentType());
+        $qrCode->render();
     }
 }
