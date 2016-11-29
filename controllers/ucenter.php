@@ -1035,7 +1035,7 @@ class Ucenter extends IController implements userAuthorization
         $shop_query = new IQuery('shop');
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
         $user_shop_data = $shop_query->find()[0];
-        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host1'] . '/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
+        $user_shop_data['identify_qrcode'] = IWeb::$app->config['image_host1'] . '/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
 //        $user_shop_data['identify_qrcode'] = 'http://192.168.0.13:8080/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
         $this->user_shop_data = $user_shop_data;
         if ($this->user_shop_data){
@@ -1081,5 +1081,19 @@ class Ucenter extends IController implements userAuthorization
     //累计收益
     function shop_accumulated_income(){
         $this->redirect('shop_accumulated_income');
+    }
+    //编辑商品信息
+    function shop_edit(){
+        $name = IFilter::act(IReq::get('name'),'string');
+        $identify_id = IFilter::act(IReq::get('id'),'int');
+        if ($name){
+            $shop_model = new IModel('shop');
+            $shop_model->setData(['name' => $name]);
+            $shop_model->update('identify_id = ' . $identify_id.' and own_id = ' .$this->user['user_id']);
+        }
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'identify_id = ' . $identify_id . ' and own_id = ' .$this->user['user_id'];
+        $this->shop_data = $shop_query->find();
+        $this->redirect('shop_edit');
     }
 }
