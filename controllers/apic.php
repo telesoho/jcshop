@@ -379,9 +379,9 @@ class Apic extends IController
     public function order_list()
     {
         $ret0 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status != 3 and status != 4'); // 全部订单
-        $ret1 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 1 and pay_type != 0'); // 待支付
+        $ret1 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 1'); // 待支付
         $ret2 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
-        $ret3 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status = 1'); // 待收货
+        $ret3 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 2 and distribution_status in (1,2)'); // 待收货
         $ret4 = Api::run('getOrderList',$this->user['user_id'], 'pay_type != 0 and status = 5 '); // 已完成
         $data['state0'] = $ret0->find();
         $data['state1'] = $ret1->find();
@@ -399,6 +399,7 @@ class Apic extends IController
             $items[$pay['id']]['type'] = $pay['type'];
         }
 
+        
         $temp = [];
         foreach ($data as $k => $v){
             foreach ($v as $key => $value ){
@@ -442,9 +443,10 @@ class Apic extends IController
                 }
             }
         }
-        $relation = array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流', '已取消'=>'已取消');
+        $relation 			= array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流', '已取消'=>'已取消','部分发货'=>'查看物流');
+        $relation_k 		= array_keys($relation);
         foreach ($data['state0'] as $key => $value){
-            $data['state0'][$key]['text'] = $relation[$value['orderStatusText']];
+            	$data['state0'][$key]['text'] = in_array($value['orderStatusText'],$relation_k) ? $relation[$value['orderStatusText']] : '';
         }
         $this->json_echo($data);
     }
