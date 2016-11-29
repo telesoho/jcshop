@@ -123,12 +123,16 @@
                 </li>
             </ul>
         <ul class="mui-table-view">
+            {if:$this->user_shop_data}
+
             <li class="mui-table-view-cell">
                 <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_edit/id/$this->user_shop_data[0]['identify_id']}">
                     <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
                     店铺信息
                 </a>
             </li>
+
+            {/if}
         </ul>
         <ul class="mui-table-view">
             {if:$this->user_shop_data}
