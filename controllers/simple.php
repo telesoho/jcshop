@@ -526,7 +526,7 @@ class Simple extends IController
     		//折扣券已使用状态
     		$model_ticket->setData(array('status'=>2,'user_id'=>$user_id));
     		$model_ticket->update('`id`='.$ticket_did);
-    		$ticket_type_id 		= $data_ticket['type'];
+    		$ticket_type 			= $data_ticket['type'];
     	}
     	//满包邮
     	$promotion_query 			= new IQuery("promotion");
