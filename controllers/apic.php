@@ -399,6 +399,8 @@ class Apic extends IController
             $items[$pay['id']]['type'] = $pay['type'];
         }
 
+        var_dump($data);exit();
+        
         $temp = [];
         foreach ($data as $k => $v){
             foreach ($v as $key => $value ){
@@ -442,11 +444,12 @@ class Apic extends IController
                 }
             }
         }
-        $relation = array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流', '已取消'=>'已取消');
+        var_dump($value);exit();
+        $relation 			= array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流', '已取消'=>'已取消','部分发货'=>'查看物流');
+        $relation_k 		= array_keys($relation);
         foreach ($data['state0'] as $key => $value){
-            $data['state0'][$key]['text'] = $relation[$value['orderStatusText']];
+            	$data['state0'][$key]['text'] = in_array($value['orderStatusText'],$relation_k) ? $relation[$value['orderStatusText']] : '';
         }
-//         var_dump($data);exit();
         $this->json_echo($data);
     }
     /**
