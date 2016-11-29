@@ -63,7 +63,7 @@
 				</a>
 			</div>
 		</div>
-		<div class="mui-slider-group">
+		<div class="mui-slider-group" v-show="showMessage">
 			<div id="order_state0" :class="contentClass">
 				<div style="min-height:100%">
 					<template v-if="showMessage && orderInfo_new.state0.length==0" v-cloak>
@@ -320,8 +320,9 @@
 		</div>
 	</div>
 </section>
-<script src="/views/mobile/javascript/vue.js"></script>
+<script src="/views/mobile/javascript/empty.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/vue.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script>
 	var vm = new Vue({
@@ -385,7 +386,7 @@
 				return  this.orderInfo;
 			}
 		},
-		mounted:function() {
+		updated:function() {
 			$(".mui-control-item").removeClass('mui-active');
 			$(".mui-control-item"+this.nowStatus).addClass('mui-active');
 			$(".mui-slider-item").removeClass('mui-active');
