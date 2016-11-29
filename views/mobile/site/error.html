@@ -15,12 +15,16 @@
             background:#fff;
             display: -webkit-flex;
             -webkit-justify-content: center;
-            flex-wrap: wrap;
+            -webkit-flex-wrap: wrap;
         }
-        .content img{
-            width:5.56rem;
-            height:5.08rem;
-            margin-top:0.78rem;
+        .img{
+            width:100%;
+            margin-left:12.5%;
+
+        }
+        .img img{
+            /*display: inline-block;*/
+            margin-top:1rem;
         }
         .content a{
             display: block;
@@ -34,14 +38,23 @@
             letter-spacing:0.0067rem;
             text-align:center;
             line-height: 0.98rem;
-            margin-top:1rem;
+            margin-top:1.5rem;
+        }
+        .content .text{
+            margin-top:0.5rem;
+            font-size:0.36rem;
+            color:#ff44a0;
         }
     </style>
 </head>
 <body>
+    <div class="img">
+        <img src="/views/mobile/skin/default/image/xinzeng/error_default.png" alt="" style="width:5.68rem;height:auto"/>
+    </div>
     <div class="content">
-            <img src="{/views/mobile/skin/default/image/xinzeng/error_default.png}" alt="">
-
+        <div class="text">
+            nihaoooo以后经济
+        </div>
         <!--<img src="/views/mobile/skin/default/image/xinzeng/error.png" alt="">-->
         <a href="{url:/site/index}">去逛逛</a>
     </div>
