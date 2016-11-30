@@ -998,8 +998,11 @@ class Apic extends IController
     /**
      * 专辑分类列表
      */
-    public function article_category(){
-    	
+    public function article_category_list(){
+    	$query 					= new IQuery('article_category');
+    	$query->where 			= '';
+
+    	$query->fields 			= 'id,name,';
     	
     }
     //通过专辑获取相关商品
