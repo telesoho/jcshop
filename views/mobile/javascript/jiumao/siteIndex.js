@@ -69,15 +69,6 @@ function checkPlay(obj){
     $(self).next().next().addClass("hide");
 }
 
-
-
-//微信分享
-var wechat_share = {
-    title       : '九猫商城', //标题
-    desc        : '欢迎来到九猫家', //描述
-    imgUrl      : "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
-}
-
 // 百度统计
 var _hmt = _hmt || [];
 (function() {
