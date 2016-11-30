@@ -131,7 +131,7 @@ class wap_wechat extends paymentPlugin
 			}
 			else
 			{
-				die('支付失败了。。。。。');//die($resultArray['return_msg']);
+				die('支付失败了');//die($resultArray['return_msg']);
 			}
 		}
 		else
