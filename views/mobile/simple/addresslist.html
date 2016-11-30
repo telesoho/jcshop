@@ -66,13 +66,13 @@
                 <%if(data[i].is_default==1){%>
                 <div class="is_default">
                     <img src="/views/mobile/skin/default/image/jmj/icon/choose.png" alt="" />
-                    <span>默认地址</span>
+                    <span>收货地址地址</span>
                 </div>
                 <%}else{%>
                 <!--非默认地址-->
-                <div class="no_default" onclick=changeDefault(<%=data[i].id%>)>
+                <div class="no_default" onclick=changeDefault1(<%=data[i].id%>)>
                     <img src="/views/mobile/skin/default/image/jmj/icon/circle.png" alt="" />
-                    <span>默认地址</span>
+                    <span>设为收货地址</span>
                 </div>
                 <%}%>
                 <div class="isEdit box">
@@ -141,17 +141,24 @@
         cityPicker3 = new mui.PopPicker({
             layer: 3
         });
+    //        设置如果订单页面进入回退到订单页面，个人中心就回退到个人中心页面
+        pushHistory();
+        window.addEventListener("popstate", function(e) {
+            if(statusOrder=="cart_order"||statusOrder=="cart_order1"){
+                window.location.href=getItem("cart2url");
+            }else{
+                window.location.href='/ucenter/index';
+            }
+        }, false);
         var submitaddr=document.getElementById("submitaddr");
         submitaddr.addEventListener('tap',function(){
             if(statusOrder=="cart_order"){
-                document.location.href="{url:/simple/addaddress}?rev=cart_order";
+                document.location.href="/simple/addaddress?rev=cart_order";
             }else{
-                document.location.href="{url:/simple/addaddress}";
+                document.location.href="/simple/addaddress";
             }
-
-
         })
-    })
+    });
     function getAddressInfo(){
         mui.ajax('index.php?controller=apic&action=address_list',{
             dataType:'json',//服务器返回json格式数据
@@ -218,7 +225,7 @@
                 timeout:10000,		// 超时时间设置为10秒；
                 success:function(data){
                     console.log(addaddressInfo);
-                    document.location.href="{url:/simple/addresslist}";
+                    document.location.href="/simple/addresslist";
                 },
                 error:function(xhr,type,errorThrown){
                     //异常处理；
@@ -244,26 +251,6 @@
         }else{
             submitaddr1.disabled='disabled';
         }
-    }
-    function changeDefault(id){
-        var data1=id;
-        mui.ajax('index.php?controller=apic&action=address_default',{
-            data:{
-                id:data1,
-                is_default:1
-            },
-            dataType:'json',//服务器返回json格式数据
-            type:'get',//HTTP请求类型
-            timeout:10000,//超时时间设置为10秒；
-            success:function(data){
-                console.log(data);
-                window.location.reload();
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
-            }
-        });
     }
     function changeDefault1(id){
         var data1=id;
@@ -329,6 +316,13 @@
     function getItem(key){
         var getter= window.localStorage.getItem(key);
         return JSON.parse(getter);
+    }
+    function pushHistory(statusOrder) {
+        var state = {
+            title: "title",
+            url: "#"
+        };
+        window.history.pushState(state, 'title', "#");
     }
 </script>
 </body>

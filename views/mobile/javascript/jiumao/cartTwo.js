@@ -11,7 +11,7 @@ $(window).load(function(){
     mui('body').on('tap','a',function(){
         document.location.href=this.href;
     });
-})
+});
 var vm = new Vue({
     el: '#wareListShop',
     data: {

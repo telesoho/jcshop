@@ -83,6 +83,11 @@ var vm = new Vue({
 vm.getData();
 $(window).load(function(){
     $("#loading").fadeOut(300);
+    pushHistory();
+    // 让order页面只能回到个人中心
+    window.addEventListener("popstate", function(e) {
+            window.location.href='/ucenter/index';
+    }, false);
     mui('body').on('tap','.locationA',function(){
         document.location.href=this.href;
     });
@@ -140,4 +145,12 @@ function saveStatus(num){
     setItem('status',num);
 //		$(".mui-slider-item").removeClass('mui-active');
 //		$("#order_state"+this.nowStatus).addClass('mui-active');
+}
+
+function pushHistory(statusOrder) {
+    var state = {
+        title: "title",
+        url: "#"
+    };
+    window.history.pushState(state, 'title', "#");
 }

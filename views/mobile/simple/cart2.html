@@ -39,6 +39,9 @@
 <!--loading页结束-->
 <!--vue容器-->
 <div id="wareListShop">
+	<div class="top_fixd">
+		<a href="/site/index"><span>首页</span></a> <span>确认订单</span>
+	</div>
 	<template v-if="showMessage && infoMessage.addressList.length==0" v-cloak>
 		<a href="{url:/simple/addaddress}?from=cart2">
 			<div class="order_addAddr">
