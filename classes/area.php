@@ -31,6 +31,12 @@ class area
 		{
 			$result[$value['area_id']] = $value['area_name'];
 		}
+		//====
+		$result_k 		= array_keys($result);
+		foreach($paramArray as $k => $v){
+			if(!in_array($v,$result_k)) $result[$v] = '';
+		}
+		//====
 		return $result;
 	}
 }

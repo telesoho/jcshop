@@ -67,7 +67,7 @@ class goods_class
 			}
 			else if($key == 'content')
 			{
-				$goodsUpdateData['content'] = IFilter::addSlash($val);
+				$goodsUpdateData['content'] = $val;//IFilter::addSlash($val);
 			}
 			else if($key[0] != '_')
 			{

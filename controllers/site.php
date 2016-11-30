@@ -424,6 +424,8 @@ class Site extends IController
 	//商品展示
 	function products()
 	{
+		$_SESSION["__forward__"] 	= $_SERVER["REQUEST_URI"]; //记录回跳链接
+		
 		$goods_id = IFilter::act(IReq::get('id'),'int');
 
 		if(!$goods_id)
