@@ -999,11 +999,27 @@ class Apic extends IController
      * 专辑分类列表
      */
     public function article_category_list(){
-    	$query 					= new IQuery('article_category');
-    	$query->where 			= '';
-
-    	$query->fields 			= 'id,name,';
-    	
+    	/* 首页展示的专辑分类 */
+    	$query_ac 					= new IQuery('article_category');
+    	$query_ac->where 			= 'id in (10,11,12,13,14,15,16,17,18,19)';
+    	$query_ac->fields 			= 'id,name';
+    	$query_ac->limit 			= 8;
+    	$list_ac 					= $query_ac->find();
+    	/* 特别推荐专辑 */
+    	$query_ar 					= new IQuery('article');
+    	$query_ar->where 			= 'top=1';
+    	$query_ar->order 			= 'sort desc';
+    	$query_ar->limit 			= 3;
+    	$query_ar->fields 			= 'id,title,image';
+    	$list_ar 					= $query_ar->find();
+    	if(!empty($list_ar)){
+    		foreach($list_ar as $k => $v){
+    			$list_ar[$k]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
+    		}
+    	}
+    	/* 返回数据 */
+		$data 						= array('ac'=>$list_ac,'ar'=>$list_ar);
+    	$this->json_echo($data);
     }
     //通过专辑获取相关商品
     public function article_rel_goods()
