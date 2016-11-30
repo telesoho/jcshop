@@ -282,7 +282,8 @@ class Simple extends IController
     //填写订单信息cart2
     function cart2()
     {
-//     	$_SESSION["__forward__"] 	= $_SERVER["REQUEST_URI"]; //记录回跳链接
+    	session_start();
+    	$_SESSION["__forward__"] 	= $_SERVER["REQUEST_URI"]; //记录回跳链接
     	
 		$id        = IFilter::act(IReq::get('id'),'int');
 		$type      = IFilter::act(IReq::get('type'));//goods,product
