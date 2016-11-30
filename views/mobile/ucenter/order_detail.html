@@ -133,18 +133,17 @@
 				<a :href="buttonurl.button2Url" class="locationA buttom_fixd buttom_fixd2">{{buttonurl.button2}}</a>
 			</div>
 		</template>
-	</section>
-	<section>
-		<!--物流弹出菜单-->
-		<div id="logistics" class="mui-modal">
-			<header class="mui-bar mui-bar-nav">
-				<a href="#logistics" class="mui-icon mui-icon-left-nav mui-pull-left locationA"></a>
-				<h1 class="mui-title">物流详情</h1>
-			</header>
-			<div class="mui-content" style="height: 100%;" id="container">
+		<section>
+			<!--物流弹出菜单-->
+			<div id="div_action" :class="showContainer?leftClass:rightClass">
+				<div class="head">
+					<span @click="showContainer=false">返回</span><span>查看物流</span>
+				</div>
+				<div id="div_text">
 
+				</div>
 			</div>
-		</div>
+		</section>
 	</section>
     <script src="/views/mobile/javascript/vue.js"></script>
 	<script src="/views/mobile/javascript/jquery.min.js"></script>

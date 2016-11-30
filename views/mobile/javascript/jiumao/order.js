@@ -9,7 +9,10 @@ var vm = new Vue({
             state3:[],
             state4:[]
         },
-        contentClass:'mui-slider-item mui-control-content'
+        contentClass:'mui-slider-item mui-control-content',
+        showContainer:false,
+        leftClass:'showWrapper',
+        rightClass:'hideWrapper'
     },
     computed: {
         nowStatus: function (){
@@ -72,9 +75,8 @@ var vm = new Vue({
         },
         getDelivery: function(eid){
             console.log(eid);
+            this.showContainer=true;
             Delivery(eid);
-            mui("#logistics").popover('show');
-            $('.mui-backdrop').hide();
         }
     }
 })
@@ -86,6 +88,9 @@ $(window).load(function(){
     });
     mui('body').on('tap','.mui-control-item',function(){
         this.click();
+    });
+    mui('.mui-scroll-wrapper').scroll({
+        deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
     });
 });
 //快递跟踪
@@ -103,11 +108,11 @@ function Delivery(id){
     $.get(urlVal,function(response){
         var responseHtml=response.substring(response.indexOf('<div class="container">'),response.indexOf("</body>"));
         console.log(responseHtml);
-        document.getElementById("container").innerHTML=responseHtml;
+        document.getElementById("div_text").innerHTML=responseHtml;
     })
 }
 function getOrder(self){
-    $.ajax('/apic/order_list',{
+    mui.ajax('/apic/order_list',{
         dataType:'json',//服务器返回json格式数据
         type:'get',//HTTP请求类型
         timeout:10000,//超时时间设置为10秒；

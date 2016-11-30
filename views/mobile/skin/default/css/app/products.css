@@ -153,10 +153,15 @@ ul li{
     width:7.25rem;
     height:2.34rem;
 }
-#goodsContent{
+#goodsContent,#goodsContent p,#goodsContent p{
     font-size:0.28rem;
     color:#3d4245;
-    text-align:justify;
+    text-align:left;
+}
+#goodsContent div,#goodsContent div{
+    font-size:0.28rem;
+    color:#3d4245;
+    text-align:left;
 }
 .footerBox{
     position:fixed;bottom:0;z-index:2;

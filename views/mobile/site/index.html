@@ -294,7 +294,7 @@
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <!--<script src="/views/mobile/javascript/time.js"></script>-->
-<script src="/views/mobile/javascript/base64.js"></script>
+<!--<script src="/views/mobile/javascript/base64.js"></script>-->
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
 <!-- 微信分享 -->
 <?php 
@@ -305,6 +305,14 @@ if(IClient::isWechat() == true){
     $this->wechat->jsApiSDK();
 }
 ?>
+<script>
+    //微信分享
+    var wechat_share = {
+        title       : '九猫商城', //标题
+        desc        : '欢迎来到九猫家', //描述
+        imgUrl      : "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
+    }
+</script>
 <script src="/views/mobile/javascript/jiumao/wechat.share.js"></script>
 <script type="text/javascript" src="/views/mobile/javascript/jiumao/siteIndex.js"></script>
 </body>
