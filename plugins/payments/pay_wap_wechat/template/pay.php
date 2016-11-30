@@ -26,7 +26,8 @@ function onBridgeReady()
 			}
 			else
 			{
-				alert(res.err_msg);
+				// get_brand_wcpay_request:cancel
+				console.log(res.err_msg);
 				window.location.href="<?php echo $return['failUrl'];?>";
 			}
 		}

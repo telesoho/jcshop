@@ -11,7 +11,7 @@ ul li{
  .leftlog{
     position:absolute;
     width:1.4rem;
-    height:0.81rem;
+    height:0.83rem;
     z-index:2;
      left:0.4rem;
      top:0.6rem;
@@ -124,10 +124,10 @@ ul li{
     display:-webkit-flex;
     -webkit-align-items: center;
     -webkit-justify-content: center;
-    flex-wrap: nowrap;
+    -webkit-flex-wrap: nowrap;
 }
 .servicePromise ul li{
-    flex:1;
+    -webkit-flex:1;
     text-align: center;
 }
 .servicePromise ul li img{
@@ -145,7 +145,7 @@ ul li{
     overflow-x: hidden;
     display: -webkit-flex;
     /*align-items: center;*/
-    justify-content: center;
+    -webkit-justify-content: center;
     padding-bottom:2rem;
     background:#fff;
 }
@@ -160,12 +160,12 @@ ul li{
 }
 .footerBox{
     position:fixed;bottom:0;z-index:2;
-    display:inline-flex;
+    display:-webkit-inline-flex;
     width:100%;
     -webkit-justify-content: flex-start;
 }
 .footerBox div{
-    flex:1;
+    -webkit-flex:1;
 }
 .joinButton{
     min-width:3rem;
@@ -181,9 +181,9 @@ ul li{
     font-size:0.24rem;
     color:#979797;
     display:-webkit-flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+    -webkit-justify-content: center;
+    -webkit-align-items: center;
+    -webkit-flex-wrap: wrap;
 }
 .footerBox .collection img{
     margin-top:0.2rem;

@@ -7,7 +7,7 @@
     <meta name="x5-orientation" content="portrait">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <title>{echo:IReq::get('heading')}</title>
+    <title>页面不存在</title>
     <style>
         .content{
             width:100%;
@@ -15,16 +15,12 @@
             background:#fff;
             display: -webkit-flex;
             -webkit-justify-content: center;
-            -webkit-flex-wrap: wrap;
+            flex-wrap: wrap;
         }
-        .img{
-            width:100%;
-            margin-left:12.5%;
-
-        }
-        .img img{
-            /*display: inline-block;*/
-            margin-top:1rem;
+        .content img{
+            width:5.56rem;
+            height:5.08rem;
+            margin-top:0.78rem;
         }
         .content a{
             display: block;
@@ -38,23 +34,14 @@
             letter-spacing:0.0067rem;
             text-align:center;
             line-height: 0.98rem;
-            margin-top:1.5rem;
-        }
-        .content .text{
-            margin-top:0.5rem;
-            font-size:0.36rem;
-            color:#ff44a0;
+            margin-top:1rem;
         }
     </style>
 </head>
 <body>
-    <div class="img">
-        <img src="/views/mobile/skin/default/image/xinzeng/error_default.png" alt="" style="width:5.68rem;height:auto"/>
-    </div>
+    {set:$msg = IReq::get('msg') ? IReq::get('msg') : '/views/mobile/skin/default/image/xinzeng/error.png'}
     <div class="content">
-        <div class="text">
-            {echo:IReq::get('msg')}
-        </div>
+            <img src="{$msg}" alt="">
         <!--<img src="/views/mobile/skin/default/image/xinzeng/error.png" alt="">-->
         <a href="{url:/site/index}">去逛逛</a>
     </div>

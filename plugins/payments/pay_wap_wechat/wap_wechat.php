@@ -131,12 +131,12 @@ class wap_wechat extends paymentPlugin
 			}
 			else
 			{
-				die($resultArray['return_msg']);
+				die('支付失败了');//die($resultArray['return_msg']);
 			}
 		}
 		else
 		{
-			die($result);
+			die('支付已取消');//die($result);
 		}
 		return null;
 	}
@@ -198,7 +198,7 @@ class wap_wechat extends paymentPlugin
 			$return['paySign']    = $mysign;
 			$return['successUrl'] = IUrl::getHost().IUrl::creatUrl('/site/success?message='.urlencode('支付成功！'));
 //			$return['failUrl']    = IUrl::getHost().IUrl::creatUrl('/site/error/msg/'.urlencode('支付失败！'));
-			$return['failUrl']    = IUrl::getHost().IUrl::creatUrl('/site/error?msg='.urlencode('/views/mobile/skin/default/image/xinzeng/zfsb.png'));
+			$return['failUrl']    = IUrl::getHost().IUrl::creatUrl('/site/error_pay?msg='.urlencode('/views/mobile/skin/default/image/xinzeng/zfsb.png'));
 
 			include(dirname(__FILE__).'/template/pay.php');
 		}

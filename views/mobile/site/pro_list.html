@@ -6,14 +6,11 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="x5-orientation" content="portrait">
-	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-	<meta http-equiv="Pragma" content="no-cache" />
-	<meta http-equiv="Expires" content="0" />
 	<title>九猫百货</title>
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/pro_list.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=1.0.1" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/pro_list.css?v=1.0.1" />
 </head>
 <body>
 <!--loading页开始-->
@@ -347,7 +344,7 @@
 			limit=50 
 			order=m.id desc}
 		<div class="item">
-			<a href="{url:/site/products?id=$item['id']}"  class="locationA"><div class="img underline"><img dataimg="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" /></div>
+			<a href="{url:/site/products?id=$item['id']}"  class="locationA"><div class="img"><img dataimg="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" /></div>
 				<div class="name">{$item['name']}</div>
 				<div class="box">
 					<div class="sellprice price">¥{$item['sell_price']}</div>
@@ -418,119 +415,7 @@
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
-<script>
-	//获取url的商品id
-	var Request = new Object();
-	Request = GetRequest();
-	var getId=Request["cat"];
-	$(".mui-control-item"+getId).addClass("mui-active");
-	var pageData = {
-		page:1
-	};
-	//页面加载完成后调用的功能
-	window.onload=function(){
-		$("#loading").fadeOut(300);
-		getIndex();
-		hotSearth();
-		//解决tab选项卡a标签无法跳转的问题
-		mui('body').on('tap','.mui-tab-item',function(){
-			var srcimg= $(this).find('img').attr("data-img");
-			$(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
-			document.location.href=this.href;
-		});
-		mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
-//		mui('body').on('tap','a',function(){
-//			document.location.href=this.href;
-//		});
-		lazyload.init({
-			anim:false,
-			selectorName:".samLazyImg"
-		});
-		//点击直达顶部
-//		mui("body").on("tap",".fix-toTop",function(){
-//			$("html,body").animate({scrollTop:0},0);
-//			return false;
-//		});
-	}
-
-	document.getElementById("searth").addEventListener('focus',function(){
-		document.getElementById("modalid-searth").className="show";
-		document.body.style.overflow = 'hidden';
-	});
-	//上拉加载
-	var stop=true;
-	$(window).bind('scroll', function() {
-		if ($(window).scrollTop() + $(window).height() +600 >= $(document).height() && $(window).scrollTop() > 50) {
-			if(stop==true){
-				stop=false;
-				pullupRefresh()
-			}
-		}
-		if($(window).scrollTop()>100){
-			$(".fix-toTop").show();
-			$(".fix-toTop").css("position","fixed");
-		}else{
-			$(".fix-toTop").hide();
-			$(".fix-toTop").css("position","fixed");
-		}
-	});
-	function pullupRefresh() {
-		mui.ajax('index.php?controller=apic&action=article_list',{
-			data:pageData,
-			dataType:'json',	// 服务器返回json格式数据
-			type:'post',		// HTTP请求类型
-			timeout:10000,		// 超时时间设置为10秒；
-			success:function(data){
-				console.log(data);
-				var pageAlbum={};
-				pageAlbum.data=data;
-				<!--var html3=template('albumPage',pageAlbum);-->
-				<!--var div = document.createElement('div');-->
-				<!--div.innerHTML=html3;-->
-//				document.getElementById("pullContainer").appendChild(div);
-//               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
-				if(data[0].totalpage>pageData.page){
-					stop = true;
-				}else{
-					stop = false;
-				}
-				pageData.page++;
-			},
-			error:function(xhr,type,errorThrown){
-				//异常处理；
-				console.log(type);
-
-			}
-		});
-	}
-	function getIndex(){
-		mui.ajax('index.php?controller=apic&action=banner_list',{
-			dataType:'json',//服务器返回json格式数据
-			type:'get',//HTTP请求类型
-			timeout:10000,//超时时间设置为10秒
-			success:function(data){
-//				console.log(data);
-				$(".mui-placeholder span").eq(1).html(data.goods_nums+"件商品等你来搜")
-			},
-			error:function(xhr,type,errorThrown){
-				//异常处理；
-			}
-		});
-	}
-	//	获取url传递过来的参数
-	function GetRequest() {
-		var url = location.search; //获取url中"?"符后的字串
-		var theRequest = new Object();
-		if (url.indexOf("?") != -1) {
-			var str = url.substr(1);
-			strs = str.split("&");
-			for(var i = 0; i < strs.length; i ++) {
-				theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
-			}
-		}
-		return theRequest;
-	}
-</script>
+<script src="/views/mobile/javascript/jiumao/pro_list.js"></script>
 </body>
 </html>
 

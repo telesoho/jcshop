@@ -1906,6 +1906,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			pinch: false
 		}
 	};
+
 	/**
 	 *
 	 * @param {type} options

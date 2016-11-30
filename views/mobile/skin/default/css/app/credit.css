@@ -38,17 +38,17 @@ html,body{
 }
 /*身份证信息为空*/
 .nodata{
-    display:flex;
+    display:-webkit-flex;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
     margin-top:1.77rem;
     background:#f8f8f8;
 }
 .nodata .content{
     width:100%;
     margin-top:0.27rem;
-    display:flex;
+    display:-webkit-flex;
     justify-content: center;
 }
 .nodata .content span{
@@ -116,7 +116,7 @@ html,body{
     width:2.6rem;
     margin-right:0.26rem;
     margin-bottom:0.1rem;
-    align-items:flex-end;
+    -webkit-align-items:flex-end;
 }
 .credit_info .content .test .action img{
     width:0.32rem;

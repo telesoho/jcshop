@@ -2,9 +2,9 @@ body{
     background:#eee;
 }
 .emptyCart{
-    display:flex;
-    align-items: center;
-    justify-content: center;
+    display:-webkit-flex;
+    -webkit-align-items: center;
+    -webkit-justify-content: center;
     margin-top:1.77rem;
 }
 .nodata{
@@ -12,8 +12,8 @@ body{
 }
 .nodata .content{
     margin-top:0.27rem;
-    display:flex;
-    justify-content: center;
+    display:-webkit-flex;
+    -webkit-justify-content: center;
 }
 .nodata .content span{
     font-size:0.28rem;

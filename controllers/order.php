@@ -684,8 +684,10 @@ class Order extends IController implements adminAuthorization
 		//搜索条件
 		$search = IReq::get('search');
 		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+		
 		//条件筛选处理
 		list($join,$where) = order_class::getSearchCondition($search);
+
 		//拼接sql
 		$orderHandle = new IQuery('order as o');
 		$orderHandle->order  = "o.id desc";

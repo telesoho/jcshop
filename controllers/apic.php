@@ -173,11 +173,13 @@ class Apic extends IController
 	        	//折扣券
 	        	case 1 :
 	        		$data['sum'] 		= $data['sum'] * $ticket_data[0]['ratio'];
+	        		$data['final_sum'] 	= $data['sum'];
 	        		$msg 				= '已为您优惠'.($ticket_data[0]['ratio']*10).'折';
 	        		break;
 	        		//抵扣券
 	        	case 2 :
 	        		$data['sum'] 		= $data['sum'] - $ticket_data[0]['money'];
+	        		$data['final_sum'] 	= $data['sum'];
 	        		$msg 				= '已为您优惠'.$ticket_data[0]['money'].'元';
 	        		break;
 	        }
@@ -188,7 +190,7 @@ class Apic extends IController
         $promotion_query 		= new IQuery("promotion");
         $promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
         $condition_price 		= $promotion_query->find()[0]['condition'];
-        if ($data['sum'] > $condition_price){
+        if ($data['sum'] >= $condition_price){
             $data['delivery_money'] 	= 0;
         } else {
         	//首重价格
@@ -236,9 +238,10 @@ class Apic extends IController
         $addressList = $addressObj->query('user_id = '.$user_id,"*","is_default desc");
         foreach ($addressList as $key => $data){
             $temp = area::name($data['province'],$data['city'],$data['area']);
-            $addressList[$key]['province_val'] =$temp[$data['province']];
-            $addressList[$key]['city_val'] =$temp[$data['city']];
-            $addressList[$key]['area_val'] =$temp[$data['area']];
+            $temp_k = array_keys($temp);
+            $addressList[$key]['province_val'] = in_array($data['province'],$temp_k) ? $temp[$data['province']] : '';
+            $addressList[$key]['city_val'] = in_array($data['city'],$temp_k) ? $temp[$data['city']] : '';
+            $addressList[$key]['area_val'] = in_array($data['area'],$temp_k) ? $temp[$data['area']] : '';
         }
         $this->json_echo($addressList);
     }
@@ -289,7 +292,7 @@ class Apic extends IController
         );
 
         $checkArray = $sqlData;
-        unset($checkArray['zip'],$checkArray['user_id']);
+        unset($checkArray['zip'],$checkArray['user_id'],$checkArray['area']);
 //        unset($checkArray['telphone'],$checkArray['zip'],$checkArray['user_id']);
         foreach($checkArray as $key => $val)
         {
@@ -325,9 +328,10 @@ class Apic extends IController
         }
 
         $areaList = area::name($province,$city,$area);
-        $sqlData['province_val'] = $areaList[$province];
-        $sqlData['city_val']     = $areaList[$city];
-        $sqlData['area_val']     = $areaList[$area];
+        $areaList_k = array_keys($areaList);
+        $sqlData['province_val'] = in_array($province,$areaList_k) ? $areaList[$province] : '';
+        $sqlData['city_val']     = in_array($city,$areaList_k) ? $areaList[$city] : '';
+        $sqlData['area_val']     = in_array($area,$areaList_k) ? $areaList[$area] : '';
         $result = array('data' => $sqlData);
 
         $this->json_echo($result);
@@ -396,9 +400,9 @@ class Apic extends IController
         $temp ='(' . $temp . ')';
 
         $ret0 = Api::run('getOrderList', $temp, 'pay_type != 0 and status != 3 and status != 4'); // 全部订单
-        $ret1 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 1 and pay_type != 0'); // 待支付
+        $ret1 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 1'); // 待支付
         $ret2 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
-        $ret3 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and distribution_status = 1'); // 待收货
+        $ret3 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and distribution_status in (1,2)'); // 待收货
         $ret4 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 '); // 已完成
         $data['state0'] = $ret0->find();
         $data['state1'] = $ret1->find();
@@ -415,6 +419,7 @@ class Apic extends IController
             $items[$pay['id']]['name'] = $pay['name'];
             $items[$pay['id']]['type'] = $pay['type'];
         }
+
 
         $temp = [];
         foreach ($data as $k => $v){
@@ -459,9 +464,10 @@ class Apic extends IController
                 }
             }
         }
-        $relation = array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流', '已取消'=>'已取消');
+        $relation 			= array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流', '已取消'=>'已取消','部分发货'=>'查看物流');
+        $relation_k 		= array_keys($relation);
         foreach ($data['state0'] as $key => $value){
-            $data['state0'][$key]['text'] = $relation[$value['orderStatusText']];
+            	$data['state0'][$key]['text'] = in_array($value['orderStatusText'],$relation_k) ? $relation[$value['orderStatusText']] : '';
         }
         $this->json_echo($data);
     }
@@ -1194,27 +1200,22 @@ class Apic extends IController
         $data['sfz_image2y'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$image2."/w/281/h/207");
         $this->json_echo($data);
     }
-//    function follow_shop(){
-//        $identify_id = IFilter::act(IReq::get('identify_id'),'int');
-//        $user_query = new IQuery('user as a');
-//        $user_query->join = 'left join shop as b on a.shop_id = b.identify_id';
-//        $user_query->where = 'a.id = ' . $this->user['user_id'];
-//        $user_query->fields = 'b.name';
-//        $user_data = $user_query->find()[0];
-//        if ($user_data['name']){
-//            $this->json_echo(['ret' => false,'msg'=>'您已经关注' . $user_data['name']]);
-//        } else {
-//            $user_model = new IModel('user');
-//            $user_model->setData(['shop_id'=>$identify_id]);
-//            $ret = $user_model->update('id = ' . $this->user['user_id']);
-//            if ($ret){
-//                $this->json_echo(['ret' => true,'msg'=>'成功关注' . $user_data['name']]);
-//            } else {
-//                $this->json_echo(['ret' => false,'msg'=>'关注' . $user_data['name'].'失败']);
-//            }
-//        }
-//    }
-
+    function qrcode(){
+        if(IClient::isWechat() == true){
+            require_once __DIR__ . '/../plugins/wechat/wechat.php';
+            require_once __DIR__ . '/../plugins/curl/Curl.php';
+            $this->wechat = new wechat();
+            $curl = new \Wenpeng\Curl\Curl();
+            $access_token = $this->wechat->getAccessToken();
+            $url = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=' . $access_token;
+            $curl->post(json_encode(['action_name'=>'QR_LIMIT_SCENE','action_info'=>['scene'=>['scene_id'=>'chenbo']]]))->url($url);
+            $ret = json_decode($curl->data());
+            echo 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . urlencode($ret->ticket);
+            echo '<br>';
+            echo $ret->url;
+//            var_dump($curl->data());
+        }
+    }
     private function json_echo($data){
         echo json_encode($data);
         exit();

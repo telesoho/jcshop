@@ -177,21 +177,21 @@
         cityPicker3.setData(cityData3);
         cityPicker3.show(function(items) {
             var showCityPickerInput=document.getElementById('usercity'+id);
-            showCityPickerInput.value = (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;
+            item3=(items[2] || {}).text?(items[2] || {}).text:'';
+            showCityPickerInput.value = (items[0] || {}).text + " " + (items[1] || {}).text + " " + item3;
             //返回 false 可以阻止选择框的关闭
             pro=(items[0] || {}).value;
             cit=(items[1] || {}).value;
-            are=(items[2] || {}).value;
+            are=(items[2] || {}).value?(items[2] || {}).value:'';
         });
         this.blur();
     }
 
-
     function changeAddr(id){
         var showCityPickerInput=document.getElementById('usercity'+id);
-        pro=showCityPickerInput.getAttribute("data-province");
-        cit=showCityPickerInput.getAttribute("data-city");
-        are=showCityPickerInput.getAttribute('data-area');
+//        pro=showCityPickerInput.getAttribute("data-province");
+//        cit=showCityPickerInput.getAttribute("data-city");
+//        are=showCityPickerInput.getAttribute('data-area');
         if(!checkPhone()){
             var addrId=document.getElementById("addressid");
             var username=document.getElementById("username");
@@ -216,6 +216,7 @@
                 type:'post',		// HTTP请求类型
                 timeout:10000,		// 超时时间设置为10秒；
                 success:function(data){
+                    console.log(addaddressInfo);
                     document.location.href="{url:/simple/addresslist}";
                 },
                 error:function(xhr,type,errorThrown){
