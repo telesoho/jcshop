@@ -695,7 +695,7 @@ class Apic extends IController
     	$list 				= $query->find();
     	if(!empty($list)){
     		foreach($list as $k => $v){
-    			$list[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/250/h/170");
+    			$list[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/250/h/127");
     		}
     	}
     	
@@ -952,10 +952,48 @@ class Apic extends IController
         $this->json_echo($data);
     }
     /**
-     * 文章列表
+     * 专辑列表
      */
     public function article_lists(){
-    	
+    	/* 获取参数 */
+    	$cid 				= IFilter::act(IReq::get('cid'), 'int'); 	//专辑分类ID，选填
+    	$page 				= IFilter::act(IReq::get('page'),'int'); 	//当前页码，选填
+    	/* 获取数据 */
+    	$query 				= new IQuery('article as m');
+    	$query->where 		= empty($cid) ? '' : 'm.category_id='.$cid;
+    	$query->fields 		= 'm.id,m.title,m.image,m.visit_num';
+    	$query->order 		= 'm.sort asc';
+    	$query->page 		= $page>1 ? $page : 1;
+    	$query->pagesize 	= 10;
+    	$list 				= $query->find();
+    	if(!empty($list)){
+    		//商品列表模型
+    		$query_goods 				= new IQuery('goods as m');
+    		$query_goods->join 			= 'left join relation as r on r.goods_id=m.id';
+    		$query_goods->fields 		= 'm.id,m.name,m.sell_price,m.img';
+    		$query_goods->order 		= 'm.sort asc';
+    		$query_goods->limit 		= 1000;
+    		//商品统计模型
+    		$query_goods_count 			= new IQuery('goods as m');
+    		$query_goods_count->join 	= 'left join relation as r on r.goods_id=m.id';
+    		$query_goods_count->fields 	= 'count(m.id) as num';
+    		foreach($list as $k => $v){
+    			$list[$k]['image'] 		= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
+    			//相关商品数量
+    			$query_goods_count->where 	= 'm.is_del=0 and r.article_id='.$v['id'];
+    			$count 						= $query_goods_count->find();
+    			$list[$k]['goods_num'] 		= $count[0]['num'];
+    			//相关商品列表
+    			$query_goods->where 	= 'm.is_del=0 and r.article_id='.$v['id'];
+    			$list[$k]['list'] 		= $query_goods->find();
+    			if(!empty($list[$k]['list'])){
+    				foreach ($list[$k]['list'] as $k1 => $v1){
+    					$list[$k]['list'][$k1]['img'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/180/h/180");
+    				}
+    			}
+    		}
+    	}
+    	$this->json_echo($data);
     }
     //通过专辑获取相关商品
     public function article_rel_goods()
