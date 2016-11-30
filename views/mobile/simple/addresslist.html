@@ -127,6 +127,7 @@
 <script src="/views/mobile/javascript/mui.poppicker.js"></script>
 <script src="/views/mobile/javascript/city.data-3.js" type="text/javascript" charset="utf-8"></script>
 <script>
+    var cityPicker3;
     var Request = new Object();
     Request = GetRequest();
     var statusOrder=Request["rev"];
@@ -136,6 +137,10 @@
         $("#loading").fadeOut(300);
         //    跳转到新增收货地址页面
         getAddressInfo();
+        //    三级联动
+        cityPicker3 = new mui.PopPicker({
+            layer: 3
+        });
         var submitaddr=document.getElementById("submitaddr");
         submitaddr.addEventListener('tap',function(){
             if(statusOrder=="cart_order"){
@@ -168,10 +173,6 @@
             }
         });
     }
-//    三级联动
-    var cityPicker3 = new mui.PopPicker({
-        layer: 3
-    });
     function checkcity(id){
         document.activeElement.blur();//去除软键盘
         cityPicker3.setData(cityData3);
