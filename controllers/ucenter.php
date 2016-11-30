@@ -1038,6 +1038,11 @@ class Ucenter extends IController implements userAuthorization
         $user_shop_data['identify_qrcode'] = IWeb::$app->config['image_host1'] . '/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
 //        $user_shop_data['identify_qrcode'] = 'http://192.168.0.13:8080/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
         $this->user_shop_data = $user_shop_data;
+
+        $memberObj = new IModel('member','balance');
+        $where     = 'user_id = '.$this->user['user_id'];
+        $this->memberRow = $memberObj->getObj($where);
+
         if ($this->user_shop_data){
 
             //待入账金额

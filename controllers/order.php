@@ -1657,7 +1657,10 @@ class Order extends IController implements adminAuthorization
         $id = IFilter::act(IReq::get('id'),'string');
         if ($id){
             $shop_category_query = new IQuery('shop_category');
-            $shop_category_query->get;
+            $shop_category_query->where = 'id = ' . $id;
+            $shop_category_data = $shop_category_query->find();
+            $this->shop_category_name = isset($shop_category_data[0]['name']) ? $shop_category_data[0]['name'] : null;
+            $this->shop_category_id = isset($shop_category_data[0]['id']) ? $shop_category_data[0]['id'] : null;
         }
 
         $name = IFilter::act(IReq::get('name'),'string');
@@ -1665,7 +1668,12 @@ class Order extends IController implements adminAuthorization
         $shop_category_model = new IModel('shop_category');
         $shop_category_model->setData(['name'=>$name,'rebate'=>$rebate]);
         if (!empty($name) && !empty($rebate)){
-            $ret = $shop_category_model->add();
+            $category_id = IFilter::act(IReq::get('category_id'),'int');
+            if (!empty($category_id)){
+                $ret = $shop_category_model->update('id = ' . $category_id);
+            } else {
+                $ret = $shop_category_model->add();
+            }
             if ($ret){
                 $this->redirect('order_shop_category');
             }

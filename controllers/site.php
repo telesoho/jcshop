@@ -19,16 +19,14 @@ class Site extends IController
 
 	function init()
 	{
-		//必须微信客户端
-// 		$isWechat 				= IClient::isWechat();
-// 		if($isWechat == false) exit('请使用微信访问我们的页面：）');
-//        $action = IFilter::act(IReq::get('action'),'string');
-//        if ($action!='article_detail' || $action='index'){ISession::clear('visit_num');}
+
 	}
 
 	function index()
 	{
         if ($this->user['user_id']){
+            ISession::clear('shop_name');
+            ISession::clear('shop_identify_id');
 	        $user_own_shop_data = $this->get_user_own_shop_data();
             if (!empty($user_own_shop_data)){
                 ISession::set('shop_name',$user_own_shop_data['name']);
@@ -39,25 +37,9 @@ class Site extends IController
                     ISession::set('shop_name',$user_rel_shop_data['name']);
                     ISession::set('shop_identify_id',$user_rel_shop_data['identify_id']);
                 } else {
+                    //关联店铺
                     $identify_id = IFilter::act(IReq::get('iid'),'int');
-                    if ($identify_id){
-                        $shop_data = $this->get_shop_data_by_identify_id($identify_id);
-                        ISession::set('shop_name',$shop_data['name']);
-                        ISession::set('shop_identify_id',$shop_data['identify_id']);
-                        $if_shop_register = $this->if_shop_register($identify_id);
-                        if ($if_shop_register){
-
-                        } else {
-                            $shop_model = new IModel('shop');
-                            $shop_model->setData(['own_id'=>$this->user['user_id']]);
-                            $ret = $shop_model->update('identify_id='.$identify_id);
-                            if ($ret){
-                                $user_model = new IModel('user');
-                                $user_model->setData(['shop_identify_id' => $identify_id]);
-                                $user_model->update('id = ' . $this->user['user_id']);
-                            }
-                        }
-                    }
+                    ISession::set('if_associate',$identify_id);
                 }
             }
         }
@@ -1048,6 +1030,31 @@ class Site extends IController
     	}
     	exit( '' );
     }
-    
-    
+
+    function associate_user_shop(){
+        if ($identify_id = ISession::get('if_associate')){
+            if ($identify_id){
+                $shop_data = $this->get_shop_data_by_identify_id($identify_id);
+                ISession::set('shop_name',$shop_data['name']);
+                ISession::set('shop_identify_id',$shop_data['identify_id']);
+                $if_shop_register = $this->if_shop_register($identify_id);
+                if ($if_shop_register){
+
+                } else {
+                    $shop_model = new IModel('shop');
+                    $shop_model->setData(['own_id'=>$this->user['user_id']]);
+                    $ret = $shop_model->update('identify_id='.$identify_id);
+                    if ($ret){
+                        $user_model = new IModel('user');
+                        $user_model->setData(['shop_identify_id' => $identify_id]);
+                        $user_model->update('id = ' . $this->user['user_id']);
+                    }
+                }
+            }
+        }
+        ISession::set('if_associate',null);
+    }
+    function near_shops(){
+        $this->redirect('near_shops');
+    }
 }

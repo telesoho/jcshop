@@ -7,7 +7,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
     <title>九猫家<?php echo !empty(ISession::get('shop_name')) ? '的' . ISession::get('shop_name') : ''?>商城</title>
-    <title>九猫大百货</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
@@ -308,5 +307,16 @@ if(IClient::isWechat() == true){
 ?>
 <script src="/views/mobile/javascript/jiumao/wechat.share.js"></script>
 <script type="text/javascript" src="/views/mobile/javascript/jiumao/siteIndex.js"></script>
+{if:ISession::get('if_associate')}
+<script>
+    if (confirm('是否同意九猫家城市服务商合作线上协议')){
+        $.get('{url:/site/associate_user_shop}');
+        location.href = '{url:/site/index}'
+    } else {
+        location.href = '{url:/site/index}'
+    }
+
+</script>
+{/if}
 </body>
 </html>

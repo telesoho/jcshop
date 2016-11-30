@@ -68,6 +68,7 @@
   ),
   'encryptKey' => '693db335771319c04d195cca4f907fa9',
   'authorizeCode' => '201610093145',
-  'image_host' => 'http://192.168.0.13:8080',
-  'image_host1' => 'http://dev.jiumaojia.com',
+  'image_host' => 'http://192.168.0.37:8080',
+  'image_host1' => 'http://192.168.0.37:8080',
+//  'image_host1' => 'http://dev.jiumaojia.com',
 )?>
