@@ -197,10 +197,9 @@
 
     function changeAddr(id){
         var showCityPickerInput=document.getElementById('usercity'+id);
-        pro=showCityPickerInput.getAttribute("data-province");
-        cit=showCityPickerInput.getAttribute("data-city");
-        are=showCityPickerInput.getAttribute('data-area');
-        checkcity(id);
+        pro=pro?pro:showCityPickerInput.getAttribute("data-province");
+        cit=cit?cit:showCityPickerInput.getAttribute("data-city");
+        are=are?are:showCityPickerInput.getAttribute('data-area');
         if(!checkPhone()){
             var addrId=document.getElementById("addressid");
             var username=document.getElementById("username");
