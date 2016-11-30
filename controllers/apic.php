@@ -993,7 +993,14 @@ class Apic extends IController
     			}
     		}
     	}
-    	$this->json_echo($data);
+    	$this->json_echo($list);
+    }
+    /**
+     * 专辑分类列表
+     */
+    public function article_category(){
+    	
+    	
     }
     //通过专辑获取相关商品
     public function article_rel_goods()
