@@ -111,12 +111,14 @@ class Apic extends IController
         //更新$addressList数据
         foreach($addressList as $key => $val)
         {
-            $temp = area::name($val['province'],$val['city'],$val['area']);
+            $temp 		= area::name($val['province'],$val['city'],$val['area']);
+
+            $temp_k 	= array_keys($temp);
             if(isset($temp[$val['province']]) && isset($temp[$val['city']]) && isset($temp[$val['area']]))
             {
-                $addressList[$key]['province_val'] = $temp[$val['province']];
-                $addressList[$key]['city_val']     = $temp[$val['city']];
-                $addressList[$key]['area_val']     = $temp[$val['area']];
+                $addressList[$key]['province_val'] = in_array($val['province'],$temp_k) ? $temp[$val['province']] : '';
+                $addressList[$key]['city_val'] = in_array($val['city'],$temp_k) ? $temp[$val['city']] : '';
+                $addressList[$key]['area_val'] = in_array($val['area'],$temp_k) ? $temp[$val['area']] : '';
             }
         }
 
@@ -408,10 +410,11 @@ class Apic extends IController
                 $data[$k][$key]['pay_type'] = $items[$value['pay_type']]['name'];
                 $data[$k][$key]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
                 $data[$k][$key]['orderStatusVal'] = Order_Class::getOrderStatus($value);
-                $temp2 = area::name($value['province'],$value['city'],$value['area']);
-                $data[$k][$key]['province_val'] =$temp2[$value['province']];
-                $data[$k][$key]['city_val'] =$temp2[$value['city']];
-                $data[$k][$key]['area_val'] =$temp2[$value['area']];
+                $temp2 			= area::name($value['province'],$value['city'],$value['area']);
+                $temp_k 		= array_keys($temp);
+                $data[$k][$key]['province_val'] 	= in_array($value['province'],$temp_k) ? $temp2[$value['province']] : '';
+                $data[$k][$key]['city_val'] 		= in_array($value['city'],$temp_k) ? $temp2[$value['city']] : '';
+                $data[$k][$key]['area_val'] 		= in_array($value['area'],$temp_k) ? $temp2[$value['area']] : '';
 //                $orderObj = new order_class();
 //                $data[$k][$key]['order_info'] = $orderObj->getOrderShow($value['id'],$this->user['user_id']);
                 $temp3 = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));

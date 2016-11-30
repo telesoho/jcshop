@@ -756,8 +756,49 @@ class Simple extends IController
 		}
 		else
 		{
-			//直接跳转到支付页面
-			$this->redirect('/block/doPay/order_id/'.$order_id);
+			//直接跳转到支付页面==============
+			if($order_id)
+			{
+				$order_id = explode("_",IReq::get('order_id'));
+				$order_id = IFilter::act($order_id,'int');
+			
+				//获取订单信息
+				$orderDB  = new IModel('order');
+				$orderRow = $orderDB->getObj('id = '.current($order_id));
+			
+				if(empty($orderRow))
+				{
+					IError::show(403,'要支付的订单信息不存在');
+				}
+				$payment_id = $orderRow['pay_type'];
+			}
+			
+			//获取支付方式类库
+			$paymentInstance = Payment::createPaymentInstance($payment_id);
+			
+			//在线充值
+			if($recharge !== null)
+			{
+				$recharge   = IFilter::act($recharge,'float');
+				$paymentRow = Payment::getPaymentById($payment_id);
+			
+				//account:充值金额; paymentName:支付方式名字
+				$reData   = array('account' => $recharge , 'paymentName' => $paymentRow['name']);
+				$sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'recharge',$reData));
+			}
+			//订单支付
+			else if($order_id)
+			{
+				$sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id));
+			}
+			else
+			{
+				IError::show(403,'发生支付错误');
+			}
+			
+			$paymentInstance->doPay($sendData);
+			//==============
+			
 // 			$this->setRenderData($dataArray);
 // 			$this->redirect('cart3');
 		}
