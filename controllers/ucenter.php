@@ -91,7 +91,8 @@ class Ucenter extends IController implements userAuthorization
      */
     public function order()
     {
-//     	$_SESSION["__forward__"] 	= $_SERVER["REQUEST_URI"]; //记录回跳链接
+    	session_start();
+    	$_SESSION["__forward__"] 	= $_SERVER["REQUEST_URI"]; //记录回跳链接
         $this->initPayment();
         $this->redirect('order');
 
