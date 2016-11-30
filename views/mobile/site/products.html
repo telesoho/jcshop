@@ -27,7 +27,7 @@
 </head>
 <body>
 	<div class="top_fixd">
-		<a href="/site/index" class="test11"><span>首页</span></a> <span>确认订单</span>
+		<a href="/site/index" class="test11"><span>首页</span></a> <span>商品详情</span>
 	</div>
 	<!--轮播-->
     <section style="width:7.5rem;height:7.5rem;position:relative;background:#fff;margin-top:0.9rem;">
@@ -55,18 +55,18 @@
 	        </a>
         </div>
     </section>
-	<!--相关视频-->
-    <!--<section>-->
-		<!--<div class="relatedContent" id="showVedio">-->
-			<!--<p class="title">相关视频</p>-->
-			<!--<div class="contentInfo">-->
-				<!--<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" style="height:1.8rem">-->
-					<!--<div class="mui-scroll" id="relateVedio">-->
-					<!--</div>-->
-				<!--</div>-->
-			<!--</div>-->
-		<!--</div>-->
-    <!--</section>-->
+	<!--相关专辑-->
+    <section>
+		<div class="relatedContent" id="showArticle">
+			<p class="title">相关专辑</p>
+			<div class="contentInfo">
+				<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" style="height:1.67rem">
+					<div class="mui-scroll" id="relateArticle">
+					</div>
+				</div>
+			</div>
+		</div>
+    </section>
 	<!--心得页面-->
     <section id="evaluateBox">
     </section>
@@ -295,24 +295,17 @@
 		<span class="collection_text" style="color:#ff4aa0">已种草</span>
 		<%}%>
 	</script>
-	<!--相关视频专辑-->
-	<!--<script id="vedioTemp" type="text/html">-->
-		<!--<%if(article_data){%>-->
-			<!--<% for(var i=0; i<article_data.length; i++){%>-->
-			<!--<% var item =article_data[i] %>-->
-			<!--<div class="mui-control-item">-->
-				<!--<div class="info01"><a href="#"><img src="<%=item.image %>"/></a></div>-->
-				<!--<div class="info02">-->
-					<!--<a href="#">-->
-						<!--<p>精彩回放</p>-->
-						<!--<p><%=item.title %></p>-->
-						<!--<p><img src="/views/mobile/skin/default/image/jmj/img/eye_icon.png"/>0次</p>-->
-					<!--</a>-->
-				<!--</div>-->
-			<!--</div>-->
-			<!--<%}%>-->
-		<!--<%}%>-->
-	<!--</script>-->
+	<!--相关专辑-->
+	<script id="articleTemp" type="text/html">
+		<%if(data){%>
+			<% for(var i=0; i<data.length; i++){%>
+			<% var item =data[i] %>
+			<div class="mui-control-item">
+				<div class="info01"><a href="/site/article_detail?id=<%=item.id %>" class="test11"><img src="<%=item.image %>"/></a></div>
+			</div>
+			<%}%>
+		<%}%>
+	</script>
 	<!--翻译弹出-->
 	<div id="sheet" class="mui-popover mui-popover-action mui-popover-bottom">
 		<ul class="mui-table-view">
@@ -323,9 +316,9 @@
                 正在翻译，请稍等...
 			</div>
 		</ul>
-		<div id="close" >
+		<div id="close" style="text-align:center">
 
-			<a href="#sheet" ><img src="/views/mobile/skin/default/image/jmj/icon/close.png"  style="width:0.62rem;" ></a>
+			<a href="#sheet" ><img src="/views/mobile/skin/default/image/jmj/icon/close.png"  style="width:0.62rem;margin-top:0.2rem;" ></a>
 		</div>
 
 	</div>
@@ -410,13 +403,14 @@
 					var html2=template('product_goodsDetail',data);
 					document.getElementById('goods_detaile').innerHTML=html2;
 					document.getElementById('goodsContent').innerHTML=data.content;
-					var html3=template('evaluate',data);
-					document.getElementById('evaluateBox').innerHTML=html3;
+//					var html3=template('evaluate',data);
+//					document.getElementById('evaluateBox').innerHTML=html3;
 					var html4=template('joinCarTemplate',data);
 					document.getElementById('select_product').innerHTML=html4;
 					document.getElementById('collection_state').innerHTML=template('collectionTemplate',data);
 					var productInstance = new productClass("{$id}","{$this->user['user_id']}","{$promo}","{$active_id}");
-//					getRelateDetail(product_detail);
+					getRelateArticle(product_detail)
+
 				},
 				error:function(xhr,type,errorThrown){
 					//异常处理；
@@ -424,25 +418,26 @@
 				}
 			});
 		}
-		function getRelateDetail(obj){
-			mui.ajax('index.php?controller=apic&action=products_details_other',{
+		function getRelateArticle(obj){
+			mui.ajax('/apic/products_details_article',{
 				data:{id:obj},
 				dataType:'json',//服务器返回json格式数据
 				type:'get',//HTTP请求类型
 				timeout:10000,//超时时间设置为10秒；
 				success:function(data){
-				    console.log(data);
-					console.log(data.article_data.length);
+					console.log(data);
 //					if(data.article_data.length==0){
 //						$("#showVedio").hide();
 //					}
-//					var relateV=template('vedioTemp',data);
-//					document.getElementById('relateVedio').innerHTML=relateV;
-//					var relateW=template('relateTemp',data);
-//					document.getElementById('getDetailR').innerHTML=relateW;
-//					var relateB=template('relateBannelTemp',data);
-//					document.getElementById('bannel').innerHTML=relateB;
-					document.getElementById('sumRelative').innerHTML=data.brand_data.nums;
+					var dat={};
+					dat.data=data;
+					if(data.length!=0){
+						var relateV=template('articleTemp',dat);
+						document.getElementById('relateArticle').innerHTML=relateV;
+					}else{
+						document.getElementById('showArticle').style.display="none";
+					}
+
 				},
 				error:function(xhr,type,errorThrown){
 					//异常处理；
