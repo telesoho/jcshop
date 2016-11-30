@@ -673,9 +673,33 @@ class Apic extends IController
             } else {
                 $goods_info['is_favorite'] = 0;
             }
-
+            
 
         $this->json_echo($goods_info);
+    }
+    /**
+     * 商品的相关专辑
+     */
+    public function products_details_article(){
+		/* 获取参数 */
+    	$goods_id = IFilter::act(IReq::get('id'),'int');
+    	if(empty($goods_id)) IError::show(403,"传递的参数不正确");
+    	
+    	/* 相关专辑 */
+    	$query 				= new IQuery('article as m');
+    	$query->join 		= 'left join relation as r on r.article_id = m.id';
+    	$query->where 		= 'm.visibility=1 and r.goods_id='.$goods_id;
+    	$query->order 		= 'm.sort asc';
+    	$query->fields 		= 'm.id,m.title,m.image';
+    	$query->limit 		= 10;
+    	$list 				= $query->find();
+    	if(!empty($list)){
+    		foreach($list as $k => $v){
+    			$list[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/250/h/170");
+    		}
+    	}
+    	
+    	$this->json_echo($list);
     }
     //商品详情的补充信息内容
     public function products_details_other(){
@@ -926,6 +950,12 @@ class Apic extends IController
 //        var_dump($data);
 
         $this->json_echo($data);
+    }
+    /**
+     * 文章列表
+     */
+    public function article_lists(){
+    	
     }
     //通过专辑获取相关商品
     public function article_rel_goods()
