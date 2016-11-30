@@ -325,13 +325,12 @@ class Block extends IController
 		if($return == 1)
 		{
 			//清空购物车
-			$orderDB 	 		= new Model('order');
-			$orderInfo 			= $orderDB->getObj('order_no='.$orderNo);
-			if($orderInfo['type_source'] == 2){
-				$cartDB  		= new IModel('goods_car');
-				$cartRow 		= $cartDB->del('user_id = '.$orderInfo['user_id']);
-			}
-			
+// 			$orderDB 	 		= new Model('order');
+// 			$orderInfo 			= $orderDB->getObj('order_no='.$orderNo);
+// 			if($orderInfo['type_source'] == 2){
+// 				$cartDB  		= new IModel('goods_car');
+// 				$cartRow 		= $cartDB->del('user_id = '.$orderInfo['user_id']);
+// 			}
 			//充值方式
 			if(stripos($orderNo,'recharge') !== false)
 			{
