@@ -41,6 +41,7 @@
 	width:7.5rem;
 	height:0.07rem;
 	background:url("../../image/jmj/cart/line.png");
+	background-size:contain;
 	top:0;
 	left:0;
 }
@@ -49,6 +50,7 @@
 	width:7.5rem;
 	height:0.07rem;
 	background:url("../../image/jmj/cart/line.png");
+	background-size:contain;
 	bottom:0;
 	left:0;
 }
@@ -195,22 +197,25 @@
 	font-size:0.2rem;
 	color:#3d4245;
 	position:relative;
-	top:0.05rem;
+	/*top:0.05rem;*/
 }
 #testForm .top img{
 	width:0.25rem;height:0.25rem;vertical-align: middle;margin-right:0.1rem;
+	position:relative;
+	top:-0.01rem;
 }
 #testForm .bottom{
 	background:#ff44a0;
-	border-radius:0.72rem;
+	border-radius:0.62rem;
 	width:5.93rem;
-	height:0.72rem;
+	height:0.62rem;
 	text-align: center;
-	line-height:0.72rem;
+	line-height:0.62rem;
 	font-size:0.32rem;
 	color:#ffffff;
 	position:relative;
-	top:-0.05rem;
+	/*bottom:0.1rem;*/
+	top:-0.15rem;
 }
 /*弹出框样式*/
 #sheet1 .mui-table-view{
