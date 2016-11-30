@@ -1,8 +1,33 @@
 /*订单确认样式*/
-#wareListShop{
-	margin-top:0.28rem;
+.top_fixd{
+	width:100%;
+	height:0.9rem;
+	line-height:0.9rem;
+	background:#ff4aa0;
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:2;
+	border-bottom:1px solid #eee;
 }
+.top_fixd span:nth-child(1){
+	font-size:0.26rem;
+	color:#fff;
+	display: inline-block;
+	margin-left:0.2rem;
+}
+.top_fixd span:nth-child(2){
+	font-size:0.34rem;
+	color:#fff;
+	width:50%;
+	display: inline-block;
+	text-align: right;
+}
+/*#wareListShop{*/
+
+/*}*/
 #wareListShop .order_addAddr{
+	margin-top:1.18rem;
 }
 .order_addAddr{
 	background:#fff;
