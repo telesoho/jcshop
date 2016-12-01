@@ -26,15 +26,14 @@ var vm = new Vue({
             payment:[
                 {id:''}
             ],
-            kicket:{},
-            state:true
+            kicket:{}
         },
         error:'',
         showButton:true,
         img1:'/views/mobile/skin/default/image/jmj/cart/red.png',
         img2:'/views/mobile/skin/default/image/jmj/cart/uncho.png',
         bg:'background:rgba(255,68,160,0.5)',
-        bg1:'background:rgba(255,68,160)',
+        bg1:'background:rgba(255,68,160,1)',
         state:true,
         promo:{
             val:'',
@@ -62,15 +61,13 @@ var vm = new Vue({
         },
         changeBg: function(){
             this.showButton=this.showButton?false:true;
+            console.log(this.showButton);
         },
         formSubmit: function(obj){
             var self=this;
-            console.log(self.state);
             if(self.showButton&&self.state){
                 self.state=false;
                 checkSubmit(obj);
-                console.log(self.state);
-
             }
         },
         promoCho: function(){
