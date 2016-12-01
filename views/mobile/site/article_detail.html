@@ -244,7 +244,7 @@ if(IClient::isWechat() == true){
 var wechat_share = {
     title       : $('.article_body').text().trim(),//'{$articleRow["title"]}', //标题
     desc        : $('.article_body').text().trim(), //描述
-    imgUrl      : '{$articleRow["share_img"]}', //图片
+    imgUrl      : '{$this->articleRow["share_img"]}', //图片
 }
 </script>
 
