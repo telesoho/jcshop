@@ -219,7 +219,7 @@ class Block extends IController
 		else if($order_id)
 		{
 			$sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id));
-			$sendData['order_id'] = $order_id;
+// 			$sendData['order_id'] = $order_id;
 		}
 		else
 		{
