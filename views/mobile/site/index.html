@@ -11,32 +11,9 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/siteIndex.css" />
 </head>
 <body>
-<!--loading页开始-->
-<div id="loading">
-    <div class="spinner">
-        <div class="spinner-container container1">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container2">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container3">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-    </div>
-</div>
-<!--loading页结束-->
 <!--下拉刷新容器-->
 <!--<div id="pullrefresh" class="mui-content mui-scroll-wrapper">-->
     <!--<div class="mui-scroll" id="muiScroll">-->
@@ -100,6 +77,39 @@
         <div id="slider1" class="mui-slider" >
         </div>
         <!--轮播图结束-->
+    </section>
+    <section id="indexInfo" v-if="showMessage">
+        <div class="banner_img flexbox">
+            <img src="/views/mobile/skin/default/image/xinzeng/baner_tip.png" alt="" />
+        </div>
+        <div class="hot_category">
+            <div class="head flexbox">
+                <span class="darkline"></span>
+                <span>特别分类</span>
+                <span class="darkline"></span>
+            </div>
+            <div >
+                <div class="item_img">
+                    <a href="#" @click="toArticle_list(item)" class="img"  v-for="item in article_category_list.ac">
+                        <img  alt=""   :src="item.image"  class="samLazyImg" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!--<div class="hot_article">-->
+            <!--<div class="head flexbox">-->
+                <!--<span class="darkline"></span>-->
+                <!--<span>特别推荐</span>-->
+                <!--<span class="darkline"></span>-->
+            <!--</div>-->
+            <!--<div v-for="item in article_category_list.ar">-->
+                <!--<div class="item_img">-->
+                    <!--<a href="#" @click="toArticle(item)">-->
+                        <!--<img :dataimg="item.image" alt="" width="100%"  src="/views/mobile/skin/default/image/jmj/icon/big_lazy.png"  class="samLazyImg" />-->
+                    <!--</a>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
     </section>
         <!--专辑-->
         <!--<section class="timePurchase line">-->
@@ -289,6 +299,7 @@
     <%}%>
 </script>
 <!--头信息结束-->
+<script src="/views/mobile/javascript/vue.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>

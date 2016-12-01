@@ -77,6 +77,7 @@ var vm = new Vue({
 //页面加载动画的调用
 $(window).load(function(){
     $("#loading").fadeOut(300);
+    document.title=getItem("artileName");
     mui('body').on('tap','.mui-tab-item',function(){
         var srcimg= $(this).find('img').attr("data-img");
         $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
@@ -105,7 +106,7 @@ $(window).bind('scroll', function() {
 function pullupArticleRefresh(self){
     mui.ajax('/apic/article_lists', {
         data:{
-            cid:'',
+            cid:getItem("articleId"),
             page:self.page
         },
         dataType: 'json',
