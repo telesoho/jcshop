@@ -63,7 +63,10 @@
         _confirm('支付失败了，继续去付款？',function(){
             window.location.href='{url:block/doPay}/order_id/{$order_id}'; //继续支付
         }); 
-        window.location.href='{url:ucenter/order}'; //跳转到全部订单
+
+        setTimeout(function(){
+            window.location.href='{url:ucenter/order}'; //跳转到全部订单
+        },10000);
 
         // if(confirm('支付失败了，继续去付款？')){
         //     window.location.href='{url:block/doPay}/order_id/{$order_id}';
