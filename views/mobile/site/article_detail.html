@@ -281,7 +281,7 @@ if(IClient::isWechat() == true){
 <script type="text/javascript">
 var wechat_share = {
     title       : "<?php if($this->articleRow['id']==284){echo '这是一个99%的妹子都希望收到的礼物';}else{echo $this->articleRow['title'];} ?>", //标题
-    desc        : $('.article_body').text().trim(), //描述
+    desc        : $('.article_body').text().trim().substring(0,100), //描述
     imgUrl      : "{echo:IWeb::$app->config['image_host'] . IUrl::creatUrl('/pic/thumb/img/'.$this->articleRow['image'].'/w/200/h/200')}", //图片
 }
 </script>
