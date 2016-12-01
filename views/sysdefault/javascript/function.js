@@ -22,12 +22,12 @@ function _confirm(text,fn,obj){
     var html    = '<div style="display:none; width:100%; height:100%; position:fixed; left:0; top:0; z-index:8888;">';
     html        += '<div style="position:absolute; width:100%; height:100%; left:0; top:0; background:rgba(0,0,0,0.3);"></div>';
     html        += '<div class="hint_contain" style="color:#fff; font-size:16px; opacity:0; min-width:200px; height:100px; background:rgba(0,0,0,0.6); position:absolute; left:50%; top:0%; margin-left:-125px; margin-top:-50px; text-align:center; border-radius:10px; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;">';
-    html        += '<p style="font-size:16px; color:#000; line-height:20px; padding:20px 20px; border-bottom:solid 1px #000; overflow:hidden;">确定删除?</p>';
-    html        += '<span class="hint_true" style="display:block; float:left; line-height:39px; box-sizing:border-box; cursor:pointer; width:50%; height:39px; border-bottom-left-radius:10px; border-right:solid 1px #000; color:#000;" >确定</span>';
-    html        += '<span class="hint_false" style="display:block; float:left; line-height:39px; box-sizing:border-box; cursor:pointer; width:50%; height:39px; border-bottom-right-radius:10px; color:#000;">取消</span></div></div>';
+    html        += '<p style="font-size:16px; color:#fff; line-height:20px; padding:20px 20px; border-bottom:solid 1px #000; overflow:hidden;">确定删除?</p>';
+    html        += '<span class="hint_true" style="display:block; float:left; line-height:39px; box-sizing:border-box; cursor:pointer; width:50%; height:39px; border-bottom-left-radius:10px; border-right:solid 1px #000; color:#fff;" >确定</span>';
+    html        += '<span class="hint_false" style="display:block; float:left; line-height:39px; box-sizing:border-box; cursor:pointer; width:50%; height:39px; border-bottom-right-radius:10px; color:#fff;">取消</span></div></div>';
     var thisDiv = $(html);
     if(text)thisDiv.find('p').text(text);
-    thisDiv.appendTo($('body')).show().find('.hint_contain').animate({'top':'40%','opacity':'1'},speed1,function(){
+    thisDiv.appendTo($('body')).show().find('.hint_contain').animate({'top':'45%','opacity':'1'},speed1,function(){
         thisDiv.find('.hint_true').on({
             'click'         : function(){
                 thisDiv.find('.hint_contain').animate({'top':'0%','opacity':'0'},speed2,function(){

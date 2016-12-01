@@ -60,19 +60,19 @@
     window.onload=function(){
         // alert('支付失败了:(');
         // window.location.href='{echo:$_SESSION["__forward__"]}';
-        _confirm('支付失败了，继续去付款？',function(){
-            window.location.href='{url:block/doPay}/order_id/{$order_id}'; //继续支付
-        }); 
+        // _confirm('支付失败了，继续去付款？',function(){
+        //     window.location.href='{url:block/doPay}/order_id/{$order_id}'; //继续支付
+        // }); 
 
-        setTimeout(function(){
-            window.location.href='{url:ucenter/order}'; //跳转到全部订单
-        },10000);
+        // setTimeout(function(){
+        //     window.location.href='{url:ucenter/order}'; //跳转到全部订单
+        // },10000);
 
-        // if(confirm('支付失败了，继续去付款？')){
-        //     window.location.href='{url:block/doPay}/order_id/{$order_id}';
-        // }else{
-        //     window.location.href='{url:ucenter/order}';
-        // }
+        if(confirm('支付失败了，继续去付款？')){
+            window.location.href='{url:block/doPay}/order_id/{$order_id}';
+        }else{
+            window.location.href='{url:ucenter/order}';
+        }
     }
 
     </script>
