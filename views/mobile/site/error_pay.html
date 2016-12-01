@@ -7,7 +7,7 @@
     <meta name="x5-orientation" content="portrait">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <title>页面不存在</title>
+    <title>支付失败了...</title>
     <style>
         .content{
             width:100%;
@@ -39,7 +39,7 @@
     </style>
 </head>
 <body>
-    
+    <script src="/views/sysdefault/javascript/function.js"></script>
     <div class="content">
             <img src="/views/mobile/skin/default/image/xinzeng/zfsb.png" alt="">
         <!--<img src="/views/mobile/skin/default/image/xinzeng/error.png" alt="">-->
@@ -59,11 +59,16 @@
     window.onload=function(){
         // alert('支付失败了:(');
         // window.location.href='{echo:$_SESSION["__forward__"]}';
-        if(confirm('支付失败了，继续去付款？')){
-            window.location.href='{url:block/doPay}/order_id/{$order_id}';
-        }else{
-            window.location.href='{url:ucenter/order}';
-        }
+        _confirm('支付失败了，继续去付款？',function(){
+            window.location.href='{url:block/doPay}/order_id/{$order_id}'; //继续支付
+        }); 
+        window.location.href='{url:ucenter/order}'; //跳转到全部订单
+
+        // if(confirm('支付失败了，继续去付款？')){
+        //     window.location.href='{url:block/doPay}/order_id/{$order_id}';
+        // }else{
+        //     window.location.href='{url:ucenter/order}';
+        // }
     }
 
     </script>
