@@ -47,25 +47,20 @@
 <section id="user_Info">
 </section>
 <section id="section-user-info">
-    <ul class="mui-table-view" style="margin-top: 1.1em">
+    <ul class="mui-table-view" style="margin-top:0.15rem">
         <li class="mui-table-view-cell">
-            <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />账户余额&nbsp;{$this->amount_available}/{$this->memberRow['balance']}<a class="mui-btn mui-btn-warning locationA" href="{url:/ucenter/withdraw}">提现</a>
-        </li>
-    </ul>
-    <ul class="mui-table-view" style="margin-top: 1.1em">
-        <li class="mui-table-view-cell">
-            <a class="mui-navigate-right" href="{url:/ucenter/shop_amount_tobe_booked}">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />待入账金额&nbsp;{$this->amount_tobe_booked}
+            <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_edit/id/$this->identify_id}">
+                <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
+                店铺信息
             </a>
         </li>
     </ul>
-    <ul class="mui-table-view" style="margin-top: 1.1em">
-        <li class="mui-table-view-cell">
-            <a class="mui-navigate-right" href="{url:/ucenter/shop_accumulated_income}">
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />累计收益
-            </a>
-        </li>
-    </ul>
+    <p style="text-align: center;margin-top: 1.1em">
+        <label>店铺二维码</label>
+    </p>
+    <p style="text-align: center;margin-top: 1.1em;margin-bottom: 5.1em">
+        <img src="<?php echo IWeb::$app->config['image_host1'] . '/ucenter/qrcode/identify_id/' . $this->shop_data[0]['identify_id'];?>">
+    </p>
 </section>
 <footer>
     <nav class="mui-bar mui-bar-tab"  style="z-index:25">
@@ -115,7 +110,7 @@
     <%if(username==null){%>
     <div class="userName">九猫家的小小猫</div>
     <%}else{%>
-    <div class="userName">{$this->user_shop_data['name']}&nbsp;&nbsp;&nbsp;&nbsp;收益信息</div>
+    <div class="userName">{$this->shop_data[0]['name']}的店铺信息</div>
     <%}%>
 
 

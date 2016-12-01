@@ -124,14 +124,12 @@
             </ul>
         <ul class="mui-table-view">
             {if:$this->user_shop_data}
-
             <li class="mui-table-view-cell">
-                <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_edit/id/$this->user_shop_data[0]['identify_id']}">
+                <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_user/id/$this->user_shop_data[0]['identify_id']}">
                     <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
-                    店铺信息
+                    我的店铺
                 </a>
             </li>
-
             {/if}
         </ul>
         <ul class="mui-table-view">
@@ -142,15 +140,7 @@
                         收益
                     </a>
                 </li>
-            {else:}
-                <li class="mui-table-view-cell">
-                    <a class="mui-navigate-right" href="{url:/ucenter/shop_register}">
-                        <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
-                            申请开店
-                    </a>
-                </li>
             {/if}
-
         </ul>
         <ul class="mui-table-view" style="margin-top: 0.12rem;margin-bottom:1.1rem;">
             <li class="mui-table-view-cell">

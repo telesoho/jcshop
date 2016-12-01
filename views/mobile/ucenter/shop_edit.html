@@ -1,163 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-cn">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="x5-orientation" content="portrait">
-    <title>个人中心</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css"/>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/personalCenter.css" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>开店</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+    <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 
 </head>
 <body>
-<div id="loading">
-    <div class="spinner">
-        <div class="spinner-container container1">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
+<div class="container" style="margin-top: 10px;">
+    <div class="alert alert-success">您的店铺信息内容</div>
+    <form class="form-horizontal" role="form" method="post">
+        <div class="form-group">
+            <label for="a" class="col-xs-4 control-label">店铺名称</label>
+            <div class="col-xs-8">
+                <input type="text" name='name' class="form-control" id="a" value="<?php echo $this->shop_data[0]['name']; ?>" required placeholder="店铺名称">
+            </div>
         </div>
-        <div class="spinner-container container2">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
+        <div class="form-group">
+            <label for="b" class="col-xs-4 control-label">店铺描述</label>
+            <div class="col-xs-8">
+                <input type="text" name='description' class="form-control" id="b" value="<?php echo $this->shop_data[0]['description'] ?>" required placeholder="店铺描述">
+            </div>
         </div>
-        <div class="spinner-container container3">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
+        <div class="form-group">
+            <label for="c" class="col-xs-4 control-label">店铺地址</label>
+            <div class="col-xs-8">
+                <input type="text" name="address" class="form-control" id="c" value="<?php echo $this->shop_data[0]['address'] ?>" required placeholder="店铺地址">
+            </div>
         </div>
-    </div>
-</div>
-<!--loading页结束-->
-<!--<header class="mui-bar mui-bar-nav">
-    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-    <h1 class="mui-title">个人中心</h1>
-</header>-->
-<section id="user_Info">
-</section>
-<section id="section-user-info">
-    <form method="post">
-        <ul class="mui-table-view" style="margin-top: 1.1em">
-            <li class="mui-table-view-cell">
-                <input name="identify_id" type="hidden" value="">
-                <input name="name" value="" placeholder="店铺名称">
-                <button type="submit" class="mui-btn mui-btn-info" >确认</button>
-            </li>
-        </ul>
+        <div class="form-group">
+            <label for="d" class="col-xs-4 control-label">联系电话</label>
+            <div class="col-xs-8">
+                <input type="text" name='phone' class="form-control" id="d" value="<?php echo $this->shop_data[0]['phone'] ?>" required placeholder="电话">
+            </div>
+        </div>
+        <hr>
+        <div class="form-group text-center">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-info">保存修改</button><span style="margin-left: 5px;margin-right: 5px;">|</span><a href="{url:/ucenter/shop_user/id/$_GET['id']}" class="btn btn-danger">取消返回</a>
+            </div>
+        </div>
     </form>
+</div>
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 
-    <p style="text-align: center;margin-top: 1.1em">
-        <label>店铺二维码</label>
-    </p>
-    <p style="text-align: center;margin-top: 1.1em;margin-bottom: 5.1em">
-        <img src="<?php echo IWeb::$app->config['image_host1'] . '/ucenter/qrcode/identify_id/' . $this->shop_data[0]['identify_id'];?>">
-    </p>
-</section>
-<footer>
-    <nav class="mui-bar mui-bar-tab"  style="z-index:25">
-        <a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">
-                <span class="mui-icon nav-icon icon-home">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/home.png"  data-img="home-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">首页</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/site/sitemap}">
-                <span class="mui-icon nav-icon icon-classification">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/mune.png" data-img="mune-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">分类</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/site/favorite}">
-                <span class="nav-icon icon-vedio">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/grass.png" data-img="grass.png"  alt="" class="img-move02">
-                    <div class="grow">种草</div>
-                    <span class="tab-mark"></span>
-                </span>
-        </a>
-        <a class="mui-tab-item" href="{url:simple/cart}">
-                <span class="mui-icon nav-icon icon-shopcar">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/buy.png" data-img="buy-ed.png"  alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">购物车</div>
-        </a>
-        <a class="mui-tab-item  mui-active" href="{url:/ucenter/index}">
-                <span class="mui-icon nav-icon icon-my">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/my-ed.png" data-img="my-ed.png"  alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">我的</div>
-        </a>
-    </nav>
-</footer>
-<script id="userinfo" type="text/html">
-    <div class="headBox">
-        <div class="whiteBack">
-            <%if(head_ico==null){%>
-            <img src="/views/mobile/skin/default/image/jmj/img/cat_logo.png"/>
-            <%}else{%>
-            <img src="<%=head_ico %>"/>
-            <%}%>
-        </div>
-    </div>
-    <%if(username==null){%>
-    <div class="userName">九猫家的小小猫</div>
-    <%}else{%>
-    <div class="userName">{$this->shop_data[0]['name']}的店铺信息</div>
-    <%}%>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
-
-</script>
-<script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/template-native.js"></script>
-<script src="/views/mobile/javascript/mui.js"></script>
-<script>
-    $(window).load(function(){
-        $("#loading").fadeOut(300);
-        getInfo();
-        //解决tab选项卡a标签无法跳转的问题
-        mui('body').on('tap','.mui-tab-item',function(){
-            var srcimg= $(this).find('img').attr("data-img");
-            $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
-            document.location.href=this.href;
-        });
-        mui('body').on("tap",'a',function(){
-            window.location.href=this.href;
-        })
-    })
-    function getInfo(){
-        mui.ajax('index.php?controller=apic&action=info',{
-            dataType:'json',	// 服务器返回json格式数据
-            type:'get',		// HTTP请求类型
-            timeout:10000,		// 超时时间设置为10秒；
-            success:function(data){
-                if(data){
-                }else{
-                    data={
-                        head_ico:null,
-                        username:null
-                    }
-                };
-                var html=template('userinfo',data);
-                document.getElementById("user_Info").innerHTML=html;
-
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
-            }
-        });
-    }
-
-</script>
 </body>
 </html>

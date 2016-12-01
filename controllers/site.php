@@ -25,8 +25,8 @@ class Site extends IController
 	function index()
 	{
         if ($this->user['user_id']){
-            ISession::clear('shop_name');
-            ISession::clear('shop_identify_id');
+//            ISession::clear('shop_name');
+//            ISession::clear('shop_identify_id');
 	        $user_own_shop_data = $this->get_user_own_shop_data();
             if (!empty($user_own_shop_data)){
                 ISession::set('shop_name',$user_own_shop_data['name']);
@@ -41,7 +41,14 @@ class Site extends IController
                     $identify_id = IFilter::act(IReq::get('iid'),'int');
 //                    ISession::set('if_associate',$identify_id);
                     if(!empty($identify_id)){
-                        $this->redirect('contract?iid='.$identify_id);
+                        $if_shop_register = $this->if_shop_register($identify_id);
+                        if ($if_shop_register){
+                            $shop_data = $this->get_shop_data_by_identify_id($identify_id);
+                            ISession::set('shop_name',$shop_data['name']);
+                            ISession::set('shop_identify_id',$shop_data['identify_id']);
+                        } else {
+                            $this->redirect('contract?iid='.$identify_id);
+                        }
                     }
                 }
             }
@@ -1071,14 +1078,75 @@ class Site extends IController
         $shop_name 	= IFilter::act(IReq::get('shop_name'),'string');
         $recommender = IFilter::act(IReq::get('recommender'),'string');
         $agree = IFilter::act(IReq::get('agree'));
-        if ($identify_id){
-            if ($agree === 'true'){
+        if ($identify_id && $agree === 'true'){
+            $shop_data = $this->get_shop_data_by_identify_id($identify_id);
+            ISession::set('shop_name',$shop_data['name']);
+            ISession::set('shop_identify_id',$shop_data['identify_id']);
+            $if_shop_register = $this->if_shop_register($identify_id);
+            if ($if_shop_register){
+
+            } else {
                 $shop_model = new IModel('shop');
-                $shop_model->setData(['name'=>$shop_name,'recommender'=>$recommender,'own_id'=>$this->user['user_id']]);
-                $ret = $shop_model->update('identify_id = ' . $identify_id);
-                if($ret) $this->redirect('index');
+                $shop_model->setData(['own_id'=>$this->user['user_id'],'name'=>$shop_name,'recommender'=>$recommender]);
+                $ret = $shop_model->update('identify_id='.$identify_id);
+                if ($ret){
+                    $user_model = new IModel('user');
+                    $user_model->setData(['shop_identify_id' => $identify_id, 'shop_relation_time' => date('Y-m-d H:i:s')]);
+                    $ret = $user_model->update('id = ' . $this->user['user_id']);
+                    if($ret) $this->redirect('index');
+                }
             }
         }
         $this->redirect('contract');
+    }
+
+    function recommender_login(){
+        $name = IFilter::act(IReq::get('name'),'string');
+        $password = IFilter::act(IReq::get('password'),'string');
+        if ($name){
+            $recommender_query = new IQuery('recommender');
+            $recommender_query->where = 'name = "' . $name . '" and password = "' . $password . '"';
+            $ret = $recommender_query->find();
+            if (isset($ret[0])){
+                ISession::set('recommender', $name);
+                $this->redirect('recommender_shop');
+            }
+        }
+        $this->redirect('recommender_login');
+    }
+    function recommender_shop(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = "' . ISession::get('recommender') . '"';
+        $ret = $shop_query->find();
+        foreach ($ret as $key => $value){
+            $data[]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
+            $data[]['identify_id'] = $value['identify_id'];
+        }
+        var_dump($data);
+        $this->redirect('recommender_shop');
+    }
+    private function get_amount_tobe_booked($identify_id){
+        $shop_query = new IQuery('shop');
+        $user_query = new IQuery('user');
+        $shop_query->where = 'identify_id = ' . $identify_id;
+        $shop_data = $shop_query->find()[0];
+        $temp = '(';
+//        $temp = '( user_id = ' . $this->user['user_id'];
+        if ($shop_data){
+            $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+        }
+        $temp .= ')';
+        $temp = '(' . explode('or', $temp, 2)[1];
+        $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
+        $order_query = new IQuery('order');
+        $order_query->where = $where;
+        $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
+        $amount_tobe_booked = $order_query->find()[0]['amount_tobe_booked'];
+        $amount_tobe_booked = empty($amount_tobe_booked) ? '0.00' : $amount_tobe_booked;
+        return $amount_tobe_booked;
     }
 }

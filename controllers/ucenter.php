@@ -1035,8 +1035,6 @@ class Ucenter extends IController implements userAuthorization
         $shop_query = new IQuery('shop');
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
         $user_shop_data = $shop_query->find()[0];
-        $user_shop_data['identify_qrcode'] = IWeb::$app->config['image_host1'] . '/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
-//        $user_shop_data['identify_qrcode'] = 'http://192.168.0.13:8080/ucenter/qrcode/identify_id/' . $user_shop_data['identify_id'];
         $this->user_shop_data = $user_shop_data;
 
         $memberObj = new IModel('member','balance');
@@ -1087,18 +1085,31 @@ class Ucenter extends IController implements userAuthorization
     function shop_accumulated_income(){
         $this->redirect('shop_accumulated_income');
     }
-    //编辑商品信息
+    //编辑店铺信息
     function shop_edit(){
         $name = IFilter::act(IReq::get('name'),'string');
+        $description = IFilter::act(IReq::get('description'),'string');
+        $address = IFilter::act(IReq::get('address'),'string');
+        $phone = IFilter::act(IReq::get('phone'),'string');
         $identify_id = IFilter::act(IReq::get('id'),'int');
         if ($name){
             $shop_model = new IModel('shop');
-            $shop_model->setData(['name' => $name]);
-            $shop_model->update('identify_id = ' . $identify_id.' and own_id = ' .$this->user['user_id']);
+            $shop_model->setData(['name' => $name, 'description' => $description, 'address' => $address, 'phone'=>$phone]);
+            $ret = $shop_model->update('identify_id = ' . $identify_id.' and own_id = ' .$this->user['user_id']);
+            if ($ret) $this->redirect('shop_user/id/' . $identify_id);
         }
         $shop_query = new IQuery('shop');
         $shop_query->where = 'identify_id = ' . $identify_id . ' and own_id = ' .$this->user['user_id'];
         $this->shop_data = $shop_query->find();
         $this->redirect('shop_edit');
+    }
+    //用户店铺信息
+    function shop_user(){
+        $identify_id = IFilter::act(IReq::get('id'),'int');
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'identify_id = ' . $identify_id . ' and own_id = ' .$this->user['user_id'];
+        $this->shop_data = $shop_query->find();
+        $this->identify_id = $identify_id;
+        $this->redirect('shop_user');
     }
 }
