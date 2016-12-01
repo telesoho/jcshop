@@ -39,7 +39,10 @@ class Site extends IController
                 } else {
                     //关联店铺
                     $identify_id = IFilter::act(IReq::get('iid'),'int');
-                    ISession::set('if_associate',$identify_id);
+//                    ISession::set('if_associate',$identify_id);
+                    if(!empty($identify_id)){
+                        $this->redirect('contract?iid='.$identify_id);
+                    }
                 }
             }
         }
@@ -1046,7 +1049,7 @@ class Site extends IController
                     $ret = $shop_model->update('identify_id='.$identify_id);
                     if ($ret){
                         $user_model = new IModel('user');
-                        $user_model->setData(['shop_identify_id' => $identify_id]);
+                        $user_model->setData(['shop_identify_id' => $identify_id, 'shop_relation_time' => date('Y-m-d H:i:s')]);
                         $user_model->update('id = ' . $this->user['user_id']);
                     }
                 }
@@ -1055,6 +1058,27 @@ class Site extends IController
         ISession::set('if_associate',null);
     }
     function near_shops(){
+        if(IClient::isWechat() == true){
+            require_once __DIR__ . '/../plugins/wechat/wechat.php';
+            $this->wechat = new wechat();
+        }
         $this->redirect('near_shops');
+    }
+    //协议信息内容和填写合伙人信息
+    function contract(){
+        $identify_id = IFilter::act(IReq::get('identify_id'),'string');
+        $this->identify_id = IFilter::act(IReq::get('iid'));
+        $shop_name 	= IFilter::act(IReq::get('shop_name'),'string');
+        $recommender = IFilter::act(IReq::get('recommender'),'string');
+        $agree = IFilter::act(IReq::get('agree'));
+        if ($identify_id){
+            if ($agree === 'true'){
+                $shop_model = new IModel('shop');
+                $shop_model->setData(['name'=>$shop_name,'recommender'=>$recommender,'own_id'=>$this->user['user_id']]);
+                $ret = $shop_model->update('identify_id = ' . $identify_id);
+                if($ret) $this->redirect('index');
+            }
+        }
+        $this->redirect('contract');
     }
 }
