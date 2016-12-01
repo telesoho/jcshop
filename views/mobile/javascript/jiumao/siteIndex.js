@@ -1,6 +1,38 @@
 /**
  * Created by yb on 2016/11/29.
  */
+var vm = new Vue({
+    el: '#indexInfo',
+    data: {
+        showMessage:false,
+        article_category_list:[]
+    },
+    computed: {
+    },
+    mounted: function(){
+        var self=this;
+        getArticle_category_list(self);
+    },
+    updated:function() {
+        // getScrollTop1();
+        lazyload.init({
+            anim:false,
+            selectorName:".samLazyImg"
+        });
+    },
+    methods: {
+        toArticle: function(item){
+            window.location.href='/site/article_detail?id='+item.id;
+        },
+        toArticle_list: function(item){
+            // 保存分类的名字和id
+            setItem("artileName",item.name);
+            setItem("articleId",item.id);
+            setItem("articlePage",1);
+            window.location.href='/site/article_list'
+        }
+    }
+})
 var pageData = {
     page:1
 };
@@ -34,13 +66,22 @@ window.onload=function(){
 //        self_Aid.previousSiblingNode.play();
         $(self_Aid).prev().addClass("hide");
         $(self_Aid).prev().prev()[0].play();
-
-
     });
     //点击直达顶部
     mui("body").on("tap",".fix-toTop",function(){
         $("html,body").animate({scrollTop:0},0);
         return false;
+    });
+}
+function getArticle_category_list(self){
+    mui.ajax('/apic/article_category_list', {
+        dataType: 'json',
+        type: 'get',
+        timeout: 10000,
+        success: function (data) {
+            self.showMessage=true;
+            self.article_category_list=data;
+        }
     });
 }
 //上拉加载
