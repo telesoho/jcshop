@@ -45,12 +45,22 @@
         <!--<img src="/views/mobile/skin/default/image/xinzeng/error.png" alt="">-->
         <a href="{url:/site/index}">去逛逛</a>
     </div>
+    <?php
+        $order_no           = IReq::get("order_no");
+        if(!empty($order_no)){
+            $query          = new IQuery('order');
+            $query->where   = 'order_no='.$order_no;
+            $query->fields  = 'id';
+            $info           = $query->find();
+        }
+        $order_id           = empty($info) ? 0 : $info[0]['id'] ;
+    ?>
     <script type="text/javascript">
     window.onload=function(){
         // alert('支付失败了:(');
         // window.location.href='{echo:$_SESSION["__forward__"]}';
         if(confirm('支付失败了，继续去付款？')){
-            window.location.href='{url:block/doPay}/order_id/{echo:IReq::get("order_id")}';
+            window.location.href='{url:block/doPay}/order_id/{$order_id}';
         }else{
             window.location.href='{url:ucenter/order}';
         }
