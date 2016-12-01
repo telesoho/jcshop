@@ -962,8 +962,9 @@ class Order_Class
 		$goodList = array();
 		foreach($orderGoodsList as $good)
 		{
-			$temp = JSON::decode($good['goods_array']);
-			$temp['goods_nums'] = $good['goods_nums'];
+			$temp 					= JSON::decode($good['goods_array']);
+			$temp['goods_nums'] 	= $good['goods_nums'];
+			$temp['goods_id'] 		= $good['goods_id'];
 			$goodList[] = $temp;
 		}
 		return $goodList;

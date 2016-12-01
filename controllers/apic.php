@@ -1014,7 +1014,7 @@ class Apic extends IController
     	$list_ar 					= $query_ar->find();
     	if(!empty($list_ar)){
     		foreach($list_ar as $k => $v){
-    			$list_ar[$k]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
+    			$list_ar[$k]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/738/h/353");
     		}
     	}
     	/* 返回数据 */
