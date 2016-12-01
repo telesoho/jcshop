@@ -219,12 +219,12 @@ class Block extends IController
 		else if($order_id)
 		{
 			$sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id));
+// 			$sendData['order_id'] = $order_id;
 		}
 		else
 		{
 			IError::show(403,'发生支付错误');
 		}
-
 		$paymentInstance->doPay($sendData);
 	}
 
