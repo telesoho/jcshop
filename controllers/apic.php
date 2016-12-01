@@ -1001,10 +1001,16 @@ class Apic extends IController
     public function article_category_list(){
     	/* 首页展示的专辑分类 */
     	$query_ac 					= new IQuery('article_category');
-    	$query_ac->where 			= 'id in (10,11,12,13,14,15,16,17,18,19)';
+    	$query_ac->where 			= 'id in (11,12,15,16,18,19)';
+    	//11喵酱推荐/12杂志揭载/15药妆特供/16健康推荐/18居家个护/19吃喝宅乐/
     	$query_ac->fields 			= 'id,name';
-    	$query_ac->limit 			= 8;
+    	$query_ac->limit 			= 6;
     	$list_ac 					= $query_ac->find();
+    	if(!empty($list_ac)){
+    		foreach($list_ac as $k => $v){
+    			$list_ac[$k]['image'] = IWeb::$app->config['image_host'] . '/upload/category/article_img/'.$v['id'].'.png';
+    		}
+    	}
     	/* 特别推荐专辑 */
     	$query_ar 					= new IQuery('article');
     	$query_ar->where 			= 'top=1';

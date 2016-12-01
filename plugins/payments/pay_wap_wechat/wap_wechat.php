@@ -172,7 +172,7 @@ class wap_wechat extends paymentPlugin
 	/**
 	 * @see paymentplugin::doPay()
 	 */
-	public function doPay($sendData)
+	public function doPay($sendData, $order_id)
 	{
 		if(isset($sendData['prepay_id']) && $sendData['prepay_id'])
 		{
@@ -198,7 +198,7 @@ class wap_wechat extends paymentPlugin
 			$return['paySign']    = $mysign;
 			$return['successUrl'] = IUrl::getHost().IUrl::creatUrl('/site/success?message='.urlencode('支付成功！'));
 //			$return['failUrl']    = IUrl::getHost().IUrl::creatUrl('/site/error/msg/'.urlencode('支付失败！'));
-			$return['failUrl']    = IUrl::getHost().IUrl::creatUrl('/site/error_pay?msg='.urlencode('/views/mobile/skin/default/image/xinzeng/zfsb.png'));
+			$return['failUrl']    = IUrl::getHost().IUrl::creatUrl('/site/error_pay?order_id='.$order_id);
 
 			include(dirname(__FILE__).'/template/pay.php');
 		}

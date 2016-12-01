@@ -39,15 +39,22 @@
     </style>
 </head>
 <body>
-    {set:$msg = IReq::get('msg') ? IReq::get('msg') : '/views/mobile/skin/default/image/xinzeng/error.png'}
+    
     <div class="content">
-            <img src="{$msg}" alt="">
+            <img src="/views/mobile/skin/default/image/xinzeng/zfsb.png" alt="">
         <!--<img src="/views/mobile/skin/default/image/xinzeng/error.png" alt="">-->
         <a href="{url:/site/index}">去逛逛</a>
     </div>
     <script type="text/javascript">
-    alert('支付失败了:(');
-    window.location.href='{echo:$_SESSION["__forward__"]}';
+    window.onload=function(){
+        // alert('支付失败了:(');
+        // window.location.href='{echo:$_SESSION["__forward__"]}';
+        if(confirm('支付失败了，继续去付款？')){
+            window.location.href='{url:block/doPay}/order_id/{echo:IReq::get("order_id")}';
+        }else{
+            window.location.href='{url:ucenter/order}';
+        }
+    }
 
     </script>
 
