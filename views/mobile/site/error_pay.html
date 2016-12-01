@@ -46,7 +46,7 @@
         <a href="{url:/site/index}">去逛逛</a>
     </div>
     <?php
-        $order_no           = IReq::get("order_id");
+        $order_no           = IReq::get("order_no");
         if(!empty($order_no)){
             $query          = new IQuery('order');
             $query->where   = 'order_no='.$order_no;
