@@ -269,13 +269,12 @@
 <?php } ?>
 
 <!-- 微信分享 -->
+{if:IClient::isWechat() == true}
 <?php 
-if(IClient::isWechat() == true){
     require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
     $this->wechat = new wechat();
     $this->wechat->config['wechat_jsApiSDK']=1;
     $this->wechat->jsApiSDK();
-}
 ?>
 <script src="/views/mobile/javascript/jiumao/wechat.share.js"></script>
 <script type="text/javascript">
@@ -285,7 +284,7 @@ var wechat_share = {
     imgUrl      : "{echo:IWeb::$app->config['image_host'] . IUrl::creatUrl('/pic/thumb/img/'.$this->articleRow['image'].'/w/200/h/200')}", //图片
 }
 </script>
-
+{/if}
 
 </body>
 </html>
