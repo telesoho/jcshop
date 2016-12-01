@@ -26,7 +26,8 @@ var vm = new Vue({
             payment:[
                 {id:''}
             ],
-            kicket:{}
+            kicket:{},
+            state:true
         },
         error:'',
         showButton:true,
@@ -64,8 +65,12 @@ var vm = new Vue({
         },
         formSubmit: function(obj){
             var self=this;
-            if(self.showButton){
-                checkSubmit(obj)
+            console.log(self.state);
+            if(self.showButton&&self.state){
+                self.state=false;
+                checkSubmit(obj);
+                console.log(self.state);
+
             }
         },
         promoCho: function(){
