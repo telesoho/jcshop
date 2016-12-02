@@ -41,9 +41,9 @@
             <div class="ware">
                 <div class="title">{$goods_no_data['name']}</div>
                 <div class="price">
-                    <span class="price1 sellprice">九猫价:￥{$goods_no_data['sell_price']}</span>
+                    <span class="price1 sellprice">九猫价:<span style="font-size:0.2rem;color:#ff4aa0">￥</span>{$goods_no_data['sell_price']}</span>
                     <span class="price2">日本价:<?php echo explode('.',$goods_no_data['jp_price'])[0]; ?>円</span>
-                    <span class="price3">国内价: ￥{$goods_no_data['market_price']}</span>
+                    <span class="price3">国内价: <span style="font-size:0.2rem;color:#bbb">￥</span>{$goods_no_data['market_price']}</span>
                 </div>
                 <a href="{url:/site/products?id=$goods_no_data['goods_id']}"><div class="buy">立即购买</div></a>
             </div>
