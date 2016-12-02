@@ -422,7 +422,7 @@ class Apic extends IController
             $items[$pay['id']]['type'] = $pay['type'];
         }
 
-
+        
         $temp = [];
         foreach ($data as $k => $v){
             foreach ($v as $key => $value ){
@@ -707,8 +707,8 @@ class Apic extends IController
     	/* 相关专辑 */
     	$query 				= new IQuery('article as m');
     	$query->join 		= 'left join relation as r on r.article_id = m.id';
-    	$query->where 		= 'm.visibility=1 and r.goods_id='.$goods_id;
-    	$query->order 		= 'm.sort asc';
+    	$query->where 		= 'm.top=0 and m.visibility=1 and r.goods_id='.$goods_id;
+    	$query->order 		= 'm.sort desc';
     	$query->fields 		= 'm.id,m.title,m.image';
     	$query->limit 		= 10;
     	$list 				= $query->find();
@@ -717,7 +717,6 @@ class Apic extends IController
     			$list[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/250/h/127");
     		}
     	}
-    	
     	$this->json_echo($list);
     }
     //商品详情的补充信息内容
@@ -781,7 +780,7 @@ class Apic extends IController
      */
     //显示专辑列表（首页）
     public function article_list(){
-        if (empty($this->user['user_id'])){$this->json_echo([]);}
+    	if (empty($this->user['user_id'])){$this->json_echo([]);}
         if (empty($_SERVER['REDIRECT_PATH_INFO']) && (IClient::isAjax() == false) ){ISession::clear('visit_num');}
         $goods_query = new IQuery("goods");
         /*视频专辑*/
@@ -814,14 +813,14 @@ class Apic extends IController
 //            $article_data_tbtj[$key]['article_type'] = 'tbtj';
 //        }
 
-        /*图文专辑*/
-        $category_query = new IQuery("article_category");
-        $category_query->where = 'parent_id = 1';
-        $category_query->fields='id,name';
-        $category_data = $category_query->find();
-        $visit_article_id = ISession::get('visit_article_id');
+        //图文专辑
+        $category_query 			= new IQuery("article_category");
+        $category_query->where 		= 'parent_id = 1';
+        $category_query->fields 	= 'id,name';
+        $category_data 				= $category_query->find();
+        $visit_article_id 			= ISession::get('visit_article_id');
         if (!empty( $visit_article_id )){
-            $visit_num = explode(',',$visit_article_id)[1];
+            $visit_num 				= explode(',',$visit_article_id)[1];
             $xb = explode(',',$visit_article_id)[1];
             $visit_article_id = explode(',',$visit_article_id)[0];
             ISession::clear('visit_article_id');
@@ -957,12 +956,14 @@ class Apic extends IController
     	$page 				= IFilter::act(IReq::get('page'),'int'); 	//当前页码，选填
     	/* 获取数据 */
     	$query 				= new IQuery('article as m');
-    	$query->where 		= empty($cid) ? '' : 'm.category_id='.$cid;
+    	$query->where 		= 'top=0 and visibility=1 '.(empty($cid) ? '' : ' and m.category_id='.$cid);
     	$query->fields 		= 'm.id,m.title,m.image,m.visit_num';
     	$query->order 		= 'm.sort asc';
     	$query->page 		= $page>1 ? $page : 1;
     	$query->pagesize 	= 10;
     	$list 				= $query->find();
+    	$total_page 		= $query->getTotalPage();
+    	if ($page > $total_page) $list = array();
     	if(!empty($list)){
     		//商品列表模型
     		$query_goods 				= new IQuery('goods as m');
@@ -1010,7 +1011,7 @@ class Apic extends IController
     	}
     	/* 特别推荐专辑 */
     	$query_ar 					= new IQuery('article');
-    	$query_ar->where 			= 'top=1';
+    	$query_ar->where 			= 'top=1 and visibility=1';
     	$query_ar->order 			= 'sort desc';
     	$query_ar->limit 			= 3;
     	$query_ar->fields 			= 'id,title,image';
@@ -1022,6 +1023,7 @@ class Apic extends IController
     	}
     	/* 返回数据 */
 		$data 						= array('ac'=>$list_ac,'ar'=>$list_ar);
+		var_dump($data);exit();
     	$this->json_echo($data);
     }
     //通过专辑获取相关商品
@@ -1104,20 +1106,22 @@ class Apic extends IController
      */
     public function category_top()
     {
-        $data = Api::run('getCategoryListTop');
-        foreach ($data as $key => $value){
-            $temp2 = IWeb::$app->config['image_host'] . '/upload/category_icon/' . $value['id'] . '_0.png,';
-            $temp2 .= IWeb::$app->config['image_host'] . '/upload/category_icon/' . $value['id'] . '_1.png';
-            $data[$key]['image'] = $temp2;
+    	//一级分类
+        $data 							= Api::run('getCategoryListTop');
 
+        foreach ($data as $key => $value){
+			//banner图
             if (!empty($value['banner_image'])){
                 $data[$key]['banner_image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['banner_image']."/w/520/h/154");
             }
+            //icon
             if (!empty($value['image'])){
-                $temp = explode(',',$value['image']);
-                $data[$key]['image'] = IWeb::$app->config['image_host'] . '/' . $temp[0].','.IWeb::$app->config['image_host'] . '/' . $temp[1];
+                $temp 					= explode(',',$value['image']);
+                $data[$key]['image'] 	= empty($temp[0]) ? '' : IWeb::$app->config['image_host'].'/'.$temp[0];
+                $data[$key]['image'] 	.= empty($temp[1]) ? '' : ','.IWeb::$app->config['image_host'].'/'.$temp[1];
             }
-            $data[$key]['child'] = [];
+           	//二级子分类
+            $data[$key]['child'] 		= [];
             $second = Api::run('getCategoryByParentid',array('#parent_id#',$value['id']));
             if(!empty($second)) foreach ($second as $k=>$v){
                 if (!empty($v['banner_image'])){
@@ -1180,7 +1184,7 @@ class Apic extends IController
     	$query_keyword->fields 		= 'word';
     	$query_keyword->limit 		= 20;
     	$data_keyword 				= $query_keyword->find();
-
+    	
     	$this->json_echo($data_keyword);
     }
 	/* 开始搜索 */
@@ -1207,12 +1211,12 @@ class Apic extends IController
     	$query_goods->pagesize 		= 1000;
     	$data_goods 				= $query_goods->find();
     	$total_page 				= $query_goods->getTotalPage();
+    	if ($gpage > $total_page) $data_goods = array();
     	if(!empty($data_goods)){
     		foreach($data_goods as $k => $v){
     			$data_goods[$k]['img'] 		= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/290/h/290");
     		}
     	}
-    	if ($gpage > $total_page) $data_goods = array();
 
     	/* 专辑 */
     	$query_article 				= new IQuery('article');
@@ -1223,12 +1227,12 @@ class Apic extends IController
     	$query_article->pagesize 	= 1000;
     	$data_article  				= $query_article->find();
     	$total_page 				= $query_article->getTotalPage();
+    	if ($apage > $total_page) $data_article = array();
     	if(!empty($data_article)){
     		foreach($data_article as $k => $v){
     			$data_article[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/513/h/260");
     		}
     	}
-    	if ($apage > $total_page) $data_article = array();
 
         $this->json_echo(array('goods'=>$data_goods,'article'=>$data_article));
     }

@@ -78,39 +78,39 @@
         </div>
         <!--轮播图结束-->
     </section>
-    <!--<section id="indexInfo" v-if="showMessage">-->
-        <!--<div class="banner_img flexbox">-->
-            <!--<img src="/views/mobile/skin/default/image/xinzeng/baner_tip.png" alt="" />-->
-        <!--</div>-->
-        <!--<div class="hot_category">-->
-            <!--<div class="head flexbox">-->
-                <!--<span class="darkline"></span>-->
-                <!--<span>特别分类</span>-->
-                <!--<span class="darkline"></span>-->
-            <!--</div>-->
-            <!--<div >-->
-                <!--<div class="item_img">-->
-                    <!--<a href="#" @click="toArticle_list(item)" class="img"  v-for="item in article_category_list.ac">-->
-                        <!--<img  alt=""   :src="item.image"  class="samLazyImg" />-->
-                    <!--</a>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--&lt;!&ndash;<div class="hot_article">&ndash;&gt;-->
-            <!--&lt;!&ndash;<div class="head flexbox">&ndash;&gt;-->
-                <!--&lt;!&ndash;<span class="darkline"></span>&ndash;&gt;-->
-                <!--&lt;!&ndash;<span>特别推荐</span>&ndash;&gt;-->
-                <!--&lt;!&ndash;<span class="darkline"></span>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-            <!--&lt;!&ndash;<div v-for="item in article_category_list.ar">&ndash;&gt;-->
-                <!--&lt;!&ndash;<div class="item_img">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<a href="#" @click="toArticle(item)">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<img :dataimg="item.image" alt="" width="100%"  src="/views/mobile/skin/default/image/jmj/icon/big_lazy.png"  class="samLazyImg" />&ndash;&gt;-->
-                    <!--&lt;!&ndash;</a>&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--</section>-->
+    <section id="indexInfo" v-if="showMessage" v-cloak>
+        <div class="banner_img flexbox">
+            <img src="/views/mobile/skin/default/image/xinzeng/baner_tip.png" alt="" />
+        </div>
+        <div class="hot_category">
+            <div class="head flexbox">
+                <span class="darkline"></span>
+                <span>特别分类</span>
+                <span class="darkline"></span>
+            </div>
+            <div >
+                <div class="item_img">
+                    <a href="#" @click="toArticle_list(item)" class="img"  v-for="item in article_category_list.ac">
+                        <img  alt=""   :src="item.image"  class="samLazyImg" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="hot_article">
+            <div class="head flexbox">
+                <span class="darkline"></span>
+                <span>特别推荐</span>
+                <span class="darkline"></span>
+            </div>
+            <div v-for="item in article_category_list.ar">
+                <div class="item_img">
+                    <a href="#" @click="toArticle(item)">
+                        <img :dataimg="item.image" alt="" width="100%"  src="/views/mobile/skin/default/image/jmj/icon/big_lazy.png"  class="samLazyImg" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
         <!--专辑-->
         <!--<section class="timePurchase line">-->
             <!--<div class="timePurchase_title">-->

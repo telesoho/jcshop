@@ -259,9 +259,9 @@ class Site extends IController
 		/* 专辑 */
 		$db_article 					= new IQuery('article as m');
 		$db_article->join 				= 'left join article_category as c on c.id=m.category_id';
-		$db_article->where 				= 'm.visibility=1 and m.category_id='.$this->ac_id;
+		$db_article->where 				= 'm.top=0 and m.visibility=1 and m.category_id='.$this->ac_id;
 		$db_article->fields 			= 'm.id,m.title,m.visit_num,m.favorite,m.image,c.name';
-		$db_article->order 				= 'm.top desc,m.sort desc';
+		$db_article->order 				= 'm.sort desc';
 		$db_article->limit 				= 2;
 		$data_article 					= $db_article->find();
 		if(!empty($data_article)){
@@ -269,7 +269,7 @@ class Site extends IController
 			$db_goods->join 			= 'left join relation as r on r.goods_id=m.id';
 			$db_goods->fields 			= 'm.id,m.name,m.sell_price,m.img';
 			$db_goods->order 			= 'm.sort desc';
-			$db_goods->limit 			= 1000;
+			$db_goods->limit 			= 100;
 			$db_favorite 				= new IQuery('favorite_article');
 			$db_favorite->field 		= 'count(id)';
 			foreach($data_article as $k => $v){
