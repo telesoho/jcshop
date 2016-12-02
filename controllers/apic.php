@@ -1165,7 +1165,7 @@ class Apic extends IController
         $favorite_a_query->where 		= 'user_id = ' . $this->user['user_id'];
         $data2 = $favorite_a_query->find();
         if($data2) foreach ($data2 as $key=>$value){
-        	$data2[$key]['description'] = trim( mb_substr(strip_tags( htmlspecialchars_decode($value['content']) ),0,100) );
+        	$data2[$key]['description'] = empty($value['content']) ? '' : trim( mb_substr(strip_tags( htmlspecialchars_decode($value['content']) ),0,100,'utf-8') );
         	unset($data2[$key]['content']);
         	$data2[$key]['image'] 		= empty($value['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
         }
