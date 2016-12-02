@@ -62,9 +62,11 @@
 			</div>
 			<div class="ware">
 				<div class="box head-name">
-					<div class="name">
-						{{item.name}}
-					</div>
+					<a :href="item.url" class="classA">
+						<div class="name">
+							{{item.name}}
+						</div>
+					</a>
 					<div class="del flexbox" @click='removeCart(item)'>
 						<img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt="" style="width:0.36rem;height:0.39rem;" />
 					</div>
@@ -102,7 +104,7 @@
 				</div>
 				<a  href="{url:/simple/cart2}"  class="toPay classA">结算({{infoMessage.count}})</a>
 			</div>
-			<a href="{url:/site/index}" class="condition_price classA">
+			<a href="#" class="condition_price">
 				{{freeShipping}}
 			</a>
 		</div>

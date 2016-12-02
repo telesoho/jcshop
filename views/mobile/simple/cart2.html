@@ -39,6 +39,9 @@
 <!--loading页结束-->
 <!--vue容器-->
 <div id="wareListShop">
+	<div class="top_fixd">
+		<a href="/site/index"><span>首页</span></a> <span>确认订单</span>
+	</div>
 	<template v-if="showMessage && infoMessage.addressList.length==0" v-cloak>
 		<a href="{url:/simple/addaddress}?from=cart2">
 			<div class="order_addAddr">
@@ -125,7 +128,7 @@
 	</div>
 	<div style="height:3rem;"  id="deliveryTest"></div>
 	<!--底部fixed定位-->
-	<form action='{url:/simple/cart3}' class="form" method='post' name='order_form' onsubmit='return orderFormInstance.isSubmit()' id="testForm" v-cloak>
+	<form action='{url:/simple/cart3}' class="form" method='post' name='order_form'  id="testForm" v-cloak>
 		<!--输入框要提交项目-->
 		<input type='hidden' name='ticket_did'  v-model="infoMessage.kicket.id" />
 		<input type='hidden' name='direct_gid'  v-model="infoMessage.gid" />
@@ -145,12 +148,13 @@
 			<div class="left" style="color: #bbb;font-size:0.24rem">共{{infoMessage.count}}件商品</div>
 			<div class="right"><span>合计: </span>￥{{infoMessage.sum}}</div>
 		</div>
-		<div class="flexbox" style="height:1.43rem">
+		<div class="flexbox" style="height:1.63rem">
 			<div class="top">
 				<img :src="showButton?img1:img2" alt="" @click="changeBg"/>
-				本人同意并接受<span style="color:#ff44a0"> 《个人委托协议》 </span>和<span  style="color:#ff44a0"> 《用户协议》 </span>
+				本人同意并接受 <a href="/site/agreement"><span style="color:#ff44a0">《个人委托协议》 </span></a>和 <a
+					href="/site/agreement"><span  style="color:#ff44a0">《用户协议》</span></a>
 			</div>
-			<div class="bottom" type="button" @click="formSubmit(infoMessage.addressList)" :style="showButton?bg1:bg">
+			<div class="bottom" type="button" :style="showButton?bg1:bg"  @click="formSubmit(infoMessage.addressList)">
 				确认
 			</div>
 		</div>
@@ -199,6 +203,6 @@
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
-<script src="/views/mobile/javascript/jiumao/cartTwo.js"></script>
+<script src="/views/mobile/javascript/jiumao/cartTwo.js?v=1.0.1"></script>
 </body>
 </html>

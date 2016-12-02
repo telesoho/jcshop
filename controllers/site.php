@@ -306,11 +306,16 @@ class Site extends IController
 		if(!empty($data_brand_category)){
 			//关联的品牌
 			$db_brand 					= new IQuery('brand');
-			$where 						= '';
-			foreach($data_brand_category as $k => $v){
-				$where 		.= 'category_ids like "%,'.$v['id'].',%"';
-				if(count($data_brand_category)-1 != $k) $where .= ' OR ';
+			$where 						= 'logo is not null ';
+			if(!empty($data_brand_category)){
+				$where 					.= 'and (';
+				foreach($data_brand_category as $k => $v){
+					$where 				.= 'category_ids like "%,'.$v['id'].',%"';
+					if(count($data_brand_category)-1 != $k) $where .= ' OR ';
+				}
+				$where 					.= ')';
 			}
+			
 			$db_brand->where 			= $where;
 			$db_brand->fields 			= 'id,name,logo,url';
 			$db_brand->order 			= 'sort desc';
@@ -319,7 +324,6 @@ class Site extends IController
 			if(!empty($data_brand)){
 				foreach ($data_brand as $k => $v){
 					$data_brand[$k]['logo'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['logo']."/w/200/h/120");
-					if(empty($v['logo'])) unset($data_brand[$k]);
 				}
 			}
 		}
@@ -482,6 +486,8 @@ class Site extends IController
 	//商品展示
 	function products()
 	{
+		$_SESSION["__forward__"] 	= $_SERVER["REQUEST_URI"]; //记录回跳链接
+		
 		$goods_id = IFilter::act(IReq::get('id'),'int');
 
 		if(!$goods_id)

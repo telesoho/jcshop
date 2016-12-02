@@ -6,6 +6,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
+    <title>九猫大百货</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=1.0.2" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=1.0.2" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=1.0.2" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=1.0.2" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/siteIndex.css?v=1.0.2" />
     <title><?php echo !empty(ISession::get('shop_name')) ? ISession::get('shop_name') : '九猫家商城'?></title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
@@ -13,30 +19,6 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
 </head>
 <body>
-<!--loading页开始-->
-<div id="loading">
-    <div class="spinner">
-        <div class="spinner-container container1">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container2">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container3">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-    </div>
-</div>
-<!--loading页结束-->
 <!--下拉刷新容器-->
 <!--<div id="pullrefresh" class="mui-content mui-scroll-wrapper">-->
     <!--<div class="mui-scroll" id="muiScroll">-->
@@ -101,6 +83,39 @@
         </div>
         <!--轮播图结束-->
     </section>
+    <!--<section id="indexInfo" v-if="showMessage">-->
+        <!--<div class="banner_img flexbox">-->
+            <!--<img src="/views/mobile/skin/default/image/xinzeng/baner_tip.png" alt="" />-->
+        <!--</div>-->
+        <!--<div class="hot_category">-->
+            <!--<div class="head flexbox">-->
+                <!--<span class="darkline"></span>-->
+                <!--<span>特别分类</span>-->
+                <!--<span class="darkline"></span>-->
+            <!--</div>-->
+            <!--<div >-->
+                <!--<div class="item_img">-->
+                    <!--<a href="#" @click="toArticle_list(item)" class="img"  v-for="item in article_category_list.ac">-->
+                        <!--<img  alt=""   :src="item.image"  class="samLazyImg" />-->
+                    <!--</a>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;<div class="hot_article">&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="head flexbox">&ndash;&gt;-->
+                <!--&lt;!&ndash;<span class="darkline"></span>&ndash;&gt;-->
+                <!--&lt;!&ndash;<span>特别推荐</span>&ndash;&gt;-->
+                <!--&lt;!&ndash;<span class="darkline"></span>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<div v-for="item in article_category_list.ar">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="item_img">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<a href="#" @click="toArticle(item)">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<img :dataimg="item.image" alt="" width="100%"  src="/views/mobile/skin/default/image/jmj/icon/big_lazy.png"  class="samLazyImg" />&ndash;&gt;-->
+                    <!--&lt;!&ndash;</a>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--</section>-->
         <!--专辑-->
         <!--<section class="timePurchase line">-->
             <!--<div class="timePurchase_title">-->
@@ -289,34 +304,34 @@
     <%}%>
 </script>
 <!--头信息结束-->
-<script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/template-native.js"></script>
-<script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/lazyload.js"></script>
+<script src="/views/mobile/javascript/vue.js?v=1.0.2"></script>
+<script src="/views/mobile/javascript/mui.js?v=1.0.2"></script>
+<script src="/views/mobile/javascript/template-native.js?v=1.0.2"></script>
+<script src="/views/mobile/javascript/jquery.min.js?v=1.0.2"></script>
+<script src="/views/mobile/javascript/lazyload.js?v=1.0.2"></script>
 <!--<script src="/views/mobile/javascript/time.js"></script>-->
-<script src="/views/mobile/javascript/base64.js"></script>
-<script src="/views/mobile/javascript/jiumao/common.js"></script>
+<!--<script src="/views/mobile/javascript/base64.js"></script>-->
+<script src="/views/mobile/javascript/jiumao/common.js?v=1.0.2"></script>
+
 <!-- 微信分享 -->
-<?php 
-if(IClient::isWechat() == true){
+{if:IClient::isWechat() == true}
+<?php
     require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
     $this->wechat = new wechat();
     $this->wechat->config['wechat_jsApiSDK']=1;
     $this->wechat->jsApiSDK();
-}
 ?>
-<script src="/views/mobile/javascript/jiumao/wechat.share.js"></script>
-<script type="text/javascript" src="/views/mobile/javascript/jiumao/siteIndex.js"></script>
-{if:ISession::get('if_associate')}
 <script>
-    if (confirm('是否同意九猫家城市服务商合作线上协议')){
-        $.get('{url:/site/associate_user_shop}');
-        location.href = '{url:/site/index}'
-    } else {
-        location.href = '{url:/site/index}'
+    //微信分享
+    var wechat_share = {
+        title       : '九猫大百货-日本同价-东京直邮', //标题
+        desc        : '欢迎来到九猫家', //描述
+        imgUrl      : "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
     }
-
 </script>
+<script src="/views/mobile/javascript/jiumao/wechat.share.js"></script>
 {/if}
+
+<script type="text/javascript" src="/views/mobile/javascript/jiumao/siteIndex.js"></script>
 </body>
 </html>

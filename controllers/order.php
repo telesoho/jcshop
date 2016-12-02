@@ -1495,6 +1495,8 @@ class Order extends IController implements adminAuthorization
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">发货状态</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品编号</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品名称</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">日文品名</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">目前价格</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">规格</td>';
 		$strTable .= '</tr>';
@@ -1512,19 +1514,33 @@ class Order extends IController implements adminAuthorization
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.Order_Class::getOrderDistributionStatusText($val).' </td>';
 
 			$orderGoods = Order_class::getOrderGoods($val['id']);
-			
 			$strGoods 			= array(
 				'goodsno' 		=> '',
 				'name' 			=> '',
+				'name_jp' 		=> '',
+				'sell_price' 	=> '',
 				'goods_nums' 	=> '',
 				);
+			$query 				= new IQuery('goods');
+			$query->finds 		= 'id,name,name_jp,sell_price';
 			foreach($orderGoods as $v){
+				$query->where 				= 'id='.$v['goods_id'];
+				$info 						= $query->find();
 				$strGoods['goodsno'] 		.= $v['goodsno'].'<br />';
 				$strGoods['name'] 			.= $v['name'].'<br />';
+				$strGoods['name_jp'] 		.= $info[0]['name_jp'].'<br />';
+				$strGoods['sell_price'] 	.= $info[0]['sell_price'].'<br />';
 				$strGoods['goods_nums'] 	.= $v['goods_nums'].'<br />';
 			}
+			//商品编号
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['goodsno'].' </td>';
+			//商品名称
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['name'].' </td>';
+			//日文品名
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['name_jp'].' </td>';
+			//当前价格
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['sell_price'].' </td>';
+			//商品数量
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['goods_nums'].' </td>';
 			
 			unset($orderGoods);

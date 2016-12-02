@@ -111,12 +111,14 @@ class Apic extends IController
         //更新$addressList数据
         foreach($addressList as $key => $val)
         {
-            $temp = area::name($val['province'],$val['city'],$val['area']);
+            $temp 		= area::name($val['province'],$val['city'],$val['area']);
+
+            $temp_k 	= array_keys($temp);
             if(isset($temp[$val['province']]) && isset($temp[$val['city']]) && isset($temp[$val['area']]))
             {
-                $addressList[$key]['province_val'] = $temp[$val['province']];
-                $addressList[$key]['city_val']     = $temp[$val['city']];
-                $addressList[$key]['area_val']     = $temp[$val['area']];
+                $addressList[$key]['province_val'] = in_array($val['province'],$temp_k) ? $temp[$val['province']] : '';
+                $addressList[$key]['city_val'] = in_array($val['city'],$temp_k) ? $temp[$val['city']] : '';
+                $addressList[$key]['area_val'] = in_array($val['area'],$temp_k) ? $temp[$val['area']] : '';
             }
         }
 
@@ -427,10 +429,11 @@ class Apic extends IController
                 $data[$k][$key]['pay_type'] = $items[$value['pay_type']]['name'];
                 $data[$k][$key]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
                 $data[$k][$key]['orderStatusVal'] = Order_Class::getOrderStatus($value);
-                $temp2 = area::name($value['province'],$value['city'],$value['area']);
-                $data[$k][$key]['province_val'] =$temp2[$value['province']];
-                $data[$k][$key]['city_val'] =$temp2[$value['city']];
-                $data[$k][$key]['area_val'] =$temp2[$value['area']];
+                $temp2 			= area::name($value['province'],$value['city'],$value['area']);
+                $temp_k 		= array_keys($temp);
+                $data[$k][$key]['province_val'] 	= in_array($value['province'],$temp_k) ? $temp2[$value['province']] : '';
+                $data[$k][$key]['city_val'] 		= in_array($value['city'],$temp_k) ? $temp2[$value['city']] : '';
+                $data[$k][$key]['area_val'] 		= in_array($value['area'],$temp_k) ? $temp2[$value['area']] : '';
 //                $orderObj = new order_class();
 //                $data[$k][$key]['order_info'] = $orderObj->getOrderShow($value['id'],$this->user['user_id']);
                 $temp3 = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
@@ -689,9 +692,33 @@ class Apic extends IController
             } else {
                 $goods_info['is_favorite'] = 0;
             }
-
+            
 
         $this->json_echo($goods_info);
+    }
+    /**
+     * 商品的相关专辑
+     */
+    public function products_details_article(){
+		/* 获取参数 */
+    	$goods_id = IFilter::act(IReq::get('id'),'int');
+    	if(empty($goods_id)) IError::show(403,"传递的参数不正确");
+    	
+    	/* 相关专辑 */
+    	$query 				= new IQuery('article as m');
+    	$query->join 		= 'left join relation as r on r.article_id = m.id';
+    	$query->where 		= 'm.visibility=1 and r.goods_id='.$goods_id;
+    	$query->order 		= 'm.sort asc';
+    	$query->fields 		= 'm.id,m.title,m.image';
+    	$query->limit 		= 10;
+    	$list 				= $query->find();
+    	if(!empty($list)){
+    		foreach($list as $k => $v){
+    			$list[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/250/h/127");
+    		}
+    	}
+    	
+    	$this->json_echo($list);
     }
     //商品详情的补充信息内容
     public function products_details_other(){
@@ -920,6 +947,82 @@ class Apic extends IController
 
         }
         $this->json_echo($data);
+    }
+    /**
+     * 专辑列表
+     */
+    public function article_lists(){
+    	/* 获取参数 */
+    	$cid 				= IFilter::act(IReq::get('cid'), 'int'); 	//专辑分类ID，选填
+    	$page 				= IFilter::act(IReq::get('page'),'int'); 	//当前页码，选填
+    	/* 获取数据 */
+    	$query 				= new IQuery('article as m');
+    	$query->where 		= empty($cid) ? '' : 'm.category_id='.$cid;
+    	$query->fields 		= 'm.id,m.title,m.image,m.visit_num';
+    	$query->order 		= 'm.sort asc';
+    	$query->page 		= $page>1 ? $page : 1;
+    	$query->pagesize 	= 10;
+    	$list 				= $query->find();
+    	if(!empty($list)){
+    		//商品列表模型
+    		$query_goods 				= new IQuery('goods as m');
+    		$query_goods->join 			= 'left join relation as r on r.goods_id=m.id';
+    		$query_goods->fields 		= 'm.id,m.name,m.sell_price,m.img';
+    		$query_goods->order 		= 'm.sort asc';
+    		$query_goods->limit 		= 1000;
+    		//商品统计模型
+    		$query_goods_count 			= new IQuery('goods as m');
+    		$query_goods_count->join 	= 'left join relation as r on r.goods_id=m.id';
+    		$query_goods_count->fields 	= 'count(m.id) as num';
+    		foreach($list as $k => $v){
+    			$list[$k]['image'] 		= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
+    			//相关商品数量
+    			$query_goods_count->where 	= 'm.is_del=0 and r.article_id='.$v['id'];
+    			$count 						= $query_goods_count->find();
+    			$list[$k]['goods_num'] 		= $count[0]['num'];
+    			//相关商品列表
+    			$query_goods->where 	= 'm.is_del=0 and r.article_id='.$v['id'];
+    			$list[$k]['list'] 		= $query_goods->find();
+    			if(!empty($list[$k]['list'])){
+    				foreach ($list[$k]['list'] as $k1 => $v1){
+    					$list[$k]['list'][$k1]['img'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/180/h/180");
+    				}
+    			}
+    		}
+    	}
+    	$this->json_echo($list);
+    }
+    /**
+     * 专辑分类列表
+     */
+    public function article_category_list(){
+    	/* 首页展示的专辑分类 */
+    	$query_ac 					= new IQuery('article_category');
+    	$query_ac->where 			= 'id in (11,12,15,16,18,19)';
+    	//11喵酱推荐/12杂志揭载/15药妆特供/16健康推荐/18居家个护/19吃喝宅乐/
+    	$query_ac->fields 			= 'id,name';
+    	$query_ac->limit 			= 6;
+    	$list_ac 					= $query_ac->find();
+    	if(!empty($list_ac)){
+    		foreach($list_ac as $k => $v){
+    			$list_ac[$k]['image'] = IWeb::$app->config['image_host'] . '/upload/category/article_img/'.$v['id'].'.png';
+    		}
+    	}
+    	/* 特别推荐专辑 */
+    	$query_ar 					= new IQuery('article');
+    	$query_ar->where 			= 'top=1';
+    	$query_ar->order 			= 'sort desc';
+    	$query_ar->limit 			= 3;
+    	$query_ar->fields 			= 'id,title,image';
+    	$list_ar 					= $query_ar->find();
+    	if(!empty($list_ar)){
+    		foreach($list_ar as $k => $v){
+    			$list_ar[$k]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/738/h/353");
+    		}
+    	}
+    	/* 返回数据 */
+		$data 						= array('ac'=>$list_ac,'ar'=>$list_ar);
+    	$this->json_echo($data);
     }
     //通过专辑获取相关商品
     public function article_rel_goods()

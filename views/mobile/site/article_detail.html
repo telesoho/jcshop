@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=1.01" />
 </head>
 <style>video{width: 100%;height: auto;}</style>
 <body>
@@ -40,6 +40,9 @@
 <!--loading页结束-->
 <!--下拉刷新容器-->
 <section>
+    <div class="top_fixd">
+        <a href="/site/index"><span>首页</span></a> <span>文章详情</span>
+    </div>
     <div class="article_title">
         <img src="{webroot:$this->articleRow['image']}" alt="" width="100%" />
     </div>
@@ -264,5 +267,24 @@
     })
 </script>
 <?php } ?>
+
+<!-- 微信分享 -->
+{if:IClient::isWechat() == true}
+<?php 
+    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+    $this->wechat = new wechat();
+    $this->wechat->config['wechat_jsApiSDK']=1;
+    $this->wechat->jsApiSDK();
+?>
+<script src="/views/mobile/javascript/jiumao/wechat.share.js"></script>
+<script type="text/javascript">
+var wechat_share = {
+    title       : "<?php if($this->articleRow['id']==284){echo '这是一个99%的妹子都希望收到的礼物';}else{echo $this->articleRow['title'];} ?>", //标题
+    desc        : $('.article_body').text().trim().substring(0,100), //描述
+    imgUrl      : "{echo:IWeb::$app->config['image_host'] . IUrl::creatUrl('/pic/thumb/img/'.$this->articleRow['image'].'/w/200/h/200')}", //图片
+}
+</script>
+{/if}
+
 </body>
 </html>

@@ -11,7 +11,7 @@ $(window).load(function(){
     mui('body').on('tap','a',function(){
         document.location.href=this.href;
     });
-})
+});
 var vm = new Vue({
     el: '#wareListShop',
     data: {
@@ -33,7 +33,7 @@ var vm = new Vue({
         img1:'/views/mobile/skin/default/image/jmj/cart/red.png',
         img2:'/views/mobile/skin/default/image/jmj/cart/uncho.png',
         bg:'background:rgba(255,68,160,0.5)',
-        bg1:'background:rgba(255,68,160)',
+        bg1:'background:rgba(255,68,160,1)',
         state:true,
         promo:{
             val:'',
@@ -61,11 +61,13 @@ var vm = new Vue({
         },
         changeBg: function(){
             this.showButton=this.showButton?false:true;
+            console.log(this.showButton);
         },
         formSubmit: function(obj){
             var self=this;
-            if(self.showButton){
-                checkSubmit(obj)
+            if(self.showButton&&self.state){
+                self.state=false;
+                checkSubmit(obj);
             }
         },
         promoCho: function(){

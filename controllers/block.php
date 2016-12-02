@@ -219,12 +219,12 @@ class Block extends IController
 		else if($order_id)
 		{
 			$sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id));
+// 			$sendData['order_id'] = $order_id;
 		}
 		else
 		{
 			IError::show(403,'发生支付错误');
 		}
-
 		$paymentInstance->doPay($sendData);
 	}
 
@@ -326,13 +326,12 @@ class Block extends IController
 		if($return == 1)
 		{
 			//清空购物车
-			$orderDB 	 		= new Model('order');
-			$orderInfo 			= $orderDB->getObj('order_no='.$orderNo);
-			if($orderInfo['type_source'] == 2){
-				$cartDB  		= new IModel('goods_car');
-				$cartRow 		= $cartDB->del('user_id = '.$orderInfo['user_id']);
-			}
-			
+// 			$orderDB 	 		= new Model('order');
+// 			$orderInfo 			= $orderDB->getObj('order_no='.$orderNo);
+// 			if($orderInfo['type_source'] == 2){
+// 				$cartDB  		= new IModel('goods_car');
+// 				$cartRow 		= $cartDB->del('user_id = '.$orderInfo['user_id']);
+// 			}
 			//充值方式
 			if(stripos($orderNo,'recharge') !== false)
 			{

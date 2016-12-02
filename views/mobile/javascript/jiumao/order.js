@@ -73,16 +73,31 @@ var vm = new Vue({
             var self = this;
             getOrder(self);
         },
-        getDelivery: function(eid){
+        getDelivery: function (eid) {
             console.log(eid);
-            this.showContainer=true;
+            this.showContainer = true;
             Delivery(eid);
+        },
+        cancelOrder: function (url) {
+            var btnArray = ['取消', '确认'];
+            mui.confirm('您确定要删除订单吗？', '取消订单', btnArray, function (e) {
+                if (e.index == 1) {
+                    window.location.href = url
+                } else {
+
+                }
+            })
         }
     }
 })
 vm.getData();
 $(window).load(function(){
     $("#loading").fadeOut(300);
+    pushHistory();
+    // 让order页面只能回到个人中心
+    window.addEventListener("popstate", function(e) {
+            window.location.href='/ucenter/index';
+    }, false);
     mui('body').on('tap','.locationA',function(){
         document.location.href=this.href;
     });
@@ -140,4 +155,12 @@ function saveStatus(num){
     setItem('status',num);
 //		$(".mui-slider-item").removeClass('mui-active');
 //		$("#order_state"+this.nowStatus).addClass('mui-active');
+}
+
+function pushHistory(statusOrder) {
+    var state = {
+        title: "title",
+        url: "#"
+    };
+    window.history.pushState(state, 'title', "#");
 }

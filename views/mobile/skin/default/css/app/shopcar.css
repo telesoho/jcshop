@@ -1,8 +1,33 @@
 /*订单确认样式*/
-#wareListShop{
-	margin-top:0.28rem;
+.top_fixd{
+	width:100%;
+	height:0.9rem;
+	line-height:0.9rem;
+	background:#ff4aa0;
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:2;
+	border-bottom:1px solid #eee;
 }
+.top_fixd span:nth-child(1){
+	font-size:0.26rem;
+	color:#fff;
+	display: inline-block;
+	margin-left:0.2rem;
+}
+.top_fixd span:nth-child(2){
+	font-size:0.34rem;
+	color:#fff;
+	width:50%;
+	display: inline-block;
+	text-align: right;
+}
+/*#wareListShop{*/
+
+/*}*/
 #wareListShop .order_addAddr{
+	margin-top:1.18rem;
 }
 .order_addAddr{
 	background:#fff;
@@ -16,6 +41,7 @@
 	width:7.5rem;
 	height:0.07rem;
 	background:url("../../image/jmj/cart/line.png");
+	background-size:contain;
 	top:0;
 	left:0;
 }
@@ -24,6 +50,7 @@
 	width:7.5rem;
 	height:0.07rem;
 	background:url("../../image/jmj/cart/line.png");
+	background-size:contain;
 	bottom:0;
 	left:0;
 }
@@ -170,22 +197,25 @@
 	font-size:0.2rem;
 	color:#3d4245;
 	position:relative;
-	top:0.05rem;
+	/*top:0.05rem;*/
 }
 #testForm .top img{
 	width:0.25rem;height:0.25rem;vertical-align: middle;margin-right:0.1rem;
+	position:relative;
+	top:-0.01rem;
 }
 #testForm .bottom{
 	background:#ff44a0;
-	border-radius:0.72rem;
+	border-radius:0.62rem;
 	width:5.93rem;
-	height:0.72rem;
+	height:0.62rem;
 	text-align: center;
-	line-height:0.72rem;
+	line-height:0.62rem;
 	font-size:0.32rem;
 	color:#ffffff;
 	position:relative;
-	top:-0.05rem;
+	/*bottom:0.1rem;*/
+	top:-0.15rem;
 }
 /*弹出框样式*/
 #sheet1 .mui-table-view{
