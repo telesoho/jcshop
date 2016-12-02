@@ -487,13 +487,22 @@ class Goods extends IController implements adminAuthorization
             'banner_image' => $banner_image,
 		);
 		//上传icon
-		if(!empty($_FILES['icon']['name'][0])){
+		if(!empty($_FILES['icon1']['name']) || !empty($_FILES['icon2']['name'])){
+			//执行上传
 			$upload 		= new IUpload(10000,array('jpg','gif','png'));
 			$rel 			= $upload->setDir('upload/category/category_icon')->execute();
-			if($rel['icon'][0]['flag'] != 1) die(IUpload::errorMessage($rel['icon'][0]['flag']));
-			if(!empty($rel['icon'][1]) && $rel['icon'][1]['flag'] != 1) die(IUpload::errorMessage($rel['icon'][1]['flag']));
-			$icon 			= array('upload/category/category_icon/'.$rel['icon'][0]['name']);
-			if(!empty($rel['icon'][1])) $icon[] = 'upload/category/category_icon/'.$rel['icon'][1]['name'];
+			//判断上传是否出错
+			if(!empty($rel['icon1'][0]) && $rel['icon1'][0]['flag'] != 1){
+				die(IUpload::errorMessage( $rel['icon1'][0]['flag'] ));
+			}
+			if(!empty($rel['icon2'][0]) && $rel['icon2'][0]['flag'] != 1){
+				die(IUpload::errorMessage( $rel['icon2'][0]['flag'] ));
+			}
+			//合并地址
+			$icon 			= array();
+			foreach($rel as $k => $v){
+				$icon[] 	= 'upload/category/category_icon/'.$v[0]['name'];
+			}
 			$icon 			= implode(',',$icon);
 		}
 		if(!empty($icon)) $category_info['image'] = $icon;

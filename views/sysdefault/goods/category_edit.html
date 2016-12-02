@@ -74,8 +74,8 @@
 					<th>分类icon图片：</th>
 					<td>
 						{set:$icon=explode(',',$this->categoryRow['image'])}
-						<input type="file" name="icon[]" accept="image/gif,image/jpg,image/png"/>
-						{if:$this->categoryRow['parent_id'] == 0}<input type="file" name="icon[]" accept="image/gif,image/jpg,image/png"/>{/if}
+						<input type="file" name="icon1" accept="image/gif,image/jpg,image/png"/>
+						{if:$this->categoryRow['parent_id'] == 0}<input type="file" name="icon2" accept="image/gif,image/jpg,image/png"/>{/if}
 						<div style="display:block;">
 							{if:!empty($icon[0])}<img  src="{echo:IWeb::$app->config['image_host'].'/'.$icon[0]}" style="margin:5px; border:1px solid gray; opacity:1;max-width:100px;max-height:100px"/>{/if}
 							{if:!empty($icon[1])}<img  src="{echo:IWeb::$app->config['image_host'].'/'.$icon[1]}" style="margin:5px; border:1px solid gray; opacity:1;max-width:100px;max-height:100px"/>{/if}
