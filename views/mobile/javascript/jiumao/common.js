@@ -186,7 +186,7 @@ function getIndex(){
 }
 // 下拉刷新
 function pullupIndexRefresh() {
-    mui.ajax('index.php?controller=apic&action=article_list',{
+    mui.ajax('/apic/article_list',{
         data:pageData,
         dataType:'json',	// 服务器返回json格式数据
         type:'post',		// HTTP请求类型

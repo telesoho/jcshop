@@ -82,13 +82,15 @@ function getArticle_category_list(self){
             console.log(data);
             self.showMessage=true;
             self.article_category_list=data;
+        },
+        error: function(type){
         }
     });
 }
 //上拉加载
 var stop=true;
 $(window).bind('scroll', function() {
-    if ($(window).scrollTop() + $(window).height() +2000 >= $(document).height() && $(window).scrollTop() > 50) {
+    if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
             stop=false;
             pullupIndexRefresh()
