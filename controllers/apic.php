@@ -1168,7 +1168,7 @@ class Apic extends IController
 //         	$data2[$key]['description'] = mb_substr(strip_tags($value['content']),0,100);
         	$data2[$key]['image'] 		= empty($value['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
         }
-        var_dump($data2);exit();
+//         var_dump($data2);exit();
         $this->json_echo(['goods_data'=>$data1,'article_data'=>$data2]);
     }
     function user_credit_info(){
