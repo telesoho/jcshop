@@ -255,7 +255,7 @@ iframe{
 /*特殊处理样式*/
 .sellprice{
   /*font-family:'HelveticaNeueLt';*/
-  font-size:0.34rem;
+  font-size:0.3rem;
   color:#ff44a0;
 }
 .hidewrap{
@@ -726,7 +726,7 @@ input[type='search']{
 }
 .albumn_index .product .name{
   width:1.8rem;
-  font-size:0.22rem;
+  font-size:0.24rem;
   color:#3d4225;
   margin-bottom:0.1rem;
   margin-top:0.17rem;
