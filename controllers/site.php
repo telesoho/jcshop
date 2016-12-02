@@ -1139,11 +1139,42 @@ class Site extends IController
     }
     function recommender_shop_tobe_booked(){
         $recommender = ISession::get('recommender');
+        if (empty($recommender)){$this-$this->redirect('index');}
         $this->data = $this->get_shop_recommender();
         $this->redirect('recommender_shop_tobe_booked');
     }
     function recommender_shop_income(){
+        $recommender = ISession::get('recommender');
+        if (empty($recommender)){$this->redirect('index');}
         $this->redirect('recommender_shop_income');
+    }
+    function recommender_shop_tobe_booked_details(){
+        $recommender = ISession::get('recommender');
+        if (empty($recommender)){$this->redirect('index');}
+        $id = IFilter::act(IReq::get('id'),'string');
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'id = ' . $id . ' and recommender = "' . $recommender . '"';
+        $shop_data = $shop_query->find();
+        $this->shop_name = $shop_data[0]['name'];
+        $temp = '';
+        if ($shop_data){
+
+            $user_query = new IQuery('user');
+            $user_query->where = 'shop_identify_id = ' . $shop_data[0]['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+            $temp = explode('or',$temp,2)[1];
+        }
+        $temp ='(' . $temp . ')';
+        $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
+        $this->last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
+        $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
+        $this->complete_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval)->find(); // 已完成
+        $date_interval = ' and DATE_FORMAT( create_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
+        $this->distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
+        $this->redirect('recommender_shop_tobe_booked_details');
     }
     private function get_shop_recommender(){
         if (empty(ISession::get('recommender'))){
@@ -1157,6 +1188,7 @@ class Site extends IController
                 $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
                 $data[$key]['identify_id'] = $value['identify_id'];
                 $data[$key]['name'] = $value['name'];
+                $data[$key]['id'] = $value['id'];
                 $data[$key]['address'] = $value['address'];
             }
             return $data;

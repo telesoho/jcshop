@@ -5,14 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>店铺待入账金额详情</title>
-    <!-- 新 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
-
-    <!-- 可选的Bootstrap主题文件（一般不用引入） -->
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-
-    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-
+    <link rel="stylesheet" href="/views/mobile/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/views/mobile/bootstrap/css/bootstrap-theme.min.css">
 </head>
 <body>
 <div class="container" style="margin-top: 10px;">
@@ -25,6 +19,7 @@
         <tr>
             <th>店铺名称</th>
             <th>待入账金额</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
@@ -33,6 +28,7 @@
             <tr>
                 <td>{$item['name']}</td>
                 <td>{$item['amount_tobe_booked']}</td>
+                <td><a href="{url:/site/recommender_shop_tobe_booked_details/id/$item['id']}" class="btn btn-info btn-xs">详情</a></td>
             </tr>
             {/foreach}
         {/if}
