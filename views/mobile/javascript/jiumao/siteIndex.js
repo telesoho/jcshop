@@ -1,38 +1,6 @@
 /**
  * Created by yb on 2016/11/29.
  */
-// var vm = new Vue({
-//     el: '#indexInfo',
-//     data: {
-//         showMessage:false,
-//         article_category_list:[]
-//     },
-//     computed: {
-//     },
-//     mounted: function(){
-//         var self=this;
-//         getArticle_category_list(self);
-//     },
-//     updated:function() {
-//         // getScrollTop1();
-//         lazyload.init({
-//             anim:false,
-//             selectorName:".samLazyImg"
-//         });
-//     },
-//     methods: {
-//         toArticle: function(item){
-//             window.location.href='/site/article_detail?id='+item.id;
-//         },
-//         toArticle_list: function(item){
-//             // 保存分类的名字和id
-//             setItem("artileName",item.name);
-//             setItem("articleId",item.id);
-//             setItem("articlePage",1);
-//             window.location.href='/site/article_list'
-//         }
-//     }
-// })
 var pageData = {
     page:1
 };
@@ -40,6 +8,38 @@ var pageData = {
 window.onload=function(){
     $("#loading").fadeOut(300);
     getIndex();
+    var vm = new Vue({
+        el: '#indexInfo',
+        data: {
+            showMessage:false,
+            article_category_list:[]
+        },
+        computed: {
+        },
+        mounted: function(){
+            var self=this;
+            getArticle_category_list(self);
+        },
+        updated:function() {
+            // getScrollTop1();
+            lazyload.init({
+                anim:false,
+                selectorName:".samLazyImg"
+            });
+        },
+        methods: {
+            toArticle: function(item){
+                window.location.href='/site/article_detail?id='+item.id;
+            },
+            toArticle_list: function(item){
+                // 保存分类的名字和id
+                setItem("artileName",item.name);
+                setItem("articleId",item.id);
+                setItem("articlePage",1);
+                window.location.href='/site/article_list'
+            }
+        }
+    })
     pullupIndexRefresh();
     hotSearth();
     //解决tab选项卡a标签无法跳转的问题
@@ -79,6 +79,7 @@ function getArticle_category_list(self){
         type: 'get',
         timeout: 10000,
         success: function (data) {
+            console.log(data);
             self.showMessage=true;
             self.article_category_list=data;
         }

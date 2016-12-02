@@ -5,3 +5,5 @@ upload/
 .idea/
 .DS_Store
 config.php/
+test.html/
+.gitignore/
