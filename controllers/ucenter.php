@@ -67,6 +67,11 @@ class Ucenter extends IController implements userAuthorization
         $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
         $this->amount_tobe_booked = $order_query->find()[0]['amount_tobe_booked'];
         $this->amount_tobe_booked = empty($this->amount_tobe_booked) ? '0.00' : $this->amount_tobe_booked;
+
+        $shop_category = new IQuery('shop_category');
+        $shop_category->where = 'id = ' . $shop_data['category_id'];
+        $shop_category_data = $shop_category->find();
+        $this->amount_tobe_booked = $this->amount_tobe_booked * $shop_category_data[0]['rebate'];
         return;
     }
 
