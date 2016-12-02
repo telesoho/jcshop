@@ -1492,10 +1492,10 @@ class Order extends IController implements adminAuthorization
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付状态</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">发货状态</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品编号</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品名称</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">日文品名</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">目前价格</td>';
-		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">规格</td>';
 		$strTable .= '</tr>';
 		
@@ -1520,26 +1520,38 @@ class Order extends IController implements adminAuthorization
 				'goods_nums' 	=> '',
 				);
 			$query 				= new IQuery('goods');
-			$query->finds 		= 'id,name,name_jp,sell_price';
+			$query->fields 		= 'id,name,name_jp,sell_price,type';
+			$query_bag 			= new IQuery('goods_bag');
+			$query_bag->fields 	= 'id,goods_no,num';
 			foreach($orderGoods as $v){
 				$query->where 				= 'id='.$v['goods_id'];
 				$info 						= $query->find();
-				$strGoods['goodsno'] 		.= $v['goodsno'].'<br />';
+				//礼包类商品
+				if($info[0]['type']==2){
+					$query_bag->where 		= 'goods_id='.$v['goods_id'];
+					$info_bag 				= $query_bag->find();
+					foreach($info_bag as $k1 => $v1){
+						$strGoods['goodsno'] 		.= $v1['goods_no'].'<br />';
+						$strGoods['goods_nums'] 	.= $v1['num'].'<br />';
+					}
+				}else{
+					$strGoods['goodsno'] 		.= $v['goodsno'].'<br />';
+					$strGoods['goods_nums'] 	.= $v['goods_nums'].'<br />';
+				}
 				$strGoods['name'] 			.= $v['name'].'<br />';
 				$strGoods['name_jp'] 		.= $info[0]['name_jp'].'<br />';
 				$strGoods['sell_price'] 	.= $info[0]['sell_price'].'<br />';
-				$strGoods['goods_nums'] 	.= $v['goods_nums'].'<br />';
 			}
 			//商品编号
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['goodsno'].' </td>';
+			//商品数量
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['goods_nums'].' </td>';
 			//商品名称
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['name'].' </td>';
 			//日文品名
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['name_jp'].' </td>';
 			//当前价格
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['sell_price'].' </td>';
-			//商品数量
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['goods_nums'].' </td>';
 			
 			unset($orderGoods);
 

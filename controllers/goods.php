@@ -222,7 +222,7 @@ class Goods extends IController implements adminAuthorization
 		{
 			die("没有找到相关商品！");
 		}
-
+		
 		$this->setRenderData($data);
 		$this->redirect('goods_edit');
 	}
@@ -231,22 +231,37 @@ class Goods extends IController implements adminAuthorization
 	 */
 	function goods_update()
 	{
-		$id       = IFilter::act(IReq::get('id'),'int');
-		$callback = IFilter::act(IReq::get('callback'));
-		$callback = strpos($callback,'goods/goods_list') === false ? '' : $callback;
+		$id       			= IFilter::act(IReq::get('id'),'int');
+		$callback 			= IFilter::act(IReq::get('callback'));
+		$callback 			= strpos($callback,'goods/goods_list') === false ? '' : $callback;
 
 		//检查表单提交状态
 		if(!$_POST)
 		{
 			die('请确认表单提交正确');
 		}
-
+		$bag_no 			= $_POST['bag_no']; //礼包商品编码
+		$bag_num 			= $_POST['bag_num']; //礼包商品数量
+		
 		//初始化商品数据
+		unset($_POST['bag_no']);
+		unset($_POST['bag_num']);
 		unset($_POST['id']);
 		unset($_POST['callback']);
 
-		$goodsObject = new goods_class();
-		$goodsObject->update($id,$_POST);
+		$goodsObject 		= new goods_class();
+		$goods_id 			=$goodsObject->update($id,$_POST);
+		
+		//礼包商品
+		if($_POST['type'] == 2){
+			$model 			= new IModel('goods_bag');
+			$model->del('goods_id='.$goods_id);
+			foreach ($bag_no as $k => $v){
+				$data 		= array('goods_id'=>$goods_id,'goods_no'=>$bag_no[$k],'num'=>$bag_num[$k]);
+				$model->setData($data);
+				$model->add();
+			}
+		}
 
 		//记录日志
 		$logObj = new log('db');
