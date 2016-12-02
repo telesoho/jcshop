@@ -16,27 +16,36 @@
 </head>
 <body>
 <div class="container" style="margin-top: 10px;">
-    <div class="alert alert-success">推荐人登录</div>
-    <form class="form-horizontal" role="form">
-        <div class="form-group">
-            <label for="a" class="col-xs-3 control-label">姓名</label>
-            <div class="col-xs-9">
-                <input type="text" name='recommender' class="form-control" id="a" required placeholder="姓名">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <?php foreach($this->data as $key=>$value){ ?>
+        <div class="panel panel-info">
+            <div class="panel-heading" role="tab" id="headingOne{$key}">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne{$key}" aria-expanded="true" aria-controls="collapseOne{$key}" style="text-decoration: none;">
+                            店名：{$value['name']}&nbsp;&nbsp;&nbsp;&nbsp;<small>店铺地址：{$value['address']}</small>
+                        </a>
+                    </h4>
+            </div>
+            <div id="collapseOne{$key}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne{$key}">
+                <div class="panel-body">
+                    待入账金额 {$value['amount_tobe_booked']}
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="b" class="col-xs-3 control-label">密码</label>
-            <div class="col-xs-9">
-                <input type="password" name="password" class="form-control" id="b" required placeholder="密码">
-            </div>
-        </div>
+        <?php } ?>
 
-        <div class="form-group text-center">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-info">登录</button>
-            </div>
-        </div>
-    </form>
+    </div>
+
+    <?php foreach($this->data as $key=>$value){ ?>
+        <!--<div class="panel panel-default">-->
+            <!--<div class="panel-heading">-->
+                <!--<h3 class="panel-title">{$value['name']}&nbsp;&nbsp;&nbsp;&nbsp;店铺地址：{$value['address']}</h3>-->
+            <!--</div>-->
+            <!--<div class="panel-body">-->
+                <!--待入账金额 {$value['amount_tobe_booked']}-->
+            <!--</div>-->
+        <!--</div>-->
+    <?php } ?>
 </div>
 <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 

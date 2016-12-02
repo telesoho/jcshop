@@ -1118,11 +1118,17 @@ class Site extends IController
         $shop_query = new IQuery('shop');
         $shop_query->where = 'recommender = "' . ISession::get('recommender') . '"';
         $ret = $shop_query->find();
-        foreach ($ret as $key => $value){
-            $data[]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
-            $data[]['identify_id'] = $value['identify_id'];
+        if(!empty($ret)) {
+            foreach ($ret as $key => $value){
+                $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
+                $data[$key]['identify_id'] = $value['identify_id'];
+                $data[$key]['name'] = $value['name'];
+                $data[$key]['address'] = $value['address'];
+            }
+            $this->data = $data;
+        } else {
+            $this->redirect('recommender_login');
         }
-        var_dump($data);
         $this->redirect('recommender_shop');
     }
     private function get_amount_tobe_booked($identify_id){
