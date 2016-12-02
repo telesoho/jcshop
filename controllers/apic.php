@@ -761,7 +761,6 @@ class Apic extends IController
      */
     //显示专辑列表（首页）
     public function article_list(){
-//     	var_dump(123213);exit();
     	/* 获取参数 */
     	$cid 				= IFilter::act(IReq::get('cid'), 'int'); 	//专辑分类ID，选填
     	$page 				= IFilter::act(IReq::get('page'),'int'); 	//当前页码，选填
@@ -821,7 +820,6 @@ class Apic extends IController
     			}
     		}
     	}
-    	var_dump($list);exit();
     	$this->json_echo($list);
     }
     /**
