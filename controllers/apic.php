@@ -791,8 +791,8 @@ class Apic extends IController
     		$query_favorite->fields 	= 'count(id) as num';
     		//收藏人数
     		foreach($list as $k => $v){
-    			$list[$k]['icon'] 		= IWeb::$app->config['image_host'].'/'.$v['icon'];
-    			$list[$k]['image'] 		= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
+    			$list[$k]['icon'] 		= empty($v['icon']) ? '' : IWeb::$app->config['image_host'].'/'.$v['icon'];
+    			$list[$k]['image'] 		= empty($v['image']) ? '' : IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
     			//收藏人数
     			$query_favorite->where 	= 'aid='.$v['id'];
     			$count 					= $query_favorite->find();
@@ -815,7 +815,7 @@ class Apic extends IController
     			$list[$k]['list'] 		= $query_goods->find();
     			if(!empty($list[$k]['list'])){
     				foreach ($list[$k]['list'] as $k1 => $v1){
-    					$list[$k]['list'][$k1]['img'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/180/h/180");
+    					$list[$k]['list'][$k1]['img'] 	= empty($v1['img']) ? '' : IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/180/h/180");
     				}
     			}
     		}
@@ -845,7 +845,7 @@ class Apic extends IController
     		$query_goods->join 			= 'left join relation as r on r.goods_id=m.id';
     		$query_goods->fields 		= 'm.id,m.name,m.sell_price,m.img';
     		$query_goods->order 		= 'm.sort asc';
-    		$query_goods->limit 		= 1000;
+    		$query_goods->limit 		= 5;
     		//商品统计模型
     		$query_goods_count 			= new IQuery('goods as m');
     		$query_goods_count->join 	= 'left join relation as r on r.goods_id=m.id';
@@ -1143,28 +1143,31 @@ class Apic extends IController
         $data = array_merge($userRow, $memberRow);
         $this->json_echo($data);
     }
+    
+    /**
+     * 收藏列表
+     */
     function favorite_list(){
-        $favorite_query = new IQuery('favorite as a');
-        $favorite_query->join = 'left join goods as go on go.id = a.rid';
-        $favorite_query->fields = 'a.*,go.id,go.name,go.sell_price,go.market_price,go.img,go.jp_price';
+    	/* 商品收藏 */
+        $favorite_query 				= new IQuery('favorite as a');
+        $favorite_query->join 			= 'left join goods as go on go.id = a.rid';
+        $favorite_query->fields 		= 'a.*,go.id,go.name,go.sell_price,go.market_price,go.img,go.jp_price';
 
-        $favorite_query->where = 'user_id = ' . $this->user['user_id'];
+        $favorite_query->where 			= 'user_id = ' . $this->user['user_id'];
         $data1 = $favorite_query->find();
         if($data1) foreach ($data1 as $key=>$value){
-            if (!empty($value['img'])){
-                $data1[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/200/h/200");
-            }
+        	$data1[$key]['img'] 		= empty($value['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/200/h/200");
         }
-        $favorite_a_query = new IQuery('favorite_article as a');
-        $favorite_a_query->join = 'left join article as aa on aa.id = a.aid';
-        $favorite_a_query->fields = 'a.*,aa.id,aa.title,aa.title,aa.image,aa.description';
-        $favorite_a_query->where = 'user_id = ' . $this->user['user_id'];
+        /* 专辑收藏 */
+        $favorite_a_query 				= new IQuery('favorite_article as a');
+        $favorite_a_query->join 		= 'left join article as aa on aa.id = a.aid';
+        $favorite_a_query->fields 		= 'a.*,aa.id,aa.title,aa.title,aa.image,aa.content';
+        $favorite_a_query->where 		= 'user_id = ' . $this->user['user_id'];
         $data2 = $favorite_a_query->find();
         if($data2) foreach ($data2 as $key=>$value){
-            if (!empty($value['image'])){
-                $temp = explode(',',$value['image']);
-                $data2[$key]['image'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
-            }
+        	$data2[$key]['description'] = empty($value['content']) ? '' : trim( mb_substr(strip_tags( htmlspecialchars_decode($value['content']) ),0,100,'utf-8') );
+        	unset($data2[$key]['content']);
+        	$data2[$key]['image'] 		= empty($value['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
         }
         $this->json_echo(['goods_data'=>$data1,'article_data'=>$data2]);
     }
