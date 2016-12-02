@@ -767,7 +767,7 @@ class Apic extends IController
     	/* 获取数据 */
     	$query 				= new IQuery('article as m');
     	$query->join 		= 'left join article_category as c on c.id=m.category_id';
-    	$query->where 		= 'top=0 and visibility=1 ';
+    	$query->where 		= 'm.top=0 and m.visibility=1 '.(empty($cid) ? '' : ' and m.category_id='.$cid);
     	$query->fields 		= 'm.id,m.title,m.image,m.visit_num,m.category_id,c.icon,c.name as category_name';
     	$query->order 		= 'm.sort asc';
     	$query->page 		= $page>1 ? $page : 1;
@@ -1165,7 +1165,7 @@ class Apic extends IController
         $favorite_a_query->where 		= 'user_id = ' . $this->user['user_id'];
         $data2 = $favorite_a_query->find();
         if($data2) foreach ($data2 as $key=>$value){
-        	$data2[$key]['description'] = empty($value['content']) ? '' : trim( mb_substr(strip_tags( htmlspecialchars_decode($value['content']) ),0,100,'utf-8') );
+        	$data2[$key]['description'] = empty($value['content']) ? '' :  mb_substr( trim(strip_tags( str_ireplace('&nbsp;','',htmlspecialchars_decode($value['content']) ) ),30,'utf-8') );
         	unset($data2[$key]['content']);
         	$data2[$key]['image'] 		= empty($value['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
         }
