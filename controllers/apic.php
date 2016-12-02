@@ -1161,13 +1161,14 @@ class Apic extends IController
         /* 专辑收藏 */
         $favorite_a_query 				= new IQuery('favorite_article as a');
         $favorite_a_query->join 		= 'left join article as aa on aa.id = a.aid';
-        $favorite_a_query->fields 		= 'a.*,aa.id,aa.title,aa.title,aa.image,aa.content';
+        $favorite_a_query->fields 		= 'a.*,aa.id,aa.title,aa.title,aa.image,aa.description';
         $favorite_a_query->where 		= 'user_id = ' . $this->user['user_id'];
         $data2 = $favorite_a_query->find();
         if($data2) foreach ($data2 as $key=>$value){
-        	$data2[$key]['description'] = mb_substr(strip_tags($value['content']),0,100);
+//         	$data2[$key]['description'] = mb_substr(strip_tags($value['content']),0,100);
         	$data2[$key]['image'] 		= empty($value['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$value['image']."/w/210/h/107");
         }
+        var_dump($data2);exit();
         $this->json_echo(['goods_data'=>$data1,'article_data'=>$data2]);
     }
     function user_credit_info(){
