@@ -78,11 +78,6 @@ var vm = new Vue({
 $(window).load(function(){
     $("#loading").fadeOut(300);
     document.title=getItem("artileName");
-    mui('body').on('tap','.mui-tab-item',function(){
-        var srcimg= $(this).find('img').attr("data-img");
-        $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
-        document.location.href=this.href;
-    });
     mui('body').on('tap','.locationA',function(){
         document.location.href=this.href;
     })
