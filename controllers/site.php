@@ -25,8 +25,8 @@ class Site extends IController
 	function index()
 	{
         if ($this->user['user_id']){
-//            ISession::clear('shop_name');
-//            ISession::clear('shop_identify_id');
+            $identify_id = IFilter::act(IReq::get('iid'),'int');
+            if (empty($identify_id)){ISession::clear('shop_name');ISession::clear('shop_identify_id');}
 	        $user_own_shop_data = $this->get_user_own_shop_data();
             if (!empty($user_own_shop_data)){
                 ISession::set('shop_name',$user_own_shop_data['name']);
@@ -38,7 +38,6 @@ class Site extends IController
                     ISession::set('shop_identify_id',$user_rel_shop_data['identify_id']);
                 } else {
                     //关联店铺
-                    $identify_id = IFilter::act(IReq::get('iid'),'int');
 //                    ISession::set('if_associate',$identify_id);
                     if(!empty($identify_id)){
                         $if_shop_register = $this->if_shop_register($identify_id);
@@ -49,6 +48,8 @@ class Site extends IController
                         } else {
                             $this->redirect('contract?iid='.$identify_id);
                         }
+                    } else {
+                        ISession::set('shop_identify_id','999999999');
                     }
                 }
             }
@@ -486,7 +487,7 @@ class Site extends IController
 	//商品展示
 	function products()
 	{
-		$_SESSION["__forward__"] 	= $_SERVER["REQUEST_URI"]; //记录回跳链接
+//		$_SESSION["__forward__"] 	= $_SERVER["REQUEST_URI"]; //记录回跳链接
 		
 		$goods_id = IFilter::act(IReq::get('id'),'int');
 

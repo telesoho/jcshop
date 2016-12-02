@@ -18,18 +18,19 @@
     </blockquote>
     <div class="panel panel-default">
         <div class="panel-body">
-            <dl class="dl-horizontal">
-                {if:$this->last_month_distribute_order_ret}
+            {if:$this->last_month_distribute_order_ret}
                 {foreach:$items = $this->last_month_distribute_order_ret}
-                <dt>订单号</dt>
-                <dd>{$item['order_no']}</dd>
-                <dt>付款时间</dt>
-                <dd>{$item['pay_time']}</dd>
-                <dt>实际付款金额</dt>
-                <dd>{$item['real_amount']}</dd>
+                    <dl class="dl-horizontal">
+                        <dt>订单号</dt>
+                        <dd>{$item['order_no']}</dd>
+                        <dt>付款时间</dt>
+                        <dd>{$item['pay_time']}</dd>
+                        <dt>实际付款金额</dt>
+                        <dd>{$item['real_amount']}</dd>
+                    </dl>
+                    <hr>
                 {/foreach}
-                {/if}
-            </dl>
+            {/if}
         </div>
     </div>
     <blockquote class="bg-success">
@@ -37,17 +38,18 @@
     </blockquote>
     <div class="panel panel-default">
         <div class="panel-body">
-            <dl class="dl-horizontal">
-                {if:$this->complete_order_ret}
-                    {foreach:$items = $this->complete_order_ret}
+            {if:$this->complete_order_ret}
+                {foreach:$items = $this->complete_order_ret}
+                    <dl class="dl-horizontal">
                         <dt>订单号</dt><dd>{$item['order_no']}</dd>
                         <dt>付款时间</dt>
                         <dd>{$item['pay_time']}</dd>
                         <dt>实际付款金额</dt>
                         <dd>{$item['real_amount']}</dd>
-                    {/foreach}
-                {/if}
-            </dl>
+                    </dl>
+                    <hr>
+                {/foreach}
+            {/if}
         </div>
     </div>
     <blockquote class="bg-danger">
@@ -55,18 +57,19 @@
     </blockquote>
     <div class="panel panel-default">
         <div class="panel-body">
-            <dl class="dl-horizontal">
-                {if:$this->distribute_order_ret}
+            {if:$this->distribute_order_ret}
                 {foreach:$items = $this->distribute_order_ret}
-                <dt>订单号</dt>
-                <dd>{$item['order_no']}</dd>
-                <dt>付款时间</dt>
-                <dd>{$item['pay_time']}</dd>
-                <dt>实际付款金额</dt>
-                <dd>{$item['real_amount']}</dd>
+                    <dl class="dl-horizontal">
+                        <dt>订单号</dt>
+                        <dd>{$item['order_no']}</dd>
+                        <dt>付款时间</dt>
+                        <dd>{$item['pay_time']}</dd>
+                        <dt>实际付款金额</dt>
+                        <dd>{$item['real_amount']}</dd>
+                    </dl>
+                    <hr>
                 {/foreach}
-                {/if}
-            </dl>
+            {/if}
         </div>
     </div>
     <hr>
