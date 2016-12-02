@@ -14,31 +14,6 @@
 </head>
 <style>video{width: 100%;height: auto;}</style>
 <body>
-<!--loading页开始-->
-<div id="loading">
-    <div class="spinner">
-        <div class="spinner-container container1">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container2">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container3">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-    </div>
-</div>
-<!--loading页结束-->
-<!--下拉刷新容器-->
 <section>
     <div class="top_fixd">
         <a href="/site/index"><span>首页</span></a> <span>文章详情</span>
@@ -85,6 +60,9 @@
                 echo $content;
             }
         ?>
+        <div class="img">
+            <img src="/views/mobile/skin/default/image/xinzeng/erweima.png" alt=""  />
+        </div>
         <?php $favorite_article = new IQuery('favorite_article'); $favorite_article->where='user_id = ' . $this->user['user_id'] . ' and aid=' . $this->articleRow['id']; if(!empty($favorite_article->find())){ ?>
             <div onclick="growGrass({$this->articleRow['id']})" class="articleState active">已种草</div>
         <?php } else { ?>
