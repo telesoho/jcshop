@@ -747,8 +747,8 @@ input[type='search']{
 /*购物车页面*/
 .emptyCart{
 	display:-webkit-flex;
-	align-items: center;
-	justify-content: center;
+	-webkit-align-items: center;
+	-webkit-justify-content: center;
 	margin-top:1.77rem;
 }
 .nodata{
@@ -757,7 +757,7 @@ input[type='search']{
 .nodata .content{
 	margin-top:0.27rem;
 	display:-webkit-flex;
-	justify-content: center;
+	-webkit-justify-content: center;
 }
 .nodata .content span{
 	font-size:0.28rem;

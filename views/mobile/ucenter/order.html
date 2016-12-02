@@ -102,7 +102,7 @@
 						<div class="orderToDo box">
 							<div class="left">应付金额：<span style="color:#f3026a;margin-left:0.1rem;">¥{{item.order_amount}}</span></div>
 							<div class="right" v-if="item.orderStatusVal==2">
-								<a :href="item.button1Url" class="locationA button">{{item.button1}}</a>
+								<a href="item.button1Url" class="button" @click="cancelOrder(item.button1Url)">{{item.button1}}</a>
 								<a :href="item.button2Url" class="locationA button">{{item.button2}}</a>
 							</div>
 							<div class="right" v-if="item.orderStatusVal==3">
@@ -156,7 +156,7 @@
 						<div class="orderToDo box">
 							<div class="left">应付金额：<span style="color:#f3026a;margin-left:0.1rem;">¥{{item.order_amount}}</span></div>
 							<div class="right">
-								<a :href="item.button1Url" class="locationA button">{{item.button1}}</a>
+								<a :href="item.button1Url" class="button" @click="cancelOrder(item.button1Url)">{{item.button1}}</a>
 								<a :href="item.button2Url" class="locationA button">{{item.button2}}</a>
 							</div>
 						</div>
@@ -326,7 +326,7 @@
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/jiumao/order.js"></script>
+<script src="/views/mobile/javascript/jiumao/order.js?v=1.0.1"></script>
 
 </body>
 </html>

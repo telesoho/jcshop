@@ -73,10 +73,20 @@ var vm = new Vue({
             var self = this;
             getOrder(self);
         },
-        getDelivery: function(eid){
+        getDelivery: function (eid) {
             console.log(eid);
-            this.showContainer=true;
+            this.showContainer = true;
             Delivery(eid);
+        },
+        cancelOrder: function (url) {
+            var btnArray = ['取消', '确认'];
+            mui.confirm('您确定要删除订单吗？', '取消订单', btnArray, function (e) {
+                if (e.index == 1) {
+                    window.location.href = url
+                } else {
+
+                }
+            })
         }
     }
 })
