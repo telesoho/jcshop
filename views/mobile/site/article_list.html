@@ -16,6 +16,20 @@
 <div id="articleList">
     <template >
         <section class="recommended line albumn_index" v-for="(item,key) in new_data" :style="key==0?style.firstArticle:style.ortherArticle">
+            <div class="title">
+                <span class="logo" >
+                <img :src="item.icon" alt="" class="img-hot">
+            </span>
+                <span class="name">
+            {{item.category_name}}
+            </span>
+                <span class="num mui-pull-right favorite<%=dat.id %>">
+            {{item.favorite_num}}
+            </span>
+                <span class="like mui-pull-right">
+                <img :src="item.is_favorite==0?img1:img2"  alt="" class="img-like" @click="collection(item)" />
+            </span>
+            </div>
             <a href="#" @click="store(item)" :id="item.product_id">
                 <div class="content">
                     <div class="img">

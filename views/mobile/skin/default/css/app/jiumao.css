@@ -403,6 +403,12 @@ input[type='search']{
 	text-align:center !important;
 	padding:0.61rem 0;
 }
+/*.article_body p span{*/
+	/*color:#3d4245;*/
+/*}*/
+/*.article_body div span{*/
+	/*color:#3d4245;*/
+/*}*/
 .article_body p{
 	font-size:0.3rem;
 	color:#3d4245;
@@ -442,6 +448,12 @@ input[type='search']{
 	width:2rem !important;
     height:2rem !important;
 
+}
+.article_body p span{
+	color:#3d4245;
+}
+.article_body div span{
+	color:#3d4245;
 }
 .article_body .content_ware .ware .title{
     font-size:0.32rem;
