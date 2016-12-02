@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>推荐人详情</title>
+    <title>店铺待入账金额详情</title>
     <!-- 新 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
 
@@ -16,20 +16,33 @@
 </head>
 <body>
 <div class="container" style="margin-top: 10px;">
-    <div class="panel panel-info" style="margin-top: 10em">
-        <div class="panel-body">
-            <a href="{url:/site/recommender_shop_tobe_booked}">
-                <h4>待入账金额&nbsp;&nbsp;<small>查看各店铺待入账详情</small></h4>
-            </a>
-        </div>
+    <div class="page-header">
+        <h3>店铺待入账金额&nbsp;&nbsp;<small>详情信息</small></h3>
     </div>
-    <div class="panel panel-info">
-        <div class="panel-body">
-            <a href="{url:/site/recommender_shop_income}">
-                <h4>累计收益&nbsp;&nbsp;<small>查看各店铺累计收益详情</small></h4>
-            </a>
-        </div>
-    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>店铺名称</th>
+            <th>待入账金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {if:$this->data}
+            {foreach:$items = $this->data}
+            <tr>
+                <td>{$item['name']}</td>
+                <td>{$item['amount_tobe_booked']}</td>
+            </tr>
+            {/foreach}
+        {/if}
+        </tbody>
+    </table>
+    <hr>
+    <p class="text-center">
+        <a href="{url:/site/recommender_shop}" class="btn btn-primary">返回</a>
+        <a href="{url:/site/recommender_shop_income}" class="btn btn-info">查看收益信息</a>
+    </p>
 </div>
 <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 

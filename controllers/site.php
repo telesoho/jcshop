@@ -1137,6 +1137,33 @@ class Site extends IController
         }
         $this->redirect('recommender_shop');
     }
+    function recommender_shop_tobe_booked(){
+        $recommender = ISession::get('recommender');
+        $this->data = $this->get_shop_recommender();
+        $this->redirect('recommender_shop_tobe_booked');
+    }
+    function recommender_shop_income(){
+        $this->redirect('recommender_shop_income');
+    }
+    private function get_shop_recommender(){
+        if (empty(ISession::get('recommender'))){
+            return null;
+        }
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = "' . ISession::get('recommender') . '"';
+        $ret = $shop_query->find();
+        if(!empty($ret)) {
+            foreach ($ret as $key => $value){
+                $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
+                $data[$key]['identify_id'] = $value['identify_id'];
+                $data[$key]['name'] = $value['name'];
+                $data[$key]['address'] = $value['address'];
+            }
+            return $data;
+        } else {
+            return null;
+        }
+    }
     private function get_amount_tobe_booked($identify_id){
         $shop_query = new IQuery('shop');
         $user_query = new IQuery('user');
