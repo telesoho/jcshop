@@ -19,7 +19,7 @@
         <a href="/site/index"><span>首页</span></a> <span>文章详情</span>
     </div>
     <div class="article_title">
-        <img src="{webroot:$this->articleRow['image']}" alt="" width="100%" />
+        <img src="<?php echo IWeb::$app->config['image_host'] . '/' ?>{$this->articleRow['image']}" alt="" width="100%" />
     </div>
     <div class="article_body">
         <?php
