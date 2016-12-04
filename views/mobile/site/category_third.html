@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
-    <title></title>
+    <title>{echo:urldecode($_GET['title'])}</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css" />
 </head>
@@ -84,9 +84,8 @@
     //页面加载动画的调用
     $(window).load(function(){
         $("#loading").fadeOut(300);
-        var getinfo=getItem("siteMap");
-        getcategory_thirdInfo(getinfo.id);
-        document.title = getinfo.name;
+        getcategory_thirdInfo("{$_GET['id']}");
+        // document.title = getinfo.name;
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','a',function(){document.location.href=this.href;});
     })
