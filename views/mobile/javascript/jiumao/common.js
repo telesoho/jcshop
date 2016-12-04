@@ -60,8 +60,9 @@ function removeItem(key){
     window.localStorage.removeItem(key);
 }
 function pushSession(key,value){
+    var val=JSON.stringify(value)?JSON.stringify(value):[];
     if(window.sessionStorage){
-        sessionStorage.setItem(key,value);
+        sessionStorage.setItem(key,val);
     }else{
         console.log("无法使用缓存");
         return "";
@@ -70,7 +71,7 @@ function pushSession(key,value){
 function getSession(key){
     if(window.sessionStorage){
         var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
-        return state;
+        return JSON.parse(state);
     }else{
         console.log("无法使用缓存");
         return "";
@@ -162,58 +163,6 @@ function getScrollTop()
 //        console.log(position);
 }
 // api接口请求
-// 首页请求
-function getIndex(){
-    mui.ajax('index.php?controller=apic&action=banner_list',{
-        dataType:'json',//服务器返回json格式数据
-        type:'get',//HTTP请求类型
-        timeout:10000,//超时时间设置为10秒；
-        success:function(data){
-            console.log(data);
-            setItem("placeHolder",data.goods_nums);
-            $(".mui-placeholder span").eq(1).html(data.goods_nums+"件商品等你来搜");
-            var html = template('C_slider',data);
-            document.getElementById("slider1").innerHTML = html;
-            var gallery = mui('#slider1');
-            gallery.slider({
-                interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
-            });
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
-        }
-    });
-}
-// 下拉刷新
-function pullupIndexRefresh() {
-    mui.ajax('/apic/article_list',{
-        data:pageData,
-        dataType:'json',	// 服务器返回json格式数据
-        type:'post',		// HTTP请求类型
-        timeout:10000,		// 超时时间设置为10秒；
-        success:function(data){
-            console.log(data);
-            var pageAlbum={};
-            pageAlbum.data=data;
-            var html3=template('albumPage',pageAlbum);
-            var div = document.createElement('div');
-            div.innerHTML=html3;
-            document.getElementById("pullContainer").appendChild(div);
-            lazyload.init({
-                anim:false,
-                selectorName:".samLazyImg"
-            });
-//               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
-            stop = true;
-
-            pageData.page++;
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
-            console.log(type);
-        }
-    });
-}
 //首页限时购接口
 //    function getTimePurchase(){
 //        var url1='index.php?controller=apic&action=pro_speed_list';
@@ -234,35 +183,6 @@ function pullupIndexRefresh() {
 //            }
 //        });
 //    }
-// 首页分享接口
-function collection(id){
-    mui.ajax('index.php?controller=apic&action=favorite_article_add',{
-        data:{
-            id:id
-        },
-        dataType:'json',//服务器返回json格式数据
-        type:'get',//HTTP请求类型
-        timeout:10000,//超时时间设置为10秒；
-        success:function(data){
-            console.log(data);
-            var num=$(".favorite"+id);
-            var share=$(".shareContent"+id);
-            if(data.message=="收藏成功"){
-//                        num.innerHTML=parseInt(num.innerHTML)+1;
-                num.html(parseInt(num.html())+1);
-                share.attr("src","/views/mobile/skin/default/image/jmj/icon/like-ed.png");
-            }else{
-//                   num.innerHTML=parseInt(num.innerHTML)-1;
-                num.html(parseInt(num.html())-1);
-                share.attr("src","/views/mobile/skin/default/image/jmj/icon/like.png");
-            }
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
-            console.log(type);
-        }
-    });
-}
 function hotSearth(){
     mui.ajax('/apic/search_words',{
         dataType:'json',//服务器返回json格式数据
