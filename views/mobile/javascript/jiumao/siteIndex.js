@@ -55,26 +55,31 @@ var vm = new Vue({
     mounted: function(){
         var self=this;
         if(getSession('banner')){
-
+            console.log("走缓存")
+            self.showMessage=true;
             self.indexInfo.banner=getSession("banner");
         }else{
+            console.log("走接口")
             getBanner(self);
         };
         if(getSession('article_category_list')){
+            console.log("走缓存")
             self.indexInfo.article_category_list=getSession("article_category_list");
         }else{
+            console.log("走接口")
             getArticle_category_list(self);
         };
         if(getSession('articleDetail')){
+            console.log("走缓存")
             self.indexInfo.articleDetail=getSession("articleDetail");
             self.page=getSession("indexPage");
         }else{
+            console.log("走接口")
             pullupInfoRefresh(self);
         };
     },
     updated:function() {
         // 页面加载完成执行的函数;
-        $(".mui-placeholder span").eq(1).html(getItem("placeHolder")+"件商品等你来搜");;
         lazyload.init({
             anim:false,
             selectorName:".samLazyImg"
@@ -114,6 +119,7 @@ var vm = new Vue({
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){
         var srcimg= $(this).find('img').attr("data-img");
+        console.log(this);
         $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
         document.location.href=this.href;
     });
