@@ -7,21 +7,22 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
     <title>九猫大百货</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=1.0.2" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=1.0.2" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=1.0.2" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=1.0.2" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/siteIndex.css?v=1.0.2" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/siteIndex.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 <!--下拉刷新容器-->
 <!--<div id="pullrefresh" class="mui-content mui-scroll-wrapper">-->
-    <!--<div class="mui-scroll" id="muiScroll">-->
-        <!--头部-->
+<!--<div class="mui-scroll" id="muiScroll">-->
+<!--头部-->
+<section id="indexInfo"  v-cloak>
     <section class="homeHeader" id="homeHeader">
         <div class="nav-header">
             <div class="mui-input-row mui-search">
-                <input type="search" id="searth"  placeholder="" onfocus="getSearth()">
+                <input type="search" id="searth"  :placeholder="searth" onfocus="getSearth()">
             </div>
         </div>
         <img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon">
@@ -63,22 +64,39 @@
                         <span class="bg"></span>
                     </a>
                     <!--<a class="mui-control-item" href="#">-->
-                        <!--<span class="text">宠物</span><span class="bg"></span>-->
+                    <!--<span class="text">宠物</span><span class="bg"></span>-->
                     <!--</a>-->
                     <!--<a class="mui-control-item " href="#">-->
-                        <!--<span class="text">健康</span><span class="bg"></span>-->
+                    <!--<span class="text">健康</span><span class="bg"></span>-->
                     <!--</a>-->
                 </div>
             </div>
         </div>
     </section>
-        <!--轮播图-->
-    <section>
-        <div id="slider1" class="mui-slider" >
+    <div id="slider1" class="mui-slider" >
+        <div class="mui-slider-group mui-slider-loop">
+            <div class="mui-slider-item mui-slider-item-duplicate">
+                <a :href="indexInfo.banner[indexInfo.banner.length-1].url" class="locationA">
+                    <img :src="indexInfo.banner[indexInfo.banner.length-1].img">
+                </a>
+            </div>
+            <div class="mui-slider-item" v-for="item in indexInfo.banner">
+                <a :href="item.url" class="locationA">
+                    <img :src="item.img" class="samLazyImg">
+                </a>
+            </div>
+            <div class="mui-slider-item mui-slider-item-duplicate">
+                <a :href="indexInfo.banner[0].url" class="locationA">
+                    <img :src="indexInfo.banner[0].img">
+                </a>
+            </div>
         </div>
-        <!--轮播图结束-->
-    </section>
-    <section id="indexInfo" v-if="showMessage" v-cloak>
+        <div class="mui-slider-indicator" style="bottom:0.16rem;" >
+            <div class="mui-indicator mui-active" style="margin-right:-3px"></div>
+            <div class="mui-indicator" v-for="key in indexInfo.banner.length-1"></div>
+        </div>
+    </div>
+    <div id="article_list">
         <div class="banner_img flexbox">
             <img src="/views/mobile/skin/default/image/xinzeng/baner_tip.png" alt="" />
         </div>
@@ -90,7 +108,7 @@
             </div>
             <div >
                 <div class="item_img">
-                    <a href="#" @click="toArticle_list(item)" class="img"  v-for="item in article_category_list.ac">
+                    <a href="#" @click="toArticle_list(item)" class="img"  v-for="item in indexInfo.article_category_list.ac">
                         <img  alt=""   :src="item.image"  class="samLazyImg" />
                     </a>
                 </div>
@@ -102,7 +120,7 @@
                 <span>特别推荐</span>
                 <span class="darkline"></span>
             </div>
-            <div v-for="item in article_category_list.ar">
+            <div v-for="item in indexInfo.article_category_list.ar">
                 <div class="item_img">
                     <a href="#" @click="toArticle(item)">
                         <img :dataimg="item.image" alt="" width="100%"  src="/views/mobile/skin/default/image/jmj/icon/big_lazy.png"  class="samLazyImg" />
@@ -110,28 +128,77 @@
                 </div>
             </div>
         </div>
+    </div>
+    <section class="recommended line albumn_index" v-for="(item,key) in new_data">
+        <div class="title">
+                <span class="logo" >
+                <img :src="item.icon" alt="" class="img-hot">
+            </span>
+            <span class="name">
+            {{item.category_name}}
+            </span>
+            <span class="num mui-pull-right favorite<%=dat.id %>">
+            {{item.favorite_num}}
+            </span>
+            <span class="like mui-pull-right">
+                <img :src="item.is_favorite==0?img1:img2"  alt="" class="img-like" @click="collection(item)" />
+            </span>
+        </div>
+        <a href="#" @click="store(item)" :id="item.product_id">
+            <div class="content">
+                <div class="img">
+                    <img :dataimg="item.image" alt="" width="100%" style="height:3.8rem;" src="/views/mobile/skin/default/image/jmj/icon/big_lazy.png"  class="samLazyImg"  />
+                </div>
+                <div class="mark1">{{item.goods_num}}件商品
+                </div>
+                <div class="mark2">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
+                    {{item.visit_num}}</div>
+            </div>
+        </a>
+        <div class="single"></div>
+        <div class="mark">
+            <div class="product">
+                <div class="slider">
+                    <div class="item" v-for="itemList in item.list" >
+                        <a href="#" @click="store(itemList)" >
+                            <div class="img"><img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
+                            <div class="name hidewrap">{{itemList.name}}</div>
+                            <div class="sellprice" style="font-size:0.26rem;">
+                                <span style="font-size:0.2rem;color:#ff4aa0">￥</span> {{itemList.sell_price}} </div>
+                        </a>
+                    </div>
+                    <div class="singleline"></div>
+                </div>
+                <div class="mark"></div>
+            </div>
+        </div>
     </section>
-        <!--专辑-->
-        <!--<section class="timePurchase line">-->
-            <!--<div class="timePurchase_title">-->
-                <!--<div class="logo">-->
-                    <!--<img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying01.png" alt="" class="img-pan1">-->
-                    <!--<span>限时抢购</span>-->
-                    <!--<img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying02.png" alt="" class="img-pan2">-->
-                <!--</div>-->
-                <!--<div id="timer" data_timer="0000000000" class="timer">-->
-                    <!--<span id="timer_h">00</span>-->
-                    <!--<span id="timer_m">00</span>-->
-                    <!--<span id="timer_s">00</span>-->
-                <!--</div>-->
-                <!--<div class="right">-->
-                    <!--<span class="mui-icon mui-icon-forward mui-pull-right"></span>-->
-                    <!--<a href="index.php?controller=site&action=time_purchase"><span class=" mui-pull-right">更多</span></a>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="timePurchase_body" id="timePurchase_body">-->
-            <!--</div>-->
-        <!--</section>-->
+    <div class="fix-toTop hide" @click="fixToTop">
+        <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt=""  />
+    </div>
+</section>
+<!--专辑-->
+<!--<section class="timePurchase line">-->
+<!--<div class="timePurchase_title">-->
+<!--<div class="logo">-->
+<!--<img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying01.png" alt="" class="img-pan1">-->
+<!--<span>限时抢购</span>-->
+<!--<img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying02.png" alt="" class="img-pan2">-->
+<!--</div>-->
+<!--<div id="timer" data_timer="0000000000" class="timer">-->
+<!--<span id="timer_h">00</span>-->
+<!--<span id="timer_m">00</span>-->
+<!--<span id="timer_s">00</span>-->
+<!--</div>-->
+<!--<div class="right">-->
+<!--<span class="mui-icon mui-icon-forward mui-pull-right"></span>-->
+<!--<a href="index.php?controller=site&action=time_purchase"><span class=" mui-pull-right">更多</span></a>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="timePurchase_body" id="timePurchase_body">-->
+<!--</div>-->
+<!--</section>-->
 <div id="pullContainer"></div>
 <div style="padding-bottom:2.42rem;background:#f8f8f8"></div>
 <div class="fix-nav">
@@ -141,42 +208,39 @@
         </div>
     </div>
 </div>
-<div class="fix-toTop hide">
-    <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt=""  />
-</div>
 <footer>
     <nav class="mui-bar mui-bar-tab"  style="z-index:25">
-            <a id="defaultTab" class="mui-tab-item mui-active home" href="{url:/site/index}" >
+        <a id="defaultTab" class="mui-tab-item mui-active home" href="{url:/site/index}" >
                 <span class="mui-icon nav-icon icon-home">
                     <img src="/views/mobile/skin/default/image/jmj/icon/home-ed.png" data-img="home-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
                 </span>
-                <div class="mui-tab-label">首页</div>
-            </a>
-            <a class="mui-tab-item" href="{url:/site/sitemap}" >
+            <div class="mui-tab-label">首页</div>
+        </a>
+        <a class="mui-tab-item" href="{url:/site/sitemap}" >
                 <span class="mui-icon nav-icon icon-classification">
                     <img src="/views/mobile/skin/default/image/jmj/icon/mune.png" data-img="mune-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
                 </span>
-                <div class="mui-tab-label">分类</div>
-            </a>
-            <a class="mui-tab-item" href="{url:/site/favorite}">
+            <div class="mui-tab-label">分类</div>
+        </a>
+        <a class="mui-tab-item" href="{url:/site/favorite}">
                 <span class="nav-icon icon-vedio">
                     <img src="/views/mobile/skin/default/image/jmj/icon/grass.png" data-img="grass.png" alt="" class="img-move02">
                     <div class="grow">种草</div>
                     <span class="tab-mark"></span>
                 </span>
-            </a>
-            <a class="mui-tab-item" href="{url:simple/cart}">
+        </a>
+        <a class="mui-tab-item" href="{url:simple/cart}">
                 <span class="mui-icon nav-icon icon-shopcar">
                     <img src="/views/mobile/skin/default/image/jmj/icon/buy.png"  data-img="buy-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
                 </span>
-                <div class="mui-tab-label">购物车</div>
-            </a>
-            <a class="mui-tab-item" href="{url:/ucenter/index}">
+            <div class="mui-tab-label">购物车</div>
+        </a>
+        <a class="mui-tab-item" href="{url:/ucenter/index}">
                 <span class="mui-icon nav-icon icon-my">
                     <img src="/views/mobile/skin/default/image/jmj/icon/my.png" data-img="my-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
                 </span>
-                <div class="mui-tab-label">我的</div>
-            </a>
+            <div class="mui-tab-label">我的</div>
+        </a>
     </nav>
 </footer>
 <!--模态框-->
@@ -189,133 +253,26 @@
     <button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
     <button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
 </div>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script id="searth_keyword" type="text/html">
     <% for(var i=0,m=data.length; i<m&&i<10; i++){%>
     <a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
     <%}%>
 </script>
-<!--轮播图模板引擎-->
-<script id="C_slider" type="text/html">
-    <div class="mui-slider-group mui-slider-loop">
-        <div class="mui-slider-item mui-slider-item-duplicate">
-            <a href="<%=banner[banner.length-1].url %>" class="locationA">
-                <img src="<%=banner[banner.length-1].img %>">
-            </a>
-        </div>
-        <% for(var i=0; i<banner.length; i++){%>
-        <% var dat =banner[i] %>
-        <div class="mui-slider-item">
-            <a href="<%=dat.url %>" class="locationA">
-                <img src="<%=dat.img %>" class="samLazyImg">
-            </a>
-        </div>
-        <%}%>
-        <div class="mui-slider-item mui-slider-item-duplicate">
-            <a href="<%=banner[0].url %>" class="locationA">
-                <img src="<%=banner[0].img %>">
-            </a>
-        </div>
-    </div>
-    <div class="mui-slider-indicator" style="bottom:0.16rem;">
-        <div class="mui-indicator mui-active"></div>
-        <% for(var i=1; i<banner.length; i++){%>
-        <div class="mui-indicator"></div>
-        <%}%>
-    </div>
-</script>
-<!--限时购模板引擎-->
-<!--<script id="timeWare" type="text/html">-->
-        <!--<% for(var i=0,m=child.length; i<m; i++){%>-->
-        <!--<% var dat =child[i] %>-->
-        <!--<div class="item">-->
-            <!--<a href="index.php?controller=site&action=time_purchase"><div class="img" style="border:1px solid #eee">-->
-                    <!--<img src="<%=dat.img %>" alt="" width="100%">-->
-                    <!--<span><%=dat.award_value %></span>-->
-                <!--</div>-->
-                <!--<div class="text">-->
-                    <!--<div class="title"><%=dat.name %></div>-->
-                    <!--<div class="price"><s><span>￥</span><%=dat.sell_price %></s></div>-->
-                <!--</div></a>-->
-            <!--</div>-->
-        <!--<%}%>-->
-<!--</script>-->
-<!--专辑分页模板-->
-<script id="albumPage" type="text/html">
-    <% for(var i=0; i<data.length; i++){%>
-    <% var dat =data[i] %>
-    <section class="recommended line albumn_index">
-        <div class="title">
-            <span class="logo" >
-                <img src="<%=dat.icon %>" alt="" class="img-hot">
-            </span>
-            <span class="name">
-            <%=dat.category_name %>
-            </span>
-            <span class="num mui-pull-right favorite<%=dat.id %>">
-            <%=cal(dat.favorite_num) %>
-            </span>
-            <span class="like mui-pull-right">
-                <%if(dat.is_favorite==0){%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png"  alt="" class="img-like shareContent<%=dat.id %>" onclick="collection(<%=dat.id %>)" />
-                <%}else{%>
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like shareContent<%=dat.id %>" onclick=collection(<%=dat.id %>) />
-                <%}%>
-            </span>
-        </div>
-        <a href="index.php?controller=site&action=article_detail&id=<%=dat.id %>&vn=<%=dat.visit_num%>&xb=<%=dat.xb%>" class="locationA">
-            <div class="content">
-                <div class="img">
-                    <img dataimg="<%=dat.image %>" alt="" width="100%" style="height:3.8rem;" src="/views/mobile/skin/default/image/jmj/icon/big_lazy.png"  class="samLazyImg"  />
-                </div>
-                <div class="mark1"><%=dat.goods_num %>件商品
-                </div>
-                <div class="mark2">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-                    <%=cal(dat.visit_num) %></div>
-            </div>
-        </a>
-        <%if(dat.list.length>=3){%>
-            <div class="single"></div>
-            <div class="mark">
-                <div class="product">
-                    <div class="slider">
-                        <% for(var m=0; m<dat.list.length; m++){%>
-                        <% var goodsitem =dat.list[m] %>
-                        <div class="item">
-                            <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
-                                <div class="img"><img dataimg="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
-                                <div class="name hidewrap"><%=goodsitem.name %></div>
-                                <div class="sellprice" style="font-size:0.26rem;">
-                                    <span style="font-size:0.2rem;color:#ff4aa0">￥</span> <%=goodsitem.sell_price %> </div>
-                            </a>
-                        </div>
-                        <div class="singleline"></div>
-                        <%}%>
-                    </div>
-                    <div class="mark"></div>
-                </div>
-            </div>
-        <%}%>
-    </section>
-    <%}%>
-</script>
-<!--头信息结束-->
-<script src="/views/mobile/javascript/vue.js?v=1.0.2"></script>
-<script src="/views/mobile/javascript/mui.js?v=1.0.2"></script>
-<script src="/views/mobile/javascript/template-native.js?v=1.0.2"></script>
-<script src="/views/mobile/javascript/jquery.min.js?v=1.0.2"></script>
-<script src="/views/mobile/javascript/lazyload.js?v=1.0.2"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <!--<script src="/views/mobile/javascript/time.js"></script>-->
-<!--<script src="/views/mobile/javascript/base64.js"></script>-->
-<script src="/views/mobile/javascript/jiumao/common.js?v=1.0.2"></script>
+<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 
 <!-- 微信分享 -->
 {if:IClient::isWechat() == true}
-<?php 
+<?php
     require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
     $this->wechat = new wechat();
-    $this->wechat->config['wechat_jsApiSDK']=1;
-    $this->wechat->jsApiSDK();
+$this->wechat->config['wechat_jsApiSDK']=1;
+$this->wechat->jsApiSDK();
 ?>
 <script>
     //微信分享

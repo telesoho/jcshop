@@ -1,10 +1,14 @@
-#indexInfo .banner_img{
+/*轮播图样式*/
+.mui-slider-indicator .mui-indicator{
+    margin-left:3px !important;
+}
+#article_list .banner_img{
     margin-top:0.22rem;
     width:100%;
     height:3.98rem;
     background:#fff;
 }
-#indexInfo .banner_img img{
+#article_list .banner_img img{
     width:7.3rem;
     height:3.66rem;
 }
