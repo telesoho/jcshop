@@ -374,7 +374,7 @@ input[type='search']{
 	font-size:0.3rem;
 	color:#fff;
 	letter-spacing:0.056rem;
-	text-align:center;
+	text-align:center !important;
 	line-height:0.65rem;
 }
 .articleState.active{
