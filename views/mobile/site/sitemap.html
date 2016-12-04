@@ -152,7 +152,7 @@
 			<% var Ssite =Fsite.child[j] %>
 			<% var Ssitestring =JSONstringfly(Fsite.child[j]) %>
 				<div class="type">
-					<a href="#" onclick="toPageThird(<%=Ssitestring%>)">
+					<a href="{url:site/category_third}/id/<%=Ssite.id %>/title/<%=Ssite.name %>" class="locationA">
 						<div class="img">
 								<img dataimg="<%=Ssite.image %>" alt="" width="1.54rem" height="1.54rem" style=""
 									 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" />
