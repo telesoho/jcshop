@@ -149,10 +149,11 @@ ul li{
     color:#bbb;
 }
 .tips{
-    height:4.5rem;
+    height:4rem;
     width:100%;
     overflow-x: hidden;
     display: -webkit-flex;
+    -webkit-flex-wrap: wrap;
     /*align-items: center;*/
     -webkit-justify-content: center;
     padding-bottom:2rem;

@@ -138,6 +138,7 @@
 			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
 				where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 1 
 				fields=m.id,m.name,m.sell_price,m.img 
+				group=m.id 
 				limit=6 
 				order=m.id desc}
 			<a href="{url:/site/products?id=$item['id']}"  class="locationA">
@@ -249,6 +250,7 @@
 			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
 				where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 3 
 				fields=m.id,m.name,m.sell_price,m.img 
+				group=m.id 
 				limit=6 
 				order=m.id desc}
 			<a href="{url:/site/products?id=$item['id']}"  class="locationA">

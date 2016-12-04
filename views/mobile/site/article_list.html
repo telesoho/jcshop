@@ -7,15 +7,29 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
     <title></title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/articleList.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/articleList.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 <!--vue容器-->
 <div id="articleList">
     <template >
         <section class="recommended line albumn_index" v-for="(item,key) in new_data" :style="key==0?style.firstArticle:style.ortherArticle">
+            <div class="title">
+                <span class="logo" >
+                <img :src="item.icon" alt="" class="img-hot">
+            </span>
+                <span class="name">
+            {{item.category_name}}
+            </span>
+                <span class="num mui-pull-right favorite<%=dat.id %>">
+            {{item.favorite_num}}
+            </span>
+                <span class="like mui-pull-right">
+                <img :src="item.is_favorite==0?img1:img2"  alt="" class="img-like" @click="collection(item)" />
+            </span>
+            </div>
             <a href="#" @click="store(item)" :id="item.product_id">
                 <div class="content">
                     <div class="img">
@@ -36,7 +50,8 @@
                             <a href="#" @click="store(itemList)" >
                                 <div class="img"><img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
                                 <div class="name hidewrap">{{itemList.name}}</div>
-                                <div class="sellprice" style="font-size:0.24rem;">￥ {{itemList.sell_price}} </div>
+                                <div class="sellprice" style="font-size:0.26rem;">
+                                    <span style="font-size:0.2rem;color:#ff4aa0">￥</span> {{itemList.sell_price}} </div>
                             </a>
                         </div>
                         <div class="singleline"></div>
@@ -46,52 +61,17 @@
             </div>
         </section>
     </template>
-    <div style="height:1rem;"></div>
+    <div style="height:0.2rem;"></div>
     <div class="fix-toTop hide" @click="fixToTop">
         <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt=""  />
     </div>
 </div>
-<footer>
-    <nav class="mui-bar mui-bar-tab"  style="z-index:25">
-        <a id="defaultTab" class="mui-tab-item mui-active home" href="{url:/site/index}" >
-                <span class="mui-icon nav-icon icon-home">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/home-ed.png" data-img="home-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">首页</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/site/sitemap}" >
-                <span class="mui-icon nav-icon icon-classification">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/mune.png" data-img="mune-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">分类</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/site/favorite}">
-                <span class="nav-icon icon-vedio">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/grass.png" data-img="grass.png" alt="" class="img-move02">
-                    <div class="grow">种草</div>
-                    <span class="tab-mark"></span>
-                </span>
-        </a>
-        <a class="mui-tab-item" href="{url:simple/cart}">
-                <span class="mui-icon nav-icon icon-shopcar">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/buy.png"  data-img="buy-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">购物车</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/ucenter/index}">
-                <span class="mui-icon nav-icon icon-my">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/my.png" data-img="my-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">我的</div>
-        </a>
-    </nav>
-</footer>
-<script src="/views/mobile/javascript/vue.js"></script>
-<script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/lazyload.js"></script>
-<script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/template-native.js"></script>
-<script src="/views/mobile/javascript/jiumao/common.js"></script>
-<script src="/views/mobile/javascript/jiumao/articleList.js"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jiumao/articleList.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

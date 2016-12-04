@@ -12,7 +12,10 @@ var vm = new Vue({
         style:{
             firstArticle:'margin-top:0',
             ortherArticle:'margin-top:0.22rem'
-        }
+        },
+        changeState:true,
+        img1:"/views/mobile/skin/default/image/jmj/icon/like.png",
+        img2:"/views/mobile/skin/default/image/jmj/icon/like-ed.png"
     },
     computed: {
         new_data: function(){
@@ -22,12 +25,15 @@ var vm = new Vue({
                 item.product_id="product_item"+item.id;
                 if(item.visit_num>=1000000){
                     item.visit_num=parseInt(item.visit_num/1000000)+"万";
+                    item.favorite_num=parseInt(item.favorite_num/1000000)+"万";
                 }
                 if(item.visit_num>=100000){
                     item.visit_num=(item.visit_num/100000).toFixed(1)+"万";
+                    item.favorite_num=(item.favorite_num/100000).toFixed(1)+"万";
                 }
                 if(item.visit_num>=10000){
                     item.visit_num=(item.visit_num/10000).toFixed(2)+"万";
+                    item.favorite_num=(item.favorite_num/100000).toFixed(1)+"万";
                 }
                 // item.cls="item box favoriteArticle"+item.id;
                 item.list.map(function(itemList){
@@ -71,6 +77,11 @@ var vm = new Vue({
         fixToTop: function(){
             $("html,body").animate({scrollTop:0},0);
             return false;
+        },
+        collection:function(item){
+            this.changeState=false;
+            var self=this;
+            collection(item,self)
         }
     }
 })
@@ -78,11 +89,6 @@ var vm = new Vue({
 $(window).load(function(){
     $("#loading").fadeOut(300);
     document.title=getItem("artileName");
-    mui('body').on('tap','.mui-tab-item',function(){
-        var srcimg= $(this).find('img').attr("data-img");
-        $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
-        document.location.href=this.href;
-    });
     mui('body').on('tap','.locationA',function(){
         document.location.href=this.href;
     })
@@ -104,7 +110,7 @@ $(window).bind('scroll', function() {
     }
 });
 function pullupArticleRefresh(self){
-    mui.ajax('/apic/article_lists', {
+    mui.ajax('/apic/article_list', {
         data:{
             cid:getItem("articleId"),
             page:self.page
@@ -130,4 +136,39 @@ function pullupArticleRefresh(self){
         }
     });
 };
+// 收藏接口
+function collection(item,self){
+    mui.ajax('/apic/favorite_article_add',{
+        data:{
+            id:item.id
+        },
+        dataType:'json',//服务器返回json格式数据
+        type:'get',//HTTP请求类型
+        timeout:10000,//超时时间设置为10秒；
+        success:function(data){
+            console.log(data);
+            self.changeState=true;
+            if(data.message=="请先登录"){
+                alert("请先登录");
+                return false;
+            }
+            if(data.message=="收藏成功"){
+                item.is_favorite=1;
+                item.favorite_num=parseInt(item.favorite_num)+1;
+//                        num.innerHTML=parseInt(num.innerHTML)+1;
+//                 num.html(parseInt(num.html())+1);
+            }else{
+                item.is_favorite=0;
+                item.favorite_num=parseInt(item.favorite_num)-1
+//                   num.innerHTML=parseInt(num.innerHTML)-1;
+//                 num.html(parseInt(num.html())-1);
+            }
+
+        },
+        error:function(xhr,type,errorThrown){
+            //异常处理；
+            console.log(type);
+        }
+    });
+}
 

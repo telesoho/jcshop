@@ -385,13 +385,13 @@ input[type='search']{
 	margin-top:0.9rem;
 }
 .article_body{
+	text-align: center;
 	background:#fff;
 	overflow-x: hidden;
 	font-size:0.3rem;
 	color:#3d4245;
 	line-height:0.38rem;
 	margin:0 auto;
-	text-align:justify;
 	padding:0 4% 0.86rem 4%;
 
 }
@@ -403,13 +403,22 @@ input[type='search']{
 	text-align:center !important;
 	padding:0.61rem 0;
 }
+/*.article_body p span{*/
+	/*color:#3d4245;*/
+/*}*/
+/*.article_body div span{*/
+	/*color:#3d4245;*/
+/*}*/
 .article_body p{
 	font-size:0.3rem;
 	color:#3d4245;
 	letter-spacing:0.0107rem;
 	line-height:0.38rem;
-	text-align:justify !important;
+	text-align:left !important;
 	width:100%;
+}
+.article_body div{
+	text-align:left;
 }
 .article_body p img{
 	display: block;
@@ -443,6 +452,12 @@ input[type='search']{
     height:2rem !important;
 
 }
+.article_body p span{
+	color:#3d4245;
+}
+.article_body div span{
+	color:#3d4245;
+}
 .article_body .content_ware .ware .title{
     font-size:0.32rem;
     color:#3d4245;
@@ -464,12 +479,14 @@ input[type='search']{
 	font-family:'HelveticaNeueLt';
 	font-size:0.26rem;
 	color:#ff44a0;
+	text-align: left;
 }
 .article_body .content_ware .ware .price .price2{
     display:block;
 	font-size:0.22rem;
 	color:#bbbbbb;
 	padding-left:0.28rem;
+	text-align: left;
 }
 .article_body .content_ware .ware .price .price3{
     display:block;
@@ -477,6 +494,7 @@ input[type='search']{
 	font-size:0.22rem;
 	color:#bbbbbb;
 	padding-left:0.28rem;
+	text-align: left;
 }
 .article_body .content_ware .ware {
     position:relative;

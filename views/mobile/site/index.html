@@ -285,7 +285,8 @@
                             <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
                                 <div class="img"><img dataimg="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
                                 <div class="name hidewrap"><%=goodsitem.name %></div>
-                                <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
+                                <div class="sellprice" style="font-size:0.26rem;">
+                                    <span style="font-size:0.2rem;color:#ff4aa0">￥</span> <%=goodsitem.sell_price %> </div>
                             </a>
                         </div>
                         <div class="singleline"></div>
