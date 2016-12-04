@@ -22,8 +22,8 @@ var vm = new Vue({
         img2:"/views/mobile/skin/default/image/jmj/icon/like-ed.png"
     },
     computed: {
-        searth: function (){
-            return this.placeHolder+"件商品等你来搜"
+        searth_pla: function (){
+            return this.placeHolder+"件商品等你来搜";
         },
         new_data: function(){
             this.indexInfo.articleDetail.map(function(item){
