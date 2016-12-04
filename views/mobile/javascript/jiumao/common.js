@@ -77,6 +77,9 @@ function getSession(key){
         return "";
     }
 }
+function removeSessionItem(key){
+    window.sessionStorage.removeItem(key);
+}
 //功能函数
 //搜索处理函数
 function handler() {
@@ -183,7 +186,7 @@ function getScrollTop1()
         document.body.scrollTop=position-9;
         console.log(document.body.scrollTop);
     }
-    // removeItem('product1');
+    removeSessionItem('product1');
 //        console.log(position);
 }
 // api接口请求
