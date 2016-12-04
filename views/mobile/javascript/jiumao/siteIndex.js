@@ -105,7 +105,12 @@ var vm = new Vue({
 })
     hotSearth();
 $(document).ready(function(){
-    getScrollTop1();
+    var ua = navigator.userAgent.toLowerCase();
+    if (/iphone|ipad|ipod/.test(ua)) {
+        getScrollTop1();
+    } else if (/android/.test(ua)) {
+
+    }
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){
         var srcimg= $(this).find('img').attr("data-img");
