@@ -177,6 +177,7 @@
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
+<script src="/views/mobile/javascript/jiumao/wechat.js"></script>
 
 <script>
 	//页面加载动画的调用
@@ -195,6 +196,24 @@
 		mui('.mui-scroll-wrapper').scroll();
 	})
 </script>
+
+<!-- 微信分享 -->
+{if:IClient::isWechat() == true}
+    <?php
+        require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+        $this->wechat = new wechat();
+        $this->wechat->config['wechat_jsApiSDK']=1;
+        $this->wechat->jsApiSDK();
+    ?>
+<script>
+//微信分享
+var wechat_share = {
+    link        : '{url:site/index}',
+}
+wechat.share();
+</script>
+{/if}
+
 </body>
 </html>
 

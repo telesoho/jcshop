@@ -115,6 +115,7 @@
 <script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jiumao/wechat.js"></script>
 <script>
     //获取url的商品id
     var Request = new Object();
@@ -215,13 +216,13 @@
     $this->wechat->config['wechat_jsApiSDK']=1;
     $this->wechat->jsApiSDK();
 ?>
-<script src="/views/mobile/javascript/jiumao/wechat.share.js"></script>
 <script type="text/javascript">
 var wechat_share = {
     title       : "<?php if($this->articleRow['id']==284){echo '这是一个99%的妹子都希望收到的礼物';}else{echo $this->articleRow['title'];} ?>", //标题
     desc        : $('.article_body').text().trim().substring(0,100), //描述
     imgUrl      : "{echo:IWeb::$app->config['image_host'] . IUrl::creatUrl('/pic/thumb/img/'.$this->articleRow['image'].'/w/200/h/200')}", //图片
 }
+wechat.share();
 </script>
 {/if}
 
