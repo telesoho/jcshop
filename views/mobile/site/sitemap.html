@@ -208,7 +208,8 @@
 <script>
 //微信分享
 var wechat_share = {
-    link        : '{url:site/index}',
+    link        : "{echo:$_SERVER['SERVER_NAME'] .'/site/index'}",
+    imgUrl      : "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
 }
 wechat.share();
 </script>
