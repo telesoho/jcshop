@@ -66,7 +66,10 @@ var vm = new Vue({
             pullupInfoRefresh(self);
         }
     },
+    beforeUpdate: function(){
+    },
     updated:function() {
+        getScrollTop1();
         // 页面加载完成执行的函数;
         lazyload.init({
             anim:false,
@@ -89,7 +92,7 @@ var vm = new Vue({
             window.location.href='/site/article_list'
         },
         store: function(item){
-            setItem("product1",item.eid)
+            pushSession("product1",item.eid);
             window.location.href=item.url;
         },
         fixToTop: function(){
@@ -209,13 +212,9 @@ function collection(item,self){
             if(data.message=="收藏成功"){
                 item.is_favorite=1;
                 item.favorite_num=parseInt(item.favorite_num)+1;
-//                        num.innerHTML=parseInt(num.innerHTML)+1;
-//                 num.html(parseInt(num.html())+1);
             }else{
                 item.is_favorite=0;
                 item.favorite_num=parseInt(item.favorite_num)-1
-//                   num.innerHTML=parseInt(num.innerHTML)-1;
-//                 num.html(parseInt(num.html())-1);
             }
 
         },

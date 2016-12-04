@@ -162,6 +162,30 @@ function getScrollTop()
     removeItem('product');
 //        console.log(position);
 }
+function getPosition1(){
+    var pid=getSession('product1');
+    var eid=document.getElementById("product_item"+pid);
+    var scroll=eid?eid:"";
+    console.log(scroll.offsetTop);
+    return scroll.offsetTop;
+
+
+}
+function getScrollTop1()
+{
+    var position=getPosition1();
+    if(document.documentElement&&document.documentElement.scrollTop)
+    {
+        document.documentElement.scrollTop=position-9;
+    }
+    else if(document.body)
+    {
+        document.body.scrollTop=position-9;
+        console.log(document.body.scrollTop);
+    }
+    // removeItem('product1');
+//        console.log(position);
+}
 // api接口请求
 //首页限时购接口
 //    function getTimePurchase(){
