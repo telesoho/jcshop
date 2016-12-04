@@ -199,7 +199,6 @@
 <!--<div class="timePurchase_body" id="timePurchase_body">-->
 <!--</div>-->
 <!--</section>-->
-<div id="pullContainer"></div>
 <div style="padding-bottom:2.42rem;background:#f8f8f8"></div>
 <div class="fix-nav">
     <div class="img"><img src="/views/mobile/skin/default/image/jmj/icon/rmb.png" alt="" class="img-rmb"/>
@@ -282,9 +281,9 @@ $this->wechat->jsApiSDK();
         imgUrl      : "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
     }
 </script>
-<script src="/views/mobile/javascript/jiumao/wechat.share.js"></script>
+<script src="/views/mobile/javascript/jiumao/wechat.share.js?v=<?php echo time(); ?>"></script>
 {/if}
 
-<script type="text/javascript" src="/views/mobile/javascript/jiumao/siteIndex.js"></script>
+<script type="text/javascript" src="/views/mobile/javascript/jiumao/siteIndex.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>
