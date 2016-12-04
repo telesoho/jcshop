@@ -66,10 +66,7 @@ var vm = new Vue({
             pullupInfoRefresh(self);
         }
     },
-    beforeUpdate: function(){
-    },
     updated:function() {
-        getScrollTop1();
         // 页面加载完成执行的函数;
         lazyload.init({
             anim:false,
@@ -107,6 +104,8 @@ var vm = new Vue({
     }
 })
     hotSearth();
+$(document).ready(function(){
+    getScrollTop1();
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){
         var srcimg= $(this).find('img').attr("data-img");
@@ -115,6 +114,7 @@ var vm = new Vue({
         document.location.href=this.href;
     });
     mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
+})
 function getBanner(self){
     mui.ajax('/apic/banner_list',{
         dataType:'json',//服务器返回json格式数据
