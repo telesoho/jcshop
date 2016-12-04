@@ -115,7 +115,7 @@ var vm = new Vue({
         }
     }
 })
-    hotSearth();
+    // hotSearth();
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){
         var srcimg= $(this).find('img').attr("data-img");
