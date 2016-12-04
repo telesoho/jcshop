@@ -134,7 +134,7 @@
 									<%for(var item in templateData){%>
 									<%item = templateData[item]%>
 									<tr class='td_c'>
-										<td><input class="small" name="_goods_no[<%=i%>]" pattern="required" type="text" value="<%=item['goods_no'] ? item['goods_no'] : item['products_no']%>" /></td>
+										<td><input class="small" name="_goods_no[<%=i%>]" type="text" value="<%=item['goods_no'] ? item['goods_no'] : item['products_no']%>" /></td>
 										<%var isProduct = false;%>
 										<%var specArrayList = parseJSON(item['spec_array'])%>
 										<%for(var result in specArrayList){%>
@@ -168,6 +168,42 @@
 									</script>
 								</table>
 							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>商品类型：</th>
+						<td>
+							<label class='attr'><input type="radio" name="type" value="1" checked onchange="page.changeType(this);"> 通常商品</label>
+							<label class='attr'><input type="radio" name="type" value="2" onchange="page.changeType(this);"> 礼包商品</label>
+						</td>
+					</tr>
+					<tr id="dataType" {if:empty($form) || $form['type']!=2}style="display:none;"{/if}>
+						<th>礼包商品：</th>
+						<td class="datalist">
+							{if:!empty($form) && $form['type']==2}
+			                    {query:name=goods_bag 
+			                        where=goods_id eq $form[id] 
+			                        fields=id,goods_no,num 
+			                        limit=50 
+			                        order=id asc}
+								<fieldset style="width:300px;" class="datainfo">
+									<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>
+									<label>商品货号：<input name="bag_no[]" type="text" value="{$item['goods_no']}" /></label>
+									<label>商品数量：<input name="bag_num[]" type="text" value="{$item['num']}" pattern="int" style="width:20px;"/></label>
+								</fieldset>
+								{/query}
+							{else:}
+								<fieldset style="width:300px;" class="datainfo">
+									<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>
+									<label>商品货号：<input name="bag_no[]" type="text" value="" /></label>
+									<label>商品数量：<input name="bag_num[]" type="text" value="1" pattern="int" style="width:20px;"/></label>
+								</fieldset>
+								<fieldset style="width:300px;" class="datainfo">
+									<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>
+									<label>商品货号：<input name="bag_no[]" type="text" value="" /></label>
+									<label>商品数量：<input name="bag_num[]" type="text" value="1" pattern="int" style="width:20px;"/></label>
+								</fieldset>
+							{/if}
 						</td>
 					</tr>
 					<tr>
@@ -325,6 +361,8 @@
 		</form>
 	</div>
 </div>
+
+    <script src="/views/sysdefault/javascript/function.js"></script>
 
 <script language="javascript">
 //创建表单实例
@@ -770,6 +808,9 @@ function delSpec(specId)
 
 var page = {
 	loading 			: false,
+	minlength 			: 2, //最少数据条数
+	maxlength 			: 20, //最多数据条数
+
 	//一键转换
 	handlePaste 		: function(e){
 		var clipboardData, pastedData;
@@ -793,7 +834,38 @@ var page = {
 			}
 			// page.loading = false;
 		},'json');
-	}
+	},
+	//添加一条数据
+	datalistAdd 		: function(obj){
+		var thisObj 	= $(obj);
+		var thisList 	= thisObj.parents('.datalist');
+		if(thisList.find('.datainfo').length == page.maxlength){
+			_inform('最多填写'+page.maxlength+'条数据');
+			return false;
+		}
+		var html 		= '';
+		html 			+= '<fieldset style="width:300px;" class="datainfo">';
+		html 			+= '<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>';
+		html 			+= '<label>商品货号：<input name="bag_no[]" type="text" value="" /></label>';
+		html 			+= '<label>商品数量：<input name="bag_num[]" type="text" value="1" pattern="int" style="width:20px;"/></label>';
+		html 			+= '</fieldset>';
+		thisObj.parents('.datalist').append(html);
+	},
+	//删除一条
+	datalistDel 		: function(obj){
+		var thisObj 	= $(obj);
+		if(thisObj.parents('.datalist').find('.datainfo').length == page.minlength){
+			_inform('至少填写'+page.minlength+'条数据');
+			return false;
+		}
+		thisObj.parents('.datainfo').remove();
+	},
+	//商品类型更改
+	changeType 			: function(obj){
+		var thisObj 	= $(obj);
+		thisObj.val()=='2' ? $('#dataType').show() : $('#dataType').hide();
+	},
+
 }
 
 </script>
