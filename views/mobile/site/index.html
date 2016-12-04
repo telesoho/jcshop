@@ -199,7 +199,6 @@
 <!--<div class="timePurchase_body" id="timePurchase_body">-->
 <!--</div>-->
 <!--</section>-->
-<div id="pullContainer"></div>
 <div style="padding-bottom:2.42rem;background:#f8f8f8"></div>
 <div class="fix-nav">
     <div class="img"><img src="/views/mobile/skin/default/image/jmj/icon/rmb.png" alt="" class="img-rmb"/>
@@ -265,7 +264,7 @@
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <!--<script src="/views/mobile/javascript/time.js"></script>-->
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jiumao/wechat.js"></script>
+<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
 
 <!-- 微信分享 -->
 {if:IClient::isWechat() == true}
@@ -280,7 +279,5 @@
 wechat.share();
 </script>
 {/if}
-
-<script type="text/javascript" src="/views/mobile/javascript/jiumao/siteIndex.js"></script>
 </body>
 </html>

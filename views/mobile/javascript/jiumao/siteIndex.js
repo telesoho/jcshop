@@ -54,27 +54,20 @@ var vm = new Vue({
     },
     mounted: function(){
         var self=this;
-        if(getSession('banner')){
-
+        if(getSession('banner')&&getSession("articleDetail")&&getSession("article_category_list")){
+            self.showMessage=true;
             self.indexInfo.banner=getSession("banner");
-        }else{
-            getBanner(self);
-        };
-        if(getSession('article_category_list')){
             self.indexInfo.article_category_list=getSession("article_category_list");
-        }else{
-            getArticle_category_list(self);
-        };
-        if(getSession('articleDetail')){
             self.indexInfo.articleDetail=getSession("articleDetail");
             self.page=getSession("indexPage");
         }else{
+            getBanner(self);
+            getArticle_category_list(self);
             pullupInfoRefresh(self);
-        };
+        }
     },
     updated:function() {
         // 页面加载完成执行的函数;
-        $(".mui-placeholder span").eq(1).html(getItem("placeHolder")+"件商品等你来搜");;
         lazyload.init({
             anim:false,
             selectorName:".samLazyImg"
@@ -96,7 +89,7 @@ var vm = new Vue({
             window.location.href='/site/article_list'
         },
         store: function(item){
-            setItem("product1",item.eid)
+            pushSession("product1",item.eid);
             window.location.href=item.url;
         },
         fixToTop: function(){
@@ -111,13 +104,17 @@ var vm = new Vue({
     }
 })
     hotSearth();
+$(document).ready(function(){
+    getScrollTop1();
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){
         var srcimg= $(this).find('img').attr("data-img");
+        console.log(this);
         $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
         document.location.href=this.href;
     });
     mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
+})
 function getBanner(self){
     mui.ajax('/apic/banner_list',{
         dataType:'json',//服务器返回json格式数据
@@ -215,13 +212,9 @@ function collection(item,self){
             if(data.message=="收藏成功"){
                 item.is_favorite=1;
                 item.favorite_num=parseInt(item.favorite_num)+1;
-//                        num.innerHTML=parseInt(num.innerHTML)+1;
-//                 num.html(parseInt(num.html())+1);
             }else{
                 item.is_favorite=0;
                 item.favorite_num=parseInt(item.favorite_num)-1
-//                   num.innerHTML=parseInt(num.innerHTML)-1;
-//                 num.html(parseInt(num.html())-1);
             }
 
         },
