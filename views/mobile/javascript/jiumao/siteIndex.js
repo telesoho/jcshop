@@ -54,29 +54,17 @@ var vm = new Vue({
     },
     mounted: function(){
         var self=this;
-        if(getSession('banner')){
-            console.log("走缓存")
+        if(getSession('banner')&&getSession("articleDetail")&&getSession("article_category_list")){
             self.showMessage=true;
             self.indexInfo.banner=getSession("banner");
-        }else{
-            console.log("走接口")
-            getBanner(self);
-        };
-        if(getSession('article_category_list')){
-            console.log("走缓存")
             self.indexInfo.article_category_list=getSession("article_category_list");
-        }else{
-            console.log("走接口")
-            getArticle_category_list(self);
-        };
-        if(getSession('articleDetail')){
-            console.log("走缓存")
             self.indexInfo.articleDetail=getSession("articleDetail");
             self.page=getSession("indexPage");
         }else{
-            console.log("走接口")
+            getBanner(self);
+            getArticle_category_list(self);
             pullupInfoRefresh(self);
-        };
+        }
     },
     updated:function() {
         // 页面加载完成执行的函数;
@@ -115,7 +103,7 @@ var vm = new Vue({
         }
     }
 })
-    // hotSearth();
+    hotSearth();
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){
         var srcimg= $(this).find('img').attr("data-img");
