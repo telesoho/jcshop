@@ -1094,11 +1094,11 @@ class Apic extends IController
         /* 商品 */
         
     	$model_keyword 				= new IModel('keyword');
-    	$data_keyword 				= $model_keyword->get_count('word in ('.$word_str.')','num');
+    	$data_keyword 				= $model_keyword->get_count('word in ("'.$word_str.'")','num');
     	if( $data_keyword > 0 ){
     		//关键字搜索次数+1
     		$model_keyword->setData(array('num'=>'num+1'));
-    		$model_keyword->update('word in ('.$word_str.')',array('num'));
+    		$model_keyword->update('word in ("'.$word_str.'")',array('num'));
     	}
     	//搜索商品
     	$query_goods 				= new IQuery('goods');
@@ -1153,7 +1153,6 @@ class Apic extends IController
     			$data_article[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/513/h/260");
     		}
     	}
-
         $this->json_echo(array('goods'=>$data_goods,'article'=>$data_article));
     }
     /**
