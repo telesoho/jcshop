@@ -817,4 +817,34 @@ class Member extends IController implements adminAuthorization
 			$result = Hsms::send($sellerRow['mobile'],$content,0);
 		}
 	}
+	public function verified(){
+//        $ret = password_verify('88888888', $a);
+        $search = IFilter::act(IReq::get('search'),'strict');
+        $keywords = IFilter::act(IReq::get('keywords'));
+        $where = ' 1 ';
+        if($search && $keywords)
+        {
+            $where .= " and $search like '%{$keywords}%' ";
+        }
+        $this->data['search'] = $search;
+        $this->data['keywords'] = $keywords;
+        $this->data['where'] = $where;
+        $tb_user_group = new IModel('user_group');
+        $data_group = $tb_user_group->query();
+        $group      = array();
+        foreach($data_group as $value)
+        {
+            $group[$value['id']] = $value['group_name'];
+        }
+        $this->data['group'] = $group;
+        $this->setRenderData($this->data);
+	    $this->redirect('verified');
+    }
+    public function member_verified_success(){
+        $user_id = IFilter::act(IReq::get('uid'),'int');
+        $user_model = new IModel('user');
+        $user_model->setData(['is_recommender'=>1, 'recommender_pass'=>password_hash("88888888", PASSWORD_DEFAULT)]);
+        $user_model->update('id = ' . $user_id);
+        $this->redirect('verified');
+    }
 }

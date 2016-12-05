@@ -41,6 +41,7 @@ class Menu
 	     		'/member/group_list' 	=> '会员组列表',
 	     		'/member/withdraw_list' =>'会员提现管理',
 				'/comment/message_list'	=> '会员消息',
+				'/member/verified'	=> '实名认证',
 			),
 			'商户管理' => array(
 				'/member/seller_list' => '商户列表',
