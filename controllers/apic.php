@@ -991,21 +991,6 @@ class Apic extends IController
 
         $this->json_echo($result);
     }
-    /**
-     * ---------------------------------------------------品牌---------------------------------------------------*
-     */
-    /**
-     * 品牌详情
-     */
-    public function brand(){
-    	/* 接收参数 */
-    	$brand_id 				= IFilter::act(IReq::get('id'),'int');
-    	
-    	/* 获取数据 */
-    	$query 					= new IQuery('brand');
-    	$query->where 			= 'id='.$brand_id;
-    	$query->fields 			= 'id,name,logo,description,';
-    }
     
     /**
      * ---------------------------------------------------分类---------------------------------------------------*
@@ -1081,6 +1066,62 @@ class Apic extends IController
                 $data[$key]['logo'] = IWeb::$app->config['image_host'] . '/' . $value['logo'];
             }
         }
+        $this->json_echo($data);
+    }
+    
+    /**
+     * 品牌详情
+     */
+    public function brand(){
+    	/* 接收参数 */
+    	$brand_id 					= IFilter::act(IReq::get('id'),'int');
+    	$page 						= IFilter::act(IReq::get('page'),'int');
+    	 
+    	/* 品牌详情 */
+    	$queryBrand 				= new IQuery('brand');
+    	$queryBrand->where 			= 'id='.$brand_id;
+    	$queryBrand->fields 		= 'id,name,logo,description';
+    	$queryBrand->limit 			= 1;
+    	$data 						= $queryBrand->find();
+    	if(empty($data)) $this->json_echo(array('error'=>'品牌不存在'));
+    	$data 						= $data[0];
+    	$data['logo'] 				= empty($data['logo']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$data['logo'].'/w/160/h/102');
+    	
+    	/* 相关商品 */
+    	$queryGoods 				= new IQuery('goods');
+    	$queryGoods->where 			= 'is_del=0 AND brand_id='.$brand_id;
+    	$queryGoods->fields 		= 'id,name,img,content,sell_price,jp_price';
+    	$queryGoods->page 			= $page<1 ? 1 : $page;
+    	$queryGoods->pagesize 		= 10;
+    	$queryGoods->order 			= 'sort asc';
+    	$dataGoods 					= $queryGoods->find();
+    	$total_page 				= $queryGoods->getTotalPage();
+    	if ($page > $total_page) $dataGoods = array();
+    	if(!empty($dataGoods)){
+    		foreach($dataGoods as $k => $v){
+    			$dataGoods[$k]['img'] 			= empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$v['img'].'/w/220/h/220');
+    			$dataGoods[$k]['description'] 	= empty($v['content']) ? '' :  mb_substr( trim(strip_tags( str_ireplace('&nbsp;','',htmlspecialchars_decode($v['content']) ) )), 0, 30,'utf-8');
+    			unset($dataGoods[$k]['content']);
+    		}
+    	}
+    	
+    	/* 相关专辑 */
+    	$queryArticle 				= new IQuery('article AS m');
+    	$queryArticle->join 		= 'LEFT JOIN relation AS r ON r.article_id=m.id LEFT JOIN goods AS g ON g.id=r.goods_id';
+    	$queryArticle->where 		= 'g.is_del=0 AND m.visibility=1 AND g.brand_id='.$brand_id;
+    	$queryArticle->fields 		= 'm.id,m.title,m.visit_num,m.image';
+    	$queryArticle->limit 	 	= 5;
+    	$queryArticle->order 		= 'm.top desc,m.sort desc';
+    	$dataArticle 				= $queryArticle->find();
+    	if(!empty($dataArticle)){
+    		foreach($dataArticle as $k => $v){
+    			$dataArticle[$k]['image'] 	= empty($v['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$v['image'].'/w/750/h/380');;
+    		}
+    	}
+    	
+    	/* 返回参数 */
+    	$data['goods_list'] 				= $dataGoods;
+    	$data['article_list'] 				= $dataArticle;
         $this->json_echo($data);
     }
     /**
