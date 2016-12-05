@@ -98,9 +98,8 @@ var vm = new Vue({
             return false;
         },
         collection:function(item){
-            this.changeState=false;
             var self=this;
-            collection(item,self)
+            if(this.changeState){this.changeState=false;collection(item,self);} ;
         }
     }
 })
