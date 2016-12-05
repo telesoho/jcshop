@@ -1084,6 +1084,11 @@ class Site extends IController
         $this->identify_id = IFilter::act(IReq::get('iid'));
         $shop_name 	= IFilter::act(IReq::get('shop_name'),'string');
         $recommender = IFilter::act(IReq::get('recommender'),'string');
+        $recommender_id = $this->is_exists_recommender($recommender)['id'];
+        if (!$recommender_id){
+            $this->redirect('contract');
+            return;
+        }
         $agree = IFilter::act(IReq::get('agree'));
         if ($identify_id && $agree === 'true'){
             $shop_data = $this->get_shop_data_by_identify_id($identify_id);
@@ -1094,7 +1099,7 @@ class Site extends IController
 
             } else {
                 $shop_model = new IModel('shop');
-                $shop_model->setData(['own_id'=>$this->user['user_id'],'name'=>$shop_name,'recommender'=>$recommender]);
+                $shop_model->setData(['own_id'=>$this->user['user_id'],'name'=>$shop_name,'recommender'=>$recommender_id]);
                 $ret = $shop_model->update('identify_id='.$identify_id);
                 if ($ret){
                     $user_model = new IModel('user');
@@ -1106,17 +1111,27 @@ class Site extends IController
         }
         $this->redirect('contract');
     }
-
+    function is_exists_recommender($recommender_name){
+        $user_query = new IQuery('user');
+        $user_query->where = 'sfz_name = "' . $recommender_name . '" and is_recommender = 1';
+        $ret = $user_query->find();
+        if (!empty($ret[0])){
+            return $ret[0];
+        } else {
+            return false;
+        }
+    }
     function recommender_login(){
         $name = IFilter::act(IReq::get('name'),'string');
         $password = IFilter::act(IReq::get('password'),'string');
         if ($name){
-            $recommender_query = new IQuery('recommender');
-            $recommender_query->where = 'name = "' . $name . '" and password = "' . $password . '"';
-            $ret = $recommender_query->find();
-            if (isset($ret[0])){
-                ISession::set('recommender', $name);
-                $this->redirect('recommender_shop');
+            $ret = $this->is_exists_recommender($name);
+            if($ret){
+                $recommender_pass = $ret['recommender_pass'];
+                if (password_verify($password, $recommender_pass)){
+                    ISession::set('recommender', $ret['id']);
+                    $this->redirect('recommender_shop');
+                }
             }
         }
         $this->redirect('recommender_login');
@@ -1218,7 +1233,12 @@ class Site extends IController
         $order_query->where = $where;
         $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
         $amount_tobe_booked = $order_query->find()[0]['amount_tobe_booked'];
+        $shop_category = new IQuery('shop_category');
+        $shop_category->where = 'id = ' . $shop_data['category_id'];
+
         $amount_tobe_booked = empty($amount_tobe_booked) ? '0.00' : $amount_tobe_booked;
+        $shop_category_data = $shop_category->find();
+        $amount_tobe_booked = $amount_tobe_booked * $shop_category_data[0]['rebate'];
         return $amount_tobe_booked;
     }
 }

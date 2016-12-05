@@ -122,26 +122,34 @@
                     </a>
                 </li>
             </ul>
-        <ul class="mui-table-view">
-            {if:$this->user_shop_data}
-            <li class="mui-table-view-cell">
-                <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_user/id/$this->user_shop_data[0]['identify_id']}">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
-                    我的店铺
-                </a>
-            </li>
-            {/if}
-        </ul>
-        <ul class="mui-table-view">
-            {if:$this->user_shop_data}
+        {if:$this->user_shop_data}
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_user/id/$this->user_shop_data[0]['identify_id']}">
+                        <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
+                        我的店铺
+                    </a>
+                </li>
+            </ul>
+            <ul class="mui-table-view">
+                    <li class="mui-table-view-cell">
+                        <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_income}">
+                            <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
+                            收益
+                        </a>
+                    </li>
+            </ul>
+        {/if}
+        {if:$this->user_shop_data[0]['is_recommender']}
+            <ul class="mui-table-view">
                 <li class="mui-table-view-cell">
                     <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_income}">
                         <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
-                        收益
+                        合伙人
                     </a>
                 </li>
-            {/if}
-        </ul>
+            </ul>
+        {/if}
         <ul class="mui-table-view" style="margin-top: 0.12rem">
             <li class="mui-table-view-cell">
                 <a class="mui-navigate-right locationA" href="{url:/simple/credit}">

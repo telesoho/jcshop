@@ -1473,7 +1473,10 @@ class Simple extends IController
         $fileExt = $extmatches[1];
         $fileExt = 'jpg';
         $filename = time().rand(100,999).".{$fileExt}";
+        var_dump(file_exists($dirname));
+        var_dump(file_exists(__DIR__ . '/../../' . $dirname));
         if(!file_exists($dirname)){
+            echo $dirname;
             mkdir($dirname,0777,true);
         }
         file_put_contents($dirname.$filename,$media['mediaBody']);
