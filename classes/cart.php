@@ -240,13 +240,17 @@ class Cart extends IInterceptorBase
 					}
 					$cartResult = $cartDBData;
 				}
+				/* 购物车商品状态确认 */
+				$cartResult['goods'] 		= $this->goodsRefresh($cartResult['goods']);
 				$cartDB->setData(array('content' => $this->encode($cartResult),'user_id' => $user_id,'create_time' => ITime::getDateTime()));
 				$cartDB->update("user_id = ".$user_id);
 			}
 			//db没有购物车,并且有临时temp购物车
 			else if($cartResult)
 			{
-				$cartDB->setData(array('content' => $tempData,'user_id' => $user_id,'create_time' => ITime::getDateTime()));
+				/* 购物车商品状态确认 */
+				$cartResult['goods'] 		= $this->goodsRefresh($cartResult['goods']);
+				$cartDB->setData(array('content' => $this->encode($cartResult),'user_id' => $user_id,'create_time' => ITime::getDateTime()));
 				$cartDB->add();
 			}
 
@@ -254,6 +258,32 @@ class Cart extends IInterceptorBase
 			$this->saveType == 'session' ? ISession::clear($cartName) : ICookie::clear($cartName);
 		}
 		return $cartResult ? $cartResult : $this->cartStruct;
+	}
+	/**
+	 * 购物车商品状态确认
+	 * @param array $goods 商品列表，array('商品id'=>'数量');
+	 * @return array
+	 * @author 夏爽
+	 */
+	public function goodsRefresh($goods){
+		/* 商品已下架时删除 */
+		$model 				= new IModel('goods');
+		foreach($goods as $k => $v){
+			$info 			= $model->getObj('id='.$k);
+			//非正常上架状态
+			if($info['is_del']!=0 ){
+				unset($goods[$k]);continue;
+			}
+			//库存不足
+			if($info['store_nums']<=0){
+				unset($goods[$k]);continue;
+			}
+			//少于当前库存
+			if($info['store_nums']<$v){
+				$goods[$k] 	= $info['store_nums'];
+			}
+		}
+		return $goods;
 	}
 
 	/**

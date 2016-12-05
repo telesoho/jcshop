@@ -329,24 +329,12 @@ iframe{
 .mui-tab-item.mui-active .grow{
   color:#ff4aa0;
 }
-/*.mui-tab-item.mui-active .icon-home{*/
-  /*background:url('../image/jmj/icon/home-ed.png') no-repeat 100%;*/
-  /*background-size:100% 100%;*/
-/*}*/
-/*.mui-tab-item.mui-active .icon-classification{*/
-  /*background:url('../image/jmj/icon/mune-ed.png') no-repeat 100%;*/
-  /*background-size:100% 100%;*/
-/*}*/
-/*.mui-tab-item.mui-active .icon-shopcar{*/
-  /*background:url('../image/jmj/icon/buy-ed.png') no-repeat 100%;*/
-  /*background-size:100% 100%;*/
-/*}*/
-/*.mui-tab-item.mui-active .icon-my{*/
-  /*background:url('../image/jmj/icon/my-ed.png') no-repeat 100%;*/
-  /*background-size:100% 100%;*/
-/*}*/
+
 .mui-tab-item.mui-active{
   color:#ff4aa0 !important;
+}
+.tabBar_color{
+  color:#929292;
 }
 .mui-control-content {
   display: block;

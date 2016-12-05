@@ -16,9 +16,10 @@ window.onload=function(){
     hotSearth();
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){
-        var srcimg= $(this).find('img').attr("data-img");
-        $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
-        document.location.href=this.href;
+        if(!$(this).hasClass("mui-active")){
+            $(this).find(".mui-tab-label").addClass("tabBar_color");
+            document.location.href=this.href;
+        }
     });
     mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
 //		mui('body').on('tap','a',function(){
