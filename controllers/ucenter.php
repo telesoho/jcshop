@@ -4,6 +4,8 @@
  * @class Ucenter
  * @note  前台
  */
+require_once __DIR__ . '/../plugins/vendor/autoload.php';
+use  Endroid\QrCode\QrCode;
 class Ucenter extends IController implements userAuthorization
 {
 	public $layout = 'ucenter';
@@ -36,8 +38,41 @@ class Ucenter extends IController implements userAuthorization
 			"propData"   => $propData,
 		));
 
+        $user_query = new IQuery('user as a');
+        $user_query->join = 'right join shop as b on a.id = b.own_id';
+        $user_query->where = 'a.id = ' . $this->user['user_id'];
+        $this->user_shop_data = $user_query->find();
+
         $this->initPayment();
         $this->redirect('index');
+    }
+    /*获取待ru'zhang*/
+    private function get_amount_tobe_booked(){
+        $shop_query = new IQuery('shop');
+        $user_query = new IQuery('user');
+        $shop_query->where = 'own_id = ' . $this->user['user_id'];
+        $shop_data = $shop_query->find()[0];
+        $temp = '( user_id = ' . $this->user['user_id'];
+        if ($shop_data){
+            $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+        }
+        $temp .= ')';
+        $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
+        $order_query = new IQuery('order');
+        $order_query->where = $where;
+        $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
+        $this->amount_tobe_booked = $order_query->find()[0]['amount_tobe_booked'];
+        $this->amount_tobe_booked = empty($this->amount_tobe_booked) ? '0.00' : $this->amount_tobe_booked;
+
+        $shop_category = new IQuery('shop_category');
+        $shop_category->where = 'id = ' . $shop_data['category_id'];
+        $shop_category_data = $shop_category->find();
+        $this->amount_tobe_booked = $this->amount_tobe_booked * $shop_category_data[0]['rebate'];
+        return;
     }
 
 	//[用户头像]上传
@@ -96,6 +131,12 @@ class Ucenter extends IController implements userAuthorization
     	
         $this->initPayment();
         $this->redirect('order');
+
+    }
+    public function order_u()
+    {
+//        $this->initPayment();
+        $this->redirect('order_u');
 
     }
     /**
@@ -937,5 +978,148 @@ class Ucenter extends IController implements userAuthorization
 		$propIds     = $propIds ? $propIds : 0;
 		$this->setRenderData(array('propId' => $propIds));
 		$this->redirect('redpacket');
+    }
+
+    //申请开店
+    function shop_register(){
+        $license = IFilter::act(IReq::get('license'),'string');
+        $name = IFilter::act(IReq::get('name'),'string');
+        $address = IFilter::act(IReq::get('address'),'string');
+        $shop_model = new IModel('shop');
+        if ($shop_model->getObj('own_id = '.$this->user['user_id'])){$this->redirect('shop_index');}
+        if ($license){
+            $license_query = new IQuery('license');
+            $license_query->where = ' license = "' . $license . '" and status = 0';
+            $license_data = $license_query->find()[0];
+            if ($license_data){
+                if (!$shop_model->getObj('own_id = '.$this->user['user_id'])){
+                    $identify = rand(000, 999) . date('His',time());
+                    $shop_model->setData(['name'=>$name,'address'=>$address,'own_id'=>$this->user['user_id'],'register_license'=>$license,'register_time'=>date('Y-m-d H:i:s', time()),'identify_id'=>$identify]);
+                    $ret = $shop_model->add();
+                    if ($ret){
+                        $license_model = new IModel('license');
+                        $license_model->setData(['status'=>1]);
+                        $license_model->update('license = "' . $license . '"');
+                    }
+                }
+            } else {
+                IError::show('');
+            }
+        }
+        $this->redirect('shop_register');
+    }
+    function shop_index(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'own_id = ' . $this->user['user_id'];
+        $shop_data = $shop_query->find()[0];
+        $shop_data['identify_qrcode'] = IWeb::$app->config['image_host1'] . '/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
+//        $shop_data['identify_qrcode'] = 'http://192.168.0.13:8080/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
+        $this->shop_data = $shop_data;
+//        var_dump($this->shop_data);
+        $this->redirect('shop_index');
+    }
+    function qrcode(){
+        $identify_id = IFilter::act(IReq::get('identify_id'),'int');
+        $qrCode = new QrCode();
+        $qrCode
+//            ->setText('http://192.168.0.13:8080/?iid=' . $identify_id)
+            ->setText(IWeb::$app->config['image_host1'] . '?iid=' . $identify_id)
+            ->setSize(150)
+            ->setPadding(10)
+            ->setErrorCorrection('high')
+            ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+            ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+            ->setLabel('')
+            ->setLabelFontSize(16)
+            ->setImageType(QrCode::IMAGE_TYPE_PNG);
+        header('Content-Type: '.$qrCode->getContentType());
+        $qrCode->render();
+    }
+    function account_amount(){
+
+    }
+    //收益
+    function shop_income(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'own_id = ' . $this->user['user_id'];
+        $user_shop_data = $shop_query->find()[0];
+        $this->user_shop_data = $user_shop_data;
+
+        $memberObj = new IModel('member','balance');
+        $where     = 'user_id = '.$this->user['user_id'];
+        $this->memberRow = $memberObj->getObj($where);
+
+        if ($this->user_shop_data){
+
+            //待入账金额
+            $this->get_amount_tobe_booked();
+            //账户余额
+            $shop_query = new IQuery('shop');
+            $shop_query->where = 'own_id = ' . $this->user['user_id'];
+            $this->amount_available = $shop_query->find()[0]['amount_available'];
+        }
+        $this->redirect('shop_income');
+    }
+    //账户余额
+    function shop_balance(){
+        $this->redirect('shop_balance');
+    }
+    //待入账金额
+    function shop_amount_tobe_booked(){
+        $shop_query = new IQuery('shop');
+        $user_query = new IQuery('user');
+        $shop_query->where = 'own_id = ' . $this->user['user_id'];
+        $shop_data = $shop_query->find()[0];
+        $temp = '';
+        if ($shop_data){
+            $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+            if (!empty($temp)) $temp = explode('or',$temp,2)[1];
+        }
+        if (!empty($temp)){
+            $temp = '(' . $temp . ')';
+            $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
+            $this->last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
+            $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
+            $this->complete_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval)->find(); // 已完成
+            $date_interval = ' and DATE_FORMAT( create_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
+            $this->distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
+        }
+//        var_dump($this->distribute_order_ret);
+        $this->redirect('shop_amount_tobe_booked');
+    }
+    //累计收益
+    function shop_accumulated_income(){
+        $this->redirect('shop_accumulated_income');
+    }
+    //编辑店铺信息
+    function shop_edit(){
+        $name = IFilter::act(IReq::get('name'),'string');
+        $description = IFilter::act(IReq::get('description'),'string');
+        $address = IFilter::act(IReq::get('address'),'string');
+        $phone = IFilter::act(IReq::get('phone'),'string');
+        $identify_id = IFilter::act(IReq::get('id'),'int');
+        if ($name){
+            $shop_model = new IModel('shop');
+            $shop_model->setData(['name' => $name, 'description' => $description, 'address' => $address, 'phone'=>$phone]);
+            $ret = $shop_model->update('identify_id = ' . $identify_id.' and own_id = ' .$this->user['user_id']);
+            if ($ret) $this->redirect('shop_user/id/' . $identify_id);
+        }
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'identify_id = ' . $identify_id . ' and own_id = ' .$this->user['user_id'];
+        $this->shop_data = $shop_query->find();
+        $this->redirect('shop_edit');
+    }
+    //用户店铺信息
+    function shop_user(){
+        $identify_id = IFilter::act(IReq::get('id'),'int');
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'identify_id = ' . $identify_id . ' and own_id = ' .$this->user['user_id'];
+        $this->shop_data = $shop_query->find();
+        $this->identify_id = $identify_id;
+        $this->redirect('shop_user');
     }
 }

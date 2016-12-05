@@ -19,9 +19,9 @@ class wechat extends pluginBase
 
 	//配置数组
 	public $config = array(
-		'wechat_Token'     => 'jiumaojia',
-		'wechat_AppID'     => 'wxf84e1ada0f3eab92',
-		'wechat_AppSecret' => 'e34b8fbde2c0f1aa8ab2aa081ff34b18',
+		'wechat_Token'     => 'jiumaojia20161128',
+		'wechat_AppID'     => 'wxa7f3181333f2c848',
+		'wechat_AppSecret' => '768aa611de78e265028ce26f907da846',
 		'wechat_AutoLogin' => '',
 		'wechat_jsApiSDK'  => '',
 	);

@@ -4,6 +4,8 @@
  * @class Order
  * @note  后台
  */
+require_once __DIR__ . '/../plugins/vendor/autoload.php';
+use  Endroid\QrCode\QrCode;
 class Order extends IController implements adminAuthorization
 {
 	public $checkRight  = 'all';
@@ -1564,4 +1566,231 @@ class Order extends IController implements adminAuthorization
 		$reportObj->toDownload($strTable);
 		exit();
 	}
+	function order_settlement(){
+        $order_id = IFilter::act(IReq::get('id'),'int');
+        $order_model = new IModel('order');
+        $real_amount = $order_model->getObj('id = ' . $order_id)['real_amount'];
+        $user_id = $order_model->getObj('id = ' . $order_id)['user_id'];
+        $order_model->setData(['is_shop_checkout'=>1]);
+        $ret = $order_model->update('id = ' . $order_id);
+        if ($ret) {
+            $user_shop_query = new IQuery('user as a');
+            $user_shop_query->join = 'right join shop as b on a.shop_identify_id = b.identify_id';
+            $user_shop_query->fields = 'identify_id,amount_available';
+            $user_shop_query->where = 'a.id = ' . $user_id;
+            if ($user_shop_query->find()){
+                $user_shop_data = $user_shop_query->find()[0];
+                $identify_id = $user_shop_data['identify_id'];
+                $amount_available = $user_shop_data['amount_available'];
+                $shop_model = new IModel('shop');
+                $shop_model->setData(['amount_available'=>$amount_available+$real_amount]);
+                $shop_model->update('identify_id = ' . $identify_id);
+            }
+        }
+        $this->redirect('order_list');
+    }
+    function order_shop(){
+//        $this->shop_query = new IQuery('shop');
+        $this->shop_query = new IQuery('shop as a');
+        $this->shop_query->join = 'left join  shop_category as b on a.category_id = b.id';
+        $this->shop_query->fields = 'a.*,b.name as category_name, b.rebate';
+
+        $page = IFilter::act(IReq::get('page'),'int');
+        $this->shop_query->page = !empty($page) ? $page : 1;
+//        $shop_query->find();
+        $this->redirect('order_shop');
+    }
+    function order_shop_settlement(){
+        $id = IFilter::act(IReq::get('id'),'int');
+        $model = new IQuery('model');
+        $user_data = $model->query('select * from iwebshop_user where id in (select b.id as user_id from iwebshop_shop as a left join iwebshop_user as b on b.shop_identify_id = a.identify_id where a.id = '.$id.' )');
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'id = ' . $id;
+        //利率
+        $shop_query_rebate = new IQuery('shop as a');
+        $shop_query_rebate->join = 'left join shop_category as b on a.category_id=b.id';
+        $shop_query_rebate->where = 'a.id = ' . $id;
+        $this->rebate = $shop_query_rebate->find()[0]['rebate'];
+        if ($shop_query->find()){
+            $this->shop_data = $shop_query->find()[0];
+            $temp = '';
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+            $temp = explode('or',$temp,2)[1];
+            $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
+            $ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval); // 已完成
+            $this->order_data = $ret->find();
+        } else {
+            $this->shop_data = null;
+            $this->order_data = null;
+        }
+
+        $url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers';
+        $nonce_str = $this->generate_password(30);
+        $params = array(
+            'appid' => 'jmj20161111',
+            'mchid' => '1406917802',
+            'device_info' => '',
+            'nonce_str' => $nonce_str,
+            'sign' => '',
+            'partner_trade_no' => '321654987',
+            'openid' => '',
+            'check_name' => '',
+            're_user_name' => '',
+            'amount' => '',
+            'desc' => '',
+            'spbill_create_ip' => '',
+        );
+//        sort($params);
+        ksort($params,SORT_STRING);
+//        $data = $this->curl_post_ssl('https://api.mch.weixin.qq.com/secapi/pay/refund', 'merchantid=1001000');
+        $data = $this->curl_post_ssl('https://api.mch.weixin.qq.com/secapi/pay/refund', $params);
+        var_dump($data);
+        $this->redirect('order_shop_settlement');
+    }
+    function order_shop_category(){
+        $shop_category_query = new IQuery('shop_category');
+        $shop_category_query->page = !empty($page) ? $page : 1;
+        $this->shop_category_data = $shop_category_query->find();
+        $page = IFilter::act(IReq::get('page'),'int');
+        $this->shop_category_pagebar = $shop_category_query->getPageBar();
+        $this->redirect('order_shop_category');
+    }
+    function order_add_shop(){
+        $nums = IFilter::act(IReq::get('nums'),'int');
+        $shop_model = new IModel('shop');
+        $this->shop_category_query = new IQuery('shop_category');
+        $count = $shop_model->get_count('');
+        if (!empty($nums)){
+            $shop_model = new IModel('shop');
+            $name = IFilter::act(IReq::get('name'),'string');
+            $address = IFilter::act(IReq::get('address'),'string');
+            $category_id = IFilter::act(IReq::get('category_id'),'string');
+//            var_dump($category_id);exit();
+            for ($i=1;$i<=$nums;$i++){
+                $shop_model->setData(['name'=>$name . ($count + $i),'register_time'=>date('Y-m-d H:i:s') ,'address'=>$address,'identify_id'=>$i . rand(1000, 9999) . date('is',time()),'category_id'=>$category_id]);
+                $ret = $shop_model->add();
+                if ($ret){
+                    continue;
+                } else {
+                    return;
+                }
+            }
+            $this->redirect('order_shop');
+        }
+        $this->redirect('order_add_shop');
+    }
+    function order_add_shop_category(){
+        $id = IFilter::act(IReq::get('id'),'string');
+        if ($id){
+            $shop_category_query = new IQuery('shop_category');
+            $shop_category_query->where = 'id = ' . $id;
+            $shop_category_data = $shop_category_query->find();
+            $this->shop_category_name = isset($shop_category_data[0]['name']) ? $shop_category_data[0]['name'] : null;
+            $this->shop_category_id = isset($shop_category_data[0]['id']) ? $shop_category_data[0]['id'] : null;
+        }
+
+        $name = IFilter::act(IReq::get('name'),'string');
+        $rebate = IFilter::act(IReq::get('rebate'),'string');
+        $shop_category_model = new IModel('shop_category');
+        $shop_category_model->setData(['name'=>$name,'rebate'=>$rebate]);
+        if (!empty($name) && !empty($rebate)){
+            $category_id = IFilter::act(IReq::get('category_id'),'int');
+            if (!empty($category_id)){
+                $ret = $shop_category_model->update('id = ' . $category_id);
+            } else {
+                $ret = $shop_category_model->add();
+            }
+            if ($ret){
+                $this->redirect('order_shop_category');
+            }
+        };
+        $this->redirect('order_add_shop_category');
+    }
+    function order_shop_info(){
+        $shop_query = new IQuery('shop');
+        $id = IFilter::act(IReq::get('id'),'int');
+        $shop_query->where = 'id = ' . $id;
+        $this->shop_data = $shop_query->find();
+        $this->redirect('order_shop_info');
+    }
+    function generate_password( $length = 8 ) {
+        // 密码字符集，可任意添加你需要的字符
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $password = '';
+        for ( $i = 0; $i < $length; $i++ )
+        {
+            // 这里提供两种字符获取方式
+            //// 第一种是使用 substr 截取$chars中的任意一位字符；
+            //// 第二种是取字符数组 $chars 的任意元素
+            //// $password .= substr($chars, mt_rand(0, strlen($chars) – 1), 1);
+            $password .= $chars[ mt_rand(0, strlen($chars) - 1) ];
+        }
+        return $password;
+    }
+    /*
+    请确保您的libcurl版本是否支持双向认证，版本高于7.20.1
+    */
+    function curl_post_ssl($url, $vars, $second=30,$aHeader=array())
+    {
+        $ch = curl_init();
+        //超时时间
+        curl_setopt($ch,CURLOPT_TIMEOUT,$second);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+        //这里设置代理，如果有的话
+        //curl_setopt($ch,CURLOPT_PROXY, '10.206.30.98');
+        //curl_setopt($ch,CURLOPT_PROXYPORT, 8080);
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
+
+        //以下两种方式需选择一种
+
+        //第一种方法，cert 与 key 分别属于两个.pem文件
+        //默认格式为PEM，可以注释
+        //curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
+        //curl_setopt($ch,CURLOPT_SSLCERT,getcwd().'/cert.pem');
+        //默认格式为PEM，可以注释
+        //curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
+        //curl_setopt($ch,CURLOPT_SSLKEY,getcwd().'/private.pem');
+
+        //第二种方式，两个文件合成一个.pem文件
+        curl_setopt($ch,CURLOPT_SSLCERT,getcwd().'/all.pem');
+
+        if( count($aHeader) >= 1 ){
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $aHeader);
+        }
+
+        curl_setopt($ch,CURLOPT_POST, 1);
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$vars);
+        $data = curl_exec($ch);
+        if($data){
+            curl_close($ch);
+            return $data;
+        }
+        else {
+            $error = curl_errno($ch);
+            echo "call faild, errorCode:$error\n";
+            curl_close($ch);
+            return false;
+        }
+    }
+    function qrcode(){
+        $identify_id = IFilter::act(IReq::get('identify_id'),'int');
+        $qrCode = new QrCode();
+        $qrCode
+//            ->setText('http://192.168.0.13:8080/?iid=' . $identify_id)
+            ->setText(IWeb::$app->config['image_host1'] . '?iid=' . $identify_id)
+            ->setSize(150)
+            ->setPadding(10)
+            ->setErrorCorrection('high')
+            ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+            ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+            ->setLabel('')
+            ->setLabelFontSize(16)
+            ->setImageType(QrCode::IMAGE_TYPE_PNG);
+        header('Content-Type: '.$qrCode->getContentType());
+        $qrCode->render();
+    }
 }

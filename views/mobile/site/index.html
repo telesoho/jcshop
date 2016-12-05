@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
-    <title>九猫大百货</title>
+    <title><?php echo !empty(ISession::get('shop_name')) ? ISession::get('shop_name') : '九猫家商城'?></title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
@@ -165,7 +165,7 @@
                             <div class="img"><img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
                             <div class="name hidewrap">{{itemList.name}}</div>
                             <div class="sellprice" style="font-size:0.26rem;">
-                                <span style="font-size:0.2rem;color:#ff4aa0">￥</span> {{itemList.sell_price}} </div>
+                                <span style="font-size:0.2rem;color:#ff4aa0;margin-right:-0.08rem;">￥</span> {{itemList.sell_price}} </div>
                         </a>
                     </div>
                     <div class="singleline"></div>

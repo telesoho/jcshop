@@ -117,9 +117,11 @@ class APIUcenter
 		$page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
 		$query = new IQuery('order');
         if (!empty($where)){
-            $query->where = "user_id =".$userid." and if_del= 0 and " . $where;
+            $query->where = $userid." and if_del= 0 and " . $where;
+//            $query->where = "user_id =".$userid." and if_del= 0 and " . $where;
         } else {
-            $query->where = "user_id =".$userid." and if_del= 0";
+            $query->where = $userid." and if_del= 0";
+//            $query->where = "user_id =".$userid." and if_del= 0";
         }
 
 		$query->order = "create_time desc";

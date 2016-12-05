@@ -12,18 +12,20 @@
     array (
       0 => 
       array (
-        'host' => '192.168.0.172:32771',
+        'host' => '112.74.30.84:32774',
+//        'host' => '192.168.0.172:32771',
         'user' => 'root',
-        'passwd' => '123456',
-        'name' => 'jmj',
+        'passwd' => 'jmj123456',
+        'name' => 'jmj_b2b',
       ),
     ),
     'write' => 
     array (
-      'host' => '192.168.0.172:32771',
+      'host' => '112.74.30.84:32774',
+//      'host' => '192.168.0.172:32771',
       'user' => 'root',
-      'passwd' => '123456',
-      'name' => 'jmj',
+      'passwd' => 'jmj123456',
+      'name' => 'jmj_b2b',
     ),
   ),
   'interceptor' => 
@@ -66,5 +68,7 @@
   ),
   'encryptKey' => '693db335771319c04d195cca4f907fa9',
   'authorizeCode' => '201610093145',
-  'image_host' => 'http://m.jiumaojia.com',
+  'image_host' => 'http://192.168.0.9:8080',
+  'image_host1' => 'http://192.168.0.9:8080',
+//  'image_host1' => 'http://dev.jiumaojia.com',
 )?>

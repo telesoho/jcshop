@@ -19,22 +19,81 @@ class Site extends IController
 
 	function init()
 	{
-		//必须微信客户端
-		$isWechat 				= IClient::isWechat();
-// 		if($isWechat == false) exit('请使用微信访问我们的页面：）');
-		
-        $action = IFilter::act(IReq::get('action'),'string');
-        if ($action!='article_detail' || $action='index'){ISession::clear('visit_num');}
+
 	}
 
 	function index()
 	{
+        if ($this->user['user_id']){
+            $identify_id = IFilter::act(IReq::get('iid'),'int');
+            if (empty($identify_id)){ISession::clear('shop_name');ISession::clear('shop_identify_id');}
+	        $user_own_shop_data = $this->get_user_own_shop_data();
+            if (!empty($user_own_shop_data)){
+                ISession::set('shop_name',$user_own_shop_data['name']);
+                ISession::set('shop_identify_id',$user_own_shop_data['identify_id']);
+            } else {
+                $user_rel_shop_data = $this->get_user_rel_shop_data();
+                if ($user_rel_shop_data){
+                    ISession::set('shop_name',$user_rel_shop_data['name']);
+                    ISession::set('shop_identify_id',$user_rel_shop_data['identify_id']);
+                } else {
+                    //关联店铺
+//                    ISession::set('if_associate',$identify_id);
+                    if(!empty($identify_id)){
+                        $if_shop_register = $this->if_shop_register($identify_id);
+                        if ($if_shop_register){
+                            $shop_data = $this->get_shop_data_by_identify_id($identify_id);
+                            ISession::set('shop_name',$shop_data['name']);
+                            ISession::set('shop_identify_id',$shop_data['identify_id']);
+                        } else {
+                            $this->redirect('contract?iid='.$identify_id);
+                        }
+                    } else {
+                        ISession::set('shop_identify_id','999999999');
+                    }
+                }
+            }
+        }
+        //用户登陆
+
+
         if (empty($_SERVER['REDIRECT_PATH_INFO'])){
             ISession::set('is_first',true);
         }
 //		$this->index_slide = Api::run('getBannerList');
 		$this->redirect('index');
 	}
+
+	private function get_user_own_shop_data(){
+        $user_query = new IQuery('user as a');
+        $user_query->join = 'right join shop as b on a.id = b.own_id';
+        $user_query->where = 'a.id = ' . $this->user['user_id'];
+        $user_shop_data = !empty($user_query->find()) ? $user_query->find()[0] : null;
+        return $user_shop_data;
+    }
+    private function get_user_rel_shop_data(){
+        $user_query = new IQuery('user as a');
+        $user_query->join = 'inner join shop as b on a.shop_identify_id = b.identify_id';
+        $user_query->where = 'a.id = ' . $this->user['user_id'];
+        $user_rel_shop_data = !empty($user_query->find()) ? $user_query->find()[0] : null;
+        return $user_rel_shop_data;
+    }
+    private function if_shop_register($identify_id){
+        $shop_query = new IQuery('shop as a');
+        $shop_query->join = 'inner join user as b on a.own_id = b.id';
+        $shop_query->where = 'identify_id = ' . $identify_id;
+        if (!empty($shop_query->find())){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    private function get_shop_data_by_identify_id($identify_id){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'identify_id = ' . $identify_id;
+        $shop_data = !empty($shop_query->find()) ? $shop_query->find()[0] : null;
+        return $shop_data;
+    }
 
 	//[首页]商品搜索
 	function search_list()
@@ -428,7 +487,7 @@ class Site extends IController
 	//商品展示
 	function products()
 	{
-		$_SESSION["__forward__"] 	= $_SERVER["REQUEST_URI"]; //记录回跳链接
+//		$_SESSION["__forward__"] 	= $_SERVER["REQUEST_URI"]; //记录回跳链接
 		
 		$goods_id = IFilter::act(IReq::get('id'),'int');
 
@@ -564,7 +623,7 @@ class Site extends IController
 			$visit = $visit === null ? $checkStr : $visit.$checkStr;
 			ISafe::set('visit',$visit);
 		}
-		
+
 		$this->setRenderData($goods_info);
 		$this->redirect('products');
 	}
@@ -988,6 +1047,178 @@ class Site extends IController
     	}
     	exit( '' );
     }
-    
-    
+
+    function associate_user_shop(){
+        if ($identify_id = ISession::get('if_associate')){
+            if ($identify_id){
+                $shop_data = $this->get_shop_data_by_identify_id($identify_id);
+                ISession::set('shop_name',$shop_data['name']);
+                ISession::set('shop_identify_id',$shop_data['identify_id']);
+                $if_shop_register = $this->if_shop_register($identify_id);
+                if ($if_shop_register){
+
+                } else {
+                    $shop_model = new IModel('shop');
+                    $shop_model->setData(['own_id'=>$this->user['user_id']]);
+                    $ret = $shop_model->update('identify_id='.$identify_id);
+                    if ($ret){
+                        $user_model = new IModel('user');
+                        $user_model->setData(['shop_identify_id' => $identify_id, 'shop_relation_time' => date('Y-m-d H:i:s')]);
+                        $user_model->update('id = ' . $this->user['user_id']);
+                    }
+                }
+            }
+        }
+        ISession::set('if_associate',null);
+    }
+    function near_shops(){
+        if(IClient::isWechat() == true){
+            require_once __DIR__ . '/../plugins/wechat/wechat.php';
+            $this->wechat = new wechat();
+        }
+        $this->redirect('near_shops');
+    }
+    //协议信息内容和填写合伙人信息
+    function contract(){
+        $identify_id = IFilter::act(IReq::get('identify_id'),'string');
+        $this->identify_id = IFilter::act(IReq::get('iid'));
+        $shop_name 	= IFilter::act(IReq::get('shop_name'),'string');
+        $recommender = IFilter::act(IReq::get('recommender'),'string');
+        $agree = IFilter::act(IReq::get('agree'));
+        if ($identify_id && $agree === 'true'){
+            $shop_data = $this->get_shop_data_by_identify_id($identify_id);
+            ISession::set('shop_name',$shop_data['name']);
+            ISession::set('shop_identify_id',$shop_data['identify_id']);
+            $if_shop_register = $this->if_shop_register($identify_id);
+            if ($if_shop_register){
+
+            } else {
+                $shop_model = new IModel('shop');
+                $shop_model->setData(['own_id'=>$this->user['user_id'],'name'=>$shop_name,'recommender'=>$recommender]);
+                $ret = $shop_model->update('identify_id='.$identify_id);
+                if ($ret){
+                    $user_model = new IModel('user');
+                    $user_model->setData(['shop_identify_id' => $identify_id, 'shop_relation_time' => date('Y-m-d H:i:s')]);
+                    $ret = $user_model->update('id = ' . $this->user['user_id']);
+                    if($ret) $this->redirect('index');
+                }
+            }
+        }
+        $this->redirect('contract');
+    }
+
+    function recommender_login(){
+        $name = IFilter::act(IReq::get('name'),'string');
+        $password = IFilter::act(IReq::get('password'),'string');
+        if ($name){
+            $recommender_query = new IQuery('recommender');
+            $recommender_query->where = 'name = "' . $name . '" and password = "' . $password . '"';
+            $ret = $recommender_query->find();
+            if (isset($ret[0])){
+                ISession::set('recommender', $name);
+                $this->redirect('recommender_shop');
+            }
+        }
+        $this->redirect('recommender_login');
+    }
+    function recommender_shop(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = "' . ISession::get('recommender') . '"';
+        $ret = $shop_query->find();
+        if(!empty($ret)) {
+            foreach ($ret as $key => $value){
+                $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
+                $data[$key]['identify_id'] = $value['identify_id'];
+                $data[$key]['name'] = $value['name'];
+                $data[$key]['address'] = $value['address'];
+            }
+            $this->data = $data;
+        } else {
+            $this->redirect('recommender_login');
+        }
+        $this->redirect('recommender_shop');
+    }
+    function recommender_shop_tobe_booked(){
+        $recommender = ISession::get('recommender');
+        if (empty($recommender)){$this-$this->redirect('index');}
+        $this->data = $this->get_shop_recommender();
+        $this->redirect('recommender_shop_tobe_booked');
+    }
+    function recommender_shop_income(){
+        $recommender = ISession::get('recommender');
+        if (empty($recommender)){$this->redirect('index');}
+        $this->redirect('recommender_shop_income');
+    }
+    function recommender_shop_tobe_booked_details(){
+        $recommender = ISession::get('recommender');
+        if (empty($recommender)){$this->redirect('index');}
+        $id = IFilter::act(IReq::get('id'),'string');
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'id = ' . $id . ' and recommender = "' . $recommender . '"';
+        $shop_data = $shop_query->find();
+        $this->shop_name = $shop_data[0]['name'];
+        $temp = '';
+        if ($shop_data){
+
+            $user_query = new IQuery('user');
+            $user_query->where = 'shop_identify_id = ' . $shop_data[0]['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+            $temp = explode('or',$temp,2)[1];
+        }
+        $temp ='(' . $temp . ')';
+        $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
+        $this->last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
+        $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
+        $this->complete_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval)->find(); // 已完成
+        $date_interval = ' and DATE_FORMAT( create_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
+        $this->distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
+        $this->redirect('recommender_shop_tobe_booked_details');
+    }
+    private function get_shop_recommender(){
+        if (empty(ISession::get('recommender'))){
+            return null;
+        }
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = "' . ISession::get('recommender') . '"';
+        $ret = $shop_query->find();
+        if(!empty($ret)) {
+            foreach ($ret as $key => $value){
+                $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
+                $data[$key]['identify_id'] = $value['identify_id'];
+                $data[$key]['name'] = $value['name'];
+                $data[$key]['id'] = $value['id'];
+                $data[$key]['address'] = $value['address'];
+            }
+            return $data;
+        } else {
+            return null;
+        }
+    }
+    private function get_amount_tobe_booked($identify_id){
+        $shop_query = new IQuery('shop');
+        $user_query = new IQuery('user');
+        $shop_query->where = 'identify_id = ' . $identify_id;
+        $shop_data = $shop_query->find()[0];
+        $temp = '(';
+//        $temp = '( user_id = ' . $this->user['user_id'];
+        if ($shop_data){
+            $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+        }
+        $temp .= ')';
+        $temp = '(' . explode('or', $temp, 2)[1];
+        $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
+        $order_query = new IQuery('order');
+        $order_query->where = $where;
+        $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
+        $amount_tobe_booked = $order_query->find()[0]['amount_tobe_booked'];
+        $amount_tobe_booked = empty($amount_tobe_booked) ? '0.00' : $amount_tobe_booked;
+        return $amount_tobe_booked;
+    }
 }
