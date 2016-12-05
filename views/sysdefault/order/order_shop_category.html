@@ -1,0 +1,40 @@
+{js:my97date}
+<div class="content">
+
+	<div class="headbar">
+		<div class="position">店铺<span>></span><span>店铺管理</span><span>></span><span>店铺分类列表</span></div>
+		<div class="operating">
+			<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="window.location='{url:/order/order_add_shop_category}'"><span class="addition">添加店铺类别</span></button></a>
+		</div>
+	</div>
+
+	<table class="list_table">
+		<colgroup>
+			<col width="30px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col width="70px" />
+		</colgroup>
+
+		<thead>
+		<tr>
+			<th>分类名称</th>
+			<th>返利率</th>
+			<th>操作</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		{foreach:items = $this->shop_category_data}
+		<tr>
+			<td title="{$item['name']}">{$item['name']}</td>
+			<td title="{$item['rebate']}">{$item['rebate']}</td>
+			<td title="结算">
+				<a href="{url:/order/order_add_shop_category/id/$item['id']}">编辑</a>
+			</td>
+		</tr>
+		{/foreach}
+		</tbody>
+	</table>
+</div>
+{$this->shop_category_pagebar}

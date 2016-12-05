@@ -1,0 +1,18 @@
+{js:my97date}
+<div class="headbar">
+	<div class="position">订单<span>></span><span>订单管理</span><span>></span><span>订单列表</span></div>
+	<div class="operating">
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="window.location='{url:/order/order_add_shop}'"><span class="addition">添加店铺</span></button></a>
+	</div>
+</div>
+
+	<div class="content">
+		<form method="post">
+			<input name="category_id" value="{$this->shop_category_id}" type="hidden">
+			<input name="name" value="{$this->shop_category_name}" placeholder="类别名称"><br>
+			0.05<input type="radio" name="rebate" value="0.05"><br>
+			0.15<input type="radio" name="rebate" value="0.15"><br>
+			<input type="submit">
+		</form>
+	</div>
+	<!--{}-->

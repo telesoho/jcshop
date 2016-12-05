@@ -55,6 +55,16 @@
                     </a>
                 </li>
             </ul>
+            {if:$this->user_shop_data}
+                <ul class="myOrders mui-table-view">
+                    <li class="mui-table-view-cell">
+                        <a class="locationA" href="{url:/ucenter/order_u?status=0}">
+                            顾客订单<span class="mui-pull-right ico-pull">查看全部订单
+                            <span class="mui-icon mui-icon-arrowright"></span></span>
+                        </a>
+                    </li>
+                </ul>
+            {/if}
             <div class="order">
                 <div class="mui-row">
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
@@ -112,7 +122,27 @@
                     </a>
                 </li>
             </ul>
-        <ul class="mui-table-view" style="margin-top: 0.12rem;margin-bottom:1.1rem;">
+        <ul class="mui-table-view">
+            {if:$this->user_shop_data}
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_user/id/$this->user_shop_data[0]['identify_id']}">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
+                    我的店铺
+                </a>
+            </li>
+            {/if}
+        </ul>
+        <ul class="mui-table-view">
+            {if:$this->user_shop_data}
+                <li class="mui-table-view-cell">
+                    <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_income}">
+                        <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
+                        收益
+                    </a>
+                </li>
+            {/if}
+        </ul>
+        <ul class="mui-table-view" style="margin-top: 0.12rem">
             <li class="mui-table-view-cell">
                 <a class="mui-navigate-right locationA" href="{url:/simple/credit}">
                     <img src="/views/mobile/skin/default/image/jmj/product/user_card.png" alt=""  style="vertical-align: middle;width:0.5rem" />
@@ -120,6 +150,7 @@
                 </a>
             </li>
         </ul>
+        <div style="height:1.3rem"></div>
             <!--<ul class="mui-table-view" style="margin-top: 25px;margin-bottom:0.7rem;">
                 <li class="mui-table-view-cell">
                     <a class="mui-navigate-right">

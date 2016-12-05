@@ -284,7 +284,8 @@ class Block extends IController
 							IError::show(403,'订单修改失败');
 						}
 					}
-					$this->redirect('/site/success/message/'.urlencode("支付成功").'/?callback=/ucenter/order');
+                    shop::associate($this->user['user_id']);
+                    $this->redirect('/site/success/message/'.urlencode("支付成功").'/?callback=/ucenter/order');
 					return;
 				}
 				$message = '付款金额与订单金额不符合';

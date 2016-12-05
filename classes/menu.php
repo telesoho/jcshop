@@ -61,7 +61,9 @@ class Menu
 	   '订单'=>array(
         	'订单管理'=>array(
                 '/order/order_list' => '订单列表',
-                '/order/order_edit' => '添加订单'
+                '/order/order_edit' => '添加订单',
+                '/order/order_shop' => '店铺列表',
+                '/order/order_shop_category' => '店铺分类'
         	),
         	'单据管理'=>array(
              	'/order/order_collection_list'  => '收款单',

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="x5-orientation" content="portrait">
+    <title>个人中心</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css"/>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/personalCenter.css" />
+
+</head>
+<body>
+<div id="loading">
+    <div class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
+</div>
+
+<p style="text-align: center;padding-bottom: 2em;padding-top: 2em">商铺信息</p>
+<hr>
+<form action="/ucenter/shop_register" method="post">
+    <div class="mui-input-row">
+        <label>店铺名称</label>
+        <input type="text" class="mui-input-clear" name="name" placeholder="请输入店铺名称" value="{$this->shop_data['name']}">
+    </div>
+    <div class="mui-input-row">
+        <label>地址</label>
+        <input type="text" class="mui-input-clear" name="address" placeholder="请输入地址" value="{$this->shop_data['address']}">
+    </div>
+    <div class="mui-input-row">
+        <label>店铺二维码</label>
+        <img src="{$this->shop_data['identify_qrcode']}">
+    </div>
+    <div class="mui-button-row">
+        <!--<button type="submit" class="mui-btn mui-btn-info" >确认</button>-->
+        <a href="{url:/ucenter/index}" class="mui-btn mui-btn-danger" >返回</a>
+    </div>
+</form>
+
+<footer>
+    <nav class="mui-bar mui-bar-tab"  style="z-index:25">
+        <a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">
+                <span class="mui-icon nav-icon icon-home">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/home.png"  data-img="home-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
+            <div class="mui-tab-label">首页</div>
+        </a>
+        <a class="mui-tab-item" href="{url:/site/sitemap}">
+                <span class="mui-icon nav-icon icon-classification">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/mune.png" data-img="mune-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
+            <div class="mui-tab-label">分类</div>
+        </a>
+        <a class="mui-tab-item" href="{url:/site/favorite}">
+                <span class="nav-icon icon-vedio">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/grass.png" data-img="grass.png"  alt="" class="img-move02">
+                    <div class="grow">种草</div>
+                    <span class="tab-mark"></span>
+                </span>
+        </a>
+        <a class="mui-tab-item" href="{url:simple/cart}">
+                <span class="mui-icon nav-icon icon-shopcar">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/buy.png" data-img="buy-ed.png"  alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
+            <div class="mui-tab-label">购物车</div>
+        </a>
+        <a class="mui-tab-item  mui-active" href="{url:/ucenter/index}">
+                <span class="mui-icon nav-icon icon-my">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/my-ed.png" data-img="my-ed.png"  alt="" style="width:0.5rem;height:0.5rem;"/>
+                </span>
+            <div class="mui-tab-label">我的</div>
+        </a>
+    </nav>
+</footer>
+<script id="userinfo" type="text/html">
+    <div class="headBox">
+        <div class="whiteBack">
+            <%if(head_ico==null){%>
+            <img src="/views/mobile/skin/default/image/jmj/img/cat_logo.png"/>
+            <%}else{%>
+            <img src="<%=head_ico %>"/>
+            <%}%>
+        </div>
+    </div>
+    <%if(username==null){%>
+    <div class="userName">九猫家的小小猫</div>
+    <%}else{%>
+    <div class="userName"><%=username %></div>
+    <%}%>
+
+
+</script>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/template-native.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
+<script>
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
+        getInfo();
+        //解决tab选项卡a标签无法跳转的问题
+        mui('body').on('tap','.mui-tab-item',function(){
+            var srcimg= $(this).find('img').attr("data-img");
+            $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
+            document.location.href=this.href;
+        });
+        mui('body').on("tap",'a',function(){
+            window.location.href=this.href;
+        })
+    })
+    function getInfo(){
+        mui.ajax('index.php?controller=apic&action=info',{
+            dataType:'json',	// 服务器返回json格式数据
+            type:'get',		// HTTP请求类型
+            timeout:10000,		// 超时时间设置为10秒；
+            success:function(data){
+                if(data){
+                }else{
+                    data={
+                        head_ico:null,
+                        username:null
+                    }
+                };
+                var html=template('userinfo',data);
+                document.getElementById("user_Info").innerHTML=html;
+
+            },
+            error:function(xhr,type,errorThrown){
+                //异常处理；
+                console.log(type);
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

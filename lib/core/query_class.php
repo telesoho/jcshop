@@ -184,4 +184,8 @@ class IQuery
     {
     	return "select $this->fields from $this->table $this->join $this->where $this->group $this->having $this->order";
     }
+    function query($sql = ''){
+        $result = $this->dbo->query($sql);
+        return $result;
+    }
 }
