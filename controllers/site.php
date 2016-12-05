@@ -1123,7 +1123,7 @@ class Site extends IController
     }
     function recommender_login(){
         $recommender = ISession::get('recommender');
-        if (empty($recommender)){$this-$this->redirect('recommender_shop');}
+        if (!empty($recommender)){$this-$this->redirect('recommender_shop');}
         $name = IFilter::act(IReq::get('name'),'string');
         $password = IFilter::act(IReq::get('password'),'string');
         if ($name){
