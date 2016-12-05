@@ -1063,22 +1063,32 @@ class Apic extends IController
     }
 	/* 开始搜索 */
     public function search(){
-    	//接收参数
+    	/* 关键字处理 */
         $word 						= IFilter::act(IReq::get('word'),'string');
         if(empty($word)) $this->json_echo(array());
         $gpage 						= IFilter::act(IReq::get('gpage'),'int');
         $apage 						= IFilter::act(IReq::get('apage'),'int');
+        //关键字处理
+        $word_str 					= str_replace(' ',',',$word);
+        $word_arr 					= explode(' ',$word);
         /* 商品 */
     	$model_keyword 				= new IModel('keyword');
-    	$data_keyword 				= $model_keyword->get_count('word="'.$word.'"','num');
+    	$data_keyword 				= $model_keyword->get_count('word in ('.$word_str.')','num');
+//         var_dump($data_keyword);var_dump($word_arr);exit();
     	if( $data_keyword > 0 ){
     		//关键字搜索次数+1
     		$model_keyword->setData(array('num'=>'num+1'));
-    		$model_keyword->update('word="'.$word.'"',array('num'));
+    		$model_keyword->update('word in ('.$word_str.')',array('num'));
     	}
     	//搜索商品
     	$query_goods 				= new IQuery('goods');
-    	$query_goods->where 		= 'is_del=0 AND (`name` LIKE "%'.$word.'%" OR `search_words` LIKE "%,'.$word.',%")';
+    	$where 						= 'is_del=0 AND (`name` LIKE "%'.$word.'%" OR `search_words` LIKE "%,'.$word.',%" OR ``goods_no` LIKE "%,'.$word.',%")';
+    	foreach($word_arr as $k => $v){
+    		$field 					.= ',`name` LIKE "%'.$v.'%" as name'.$k.',`search_words` LIKE "%,'.$word.',%" as search_words';
+    		$where 					.= ' `name` LIKE "%'.$v.'%"';
+    		
+    	}
+    	$query_goods->where 		= $where;
     	$query_goods->order 		= '(CASE WHEN `search_words` LIKE "%,'.$word.',%" THEN 0 ELSE 1 END) asc';
     	$query_goods->fields 		= 'id,name,sell_price,jp_price,market_price,img';
     	$query_goods->page 			= empty($gpage) ? 1 : $gpage;
