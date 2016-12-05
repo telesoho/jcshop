@@ -43,6 +43,8 @@ class Apic extends IController
         $result['delivery'] = Api::run('getDeliveryList');
         $this->json_echo($result);
     }
+    
+    
 
     /**
      * 购物车结算页面
@@ -72,7 +74,6 @@ class Apic extends IController
         	if($ticket_data[0]['status'] != 1) $this->json_echo(array('error'=>'折扣券无法使用'));
         }
         
-        
         //必须为登录用户
         if($tourist === null && $this->user['user_id'] == null)
         {
@@ -95,8 +96,8 @@ class Apic extends IController
         $user_id = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
 
         //计算商品
-        $countSumObj = new CountSum($user_id);
-        $result = $countSumObj->cart_count($id,$type,$buy_num,$promo,$active_id);
+        $countSumObj 		= new CountSum($user_id);
+        $result 			= $countSumObj->cart_count($id,$type,$buy_num,$promo,$active_id);
 
         if($countSumObj->error)
         {
@@ -105,15 +106,15 @@ class Apic extends IController
         }
 
         //获取收货地址
-        $addressObj  = new IModel('address');
-        $addressList = $addressObj->query('user_id = '.$user_id,"*","is_default desc");
+        $addressObj  		= new IModel('address');
+        $addressList 		= $addressObj->query('user_id = '.$user_id,"*","is_default desc");
 
         //更新$addressList数据
         foreach($addressList as $key => $val)
         {
-            $temp 		= area::name($val['province'],$val['city'],$val['area']);
+            $temp 			= area::name($val['province'],$val['city'],$val['area']);
 
-            $temp_k 	= array_keys($temp);
+            $temp_k 		= array_keys($temp);
             if(isset($temp[$val['province']]) && isset($temp[$val['city']]) && isset($temp[$val['area']]))
             {
                 $addressList[$key]['province_val'] = in_array($val['province'],$temp_k) ? $temp[$val['province']] : '';
@@ -123,43 +124,43 @@ class Apic extends IController
         }
 
         //获取习惯方式
-        $memberObj = new IModel('member');
-        $memberRow = $memberObj->getObj('user_id = '.$user_id,'custom');
+        $memberObj 			= new IModel('member');
+        $memberRow 			= $memberObj->getObj('user_id = '.$user_id,'custom');
         if(isset($memberRow['custom']) && $memberRow['custom'])
         {
-            $this->custom = unserialize($memberRow['custom']);
+            $this->custom 	= unserialize($memberRow['custom']);
         }
         else
         {
-            $this->custom = array(
-                'payment'  => '',
-                'delivery' => '',
+            $this->custom 	= array(
+                'payment'  	=> '',
+                'delivery' 	=> '',
             );
         }
 
         //返回值
-        $data['gid']= $id;
-        $data['type']= $type;
-        $data['num']= $buy_num;
-        $data['promo']= $promo;
-        $data['active_id']= $active_id;
-        $data['final_sum']= $result['final_sum'];
-        $data['promotion']= $result['promotion'];
-        $data['proReduce']= $result['proReduce'];
-        $data['sum']= $result['sum'];
-        $data['goodsList']= $result['goodsList'];
-        $data['count']= $result['count'];
-        $data['reduce']= $result['reduce'];
-        $data['weight']= $result['weight'];
-        $data['freeFreight']= $result['freeFreight'];
-        $data['seller']= $result['seller'];
-        $data['addressList']= $addressList;
-        $data['goodsTax']= $result['tax'];
+        $data['gid'] 			= $id;
+        $data['type'] 			= $type;
+        $data['num'] 			= $buy_num;
+        $data['promo'] 			= $promo;
+        $data['active_id'] 		= $active_id;
+        $data['final_sum'] 		= $result['final_sum'];
+        $data['promotion'] 		= $result['promotion'];
+        $data['proReduce'] 		= $result['proReduce'];
+        $data['sum'] 			= $result['sum'];
+        $data['goodsList'] 		= $result['goodsList'];
+        $data['count'] 			= $result['count'];
+        $data['reduce'] 		= $result['reduce'];
+        $data['weight'] 		= $result['weight'];
+        $data['freeFreight'] 	= $result['freeFreight'];
+        $data['seller'] 		= $result['seller'];
+        $data['addressList'] 	= $addressList;
+        $data['goodsTax'] 		= $result['tax'];
 
         //配送方式
-        $data['delivery'] = Api::run('getDeliveryList');
+        $data['delivery'] 		= Api::run('getDeliveryList');
         //付款方式
-        $data['payment'] = Api::run('getPaymentList');
+        $data['payment'] 		= Api::run('getPaymentList');
         foreach ($data['payment'] as $key=>$value){
             $data['payment'][$key]['paymentprice'] = CountSum::getGoodsPaymentPrice($value['id'],$data['sum']);
         }
@@ -1091,9 +1092,9 @@ class Apic extends IController
         $word_str 					= str_replace(' ',',',$word);
         $word_arr 					= explode(' ',$word);
         /* 商品 */
+        
     	$model_keyword 				= new IModel('keyword');
     	$data_keyword 				= $model_keyword->get_count('word in ('.$word_str.')','num');
-//         var_dump($data_keyword);var_dump($word_arr);exit();
     	if( $data_keyword > 0 ){
     		//关键字搜索次数+1
     		$model_keyword->setData(array('num'=>'num+1'));
@@ -1101,15 +1102,22 @@ class Apic extends IController
     	}
     	//搜索商品
     	$query_goods 				= new IQuery('goods');
-    	$where 						= 'is_del=0 AND (`name` LIKE "%'.$word.'%" OR `search_words` LIKE "%,'.$word.',%" OR ``goods_no` LIKE "%,'.$word.',%")';
+    	$field 						= 'id,name,sell_price,jp_price,market_price,img';
+    	$where 						= 'is_del=0 AND (';
+    	$order 						= '';
     	foreach($word_arr as $k => $v){
-    		$field 					.= ',`name` LIKE "%'.$v.'%" as name'.$k.',`search_words` LIKE "%,'.$word.',%" as search_words';
-    		$where 					.= ' `name` LIKE "%'.$v.'%"';
-    		
+    		$field 					.= ',(`name` LIKE "%'.$v.'%") as name'.$k.',(`search_words` LIKE "%,'.$v.',%") as search'.$k.',(`goods_no` LIKE "%,'.$v.',%") as goods_no'.$k;
+    		$where 					.= ' (`name` LIKE "%'.$v.'%") OR (`search_words` LIKE "%,'.$v.',%") OR (`goods_no` LIKE "%,'.$v.',%")';
+    		$order 					.= 'name'.$k;
+    		if(count($word_arr) != $k+1){
+    			$where .= ' OR';
+    			$order .= ' AND ';
+    		}
     	}
+    	$where 						.= ')';
     	$query_goods->where 		= $where;
-    	$query_goods->order 		= '(CASE WHEN `search_words` LIKE "%,'.$word.',%" THEN 0 ELSE 1 END) asc';
-    	$query_goods->fields 		= 'id,name,sell_price,jp_price,market_price,img';
+    	$query_goods->order 		= '(CASE WHEN ('.$order.') THEN 0 ELSE 1 END) asc';
+    	$query_goods->fields 		= $field;
     	$query_goods->page 			= empty($gpage) ? 1 : $gpage;
     	$query_goods->pagesize 		= 1000;
     	$data_goods 				= $query_goods->find();
@@ -1123,9 +1131,18 @@ class Apic extends IController
     	
     	/* 专辑 */
     	$query_article 				= new IQuery('article');
-    	$query_article->where 		= 'visibility=1 AND (`title` LIKE "%'.$word.'%" OR `keywords`="'.$word.'")';
-    	$query_article->order 		= '(CASE WHEN `keywords`="'.$word.'" THEN 0 ELSE 1 END) asc,top desc,sort desc';
-    	$query_article->fields 		= 'id,title,image';
+//     	$query_article->where 		= 'visibility=1 AND (`title` LIKE "%'.$word.'%" OR `keywords`="'.$word.'")';
+		$where 						= 'visibility=1 AND (';
+		$field 						= 'id,title,image';
+		foreach($word_arr as $k => $v){
+			$field 					.= ',(`title` LIKE "%'.$v.'%") as name'.$k.',(`keywords` LIKE "%,'.$v.',%") as search'.$k;
+    		$where 					.= ' (`title` LIKE "%'.$v.'%") OR (`keywords` LIKE "%'.$v.'%")';
+			if(count($word_arr) != $k+1) $where .= ' OR';
+		}
+		$where 						.= ')';
+    	$query_article->where 		= $where;
+    	$query_article->order 		= 'top desc,sort desc';
+    	$query_article->fields 		= $field;
     	$query_article->page 		= empty($apage) ? 1 : $apage;
     	$query_article->pagesize 	= 1000;
     	$data_article  				= $query_article->find();
@@ -1136,7 +1153,7 @@ class Apic extends IController
     			$data_article[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/513/h/260");
     		}
     	}
-    	
+
         $this->json_echo(array('goods'=>$data_goods,'article'=>$data_article));
     }
     /**
