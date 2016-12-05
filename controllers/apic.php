@@ -992,6 +992,22 @@ class Apic extends IController
         $this->json_echo($result);
     }
     /**
+     * ---------------------------------------------------品牌---------------------------------------------------*
+     */
+    /**
+     * 品牌详情
+     */
+    public function brand(){
+    	/* 接收参数 */
+    	$brand_id 				= IFilter::act(IReq::get('id'),'int');
+    	
+    	/* 获取数据 */
+    	$query 					= new IQuery('brand');
+    	$query->where 			= 'id='.$brand_id;
+    	$query->fields 			= 'id,name,logo,description,';
+    }
+    
+    /**
      * ---------------------------------------------------分类---------------------------------------------------*
      */
 
@@ -1083,16 +1099,15 @@ class Apic extends IController
     }
 	/* 开始搜索 */
     public function search(){
-    	/* 关键字处理 */
+    	/* 接收参数 */
         $word 						= IFilter::act(IReq::get('word'),'string');
+        $page 						= IFilter::act(IReq::get('page'),'int');
         if(empty($word)) $this->json_echo(array());
-        $gpage 						= IFilter::act(IReq::get('gpage'),'int');
-        $apage 						= IFilter::act(IReq::get('apage'),'int');
         //关键字处理
         $word_str 					= str_replace(' ',',',$word);
         $word_arr 					= explode(' ',$word);
-        /* 商品 */
         
+        /* 商品 */
     	$model_keyword 				= new IModel('keyword');
     	$data_keyword 				= $model_keyword->get_count('word in ("'.$word_str.'")','num');
     	if( $data_keyword > 0 ){
@@ -1118,11 +1133,11 @@ class Apic extends IController
     	$query_goods->where 		= $where;
     	$query_goods->order 		= '(CASE WHEN ('.$order.') THEN 0 ELSE 1 END) asc';
     	$query_goods->fields 		= $field;
-    	$query_goods->page 			= empty($gpage) ? 1 : $gpage;
-    	$query_goods->pagesize 		= 1000;
+    	$query_goods->page 			= empty($page) ? 1 : $page;
+    	$query_goods->pagesize 		= 20;
     	$data_goods 				= $query_goods->find();
     	$total_page 				= $query_goods->getTotalPage();
-    	if ($gpage > $total_page) $data_goods = array();
+    	if ($page > $total_page) $data_goods = array();
     	if(!empty($data_goods)){
     		foreach($data_goods as $k => $v){
     			$data_goods[$k]['img'] 		= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/290/h/290");
@@ -1131,7 +1146,6 @@ class Apic extends IController
     	
     	/* 专辑 */
     	$query_article 				= new IQuery('article');
-//     	$query_article->where 		= 'visibility=1 AND (`title` LIKE "%'.$word.'%" OR `keywords`="'.$word.'")';
 		$where 						= 'visibility=1 AND (';
 		$field 						= 'id,title,image';
 		foreach($word_arr as $k => $v){
@@ -1143,11 +1157,11 @@ class Apic extends IController
     	$query_article->where 		= $where;
     	$query_article->order 		= 'top desc,sort desc';
     	$query_article->fields 		= $field;
-    	$query_article->page 		= empty($apage) ? 1 : $apage;
-    	$query_article->pagesize 	= 1000;
+    	$query_article->page 		= empty($page) ? 1 : $page;
+    	$query_article->pagesize 	= 20;
     	$data_article  				= $query_article->find();
     	$total_page 				= $query_article->getTotalPage();
-    	if ($apage > $total_page) $data_article = array();
+    	if ($page > $total_page) $data_article = array();
     	if(!empty($data_article)){
     		foreach($data_article as $k => $v){
     			$data_article[$k]['image'] 	= IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/513/h/260");
