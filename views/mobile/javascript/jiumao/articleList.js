@@ -155,19 +155,11 @@ function collection(item,self){
             if(data.message=="收藏成功"){
                 item.is_favorite=1;
                 item.favorite_num=parseInt(item.favorite_num)+1;
-//                        num.innerHTML=parseInt(num.innerHTML)+1;
-//                 num.html(parseInt(num.html())+1);
             }else{
                 item.is_favorite=0;
                 item.favorite_num=parseInt(item.favorite_num)-1
-//                   num.innerHTML=parseInt(num.innerHTML)-1;
-//                 num.html(parseInt(num.html())-1);
             }
 
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
-            console.log(type);
         }
     });
 }

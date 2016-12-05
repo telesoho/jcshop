@@ -55,6 +55,7 @@ var vm = new Vue({
     mounted: function(){
         var self=this;
         if(getSession('banner')&&getSession("articleDetail")&&getSession("article_category_list")){
+            self.placeHolder=getItem('placeHolder');
             self.showMessage=true;
             self.indexInfo.banner=getSession("banner");
             self.indexInfo.article_category_list=getSession("article_category_list");
