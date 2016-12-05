@@ -1241,4 +1241,12 @@ class Site extends IController
         $amount_tobe_booked = $amount_tobe_booked * $shop_category_data[0]['rebate'];
         return $amount_tobe_booked;
     }
+    function recommender_associate_shop(){
+        $recommender = ISession::get('recommender');
+        if (empty($recommender)){$this->redirect('index');}
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = ' . $recommender;
+        $this->shop_data = $shop_query->find();
+        $this->redirect('recommender_associate_shop');
+    }
 }
