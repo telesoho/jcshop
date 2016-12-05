@@ -1229,8 +1229,14 @@ class Site extends IController
             }
         }
         $temp .= ')';
-        $temp = '(' . explode('or', $temp, 2)[1];
-        $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
+        $tem = explode('or', $temp, 2);
+        if(empty($tem[1])){
+            $where = ' pay_type != 0 and status = 5 and is_shop_checkout = 0';
+        } else {
+            $temp = '(' . $tem[1];
+            $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
+        }
+
         $order_query = new IQuery('order');
         $order_query->where = $where;
         $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
