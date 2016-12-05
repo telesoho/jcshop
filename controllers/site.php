@@ -1122,6 +1122,8 @@ class Site extends IController
         }
     }
     function recommender_login(){
+        $recommender = ISession::get('recommender');
+        if (!empty($recommender)){$this-$this->redirect('recommender_shop');}
         $name = IFilter::act(IReq::get('name'),'string');
         $password = IFilter::act(IReq::get('password'),'string');
         if ($name){
@@ -1227,8 +1229,14 @@ class Site extends IController
             }
         }
         $temp .= ')';
-        $temp = '(' . explode('or', $temp, 2)[1];
-        $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
+        $tem = explode('or', $temp, 2);
+        if(empty($tem[1])){
+            $where = ' pay_type != 0 and status = 5 and is_shop_checkout = 0';
+        } else {
+            $temp = '(' . $tem[1];
+            $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
+        }
+
         $order_query = new IQuery('order');
         $order_query->where = $where;
         $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
@@ -1240,5 +1248,13 @@ class Site extends IController
         $shop_category_data = $shop_category->find();
         $amount_tobe_booked = $amount_tobe_booked * $shop_category_data[0]['rebate'];
         return $amount_tobe_booked;
+    }
+    function recommender_associate_shop(){
+        $recommender = ISession::get('recommender');
+        if (empty($recommender)){$this->redirect('index');}
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = ' . $recommender;
+        $this->shop_data = $shop_query->find();
+        $this->redirect('recommender_associate_shop');
     }
 }
