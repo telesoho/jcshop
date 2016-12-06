@@ -1245,7 +1245,31 @@ class Apic extends IController
      * 排行榜
      */
 	public function cosme(){
+		/* 排行榜模型 */
+		$query 						= new IQuery('cosme as m');
+		$query->join 				= 'LEFT JOIN goods AS g ON g.id=m.goods_id';
+		$query->fields 				= 'g.id,g.name,g.sell_price,g.img';
+		$query->order 				= 'm.rank asc';
+		$query->limit 				= 3;
+		$name 						= array(1=>'上周热销榜',2=>'美容热销榜',3=>'美容护理榜');
+		$data 						= array();
+		for($i=1; $i<=3; $i++){
+			$query->where 			= 'g.is_del=0 AND m.type='.$i;
+			$list 					= $query->find();
+			if(!empty($list)){
+				foreach($list as $k => $v){
+					$list[$k]['img'] 	= empty($v['img']) ? '' : IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/220/h/220");
+				}
+			}
+			//返回数据
+			$data['cosme'.$i] 		= array(
+				'name' 				=> $name[$i], //榜单名称
+				'type' 				=> $i, //榜单类型
+				'list' 				=> $list, //商品列表
+				);
+		}
 		
+        $this->json_echo( $data );
 	}
     
     /**
@@ -1549,7 +1573,7 @@ class Apic extends IController
         echo json_encode($data);
         exit();
     }
-    public function test(){
+    public function test1(){
     	$a = score::incPay($this->user['user_id'],1);
     	var_dump($a);exit();
     }

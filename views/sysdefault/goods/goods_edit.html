@@ -344,7 +344,15 @@
 						<th>COSME排行：</th>
 						<td>
 							<label class='attr'>
-								<input type="radio" name="type" value="1" checked onchange="page.changeType(this);"> 通常商品
+								<div>
+									上周热销榜：排名<input type="text" name="cosme_rank[1]" value="{$cosme[1]}" class="middle" placeholder="数字越小，排名越靠前">
+								</div>
+								<div>
+									健康热销榜：排名<input type="text" name="cosme_rank[2]" value="{$cosme[2]}" class="middle" placeholder="数字越小，排名越靠前">
+								</div>
+								<div>
+									美容护理榜：排名<input type="text" name="cosme_rank[3]" value="{$cosme[3]}" class="middle" placeholder="数字越小，排名越靠前">
+								</div>
 							</label>
 						</td>
 					</tr>
