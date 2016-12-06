@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>店铺收益详情</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/views/mobile/bootstrap/css/bootstrap-theme.min.css">
+</head>
+<body>
+<div class="container" style="margin-top: 10px;">
+    <div class="page-header">
+        <h3>店铺收益&nbsp;&nbsp;<small>详情信息</small></h3>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>店铺名称</th>
+            <th>待入账金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {if:$this->data}
+        {foreach:$items = $this->data}
+        <tr>
+            <td>{$item['name']}</td>
+            <td>{$item['amount_tobe_booked']}</td>
+        </tr>
+        {/foreach}
+        {/if}
+        </tbody>
+    </table>
+    <hr>
+    <p class="text-center">
+        <a href="{url:/ucenter/recommender_shop}" class="btn btn-primary">返回</a>
+        <a href="{url:/ucenter/recommender_shop_tobe_booked}" class="btn btn-info">查看待入账信息</a>
+    </p>
+</div>
+<script src="/views/mobile/bootstrap/css/jquery.min.js"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/bootstrap/css/js/bootstrap.min.js"></script>
+</body>
+</html>
