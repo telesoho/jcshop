@@ -186,19 +186,19 @@
 			                        fields=id,goods_no,num 
 			                        limit=50 
 			                        order=id asc}
-								<fieldset style="width:300px;" class="datainfo">
+								<fieldset style="width:500px;" class="datainfo">
 									<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>
 									<label>商品货号：<input name="bag_no[]" type="text" value="{$item['goods_no']}" /></label>
 									<label>商品数量：<input name="bag_num[]" type="text" value="{$item['num']}" pattern="int" style="width:20px;"/></label>
 								</fieldset>
 								{/query}
 							{else:}
-								<fieldset style="width:300px;" class="datainfo">
+								<fieldset style="width:500px;" class="datainfo">
 									<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>
 									<label>商品货号：<input name="bag_no[]" type="text" value="" /></label>
 									<label>商品数量：<input name="bag_num[]" type="text" value="1" pattern="int" style="width:20px;"/></label>
 								</fieldset>
-								<fieldset style="width:300px;" class="datainfo">
+								<fieldset style="width:500px;" class="datainfo">
 									<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>
 									<label>商品货号：<input name="bag_no[]" type="text" value="" /></label>
 									<label>商品数量：<input name="bag_num[]" type="text" value="1" pattern="int" style="width:20px;"/></label>
@@ -340,6 +340,14 @@
 				<table class="form_table">
 					<col width="150px" />
 					<col />
+					<tr>
+						<th>COSME排行：</th>
+						<td>
+							<label class='attr'>
+								<input type="radio" name="type" value="1" checked onchange="page.changeType(this);"> 通常商品
+							</label>
+						</td>
+					</tr>
 					<tr>
 						<th>SEO关键词：</th><td><input class="normal" name="keywords" type="text" value="" /></td>
 					</tr>
@@ -844,7 +852,7 @@ var page = {
 			return false;
 		}
 		var html 		= '';
-		html 			+= '<fieldset style="width:300px;" class="datainfo">';
+		html 			+= '<fieldset style="width:500px;" class="datainfo">';
 		html 			+= '<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>';
 		html 			+= '<label>商品货号：<input name="bag_no[]" type="text" value="" /></label>';
 		html 			+= '<label>商品数量：<input name="bag_num[]" type="text" value="1" pattern="int" style="width:20px;"/></label>';
