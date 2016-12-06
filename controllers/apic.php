@@ -1238,7 +1238,16 @@ class Apic extends IController
 
         $this->json_echo(['banner'=>$banner,'goods_nums'=>$nums]);
     }
-
+    /**
+     * ---------------------------------------------------排行榜---------------------------------------------------*
+     */
+    /**
+     * 排行榜
+     */
+	public function cosme(){
+		
+	}
+    
     /**
      * @return string
      */
@@ -1624,5 +1633,9 @@ class Apic extends IController
     private function json_echo($data){
         echo json_encode($data);
         exit();
+    }
+    public function test(){
+    	$a = score::incPay($this->user['user_id'],1);
+    	var_dump($a);exit();
     }
 }
