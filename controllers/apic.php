@@ -1323,6 +1323,228 @@ class Apic extends IController
 //            var_dump($curl->data());
         }
     }
+    function recommender_shop_tobe_booked(){
+        $recommender = ISession::get('recommender');
+        if (empty($recommender)){$this-$this->redirect('index');}
+        $data = $this->get_shop_recommender();
+        $this->json_echo($data);
+    }
+    function test(){
+        $a = [
+            'name' => 'a',
+            'price' => '25',
+            'order' => [
+                [
+                    'order_num' => '123',
+                    'status' => '已完成',
+                    'price' => '55.00',
+                    'goods' => [
+                        [
+                            'goods_price' => '20',
+                            'name' => '商品名称',
+                            'img'=>'/',
+                            'id' => '2',
+                            'price' => '520.0'
+                        ],
+                        [
+                            'goods_price' => '20',
+                            'name' => '商品名称',
+                            'img'=>'/',
+                            'id' => '21',
+                            'price' => '520.0'
+                        ]
+                    ]
+                ],
+                [
+                    'order_num' => '123',
+                    'status' => '已完成',
+                    'price' => '55.00',
+                    'goods' => [
+                        [
+                            'goods_price' => '20',
+                            'name' => '商品名称',
+                            'img'=>'/',
+                            'id' => '22',
+                            'price' => '5230.0'
+                        ],
+                        [
+                            'goods_price' => '20',
+                            'name' => '商品名称',
+                            'img'=>'/',
+                            'id' => '121',
+                            'price' => '5220.0'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $this->json_echo($a);
+
+    }
+    function tests(){
+        $a=[
+            [
+                'name' => 'a',
+                'price' => '25',
+                'order' => [
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '2',
+                                'price' => '520.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '21',
+                                'price' => '520.0'
+                            ]
+                        ]
+                    ],
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '22',
+                                'price' => '5230.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '121',
+                                'price' => '5220.0'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'name' => 'b',
+                'price' => '25',
+                'order' => [
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '2',
+                                'price' => '520.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '21',
+                                'price' => '520.0'
+                            ]
+                        ]
+                    ],
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '22',
+                                'price' => '5230.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '121',
+                                'price' => '5220.0'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'name' => 'c',
+                'price' => '25',
+                'order' => [
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '2',
+                                'price' => '520.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '21',
+                                'price' => '520.0'
+                            ]
+                        ]
+                    ],
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '22',
+                                'price' => '5230.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '121',
+                                'price' => '5220.0'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+        $this->json_echo($a);
+    }
+    function recommender_shops_tobe_booked_ajax(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = "' . $this->user['user_id'] . '"';
+        $ret = $shop_query->find();
+        if(!empty($ret)) {
+            foreach ($ret as $key => $value){
+                $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
+                $data[$key]['identify_id'] = $value['identify_id'];
+                $data[$key]['name'] = $value['name'];
+                $data[$key]['id'] = $value['id'];
+                $data[$key]['address'] = $value['address'];
+            }
+        }
+        $this->json_echo($ret);
+    }
     private function json_echo($data){
         echo json_encode($data);
         exit();
