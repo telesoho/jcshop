@@ -1521,6 +1521,21 @@ class Apic extends IController
         ];
         $this->json_echo($a);
     }
+    function recommender_shops_tobe_booked_ajax(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = "' . $this->user['user_id'] . '"';
+        $ret = $shop_query->find();
+        if(!empty($ret)) {
+            foreach ($ret as $key => $value){
+                $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
+                $data[$key]['identify_id'] = $value['identify_id'];
+                $data[$key]['name'] = $value['name'];
+                $data[$key]['id'] = $value['id'];
+                $data[$key]['address'] = $value['address'];
+            }
+        }
+        $this->json_echo($ret);
+    }
     private function json_echo($data){
         echo json_encode($data);
         exit();

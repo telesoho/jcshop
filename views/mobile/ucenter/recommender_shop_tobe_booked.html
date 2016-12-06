@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>店铺待入账金额详情</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/recommender/recommender.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/mui.picker.min.css" />
+</head>
+<body>
+<div id="container_info">
+    <div class="header">
+        <a href="{url:/ucenter/recommender_shop}" class="back">返回</a>
+        <a href="#" class="title">待入账金额</a>
+    </div>
+    <div class="top box">
+        <div v-cloak>店铺名称：<span style="color:#ff4aa0;font-size:0.26rem;">{{infoMessage.name}}</span></div>
+        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">8555.00</span></div>
+    </div>
+    <div class="merchant1" v-for="item in shopTobe.order" v-cloak>
+        <div class="box" @click="showGoods(item)">
+            <div class="left">订单编号：{{item.order_num}}</div>
+            <div class="state">订单状态：{{item.status}}</div>
+        </div>
+        <div class="goods" v-if="item.show_goods">
+            <div class="goodsList" v-for="goodList in item.goods">
+                <div class="content">
+                    <div class="left flexbox">
+                        <img :src="goodList.img" alt="" />
+                    </div>
+                    <div class="right">
+                        <div class="name">{{goodList.name}}</div>
+                        <div class="price">
+                            <span class="sellprice">￥{{goodList.price}}</span>
+                            <span class="num">x{{goodList.goods_price}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="total">
+                总计收益金额：{{item.price}}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.picker.min.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#container_info',
+        data: {
+            showMessage:false,
+            page:1,
+            infoMessage:[]
+        },
+        computed: {
+            shopTobe: function(){
+                return this.infoMessage;
+            }
+        },
+        mounted: function(){
+            var self=this;
+            getInfo(self);
+        },
+        updated:function() {
+        },
+        methods: {
+            showGoods: function(obj){
+                if(obj.show_goods){
+                    obj.show_goods=false;
+                }else{
+                    this.infoMessage.order.map(function(son){
+                        son.show_goods=false;
+                    })
+                    obj.show_goods=true;
+                }
+            }
+        }
+    })
+    function getInfo(self){
+        mui.ajax('/apic/test',{
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+                self.showMessage=true;
+                data.order.map(function(item){
+                    item.show_goods=false;
+                });
+                self.infoMessage=data;
+            }
+        });
+    };
+</script>
+<script>
+//    (function($) {
+//        $.init();
+//        var result = $('.content')[0];
+//        var cho=document.getElementById("cho_month")
+//            cho.addEventListener('tap', function() {
+//                var optionsJson = this.getAttribute('data-options') || '{}';
+//                var options = JSON.parse(optionsJson);
+//                var id = this.getAttribute('id');
+//                var picker = new $.DtPicker(options);
+//                picker.show(function(rs) {
+//                    console.log(rs);
+//                    result.innerText = rs.y.text+"年"+rs.m.value+"月";
+//                    picker.dispose();
+//                });
+//            }, false);
+//    })(mui);
+//    var state=true;
+//    function showOrder(num){
+//        $(".order_num").hide();
+//        if(state){
+//            $(".order_num"+num).show();
+//            state=false;
+//        }else{
+//            state=true;
+//            $(".order_num"+num).hide();
+//        }
+//    }
+</script>
+</body>
+</html>

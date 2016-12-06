@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>商户待入账金额详情</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/recommender/recommender.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/mui.picker.min.css" />
+</head>
+<body>
+<div id="container_info">
+    <div class="header">
+        <a href="{url:/ucenter/recommender_shop}" class="back">返回</a>
+        <a href="#" class="title">商户待入账金额</a>
+    </div>
+    <div class="top box">
+        <div>交易总额：<span style="color:#ff4aa0;font-size:0.26rem;">23366.00</span></div>
+        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">8555.00</span></div>
+    </div>
+    <div class="merchant" v-for="item in shopTobe" v-cloak>
+        <div class="thead" @click="showOrder(item)">
+            <div class="showmerchant">
+                <div class="merchantImg">
+                    <img src="" alt="" />
+                </div>
+            </div>
+            <div class="name_me flexbox">
+                <div class="name hidewrap">{{item.name}}</div>
+            </div>
+            <div class="profit flexbox">
+                <div class="pro">{{item.price}}</div>
+            </div>
+        </div>
+        <div class="order"  v-if="item.show_Order" >
+            <div class="orderList" v-for="orderList in item.order">
+                <div class="box" @click="showGoods(item.order,orderList)">
+                    <div class="left">订单编号：{{orderList.order_num}}</div>
+                    <div class="state">订单状态：{{orderList.status}}</div>
+                </div>
+                <div class="goods" v-if="orderList.show_goods">
+                    <div class="goodsList" v-for="goodList in orderList.goods">
+                        <div class="content">
+                            <div class="left flexbox">
+                                <img :src="goodList.img" alt="" />
+                            </div>
+                            <div class="right">
+                                <div class="name">{{goodList.name}}</div>
+                                <div class="price">
+                                    <span class="sellprice">￥{{goodList.price}}</span>
+                                    <span class="num">x{{goodList.goods_price}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="total">
+                        总计收益金额：{{orderList.price}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.picker.min.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#container_info',
+        data: {
+            showMessage:false,
+            page:1,
+            infoMessage:[]
+        },
+        computed: {
+            shopTobe: function(){
+                return this.infoMessage;
+            }
+        },
+        mounted: function(){
+            var self=this;
+            getInfo(self);
+        },
+        updated:function() {
+        },
+        methods: {
+            showOrder: function(obj){
+                if(obj.show_Order){
+                    obj.show_Order=false;
+                }else{
+                    this.infoMessage.map(function(item){
+                        item.show_Order=false;
+                    });
+                    obj.show_Order=true;
+                }
+            },
+            showGoods: function(item,obj){
+                if(obj.show_goods){
+                    obj.show_goods=false;
+                }else{
+                    item.map(function(son){
+                        son.show_goods=false;
+                    })
+                    obj.show_goods=true;
+                }
+            }
+        }
+    })
+    function getInfo(self){
+        mui.ajax('/apic/recommender_shops_tobe_booked_ajax',{
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+                self.showMessage=true;
+                data.map(function(item){
+                    item.show_Order=false;
+                    item.order.map(function(orderList){
+                        orderList.show_goods=false;
+                    })
+                });
+                self.infoMessage=data;
+                console.log(self.infoMessage);
+            }
+        });
+    };
+</script>
+<script>
+//    (function($) {
+//        $.init();
+//        var result = $('.content')[0];
+//        var cho=document.getElementById("cho_month")
+//            cho.addEventListener('tap', function() {
+//                var optionsJson = this.getAttribute('data-options') || '{}';
+//                var options = JSON.parse(optionsJson);
+//                var id = this.getAttribute('id');
+//                var picker = new $.DtPicker(options);
+//                picker.show(function(rs) {
+//                    console.log(rs);
+//                    result.innerText = rs.y.text+"年"+rs.m.value+"月";
+//                    picker.dispose();
+//                });
+//            }, false);
+//    })(mui);
+//    var state=true;
+//    function showOrder(num){
+//        $(".order_num").hide();
+//        if(state){
+//            $(".order_num"+num).show();
+//            state=false;
+//        }else{
+//            state=true;
+//            $(".order_num"+num).hide();
+//        }
+//    }
+</script>
+</body>
+</html>

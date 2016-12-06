@@ -135,20 +135,20 @@
                     <li class="mui-table-view-cell">
                         <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_income}">
                             <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
-                            收益
+                            收益{$this->user_shop_data[0]['is_recommender']}
                         </a>
                     </li>
             </ul>
-            {if:$this->user_shop_data[0]['is_recommender']}
-                <ul class="mui-table-view">
-                    <li class="mui-table-view-cell">
-                        <a class="mui-navigate-right locationA" href="{url:/site/recommender_login}">
-                            <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
-                            合伙人
-                        </a>
-                    </li>
-                </ul>
-            {/if}
+        {/if}
+        {if:$this->user_data[0]['is_recommender']}
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a class="mui-navigate-right locationA" href="{url:/ucenter/recommender_shop}">
+                        <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
+                        合伙人
+                    </a>
+                </li>
+            </ul>
         {/if}
         <ul class="mui-table-view" style="margin-top: 0.12rem">
             <li class="mui-table-view-cell">
