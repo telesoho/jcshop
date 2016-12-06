@@ -229,7 +229,7 @@
 		<div class="banner">
 			{foreach:items=$this->data_brand}
 			<div class="item">
-				<a href="{echo:empty($item['url']) ? 'javascript:;' : $item['url']}"  class="locationA"><img src="{$item['logo']}" alt="{$item['name']}" style="width:1.61rem;height:1.03rem" /></a>
+				<a href="{url:site/brand_detail}/id/{$item['id']}"  class="locationA"><img src="{$item['logo']}" alt="{$item['name']}" style="width:1.61rem;height:1.03rem" /></a>
 			</div>
 			{/foreach}
 		</div>
