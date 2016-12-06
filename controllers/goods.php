@@ -223,6 +223,17 @@ class Goods extends IController implements adminAuthorization
 			die("没有找到相关商品！");
 		}
 		
+		/* cosme排行信息 */
+		$queryCosme 				= new IQuery('cosme');
+		$queryCosme->where 			= 'goods_id='.$goods_id;
+		$dataCosmeList 				= $queryCosme->find();
+		$dataCosme 					= array();
+		foreach($dataCosmeList as $k => $v){
+			$dataCosme[$v['type']] 	= $v['rank'];
+		}
+		$data['cosme'] 				= $dataCosme;
+		
+		/* 模板赋值 */
 		$this->setRenderData($data);
 		$this->redirect('goods_edit');
 	}
@@ -231,35 +242,53 @@ class Goods extends IController implements adminAuthorization
 	 */
 	function goods_update()
 	{
-		$id       			= IFilter::act(IReq::get('id'),'int');
-		$callback 			= IFilter::act(IReq::get('callback'));
-		$callback 			= strpos($callback,'goods/goods_list') === false ? '' : $callback;
+		$id       					= IFilter::act(IReq::get('id'),'int');
+		$callback 					= IFilter::act(IReq::get('callback'));
+		$callback 					= strpos($callback,'goods/goods_list') === false ? '' : $callback;
 
 		//检查表单提交状态
 		if(!$_POST)
 		{
 			die('请确认表单提交正确');
 		}
-		$bag_no 			= $_POST['bag_no']; //礼包商品编码
-		$bag_num 			= $_POST['bag_num']; //礼包商品数量
+		/* 自定义更新 */
+		$bag_no 					= $_POST['bag_no']; //礼包商品编码
+		$bag_num 					= $_POST['bag_num']; //礼包商品数量
+		$cosme_rank 				= $_POST['cosme_rank']; //cosme排名
 		
 		//初始化商品数据
-		unset($_POST['bag_no']);
-		unset($_POST['bag_num']);
 		unset($_POST['id']);
 		unset($_POST['callback']);
+		unset($_POST['bag_no'], $_POST['bag_num'], $_POST['cosme_type'], $_POST['cosme_rank']);
 
-		$goodsObject 		= new goods_class();
-		$goods_id 			=$goodsObject->update($id,$_POST);
+		$goodsObject 				= new goods_class();
+		$goods_id 					=$goodsObject->update($id,$_POST);
 		
-		//礼包商品
+		/* 礼包商品 */
 		if($_POST['type'] == 2){
-			$model 			= new IModel('goods_bag');
+			$model 					= new IModel('goods_bag');
 			$model->del('goods_id='.$goods_id);
 			foreach ($bag_no as $k => $v){
-				$data 		= array('goods_id'=>$goods_id,'goods_no'=>$bag_no[$k],'num'=>$bag_num[$k]);
+				$data 				= array('goods_id'=>$goods_id,'goods_no'=>$bag_no[$k],'num'=>$bag_num[$k]);
 				$model->setData($data);
 				$model->add();
+			}
+		}
+		/* cosme排行榜 */
+		$modelCosme 				= new IModel('cosme');
+		foreach($cosme_rank as $k => $v){
+			if( !empty($v) ){
+				$info 				= $modelCosme->getObj('goods_id='.$goods_id.' AND type='.$k);
+				if(!empty($info)){
+					$modelCosme->setData(array('rank'=>$v));
+					$modelCosme->update('id='.$info['id']);
+				}else{
+					$modelCosme->setData(array('goods_id'=>$goods_id,'type'=>$k,'rank'=>$v));
+					$modelCosme->add();
+				}
+			}else{
+				$info 				= $modelCosme->getObj('goods_id='.$goods_id.' AND type='.$k);
+				if( !empty($info) ) $modelCosme->del('id='.$info['id']);
 			}
 		}
 

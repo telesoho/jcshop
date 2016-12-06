@@ -18,30 +18,30 @@
     </div>
     <div class="top box">
         <div v-cloak>店铺名称：<span style="color:#ff4aa0;font-size:0.26rem;">{{infoMessage.name}}</span></div>
-        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">{$this->amount_tobe_booked}</span></div>
+        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">8555.00</span></div>
     </div>
-    <div class="merchant1" v-for="item in shopTobe.orders" v-cloak>
+    <div class="merchant1" v-for="item in shopTobe.order" v-cloak>
         <div class="box" @click="showGoods(item)">
-            <div class="left">订单编号：{{item.order_no}}</div>
+            <div class="left">订单编号：{{item.order_num}}</div>
             <div class="state">订单状态：{{item.status}}</div>
         </div>
         <div class="goods" v-if="item.show_goods">
-            <div class="goodsList" v-for="goods_list in item.goods_list">
+            <div class="goodsList" v-for="goodList in item.goods">
                 <div class="content">
                     <div class="left flexbox">
-                        <img :src="goods_list.img" alt="" />
+                        <img :src="goodList.img" alt="" />
                     </div>
                     <div class="right">
-                        <div class="name">{{goods_list.good_info.name}}</div>
+                        <div class="name">{{goodList.name}}</div>
                         <div class="price">
-                            <span class="sellprice">￥{{goods_list.goods_price}}</span>
-                            <span class="num">x{{goods_list.goods_nums}}</span>
+                            <span class="sellprice">￥{{goodList.price}}</span>
+                            <span class="num">x{{goodList.goods_price}}</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="total">
-                实际支付金额：{{item.payable_amount}}
+                总计收益金额：{{item.price}}
             </div>
         </div>
     </div>
@@ -74,7 +74,7 @@
                 if(obj.show_goods){
                     obj.show_goods=false;
                 }else{
-                    this.infoMessage.orders.map(function(son){
+                    this.infoMessage.order.map(function(son){
                         son.show_goods=false;
                     })
                     obj.show_goods=true;
@@ -83,13 +83,13 @@
         }
     })
     function getInfo(self){
-        mui.ajax('/apic/recommender_shop_tobe_booked',{
+        mui.ajax('/apic/test',{
             dataType:'json',//服务器返回json格式数据
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
                 self.showMessage=true;
-                data.orders.map(function(item){
+                data.order.map(function(item){
                     item.show_goods=false;
                 });
                 self.infoMessage=data;
@@ -98,33 +98,33 @@
     };
 </script>
 <script>
-    //    (function($) {
-    //        $.init();
-    //        var result = $('.content')[0];
-    //        var cho=document.getElementById("cho_month")
-    //            cho.addEventListener('tap', function() {
-    //                var optionsJson = this.getAttribute('data-options') || '{}';
-    //                var options = JSON.parse(optionsJson);
-    //                var id = this.getAttribute('id');
-    //                var picker = new $.DtPicker(options);
-    //                picker.show(function(rs) {
-    //                    console.log(rs);
-    //                    result.innerText = rs.y.text+"年"+rs.m.value+"月";
-    //                    picker.dispose();
-    //                });
-    //            }, false);
-    //    })(mui);
-    //    var state=true;
-    //    function showOrder(num){
-    //        $(".order_num").hide();
-    //        if(state){
-    //            $(".order_num"+num).show();
-    //            state=false;
-    //        }else{
-    //            state=true;
-    //            $(".order_num"+num).hide();
-    //        }
-    //    }
+//    (function($) {
+//        $.init();
+//        var result = $('.content')[0];
+//        var cho=document.getElementById("cho_month")
+//            cho.addEventListener('tap', function() {
+//                var optionsJson = this.getAttribute('data-options') || '{}';
+//                var options = JSON.parse(optionsJson);
+//                var id = this.getAttribute('id');
+//                var picker = new $.DtPicker(options);
+//                picker.show(function(rs) {
+//                    console.log(rs);
+//                    result.innerText = rs.y.text+"年"+rs.m.value+"月";
+//                    picker.dispose();
+//                });
+//            }, false);
+//    })(mui);
+//    var state=true;
+//    function showOrder(num){
+//        $(".order_num").hide();
+//        if(state){
+//            $(".order_num"+num).show();
+//            state=false;
+//        }else{
+//            state=true;
+//            $(".order_num"+num).hide();
+//        }
+//    }
 </script>
 </body>
 </html>

@@ -1238,7 +1238,40 @@ class Apic extends IController
 
         $this->json_echo(['banner'=>$banner,'goods_nums'=>$nums]);
     }
-
+    /**
+     * ---------------------------------------------------排行榜---------------------------------------------------*
+     */
+    /**
+     * 排行榜
+     */
+	public function cosme(){
+		/* 排行榜模型 */
+		$query 						= new IQuery('cosme as m');
+		$query->join 				= 'LEFT JOIN goods AS g ON g.id=m.goods_id';
+		$query->fields 				= 'g.id,g.name,g.sell_price,g.img';
+		$query->order 				= 'm.rank asc';
+		$query->limit 				= 3;
+		$name 						= array(1=>'上周热销榜',2=>'美容热销榜',3=>'美容护理榜');
+		$data 						= array();
+		for($i=1; $i<=3; $i++){
+			$query->where 			= 'g.is_del=0 AND m.type='.$i;
+			$list 					= $query->find();
+			if(!empty($list)){
+				foreach($list as $k => $v){
+					$list[$k]['img'] 	= empty($v['img']) ? '' : IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/220/h/220");
+				}
+			}
+			//返回数据
+			$data['cosme'.$i] 		= array(
+				'name' 				=> $name[$i], //榜单名称
+				'type' 				=> $i, //榜单类型
+				'list' 				=> $list, //商品列表
+				);
+		}
+		
+        $this->json_echo( $data );
+	}
+    
     /**
      * @return string
      */
@@ -1313,12 +1346,6 @@ class Apic extends IController
             echo $ret->url;
 //            var_dump($curl->data());
         }
-    }
-    function recommender_shop_tobe_booked(){
-        $recommender = ISession::get('recommender');
-        if (empty($recommender)){$this-$this->redirect('index');}
-        $data = $this->get_shop_recommender();
-        $this->json_echo($data);
     }
     function test(){
         $a = [
@@ -1521,8 +1548,118 @@ class Apic extends IController
         ];
         $this->json_echo($a);
     }
+    function recommender_shops_tobe_booked(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = "' . $this->user['user_id'] . '"';
+        $ret = $shop_query->find();
+        $temp = 0;
+        if(!empty($ret)) {
+            foreach ($ret as $key => $value){
+                $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
+                $data[$key]['identify_id'] = $value['identify_id'];
+                $data[$key]['name'] = $value['name'];
+                $data[$key]['id'] = $value['id'];
+                $data[$key]['address'] = $value['address'];
+                $data[$key]['head_ico'] = $this->get_user_head_ico($value['own_id']);
+                $data[$key]['orders'] = $this->get_shop_orders($value['id']);
+                $temp += $data[$key]['amount_tobe_booked'];
+            }
+        }
+        $data[0]['all_shop_amount_tobe_booked'] = $temp;
+        $this->json_echo($data);
+    }
+    function recommender_shop_tobe_booked(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'own_id = "' . $this->user['user_id'] . '"';
+        $ret = $shop_query->find();
+        $data = [];
+        if(!empty($ret)) {
+            $data['amount_tobe_booked'] = $this->get_amount_tobe_booked($ret[0]['identify_id']);
+            $data['identify_id'] = $ret[0]['identify_id'];
+            $data['name'] = $ret[0]['name'];
+            $data['id'] = $ret[0]['id'];
+            $data['address'] = $ret[0]['address'];
+            $data['orders'] = $this->get_shop_orders($ret[0]['id']);
+        }
+        $this->json_echo($data);
+    }
+    function get_shop_orders($shop_id){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'id = ' . $shop_id . ' and recommender = ' . $this->user['user_id'];
+        $shop_data = $shop_query->find();
+        $temp = '';
+        if ($shop_data){
+            $user_query = new IQuery('user');
+            $user_query->where = 'shop_identify_id = ' . $shop_data[0]['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+            $temp = explode('or',$temp,2)[1];
+        }
+        $temp ='(' . $temp . ')';
+        $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
+        $last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
+        $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
+        $complete_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval)->find(); // 已完成
+        $date_interval = ' and DATE_FORMAT( create_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
+        $distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
+        $merge_data = array_merge($last_month_distribute_order_ret, $complete_order_ret, $distribute_order_ret);
+        foreach ($merge_data as $k=>$value){
+            $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
+            foreach($temp as $key => $good){
+                $good_info = JSON::decode($good['goods_array']);
+                $temp[$key]['good_info'] = $good_info;
+                $temp[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$temp[$key]['img']."/w/160/h/160");
+            }
+            $merge_data[$k]['goods_list'] = $temp;
+        }
+        return $merge_data;
+    }
+    /*获取待ru'zhang*/
+    private function get_amount_tobe_booked(){
+        $shop_query = new IQuery('shop');
+        $user_query = new IQuery('user');
+        $shop_query->where = 'own_id = ' . $this->user['user_id'];
+        $shop_data = $shop_query->find()[0];
+        $temp = '( user_id = ' . $this->user['user_id'];
+        if ($shop_data){
+            $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
+            $user_data = $user_query->find();
+            foreach ($user_data as $key=>$value){
+                $temp .= ' or user_id = ' . $value['id'];
+            }
+        }
+        $temp .= ')';
+        $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
+        $order_query = new IQuery('order');
+        $order_query->where = $where;
+        $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
+        $amount_tobe_booked = $order_query->find()[0]['amount_tobe_booked'];
+        $amount_tobe_booked = empty($amount_tobe_booked) ? '0.00' : $amount_tobe_booked;
+
+        $shop_category = new IQuery('shop_category');
+        $shop_category->where = 'id = ' . $shop_data['category_id'];
+        $shop_category_data = $shop_category->find();
+        $amount_tobe_booked = $amount_tobe_booked * $shop_category_data[0]['rebate'];
+        return $amount_tobe_booked;
+    }
+    private function get_user_head_ico($user_id){
+        $user_query = new IQuery('user');
+        $user_query->where = 'id = ' . $user_id;
+        $ret = $user_query->find();
+        if (!empty($ret[0])){
+            return $ret[0]['head_ico'];
+        } else {
+            return false;
+        }
+    }
     private function json_echo($data){
         echo json_encode($data);
         exit();
+    }
+    public function test1(){
+    	$a = score::incPay($this->user['user_id'],1);
+    	var_dump($a);exit();
     }
 }

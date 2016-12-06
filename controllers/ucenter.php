@@ -43,8 +43,27 @@ class Ucenter extends IController implements userAuthorization
         $user_query->where = 'a.id = ' . $this->user['user_id'];
         $this->user_shop_data = $user_query->find();
 
+        $user_query = new IQuery('user');
+        $user_query->where = 'id = ' . $this->user['user_id'];
+        $this->user_data = $user_query->find();
+
         $this->initPayment();
         $this->redirect('index');
+    }
+    function recommender_shop(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = ' . $this->user['user_id'];
+        $ret = $shop_query->find();
+        if(!empty($ret)) {
+            foreach ($ret as $key => $value){
+                $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
+                $data[$key]['identify_id'] = $value['identify_id'];
+                $data[$key]['name'] = $value['name'];
+                $data[$key]['address'] = $value['address'];
+            }
+            $this->data = $data;
+        }
+        $this->redirect('recommender_shop');
     }
     /*获取待ru'zhang*/
     private function get_amount_tobe_booked(){
@@ -1066,6 +1085,7 @@ class Ucenter extends IController implements userAuthorization
     }
     //待入账金额
     function shop_amount_tobe_booked(){
+        $this->get_amount_tobe_booked();
         $shop_query = new IQuery('shop');
         $user_query = new IQuery('user');
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
@@ -1121,5 +1141,9 @@ class Ucenter extends IController implements userAuthorization
         $this->shop_data = $shop_query->find();
         $this->identify_id = $identify_id;
         $this->redirect('shop_user');
+    }
+    function recommender_shops_tobe_booked(){
+
+        $this->redirect('recommender_shops_tobe_booked');
     }
 }
