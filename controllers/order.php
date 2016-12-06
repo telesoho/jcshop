@@ -1667,9 +1667,13 @@ class Order extends IController implements adminAuthorization
             $name = IFilter::act(IReq::get('name'),'string');
             $address = IFilter::act(IReq::get('address'),'string');
             $category_id = IFilter::act(IReq::get('category_id'),'string');
-//            var_dump($category_id);exit();
+
+            $initial_num = $this->get_shop_category_initial_num($category_id);
+//            var_dump($initial_num);
+//            exit();
             for ($i=1;$i<=$nums;$i++){
-                $shop_model->setData(['name'=>$name . ($count + $i),'register_time'=>date('Y-m-d H:i:s') ,'address'=>$address,'identify_id'=>$i . rand(1000, 9999) . date('is',time()),'category_id'=>$category_id]);
+                $identify_id = $i . rand(1000, 9999) . date('is',time());
+                $shop_model->setData(['name'=>$name . ($count + $i),'register_time'=>date('Y-m-d H:i:s') ,'address'=>$address,'identify_id'=>$identify_id,'category_id'=>$category_id]);
                 $ret = $shop_model->add();
                 if ($ret){
                     continue;
@@ -1680,6 +1684,41 @@ class Order extends IController implements adminAuthorization
             $this->redirect('order_shop');
         }
         $this->redirect('order_add_shop');
+    }
+    /**/
+    private function get_shop_category_initial_num($id){
+        $shop_category_query = new IQuery('shop_category');
+        $shop_category_query->where = ' id = ' . $id;
+        $data = $shop_category_query->find();
+        if (!empty($data)){
+            switch ($data[0]['name']){
+                case '校园店':
+                    $shop_query = new IModel('shop');
+                    $shop_category_num = $shop_query->get_count('category_id = ' . $data[0]['id']);
+//                    echo $shop_category_num;
+                    return 1000500+$shop_category_num;
+                case '海报店':
+                    $shop_query = new IModel('shop');
+                    $shop_category_num = $shop_query->get_count('category_id = ' . $data[0]['id']);
+//                    echo $shop_category_num;
+                    return 1100500+$shop_category_num;
+                case '店中店':
+                    $shop_query = new IModel('shop');
+                    $shop_category_num = $shop_query->get_count('category_id = ' . $data[0]['id']);
+//                    echo $shop_category_num;
+                    return 1200500+$shop_category_num;
+                case '旗舰店':
+                    $shop_query = new IModel('shop');
+                    $shop_category_num = $shop_query->get_count('category_id = ' . $data[0]['id']);
+//                    echo $shop_category_num;
+                    return 1300500+$shop_category_num;
+                default:
+                    return false;
+            }
+        } else {
+            return false;
+        }
+
     }
     function order_add_shop_category(){
         $id = IFilter::act(IReq::get('id'),'string');
@@ -1787,7 +1826,7 @@ class Order extends IController implements adminAuthorization
             ->setErrorCorrection('high')
             ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
             ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
-            ->setLabel('')
+            ->setLabel($identify_id)
             ->setLabelFontSize(16)
             ->setImageType(QrCode::IMAGE_TYPE_PNG);
         header('Content-Type: '.$qrCode->getContentType());
