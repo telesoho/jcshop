@@ -1161,6 +1161,19 @@ class Site extends IController
         $this->data = $this->get_shop_recommender();
         $this->redirect('recommender_shop_tobe_booked');
     }
+    function recommender_shops_tobe_booked(){
+//        $recommender = ISession::get('recommender');
+//        if (empty($recommender)){$this-$this->redirect('index');}
+//        $this->data = $this->get_shop_recommender();
+        $this->redirect('recommender_shops_tobe_booked');
+    }
+    function recommender_shop_tobe_booked_ajax(){
+        $recommender = ISession::get('recommender');
+        if (empty($recommender)){$this-$this->redirect('index');}
+        $data = $this->get_shop_recommender();
+        echo json_encode($data);
+        exit();
+    }
     function recommender_shop_income(){
         $recommender = ISession::get('recommender');
         if (empty($recommender)){$this->redirect('index');}

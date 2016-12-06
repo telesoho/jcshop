@@ -1080,12 +1080,13 @@ class Apic extends IController
     	/* 品牌详情 */
     	$queryBrand 				= new IQuery('brand');
     	$queryBrand->where 			= 'id='.$brand_id;
-    	$queryBrand->fields 		= 'id,name,logo,description';
+    	$queryBrand->fields 		= 'id,name,logo,description,banner';
     	$queryBrand->limit 			= 1;
     	$data 						= $queryBrand->find();
     	if(empty($data)) $this->json_echo(array('error'=>'品牌不存在'));
     	$data 						= $data[0];
     	$data['logo'] 				= empty($data['logo']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$data['logo'].'/w/160/h/102');
+    	$data['banner'] 			= empty($data['banner']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$data['banner'].'/w/750/h/376');
     	
     	/* 相关商品 */
     	$queryGoods 				= new IQuery('goods');
@@ -1104,6 +1105,11 @@ class Apic extends IController
     			unset($dataGoods[$k]['content']);
     		}
     	}
+    	//相关商品数量
+    	$queryGoodsSum 				= new IQuery('goods');
+    	$queryGoodsSum->fields 		= 'count(`id`) as sum';
+    	$queryGoodsSum->where 		= 'is_del=0 AND brand_id='.$brand_id;
+    	$dataGoodsSum 				= $queryGoodsSum->find();
     	
     	/* 相关专辑 */
     	$queryArticle 				= new IQuery('article AS m');
@@ -1118,10 +1124,18 @@ class Apic extends IController
     			$dataArticle[$k]['image'] 	= empty($v['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$v['image'].'/w/750/h/380');;
     		}
     	}
+    	//相关专辑数量
+    	$queryArticleSum 			= new IQuery('article AS m');
+    	$queryArticleSum->join 		= 'LEFT JOIN relation AS r ON r.article_id=m.id LEFT JOIN goods AS g ON g.id=r.goods_id';
+    	$queryArticleSum->where 	= 'g.is_del=0 AND m.visibility=1 AND g.brand_id='.$brand_id;
+    	$queryArticleSum->fields 	= 'count(*) as sum';
+    	$dataArticleSum 			= $queryArticleSum->find();
     	
     	/* 返回参数 */
-    	$data['goods_list'] 				= $dataGoods;
-    	$data['article_list'] 				= $dataArticle;
+    	$data['goods_sum'] 			= $dataGoodsSum[0]['sum'];
+    	$data['article_sum'] 		= $dataArticleSum[0]['sum'];
+    	$data['goods_list'] 		= $dataGoods;
+    	$data['article_list'] 		= $dataArticle;
         $this->json_echo($data);
     }
     /**
@@ -1299,6 +1313,213 @@ class Apic extends IController
             echo $ret->url;
 //            var_dump($curl->data());
         }
+    }
+    function recommender_shop_tobe_booked(){
+        $recommender = ISession::get('recommender');
+        if (empty($recommender)){$this-$this->redirect('index');}
+        $data = $this->get_shop_recommender();
+        $this->json_echo($data);
+    }
+    function test(){
+        $a = [
+            'name' => 'a',
+            'price' => '25',
+            'order' => [
+                [
+                    'order_num' => '123',
+                    'status' => '已完成',
+                    'price' => '55.00',
+                    'goods' => [
+                        [
+                            'goods_price' => '20',
+                            'name' => '商品名称',
+                            'img'=>'/',
+                            'id' => '2',
+                            'price' => '520.0'
+                        ],
+                        [
+                            'goods_price' => '20',
+                            'name' => '商品名称',
+                            'img'=>'/',
+                            'id' => '21',
+                            'price' => '520.0'
+                        ]
+                    ]
+                ],
+                [
+                    'order_num' => '123',
+                    'status' => '已完成',
+                    'price' => '55.00',
+                    'goods' => [
+                        [
+                            'goods_price' => '20',
+                            'name' => '商品名称',
+                            'img'=>'/',
+                            'id' => '22',
+                            'price' => '5230.0'
+                        ],
+                        [
+                            'goods_price' => '20',
+                            'name' => '商品名称',
+                            'img'=>'/',
+                            'id' => '121',
+                            'price' => '5220.0'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $this->json_echo($a);
+
+    }
+    function tests(){
+        $a=[
+            [
+                'name' => 'a',
+                'price' => '25',
+                'order' => [
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '2',
+                                'price' => '520.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '21',
+                                'price' => '520.0'
+                            ]
+                        ]
+                    ],
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '22',
+                                'price' => '5230.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '121',
+                                'price' => '5220.0'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'name' => 'b',
+                'price' => '25',
+                'order' => [
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '2',
+                                'price' => '520.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '21',
+                                'price' => '520.0'
+                            ]
+                        ]
+                    ],
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '22',
+                                'price' => '5230.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '121',
+                                'price' => '5220.0'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'name' => 'c',
+                'price' => '25',
+                'order' => [
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '2',
+                                'price' => '520.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '21',
+                                'price' => '520.0'
+                            ]
+                        ]
+                    ],
+                    [
+                        'order_num' => '123',
+                        'status' => '已完成',
+                        'price' => '55.00',
+                        'goods' => [
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '22',
+                                'price' => '5230.0'
+                            ],
+                            [
+                                'goods_price' => '20',
+                                'name' => '商品名称',
+                                'img'=>'/',
+                                'id' => '121',
+                                'price' => '5220.0'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+        $this->json_echo($a);
     }
     private function json_echo($data){
         echo json_encode($data);
