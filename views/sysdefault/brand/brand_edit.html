@@ -25,6 +25,9 @@
 					<th>LOGO：</th><td><div>{if:isset($brand['logo'])}<img src="{webroot:$brand[logo]}" height="60px"/><br />{/if}<input type='file' class='normal' name='logo'/></div></td>
 				</tr>
 				<tr>
+					<th>Banner：</th><td><div>{if:isset($brand['banner'])}<img src="{webroot:$brand[banner]}" height="60px"/><br />{/if}<input type='file' class='normal' name='banner'/></div></td>
+				</tr>
+				<tr>
 					<th>所属分类：</th>
 					<td>
 						{query:name=brand_category}{/query}
