@@ -1037,20 +1037,45 @@ class Apic extends IController
      */
     public function category_child()
     {
-        $catId = IFilter::act(IReq::get('id'),'int');//分类id
+    	/* 获取参数 */
+        $catId 					= IFilter::act(IReq::get('id'),'int'); //分类id
+        $cosme 					= IFilter::act(IReq::get('cosme'),'int'); //是否排行榜页面
+        $page 					= IFilter::act(IReq::get('page'),'int'); //分页编号
         if($catId == 0){$this->json_echo([]);}
-        $goodsObj = search_goods::find(array('category_extend' => goods_class::catChild($catId)),99999);
-        //获取汇率
-        $siteConfig 		= new Config('site_config');
-        $exchange_rate_jp 	= $siteConfig->exchange_rate_jp;
-        $ratio 				= ',go.sell_price*'.$exchange_rate_jp.'/go.jp_price as ratio';
-        $goodsObj->fields 	.= $ratio;
-        $goodsObj->order 	= 'ratio asc';//根据折扣力度排序
-        $resultData = $goodsObj->find();
-        foreach ($resultData as $key=>$value){
-            $resultData[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
+        
+		/* 获取数据 */
+        $query 					= new IQuery('goods as m');
+        if($cosme == 1){
+        	//cosme排行榜进入
+        	$join 				= 'LEFT JOIN cosme AS c ON c.goods_id=m.id';
+        	$where 				= 'm.is_del=0 AND c.type='.$catId;
+        	$fields 			= 'm.id,m.name,m.sell_price,m.jp_price,m.market_price,m.img';
+        	$order 				= 'c.rank asc';
+        }else{
+        	//通常进入
+        	$join 				= 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
+        	$where 				= 'm.is_del=0 AND c.category_id='.$catId;
+        	$fields 			= 'm.id,m.name,m.sell_price,m.jp_price,m.market_price,m.img';
+	        //获取汇率
+	        $siteConfig 		= new Config('site_config');
+	        $exchange_rate_jp 	= $siteConfig->exchange_rate_jp;
+        	$order 				= 'm.sell_price*'.$exchange_rate_jp.'/m.jp_price asc';
         }
-        $this->json_echo($resultData);
+        $query->join 			= $join;
+        $query->where 			= $where;
+        $query->fields 			= $fields;
+        $query->order 			= $order;
+        $query->page 			= $page<1 ? 1 : $page;
+        $query->pagesize 		= 1000;
+        $resultData 			= $query->find();
+    	$totalPage 				= $query->getTotalPage();
+    	if ($page > $totalPage) $resultData = array();
+        if( !empty($resultData) ){
+        	foreach($resultData as $k => $v){
+        		$resultData[$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/350/h/350");
+        	}
+        }
+        $this->json_echo( $resultData );
     }
     /**
      * ---------------------------------------------------品牌---------------------------------------------------*
@@ -1268,7 +1293,6 @@ class Apic extends IController
 				'list' 				=> $list, //商品列表
 				);
 		}
-		
         $this->json_echo( $data );
 	}
     
