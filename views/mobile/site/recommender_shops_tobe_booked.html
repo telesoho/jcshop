@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>店铺待入账金额详情</title>
+    <title>商户待入账金额详情</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/recommender/recommender.css?v=<?php echo time(); ?>">
@@ -14,7 +14,7 @@
 <div id="container_info">
     <div class="header">
         <a href="{url:/site/recommender_shop}" class="back">返回</a>
-        <a href="#" class="title">待入账金额</a>
+        <a href="#" class="title">商户待入账金额</a>
     </div>
     <div class="top box">
         <div>交易总额：<span style="color:#ff4aa0;font-size:0.26rem;">23366.00</span></div>
@@ -130,33 +130,33 @@
     };
 </script>
 <script>
-    (function($) {
-        $.init();
-        var result = $('.content')[0];
-        var cho=document.getElementById("cho_month")
-            cho.addEventListener('tap', function() {
-                var optionsJson = this.getAttribute('data-options') || '{}';
-                var options = JSON.parse(optionsJson);
-                var id = this.getAttribute('id');
-                var picker = new $.DtPicker(options);
-                picker.show(function(rs) {
-                    console.log(rs);
-                    result.innerText = rs.y.text+"年"+rs.m.value+"月";
-                    picker.dispose();
-                });
-            }, false);
-    })(mui);
-    var state=true;
-    function showOrder(num){
-        $(".order_num").hide();
-        if(state){
-            $(".order_num"+num).show();
-            state=false;
-        }else{
-            state=true;
-            $(".order_num"+num).hide();
-        }
-    }
+//    (function($) {
+//        $.init();
+//        var result = $('.content')[0];
+//        var cho=document.getElementById("cho_month")
+//            cho.addEventListener('tap', function() {
+//                var optionsJson = this.getAttribute('data-options') || '{}';
+//                var options = JSON.parse(optionsJson);
+//                var id = this.getAttribute('id');
+//                var picker = new $.DtPicker(options);
+//                picker.show(function(rs) {
+//                    console.log(rs);
+//                    result.innerText = rs.y.text+"年"+rs.m.value+"月";
+//                    picker.dispose();
+//                });
+//            }, false);
+//    })(mui);
+//    var state=true;
+//    function showOrder(num){
+//        $(".order_num").hide();
+//        if(state){
+//            $(".order_num"+num).show();
+//            state=false;
+//        }else{
+//            state=true;
+//            $(".order_num"+num).hide();
+//        }
+//    }
 </script>
 </body>
 </html>

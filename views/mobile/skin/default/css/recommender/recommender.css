@@ -23,7 +23,7 @@
     /*border:1px solid #eee;*/
 }
 #container_info .thead{
-    background:#bce8f1;
+    background:#eef;
     padding:0 0.2rem 0 0.2rem;
     width:100%;
     display:-webkit-flex;
@@ -34,7 +34,7 @@
 #container_info .thead .name,#container_info .thead .pro{
     position:relative;
     text-align: center;
-    color:#ff4aa0;
+    color:#3d4225;
     fon-size:0.26rem;
     /*top:-0.05rem;*/
     width:97%;
@@ -114,3 +114,11 @@
     height:0.9rem;
     line-height:0.9rem;
 }
+/*店铺详情页面*/
+#container_info .merchant1 .box{
+    padding:0 0.2rem 0 0.2rem;
+    height:0.9rem;
+    line-height:0.9rem;
+    background:#eef;
+    border-bottom:1px solid #ddd;
+ }
