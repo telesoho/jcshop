@@ -14,21 +14,21 @@
     <form class="form-horizontal" role="form" method="post">
         <div class="form-group">
             <label for="a" class="">店铺名称</label>
-            <input type="text" name='name' id="a" required placeholder="店铺名称">
+            <input type="text" name='name' id="a" value="<?php echo $this->shop_data[0]['name']; ?>" required placeholder="店铺名称">
         </div>
         
         <div class="form-group">
             <label for="c" class="">店铺地址</label> 
-            <input type="text" name="address" class="form-control" id="c" required placeholder="店铺地址">
+            <input type="text" name="address" class="form-control" id="c" value="<?php echo $this->shop_data[0]['address']; ?>" required placeholder="店铺地址">
         </div>
         <div class="form-group">
             <label for="d" class="">联系电话</label>
-            <input type="text" name='phone' class="form-control" id="d" required placeholder="电话">
+            <input type="text" name='phone' class="form-control" id="d" value="<?php echo $this->shop_data[0]['phone']; ?>" required placeholder="电话">
         </div>
         <div class="form-group q" style="margin-bottom:0.4rem ;height: auto;">
             <label for="b" class="describe">店铺描述</label>
            
-           <textarea name="b" id="b" value="" style="height:2rem ;" placeholder="店铺描述"></textarea>
+           <textarea name="b" id="b" value="<?php echo $this->shop_data[0]['description']; ?>" style="height:2rem ;" placeholder="店铺描述"></textarea>
         </div>
        <div class="form-group">
             <label for="d" class="">店内活动</label>
