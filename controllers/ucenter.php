@@ -1085,6 +1085,7 @@ class Ucenter extends IController implements userAuthorization
     }
     //待入账金额
     function shop_amount_tobe_booked(){
+        $this->get_amount_tobe_booked();
         $shop_query = new IQuery('shop');
         $user_query = new IQuery('user');
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
@@ -1142,6 +1143,7 @@ class Ucenter extends IController implements userAuthorization
         $this->redirect('shop_user');
     }
     function recommender_shops_tobe_booked(){
+
         $this->redirect('recommender_shops_tobe_booked');
     }
 }

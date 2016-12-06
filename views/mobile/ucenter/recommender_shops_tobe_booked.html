@@ -18,45 +18,45 @@
     </div>
     <div class="top box">
         <div>交易总额：<span style="color:#ff4aa0;font-size:0.26rem;">23366.00</span></div>
-        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">8555.00</span></div>
+        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">{{all_shop_amount_tobe_booked}}</span></div>
     </div>
     <div class="merchant" v-for="item in shopTobe" v-cloak>
         <div class="thead" @click="showOrder(item)">
             <div class="showmerchant">
                 <div class="merchantImg">
-                    <img src="" alt="" />
+                    <img src="{{item.head_ico}}" alt="" />
                 </div>
             </div>
             <div class="name_me flexbox">
                 <div class="name hidewrap">{{item.name}}</div>
             </div>
             <div class="profit flexbox">
-                <div class="pro">{{item.price}}</div>
+                <div class="pro">{{item.amount_tobe_booked}}</div>
             </div>
         </div>
         <div class="order"  v-if="item.show_Order" >
-            <div class="orderList" v-for="orderList in item.order">
-                <div class="box" @click="showGoods(item.order,orderList)">
-                    <div class="left">订单编号：{{orderList.order_num}}</div>
-                    <div class="state">订单状态：{{orderList.status}}</div>
+            <div class="orderList" v-for="orders in item.orders">
+                <div class="box" @click="showGoods(item.orders,orders)">
+                    <div class="left">订单编号：{{orders.order_no}}</div>
+                    <div class="state">订单状态：{{orders.status}}</div>
                 </div>
-                <div class="goods" v-if="orderList.show_goods">
-                    <div class="goodsList" v-for="goodList in orderList.goods">
+                <div class="goods" v-if="orders.show_goods">
+                    <div class="goodsList" v-for="goods_list in orders.goods_list">
                         <div class="content">
                             <div class="left flexbox">
-                                <img :src="goodList.img" alt="" />
+                                <img :src="goods_list.img" alt="" />
                             </div>
                             <div class="right">
-                                <div class="name">{{goodList.name}}</div>
+                                <div class="name">{{goods_list.good_info.name}}</div>
                                 <div class="price">
-                                    <span class="sellprice">￥{{goodList.price}}</span>
-                                    <span class="num">x{{goodList.goods_price}}</span>
+                                    <span class="sellprice">￥{{goods_list.goods_price}}</span>
+                                    <span class="num">x{{goods_list.goods_nums}}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="total">
-                        总计收益金额：{{orderList.price}}
+                        总计收益金额：{{orders.payable_amount}}
                     </div>
                 </div>
             </div>
@@ -72,6 +72,7 @@
     var vm = new Vue({
         el: '#container_info',
         data: {
+            all_shop_amount_tobe_booked:'',
             showMessage:false,
             page:1,
             infoMessage:[]
@@ -111,7 +112,7 @@
         }
     })
     function getInfo(self){
-        mui.ajax('/apic/recommender_shops_tobe_booked_ajax',{
+        mui.ajax('/apic/recommender_shops_tobe_booked',{
             dataType:'json',//服务器返回json格式数据
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
@@ -119,10 +120,11 @@
                 self.showMessage=true;
                 data.map(function(item){
                     item.show_Order=false;
-                    item.order.map(function(orderList){
-                        orderList.show_goods=false;
+                    item.orders.map(function(orders){
+                        orders.show_goods=false;
                     })
                 });
+                self.all_shop_amount_tobe_booked=data[0].all_shop_amount_tobe_booked;
                 self.infoMessage=data;
                 console.log(self.infoMessage);
             }
