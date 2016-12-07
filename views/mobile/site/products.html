@@ -512,12 +512,6 @@
 	</script>
 <!-- 微信分享 -->
 {if:IClient::isWechat() == true}
-<?php 
-	require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
-	$this->wechat = new wechat();
-	$this->wechat->config['wechat_jsApiSDK']=1;
-	$this->wechat->jsApiSDK();
-?>
 <script type="text/javascript">
 var wechat_share = {
     title       : '九猫大百货-日本同价-东京直邮', //标题

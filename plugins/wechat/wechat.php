@@ -34,7 +34,7 @@ class wechat extends pluginBase
 	public $msgObject = null;
 
 	//获取配置参数
-	public function initConfig()
+	private  function initConfig()
 	{
 		//缺少SSL组件
 		if(!extension_loaded("OpenSSL"))
@@ -43,18 +43,6 @@ class wechat extends pluginBase
 			return false;
 		}
 		//获取参数配置
-// 		$config 				= IWeb::$app->config['image_host'];
-// 		$siteConfig 			= new Config('site_config');
-// 		$siteConfigObj 			= $siteConfig->wechat_config;
-		
-// 		if( isset($siteConfigObj['wechat_Token']) && isset($siteConfigObj['wechat_AppID']) && isset($siteConfigObj['wechat_AppSecret']) ){
-// 			$this->config 		= $siteConfigObj;
-// 			return true;
-// 		}else{
-// 			$this->setError("微信配置信息不完全，参数【TOKEN】【AppID】【AppSecret】必须填写完整");
-// 			return false;
-// 		}
-		
 		$siteConfigObj = $this->config();
 		if(isset($siteConfigObj['wechat_Token']) && isset($siteConfigObj['wechat_AppID']) && isset($siteConfigObj['wechat_AppSecret']))
 		{
@@ -70,6 +58,13 @@ class wechat extends pluginBase
 			$this->setError("微信配置信息不完全，参数【TOKEN】【AppID】【AppSecret】必须填写完整");
 			return false;
 		}
+	}
+	
+	/**
+	 * 设置配置
+	 */
+	public function setConfig(){
+		return $this->initConfig();
 	}
 
 	/**
