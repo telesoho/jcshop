@@ -1057,7 +1057,7 @@ class Site extends IController
     function is_exists_recommender($recommender_name)
     {
         $user_query = new IQuery('user');
-        $user_query->where = 'sfz_name = "' . $recommender_name . '" and is_recommender = 1';
+        $user_query->where = 'recommender_id = "' . $recommender_name . '" and is_recommender = 1';
         $ret = $user_query->find();
         if (!empty($ret[0])) {
             return $ret[0];
