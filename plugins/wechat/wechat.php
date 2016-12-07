@@ -18,7 +18,7 @@ class wechat extends pluginBase
 	);
 
 	//配置数组
-	public static $config = array(
+	public $config = array(
 		'wechat_Token'     => '',
 		'wechat_AppID'     => '',
 		'wechat_AppSecret' => '',
