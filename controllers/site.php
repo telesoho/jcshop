@@ -1270,4 +1270,60 @@ class Site extends IController
         $this->shop_data = $shop_query->find();
         $this->redirect('recommender_associate_shop');
     }
+    function your_name(){
+        $name = IFilter::act(IReq::get('name'),'string');
+        $sex = IFilter::act(IReq::get('sex'),'string');
+        switch ($sex){
+            case 0:
+                $sex_name = '女';
+                break;
+            case 1:
+                $sex_name = '男';
+                break;
+            default:
+                $sex_name = '女';
+                break;
+        }
+        if ($name){
+            preg_match_all('/./u',$name,$names);
+            header("Content-type: image/jpeg");    //浏览器输出，如不需要可去掉此行
+            switch (strlen($name)){
+                case 6:
+                    $im = @imagecreatefrompng(__DIR__ . '/2.png');    //从图片建立文件，此处以jpg文件格式为例
+                    break;
+                case 9:
+                    $im = @imagecreatefrompng(__DIR__ . '/3.png');    //从图片建立文件，此处以jpg文件格式为例
+                    break;
+                default:
+                    $im = @imagecreatefrompng(__DIR__ . '/2.png');    //从图片建立文件，此处以jpg文件格式为例
+                    break;
+            }
+            $white = imagecolorallocate($im, 255, 255, 255);
+            $grey = imagecolorallocate($im, 128, 128, 128);
+            $black = imagecolorallocate($im, 0, 0, 0);
+            $text = $name;  //要写到图上的文字
+            $font = __DIR__ . '/wr.ttf';  //写的文字用到的字体。
+            $srcw=imagesx($im);
+            switch (strlen($name)){
+                case 6:
+                    $im = @imagecreatefrompng(__DIR__ . '/2.png');    //从图片建立文件，此处以jpg文件格式为例
+                    imagettftext($im, 22, 0, 343, 835, $white, $font, $names[0][0]);
+                    imagettftext($im, 22, 0, 378, 835, $white, $font, $names[0][1]);
+                    break;
+                case 9:
+                    $im = @imagecreatefrompng(__DIR__ . '/3.png');    //从图片建立文件，此处以jpg文件格式为例
+                    imagettftext($im, 22, 0, 343, 835, $white, $font, $names[0][0]);
+                    imagettftext($im, 22, 0, 376, 835, $white, $font, $names[0][1]);
+                    imagettftext($im, 22, 0, 410, 835, $white, $font, $names[0][2]);
+                    break;
+                default:
+                    $im = @imagecreatefrompng(__DIR__ . '/2.png');    //从图片建立文件，此处以jpg文件格式为例
+                    break;
+            }
+            imagettftext($im, 22, 0, 271, 835, $white, $font, $sex_name);
+            imagepng($im);
+            imagedestroy($im);
+        }
+        $this->redirect('your_name');
+    }
 }
