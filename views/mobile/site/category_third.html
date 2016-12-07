@@ -45,7 +45,7 @@
     <% for(var i=0; i<data.length; i++){%>
     <% var category=data[i] %>
         <div class="product_item" id="product_item<%=category.id %>">
-            <a href="index.php?controller=site&action=products&id=<%=category.id %>">
+            <a href="/site/products?id=<%=category.id %>">
                 <div class="img">
                     <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"  />
                     <img src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg img-ware" dataimg="<%=category.img%>" />
