@@ -34,7 +34,7 @@ class wechat extends pluginBase
 	public $msgObject = null;
 
 	//获取配置参数
-	private function initConfig()
+	private  function initConfig()
 	{
 		//缺少SSL组件
 		if(!extension_loaded("OpenSSL"))
@@ -58,6 +58,13 @@ class wechat extends pluginBase
 			$this->setError("微信配置信息不完全，参数【TOKEN】【AppID】【AppSecret】必须填写完整");
 			return false;
 		}
+	}
+	
+	/**
+	 * 设置配置
+	 */
+	public function setConfig(){
+		return $this->initConfig();
 	}
 
 	/**
