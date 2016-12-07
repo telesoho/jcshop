@@ -46,7 +46,11 @@
         <li class="mui-table-view-cell">
             <a class="mui-navigate-right locationA" href="{url:/ucenter/recommender_associate_shop}">
                 <img src="/views/mobile/skin/default/image/jmj/icon/address-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
+                {if:$this->shop_nums}
                 旗下 {$this->shop_nums} 家店铺
+                {else:}
+                暂无旗下店铺
+                {/if}
             </a>
         </li>
     </ul>
