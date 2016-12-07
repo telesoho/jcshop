@@ -15,11 +15,16 @@
 <style>video{width: 100%;height: auto;}</style>
 <body>
 <section>
-    <div class="top_fixd">
+    <div class="top_fixd" style="border:none">
         <a href="/site/index"><span>首页</span></a> <span>文章详情</span>
     </div>
     <div class="article_title">
         <img src="<?php echo IWeb::$app->config['image_host'] . '/' ?>{$this->articleRow['image']}" alt="" width="100%" />
+    </div>
+    <div class="bodyTitle flexbox">
+        <span class="hidewrap content">那些年cocme大赏秋冬榜上的冠军这里写文章的内容</span>
+        <span class="first_line"></span>
+        <span class="last_line"></span>
     </div>
     <div class="article_body">
         <?php
@@ -34,21 +39,43 @@
         $goods_no_data = Api::run('getGoodsInfoByGoodsNO',array('#goods_no#',$goods_no));
         if(!empty($goods_no_data)){
         ?>
-        <div class="content_ware">
-            <div class="img">
-                <a href={url:/site/products?id=$goods_no_data['goods_id']}><img src="{url:/pic/thumb/img/$goods_no_data['img']/w/160/h/160}" alt="" style="width:2rem;"></a>
+        <a href={url:/site/products?id=$goods_no_data['goods_id']}>
+            <div class="content_ware">
+            <div class="imgBg">
+                <img src="/views/mobile/skin/default/image/jmj/article/buy.png" alt="" />
             </div>
-            <div class="ware">
-                <div class="title">{$goods_no_data['name']}</div>
-                <div class="price">
-                    <span class="price1 sellprice">九猫价:<span style="font-size:0.2rem;color:#ff4aa0">￥</span>{$goods_no_data['sell_price']}</span>
-                    <span class="price2">日本价:<?php echo explode('.',$goods_no_data['jp_price'])[0]; ?>円</span>
-                    <span class="price3">国内价: <span style="font-size:0.2rem;color:#bbb">￥</span>{$goods_no_data['market_price']}</span>
+            <div class="box">
+                <div class="leftImg flexbox" style="">
+                    <div class="line_s"></div>
+                        <img src="{url:/pic/thumb/img/$goods_no_data['img']/w/160/h/160}" alt="" style="width:1.72rem;">
                 </div>
-                <a href="{url:/site/products?id=$goods_no_data['goods_id']}"><div class="buy">立即购买</div></a>
+                <div class="rightContent">
+                    <div class="name">
+                        {$goods_no_data['name']}
+                    </div>
+                    <div class="line_h"></div>
+                    <div class="price box">
+                        <div class="sellprice"><span style="font-size:0.2rem;color:#ff4aa0">￥</span>{$goods_no_data['sell_price']}</div>
+                        <div class="price2">日本价:<?php echo explode('.',$goods_no_data['jp_price'])[0]; ?>円</div>
+                    </div>
+                </div>
             </div>
         </div>
+        </a>
+        <!--<div class="content_ware">-->
+            <!--<div class="img">-->
 
+            <!--</div>-->
+            <!--<div class="ware">-->
+                <!--<div class="title"></div>-->
+                <!--<div class="price">-->
+                    <!--<span class="price1 sellprice">九猫价:<span style="font-size:0.2rem;color:#ff4aa0">￥</span>{$goods_no_data['sell_price']}</span>-->
+                    <!--<span class="price2">日本价:<?php echo explode('.',$goods_no_data['jp_price'])[0]; ?>円</span>-->
+                    <!--<span class="price3">国内价: <span style="font-size:0.2rem;color:#bbb">￥</span>{$goods_no_data['market_price']}</span>-->
+                <!--</div>-->
+                <!--<a href="{url:/site/products?id=$goods_no_data['goods_id']}"><div class="buy">立即购买</div></a>-->
+            <!--</div>-->
+        <!--</div>-->
         <?php
         }
                         echo $y[1];
@@ -61,12 +88,19 @@
             }
         ?>
         <div class="img">
-            <img src="/views/mobile/skin/default/image/xinzeng/erweima.png" alt=""  />
+            <img src="/views/mobile/skin/default/image/jmj/article/erweima.png" alt=""  />
         </div>
         <?php $favorite_article = new IQuery('favorite_article'); $favorite_article->where='user_id = ' . $this->user['user_id'] . ' and aid=' . $this->articleRow['id']; if(!empty($favorite_article->find())){ ?>
-            <div onclick="growGrass({$this->articleRow['id']})" class="articleState active">已种草</div>
+            <div onclick="growGrass({$this->articleRow['id']})" class="articleState active">
+                <img src="/views/mobile/skin/default/image/jmj/article/grass.png" alt="" />
+                <span class="articleStateContent">取消种草</span>
+                </div>
         <?php } else { ?>
-            <div onclick="growGrass({$this->articleRow['id']})" class="articleState">点我种草吧</div>
+            <div onclick="growGrass({$this->articleRow['id']})" class="articleState">
+                <img src="/views/mobile/skin/default/image/jmj/article/grass.png" alt="" />
+                <span class="articleStateContent">立即种草</span>
+
+            </div>
         <?php } ?>
     </div>
 
@@ -194,10 +228,10 @@
                 console.log(data);
                 if(data.message=="收藏成功"){
                     $(".articleState").addClass("active")
-                    $(".articleState").html("已种草");
+                    $(".articleStateContent").html("取消种草");
                 }else{
                     $(".articleState").removeClass("active")
-                    $(".articleState").html("点我种草吧");
+                    $(".articleStateContent").html("立即种草");
                 }
             },
             error:function(xhr,type,errorThrown){
