@@ -83,6 +83,9 @@
     </style>
 </head>
 <body>
+{if:$this->img}
+<img style="width: 100%" src="{$this->img}">
+{else:}
 <div class="header">
     图片生成器
 </div>
@@ -109,5 +112,28 @@
         <img src="/views/mobile/skin/default/image/ceshi/page2.png" class="img2" alt="" />
     </div>
 </form>
+{/if}
+<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
+
+<!-- 微信分享 -->
+{if:IClient::isWechat() == true}
+<?php
+    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+    $this->wechat = new wechat();
+$this->wechat->setConfig();
+$this->wechat->config['wechat_jsApiSDK']=1;
+$this->wechat->jsApiSDK();
+?>
+<script>
+    //微信分享
+    var wechat_share = {
+        title       : '九猫大百货-日本同价-东京直邮', //标题
+        desc        : '欢迎来到九猫家', //描述
+        link        : '',
+        imgUrl      : "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
+    }
+    wechat.share();
+</script>
+{/if}
 </body>
 </html>
