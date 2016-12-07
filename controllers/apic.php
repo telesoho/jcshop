@@ -18,13 +18,6 @@ class Apic extends IController
         $stream->setFormatter($formatter);
         $this->log = new Logger('api');
         $this->log->pushHandler($stream);
-        if(IClient::isWechat() == true){
-        	require_once __DIR__ . '/../plugins/wechat/wechat.php';
-        	$this->wechat = new wechat();
-	        $this->wechat->setConfig();
-	        $this->wechat->config['wechat_jsApiSDK']=1;
-	        $this->wechat->jsApiSDK();
-        }
 //        header("Content-type: application/json");
     }
     /**

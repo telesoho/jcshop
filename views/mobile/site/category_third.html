@@ -94,6 +94,13 @@
 
 <!-- 微信分享 -->
 {if:IClient::isWechat() == true}
+<?php 
+    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+    $this->wechat = new wechat();
+    $this->wechat->setConfig();
+    $this->wechat->config['wechat_jsApiSDK']=1;
+    $this->wechat->jsApiSDK();
+?>
 <script>
 //微信分享
 var wechat_share = {
