@@ -16,10 +16,12 @@
         <a href="{url:/ucenter/recommender_shop}" class="back">返回</a>
         <a href="#" class="title">商户待入账金额</a>
     </div>
+    {if:$this->shop_nums}
     <div class="top box">
-        <div>交易总额：<span style="color:#ff4aa0;font-size:0.26rem;">23366.00</span></div>
-        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">{{all_shop_amount_tobe_booked}}</span></div>
+        <div>交易总额：<span style="color:#ff4aa0;font-size:0.26rem;">{{partner_goods_total_price}}</span></div>
+        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">{{partner_goods_total_tobe_booked}}</span></div>
     </div>
+    {/if}
     <div class="merchant" v-for="item in shopTobe" v-cloak>
         <div class="thead" @click="showOrder(item)">
             <div class="showmerchant">
@@ -38,7 +40,7 @@
             <div class="orderList" v-for="orders in item.orders">
                 <div class="box" @click="showGoods(item.orders,orders)">
                     <div class="left">订单编号：{{orders.order_no}}</div>
-                    <div class="state">订单状态：{{orders.status}}</div>
+                    <div class="state">{{orders.orderStatusText}}</div>
                 </div>
                 <div class="goods" v-if="orders.show_goods">
                     <div class="goodsList" v-for="goods_list in orders.goods_list">
@@ -56,7 +58,7 @@
                         </div>
                     </div>
                     <div class="total">
-                        总计收益金额：{{orders.payable_amount}}
+                        总计收益金额：{{orders.goods_total_tobe_booked}}
                     </div>
                 </div>
             </div>
@@ -72,7 +74,8 @@
     var vm = new Vue({
         el: '#container_info',
         data: {
-            all_shop_amount_tobe_booked:'',
+            partner_goods_total_tobe_booked:'',
+            partner_goods_total_price:'',
             showMessage:false,
             page:1,
             infoMessage:[]
@@ -124,7 +127,8 @@
                         orders.show_goods=false;
                     })
                 });
-                self.all_shop_amount_tobe_booked=data[0].all_shop_amount_tobe_booked;
+                self.partner_goods_total_tobe_booked=data[0].partner_goods_total_tobe_booked;
+                self.partner_goods_total_price=data[0].partner_goods_total_price;
                 self.infoMessage=data;
                 console.log(self.infoMessage);
             }

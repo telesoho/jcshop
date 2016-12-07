@@ -1696,22 +1696,27 @@ class Order extends IController implements adminAuthorization
                     $shop_query = new IModel('shop');
                     $shop_category_num = $shop_query->get_count('category_id = ' . $data[0]['id']);
 //                    echo $shop_category_num;
-                    return 1000500+$shop_category_num;
+                    return 10000500+$shop_category_num;
                 case '海报店':
                     $shop_query = new IModel('shop');
                     $shop_category_num = $shop_query->get_count('category_id = ' . $data[0]['id']);
 //                    echo $shop_category_num;
-                    return 1100500+$shop_category_num;
+                    return 11000500+$shop_category_num;
                 case '店中店':
                     $shop_query = new IModel('shop');
                     $shop_category_num = $shop_query->get_count('category_id = ' . $data[0]['id']);
 //                    echo $shop_category_num;
-                    return 1200500+$shop_category_num;
+                    return 12000500+$shop_category_num;
                 case '旗舰店':
                     $shop_query = new IModel('shop');
                     $shop_category_num = $shop_query->get_count('category_id = ' . $data[0]['id']);
 //                    echo $shop_category_num;
-                    return 1300500+$shop_category_num;
+                    return 15000500+$shop_category_num;
+                case '云商城':
+                    $shop_query = new IModel('shop');
+                    $shop_category_num = $shop_query->get_count('category_id = ' . $data[0]['id']);
+//                    echo $shop_category_num;
+                    return 13000500+$shop_category_num;
                 default:
                     return false;
             }
