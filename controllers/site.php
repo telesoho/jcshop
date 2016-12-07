@@ -55,11 +55,6 @@ class Site extends IController
             }
         }
         //用户登陆
-
-
-        if (empty($_SERVER['REDIRECT_PATH_INFO'])){
-            ISession::set('is_first',true);
-        }
 //		$this->index_slide = Api::run('getBannerList');
 		$this->redirect('index');
 	}
