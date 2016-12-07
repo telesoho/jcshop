@@ -77,3 +77,21 @@
     display:block;
     margin-bottom:0.3rem;
 }
+/*.facAnimate-enter-active{*/
+    /*-webkit-animation: bounce-in .5s;*/
+/*}*/
+/*.circle_ani{*/
+    /*position:relative;*/
+/*}*/
+/*.circle_ani span{*/
+    /*position: absolute;*/
+    /*right:0.64rem;*/
+    /*top:-0.7rem;*/
+    /*display:inline-block;*/
+    /*width:0.5rem;*/
+    /*height:0.5rem;*/
+    /*border-radius: 0.5rem;*/
+    /*-webkit-border-radius: 0.5rem;*/
+    /*border:1px solid #ff4aa0;*/
+/*}*/
+

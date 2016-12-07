@@ -37,15 +37,28 @@
 </div>
 <!--loading页结束-->
 <!--头部-->
-<section class="homeHeader" id="homeHeader">
-	<div class="nav-header">
-		<div class="mui-input-row mui-search">
-			<input type="search" id="searth"  placeholder="" onfocus="getSearth()">
-		</div>
+<section class="search-header" id="homeHeader">
+	<div class="inputContent">
+		<form onsubmit="searthSubmit()" action="/site/search_list">
+			<input type="search" placeholder="" id="search" onfocus="getSearth();" />
+			<img class="search_ico" src="/views/mobile/skin/default/image/xinzeng/search.png" alt="" />
+		</form>
+		<img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon" />
+		<img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon" />
+		<img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower" />
+		<div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
 	</div>
-	<img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon">
-	<img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon">
-	<img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower">
+	<!--模态框-->
+	<div id="modalid-search" class="hide">
+		<div class="title">
+			猫猫都在搜
+		</div>
+		<div class="search-content">
+			<!--<a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in search" v-if="key<10">{{item.word}}</a>-->
+		</div>
+		<button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
+		<button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
+	</div>
 </section>
 <!--分类页面-->
 <section class="box" id="scroll_sitemap">
@@ -96,15 +109,7 @@
 	</nav>
 </footer>
 <!--模态框-->
-<div id="modalid-searth" class="hide">
-	<div class="title">
-		大家都在搜
-	</div>
-	<div class="searth-content">
-	</div>
-	<button type="button" id="button-submit" class="mui-btn  mui-btn-outlined buttom-submit" onclick="searthSubmit();">确定</button>
-	<button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
-</div>
+
 <!--<span class="mui-icon-extra mui-icon-extra-top" id="pagetop"></span>-->
 <!--头信息结束-->
 <!--一级分类-->
@@ -168,7 +173,7 @@
 	<%}%>
 </script>
 <script id="searth_keyword" type="text/html">
-	<% for(var i=0; i<data.length&&i<10; i++){%>
+	<% for(var i=0; i<data.length&&i<12; i++){%>
 	<a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
 	<%}%>
 </script>
@@ -178,15 +183,14 @@
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js"></script>
-
 <script>
 	//页面加载动画的调用
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
 		var temp=getItem("placeHolder");
-		$(".mui-placeholder span").eq(1).html(temp+"件商品等你来搜");
+		document.getElementById("search").placeholder=temp+"件商品等你来搜"
 		getSitemapInfo();
-		hotSearth();
+		hotSearth1();
 		//解决tab选项卡a标签无法跳转的问题
 		mui('body').on('tap','.mui-tab-item',function(){
 			if(!$(this).hasClass("mui-active")){

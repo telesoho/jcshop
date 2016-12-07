@@ -379,83 +379,82 @@ iframe{
   color:#3d4225;
   font-size:0.26rem;
 }
-.homeHeader{
-  position:relative;
-}
-.nav-header{
+/*搜索框样式*/
+.search-header{
   height:1.2rem;
-  padding:0.3rem 0;
   width:100%;
   background:#ff4aa0 !important;
+  position:relative;
 }
-.mui-search {
-  background:#fff !important;
-  border-radius:0.32rem !important;
-  width:5.16rem;
-  height:0.64rem;
-  margin-left:1.17rem;
-  z-index:23;
+#search{
+  font-size:0.28rem;
+  position:absolute;
+  width:5.54rem;
+  height:0.6rem;
+  border-radius:0.6rem;
+  border:none;
+  top:0.3rem;
+  left:0.98rem;
+  line-height:0.6rem;
+  z-index:4;
 }
-.mui-search.mui-active:before{
-  color:#ff4aa0 !important;
+#search::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+  color: #ff4aa0;
+  font-size:0.28rem;
+  opacity: 0.89;
+  padding-left:0.3rem;
 }
-.mui-icon-search:before{
-  color:#ff4aa0 !important;
+#search:focus{
+  padding-left:0.6rem;
+}
+#search:focus~.search_ico{
+  left:1.1rem;
+}
+.inputContent .cancel{
+  position:absolute;
+  font-size:0.31rem;
+  right:0.2rem;
+  top:0.4rem;
+  color:#fff;
+}
+.search_ico{
+  width:0.24rem;
+  height:0.28rem;
+  position:absolute;
+  top:0.49rem;
+  left:2.0rem;
+  z-index:5;
 }
 .left-icon{
   display:inline-block;
   position:absolute;
   top:0.15rem;
-  left:1.1rem;
-  z-index:1;
+  left:0.9rem;
+  z-index:2;
 }
 .img-flower{
   width:0.77rem;
   position:absolute;
-  top:0.07rem;
-  right:1.0rem;
-  z-index:100;
+  top:0.06rem;
+  right:0.85rem;
+  z-index:5;
 }
 .right-icon{
   display:inline-block;
   position:absolute;
   top:0.15rem;
-  right:1.06rem;
-  z-index:1;
-}
-.mui-search .right-icon{
-
+  right:0.9rem;
+  z-index:2;
 }
 input[type='search']{
+  position:relative;
+  z-index:2;
   background:#fff !important;
   color:#3d4245;
   height:0.64rem !important;
 }
-.mui-icon-search:before{
-  color:rgba(255,255,255,0.5);
-  position:relative;
-  right:0.27rem;
-  top:0.04rem;
-  /*width:0.2rem !important;;*/
-  /*height:0.2rem !important;*/
-  font-size:0.4rem;
-}
-.mui-icon-search:after{
-  color:rgba(255,255,255,0.5);
-  position:absolute;
-  top:0.17rem;
-  right:0.63rem;
-}
-.mui-input-row.mui-active {
-  color:rgba(255,255,255,0.5) !important;
-}
-.mui-search span:nth-child(2){
-  margin-top:0.02rem;
-  color:#ff44a0;
-  font-size:0.28rem;
-}
 /*搜索页面*/
-#modalid-searth{
+#modalid-search{
   position:fixed;
   top:1.2rem;
   left:0;
@@ -466,7 +465,7 @@ input[type='search']{
   z-index:999;
   overflow: hidden;
 }
-#modalid-searth .title{
+#modalid-search .title{
   background:#f8f8f8;
   border:1px solid #eeeeee;
   width:100%;
@@ -477,17 +476,17 @@ input[type='search']{
   padding:0 0.15rem;
   line-height:0.5rem;
 }
-#modalid-searth .searth-content{
+#modalid-search .search-content{
   width:100%;
   padding: 0 5% 6% 5%;
   display:-webkit-flex;
   -webkit-flex-wrap: wrap;
   justify-content: flex-start;
 }
-#modalid-searth .searth-content a{
+#modalid-search .search-content a{
   display:inline-block;
   width:auto;
-  padding:0.11rem 0.43rem;
+  padding:0.11rem 0.33rem;
   text-align:center;
   margin:0.24rem 0.2rem 0.1rem 0;
   font-size:0.3rem;
@@ -497,7 +496,7 @@ input[type='search']{
   color:#979797;
 }
 .no_margin{margin:0 !important;}
-#modalid-searth .searth-content a.content_red{border:1px solid #ff4aa0;color:#ff4aa0;}
+#modalid-search .search-content a.content_red{border:1px solid #ff4aa0;color:#ff4aa0;}
 .no_margin_right{margin-right:0 !important;}
 .search_element{width:100%;overflow:hidden;padding:0 1%;}
 .search_element li{border-bottom:1px solid #eee;padding:5% .41rem;}

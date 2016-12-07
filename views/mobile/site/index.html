@@ -19,15 +19,28 @@
 <!--<div class="mui-scroll" id="muiScroll">-->
 <!--头部-->
 <section id="indexInfo"  v-cloak>
-    <section class="homeHeader" id="homeHeader">
-        <div class="nav-header">
-            <div class="mui-input-row mui-search">
-                <input type="search" id="searth"  :placeholder="searth_pla" onfocus="getSearth()">
-            </div>
+    <section class="search-header" id="homeHeader">
+        <div class="inputContent">
+            <form onsubmit="searthSubmit()" action="/site/search_list">
+                <input type="search" :placeholder="searth_pla" id="search" @focus="showSearth"/>
+                <img class="search_ico" src="/views/mobile/skin/default/image/xinzeng/search.png" alt="" />
+            </form>
+            <img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon" />
+            <img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon" />
+            <img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower" />
+            <div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
         </div>
-        <img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon">
-        <img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon">
-        <img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower">
+        <!--模态框-->
+        <div id="modalid-search" class="hide">
+            <div class="title">
+                猫猫都在搜
+            </div>
+            <div class="search-content">
+                <a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in search" v-if="key<12">{{item.word}}</a>
+            </div>
+            <button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
+            <button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
+        </div>
     </section>
     <section id="nav-slider">
         <div  class="mui-slider">
@@ -178,27 +191,6 @@
         <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt=""  />
     </div>
 </section>
-<!--专辑-->
-<!--<section class="timePurchase line">-->
-<!--<div class="timePurchase_title">-->
-<!--<div class="logo">-->
-<!--<img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying01.png" alt="" class="img-pan1">-->
-<!--<span>限时抢购</span>-->
-<!--<img src="/views/mobile/skin/default/image/jmj/icon/Panicbuying02.png" alt="" class="img-pan2">-->
-<!--</div>-->
-<!--<div id="timer" data_timer="0000000000" class="timer">-->
-<!--<span id="timer_h">00</span>-->
-<!--<span id="timer_m">00</span>-->
-<!--<span id="timer_s">00</span>-->
-<!--</div>-->
-<!--<div class="right">-->
-<!--<span class="mui-icon mui-icon-forward mui-pull-right"></span>-->
-<!--<a href="index.php?controller=site&action=time_purchase"><span class=" mui-pull-right">更多</span></a>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="timePurchase_body" id="timePurchase_body">-->
-<!--</div>-->
-<!--</section>-->
 <div style="padding-bottom:2.42rem;background:#f8f8f8"></div>
 <div class="fix-nav">
     <div class="img"><img src="/views/mobile/skin/default/image/jmj/icon/rmb.png" alt="" class="img-rmb"/>
@@ -242,22 +234,7 @@
         </a>
     </nav>
 </footer>
-<!--模态框-->
-<div id="modalid-searth" class="hide">
-    <div class="title">
-        猫猫都在搜
-    </div>
-    <div class="searth-content">
-    </div>
-    <button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
-    <button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
-</div>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-<script id="searth_keyword" type="text/html">
-    <% for(var i=0,m=data.length; i<m&&i<10; i++){%>
-    <a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
-    <%}%>
-</script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
