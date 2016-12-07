@@ -532,30 +532,24 @@ class Apic extends IController
         $items[0]['child'] = $items2;
         $this->json_echo($items[0]);
     }
-    //商品展示
+    /**
+     * 商品详情
+     */
     function products_details()
     {
-        $goods_id = IFilter::act(IReq::get('id'),'int');
-
-        if(!$goods_id)
-        {
-            IError::show(403,"传递的参数不正确");
-            exit;
-        }
+    	/* 获取参数 */
+        $goods_id 				= IFilter::act(IReq::get('id'),'int');
+        if(!$goods_id) IError::show(403,"传递的参数不正确");
 
         //使用商品id获得商品信息
-        $tb_goods = new IModel('goods');
-        $goods_info = $tb_goods->getObj('id='.$goods_id." AND is_del=0");
-        if(!$goods_info)
-        {
-            IError::show(403,"这件商品不存在");
-            exit;
-        }
-
+        $tb_goods 				= new IModel('goods');
+        $goods_info 			= $tb_goods->getObj('id='.$goods_id." AND is_del=0");
+        if(!$goods_info) IError::show(403,"这件商品不存在");
+        
         //品牌名称
         if($goods_info['brand_id'])
         {
-            $tb_brand = new IModel('brand');
+            $tb_brand 			= new IModel('brand');
             $brand_info = $tb_brand->getObj('id='.$goods_info['brand_id']);
             if($brand_info)
             {
@@ -564,9 +558,9 @@ class Apic extends IController
         }
 
         //获取商品分类
-        $categoryObj = new IModel('category_extend as ca,category as c');
-        $categoryList= $categoryObj->query('ca.goods_id = '.$goods_id.' and ca.category_id = c.id','c.id,c.name','ca.id desc',1);
-        $categoryRow = null;
+        $categoryObj 			= new IModel('category_extend as ca,category as c');
+        $categoryList 			= $categoryObj->query('ca.goods_id = '.$goods_id.' and ca.category_id = c.id','c.id,c.name','ca.id desc',1);
+        $categoryRow 			= null;
         if($categoryList)
         {
             $categoryRow = current($categoryList);
@@ -574,7 +568,7 @@ class Apic extends IController
         $goods_info['category'] = $categoryRow ? $categoryRow['id'] : 0;
 
         //商品图片
-        $tb_goods_photo = new IQuery('goods_photo_relation as g');
+        $tb_goods_photo 		= new IQuery('goods_photo_relation as g');
         $tb_goods_photo->fields = 'p.id AS photo_id,p.img ';
         $tb_goods_photo->join = 'left join goods_photo as p on p.id=g.photo_id ';
         $tb_goods_photo->where =' g.goods_id='.$goods_id;
@@ -694,7 +688,6 @@ class Apic extends IController
                 $goods_info['is_favorite'] = 0;
             }
             
-
         $this->json_echo($goods_info);
     }
     /**
@@ -1297,18 +1290,19 @@ class Apic extends IController
 	}
     
     /**
+     * 个人中心
      * @return string
      */
     public function info()
     {
         $user_id = $this->user['user_id'];
 
-        $userObj       = new IModel('user');
-        $where         = 'id = '.$user_id;
-        $userRow = $userObj->getObj($where, array('head_ico','username'));
+        $userObj       		= new IModel('user');
+        $where         		= 'id = '.$user_id;
+        $userRow 			= $userObj->getObj($where, array('head_ico','username'));
 
-        $memberObj       = new IModel('member');
-        $where           = 'user_id = '.$user_id;
+        $memberObj       	= new IModel('member');
+        $where           	= 'user_id = '.$user_id;
         $memberRow = $memberObj->getObj($where);
 
         $data = array_merge($userRow, $memberRow);
@@ -1683,7 +1677,11 @@ class Apic extends IController
         exit();
     }
     public function test1(){
-    	$a = score::incPay($this->user['user_id'],1);
-    	var_dump($a);exit();
+    	$a 		= 'F:/1/';
+    	$b 		= scandir($a);
+    	foreach($b as $k => $v){
+    		if($v=='.' || $v=='..') continue;
+    		echo $v.'<br/>';
+    	}
     }
 }
