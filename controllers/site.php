@@ -1318,7 +1318,8 @@ class Site extends IController
             imagettftext($im, 22, 0, 271, 835, $white, $font, $sex_name);
             imagepng($im);
             imagedestroy($im);
+        } else {
+            $this->redirect('your_name');
         }
-        $this->redirect('your_name');
     }
 }
