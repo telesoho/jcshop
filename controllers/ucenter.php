@@ -1147,7 +1147,12 @@ class Ucenter extends IController implements userAuthorization
         $this->redirect('recommender_shops_tobe_booked');
     }
     function recommender_associate_shop(){
-//        echo 's';
+        $shop_query = new IQuery('shop as a');
+        $shop_query->join = 'right join user as b on a.own_id = b.id';
+        $shop_query->where = 'a.recommender = ' . $this->user['user_id'];
+        $this->data = $shop_query->find();
+//        var_dump($this->data);
+        $this->redirect('recommender_associate_shop');
     }
     private function get_associate_shop_nums(){
         $shop_query = new IQuery('shop');
