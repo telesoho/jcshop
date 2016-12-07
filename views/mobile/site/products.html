@@ -48,6 +48,9 @@
         	<a href="#serviceDescription">
 	            <ul>
 	                <li><img src="/views/mobile/skin/default/image/jmj/img/plane_icon.png"/>日本直邮</li>
+					<li id="showUni">
+						<img src="/views/mobile/skin/default/image/jmj/img/plane_icon.png" style="width:0.32rem;height:0.32rem;vertical-align: middle"/>
+						universal入驻</li>
 	                <li><img src="/views/mobile/skin/default/image/jmj/img/man_icon.png"/>满
 						<img src="/views/mobile/skin/default/image/jmj/product/288.png" style="width:0.64rem;"/>包邮</li>
 	                <li><span class="mui-icon mui-icon-arrowright"></span></li>
@@ -394,7 +397,7 @@
 				timeout:10000,//超时时间设置为10秒；
 				success:function(data){
 					//轮播图展示页面
-                    console.log(data);
+                    console.log(data.vendor);
 					setItem("collection",data);
 					var html=template('product_carousel',data);
 					document.getElementById('carousel').innerHTML=html;
@@ -405,6 +408,11 @@
 					var html2=template('product_goodsDetail',data);
 					document.getElementById('goods_detaile').innerHTML=html2;
 					document.getElementById('goodsContent').innerHTML=data.content;
+					if(data.vendor==1){
+						document.getElementById("showUni").style.display="block";
+					}else{
+						document.getElementById("showUni").style.display="none";
+					}
 //					var html3=template('evaluate',data);
 //					document.getElementById('evaluateBox').innerHTML=html3;
 					var html4=template('joinCarTemplate',data);
