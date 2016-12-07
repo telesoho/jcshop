@@ -20,11 +20,11 @@
 						
 					</span>
 					<dl>
-						<dt><a href="#"><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop01.png"/></a></dt>		
+						<dt><a href="#"><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop01.png" style="width: 0.19rem;height: 0.19rem;"/></a></dt>		
 						<dd>商品<strong id="strong1"></strong>款</dd>
 					</dl>
 					<dl>
-						<dt><a href="#"><img src="/views/mobile/skin/default/image/jmj/brand_detail/video01.png"/></a></dt>
+						<dt><a href="#"><img src="/views/mobile/skin/default/image/jmj/brand_detail/video01.png" style="width: 0.24rem;height: 0.22rem;"/></a></dt>
 						<dd>专辑<strong id="strong2"></strong>场</dd>
 					</dl>
 			</div>
@@ -36,7 +36,7 @@
 		<!--                  文章                                                    -->
 			<!-- 收起     -->
 		<div id="article">
-			<div id="article_top" style="overflow : hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;height: 0.88rem;">
+			<div id="article_top" style="overflow : hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;height: 1.0rem;">
 				
 			</div>
 			<div class="article_footer">
@@ -46,7 +46,7 @@
 			<!--- 展开  -->
 		<div id="article1">
 			<div id="article_top1">
-				资生堂（Shiseido ），是日本著名的化妆品品牌。取名源自中文《易经》中的“至哉坤元，万物资生”，资生堂的涵义为孕育新生命，创造新价值“至哉坤元，万物资生”意为“赞美大地的美德，她哺育了新的生命，创造了新的价值。”这一名称正是资生堂公司形象的反映，是将东方的美学及意识与西方的技术及商业实践相结合，将先进技术与传统理念相结合，用西方文化诠释含蓄的东方文化。
+				
 			</div>
 			<div class="article_footer">
 				<img src="/views/mobile/skin/default/image/jmj/brand_detail/shou.png"/>
@@ -57,9 +57,10 @@
 		<div class="divider"></div>
 		
 		<!--                  相关标签                                                 -->
-		<div class="label">
-			<div><img src="/views/mobile/skin/default/image/jmj/brand_detail/video02.png"/></div>
-			<div class="label1">相关专辑</div>
+		<div class="label" style="clear: both;">
+			<div style="">
+				<img src="/views/mobile/skin/default/image/jmj/brand_detail/video02.png" style="width: 0.31rem;height: 0.31rem;"/></div>
+			<p class="label1">相关专辑</p>
 		</div>
 		
 		<!--                  线条                                                    -->
@@ -76,7 +77,7 @@
 		<div class="divider divider1"></div>
 		<!--                  相关标签                                                 -->
 		<div class="label">
-			<div><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop02.png"/></div>
+			<div><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop02.png" style="width: 0.31rem;height: 0.31rem;"/></div>
 			<div class="label1">全部商品</div>
 		</div>
 		<!--                  线条                                                    -->
@@ -95,7 +96,16 @@
 				</li>-->
 			</ul>
 		</div>
-		
+		<div class="flexbox empty_product" style="width:100%; display: none;">
+            <div class="img" style="text-align: center;">
+                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt="" style="width: 0.73rem;margin-top: 0.65rem;"/>
+            </div>
+           <div class="content">
+               <span>~</span>
+               <span>憋拉了，到底了</span>
+               <span>~</span>
+           </div>
+       </div>
 		<input type="hidden" value="<?php echo $_GET['id']; ?>" id="phpnum" />
 		<script src="/views/mobile/javascript/jquery.min.js"></script>
 		<script src="/views/mobile/javascript/jiumao/brand_detail.js"></script>

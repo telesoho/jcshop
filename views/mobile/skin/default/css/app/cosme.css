@@ -1,0 +1,101 @@
+li{
+	list-style: none;
+}
+#header{
+	display: -webkit-flex;
+	-webkit-justify-content: center;
+	-webkit-align-items: center;
+	height:6.03rem
+}
+.showapp{
+	width: 100%;
+	height: 3.4rem;
+	position: relative;
+}
+.showapp ul{
+	width: 100%;
+	height: 3.4rem;
+	display: flex;
+}
+.showapp li{
+	width: 30%;
+	height: 3.18rem;
+	position: relative;
+}
+.showapp li:nth-child(1){
+	margin-left: 0.20rem;
+}
+.showapp li .logo1{
+	position: absolute;
+	width: 0.58rem;
+	height: 0.48rem;
+	top: 0.2rem;
+}
+.triangle{
+	position: relative;
+}
+.triangle:after{
+	content: "";
+	border-left:0.25rem solid transparent;
+	border-right: 0.25rem solid transparent;
+	border-bottom: 0.25rem solid #fff;
+	background: transparent;
+    position: absolute;
+    content: '';
+    left: 3.5rem;
+    top: -0.23rem;
+    z-index: 24;
+    width: 0;
+    height: 0;
+}
+
+.showapp li .logo2{
+	width: 80%;
+	margin-top: 0.38rem;
+	text-align: center;
+}
+.showapp li p{
+	font-size:0.24rem;
+	color:#3d4245;
+	height:0.35rem;
+	width: 90%;
+	overflow : hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    
+}
+.showapp li .span2{
+	font-size:0.24rem;
+	color:#ff44a0;
+	overflow: hidden;
+}
+.showapp li .span1{
+	font-size: 0.2rem;
+	margin-right: 0.08rem;
+	color:#ff44a0;
+}
+.showapp .more{
+	position: absolute;
+	font-size:0.2rem;
+	width: 0.3rem;
+	color:#979797;
+	top: 50%;
+	margin-top: -0.48rem;
+	right: 0.32rem;
+	line-height: 0.32rem;
+}
+.showapp .span3{
+	width: 0.11rem;
+	height: 0.21rem;
+	position: absolute;
+	top: 50%;
+	right: 0.15rem;
+	margin-left: 0.17rem;
+}
+/*                          分割线divider                                  */
+.divider{
+	background:#f8f8f8;
+	border:1px solid #eeeeee;
+	width:100%;
+	height:0.2rem;
+}

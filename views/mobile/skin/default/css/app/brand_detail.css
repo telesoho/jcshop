@@ -66,9 +66,10 @@ li{
 	/*border-top:1px solid #bbbbbb;
 	border-bottom:1px solid #bbbbbb;*/
 	width: 100%;
-	height:0.02rem;
-	background: #bbbbbb;
-	opacity: 0.5;
+	height: 0.01rem;
+	width: 100%;
+	background: #999;
+	opacity: 0.2;
 }
 #article{
 	margin-top: 0.12rem;
@@ -124,19 +125,24 @@ li{
 	width: 100%;
 	height: 0.7rem;
 }
+.label div{
+	height: 0.7rem;
+	float: left;
+}
 .label div img{
 	width: 0.45rem;
 	height: 0.45rem;
 	float: left;
 	margin-left:0.26rem ;
-	margin-top: 0.14rem;
+	margin-top: 0.22rem;
 }
 .label .label1{
 	float: left;
 	margin-left:0.2rem;
-	margin-top:0.23rem ;
 	font-size:0.28rem;
+	width: 2rem;
 	color:#3d4245;
+	line-height: 0.7rem;
 }
 .mark{
 	position:relative;
@@ -196,7 +202,18 @@ li{
 	padding-left:0.28rem ;
 	padding-bottom:0.29rem ;
 	overflow: hidden;
-	border-bottom:0.01rem solid #bbbbbb;
+	position: relative;
+}
+#list li t{
+		position: absolute;
+	bottom: 0;
+	left:0;
+	display: block;
+	clear:both;
+	height: 0.02rem;
+	width: 100%;
+	background: #999;
+	opacity: 0.2;
 }
 #list li:last-child{
 	border: 0;
