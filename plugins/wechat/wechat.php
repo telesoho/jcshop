@@ -43,21 +43,33 @@ class wechat extends pluginBase
 			return false;
 		}
 		//获取参数配置
-		$siteConfigObj = $this->config();
-		if(isset($siteConfigObj['wechat_Token']) && isset($siteConfigObj['wechat_AppID']) && isset($siteConfigObj['wechat_AppSecret']))
-		{
-			$this->config['wechat_Token']     = $siteConfigObj['wechat_Token'];
-			$this->config['wechat_AppID']     = $siteConfigObj['wechat_AppID'];
-			$this->config['wechat_AppSecret'] = $siteConfigObj['wechat_AppSecret'];
-			$this->config['wechat_AutoLogin'] = $siteConfigObj['wechat_AutoLogin'];
-			$this->config['wechat_jsApiSDK']  = $siteConfigObj['wechat_jsApiSDK'];
+		$config 				= IWeb::$app->config['image_host'];
+		$siteConfig 			= new Config('site_config');
+		$siteConfigObj 			= $siteConfig->wechat_config;
+		
+		if( isset($siteConfigObj['wechat_Token']) && isset($siteConfigObj['wechat_AppID']) && isset($siteConfigObj['wechat_AppSecret']) ){
+			$this->config 		= $siteConfigObj;
 			return true;
-		}
-		else
-		{
+		}else{
 			$this->setError("微信配置信息不完全，参数【TOKEN】【AppID】【AppSecret】必须填写完整");
 			return false;
 		}
+		
+// 		$siteConfigObj = $this->config();
+// 		if(isset($siteConfigObj['wechat_Token']) && isset($siteConfigObj['wechat_AppID']) && isset($siteConfigObj['wechat_AppSecret']))
+// 		{
+// 			$this->config['wechat_Token']     = $siteConfigObj['wechat_Token'];
+// 			$this->config['wechat_AppID']     = $siteConfigObj['wechat_AppID'];
+// 			$this->config['wechat_AppSecret'] = $siteConfigObj['wechat_AppSecret'];
+// 			$this->config['wechat_AutoLogin'] = $siteConfigObj['wechat_AutoLogin'];
+// 			$this->config['wechat_jsApiSDK']  = $siteConfigObj['wechat_jsApiSDK'];
+// 			return true;
+// 		}
+// 		else
+// 		{
+// 			$this->setError("微信配置信息不完全，参数【TOKEN】【AppID】【AppSecret】必须填写完整");
+// 			return false;
+// 		}
 	}
 
 	/**

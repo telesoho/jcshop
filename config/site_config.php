@@ -42,5 +42,13 @@
   'exchange_rate_jp' => '15.26', //四位
   'score_rate' => '100', //积分和金额兑换比例
   'score_goods_rate' => '0.07', //商品返金额比例
+	//微信配置
+	'wechat_config' 	=> array(
+		'wechat_Token'     => 'jiumaojia20161228',
+		'wechat_AppID'     => 'wxa7f3181333f2c848',
+		'wechat_AppSecret' => '768aa611de78e265028ce26f907da846',
+		'wechat_AutoLogin' => '',
+		'wechat_jsApiSDK'  => '',
+	),
   
 )?>

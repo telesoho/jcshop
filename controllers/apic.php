@@ -402,29 +402,30 @@ class Apic extends IController
         }
         $temp ='(' . $temp . ')';
 
-        $ret0 = Api::run('getOrderList', $temp, 'pay_type != 0 and status != 3 and status != 4'); // 全部订单
-        $ret1 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 1'); // 待支付
-        $ret2 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
-        $ret3 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and distribution_status in (1,2)'); // 待收货
-        $ret4 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 '); // 已完成
+        $ret0 			= Api::run('getOrderList', $temp, 'pay_type != 0 and status != 3 and status != 4'); // 全部订单
+        $ret1 			= Api::run('getOrderList', $temp, 'pay_type != 0 and status = 1'); // 待支付
+        $ret2 			= Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
+        $ret3 			= Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and distribution_status in (1,2)'); // 待收货
+        $ret4 			= Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 '); // 已完成
+        
+        
         $data['state0'] = $ret0->find();
         $data['state1'] = $ret1->find();
         $data['state2'] = $ret2->find();
         $data['state3'] = $ret3->find();
         $data['state4'] = $ret4->find();
         //支付方式
-        $payment = new IQuery('payment');
-        $payment->fields = 'id,name,type';
-        $payments = $payment->find();
-        $items = array();
+        $payment 			= new IQuery('payment');
+        $payment->fields 	= 'id,name,type';
+        $payments 			= $payment->find();
+        $items 				= array();
         foreach($payments as $pay)
         {
             $items[$pay['id']]['name'] = $pay['name'];
             $items[$pay['id']]['type'] = $pay['type'];
         }
-
         
-        $temp = [];
+        $temp 					= [];
         foreach ($data as $k => $v){
             foreach ($v as $key => $value ){
                 $data[$k][$key]['pay_type'] = $items[$value['pay_type']]['name'];
