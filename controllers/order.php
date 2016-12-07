@@ -1594,6 +1594,7 @@ class Order extends IController implements adminAuthorization
         $this->shop_query = new IQuery('shop as a');
         $this->shop_query->join = 'left join  shop_category as b on a.category_id = b.id';
         $this->shop_query->fields = 'a.*,b.name as category_name, b.rebate';
+        $this->shop_query->order = 'register_time desc';
 
         $page = IFilter::act(IReq::get('page'),'int');
         $this->shop_query->page = !empty($page) ? $page : 1;
@@ -1668,11 +1669,10 @@ class Order extends IController implements adminAuthorization
             $address = IFilter::act(IReq::get('address'),'string');
             $category_id = IFilter::act(IReq::get('category_id'),'string');
 
-            $initial_num = $this->get_shop_category_initial_num($category_id);
-//            var_dump($initial_num);
-//            exit();
             for ($i=1;$i<=$nums;$i++){
-                $identify_id = $i . rand(1000, 9999) . date('is',time());
+//                $identify_id = $i . rand(1000, 9999) . date('is',time());
+                $initial_num = $this->get_shop_category_initial_num($category_id);
+                $identify_id = $initial_num;
                 $shop_model->setData(['name'=>$name . ($count + $i),'register_time'=>date('Y-m-d H:i:s') ,'address'=>$address,'identify_id'=>$identify_id,'category_id'=>$category_id]);
                 $ret = $shop_model->add();
                 if ($ret){

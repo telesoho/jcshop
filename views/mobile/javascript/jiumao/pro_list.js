@@ -12,8 +12,10 @@ var pageData = {
 //页面加载完成后调用的功能
 window.onload=function(){
     $("#loading").fadeOut(300);
+    var temp=getItem("placeHolder");
+    document.getElementById("search").placeholder=temp+"件商品等你来搜"
     getIndex();
-    hotSearth();
+    hotSearth1();
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){
         if(!$(this).hasClass("mui-active")){
@@ -36,10 +38,6 @@ window.onload=function(){
 //		});
 }
 
-document.getElementById("searth").addEventListener('focus',function(){
-    document.getElementById("modalid-searth").className="show";
-    document.body.style.overflow = 'hidden';
-});
 //上拉加载
 var stop=true;
 $(window).bind('scroll', function() {
@@ -93,7 +91,7 @@ function getIndex(){
         timeout:10000,//超时时间设置为10秒
         success:function(data){
 //				console.log(data);
-            $(".mui-placeholder span").eq(1).html(data.goods_nums+"件商品等你来搜")
+
         },
         error:function(xhr,type,errorThrown){
             //异常处理；

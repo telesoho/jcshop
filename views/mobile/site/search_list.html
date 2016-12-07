@@ -36,22 +36,35 @@
     </div>
 </div>
 <!--loading页结束-->
-<section class="homeHeader" id="homeHeader">
-    <div class="nav-header">
-        <div class="mui-input-row mui-search">
-            <input type="search" id="searth"  placeholder="" onfocus="getSearth()">
-        </div>
-    </div>
-    <img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon">
-    <img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon">
-    <img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower">
-</section>
 <div id="searth_container">
+    <section class="search-header" id="homeHeader">
+        <div class="inputContent">
+            <form onsubmit="searthSubmit()">
+                <input type="search" :placeholder="searth_pla" id="search" @focus="showSearth" v-model="searth_word" />
+                <img class="search_ico" src="/views/mobile/skin/default/image/xinzeng/search.png" alt="" />
+            </form>
+            <img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon" />
+            <img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon" />
+            <img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower" />
+            <div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
+        </div>
+        <!--模态框-->
+        <div id="modalid-search" class="hide">
+            <div class="title">
+                猫猫都在搜
+            </div>
+            <div class="search-content">
+                <a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in search" v-if="key<12">{{item.word}}</a>
+            </div>
+            <button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
+            <button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
+        </div>
+    </section>
     <template v-if="showMessage && infoMessage.goods==''&&infoMessage.article==''" v-cloak>
         <div class="empty">
             <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;">
             <div class="content">暂时没有你想要搜索的商品</div>
-            <a href="{url:/site/index}" class="gotoFind">去逛逛</a>
+            <a href="{url:/site/index}" class="gotoFind locationA">去逛逛</a>
         </div>
     </template>
     <div class="searth_container_content" v-else>
@@ -98,7 +111,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flexbox empty_product">
+                    <div class="flexbox empty_product" v-if="empty">
                         <div class="img">
                             <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
                         </div>
@@ -132,7 +145,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flexbox empty_product over-article">
+                    <div class="flexbox empty_product over-article" v-if="empty">
                         <div class="img">
                             <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
                         </div>
@@ -185,21 +198,6 @@
         </a>
     </nav>
 </footer>
-<!--搜索模态框-->
-<div id="modalid-searth" class="hide">
-    <div class="title">
-        猫猫都在搜
-    </div>
-    <div class="searth-content">
-    </div>
-    <button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
-    <button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
-</div>
-<script id="searth_keyword" type="text/html">
-    <% for(var i=0; i<data.length&&i<10; i++){%>
-    <a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
-    <%}%>
-</script>
 <!--头信息结束-->
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
@@ -208,22 +206,17 @@
 <script src="/views/mobile/javascript/base64.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script>
-//    var page={
-//        page1:1,
-//        page2:1
-//    }
     //页面加载完成后调用的功能
     window.onload=function(){
        document.getElementById("loading").remove();
         $(".mui-placeholder span").eq(1).html(getItem("searth_word")).css("color","#3d4225");
-//        $("#searth").val(getItem("searth_word"));
-        hotSearth();
         mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','.mui-tab-item',function(){
-            var srcimg= $(this).find('img').attr("data-img");
-            $(this).find('img').attr("src","/views/mobile/skin/default/image/jmj/icon/"+srcimg);
-            document.location.href=this.href;
+            if(!$(this).hasClass("mui-active")){
+                $(this).find(".mui-tab-label").addClass("tabBar_color");
+                document.location.href=this.href;
+            }
         });
         var state=getSession('searthState');
         var wndObj=document.getElementsByTagName("body");
@@ -241,6 +234,10 @@
     var vm = new Vue({
         el: '#searth_container',
         data: {
+            searth_word:getItem("searth_word"),
+            search:[],
+            page:1,
+            empty:false,
             showMessage:false,
             infoMessage:{
                 goods:[],
@@ -249,6 +246,9 @@
             state:getSession('searthState')
         },
         computed: {
+            searth_pla: function (){
+                return getItem('placeHolder')+"件商品等你来搜";
+            },
             // 读取和设置
             new_info_goods: function() {
                 var self=this.infoMessage.goods;
@@ -271,12 +271,23 @@
                 return  this.infoMessage.article;
             }
         },
+        mounted: function(){
+            var self=this;
+            hotSearth(self)
+            if(getSession("searth_answer")){
+                self.infoMessage=getSession("searth_answer");
+                self.page=getSession("page");
+            }else{
+                self.page=1;
+                getSearthList(self);
+            }
+        },
         updated:function() {
             lazyload.init({
                 anim:false,
                 selectorName:".samLazyImg"
             });
-            getScrollTop(); //记录位置函数，有个bug，当拉到底部的时候因位置冲突，滚动无效
+//            getScrollTop(); //记录位置函数，有个bug，当拉到底部的时候因位置冲突，滚动无效
         },
         methods: {
             getData: function () {
@@ -294,9 +305,11 @@
                 }
                 changeState(sta)
             },
+            showSearth: function(){
+                getSearth();
+            }
         }
     })
-    vm.getData();
     function changeState(index){
         $(".head .item").removeClass("active");
         $(".itemTop"+index).addClass("active");
@@ -323,35 +336,48 @@
     function getSearthList(self){
         mui.ajax('/apic/search', {
             data:{
+                page:self.page,
                 word:getItem("searth_word")
             },
             dataType: 'json',
             type: 'get',
             timeout: 10000,
             success: function (data) {
-                    console.log(data);
-                  self. infoMessage =data;
+                console.log(data);
+                self.showMessage = true;
+//                  self. infoMessage =data;
 //                console.log(data);
-//                self.$data.overMessage=data;
-//                for(var i=0;i<data.goods.length;i++){
-//                    self.$data.infoMessage.goods.push(data.goods[i]);
-//                }
-//                for(var j=0;j<data.article.length;j++){
-//                    self.$data.infoMessage.article.push(data.article[j]);
-//                }
-//                self.$data.showMessage = true;
-//                if(data.goods.length==0&&data.article.length==0){
-//                    stop=false;
-//                }else{
-//                    stop=true;
-//                }
-//                page.page1++;
-//                page.page2++;
+                self.overMessage=data;
+                for(var i=0;i<data.goods.length;i++){
+                    self.infoMessage.goods.push(data.goods[i]);
+                }
+                for(var j=0;j<data.article.length;j++){
+                    self.infoMessage.article.push(data.article[j]);
+                }
+                if(data.goods.length==0&&data.article.length==0){
+                    stop=false;
+                    self.empty=true;
+                }else{
+                    stop=true;
+                }
+                pushSession("searth_answer",self.infoMessage);
+                self.page++;
+                pushSession('searth_page',self.page);
 //
             },
             error: function (xhr, type, errorThrown) {
                 //异常处理；
                 console.log(type);
+            }
+        });
+    }
+    function hotSearth(self){
+        mui.ajax('/apic/search_words',{
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒；
+            success:function(data){
+                self.search=data;
             }
         });
     }
