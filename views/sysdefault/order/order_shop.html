@@ -16,12 +16,14 @@
 			<col width="70px" />
 			<col width="70px" />
 			<col width="70px" />
+			<col width="70px" />
 		</colgroup>
 
 		<thead>
 		<tr>
 			<th>店铺名称</th>
 			<th>注册开店时间</th>
+			<th>店铺编号</th>
 			<th>店铺二维码</th>
 			<th>店铺类别</th>
 			<th>状态</th>
@@ -38,6 +40,7 @@
 				</a>
 			</td>
 			<td title="{$item['register_time']}">{$item['register_time']}</td>
+			<td title="{$item['register_time']}">{$item['identify_id']}</td>
 			<td title="{$item['register_time']}">
 				<img width="50" src="<?php echo IWeb::$app->config['image_host1'] . '/order/qrcode/identify_id/' . $item['identify_id'];?>">
 			</td>
