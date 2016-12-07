@@ -3,26 +3,51 @@
     height:0.9rem;
     background:#ff4aa0;
     line-height:0.9rem;
-    display:-webkit-flex;
-    -webkit-flex-wrap:nowrap ;
-    -webkit-justify-content: space-between;
+    /*display:-webkit-flex;*/
+    /*-webkit-flex-wrap:nowrap ;*/
+    /*-webkit-justify-content: space-between;*/
+    position:relative;
 }
 #container_info .header .back{
+    position:absolute;
+    left:0;
     color:#fff;
     font-size:0.26rem;
     margin-left:0.2rem;
 }
 #container_info .header .title{
-    width:57%;
-    text-align: left;
+    display: inline-block;
+    width:100%;
+    text-align:center;
     color:#fff;
     font-size:0.3rem;
+}
+#container_info .choMonth{
+    margin-top:0.2rem;
+    background:#fff;
+    height:0.8rem;
+    width:100%;
+    display: -webkit-flex;
+    -webkit-justify-content: space-between;
+    -webkit-align-items: center;
+}
+#container_info .choMonth div{
+    font-size:0.28rem;
+    color:#3d4225;
+}
+#container_info .choMonth .left{
+    margin-left:0.2rem;
+    color:#bbb;
+}
+#container_info .choMonth .right{
+    margin-right:0.2rem;
 }
 #container_info>.top{
     padding:0.2rem;
     /*border:1px solid #eee;*/
 }
 #container_info .thead{
+    margin-top:0.1rem;
     background:#eef;
     padding:0 0.2rem 0 0.2rem;
     width:100%;

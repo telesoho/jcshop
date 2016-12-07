@@ -54,6 +54,7 @@ class Ucenter extends IController implements userAuthorization
         $shop_query = new IQuery('shop');
         $shop_query->where = 'recommender = ' . $this->user['user_id'];
         $ret = $shop_query->find();
+        $this->shop_nums = null;
         if(!empty($ret)) {
             foreach ($ret as $key => $value){
                 $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
@@ -62,6 +63,7 @@ class Ucenter extends IController implements userAuthorization
                 $data[$key]['address'] = $value['address'];
             }
             $this->data = $data;
+            $this->shop_nums= count($data);
         }
         $this->redirect('recommender_shop');
     }
@@ -70,7 +72,11 @@ class Ucenter extends IController implements userAuthorization
         $shop_query = new IQuery('shop');
         $user_query = new IQuery('user');
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
-        $shop_data = $shop_query->find()[0];
+        if (empty($shop_data = $shop_query->find())){
+            return '0.00';
+        } else {
+            $shop_data = $shop_data[0];
+        }
         $temp = '( user_id = ' . $this->user['user_id'];
         if ($shop_data){
             $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
@@ -1029,23 +1035,20 @@ class Ucenter extends IController implements userAuthorization
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
         $shop_data = $shop_query->find()[0];
         $shop_data['identify_qrcode'] = IWeb::$app->config['image_host1'] . '/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
-//        $shop_data['identify_qrcode'] = 'http://192.168.0.13:8080/ucenter/qrcode/identify_id/' . $shop_data['identify_id'];
         $this->shop_data = $shop_data;
-//        var_dump($this->shop_data);
         $this->redirect('shop_index');
     }
     function qrcode(){
         $identify_id = IFilter::act(IReq::get('identify_id'),'int');
         $qrCode = new QrCode();
         $qrCode
-//            ->setText('http://192.168.0.13:8080/?iid=' . $identify_id)
             ->setText(IWeb::$app->config['image_host1'] . '?iid=' . $identify_id)
             ->setSize(150)
             ->setPadding(10)
             ->setErrorCorrection('high')
             ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
             ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
-            ->setLabel('')
+            ->setLabel($identify_id)
             ->setLabelFontSize(16)
             ->setImageType(QrCode::IMAGE_TYPE_PNG);
         header('Content-Type: '.$qrCode->getContentType());
@@ -1140,7 +1143,25 @@ class Ucenter extends IController implements userAuthorization
         $this->redirect('shop_user');
     }
     function recommender_shops_tobe_booked(){
-
+        $this->shop_nums = $this->get_associate_shop_nums();
         $this->redirect('recommender_shops_tobe_booked');
+    }
+    function recommender_associate_shop(){
+        $shop_query = new IQuery('shop as a');
+        $shop_query->join = 'right join user as b on a.own_id = b.id';
+        $shop_query->where = 'a.recommender = ' . $this->user['user_id'];
+        $this->data = $shop_query->find();
+//        var_dump($this->data);
+        $this->redirect('recommender_associate_shop');
+    }
+    private function get_associate_shop_nums(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = ' . $this->user['user_id'];
+        $ret = $shop_query->find();
+        if (empty($ret)){
+            return false;
+        } else {
+            return count($ret);
+        }
     }
 }

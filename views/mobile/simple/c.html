@@ -11,26 +11,26 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/recommender/c.css?v=<?php echo time(); ?>">
 </head>
 <body>
-<div id="shopContainer">
-    <div class="header">
-        <a href="{url:/ucenter/recommender_shop}" class="back">返回</a>
-        <a href="#" class="title">旗下店铺</a>
-    </div>
-    <div class="shopList" v-cloak>
-        <div class="shopListItem" v-for="(item,key) in shopList">
-            <div class="no">
-                {{key+1}}
-            </div>
-            <div class="img">
-                <img :src="item.head_ico" alt="" style="">
-            </div>
-            <div class="name">
-                {{item.name}}
+    <div id="shopContainer">
+        <div class="header">
+            <a href="#" class="back">返回</a>
+            <a href="#" class="title">旗下店铺</a>
+        </div>
+        <div class="shopList" v-cloak>
+            <div class="shopListItem" v-for="(item,key) in shopList">
+                <div class="no">
+                    {{key+1}}
+                </div>
+                <div class="img">
+                    <img :src="item.img" alt="" style="">
+                </div>
+                <div class="name">
+                    {{item.name}}
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
@@ -47,7 +47,13 @@
         }
     });
     function getShopList(self){
-        self.shopList=<?php echo json_encode($this->data) ?>
+        self.shopList=[
+            {img:'',name:'小王店铺'},
+            {img:'',name:'小李店铺'},
+            {img:'',name:'小马店铺'},
+            {img:'',name:'小王店铺'},
+            {img:'',name:'小王店铺'}
+        ]
     }
 </script>
 </body>
