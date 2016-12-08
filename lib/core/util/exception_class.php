@@ -72,6 +72,13 @@ class IException extends Exception
 				}
 			}
 		}
+		/* 错误处理 */
+		alarm::log(array(
+			'content' 			=> '系统级错误(CODE:'.$excep->getCode().'):'.$excep->getMessage(),
+			'file' 				=> $excep->getFile(),
+			'line' 				=> $excep->getLine(),
+			'datetime' 			=> date('Y-m-d H:i:s',time()),
+			));
 		self::show($logString);
 	}
 

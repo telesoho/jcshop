@@ -156,6 +156,16 @@ class IInterceptor
 	public static function shutDown()
 	{
 		self::run("onPhpShutDown");
+		/* 错误记录 */
+		if(error_get_last()){
+			$error 			= error_get_last();
+			alarm::log(array(
+				'content' 		=> '异常错误(TYPE:'.$error['type'].'):'.$error['message'],
+				'file' 			=> $error['file'],
+				'line' 			=> $error['line'],
+				'datetime' 		=> date('Y-m-d H:i:s',time()),
+			));
+		}
 	}
 }
 

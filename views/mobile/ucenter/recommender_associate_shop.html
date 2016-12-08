@@ -1,44 +1,54 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>旗下店铺详情</title>
-    <link rel="stylesheet" href="/views/mobile/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/views/mobile/bootstrap/css/bootstrap-theme.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>旗下店铺</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/recommender/c.css?v=<?php echo time(); ?>">
 </head>
 <body>
-<div class="container" style="margin-top: 10px;">
-    <div class="page-header">
-        <h3>店铺收益&nbsp;&nbsp;<small>详情信息</small></h3>
+<div id="shopContainer">
+    <div class="header">
+        <a href="{url:/ucenter/recommender_shop}" class="back">返回</a>
+        <a href="#" class="title">旗下店铺</a>
+    </div>
+    <div class="shopList" v-cloak>
+        <div class="shopListItem" v-for="(item,key) in shopList">
+            <div class="no">
+                {{key+1}}
+            </div>
+            <div class="img">
+                <img :src="item.head_ico" alt="" style="">
+            </div>
+            <div class="name">
+                {{item.name}}
+            </div>
+        </div>
     </div>
 
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>店铺名称</th>
-            <th>店铺地址</th>
-        </tr>
-        </thead>
-        <tbody>
-        {if:$this->shop_data}
-        {foreach:$items = $this->shop_data}
-        <tr>
-            <td>{$item['name']}</td>
-            <td>{$item['address']}</td>
-        </tr>
-        {/foreach}
-        {/if}
-        </tbody>
-    </table>
-    <hr>
-    <p class="text-center">
-        <a href="{url:/ucenter/recommender_shop}" class="btn btn-primary">返回</a>
-        <a href="{url:/ucenter/recommender_shop_tobe_booked}" class="btn btn-info">查看待入账信息</a>
-    </p>
 </div>
-<script src="/views/mobile/bootstrap/css/jquery.min.js"></script>
-<script src="/views/mobile/bootstrap/css/js/bootstrap.min.js"></script>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script>
+    var vm=new Vue({
+        el:'#shopContainer',
+        data:{
+            shopList:''
+        },
+        mounted: function(){
+            var self=this;
+            //发送ajax请求
+            getShopList(self);
+        }
+    });
+    function getShopList(self){
+        self.shopList=<?php echo json_encode($this->data) ?>
+    }
+</script>
 </body>
 </html>

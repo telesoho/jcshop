@@ -7,9 +7,9 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="x5-orientation" content="portrait">
 	<title>九猫大百货</title>
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 <!--loading页开始-->
@@ -37,15 +37,28 @@
 </div>
 <!--loading页结束-->
 <!--头部-->
-<section class="homeHeader" id="homeHeader">
-	<div class="nav-header">
-		<div class="mui-input-row mui-search">
-			<input type="search" id="searth"  placeholder="" onfocus="getSearth()">
-		</div>
+<section class="search-header" id="homeHeader">
+	<div class="inputContent">
+		<form onsubmit="searthSubmit()" action="/site/search_list">
+			<input type="search" placeholder="" id="search" onfocus="getSearth();" />
+			<img class="search_ico" src="/views/mobile/skin/default/image/xinzeng/search.png" alt="" />
+		</form>
+		<img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon" />
+		<img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon" />
+		<img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower" />
+		<div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
 	</div>
-	<img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon">
-	<img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon">
-	<img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower">
+	<!--模态框-->
+	<div id="modalid-search" class="hide">
+		<div class="title">
+			猫猫都在搜
+		</div>
+		<div class="search-content">
+			<!--<a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in search" v-if="key<10">{{item.word}}</a>-->
+		</div>
+		<button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
+		<button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
+	</div>
 </section>
 <!--分类页面-->
 <section class="box" id="scroll_sitemap">
@@ -96,15 +109,7 @@
 	</nav>
 </footer>
 <!--模态框-->
-<div id="modalid-searth" class="hide">
-	<div class="title">
-		大家都在搜
-	</div>
-	<div class="searth-content">
-	</div>
-	<button type="button" id="button-submit" class="mui-btn  mui-btn-outlined buttom-submit" onclick="searthSubmit();">确定</button>
-	<button type="button" id="button-cancel" class="mui-btn  mui-btn-outlined buttom-cancel" onclick="searthCancel();">取消</button>
-</div>
+
 <!--<span class="mui-icon-extra mui-icon-extra-top" id="pagetop"></span>-->
 <!--头信息结束-->
 <!--一级分类-->
@@ -168,25 +173,24 @@
 	<%}%>
 </script>
 <script id="searth_keyword" type="text/html">
-	<% for(var i=0; i<data.length&&i<10; i++){%>
+	<% for(var i=0; i<data.length&&i<12; i++){%>
 	<a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
 	<%}%>
 </script>
-<script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/template-native.js"></script>
-<script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/lazyload.js"></script>
-<script src="/views/mobile/javascript/jiumao/common.js"></script>
-<script src="/views/mobile/javascript/jiumao/wechat.js"></script>
-
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
 <script>
 	//页面加载动画的调用
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
 		var temp=getItem("placeHolder");
-		$(".mui-placeholder span").eq(1).html(temp+"件商品等你来搜");
+		document.getElementById("search").placeholder=temp+"件商品等你来搜"
 		getSitemapInfo();
-		hotSearth();
+		hotSearth1();
 		//解决tab选项卡a标签无法跳转的问题
 		mui('body').on('tap','.mui-tab-item',function(){
 			if(!$(this).hasClass("mui-active")){
@@ -200,12 +204,13 @@
 
 <!-- 微信分享 -->
 {if:IClient::isWechat() == true}
-    <?php
-        require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
-        $this->wechat = new wechat();
-        $this->wechat->config['wechat_jsApiSDK']=1;
-        $this->wechat->jsApiSDK();
-    ?>
+<?php 
+	require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+	$this->wechat = new wechat();
+	$this->wechat->setConfig();
+	$this->wechat->config['wechat_jsApiSDK']=1;
+	$this->wechat->jsApiSDK();
+?>
 <script>
 //微信分享
 var wechat_share = {

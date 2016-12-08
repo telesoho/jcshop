@@ -1482,4 +1482,25 @@ class Simple extends IController
         file_put_contents($dirname.$filename,$media['mediaBody']);
         return $dirname.$filename;
     }
+    function a(){
+        $this->redirect('a');
+    }
+    function b(){
+        $this->redirect('b');
+    }
+    function c(){
+        $this->redirect('c');
+
+    }
+    function d(){
+        $this->redirect('d');
+
+    }
+    function e(){
+        $this->redirect('e');
+    }
+    function f(){
+        $this->redirect('f');
+    }
+
 }

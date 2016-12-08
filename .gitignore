@@ -7,3 +7,4 @@ upload/
 config.php/
 test.html/
 .gitignore/
+/config/config.php

@@ -402,29 +402,30 @@ class Apic extends IController
         }
         $temp ='(' . $temp . ')';
 
-        $ret0 = Api::run('getOrderList', $temp, 'pay_type != 0 and status != 3 and status != 4'); // 全部订单
-        $ret1 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 1'); // 待支付
-        $ret2 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
-        $ret3 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and distribution_status in (1,2)'); // 待收货
-        $ret4 = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 '); // 已完成
+        $ret0 			= Api::run('getOrderList', $temp, 'pay_type != 0 and status != 3 and status != 4'); // 全部订单
+        $ret1 			= Api::run('getOrderList', $temp, 'pay_type != 0 and status = 1'); // 待支付
+        $ret2 			= Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and distribution_status = 0'); // 待发货
+        $ret3 			= Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and distribution_status in (1,2)'); // 待收货
+        $ret4 			= Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 '); // 已完成
+        
+        
         $data['state0'] = $ret0->find();
         $data['state1'] = $ret1->find();
         $data['state2'] = $ret2->find();
         $data['state3'] = $ret3->find();
         $data['state4'] = $ret4->find();
         //支付方式
-        $payment = new IQuery('payment');
-        $payment->fields = 'id,name,type';
-        $payments = $payment->find();
-        $items = array();
+        $payment 			= new IQuery('payment');
+        $payment->fields 	= 'id,name,type';
+        $payments 			= $payment->find();
+        $items 				= array();
         foreach($payments as $pay)
         {
             $items[$pay['id']]['name'] = $pay['name'];
             $items[$pay['id']]['type'] = $pay['type'];
         }
-
         
-        $temp = [];
+        $temp 					= [];
         foreach ($data as $k => $v){
             foreach ($v as $key => $value ){
                 $data[$k][$key]['pay_type'] = $items[$value['pay_type']]['name'];
@@ -532,30 +533,24 @@ class Apic extends IController
         $items[0]['child'] = $items2;
         $this->json_echo($items[0]);
     }
-    //商品展示
+    /**
+     * 商品详情
+     */
     function products_details()
     {
-        $goods_id = IFilter::act(IReq::get('id'),'int');
-
-        if(!$goods_id)
-        {
-            IError::show(403,"传递的参数不正确");
-            exit;
-        }
+    	/* 获取参数 */
+        $goods_id 				= IFilter::act(IReq::get('id'),'int');
+        if(!$goods_id) IError::show(403,"传递的参数不正确");
 
         //使用商品id获得商品信息
-        $tb_goods = new IModel('goods');
-        $goods_info = $tb_goods->getObj('id='.$goods_id." AND is_del=0");
-        if(!$goods_info)
-        {
-            IError::show(403,"这件商品不存在");
-            exit;
-        }
-
+        $tb_goods 				= new IModel('goods');
+        $goods_info 			= $tb_goods->getObj('id='.$goods_id." AND is_del=0");
+        if(!$goods_info) IError::show(403,"这件商品不存在");
+        
         //品牌名称
         if($goods_info['brand_id'])
         {
-            $tb_brand = new IModel('brand');
+            $tb_brand 			= new IModel('brand');
             $brand_info = $tb_brand->getObj('id='.$goods_info['brand_id']);
             if($brand_info)
             {
@@ -564,9 +559,9 @@ class Apic extends IController
         }
 
         //获取商品分类
-        $categoryObj = new IModel('category_extend as ca,category as c');
-        $categoryList= $categoryObj->query('ca.goods_id = '.$goods_id.' and ca.category_id = c.id','c.id,c.name','ca.id desc',1);
-        $categoryRow = null;
+        $categoryObj 			= new IModel('category_extend as ca,category as c');
+        $categoryList 			= $categoryObj->query('ca.goods_id = '.$goods_id.' and ca.category_id = c.id','c.id,c.name','ca.id desc',1);
+        $categoryRow 			= null;
         if($categoryList)
         {
             $categoryRow = current($categoryList);
@@ -574,7 +569,7 @@ class Apic extends IController
         $goods_info['category'] = $categoryRow ? $categoryRow['id'] : 0;
 
         //商品图片
-        $tb_goods_photo = new IQuery('goods_photo_relation as g');
+        $tb_goods_photo 		= new IQuery('goods_photo_relation as g');
         $tb_goods_photo->fields = 'p.id AS photo_id,p.img ';
         $tb_goods_photo->join = 'left join goods_photo as p on p.id=g.photo_id ';
         $tb_goods_photo->where =' g.goods_id='.$goods_id;
@@ -694,7 +689,6 @@ class Apic extends IController
                 $goods_info['is_favorite'] = 0;
             }
             
-
         $this->json_echo($goods_info);
     }
     /**
@@ -1037,20 +1031,45 @@ class Apic extends IController
      */
     public function category_child()
     {
-        $catId = IFilter::act(IReq::get('id'),'int');//分类id
+    	/* 获取参数 */
+        $catId 					= IFilter::act(IReq::get('id'),'int'); //分类id
+        $cosme 					= IFilter::act(IReq::get('cosme'),'int'); //是否排行榜页面
+        $page 					= IFilter::act(IReq::get('page'),'int'); //分页编号
         if($catId == 0){$this->json_echo([]);}
-        $goodsObj = search_goods::find(array('category_extend' => goods_class::catChild($catId)),99999);
-        //获取汇率
-        $siteConfig 		= new Config('site_config');
-        $exchange_rate_jp 	= $siteConfig->exchange_rate_jp;
-        $ratio 				= ',go.sell_price*'.$exchange_rate_jp.'/go.jp_price as ratio';
-        $goodsObj->fields 	.= $ratio;
-        $goodsObj->order 	= 'ratio asc';//根据折扣力度排序
-        $resultData = $goodsObj->find();
-        foreach ($resultData as $key=>$value){
-            $resultData[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/350/h/350");
+        
+		/* 获取数据 */
+        $query 					= new IQuery('goods as m');
+        if($cosme == 1){
+        	//cosme排行榜进入
+        	$join 				= 'LEFT JOIN cosme AS c ON c.goods_id=m.id';
+        	$where 				= 'm.is_del=0 AND c.type='.$catId;
+        	$fields 			= 'm.id,m.name,m.sell_price,m.jp_price,m.market_price,m.img';
+        	$order 				= 'c.rank asc';
+        }else{
+        	//通常进入
+        	$join 				= 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
+        	$where 				= 'm.is_del=0 AND c.category_id='.$catId;
+        	$fields 			= 'm.id,m.name,m.sell_price,m.jp_price,m.market_price,m.img';
+	        //获取汇率
+	        $siteConfig 		= new Config('site_config');
+	        $exchange_rate_jp 	= $siteConfig->exchange_rate_jp;
+        	$order 				= 'm.sell_price*'.$exchange_rate_jp.'/m.jp_price asc';
         }
-        $this->json_echo($resultData);
+        $query->join 			= $join;
+        $query->where 			= $where;
+        $query->fields 			= $fields;
+        $query->order 			= $order;
+        $query->page 			= $page<1 ? 1 : $page;
+        $query->pagesize 		= 1000;
+        $resultData 			= $query->find();
+    	$totalPage 				= $query->getTotalPage();
+    	if ($page > $totalPage) $resultData = array();
+        if( !empty($resultData) ){
+        	foreach($resultData as $k => $v){
+        		$resultData[$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/350/h/350");
+        	}
+        }
+        $this->json_echo( $resultData );
     }
     /**
      * ---------------------------------------------------品牌---------------------------------------------------*
@@ -1268,23 +1287,23 @@ class Apic extends IController
 				'list' 				=> $list, //商品列表
 				);
 		}
-		
         $this->json_echo( $data );
 	}
     
     /**
+     * 个人中心
      * @return string
      */
     public function info()
     {
         $user_id = $this->user['user_id'];
 
-        $userObj       = new IModel('user');
-        $where         = 'id = '.$user_id;
-        $userRow = $userObj->getObj($where, array('head_ico','username'));
+        $userObj       		= new IModel('user');
+        $where         		= 'id = '.$user_id;
+        $userRow 			= $userObj->getObj($where, array('head_ico','username'));
 
-        $memberObj       = new IModel('member');
-        $where           = 'user_id = '.$user_id;
+        $memberObj       	= new IModel('member');
+        $where           	= 'user_id = '.$user_id;
         $memberRow = $memberObj->getObj($where);
 
         $data = array_merge($userRow, $memberRow);
@@ -1552,20 +1571,32 @@ class Apic extends IController
         $shop_query = new IQuery('shop');
         $shop_query->where = 'recommender = "' . $this->user['user_id'] . '"';
         $ret = $shop_query->find();
-        $temp = 0;
+        $temp_goods_total_price = 0;
+        $temp_goods_tobe_booked = 0;
+        $partner_goods_total_price = 0;
+        $partner_goods_total_tobe_booked = 0;
         if(!empty($ret)) {
             foreach ($ret as $key => $value){
-                $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
                 $data[$key]['identify_id'] = $value['identify_id'];
                 $data[$key]['name'] = $value['name'];
                 $data[$key]['id'] = $value['id'];
                 $data[$key]['address'] = $value['address'];
                 $data[$key]['head_ico'] = $this->get_user_head_ico($value['own_id']);
                 $data[$key]['orders'] = $this->get_shop_orders($value['id']);
-                $temp += $data[$key]['amount_tobe_booked'];
+                foreach ($data[$key]['orders'] as $k=>$v){
+                    $temp_goods_total_price += $v['goods_total_price'];
+                    $temp_goods_tobe_booked += $v['goods_total_tobe_booked'];
+                }
+                $data[$key]['goods_total_price'] = $temp_goods_total_price;
+                $data[$key]['amount_tobe_booked'] = $temp_goods_tobe_booked;
+                $partner_goods_total_tobe_booked += $temp_goods_tobe_booked;
+                $partner_goods_total_price += $temp_goods_total_price;
+                $temp_goods_total_price = 0;
+                $temp_goods_tobe_booked = 0;
             }
+            $data[0]['partner_goods_total_tobe_booked'] = $partner_goods_total_tobe_booked;
+            $data[0]['partner_goods_total_price'] = $partner_goods_total_price;
         }
-        $data[0]['all_shop_amount_tobe_booked'] = $temp;
         $this->json_echo($data);
     }
     function recommender_shop_tobe_booked(){
@@ -1607,12 +1638,21 @@ class Apic extends IController
         $merge_data = array_merge($last_month_distribute_order_ret, $complete_order_ret, $distribute_order_ret);
         foreach ($merge_data as $k=>$value){
             $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
+            $goods_total_price = 0;
             foreach($temp as $key => $good){
+                $goods_total_price += $good['real_price'];
                 $good_info = JSON::decode($good['goods_array']);
                 $temp[$key]['good_info'] = $good_info;
                 $temp[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$temp[$key]['img']."/w/160/h/160");
             }
+            $shop_category = new IQuery('shop_category');
+            $shop_category->where = 'id = ' . $shop_data[0]['category_id'];
+            $shop_category_data = $shop_category->find();
+            $merge_data[$k]['goods_total_price'] = $goods_total_price;
+            $merge_data[$k]['goods_total_tobe_booked'] = $goods_total_price* $shop_category_data[0]['rebate'];
             $merge_data[$k]['goods_list'] = $temp;
+            $relation = array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流', '已取消'=>'已取消','部分发货'=>'查看物流');
+            $merge_data[$k]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
         }
         return $merge_data;
     }
@@ -1621,7 +1661,11 @@ class Apic extends IController
         $shop_query = new IQuery('shop');
         $user_query = new IQuery('user');
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
-        $shop_data = $shop_query->find()[0];
+        if (empty($shop_data = $shop_query->find())){
+            $shop_data = false;
+        } else {
+            $shop_data = $shop_data[0];
+        }
         $temp = '( user_id = ' . $this->user['user_id'];
         if ($shop_data){
             $user_query->where = 'shop_identify_id = ' . $shop_data['identify_id'];
@@ -1637,11 +1681,12 @@ class Apic extends IController
         $order_query->fields = 'sum(real_amount) as amount_tobe_booked';
         $amount_tobe_booked = $order_query->find()[0]['amount_tobe_booked'];
         $amount_tobe_booked = empty($amount_tobe_booked) ? '0.00' : $amount_tobe_booked;
-
-        $shop_category = new IQuery('shop_category');
-        $shop_category->where = 'id = ' . $shop_data['category_id'];
-        $shop_category_data = $shop_category->find();
-        $amount_tobe_booked = $amount_tobe_booked * $shop_category_data[0]['rebate'];
+        if (!empty($shop_data)){
+            $shop_category = new IQuery('shop_category');
+            $shop_category->where = 'id = ' . $shop_data['category_id'];
+            $shop_category_data = $shop_category->find();
+            $amount_tobe_booked = $amount_tobe_booked * $shop_category_data[0]['rebate'];
+        }
         return $amount_tobe_booked;
     }
     private function get_user_head_ico($user_id){
@@ -1659,7 +1704,11 @@ class Apic extends IController
         exit();
     }
     public function test1(){
-    	$a = score::incPay($this->user['user_id'],1);
-    	var_dump($a);exit();
+    	$a 		= 'F:/1/';
+    	$b 		= scandir($a);
+    	foreach($b as $k => $v){
+    		if($v=='.' || $v=='..') continue;
+    		echo $v.'<br/>';
+    	}
     }
 }

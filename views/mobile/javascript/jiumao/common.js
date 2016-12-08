@@ -86,30 +86,37 @@ function handler() {
     event.preventDefault();
 }
 function getSearth(){
-    document.getElementById("searth").value="";
-    document.getElementById("modalid-searth").className="show";
+    document.getElementById("search").value="";
+    document.getElementById("search").placeholder="";
+    document.getElementById("modalid-search").className="show";
+    document.getElementById("cancle").className="show cancel";
     document.getElementById("homeHeader").style.cssText="position:absolute;width:100%;z-index:88;top:0;left:0";
     document.body.style.overflow = 'hidden';
     document.body.addEventListener('touchmove', handler, false)
 }
 function searthCancel(){
-    document.getElementById("modalid-searth").className="hide";
+    document.getElementById("search").placeholder=getItem("placeHolder")+"件商品等你来搜";
+    document.getElementById("modalid-search").className="hide";
+    document.getElementById("cancle").className="hide cancel";
     document.body.style.overflow = 'auto';
     document.getElementById("homeHeader").style.position="static";
     document.body.removeEventListener('touchmove', handler, false)
 }
 function ToSearthPage(item){
     setItem("searth_word",item);
+    removeSessionItem("searth_answer");
     window.location.href="/site/search_list";
 }
 function searthSubmit(){
-    var subContent=document.getElementById("searth").value;
+    var subContent=document.getElementById("search").value;
     setItem("searth_word",subContent);
+    removeSessionItem("searth_answer");
     if(subContent==""){
         searthCancel();
     }else{
         window.location.href="/site/search_list";
     }
+    return false;
 }
 //分类页面处理函数
 function toPageThird(obj){
@@ -210,7 +217,7 @@ function getScrollTop1()
 //            }
 //        });
 //    }
-function hotSearth(){
+function hotSearth1(){
     mui.ajax('/apic/search_words',{
         dataType:'json',//服务器返回json格式数据
         type:'get',//HTTP请求类型
@@ -220,7 +227,7 @@ function hotSearth(){
             dat.data=data;
             console.log(data);
             var html = template('searth_keyword',dat);
-            $(".searth-content").html(html);
+            $(".search-content").html(html);
         },
         error:function(xhr,type,errorThrown){
             //异常处理；

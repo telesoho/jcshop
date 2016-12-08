@@ -6,6 +6,7 @@ var vm = new Vue({
     data: {
         showMessage:false,
         page:1,
+        search:[],
         indexInfo:{
             banner: [
                 {
@@ -54,6 +55,7 @@ var vm = new Vue({
     },
     mounted: function(){
         var self=this;
+        hotSearth(self);
         if(getSession('banner')&&getSession("articleDetail")&&getSession("article_category_list")){
             self.placeHolder=getItem('placeHolder');
             self.showMessage=true;
@@ -102,10 +104,13 @@ var vm = new Vue({
             if(this.changeState){this.changeState=false;
                 collection(item,self);
             }
+        },
+        showSearth: function(){
+            getSearth();
         }
     }
 })
-    hotSearth();
+
 $(document).ready(function(){
     var ua = navigator.userAgent.toLowerCase();
     if (/iphone|ipad|ipod/.test(ua)) {
@@ -129,6 +134,7 @@ function getBanner(self){
         timeout:10000,//超时时间设置为10秒；
         success:function(data){
             self.showMessage=true;
+            self.placeHolder=data.goods_nums;
             // console.log(data.banner);
             setItem("placeHolder",data.goods_nums);
             self.indexInfo.banner=data.banner;
@@ -233,7 +239,20 @@ function collection(item,self){
         }
     });
 }
-
+function hotSearth(self){
+    mui.ajax('/apic/search_words',{
+        dataType:'json',//服务器返回json格式数据
+        type:'get',//HTTP请求类型
+        timeout:10000,//超时时间设置为10秒；
+        success:function(data){
+            self.search=data;
+        }
+    });
+}
+function test(e){
+    alert(111);
+    alert(e.keyCode);
+}
 // 百度统计
 var _hmt = _hmt || [];
 (function() {
