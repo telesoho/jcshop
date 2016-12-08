@@ -842,8 +842,16 @@ class Member extends IController implements adminAuthorization
     }
     public function member_verified_success(){
         $user_id = IFilter::act(IReq::get('uid'),'int');
+        $user_query = new IQuery('user');
+        $user_query->where = 'is_recommender = 1';
+        $ret = $user_query->find();
+        if (empty($ret)){
+            $num = 0;
+        } else {
+            $num = count($ret);
+        }
         $user_model = new IModel('user');
-        $user_model->setData(['is_recommender'=>1, 'recommender_pass'=>password_hash("88888888", PASSWORD_DEFAULT)]);
+        $user_model->setData(['is_recommender'=>1, 'recommender_id'=>20500+$num, 'recommender_pass'=>password_hash("88888888", PASSWORD_DEFAULT)]);
         $user_model->update('id = ' . $user_id);
         $this->redirect('verified');
     }

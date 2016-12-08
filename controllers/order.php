@@ -1717,6 +1717,11 @@ class Order extends IController implements adminAuthorization
                     $shop_category_num = $shop_query->get_count('category_id = ' . $data[0]['id']);
 //                    echo $shop_category_num;
                     return 13000500+$shop_category_num;
+                case '校园店测试':
+                    $shop_query = new IModel('shop');
+                    $shop_category_num = $shop_query->get_count('category_id = ' . $data[0]['id']);
+//                    echo $shop_category_num;
+                    return 1500+$shop_category_num;
                 default:
                     return false;
             }

@@ -54,6 +54,7 @@ class Ucenter extends IController implements userAuthorization
         $shop_query = new IQuery('shop');
         $shop_query->where = 'recommender = ' . $this->user['user_id'];
         $ret = $shop_query->find();
+        $this->shop_nums = null;
         if(!empty($ret)) {
             foreach ($ret as $key => $value){
                 $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
@@ -62,8 +63,8 @@ class Ucenter extends IController implements userAuthorization
                 $data[$key]['address'] = $value['address'];
             }
             $this->data = $data;
+            $this->shop_nums= count($data);
         }
-        $this->shop_nums= count($data);
         $this->redirect('recommender_shop');
     }
     /*获取待ru'zhang*/
@@ -1146,7 +1147,12 @@ class Ucenter extends IController implements userAuthorization
         $this->redirect('recommender_shops_tobe_booked');
     }
     function recommender_associate_shop(){
-//        echo 's';
+        $shop_query = new IQuery('shop as a');
+        $shop_query->join = 'right join user as b on a.own_id = b.id';
+        $shop_query->where = 'a.recommender = ' . $this->user['user_id'];
+        $this->data = $shop_query->find();
+//        var_dump($this->data);
+        $this->redirect('recommender_associate_shop');
     }
     private function get_associate_shop_nums(){
         $shop_query = new IQuery('shop');
