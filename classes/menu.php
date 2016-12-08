@@ -142,6 +142,9 @@ class Menu
         		'/system/role_list'  => '角色',
         		'/system/right_list' => '权限资源'
         	),
+        	'开发'=>array(
+        		'/system/error_list' => '错误日志',
+        	),
 		),
 
        '工具'=>array(

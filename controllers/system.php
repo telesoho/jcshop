@@ -1466,7 +1466,7 @@ class System extends IController implements adminAuthorization
 		$this->redirect('payment_list');
 	}
 	
-	//重置库存
+	/* 重置库存 */
 	function resetInventory(){
 		$db_goods 				= new IModel('goods');
 		$db_goods->setData(array('store_nums'=>5));
@@ -1482,6 +1482,14 @@ class System extends IController implements adminAuthorization
 		}else{
 			exit( json_encode(array('code'=>100,'msg'=>'更新失败')) );
 		}
+	}
+	
+	/**
+	 * 错误日志
+	 * @author 夏爽
+	 */
+	public function error_list(){
+		
 	}
 	
 	

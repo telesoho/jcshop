@@ -540,12 +540,16 @@ class Apic extends IController
     {
     	/* 获取参数 */
         $goods_id 				= IFilter::act(IReq::get('id'),'int');
-        if(!$goods_id) IError::show(403,"传递的参数不正确");
+        if(!$goods_id){
+        	IError::show(403,"传递的参数不正确");exit();
+        }
 
         //使用商品id获得商品信息
         $tb_goods 				= new IModel('goods');
         $goods_info 			= $tb_goods->getObj('id='.$goods_id." AND is_del=0");
-        if(!$goods_info) IError::show(403,"这件商品不存在");
+        if(!$goods_info){
+        	IError::show(403,"这件商品不存在");exit();
+        }
         
         //品牌名称
         if($goods_info['brand_id'])
@@ -1745,11 +1749,6 @@ class Apic extends IController
         exit();
     }
     public function test1(){
-    	$a 		= 'F:/1/';
-    	$b 		= scandir($a);
-    	foreach($b as $k => $v){
-    		if($v=='.' || $v=='..') continue;
-    		echo $v.'<br/>';
-    	}
+    	$model 			= new IModel('');
     }
 }
