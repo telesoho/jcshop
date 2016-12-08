@@ -24,39 +24,7 @@ class Site extends IController
 
     function index()
     {
-        if ($this->user['user_id']) {
-            $identify_id = IFilter::act(IReq::get('iid'), 'int');
-            if (empty($identify_id) && empty(ISession::get('shop_identify_id'))) {
-                ISession::clear('shop_name');
-                ISession::clear('shop_identify_id');
-            }
-            $user_own_shop_data = $this->get_user_own_shop_data();
-            if (!empty($user_own_shop_data)) {
-                ISession::set('shop_name', $user_own_shop_data['name']);
-                ISession::set('shop_identify_id', $user_own_shop_data['identify_id']);
-            } else {
-                $user_rel_shop_data = $this->get_user_rel_shop_data();
-                if ($user_rel_shop_data) {
-                    ISession::set('shop_name', $user_rel_shop_data['name']);
-                    ISession::set('shop_identify_id', $user_rel_shop_data['identify_id']);
-                } else {
-                    //关联店铺
-//                    ISession::set('if_associate',$identify_id);
-                    if (!empty($identify_id)) {
-                        $if_shop_register = $this->if_shop_register($identify_id);
-                        if ($if_shop_register) {
-                            $shop_data = $this->get_shop_data_by_identify_id($identify_id);
-                            ISession::set('shop_name', $shop_data['name']);
-                            ISession::set('shop_identify_id', $shop_data['identify_id']);
-                        } else {
-                            $this->redirect('contract?iid=' . $identify_id);
-                        }
-                    } else if (empty(ISession::get('shop_identify_id'))) {
-                        ISession::set('shop_identify_id', '999999999');
-                    }
-                }
-            }
-        }
+        $this->iid_info();
         //用户登陆
 //		$this->index_slide = Api::run('getBannerList');
         $this->redirect('index');
@@ -420,10 +388,7 @@ class Site extends IController
     //文章详情页面
     function article_detail()
     {
-        if (IClient::isWechat() == true) {
-            require_once __DIR__ . '/../plugins/wechat/wechat.php';
-            $this->wechat = new wechat();
-        }
+        $this->iid_info();
 
         $this->action = IFilter::act(IReq::get('action'), 'string');
         if ($this->action == 'article_detail') {
@@ -461,10 +426,9 @@ class Site extends IController
     //商品展示
     function products()
     {
-//		$_SESSION["__forward__"] 	= $_SERVER["REQUEST_URI"]; //记录回跳链接
-
+        $this->iid_info();
         $goods_id = IFilter::act(IReq::get('id'), 'int');
-
+        $this->product_id= $goods_id;
         if (!$goods_id) {
             IError::show(403, "传递的参数不正确");
             exit;
@@ -1312,5 +1276,39 @@ class Site extends IController
         imagepng($im);
         imagedestroy($im);
     }
-
+    private function iid_info(){
+        if ($this->user['user_id']) {
+            $identify_id = IFilter::act(IReq::get('iid'), 'int');
+            if (empty($identify_id) && empty(ISession::get('shop_identify_id'))) {
+                ISession::clear('shop_name');
+                ISession::clear('shop_identify_id');
+            }
+            $user_own_shop_data = $this->get_user_own_shop_data();
+            if (!empty($user_own_shop_data)) {
+                ISession::set('shop_name', $user_own_shop_data['name']);
+                ISession::set('shop_identify_id', $user_own_shop_data['identify_id']);
+            } else {
+                $user_rel_shop_data = $this->get_user_rel_shop_data();
+                if ($user_rel_shop_data) {
+                    ISession::set('shop_name', $user_rel_shop_data['name']);
+                    ISession::set('shop_identify_id', $user_rel_shop_data['identify_id']);
+                } else {
+                    //关联店铺
+//                    ISession::set('if_associate',$identify_id);
+                    if (!empty($identify_id)) {
+                        $if_shop_register = $this->if_shop_register($identify_id);
+                        if ($if_shop_register) {
+                            $shop_data = $this->get_shop_data_by_identify_id($identify_id);
+                            ISession::set('shop_name', $shop_data['name']);
+                            ISession::set('shop_identify_id', $shop_data['identify_id']);
+                        } else {
+                            $this->redirect('contract?iid=' . $identify_id);
+                        }
+                    } else if (empty(ISession::get('shop_identify_id'))) {
+                        ISession::set('shop_identify_id', '999999999');
+                    }
+                }
+            }
+        }
+    }
 }

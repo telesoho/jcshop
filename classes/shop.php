@@ -12,4 +12,10 @@ class Shop
             $ret = $user_model->update('id = ' . $user_id);
         }
     }
+    static function update_order_seller_id($order_id){
+        $shop_identify_id = ISession::get('shop_identify_id');
+        $order_model = new IModel('order');
+        $order_model->setData(['seller_id' => $shop_identify_id]);
+        $order_model->update('id = ' . $order_id);
+    }
 }

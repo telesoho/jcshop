@@ -56,10 +56,10 @@
 					<td title="{$item['point']}">{$item['sfz_name']}</td>
 					<td title="{$item['point']}">{$item['sfz_num']}</td>
 					<td title="{$item['time']}">
-						<img width="150" src="{$item['sfz_image1']}">
+						<img width="150" src='{echo:IWeb::$app->config["image_host"] . IUrl::creatUrl("/pic/thumb/img/" . $item["sfz_image1"] . "/w/140/h/140")}'>
 					</td>
 					<td title="{$item['time']}">
-						<img width="150" src="{$item['sfz_image2']}">
+						<img width="150" src='{echo:IWeb::$app->config["image_host"] . IUrl::creatUrl("/pic/thumb/img/" . $item["sfz_image2"] . "/w/140/h/140")}'>
 					</td>
 					<td>
 						{if:$item['is_recommender']}合伙人

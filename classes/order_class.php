@@ -212,7 +212,8 @@ class Order_Class
 			
 			/* 绑定店铺 */
 			shop::associate($orderRow['user_id']);
-			
+			shop::update_order_seller_id($orderRow['id']);
+
 			/* 店铺主获得积分 */
 			score::incPay($orderRow['user_id'], $orderRow['order_no']);
 
