@@ -1,11 +1,56 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>二维码管理</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/recommender/c.css?v=<?php echo time(); ?>">
 </head>
 <body>
+<div class="newCode">
+    <div class="header">
+        <a href="#" class="back">返回</a>
+        <a href="#" class="title">生成二维码</a>
+    </div>
+    <form class="content" action="" method="post">
+        <div class="num box">
+            <label for="inputNum" class="label1">二维码数量</label>
+            <input type="number" value="" id="inputNum" name="num" placeholder="请输入二维码数量"  />
+        </div>
+        <div class="choType box">
+            <label class="label2">二维码类型</label>
+            <select name="type" id="checkSelect" v-model="type">
+                <option value="店中店">店中店</option>
+                <option value="海报店">海报店</option>
+            </select>
+        </div>
+        <input type="submit" value="生成二维码" id="submit">
+    </form>
+</div>
 
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script>
+    var vm=new Vue({
+        el:'.newCode',
+        data:{
+            num:1,
+            type:'店中店'
+        },
+        mounted: function(){
+            var self=this;
+            //发送ajax请求
+            getShopList(self);
+        }
+    });
+    function getShopList(self){
+
+    }
+</script>
 </body>
 </html>

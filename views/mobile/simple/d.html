@@ -8,36 +8,74 @@
     <title>二维码管理</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/recommender/c.css?v=<?php echo time(); ?>">
+    <style>
+        #QRcode{
+            width:100%;
+        }
+        .header{
+            width:100%;
+            height:0.9rem;
+            background:#ff4aa0;
+            line-height:0.9rem;
+            /*display:-webkit-flex;*/
+            /*-webkit-flex-wrap:nowrap ;*/
+            /*-webkit-justify-content: space-between;*/
+            position:relative;
+        }
+        .header .back{
+            position:absolute;
+            left:0;
+            color:#fff;
+            font-size:0.26rem;
+            margin-left:0.2rem;
+        }
+        .header .title{
+            display: inline-block;
+            width:100%;
+            text-align:center;
+            color:#fff;
+            font-size:0.3rem;
+        }
+        #newCode {
+            font-size:0.34rem;
+            display:block;
+            border: 1px solid #ff44a0;
+            border-radius: 0.1rem;
+            width: 78%;
+            height: 0.96rem;
+            margin: 1.74rem 11% 0;
+            color: #ff44a0;
+            font-weight:bold;
+            line-height:0.96rem;
+            text-align: center;
+        }
+        #unUse{
+            font-size:0.34rem;
+            display:block;
+            background:#ff44a0;
+            font-weight:bold;
+            border-radius: 0.1rem;
+            width: 78%;
+            height: 0.96rem;
+            line-height:0.96rem;
+            text-align: center;
+            margin: 1.74rem 11% 0;
+            color: #fff;
+        }
+
+    </style>
 </head>
 <body>
-<div id="QRcode">
-
+<div class="header">
+    <a href="#" class="back">返回</a>
+    <a href="#" class="title">二维码管理</a>
+</div>
+<div id="QRcode flexbox">
+    <a href="/simple/e" id="newCode">生成二维码</a>
+    <a href="/simple/f" id="unUse" >未使用二维码</a>
 </div>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
-<script>
-    var vm=new Vue({
-        el:'#QRcode',
-        data:{
-            codeList:''
-        },
-        mounted: function(){
-            var self=this;
-            //发送ajax请求
-            getShopList(self);
-        }
-    });
-    function getShopList(self){
-        self.shopList=[
-            {img:'',name:'小王店铺'},
-            {img:'',name:'小李店铺'},
-            {img:'',name:'小马店铺'},
-            {img:'',name:'小王店铺'},
-            {img:'',name:'小王店铺'}
-        ]
-    }
-</script>
 </body>
 </html>

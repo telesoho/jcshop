@@ -4,81 +4,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
-    <title>合伙人累计收益</title>
+    <title>未使用二维码</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/recommender/recommender.css?v=<?php echo time(); ?>">
-    <link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/mui.picker.min.css" />
-    <style>
-        input[type='submit'], .mui-btn-primary, .mui-btn-blue{
-            color:#ff4aa0;
-        }
-    </style>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/recommender/c.css?v=<?php echo time(); ?>">
 </head>
 <body>
-<div id="container_info">
+<div id="code_info">
     <div class="header">
         <a href="{url:/site/recommender_shop}" class="back">返回</a>
-        <a href="#" class="title">合伙人累计入账金额</a>
+        <a href="#" class="title">未使用的二维码</a>
     </div>
-    <div class="choMonth">
-        <div class="left">
-            当前月份
-        </div>
-        <div class="middle" id="month_content" v-cloak>
-                <span style="color:#bbb;padding-right:0.1rem">{{year}}</span>年 <span style="color:#bbb;padding-right:0.1rem">{{month}}</span>月
-        </div>
-        <div class="right" id="cho_month" data-options='{"type":"month"}'>
-            <img src="/views/mobile/skin/default/image/xinzeng/can.png" alt="" style="width:0.25rem;height:0.26rem;"/>
+    <div class="content" v-cloak>
+        <div class="item" v-for="item in code">
+            <div class="text">
+                {{item.type}}
+            </div>
+            <div class="img">
+                <img :src="item.img" alt=""  />
+            </div>
         </div>
     </div>
-    <div class="top box">
-        <div>交易总额：<span style="color:#ff4aa0;font-size:0.26rem;">23366.00</span></div>
-        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">8555.00</span></div>
-    </div>
-    <div class="merchant" v-for="item in shopTobe" v-cloak>
-        <div class="thead" @click="showOrder(item)">
-            <div class="showmerchant">
-                <div class="merchantImg">
-                    <img src="" alt="" />
-                </div>
-            </div>
-            <div class="name_me flexbox">
-                <div class="name hidewrap">{{item.name}}</div>
-            </div>
-            <div class="profit flexbox">
-                <div class="pro">{{item.price}}</div>
-            </div>
-        </div>
-        <div class="order"  v-if="item.show_Order" >
-            <div class="orderList" v-for="orderList in item.order">
-                <div class="box" @click="showGoods(item.order,orderList)">
-                    <div class="left">订单编号：{{orderList.order_num}}</div>
-                    <div class="state">订单状态：{{orderList.status}}</div>
-                </div>
-                <div class="goods" v-if="orderList.show_goods">
-                    <div class="goodsList" v-for="goodList in orderList.goods">
-                        <div class="content">
-                            <div class="left flexbox">
-                                <img :src="goodList.img" alt="" />
-                            </div>
-                            <div class="right">
-                                <div class="name">{{goodList.name}}</div>
-                                <div class="price">
-                                    <span class="sellprice">￥{{goodList.price}}</span>
-                                    <span class="num">x{{goodList.goods_price}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="total">
-                        总计收益金额：{{orderList.price}}
-                    </div>
-                </div>
-            </div>
-        </div>
 
-    </div>
 </div>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
@@ -86,13 +33,9 @@
 <script src="/views/mobile/javascript/mui.picker.min.js"></script>
 <script>
     var vm = new Vue({
-        el: '#container_info',
+        el: '#code_info',
         data: {
-            year:'2016',
-            month:'12',
-            showMessage:false,
-            page:1,
-            infoMessage:[]
+            code:[]
         },
         computed: {
             shopTobe: function(){
@@ -106,72 +49,41 @@
         updated:function() {
         },
         methods: {
-            showOrder: function(obj){
-                if(obj.show_Order){
-                    obj.show_Order=false;
-                }else{
-                    this.infoMessage.map(function(item){
-                        item.show_Order=false;
-                    });
-                    obj.show_Order=true;
-                }
-            },
-            showGoods: function(item,obj){
-                if(obj.show_goods){
-                    obj.show_goods=false;
-                }else{
-                    item.map(function(son){
-                        son.show_goods=false;
-                    })
-                    obj.show_goods=true;
-                }
-            }
         }
     })
     function getInfo(self){
-        mui.ajax('/apic/tests',{
-            data:{
-                year:self.year,
-                month:self.month,
-            },
-            dataType:'json',//服务器返回json格式数据
-            type:'get',//HTTP请求类型
-            timeout:10000,//超时时间设置为10秒；
-            success:function(data){
-                self.showMessage=true;
-                data.map(function(item){
-                    item.show_Order=false;
-                    item.order.map(function(orderList){
-                        orderList.show_goods=false;
-                    })
-                });
-                self.infoMessage=data;
-                console.log(self.infoMessage);
-            }
-        });
-    };
-    window.onload=function(){
-        (function($) {
-            $.init();
-//            var result = document.getElementById("month_content");
-            var cho=document.getElementById("cho_month")
-            cho.addEventListener('tap', function() {
-                var optionsJson = this.getAttribute('data-options') || '{}';
-                var options = JSON.parse(optionsJson);
-                var id = this.getAttribute('id');
-                var picker = new $.DtPicker(options);
-                picker.show(function(rs) {
-                    console.log(rs);
-                    vm.$data.year=rs.y.text;
-                    vm.$data.month=rs.m.value;
-                    getInfo(vm);
-                    console.log(vm);
-//                    result.innerText = rs.y.text+"年"+rs.m.value+"月";
-                    picker.dispose();
-                });
-            }, false);
-        })(mui);
+            var data=[
+                {type:'海报店',img:'/views/mobile/skin/default/image/ceshi/jiumao.png'},
+                {type:'店中店',img:'/views/mobile/skin/default/image/ceshi/jiumao.png'},
+                {type:'店中店',img:'/views/mobile/skin/default/image/ceshi/jiumao.png'},
+                {type:'海报店',img:'/views/mobile/skin/default/image/ceshi/jiumao.png'},
+                {type:'店中店',img:'/views/mobile/skin/default/image/ceshi/jiumao.png'},
+                {type:'海报店',img:'/views/mobile/skin/default/image/ceshi/jiumao.png'}
+            ];
+            self.code=data;
+
+//        mui.ajax('/apic/tests',{
+//            data:{
+//                year:self.year,
+//                month:self.month,
+//            },
+//            dataType:'json',//服务器返回json格式数据
+//            type:'get',//HTTP请求类型
+//            timeout:10000,//超时时间设置为10秒；
+//            success:function(data){
+//                self.showMessage=true;
+//                data.map(function(item){
+//                    item.show_Order=false;
+//                    item.order.map(function(orderList){
+//                        orderList.show_goods=false;
+//                    })
+//                });
+//                self.infoMessage=data;
+//                console.log(self.infoMessage);
+//            }
+
     }
+
 </script>
 <script>
 </script>

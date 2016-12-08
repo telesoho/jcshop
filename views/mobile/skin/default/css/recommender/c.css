@@ -48,3 +48,126 @@
 .shopListItem .name{
     margin-left:0.3rem;
 }
+/*二维码页面*/
+.newCode .header{
+    width:100%;
+    height:0.9rem;
+    background:#ff4aa0;
+    line-height:0.9rem;
+    /*display:-webkit-flex;*/
+    /*-webkit-flex-wrap:nowrap ;*/
+    /*-webkit-justify-content: space-between;*/
+    position:relative;
+}
+.newCode .header .back{
+    position:absolute;
+    left:0;
+    color:#fff;
+    font-size:0.26rem;
+    margin-left:0.2rem;
+}
+.newCode .header .title{
+    display: inline-block;
+    width:100%;
+    text-align:center;
+    color:#fff;
+    font-size:0.3rem;
+}
+.newCode .num{
+    margin-top:1.2rem;
+    width:100%;
+    height:0.8rem;
+    background:#fff;
+}
+.newCode .label1{
+    margin-left:0.2rem;
+    font-size:0.28rem;
+    line-height:0.8rem;
+    width:2rem;
+    color:#3d4225;
+}
+.newCode #inputNum{
+    display: inline-block;
+    border:none;
+    height:0.8rem;
+    font-size:0.28rem;
+    margin-left:0.6rem;
+    line-height:0.8rem;
+}
+.newCode .choType{
+    border-top:1px solid #eee;
+    width:100%;
+    height:0.8rem;
+    border-bottom:1px solid #eee;
+    background:#fff;
+}
+.newCode .label2{
+    margin-left:0.2rem;
+    font-size:0.28rem;
+    line-height:0.8rem;
+    width:2rem;
+    color:#3d4225;
+}
+.newCode #checkSelect{
+    margin-left:0.6rem;
+}
+#submit{
+    width:70%;
+    margin-left:15%;
+    background:#ff4aa0;
+    border:none;
+    margin-top:1.8rem;
+    height:1rem;
+    font-size:0.3rem;
+    border-radius:0.1rem;
+}
+select {
+    border: solid 1px transparent;
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+}
+/*未使用二维码页面*/
+#code_info .header{
+    width:100%;
+    height:0.9rem;
+    background:#ff4aa0;
+    line-height:0.9rem;
+    /*display:-webkit-flex;*/
+    /*-webkit-flex-wrap:nowrap ;*/
+    /*-webkit-justify-content: space-between;*/
+    position:relative;
+}
+#code_info .header .back{
+    position:absolute;
+    left:0;
+    color:#fff;
+    font-size:0.26rem;
+    margin-left:0.2rem;
+}
+#code_info .header .title{
+    display: inline-block;
+    width:100%;
+    text-align:center;
+    color:#fff;
+    font-size:0.3rem;
+}
+#code_info .content .item{
+    margin-top:0.2rem;
+    background:#fff;
+    display: -webkit-flex;
+    -webkit-justify-content: flex-start;
+    -webkit-align-items: center;
+}
+#code_info .content .text{
+    margin-left:0.6rem;
+    font-size:0.3rem;
+    color:#3d4225;
+}
+#code_info .content .img{
+    margin-left:1.6rem;
+}
+#code_info .content .img img{
+    width:1.7rem;
+    height:1.7rem;
+}
