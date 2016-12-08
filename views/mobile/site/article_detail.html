@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
-    <title>九猫大百货</title>
+    <title><?php echo !empty(ISession::get('shop_name')) ? ISession::get('shop_name') : '九猫家商城'?></title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
@@ -256,7 +256,7 @@ var wechat_share = {
     title       : "<?php if($this->articleRow['id']==284){echo '这是一个99%的妹子都希望收到的礼物';}else{echo $this->articleRow['title'];} ?>", //标题
     desc        : $('.article_body').text().trim().substring(0,100), //描述
     imgUrl      : "{echo:IWeb::$app->config['image_host'] . IUrl::creatUrl('/pic/thumb/img/'.$this->articleRow['image'].'/w/200/h/200')}", //图片
-    link        : '',
+    link        : "{echo:IWeb::$app->config['image_host1'] . '/site/article_detail?id='.$this->articleRow['id'].'&iid='.ISession::get('shop_identify_id')}",
 }
 wechat.share();
 </script>

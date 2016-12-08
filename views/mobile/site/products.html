@@ -523,7 +523,7 @@
 var wechat_share = {
     title       : '九猫大百货-日本同价-东京直邮', //标题
     desc        : '{$name}', //描述
-    link        : '',
+    link        : "{echo:IWeb::$app->config['image_host1'] . '/site/products?id='.$this->product_id.'&iid='.ISession::get('shop_identify_id')}",
     imgUrl      : "{$img}", //图片
 }
 wechat.share();

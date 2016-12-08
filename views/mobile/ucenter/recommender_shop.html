@@ -56,7 +56,7 @@
     </ul>
     <ul class="mui-table-view">
         <li class="mui-table-view-cell">
-            <a class="mui-navigate-right locationA" href="{url:/site/favorite}">
+            <a class="mui-navigate-right" href="{url:/site/favorite}">
                 <img src="/views/mobile/skin/default/image/jmj/icon/like-info.png" alt=""  style="vertical-align: middle;width:0.6rem" />
                 账户余额0.00/0.00<a class="mui-btn mui-btn-warning locationA" href="{url:/ucenter/withdraw}">提现</a>
             </a>
@@ -123,12 +123,14 @@
             <img src="<%=head_ico %>"/>
             <%}%>
         </div>
+        <div id="nameLogn">
+            <%if(username==null){%>
+            <div class="userName">九猫家的小小猫</div>
+            <%}else{%>
+            <div class="userName"><%=username %></div>
+            <%}%>
+        </div>
     </div>
-    <%if(username==null){%>
-    <div class="userName">九猫家的小小猫</div>
-    <%}else{%>
-    <div class="userName"><%=username %></div>
-    <%}%>
 
 
 </script>

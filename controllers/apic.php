@@ -1656,6 +1656,7 @@ class Apic extends IController
         } else {
             $temp = '( user_id = ' . $this->user['user_id'] . ')';
         }
+        $temp .= ' and seller_id = ' . $shop_data[0]['identify_id'];
         $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
         $last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
         $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
