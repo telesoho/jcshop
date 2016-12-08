@@ -1660,7 +1660,7 @@ class Apic extends IController
         } else {
             $temp = '( user_id = ' . $this->user['user_id'] . ')';
         }
-        $temp .= ' and seller_id = ' . $shop_data[0]['identify_id'];
+        $temp .= ' and id_shop_checkout = 0 and seller_id = ' . $shop_data[0]['identify_id'];
         $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
         $last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
         $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
@@ -1727,6 +1727,47 @@ class Apic extends IController
             $amount_tobe_booked = $amount_tobe_booked * $shop_category_data[0]['rebate'];
         }
         return $amount_tobe_booked;
+    }
+    function get_settlement_info(){
+        $settlement_query = new IQuery('settlement');
+        $shop_query = new IQuery('shop');
+        $settlement_query->where = 'seller_id = ' . ISession::get('shop_identify_id');
+        $shop_query->where = 'identify_id = ' . ISession::get('shop_identify_id');
+        $data = $settlement_query->find();
+        $shop_data = $shop_query->find();
+        $ret['name'] = $shop_data[0]['name'];
+        $ret['amount_available'] = $shop_data[0]['amount_available'];
+        $order_query = new IQuery('order');
+        foreach ($data as $k=>$v){
+            $order_query->where = 'id = ' . $v['order_id'];
+            $order_data = $order_query->find()[0];
+            $order_data['rebate_amount'] = $v['rebate_amount'];
+            $ret['orders'][] = $order_data;
+        }
+        $merge_data = $ret['orders'];
+        foreach ($merge_data as $k=>$value){
+            $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
+            $goods_total_price = 0;
+            foreach($temp as $key => $good){
+                $goods_total_price += $good['real_price'];
+                $good_info = JSON::decode($good['goods_array']);
+                $temp[$key]['good_info'] = $good_info;
+                $temp[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$temp[$key]['img']."/w/160/h/160");
+            }
+            $shop_category = new IQuery('shop_category');
+            $shop_category->where = 'id = ' . $shop_data[0]['category_id'];
+            $shop_category_data = $shop_category->find();
+            $merge_data[$k]['goods_total_price'] = $goods_total_price;
+            $merge_data[$k]['goods_list'] = $temp;
+            $merge_data[$k]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
+            if ($merge_data[$k]['orderStatusText'] == '已完成'){
+                $merge_data[$k]['goods_total_tobe_booked'] = $goods_total_price* $shop_category_data[0]['rebate'];
+            } else {
+                $merge_data[$k]['goods_total_tobe_booked'] = '0.00';
+            }
+        }
+        $ret['orders'] = $merge_data;
+        $this->json_echo($ret);
     }
 
     /**

@@ -7,6 +7,11 @@
 				<span class="addition">{$this->shop_data['name']}<?php echo date('m',time())-1 ?>月份的订单</span>
 			</button>
 		</a>
+		<a href="{url:/order/settlement_money/id/$this->shop_data['id']}">
+			<button class="operating_btn" type="button">
+				<span class="addition">结算</span>
+			</button>
+		</a>
 	</div>
 </div>
 

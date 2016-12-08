@@ -1144,6 +1144,9 @@ class Ucenter extends IController implements userAuthorization
         $this->identify_id = $identify_id;
         $this->redirect('shop_user');
     }
+    function settlement_info(){
+        $this->redirect('settlement_info');
+    }
 
     /**
      * 合伙人待入账信息
