@@ -159,7 +159,7 @@
                 <div class="mui-row">
                 	{if:$this->user_shop_data}
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
-                    	<p>{$this->user_shop_data[0]['identify_id']}</p>
+                    	<!--<p>{$this->user_shop_data[0]['identify_id']}</p>-->
                         <a class="mui-navigate-right locationA" href="{url:/ucenter/shop_user/id/$this->user_shop_data[0]['identify_id']}" style="width: 100%;height: 100%;">
                         <img src="/views/mobile/skin/default/image/index/Idcertification.png" style="height: 0.7rem;width: 0.7rem;margin-top: 0.25rem;"/>
                         <div class="mui-media-body">我的店铺</div></a>
@@ -171,7 +171,7 @@
                     </div>
                     {/if}
                     {if:$this->user_data[0]['is_recommender']}
-                    <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">0
+                    <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
                         <a class="locationA" href="{url:/ucenter/recommender_shop}" style="width: 100%;height: 100%;">
                         <img src="/views/mobile/skin/default/image/index/public.png" style="height: 0.7rem;width: 0.7rem;margin-top: 0.25rem;"/>
                             <div class="mui-media-body">合伙人</div></a>

@@ -13,17 +13,17 @@
 <body>
 <div id="container_info">
     <div class="header">
-        <a href="{url:/ucenter/recommender_shop}" class="back">返回</a>
+        <a href="{url:/ucenter/shop_income}" class="back">返回</a>
         <a href="#" class="title">待入账金额</a>
     </div>
     <div class="top box">
         <div v-cloak>店铺名称：<span style="color:#ff4aa0;font-size:0.26rem;">{{infoMessage.name}}</span></div>
-        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">{$this->amount_tobe_booked}</span></div>
+        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">{{infoMessage.shop_tobe_booked_price}}</span></div>
     </div>
     <div class="merchant1" v-for="item in shopTobe.orders" v-cloak>
         <div class="box" @click="showGoods(item)">
             <div class="left">订单编号：{{item.order_no}}</div>
-            <div class="state">订单状态：{{item.status}}</div>
+            <div class="state">{{item.orderStatusText}}</div>
         </div>
         <div class="goods" v-if="item.show_goods">
             <div class="goodsList" v-for="goods_list in item.goods_list">
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="total">
-                实际支付金额：{{item.payable_amount}}
+                订单收益金额：{{item.goods_total_tobe_booked}}
             </div>
         </div>
     </div>
@@ -83,7 +83,7 @@
         }
     })
     function getInfo(self){
-        mui.ajax('/apic/recommender_shop_tobe_booked',{
+        mui.ajax('/apic/shop_tobe_booked',{
             dataType:'json',//服务器返回json格式数据
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
