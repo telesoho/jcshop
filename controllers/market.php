@@ -412,6 +412,56 @@ class Market extends IController implements adminAuthorization
 			exit();
 		
 	}
+	
+	/**
+	 * 活动列表
+	 */
+	public function activity_list(){
+		/* 模板赋值 */
+		$this->redirect('activity_list');
+	}
+	
+	/**
+	 * 活动新增
+	 */
+	public function acticity_add(){
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			/* 活动 */
+			$dataActivity 				= array(
+				'type' 			=> 1, //活动类型
+				'status' 		=> 1,
+				'name' 			=> $_POST['name'], //活动名称
+				'num' 			=> $_POST['num'], //优惠券总数
+				'share_score' 	=> $_POST['share_score'], //分享获得积分数
+				'share_num' 	=> $_POST['share_num'], //分享获得积分数
+				'start_time' 	=> strtotime($_POST['start_time']), //分享获得积分数
+				'end_time' 		=> strtotime($_POST['end_time']), //分享获得积分数
+				'create_time' 	=> time(), //创建时间
+			);
+			$modelActivity 				= new IModel('activity');
+			$modelActivity->setData($dataActivity);
+			$activity_id 				= $modelActivity->add();
+			if($activity_id == false) exit('数据写入错误');
+			/* 优惠券 */
+			$modelTicket 				= new IModel('activity_ticket');
+			$dataTicket 				= array();
+			foreach($_POST['ticket_name'] as $k => $v){
+				$dataTicket 			= array(
+					'pid' 			=> $activity_id, //活动ID
+					'name' 			=> $_POST['ticket_name'][$k], //优惠券名称
+					'type' 			=> $_POST['ticket_type'][$k], //优惠券类型
+					'rule' 			=> $_POST['ticket_rule'][$k], //优惠规则
+					'create_time' 	=> time(),
+				);
+				$modelTicket->setData($dataTicket);
+				$modelTicket->add();
+			}
+			/* 成功跳转 */
+			$this->redirect('activity_list');
+		}
+		$this->redirect('acticity_add');
+	}
+	
 
 	//[促销活动] 添加修改 [单页]
 	function pro_rule_edit()

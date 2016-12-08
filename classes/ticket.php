@@ -1,9 +1,47 @@
 <?php
 /**
- * @brief 代金券类库
+ * 优惠券类库
  */
 class ticket
 {
+	/**
+	 * 优惠券码code计算价格
+	 */
+	public function calculateCode(){
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public function checkCode($code){
+		/* 优惠券 */
+		if(!empty($code)){
+			if($code<=0 || $code>999999){
+				$this->json_echo(array('error'=>'请输入正确的折扣券号'));
+			}
+			/* 获取折扣券数据 */
+			$query 				 		= new IQuery('ticket_discount');
+			$query->where 				= 'code='.$code;
+			$query->fields 				= 'id,name,type,ratio,money,start_time,end_time,status';
+			$query->limit 				= 1;
+			$ticket_data 				= $query->find();
+			if(empty($ticket_data)) $this->json_echo(array('error'=>'折扣券不存在'));
+			if($ticket_data[0]['start_time']>time() || $ticket_data[0]['end_time']<time()) $this->json_echo(array('error'=>'折扣券已过期'));
+			if($ticket_data[0]['status'] == 2) $this->json_echo(array('error'=>'折扣券已使用'));
+			if($ticket_data[0]['status'] != 1) $this->json_echo(array('error'=>'折扣券无法使用'));
+		}
+	}
+	/**
+	 * 活动优惠券计算价格
+	 */
+	public function calculateActivity(){
+		
+	}
+	
+	
+	
+	
 	/**
 	 * @brief 获取代金券状态数值
 	 * @param array $ticketRow 代金券数据
