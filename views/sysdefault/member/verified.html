@@ -7,6 +7,7 @@
 				<input type='hidden' name='controller' value='member' />
 				<input type='hidden' name='action' value='verified' />
 				<select class="auto" name="search">
+					<option value="u.sfz_name">身份证姓名</option>
 					<option value="u.username">用户名</option>
 					<option value="m.true_name">姓名</option>
 					<option value="m.mobile">手机</option>
@@ -25,17 +26,19 @@
 	<div class="content">
 		<table id="list_table" class="list_table">
 			<colgroup>
-				<col width="150px" />
+				<col width="80px" />
+				<col width="80px" />
 				<col width="80px" />
 				<col width="120px" />
-				<col width="125px" />
-				<col width="120px" />
+				<col width="150px" />
+				<col width="150px" />
 				<col width="120px" />
 			</colgroup>
 
 			<thead>
 				<tr>
 					<th>用户名</th>
+					<th>合伙人编号</th>
 					<th>身份证姓名</th>
 					<th>身份证号码</th>
 					<th>证件照片1</th>
@@ -46,16 +49,17 @@
 
 			<tbody>
 				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
-				{query: name=user as u join=left join member as m on m.user_id eq u.id fields=m.*,u.username,u.sfz_num,u.sfz_name,u.sfz_image1,u.sfz_image2,u.is_recommender where=m.status neq 2 and $where order=m.user_id desc page=$page}
+				{query: name=user as u join=left join member as m on m.user_id eq u.id fields=m.*,u.username,u.sfz_num,u.recommender_id,u.sfz_name,u.sfz_image1,u.sfz_image2,u.is_recommender where=m.status neq 2 and $where order=m.user_id desc page=$page}
 				<tr>
 					<td title="{$item['balance']}">{$item['username']}</td>
+					<td title="{$item['balance']}">{$item['recommender_id']}</td>
 					<td title="{$item['point']}">{$item['sfz_name']}</td>
 					<td title="{$item['point']}">{$item['sfz_num']}</td>
 					<td title="{$item['time']}">
-						<img src="{$item['sfz_image1']}">
+						<img width="150" src="{$item['sfz_image1']}">
 					</td>
 					<td title="{$item['time']}">
-						<img src="{$item['sfz_image2']}">
+						<img width="150" src="{$item['sfz_image2']}">
 					</td>
 					<td>
 						{if:$item['is_recommender']}合伙人

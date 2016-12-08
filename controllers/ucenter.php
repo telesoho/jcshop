@@ -1085,7 +1085,7 @@ class Ucenter extends IController implements userAuthorization
     }
     //待入账金额
     function shop_amount_tobe_booked(){
-        $this->get_amount_tobe_booked();
+//        $this->get_amount_tobe_booked();
         $shop_query = new IQuery('shop');
         $user_query = new IQuery('user');
         $shop_query->where = 'own_id = ' . $this->user['user_id'];
@@ -1108,7 +1108,6 @@ class Ucenter extends IController implements userAuthorization
             $date_interval = ' and DATE_FORMAT( create_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
             $this->distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
         }
-//        var_dump($this->distribute_order_ret);
         $this->redirect('shop_amount_tobe_booked');
     }
     //累计收益
@@ -1131,6 +1130,7 @@ class Ucenter extends IController implements userAuthorization
         $shop_query = new IQuery('shop');
         $shop_query->where = 'identify_id = ' . $identify_id . ' and own_id = ' .$this->user['user_id'];
         $this->shop_data = $shop_query->find();
+        if (empty($this->shop_data)) $this->redirect('index');
         $this->redirect('shop_edit');
     }
     //用户店铺信息
@@ -1139,6 +1139,7 @@ class Ucenter extends IController implements userAuthorization
         $shop_query = new IQuery('shop');
         $shop_query->where = 'identify_id = ' . $identify_id . ' and own_id = ' .$this->user['user_id'];
         $this->shop_data = $shop_query->find();
+        if (empty($this->shop_data)) $this->redirect('index');
         $this->identify_id = $identify_id;
         $this->redirect('shop_user');
     }

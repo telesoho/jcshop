@@ -1571,6 +1571,10 @@ class Apic extends IController
         ];
         $this->json_echo($a);
     }
+
+    /**
+     * 推荐人旗下店铺的订单信息
+     */
     function recommender_shops_tobe_booked(){
         $shop_query = new IQuery('shop');
         $shop_query->where = 'recommender = "' . $this->user['user_id'] . '"';
@@ -1586,7 +1590,7 @@ class Apic extends IController
                 $data[$key]['id'] = $value['id'];
                 $data[$key]['address'] = $value['address'];
                 $data[$key]['head_ico'] = $this->get_user_head_ico($value['own_id']);
-                $data[$key]['orders'] = $this->get_shop_orders($value['id']);
+                $data[$key]['orders'] = $this->get_shop_orders($value['id'],true);
                 foreach ($data[$key]['orders'] as $k=>$v){
                     $temp_goods_total_price += $v['goods_total_price'];
                     $temp_goods_tobe_booked += $v['goods_total_tobe_booked'];
@@ -1603,24 +1607,43 @@ class Apic extends IController
         }
         $this->json_echo($data);
     }
-    function recommender_shop_tobe_booked(){
+
+    /**
+     * 店铺待入账信息
+     */
+    function shop_tobe_booked(){
         $shop_query = new IQuery('shop');
         $shop_query->where = 'own_id = "' . $this->user['user_id'] . '"';
         $ret = $shop_query->find();
         $data = [];
         if(!empty($ret)) {
-            $data['amount_tobe_booked'] = $this->get_amount_tobe_booked($ret[0]['identify_id']);
             $data['identify_id'] = $ret[0]['identify_id'];
             $data['name'] = $ret[0]['name'];
             $data['id'] = $ret[0]['id'];
             $data['address'] = $ret[0]['address'];
-            $data['orders'] = $this->get_shop_orders($ret[0]['id']);
+            $data['orders'] = $this->get_shop_orders($ret[0]['id'], false);
+            $temp = 0;
+            foreach ($data['orders'] as $k=>$v){
+                $temp += $v['goods_total_tobe_booked'];
+            }
+            $data['shop_tobe_booked_price'] = $temp;
         }
         $this->json_echo($data);
     }
-    function get_shop_orders($shop_id){
+
+    /**
+     * 获取某个店铺下的订单信息
+     * @param $shop_id
+     * @param $if_partner
+     * @return array
+     */
+    function get_shop_orders($shop_id,$if_partner){
         $shop_query = new IQuery('shop');
-        $shop_query->where = 'id = ' . $shop_id . ' and recommender = ' . $this->user['user_id'];
+        if ($if_partner){
+            $shop_query->where = 'id = ' . $shop_id . ' and recommender = ' . $this->user['user_id'];
+        } else {
+            $shop_query->where = 'id = ' . $shop_id;
+        }
         $shop_data = $shop_query->find();
         $temp = '';
         if ($shop_data){
@@ -1632,7 +1655,11 @@ class Apic extends IController
             }
             $temp = explode('or',$temp,2)[1];
         }
-        $temp ='(' . $temp . ')';
+        if (!empty($temp)){
+            $temp ='(' . $temp . ')';
+        } else {
+            $temp = '( user_id = ' . $this->user['user_id'] . ')';
+        }
         $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
         $last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
         $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
@@ -1653,14 +1680,21 @@ class Apic extends IController
             $shop_category->where = 'id = ' . $shop_data[0]['category_id'];
             $shop_category_data = $shop_category->find();
             $merge_data[$k]['goods_total_price'] = $goods_total_price;
-            $merge_data[$k]['goods_total_tobe_booked'] = $goods_total_price* $shop_category_data[0]['rebate'];
             $merge_data[$k]['goods_list'] = $temp;
-            $relation = array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流', '已取消'=>'已取消','部分发货'=>'查看物流');
             $merge_data[$k]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
+            if ($merge_data[$k]['orderStatusText'] == '已完成'){
+                $merge_data[$k]['goods_total_tobe_booked'] = $goods_total_price* $shop_category_data[0]['rebate'];
+            } else {
+                $merge_data[$k]['goods_total_tobe_booked'] = '0.00';
+            }
         }
         return $merge_data;
     }
-    /*获取待ru'zhang*/
+
+    /**
+     * 当前登陆用户的店铺待入账金额
+     * @return string
+     */
     private function get_amount_tobe_booked(){
         $shop_query = new IQuery('shop');
         $user_query = new IQuery('user');
@@ -1693,7 +1727,13 @@ class Apic extends IController
         }
         return $amount_tobe_booked;
     }
-    private function get_user_head_ico($user_id){
+
+    /**
+     * @brief 获取用户头像
+     * @param $user_id
+     * @return bool
+     */
+    public function get_user_head_ico($user_id){
         $user_query = new IQuery('user');
         $user_query->where = 'id = ' . $user_id;
         $ret = $user_query->find();
