@@ -1,6 +1,10 @@
 /**
  * Created by yb on 2016/11/29.
  */
+var Request = new Object();
+	Request = GetRequest();
+	var statusOrder=Request["id"];
+	
 var vm = new Vue({
     el: '#indexInfo',
     data: {
@@ -79,6 +83,7 @@ var vm = new Vue({
         gallery.slider({
             interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
         });
+        tanchaun(statusOrder);
     },
     methods: {
         toArticle: function(item){
@@ -112,6 +117,7 @@ var vm = new Vue({
 })
 
 $(document).ready(function(){
+//	tanchaun(statusOrder);
     var ua = navigator.userAgent.toLowerCase();
     if (/iphone|ipad|ipod/.test(ua)) {
         getScrollTop1();
@@ -264,34 +270,32 @@ var _hmt = _hmt || [];
 
 
 // 					弹	窗	处	理
-
-var Request = new Object();
-	Request = GetRequest();
-	var statusOrder=Request["id"];
-	if(statusOrder == 1){
-		document.body.style.overflow="hidden"
-		$("#bgg").css({
-			"display":"block",
-			"overflow":"hidden"
+	function tanchaun(statusOrder){
+		if(statusOrder == 1){
+			document.body.style.overflow="hidden"
+			$("#bgg").css({
+				"display":"block",
+				"overflow":"hidden"
+			})
+			$("#PopupWindow").css({
+				"display":"block",
+			});
+		}
+		$("#guan").click(function(){
+			document.body.style.overflow=""
+			$("#bgg").css({
+				"display":"none",
+				"overflow":"hidden"
+			})
+			$("#PopupWindow").css({
+				"display":"none",
+			});
 		})
-		$("#PopupWindow").css({
-			"display":"block",
-		});
+		//   点击去看看
+		$("#sess").click(function(){
+			window.location.href = "/site/ticket_list";
+		})
 	}
-	$("#guan").click(function(){
-		document.body.style.overflow=""
-		$("#bgg").css({
-			"display":"none",
-			"overflow":"hidden"
-		})
-		$("#PopupWindow").css({
-			"display":"none",
-		});
-	})
-	//   点击去看看
-	$("#sess").click(function(){
-		window.location.href = "/site/ticket_list";
-	})
 
 //	获取url传递过来的参数
 function GetRequest() {
