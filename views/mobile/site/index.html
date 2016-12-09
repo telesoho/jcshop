@@ -306,7 +306,7 @@
 var wechat_share = {
     title       : '九猫大百货-日本同价-东京直邮', //标题
     desc        : '欢迎来到九猫家', //描述
-    link        : "{url:IWeb::$app->config['image_host']}/site/ticket_gain/pid/{$this->user['user_id']}/aid/{echo:IWeb::$app->config['aid']}/iid/{echo:ISession::get('shop_identify_id')}",
+    link        : "{echo:IWeb::$app->config['image_host']}/site/ticket_gain/pid/{$this->user['user_id']}/aid/{echo:IWeb::$app->config['aid']}/iid/{echo:ISession::get('shop_identify_id')}",
 //    link        : "{echo:IWeb::$app->config['image_host1'] . '/site/index?iid='.ISession::get('shop_identify_id')}",
     imgUrl      : "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
 }
