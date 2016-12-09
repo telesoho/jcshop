@@ -240,7 +240,10 @@ class Apic extends IController
     					$data[$k]['msg'] 	= '满'.$rule[0].'减'.$rule[1];
     					$data[$k]['detail'] = $data[$k]['msg'].'满减券';
     					break;
+    				//无门槛券
     				case 2:
+    					$data[$k]['msg'] 	= '抵'.$rule[0].'元';
+    					$data[$k]['detail'] = $rule.'元无门槛券';
     					break;
     				case 3:
     					break;
@@ -1229,8 +1232,8 @@ class Apic extends IController
     	$where 						= 'is_del=0 AND (';
     	$order 						= '';
     	foreach($word_arr as $k => $v){
-    		$field 					.= ',(`name` LIKE "%'.$v.'%") as name'.$k.',(`search_words` LIKE "%,'.$v.',%") as search'.$k.',(`goods_no` LIKE "%,'.$v.',%") as goods_no'.$k;
-    		$where 					.= ' (`name` LIKE "%'.$v.'%") OR (`search_words` LIKE "%,'.$v.',%") OR (`goods_no` LIKE "%,'.$v.',%")';
+    		$field 					.= ',(`name` LIKE "%'.$v.'%") as name'.$k.',(`search_words` LIKE "%,'.$v.',%") as search'.$k.',(`goods_no`='.$v.') as goods_no'.$k;
+    		$where 					.= ' (`name` LIKE "%'.$v.'%") OR (`search_words` LIKE "%,'.$v.',%") OR (`goods_no`='.$v.')';
     		$order 					.= 'name'.$k;
     		if(count($word_arr) != $k+1){
     			$where .= ' OR';
