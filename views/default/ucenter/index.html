@@ -31,7 +31,6 @@
 					<td></td>
 				</tr>
 			</table>
-
 			<div class="stat">
 				<span>待评价商品：<label>(<b><a class="red2" href="{url:/ucenter/evaluation}">{echo:statistics::countUserWaitComment($this->user['user_id'])}</b>)</a></label></span>
 				<span>待付款订单：<label>(<b><a class="red2" href="{url:/ucenter/order}">{echo:statistics::countUserWaitPay($this->user['user_id'])}</b>)</a></label></span>
@@ -60,7 +59,6 @@
 				</td>
 			</tr>
 			{/foreach}
-
 			<tfoot><tr><td colspan="6" class="t_r"><a class="blue" href="{url:/ucenter/order}">更多订单&gt;&gt;</a></td></tr></tfoot>
 		</table>
 	</div>
