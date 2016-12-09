@@ -276,7 +276,7 @@ class Apic extends IController
     	$dataAti 					= $queryAti->find();
     	if(empty($dataAti)) $this->json_echo( apireturn::go('002016') );
     	$dataAti 					= $dataAti[0];
-    	if( $dataAti['statuis'] != 1 ) $this->json_echo( apireturn::go('002017') );
+    	if( $dataAti['status'] != 1 ) $this->json_echo( apireturn::go('002017') );
     	if( $dataAti['start_time'] > time() ) $this->json_echo( apireturn::go('002018') );
     	if( $dataAti['end_time'] < time() ) $this->json_echo( apireturn::go('002019') );
     	if( $dataAti['end_time'] < time() ) $this->json_echo( apireturn::go('002019') );
@@ -294,10 +294,10 @@ class Apic extends IController
     	
     	/* 是否已领取 */
 	    $modelAcc 					= new IModel('activity_ticket_access');
-    	$dataAcc 					= $modelAcc->getObj('from='.(empty($pid) ? 0 : $pid).' AND user_id='.$user_id.' AND ticket_id in ('.implode(',',$idTck).')');
+    	$dataAcc 					= $modelAcc->getObj('`from`='.(empty($pid) ? 0 : $pid).' AND user_id='.$user_id.' AND ticket_id in ("'.implode(',',$idTck).'")');
     	if( !empty($dataAcc) ) $this->json_echo( apireturn::go('002021') );
     	/* 是否已领完 */
-    	$countAcc 					= $modelAcc->get_count('ticket_id in ('.implode(',',$idTck).')');
+    	$countAcc 					= $modelAcc->get_count('ticket_id in ("'.implode(',',$idTck).'")');
     	if( $countAcc > $dataAti['num'] ) $this->json_echo( apireturn::go('002022') );
     	
     	/* 开始领取 */
@@ -314,11 +314,11 @@ class Apic extends IController
     	/* 分享人增加积分 */
     	if( !empty($pid) ){
     		//增加积分次数上限
-    		$countShare 			= $modelAcc->get_count('from='.(empty($pid) ? 0 : $pid).' AND ticket_id in ('.implode(',',$idTck).')');
+    		$countShare 			= $modelAcc->get_count('`from`='.(empty($pid) ? 0 : $pid).' AND ticket_id in ('.implode(',',$idTck).')');
     		if( $countShare < $dataAti['share_num'] ){
     			$modelMember 		= new IModel('member');
     			$modelMember->setData( array('point'=>'point+'.$dataAti['share_score']) );
-    			$modelMember->update('user_id='.$pid);
+    			$modelMember->update('user_id='.$pid,array('point'));
     		}
     	}
     	
@@ -342,7 +342,6 @@ class Apic extends IController
     		case 6:
     			break;
     	}
-    	$dataTckOn['uid'] 			= $user_id;
     	$this->json_echo( apireturn::go('0',$dataTckOn) );
     }
     
