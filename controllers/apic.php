@@ -242,8 +242,8 @@ class Apic extends IController
     					break;
     				//无门槛券
     				case 2:
-    					$data[$k]['msg'] 	= '抵'.$rule.'元';
-    					$data[$k]['detail'] = $rule.'元无门槛券';
+    					$data[$k]['msg'] 	= '抵'.$v['rule'].'元';
+    					$data[$k]['detail'] = $v['rule'].'元无门槛券';
     					break;
     				case 3:
     					break;
