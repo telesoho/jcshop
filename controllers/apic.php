@@ -194,7 +194,7 @@ class Apic extends IController
         	);
         }
         
-        $this->json_echo( apireturn::go(0,$data) );
+        $this->json_echo( apireturn::go('0',$data) );
     }
     /**
      * ---------------------------------------------------优惠券---------------------------------------------------*
@@ -203,11 +203,11 @@ class Apic extends IController
      * 我的优惠券列表
      */
     public function ticket_list_my(){
-    	/* 获取参数 */
+    	/* 接收参数 */
     	$type      					= IFilter::act(IReq::get('type'),'int');//[1可使用-2已过期]
     	$page        				= IFilter::act(IReq::get('page'),'int');//分页编号
     	$user_id 					= $this->user['user_id'];
-    	if( empty($user_id) ) $this->json_echo( apireturn::go(001001) );
+    	if( empty($user_id) ) $this->json_echo( apireturn::go('001001') );
     	/* 可使用优惠券 */
     	$query 						= new IQuery('activity as m');
     	$query->join 				= 'LEFT JOIN activity_ticket AS t ON t.pid=m.id LEFT JOIN activity_ticket_access AS a ON a.ticket_id=t.id';
@@ -262,6 +262,34 @@ class Apic extends IController
      * 领取优惠券
      */
     public function get_ticket_activity(){
+    	/* 接收参数 */
+    	$aid      					= IFilter::act(IReq::get('aid'),'int');//活动ID
+    	$user_id 					= $this->user['user_id'];
+    	if( empty($user_id) ) $this->json_echo( apireturn::go('001001') );
+    	/* 是否已领取过 */
+    	$modelAss 					= new IModel('activity_ticket_access');
+    	$modelAss->gotObj('user_id='.$user_id.' AND from=1');
+    	/* 活动详情 */
+    	$queryAti 					= new IQuery('activity');
+    	$queryAti->where 			= 'id='.$aid;
+    	$queryAti->fields 			= 'id,start_time,end_time,num,share_num,share_score,status';
+    	$queryAti->limit 			= 1;
+    	$dataAti 					= $queryAti->find();
+    	if(empty($dataAti)) $this->json_echo( apireturn::go('002016') );
+    	$dataAti 					= $dataAti[0];
+    	if( $dataAti['statuis'] != 1 ) $this->json_echo( apireturn::go('002017') );
+    	if( $dataAti['start_time'] > time() ) $this->json_echo( apireturn::go('002018') );
+    	if( $dataAti['end_time'] < time() ) $this->json_echo( apireturn::go('002019') );
+    	if( $dataAti['end_time'] < time() ) $this->json_echo( apireturn::go('002019') );
+    	/* 包含的优惠券列表 */
+    	$queryTck 					= new IQuery('activity_ticket');
+    	$queryTck->where 			= 'pid='.$aid;
+    	$queryTck->fields 			= 'id,name,type,rule';
+    	$dataTck 					= $queryTck->find();
+    	if(empty($dataTck)) $this->json_echo( apireturn::go('002020') );
+    	foreach($dataTck as $k => $v){
+    		
+    	}
     	
     }
     

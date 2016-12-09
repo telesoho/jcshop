@@ -29,6 +29,11 @@ class Apireturn
 		'002013' 		=>'优惠券不合法',
 		'002014' 		=>'不满足满减条件',
 		'002015' 		=>'优惠券类型不存在',
+		'002016' 		=>'活动不存在',
+		'002017' 		=>'活动已被禁用',
+		'002018' 		=>'活动未开始',
+		'002019' 		=>'活动已结束',
+		'002020' 		=>'活动出现错误',
  	);
  	
  	/**
@@ -37,7 +42,7 @@ class Apireturn
  	 * @return string
  	 */
  	public static function info($code = null){
- 		return isset(self::$Msg[$code]) ? self::$Msg[$code] : self::$Msg[-1];
+ 		return isset(self::$Msg[$code]) ? self::$Msg[$code] : '错误码不存在';
  	}
  	
  	/**
