@@ -143,8 +143,8 @@
 	<!--底部fixed定位-->
 	<form action='{url:/simple/cart3}' class="form" method='post' name='order_form'  id="testForm" v-cloak>
 		<!--输入框要提交项目-->
-		<input type='hidden' name='ticket_aid'  v-model="infoMessage.aid" />
-		<input type='hidden' name='ticket_did'  v-model="infoMessage.kicket.id" />
+		<input type='hidden' name='ticket_aid'  v-model="infoMessage.ticket.ticket_aid" />
+		<input type='hidden' name='ticket_did'  v-model="infoMessage.ticket.ticket_did" />
 		<input type='hidden' name='direct_gid'  v-model="infoMessage.gid" />
 		<input type='hidden' name='direct_type'  v-model="infoMessage.type" />
 		<input type='hidden' name='direct_num'  v-model="infoMessage.num" />
@@ -200,7 +200,7 @@
 				<img src="/views/mobile/skin/default/image/jmj/cart/catgraw.png" alt="" style="width:0.94rem;height:0.51rem;margin-top:0.15rem" />
 			</div>
 			<div class="bottom">
-				喵喵已为您使用{{infoMessage.kicket.msg}}
+				喵喵已为您使用{{infoMessage.ticket.msg}}
 			</div>
 		</ul>
 	</div>
