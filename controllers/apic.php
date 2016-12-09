@@ -223,7 +223,7 @@ class Apic extends IController
     		default:return apireturn::go('002015');
     	}
     	$query->where 				= $where;
-    	$query->fields 				= 't.id,t.name,m.start_time,m.end_time,t.type,t.rule';
+    	$query->fields 				= 'a.id,t.name,m.start_time,m.end_time,t.type,t.rule';
     	$query->page 				= $page<1 ? 1 : $page;
     	$query->pagesize 			= 100;
     	$data 						= $query->find();
@@ -296,16 +296,54 @@ class Apic extends IController
 	    $modelAcc 					= new IModel('activity_ticket_access');
     	$dataAcc 					= $modelAcc->getObj('from='.(empty($pid) ? 0 : $pid).' AND user_id='.$user_id.' AND ticket_id in ('.implode(',',$idTck).')');
     	if( !empty($dataAcc) ) $this->json_echo( apireturn::go('002021') );
+    	/* 是否已领完 */
+    	$countAcc 					= $modelAcc->get_count('ticket_id in ('.implode(',',$idTck).')');
+    	if( $countAcc > $dataAti['num'] ) $this->json_echo( apireturn::go('002022') );
     	
     	/* 开始领取 */
-    	$dataTckOn 					= $dataAcc[rand(0,count($dataAcc)-1)];
-    	$modelTck->setData(array(
+    	$dataTckOn 					= $dataTck[rand(0,count($dataTck)-1)];
+    	$modelAcc->setData(array(
     		'user_id' 		=> $user_id,
     		'ticket_id' 	=> $dataTckOn['id'],
     		'status' 		=> 1,
     		'from' 			=> empty($pid) ? 0 : $pid,
     	));
+    	$rel 						= $modelAcc->add();
+    	if( $rel == false ) $this->json_echo( apireturn::go('002023') );
     	
+    	/* 分享人增加积分 */
+    	if( !empty($pid) ){
+    		//增加积分次数上限
+    		$countShare 			= $modelAcc->get_count('from='.(empty($pid) ? 0 : $pid).' AND ticket_id in ('.implode(',',$idTck).')');
+    		if( $countShare < $dataAti['share_num'] ){
+    			$modelMember 		= new IModel('member');
+    			$modelMember->setData( array('point'=>'point+'.$dataAti['share_score']) );
+    			$modelMember->update('user_id='.$pid);
+    		}
+    	}
+    	
+    	/* 返回参数 */
+    	switch($dataTckOn['type']){
+    		//满减券
+    		case 1 :
+    			$rule 				= explode(',',$dataTckOn['rule']);
+    			$dataTckOn['msg'] 	= '满'.$rule[0].'减'.$rule[1];
+    			break;
+    		//无门槛券
+    		case 2:
+    			$dataTckOn['msg'] 	= '抵'.$dataTckOn['rule'].'元';
+    			break;
+    		case 3:
+    			break;
+    		case 4:
+    			break;
+    		case 5:
+    			break;
+    		case 6:
+    			break;
+    	}
+    	$dataTckOn['uid'] 			= $user_id;
+    	$this->json_echo( apireturn::go('0',$dataTckOn) );
     }
     
     /**

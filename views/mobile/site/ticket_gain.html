@@ -33,42 +33,59 @@
 		<script src="/views/mobile/javascript/jquery.min.js"></script>
 		<script src="/views/mobile/javascript/jiumao/ticket_gain.js"></script>
 		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
-		<script type="text/javascript">
-			
 		
-			var oShare = document.getElementById("share");
-			oShare.onclick = function(){
-				wx.onMenuShareTimeline({
-				    title: '', // 分享标题
-				    link: '', // 分享链接
-				    imgUrl: '', // 分享图标
-				    success: function () { 
-				        // 用户确认分享后执行的回调函数
-				    },
-				    cancel: function () { 
-				        // 用户取消分享后执行的回调函数
-				    }
-				});
-				
-				
-				//分享给朋友
-				wx.onMenuShareAppMessage({
-				    title: '', // 分享标题
-				    desc: '', // 分享描述
-				    link: '', // 分享链接
-				    imgUrl: '', // 分享图标
-				    type: '', // 分享类型,music、video或link，不填默认为link
-				    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-				    success: function () { 
-				        // 用户确认分享后执行的回调函数
-				    },
-				    cancel: function () { 
-				        // 用户取消分享后执行的回调函数
-				    }
-				});
-			}
-			
-			
-		</script>
+<!-- 微信分享 -->
+{if:IClient::isWechat() == true}
+<?php 
+    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+    $this->wechat = new wechat();
+    $this->wechat->setConfig();
+    $this->wechat->config['wechat_jsApiSDK']=1;
+    $this->wechat->jsApiSDK();
+?>
+<script type="text/javascript">
+var wechat_share = {
+    title       : "活动名称", //标题
+    desc        : "活动描述", //描述
+    imgUrl      : "{echo:IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/ticket_gain/01.png'}", //图片
+    link        : "{url:/site/ticket_gain}/pid/{$this->user['user_id']}",
+}
+wechat.share();
+
+var oShare = document.getElementById("share");
+oShare.onclick = function(){
+	wx.onMenuShareTimeline({
+	    title: '', // 分享标题
+	    link: '', // 分享链接
+	    imgUrl: '', // 分享图标
+	    success: function () { 
+	        // 用户确认分享后执行的回调函数
+	    },
+	    cancel: function () { 
+	        // 用户取消分享后执行的回调函数
+	    }
+	});
+	
+	
+	//分享给朋友
+	wx.onMenuShareAppMessage({
+	    title: '', // 分享标题
+	    desc: '', // 分享描述
+	    link: '', // 分享链接
+	    imgUrl: '', // 分享图标
+	    type: '', // 分享类型,music、video或link，不填默认为link
+	    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+	    success: function () { 
+	        // 用户确认分享后执行的回调函数
+	    },
+	    cancel: function () { 
+	        // 用户取消分享后执行的回调函数
+	    }
+	});
+}
+
+</script>
+{/if}
+
 	</body>
 </html>

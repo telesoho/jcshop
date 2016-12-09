@@ -397,7 +397,8 @@ class Simple extends IController
     	$promo         = IFilter::act(IReq::get('direct_promo'));//促销
     	$active_id     = IFilter::act(IReq::get('direct_active_id'),'int');//活动ID
     	$takeself      = IFilter::act(IReq::get('takeself'),'int');
-    	$ticket_did    = IFilter::act(IReq::get('ticket_did'),'int'); //折扣券ID
+    	$ticket_did    = IFilter::act(IReq::get('ticket_did'),'int'); //优惠券码ID
+    	$ticket_aid    = IFilter::act(IReq::get('ticket_aid'),'int'); //活动优惠券ID
     	$order_type    = 0;
     	$dataArray     = array();
     	$user_id       = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
