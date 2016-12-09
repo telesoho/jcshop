@@ -119,9 +119,9 @@ class ticket
 		$query->fields 				= 'id,name,type,ratio,money,start_time,end_time,status';
 		$query->limit 				= 1;
 		$ticket_data 				= $query->find();
-		$ticket_data 				= $ticket_data[0];
 		if(empty($ticket_data))
 			return apireturn::go('002002');
+		$ticket_data 				= $ticket_data[0];
 		if($ticket_data['start_time']>time() || $ticket_data['end_time']<time())
 			return apireturn::go('002003');
 		if($ticket_data['status'] == 2)

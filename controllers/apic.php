@@ -287,9 +287,17 @@ class Apic extends IController
     	$queryTck->fields 			= 'id,name,type,rule';
     	$dataTck 					= $queryTck->find();
     	if(empty($dataTck)) $this->json_echo( apireturn::go('002020') );
+    	$idTck 						= array(); //优惠券ID
     	foreach($dataTck as $k => $v){
-    		
+    		$idTck[] 				= $v['id'];
     	}
+    	/* 已领取的优惠券 */
+    	$modelTck 					= new IModel('activity_ticket_access');
+    	$queryTck->where 			= 'from=1 AND user_id='.$user_id.' AND ticket_id in ('.implode(',',$idTck).')';
+    	$queryTck->fields 			= 'id,name,type,rule';
+    	$dataTck 					= $queryTck->find();
+    	if( !empty($dataTck) ) $this->json_echo( apireturn::go('002021') );
+    	
     	
     }
     
