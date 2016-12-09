@@ -516,7 +516,6 @@ class Simple extends IController
 			IError::show(403,$orderData);
 			exit;
 		}
-		var_dump($orderData);exit();
 		
 		//=======================================
 		/* 优惠券券 */
