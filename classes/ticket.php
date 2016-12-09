@@ -128,7 +128,7 @@ class ticket
 			return apireturn::go('002004');
 		if($ticket_data['status'] != 1)
 			return apireturn::go('002005');
-		return apireturn::go('0',$data);
+		return apireturn::go('0',$ticket_data);
 	}
 	
 	/**

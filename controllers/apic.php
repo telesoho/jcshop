@@ -264,11 +264,10 @@ class Apic extends IController
     public function get_ticket_activity(){
     	/* 接收参数 */
     	$aid      					= IFilter::act(IReq::get('aid'),'int');//活动ID
+    	$pid      					= IFilter::act(IReq::get('pid'),'int');//分享人ID
     	$user_id 					= $this->user['user_id'];
     	if( empty($user_id) ) $this->json_echo( apireturn::go('001001') );
-    	/* 是否已领取过 */
-    	$modelAss 					= new IModel('activity_ticket_access');
-    	$modelAss->gotObj('user_id='.$user_id.' AND from=1');
+    	
     	/* 活动详情 */
     	$queryAti 					= new IQuery('activity');
     	$queryAti->where 			= 'id='.$aid;
@@ -281,6 +280,7 @@ class Apic extends IController
     	if( $dataAti['start_time'] > time() ) $this->json_echo( apireturn::go('002018') );
     	if( $dataAti['end_time'] < time() ) $this->json_echo( apireturn::go('002019') );
     	if( $dataAti['end_time'] < time() ) $this->json_echo( apireturn::go('002019') );
+    	
     	/* 包含的优惠券列表 */
     	$queryTck 					= new IQuery('activity_ticket');
     	$queryTck->where 			= 'pid='.$aid;
@@ -291,13 +291,16 @@ class Apic extends IController
     	foreach($dataTck as $k => $v){
     		$idTck[] 				= $v['id'];
     	}
-    	/* 已领取的优惠券 */
-    	$modelTck 					= new IModel('activity_ticket_access');
-    	$queryTck->where 			= 'from=1 AND user_id='.$user_id.' AND ticket_id in ('.implode(',',$idTck).')';
-    	$queryTck->fields 			= 'id,name,type,rule';
-    	$dataTck 					= $queryTck->find();
-    	if( !empty($dataTck) ) $this->json_echo( apireturn::go('002021') );
     	
+    	/* 是否已领取 */
+    	if( empty($pid) ){
+	    	$modelTck 				= new IModel('activity_ticket_access');
+	    	$dataTck 				= $modelTck->getObj('from=1 AND user_id='.$user_id.' AND ticket_id in ('.implode(',',$idTck).')');
+	    	if( !empty($dataTck) ) $this->json_echo( apireturn::go('002021') );
+    	}
+    	
+    	/* 开始领取 */
+    	$dataTck 					= $dataTck[rand(0,count($dataTck))];
     	
     }
     
