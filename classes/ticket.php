@@ -60,11 +60,12 @@ class ticket
 	/**
 	 * 活动优惠券计算价格
 	 */
-	public static function calculateActivity($data,$ticket_aid){
+	public static function calculateActivity($data, $ticket_aid){
 		/* 校验优惠券 */
 		$rel 						= self::checkActivity($ticket_aid);
 		if($rel['code']>0) return $rel;
 		$ticket_data 				= $rel['data'];
+		
 		/* 优惠券类型 */
 		switch ($ticket_data['type']){
 			//满减券
@@ -77,7 +78,6 @@ class ticket
 					return apireturn::go('002014');
 				//计算优惠
 				$data['sum'] 			= $data['sum'] - $rule[1];
-				$data['final_sum'] 		= $data['sum'];
 				$msg 					= '满'.$rule[0].'减'.$rule[1].'优惠券';
 				break;
 			default:
@@ -109,7 +109,7 @@ class ticket
 	/**
 	 * 最终优惠券码code计算价格
 	 */
-	public static function finalCalculateCode($goodsResult, $ticket_did, $postage){
+	public static function finalCalculateCode($data, $ticket_did, $postage){
 		$model_ticket 				= new IModel('ticket_discount');
 		$data_ticket 				= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'type,ratio,money');
 		if( empty($data_ticket ))
@@ -122,22 +122,22 @@ class ticket
 		switch($data_ticket['type']){
 			//折扣券
 			case 1 :
-				$goodsResult['sum'] = $goodsResult['sum']*$data_ticket['ratio'];
+				$data['sum'] 		= $data['sum']*$data_ticket['ratio'];
 				break;
 				//抵扣券
 			case 2 :
-				$goodsResult['sum'] = $goodsResult['sum']-$data_ticket['money'];
+				$data['sum'] 		= $data['sum']-$data_ticket['money'];
 				break;
 		}
 		/* 计算邮费 */
-		if ($goodsResult['sum'] >= $postage['condition']){
-			$goodsResult['deliveryPrice'] 			= 0;
+		if ($data['sum'] >= $postage['condition']){
+			$data['deliveryPrice'] 			= 0;
 		} else {
 			//首重价格
-			$goodsResult['deliveryPrice'] 			= $postage['delivery']['first_price'];
+			$data['deliveryPrice'] 			= $postage['delivery']['first_price'];
 			//续重价格
-			if($goodsResult['weight'] > $postage['delivery']['first_weight']){
-				$goodsResult['deliveryPrice'] 		+= ceil(($goodsResult['weight']-$postage['delivery']['first_weight'])/$postage['delivery']['second_weight'])*$postage['delivery']['second_price'];
+			if($data['weight'] > $postage['delivery']['first_weight']){
+				$data['deliveryPrice'] 		+= ceil(($data['weight']-$postage['delivery']['first_weight'])/$postage['delivery']['second_weight'])*$postage['delivery']['second_price'];
 			}
 		}
 		
@@ -146,10 +146,41 @@ class ticket
 	/**
 	 * 最终优惠券码code计算价格
 	 */
-	public static function finalCalculateActivity($goodsResult, $ticket_aid, $postage){
+	public static function finalCalculateActivity($data, $ticket_aid, $postage){
+		/* 校验优惠券 */
+		$rel 						= self::checkActivity($ticket_aid);
+		if($rel['code']>0) return $rel;
+		$ticket_data 				= $rel['data'];
 		
+		/* 优惠券类型 */
+		switch ($ticket_data['type']){
+			//满减券
+			case 1:
+				//优惠券规则
+				$rule 					= explode(',',$ticket_data['rule']);
+				if(count($rule)!=2 || $rule[0]<=0 || $rule[1]<=0)
+					return apireturn::go('002013');
+				if($data['sum'] < $rule[0])
+					return apireturn::go('002014');
+				//计算优惠
+				$data['sum'] 			= $data['sum'] - $rule[1];
+				break;
+			default:
+				return apireturn::go('002012');
+		}
 		
-		
+		/* 计算邮费 */
+		if ($data['sum'] >= $postage['condition']){
+			$data['deliveryPrice'] 			= 0;
+		} else {
+			//首重价格
+			$data['deliveryPrice'] 			= $postage['delivery']['first_price'];
+			//续重价格
+			if($data['weight'] > $postage['delivery']['first_weight']){
+				$data['deliveryPrice'] 		+= ceil(($data['weight']-$postage['delivery']['first_weight'])/$postage['delivery']['second_weight'])*$postage['delivery']['second_price'];
+			}
+		}
+		return apireturn::go('0',$data);
 	}
 
 	/**

@@ -1311,4 +1311,8 @@ class Site extends IController
             }
         }
     }
+    function tiket_gain(){
+        $this->iid_info();
+        $this->redirect('ticket_gain');
+    }
 }

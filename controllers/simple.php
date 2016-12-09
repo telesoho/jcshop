@@ -528,7 +528,7 @@ class Simple extends IController
 		$delivery 					= Api::run('getDeliveryList');
 		$postage 					= array(
 			'condition' 	=> $condition_price,
-			'delivery' 		=>　$delivery[0],
+			'delivery' 		=> $delivery[0],
 		);
     	//=======================================
     	
