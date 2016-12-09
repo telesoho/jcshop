@@ -26,8 +26,7 @@ var vm = new Vue({
             payment:[
                 {id:''}
             ],
-            kicket:{},
-            aid:''
+            ticket:{}
         },
         error:'',
         showButton:true,
@@ -242,10 +241,11 @@ function choCouponInfo(self,item) {
         timeout:10000,//超时时间设置为10秒；
         success:function(data){
             self.showCodeMessage=true;
-            self.infoMessage.aid=item.id;
             if(data.code==0){
                 item.cho=true;
                 self.infoMessage=data.data;
+                console.log(self.infoMessage.ticket.aid)
+                // self.infoMessage.aid=item.id;
             }else{
                 self.error=data.msg;
                 setTimeout(function(){

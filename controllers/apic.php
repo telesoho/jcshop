@@ -186,9 +186,9 @@ class Apic extends IController
         		$data['sum'] += $data['delivery_money'];
         	}
         	/* 优惠券 */
-        	$data['kicket'] 		= array(
-        		'kicket_did' 		=> '', 	//优惠券码ID
-        		'kicket_aid'		=> '',	//优惠券ID
+        	$data['ticket'] 		= array(
+        		'ticket_did' 		=> '', 	//优惠券码ID
+        		'ticket_aid'		=> '',	//优惠券ID
         		'name' 				=> '', 	//优惠券名称
         		'msg' 				=> '',
         	);
