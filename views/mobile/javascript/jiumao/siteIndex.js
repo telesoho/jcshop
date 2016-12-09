@@ -4,7 +4,7 @@
 var Request = new Object();
 	Request = GetRequest();
 	var statusOrder=Request["id"];
-	
+	tanchaun(statusOrder);
 var vm = new Vue({
     el: '#indexInfo',
     data: {
@@ -83,7 +83,7 @@ var vm = new Vue({
         gallery.slider({
             interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
         });
-        tanchaun(statusOrder);
+        
     },
     methods: {
         toArticle: function(item){
@@ -271,8 +271,9 @@ var _hmt = _hmt || [];
 
 // 					弹	窗	处	理
 	function tanchaun(statusOrder){
+		
 		if(statusOrder == 1){
-			document.body.style.overflow="hidden"
+//			document.body.style.overflow="hidden";
 			$("#bgg").css({
 				"display":"block",
 				"overflow":"hidden"
@@ -280,9 +281,10 @@ var _hmt = _hmt || [];
 			$("#PopupWindow").css({
 				"display":"block",
 			});
+			$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
 		}
 		$("#guan").click(function(){
-			document.body.style.overflow=""
+//			document.body.style.overflow=""
 			$("#bgg").css({
 				"display":"none",
 				"overflow":"hidden"
@@ -290,6 +292,7 @@ var _hmt = _hmt || [];
 			$("#PopupWindow").css({
 				"display":"none",
 			});
+			$(document).unbind('touchmove');
 		})
 		//   点击去看看
 		$("#sess").click(function(){
