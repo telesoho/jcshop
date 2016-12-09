@@ -49,6 +49,8 @@
 			<td title="结算">
 				{if:$item['own_id']}
 				<a href="{url:/order/order_shop_settlement/id/$item['id']}">结算</a>
+
+				<a href="{url:/order/order_shop_settlement_list/id/$item['identify_id']}">结算清单</a>
 				{else:}
 				{/if}
 			</td>

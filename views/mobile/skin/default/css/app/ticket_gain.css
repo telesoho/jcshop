@@ -1,0 +1,35 @@
+body,html{
+	width: 100%;
+	height: 100%;
+}
+img{
+	border: 0;
+	width: 7.5rem;
+	height: 100%;
+	display: block;
+}
+header{
+	height: auto;
+	overflow: hidden;
+}
+
+footer{
+	position: relative;
+}
+footer span{
+	width: 5.48rem;
+	height: 1.02rem;
+	display: block;
+	position: absolute;
+	left: 1.01rem;
+}
+footer span img{
+	width: 5.34rem;
+	height: 0.86rem;
+}
+footer #goHome{	
+	top: 5.58rem;
+}
+footer #share{
+	top: 6.89rem;
+}

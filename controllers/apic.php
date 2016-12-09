@@ -1890,6 +1890,53 @@ class Apic extends IController
         $this->json_echo($ret);
     }
 
+    function get_recommender_settlement_info(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = ' . $this->user['user_id'];
+        $shop_data = $shop_query->find();
+        $recommender_total_rebate_amount = 0;
+        $recommender_total_goods_amount = 0;
+        foreach ($shop_data as $key=>$value){
+            $settlement_query = new IQuery('settlement');
+            $shop_query = new IQuery('shop');
+            $settlement_query->where = 'seller_id = ' . $value['identify_id'];
+            $shop_query->where = 'identify_id = ' . $value['identify_id'];
+            $data = $settlement_query->find();
+            $ret[$key]['name'] = $value['name'];
+            $ret[$key]['amount_available'] = $value['amount_available'];
+            $order_query = new IQuery('order');
+            foreach ($data as $k=>$v){
+                $order_query->where = 'id = ' . $v['order_id'];
+                $order_data = $order_query->find()[0];
+                $order_data['rebate_amount'] = $v['rebate_amount'];
+                $recommender_total_rebate_amount += $v['rebate_amount'];
+                $ret[$key]['orders'][] = $order_data;
+            }
+            $merge_data = $ret[$key]['orders'];
+            foreach ($merge_data as $k=>$value){
+                $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
+                $goods_total_price = 0;
+                foreach($temp as $key => $good){
+                    $goods_total_price += $good['real_price'];
+                    $good_info = JSON::decode($good['goods_array']);
+                    $temp[$key]['good_info'] = $good_info;
+                    $temp[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$temp[$key]['img']."/w/160/h/160");
+                }
+                $shop_category = new IQuery('shop_category');
+                $shop_category->where = 'id = ' . $shop_data[0]['category_id'];
+                $shop_category_data = $shop_category->find();
+                $merge_data[$k]['goods_total_price'] = $goods_total_price;
+                $recommender_total_goods_amount += $goods_total_price;
+                $merge_data[$k]['goods_list'] = $temp;
+                $merge_data[$k]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
+            }
+            $ret[$key]['orders'] = $merge_data;
+        }
+        $ret[0]['recommender_total_goods_amount'] = $recommender_total_goods_amount;
+        $ret[0]['recommender_total_rebate_amount'] = $recommender_total_rebate_amount;
+        $this->json_echo($ret);
+    }
+
     /**
      * @brief 获取用户头像
      * @param $user_id

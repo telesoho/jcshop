@@ -209,6 +209,7 @@ body{
     left:0.2rem;
 }
 #category_third .product_item .name{
+	word-wrap:break-word;
     margin-top:0.1rem;
     font-size:0.28rem;
     color:#3d4245;

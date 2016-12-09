@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
+		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/ticket_gain.css?v=<?php echo time(); ?>"/>
+	</head>
+	<body>
+		<!-- 						第一块头部`					-->
+		<header>
+			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/01.png"/></h1>
+			<!--<h1>
+				<img src="/views/mobile/skin/default/image/jmj/ticket_gain/index.png"/>
+				<a id="goHome" class="a1"></a>
+				<span class="span1"></span>
+				<a id="share" class="a2"></a>
+				<span class="span2"></span>
+			</h1>-->
+		</header>
+		<!-- 						第 二 块头部`					-->
+		<section>
+			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/02.png"/></h1>
+		</section>
+		<!-- 						第 三 块头部`					-->
+		<footer>
+			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/03.jpg"/></h1>
+			<span id="goHome"><a href="/site/index?id=1"><img src="/views/mobile/skin/default/image/jmj/ticket_gain/btn1.png"/></a></span>
+			<span id="share"><img src="/views/mobile/skin/default/image/jmj/ticket_gain/btn2.png"/></span>
+		</footer>
+		<script src="" type="text/javascript" charset="utf-8"></script>
+		<script src="/views/mobile/javascript/jquery.min.js"></script>
+		<script src="/views/mobile/javascript/jiumao/ticket_gain.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+		
+			var oShare = document.getElementById("share");
+			oShare.onclick = function(){
+				wx.onMenuShareTimeline({
+				    title: '', // 分享标题
+				    link: '', // 分享链接
+				    imgUrl: '', // 分享图标
+				    success: function () { 
+				        // 用户确认分享后执行的回调函数
+				    },
+				    cancel: function () { 
+				        // 用户取消分享后执行的回调函数
+				    }
+				});
+				
+				
+				//分享给朋友
+				wx.onMenuShareAppMessage({
+				    title: '', // 分享标题
+				    desc: '', // 分享描述
+				    link: '', // 分享链接
+				    imgUrl: '', // 分享图标
+				    type: '', // 分享类型,music、video或link，不填默认为link
+				    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+				    success: function () { 
+				        // 用户确认分享后执行的回调函数
+				    },
+				    cancel: function () { 
+				        // 用户取消分享后执行的回调函数
+				    }
+				});
+			}
+			
+			
+		</script>
+	</body>
+</html>

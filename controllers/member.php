@@ -855,4 +855,39 @@ class Member extends IController implements adminAuthorization
         $user_model->update('id = ' . $user_id);
         $this->redirect('verified');
     }
+    function recommender_list(){
+        $search = IFilter::act(IReq::get('search'),'strict');
+        $keywords = IFilter::act(IReq::get('keywords'));
+        $where = ' is_recommender = 1 ';
+        if($search && $keywords)
+        {
+            $where .= " and $search like '%{$keywords}%' ";
+        }
+        $this->data['search'] = $search;
+        $this->data['keywords'] = $keywords;
+        $this->data['where'] = $where;
+        $tb_user_group = new IModel('user_group');
+        $data_group = $tb_user_group->query();
+        $group      = array();
+        foreach($data_group as $value)
+        {
+            $group[$value['id']] = $value['group_name'];
+        }
+        $this->data['group'] = $group;
+        $this->setRenderData($this->data);
+        $this->redirect('recommender_list');
+    }
+    function recommender_settlement(){
+        $recommender_id = IFilter::act(IReq::get('uid'),'int');
+        shop::settlement_recommender_orders($recommender_id);
+        $this->redirect('recommender_list');
+//        var_dump($shop_data);
+    }
+    function recommender_settlement_list(){
+        $recommender_id = IFilter::act(IReq::get('uid'),'int');
+        $settlement_recommender_query = new IQuery('settlement_recommender');
+        $settlement_recommender_query->where = 'recommender_id = ' . $recommender_id;
+        $this->settlement_recommender_data = $settlement_recommender_query->find();
+        $this->redirect('recommender_settlement_list');
+    }
 }

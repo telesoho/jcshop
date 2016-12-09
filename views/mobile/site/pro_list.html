@@ -116,23 +116,23 @@
 		</div>
         <div class="mark">
 		<div class="banner">
-                <div class="wrapper">
-                    {query:name=category 
-                        where=parent_id eq $this->catId and visibility eq 1 
-                        fields=id,name,image 
-                        limit=1000 
-                        order=sort desc}
-                    <a href="/site/category_third/id/{$item['id']}/title/{$item['name']}" class="locationA">
-                    <div class="item" >
-                        <img dataimg="{echo:IWeb::$app->config['image_host'].'/'.$item['image']}" alt=""  src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
-                        <div class="name hidewrap">
-                            {$item['name']}
-                        </div>
+            <div class="wrapper">
+                {query:name=category 
+                    where=parent_id eq $this->catId and visibility eq 1 
+                    fields=id,name,image 
+                    limit=1000 
+                    order=sort desc}
+                <a href="/site/category_third/id/{$item['id']}/title/{$item['name']}" class="locationA">
+                <div class="item" >
+                    <img dataimg="{echo:IWeb::$app->config['image_host'].'/'.$item['image']}" alt=""  src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
+                    <div class="name hidewrap">
+                        {$item['name']}
                     </div>
-                    </a>
-                    {/query}
                 </div>
+                </a>
+                {/query}
             </div>
+        </div>
 		</div>
 	</div>
 	<!--最新品-->

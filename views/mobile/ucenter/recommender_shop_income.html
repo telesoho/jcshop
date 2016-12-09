@@ -33,8 +33,8 @@
         </div>
     </div>
     <div class="top box">
-        <div>交易总额：<span style="color:#ff4aa0;font-size:0.26rem;">23366.00</span></div>
-        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">8555.00</span></div>
+        <div>交易总额：<span style="color:#ff4aa0;font-size:0.26rem;">{{recommender_total_goods_amount}}</span></div>
+        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">{{recommender_total_rebate_amount}}</span></div>
     </div>
     <div class="merchant" v-for="item in shopTobe" v-cloak>
         <div class="thead" @click="showOrder(item)">
@@ -51,28 +51,28 @@
             </div>
         </div>
         <div class="order"  v-if="item.show_Order" >
-            <div class="orderList" v-for="orderList in item.order">
-                <div class="box" @click="showGoods(item.order,orderList)">
-                    <div class="left">订单编号：{{orderList.order_num}}</div>
-                    <div class="state">订单状态：{{orderList.status}}</div>
+            <div class="orderList" v-for="orderList in item.orders">
+                <div class="box" @click="showGoods(item.orders,orderList)">
+                    <div class="left">订单编号：{{orderList.order_no}}</div>
+                    <div class="state">订单状态：{{orderList.orderStatusText}}</div>
                 </div>
                 <div class="goods" v-if="orderList.show_goods">
-                    <div class="goodsList" v-for="goodList in orderList.goods">
+                    <div class="goodsList" v-for="goodList in orderList.goods_list">
                         <div class="content">
                             <div class="left flexbox">
                                 <img :src="goodList.img" alt="" />
                             </div>
                             <div class="right">
-                                <div class="name">{{goodList.name}}</div>
+                                <div class="name">{{goodList.good_info.name}}</div>
                                 <div class="price">
-                                    <span class="sellprice">￥{{goodList.price}}</span>
-                                    <span class="num">x{{goodList.goods_price}}</span>
+                                    <span class="sellprice">￥{{goodList.real_price}}</span>
+                                    <span class="num">x{{goodList.goods_nums}}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="total">
-                        总计收益金额：{{orderList.price}}
+                        结算收益金额：{{orderList.rebate_amount}}
                     </div>
                 </div>
             </div>
@@ -92,7 +92,9 @@
             month:'12',
             showMessage:false,
             page:1,
-            infoMessage:[]
+            infoMessage:[],
+            recommender_total_rebate_amount: '',
+            recommender_total_goods_amount: ''
         },
         computed: {
             shopTobe: function(){
@@ -129,7 +131,7 @@
         }
     })
     function getInfo(self){
-        mui.ajax('/apic/tests',{
+        mui.ajax('/apic/get_recommender_settlement_info',{
             data:{
                 year:self.year,
                 month:self.month,
@@ -141,19 +143,19 @@
                 self.showMessage=true;
                 data.map(function(item){
                     item.show_Order=false;
-                    item.order.map(function(orderList){
+                    item.orders.map(function(orderList){
                         orderList.show_goods=false;
                     })
                 });
+                self.recommender_total_rebate_amount=data[0].recommender_total_rebate_amount
+                self.recommender_total_goods_amount=data[0].recommender_total_goods_amount
                 self.infoMessage=data;
-                console.log(self.infoMessage);
             }
         });
     };
     window.onload=function(){
         (function($) {
             $.init();
-//            var result = document.getElementById("month_content");
             var cho=document.getElementById("cho_month")
             cho.addEventListener('tap', function() {
                 var optionsJson = this.getAttribute('data-options') || '{}';
@@ -161,12 +163,9 @@
                 var id = this.getAttribute('id');
                 var picker = new $.DtPicker(options);
                 picker.show(function(rs) {
-                    console.log(rs);
                     vm.$data.year=rs.y.text;
                     vm.$data.month=rs.m.value;
                     getInfo(vm);
-                    console.log(vm);
-//                    result.innerText = rs.y.text+"年"+rs.m.value+"月";
                     picker.dispose();
                 });
             }, false);
