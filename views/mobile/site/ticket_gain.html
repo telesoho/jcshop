@@ -22,38 +22,36 @@
 			<span id="goHome" style="top: 7.58rem;"><a href="/site/index?id=1"><img src="/views/mobile/skin/default/image/jmj/ticket_gain/btn1.png" style="width: 5.48rem;height: 1.02rem;"/></a></span>
 			<span id="share" style="top: 8.89rem;"><img id="shareimg" onclick="page.oShare();" src="/views/mobile/skin/default/image/jmj/ticket_gain/btn2.png" style="width: 5.48rem;height: 1.02rem;"/></span>
 		</footer>
-		<script src="/views/mobile/javascript/jquery.min.js"></script>
-		<script src="/views/mobile/javascript/jiumao/ticket_gain.js"></script>
-		<!--<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>-->
-		<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
-
-		<script type="text/javascript">
-		function GetQueryString(name){
-		    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-		    var r = window.location.search.substr(1).match(reg);
-		    if(r!=null)return  unescape(r[2]); return null;
-		}
- 		var oPid = GetQueryString("pid");
- 		if(oPid){
- 			$.ajax({
-				url:"/apic/get_ticket_activity",
-				data:{
-					aid:"2",
-					pid:oPid
-				},
-				success:function(res){
-					console.log(res)
-				}
-			})
- 		}else{
- 			$.ajax({
-				url:"/apic/get_ticket_activity",
-				data:{
-					aid:"2",
-					pid:""
-				}
-			})
- 		}	
+		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>	
+	<script type="text/javascript">
+	
+//		function GetQueryString(name){
+//		    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+//		    var r = window.location.search.substr(1).match(reg);
+//		    if(r!=null)return  unescape(r[2]); return null;
+//		}
+// 		var oPid = GetQueryString("pid");
+// 		if(oPid){
+// 			$.ajax({
+//				url:"/apic/get_ticket_activity",
+//				data:{
+//					aid:"2",
+//					pid:oPid
+//				},
+//				success:function(res){
+//					console.log(res)
+//				}
+//			})
+// 		}else{
+// 			$.ajax({
+//				url:"/apic/get_ticket_activity",
+//				data:{
+//					aid:"2",
+//					pid:""
+//				}
+//			})
+// 		}	
 	</script>
 <!-- 微信分享 -->
 {if:IClient::isWechat() == true}
@@ -71,6 +69,7 @@ var wechat_share = {
     imgUrl      : "{echo:IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/ticket_gain/01.png'}", //图片
     link        : "{echo:IWeb::$app->config['image_host']}/site/ticket_gain/pid/{$this->user['user_id']}/aid/{echo:IWeb::$app->config['aid']}/iid/{echo:ISession::get('shop_identify_id')}",
 }
+
 wechat.share();
 var page = {
 	oShare 			: function(){
@@ -94,5 +93,6 @@ var page = {
 }
 </script>
 {/if}
+
 	</body>
 </html>
