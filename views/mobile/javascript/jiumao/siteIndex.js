@@ -261,3 +261,48 @@ var _hmt = _hmt || [];
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
 })();
+
+
+// 					弹	窗	处	理
+
+var Request = new Object();
+	Request = GetRequest();
+	var statusOrder=Request["id"];
+	if(statusOrder == 1){
+		document.body.style.overflow="hidden"
+		$("#bgg").css({
+			"display":"block",
+			"overflow":"hidden"
+		})
+		$("#PopupWindow").css({
+			"display":"block",
+		});
+	}
+	$("#guan").click(function(){
+		document.body.style.overflow=""
+		$("#bgg").css({
+			"display":"none",
+			"overflow":"hidden"
+		})
+		$("#PopupWindow").css({
+			"display":"none",
+		});
+	})
+	//   点击去看看
+	$("#sess").click(function(){
+		window.location.href = "/site/ticket_list";
+	})
+
+//	获取url传递过来的参数
+function GetRequest() {
+    var url = location.search; //获取url中"?"符后的字串
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        strs = str.split("&");
+        for(var i = 0; i < strs.length; i ++) {
+            theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+        }
+    }
+    return theRequest;
+}

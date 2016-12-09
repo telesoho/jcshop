@@ -2,51 +2,34 @@ body,html{
 	width: 100%;
 	height: 100%;
 }
-header{
-	height: 100%;
-	width: 100%;
-}
 img{
+	border: 0;
 	width: 7.5rem;
-}
-header h1{
-	position: relative;
-	width: 100%;
-}
-header h1 a{
-	position: absolute;
+	height: 100%;
 	display: block;
+}
+header{
+	height: auto;
+	overflow: hidden;
+}
+
+footer{
+	position: relative;
+}
+footer span{
 	width: 5.48rem;
 	height: 1.02rem;
-	left: 1.01rem;
-	text-align: center;
-	line-height: 1.02rem;
-	font-size: 0.36rem;
-	color:#1b1b1b;
-	z-index: 3;
-	background: url(../../image/jmj/ticket_gain/A7317D63-DB47-4E57-9BC0-895D6416F226@1x.png) no-repeat 0.06rem 0.08rem;
-	/*box-shadow: 1px 1px 1px #000;*/
-	border-radius:50px ;
-}
-header h1 .a1{
-	bottom: 2.09rem;
-}
-header h1 .a2{
-	bottom: 0.78rem;
-}
-span{
 	display: block;
-	width: 5.14rem;
-	height: 0.79rem;
 	position: absolute;
-	border-radius:50px ;
-	left: 1.1rem;
-	z-index: 2;
-	background: mediumturquoise url(../../image/jmj/ticket_gain/8A174DEE-5756-46E2-A6BB-9C9880775F7A@2x.png) bottom left;
+	left: 1.01rem;
 }
-.span1{
-	bottom: 2.18rem;	
+footer span img{
+	width: 5.34rem;
+	height: 0.86rem;
 }
-.span2{
-	bottom: 0.87rem;
+footer #goHome{	
+	top: 5.58rem;
+}
+footer #share{
+	top: 6.89rem;
 }
