@@ -51,28 +51,14 @@ class Apic extends IController
      */
     public function cart2()
     {
-        $id        = IFilter::act(IReq::get('id'),'int');
-        $type      = IFilter::act(IReq::get('type'));//goods,product
-        $promo     = IFilter::act(IReq::get('promo'));
-        $active_id = IFilter::act(IReq::get('active_id'),'int');
-        $buy_num   = IReq::get('num') ? IFilter::act(IReq::get('num'),'int') : 1;
-        $tourist   = IReq::get('tourist');//游客方式购物
-        $code 	   = IFilter::act(IReq::get('code'),'int');
-        
-        /* 优惠券 */
-        if(!empty($code)){
-        	if($code<=0 || $code>999999) $this->json_echo(array('error'=>'请输入正确的折扣券号'));
-        	/* 获取折扣券数据 */
-        	$query 				 		= new IQuery('ticket_discount');
-        	$query->where 				= 'code='.$code;
-        	$query->fields 				= 'id,name,type,ratio,money,start_time,end_time,status';
-        	$query->limit 				= 1;
-        	$ticket_data 				= $query->find();
-        	if(empty($ticket_data)) $this->json_echo(array('error'=>'折扣券不存在'));
-        	if($ticket_data[0]['start_time']>time() || $ticket_data[0]['end_time']<time()) $this->json_echo(array('error'=>'折扣券已过期'));
-        	if($ticket_data[0]['status'] == 2) $this->json_echo(array('error'=>'折扣券已使用'));
-        	if($ticket_data[0]['status'] != 1) $this->json_echo(array('error'=>'折扣券无法使用'));
-        }
+        $id        				= IFilter::act(IReq::get('id'),'int');
+        $type      				= IFilter::act(IReq::get('type'));//goods,product
+        $promo     				= IFilter::act(IReq::get('promo'));
+        $active_id 				= IFilter::act(IReq::get('active_id'),'int');
+        $buy_num   				= IReq::get('num') ? IFilter::act(IReq::get('num'),'int') : 1;
+        $tourist   				= IReq::get('tourist');//游客方式购物
+        $code 	   				= IFilter::act(IReq::get('code'),'int');
+        $ticket_aid 	   		= IFilter::act(IReq::get('ticket_aid'),'int');
         
         //必须为登录用户
         if($tourist === null && $this->user['user_id'] == null)
@@ -170,60 +156,156 @@ class Apic extends IController
             if($data['goodsList'][$key]['img']) $data['goodsList'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$data['goodsList'][$key]['img']."/w/500/h/500");
         }
         
-		/* 使用优惠券 */
-        if(!empty($code)){
-	        switch($ticket_data[0]['type']){
-	        	//折扣券
-	        	case 1 :
-	        		$data['sum'] 		= $data['sum'] * $ticket_data[0]['ratio'];
-	        		$data['final_sum'] 	= $data['sum'];
-	        		$msg 				= '已为您优惠'.($ticket_data[0]['ratio']*10).'折';
-	        		break;
-	        		//抵扣券
-	        	case 2 :
-	        		$data['sum'] 		= $data['sum'] - $ticket_data[0]['money'];
-	        		$data['final_sum'] 	= $data['sum'];
-	        		$msg 				= '已为您优惠'.$ticket_data[0]['money'].'元';
-	        		break;
-	        }
-        }
-        
-        /* 计算邮费 */
-        //满包邮
-        $promotion_query 		= new IQuery("promotion");
-        $promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
-        $condition_price 		= $promotion_query->find()[0]['condition'];
-        if ($data['sum'] >= $condition_price){
-            $data['delivery_money'] 	= 0;
-        } else {
-        	//首重价格
-        	$data['delivery_money'] 	= $data['delivery'][0]['first_price'];
-        	//续重价格
-        	if($data['weight'] > $data['delivery'][0]['first_weight']){
-        		$data['delivery_money'] += ceil(($data['weight']-$data['delivery'][0]['first_weight'])/$data['delivery'][0]['second_weight'])*$data['delivery'][0]['second_price'];
-        	}
-            $data['sum'] += $data['delivery_money'];
-        }
-
-        //满减规则
+        //满包邮规则
         $query = new IQuery("promotion");
         $query->where = "type = 0 and seller_id = 0 and award_type = 6";
         $data['condition_price'] = $query->find()[0]['condition'];
         
-        //优惠券
-        $data['kicket'] 		= array(
-        	'id' 		=> empty($ticket_data[0]['id']) ? '' : $ticket_data[0]['id'], 		//折扣券ID
-        	'name' 		=> empty($ticket_data[0]['name']) ? '' : $ticket_data[0]['name'], 	//折扣券名称
-        	'msg' 		=> empty($msg) ? '' : $msg,
+		/* 使用优惠券 */
+        if(!empty($code)){
+        	/* 优惠券码 */
+        	$rel 						= ticket::calculateCode($data,$code);
+        	if($rel['code']>0) $this->json_echo( $rel );
+        	$data 						= $rel['data'];
+        }else if(!empty($ticket_aid)){
+        	/* 活动优惠券 */
+        	$rel 						= ticket::calculateActivity($data,$ticket_aid);
+        	if($rel['code']>0) $this->json_echo( $rel );
+        	$data 						= $rel['data'];
+        }else{
+        	/* 计算邮费 */
+        	if ($data['sum'] >= $data['condition_price']){
+        		$data['delivery_money'] 	= 0; //满金额包邮
+        	} else {
+        		//首重价格
+        		$data['delivery_money'] 	= $data['delivery'][0]['first_price'];
+        		//续重价格
+        		if($data['weight'] > $data['delivery'][0]['first_weight']){
+        			$data['delivery_money'] += ceil(($data['weight']-$data['delivery'][0]['first_weight'])/$data['delivery'][0]['second_weight'])*$data['delivery'][0]['second_price'];
+        		}
+        		$data['sum'] += $data['delivery_money'];
+        	}
+        	/* 优惠券 */
+        	$data['kicket'] 		= array(
+        		'kicket_did' 		=> '', 	//优惠券码ID
+        		'kicket_aid'		=> '',	//优惠券ID
+        		'name' 				=> '', 	//优惠券名称
+        		'msg' 				=> '',
         	);
-        $this->json_echo($data);
+        }
+        
+        $this->json_echo( apireturn::go('0',$data) );
     }
     /**
-     * ---------------------------------------------------折扣券---------------------------------------------------*
+     * ---------------------------------------------------优惠券---------------------------------------------------*
      */
-    //折扣券详情 TODO:暂不需要
-    public function get_ticket_discount(){
-    	$code          				= IFilter::act(IReq::get('code'),'int');//折扣券code
+    /**
+     * 我的优惠券列表
+     */
+    public function ticket_list_my(){
+    	/* 接收参数 */
+    	$type      					= IFilter::act(IReq::get('type'),'int');//[1可使用-2已过期]
+    	$page        				= IFilter::act(IReq::get('page'),'int');//分页编号
+    	$user_id 					= $this->user['user_id'];
+    	if( empty($user_id) ) $this->json_echo( apireturn::go('001001') );
+    	/* 可使用优惠券 */
+    	$query 						= new IQuery('activity as m');
+    	$query->join 				= 'LEFT JOIN activity_ticket AS t ON t.pid=m.id LEFT JOIN activity_ticket_access AS a ON a.ticket_id=t.id';
+    	switch($type){
+    		//可使用
+    		case 1:
+    			$where 				= 'a.user_id='.$user_id.' AND m.status=1 AND a.status=1 AND m.end_time>='.time();
+    			break;
+    		//已过期
+    		case 2:
+    			$where 				= 'a.user_id='.$user_id.' AND (m.status!=1 OR a.status!=1 OR m.end_time<'.time().')';
+    			break;
+    		default:return apireturn::go('002015');
+    	}
+    	$query->where 				= $where;
+    	$query->fields 				= 't.id,t.name,m.start_time,m.end_time,t.type,t.rule';
+    	$query->page 				= $page<1 ? 1 : $page;
+    	$query->pagesize 			= 100;
+    	$data 						= $query->find();
+    	$totalPage 					= $query->getTotalPage();
+    	if ($page > $totalPage) $data = array();
+    	if(!empty($data)){
+    		foreach($data as $k => $v){
+    			$data[$k]['start_time'] 	= date('m-d',$v['start_time']);
+    			$data[$k]['end_time'] 		= date('m-d',$v['end_time']);
+    			switch($v['type']){
+    				//满减券
+    				case 1 :
+    					$rule 				= explode(',',$v['rule']);
+    					$data[$k]['msg'] 	= '满'.$rule[0].'减'.$rule[1];
+    					$data[$k]['detail'] = $data[$k]['msg'].'满减券';
+    					break;
+    				//无门槛券
+    				case 2:
+    					$data[$k]['msg'] 	= '抵'.$v['rule'].'元';
+    					$data[$k]['detail'] = $v['rule'].'元无门槛券';
+    					break;
+    				case 3:
+    					break;
+    				case 4:
+    					break;
+    				case 5:
+    					break;
+    				case 6:
+    					break;
+    			}
+    		}
+    	}
+    	$this->json_echo( apireturn::go('0',$data) );
+    }
+    /**
+     * 领取优惠券
+     */
+    public function get_ticket_activity(){
+    	/* 接收参数 */
+    	$aid      					= IFilter::act(IReq::get('aid'),'int');//活动ID
+    	$pid      					= IFilter::act(IReq::get('pid'),'int');//分享人ID
+    	$user_id 					= $this->user['user_id'];
+    	if( empty($user_id) ) $this->json_echo( apireturn::go('001001') );
+    	
+    	/* 活动详情 */
+    	$queryAti 					= new IQuery('activity');
+    	$queryAti->where 			= 'id='.$aid;
+    	$queryAti->fields 			= 'id,start_time,end_time,num,share_num,share_score,status';
+    	$queryAti->limit 			= 1;
+    	$dataAti 					= $queryAti->find();
+    	if(empty($dataAti)) $this->json_echo( apireturn::go('002016') );
+    	$dataAti 					= $dataAti[0];
+    	if( $dataAti['statuis'] != 1 ) $this->json_echo( apireturn::go('002017') );
+    	if( $dataAti['start_time'] > time() ) $this->json_echo( apireturn::go('002018') );
+    	if( $dataAti['end_time'] < time() ) $this->json_echo( apireturn::go('002019') );
+    	if( $dataAti['end_time'] < time() ) $this->json_echo( apireturn::go('002019') );
+    	
+    	/* 包含的优惠券列表 */
+    	$queryTck 					= new IQuery('activity_ticket');
+    	$queryTck->where 			= 'pid='.$aid;
+    	$queryTck->fields 			= 'id,name,type,rule';
+    	$dataTck 					= $queryTck->find();
+    	if(empty($dataTck)) $this->json_echo( apireturn::go('002020') );
+    	$idTck 						= array(); //优惠券ID
+    	foreach($dataTck as $k => $v){
+    		$idTck[] 				= $v['id'];
+    	}
+    	
+    	/* 是否已领取 */
+	    $modelAcc 					= new IModel('activity_ticket_access');
+    	$dataAcc 					= $modelAcc->getObj('from='.(empty($pid) ? 0 : $pid).' AND user_id='.$user_id.' AND ticket_id in ('.implode(',',$idTck).')');
+    	if( !empty($dataAcc) ) $this->json_echo( apireturn::go('002021') );
+    	
+    	/* 开始领取 */
+    	$dataTckOn 					= $dataAcc[rand(0,count($dataAcc)-1)];
+    	$modelTck->setData(array(
+    		'user_id' 		=> $user_id,
+    		'ticket_id' 	=> $dataTckOn['id'],
+    		'status' 		=> 1,
+    		'from' 			=> empty($pid) ? 0 : $pid,
+    	));
+    	
     }
     
     /**
@@ -1199,8 +1281,8 @@ class Apic extends IController
     	$where 						= 'is_del=0 AND (';
     	$order 						= '';
     	foreach($word_arr as $k => $v){
-    		$field 					.= ',(`name` LIKE "%'.$v.'%") as name'.$k.',(`search_words` LIKE "%,'.$v.',%") as search'.$k.',(`goods_no` LIKE "%,'.$v.',%") as goods_no'.$k;
-    		$where 					.= ' (`name` LIKE "%'.$v.'%") OR (`search_words` LIKE "%,'.$v.',%") OR (`goods_no` LIKE "%,'.$v.',%")';
+    		$field 					.= ',(`name` LIKE "%'.$v.'%") as name'.$k.',(`search_words` LIKE "%,'.$v.',%") as search'.$k.',(`goods_no`='.$v.') as goods_no'.$k;
+    		$where 					.= ' (`name` LIKE "%'.$v.'%") OR (`search_words` LIKE "%,'.$v.',%") OR (`goods_no`='.$v.')';
     		$order 					.= 'name'.$k;
     		if(count($word_arr) != $k+1){
     			$where .= ' OR';
