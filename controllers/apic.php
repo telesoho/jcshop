@@ -220,7 +220,7 @@ class Apic extends IController
     		case 2:
     			$where 				= 'a.user_id='.$user_id.' AND (m.status!=1 OR a.status!=1 OR m.end_time<'.time().')';
     			break;
-    		default:return apireturn::go(002015);
+    		default:return apireturn::go('002015');
     	}
     	$query->where 				= $where;
     	$query->fields 				= 't.name,m.start_time,m.end_time,t.type,t.rule';
@@ -242,7 +242,7 @@ class Apic extends IController
     					break;
     				//无门槛券
     				case 2:
-    					$data[$k]['msg'] 	= '抵'.$rule[0].'元';
+    					$data[$k]['msg'] 	= '抵'.$rule.'元';
     					$data[$k]['detail'] = $rule.'元无门槛券';
     					break;
     				case 3:
@@ -256,7 +256,13 @@ class Apic extends IController
     			}
     		}
     	}
-    	$this->json_echo( apireturn::go(0,$data) );
+    	$this->json_echo( apireturn::go('0',$data) );
+    }
+    /**
+     * 领取优惠券
+     */
+    public function get_ticket_activity(){
+    	
     }
     
     /**
