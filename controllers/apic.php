@@ -237,7 +237,8 @@ class Apic extends IController
     				//满减券
     				case 1 :
     					$rule 				= explode(',',$v['rule']);
-    					$data[$k]['msg'] 	= '满'.$rule[0].'减'.$rule[1].'优惠券';
+    					$data[$k]['msg'] 	= '满'.$rule[0].'减'.$rule[1];
+    					$data[$k]['detail'] = $data[$k]['msg'].'满减券';
     					break;
     				case 2:
     					break;
