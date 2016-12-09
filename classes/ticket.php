@@ -48,9 +48,9 @@ class ticket
 			$data['sum'] += $data['delivery_money'];
 		}
         /* 优惠券 */
-        $data['kicket'] 		= array(
-        	'kicket_did' 		=> $ticket_data['id'], 	//优惠券码ID
-        	'kicket_aid'		=> '',	//优惠券ID
+        $data['ticket'] 		= array(
+        	'ticket_did' 		=> $ticket_data['id'], 	//优惠券码ID
+        	'ticket_aid'		=> '',	//优惠券ID
         	'name' 				=> $ticket_data['name'], 	//优惠券名称
         	'msg' 				=> $msg,
         );
@@ -97,9 +97,9 @@ class ticket
         	$data['sum'] 		+= $data['delivery_money'];
         }
 		/* 优惠券 */
-		$data['kicket'] 		= array(
-			'kicket_did' 		=> '', 	//优惠券码ID
-			'kicket_aid'		=> $ticket_aid,	//优惠券ID
+		$data['ticket'] 		= array(
+			'ticket_did' 		=> '', 	//优惠券码ID
+			'ticket_aid'		=> $ticket_aid,	//优惠券ID
 			'name' 				=> $ticket_data['name'], 	//优惠券名称
 			'msg' 				=> $msg,
 		);
