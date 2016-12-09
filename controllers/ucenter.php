@@ -86,6 +86,7 @@ class Ucenter extends IController implements userAuthorization
             }
         }
         $temp .= ')';
+        $temp .= ' and seller_id = ' . $shop_data['identify_id'];
         $where = $temp . ' and pay_type != 0 and status = 5 and is_shop_checkout = 0';
         $order_query = new IQuery('order');
         $order_query->where = $where;
@@ -1143,16 +1144,26 @@ class Ucenter extends IController implements userAuthorization
         $this->identify_id = $identify_id;
         $this->redirect('shop_user');
     }
+    function settlement_info(){
+        $this->redirect('settlement_info');
+    }
+
+    /**
+     * 合伙人待入账信息
+     */
     function recommender_shops_tobe_booked(){
         $this->shop_nums = $this->get_associate_shop_nums();
         $this->redirect('recommender_shops_tobe_booked');
     }
+
+    /**
+     * 合伙人旗下店铺
+     */
     function recommender_associate_shop(){
         $shop_query = new IQuery('shop as a');
         $shop_query->join = 'right join user as b on a.own_id = b.id';
         $shop_query->where = 'a.recommender = ' . $this->user['user_id'];
         $this->data = $shop_query->find();
-//        var_dump($this->data);
         $this->redirect('recommender_associate_shop');
     }
     private function get_associate_shop_nums(){

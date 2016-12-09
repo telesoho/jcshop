@@ -282,6 +282,7 @@ class Simple extends IController
     //填写订单信息cart2
     function cart2()
     {
+    	/*
 		$id        = IFilter::act(IReq::get('id'),'int');
 		$type      = IFilter::act(IReq::get('type'));//goods,product
 		$promo     = IFilter::act(IReq::get('promo'));
@@ -370,7 +371,7 @@ class Simple extends IController
 
 		//获取商品税金
 		$this->goodsTax    = $result['tax'];
-
+    	*/
     	//渲染页面
     	$this->redirect('cart2');
     }

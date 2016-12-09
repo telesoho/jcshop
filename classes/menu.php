@@ -42,6 +42,7 @@ class Menu
 	     		'/member/withdraw_list' =>'会员提现管理',
 				'/comment/message_list'	=> '会员消息',
 				'/member/verified'	=> '实名认证',
+				'/member/recommender_list'	=> '合伙人',
 			),
 			'商户管理' => array(
 				'/member/seller_list' => '商户列表',
@@ -89,9 +90,12 @@ class Menu
         	// '代金券管理'=>array(
         	// 	'/market/ticket_list'       => '代金券列表',
         	// ),
-			'优惠券管理'=>array(
-        		'/market/ticket_discount_list'   => '优惠券列表',
-        	)
+			'优惠券活动' 	=> array(
+				'/market/activity_list' => '活动列表',
+			),
+			'优惠券码' 	=> array(
+        		'/market/ticket_discount_list'   => '优惠券码列表',
+        	),
 		),
 
 		'统计'=>array(

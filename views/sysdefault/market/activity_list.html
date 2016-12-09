@@ -1,9 +1,9 @@
 <div class="headbar">
-	<div class="position"><span>营销</span><span>></span><span>优惠券管理</span><span>></span><span>优惠券列表</span></div>
+	<div class="position"><span>营销</span><span>></span><span>优惠券活动</span><span>></span><span>活动列表</span></div>
 	<div class="operating">
-		<a href="javascript:;" onclick="event_link('{url:/market/ticket_discount_add}')"><button class="operating_btn" type="button"><span class="addition">添加优惠券</span></button></a>
+		<a href="javascript:;" onclick="event_link('{url:/market/activity_add}')"><button class="operating_btn" type="button"><span class="addition">添加活动</span></button></a>
 		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
-		<a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_discount_excel}';delModel({msg:'是否要生成excel表格'});"><button class="operating_btn" type="button"><span class="export">生成EXCEL</span></button></a>
+		<!-- <a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_discount_excel}';delModel({msg:'是否要生成excel表格'});"><button class="operating_btn" type="button"><span class="export">生成EXCEL</span></button></a> -->
 		<a href="javascript:void(0)" onclick="batch_del({link:'{url:/market/ticket_discount_del}'});"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
 	</div>
 </div>
@@ -12,50 +12,47 @@
 		<table class="list_table">
 			<colgroup>
 				<col width="40px" />
-				<col width="40px" />
-				<col width="70px" />
+				<col width="80px" />
 				<col width="40px" />
 				<col width="40px" />
 				<col width="40px" />
 				<col width="180px" />
+				<col width="80px" />
 				<col width="140px" />
 			</colgroup>
 
 			<thead>
 				<tr>
 					<th>选择</th>
-					<th>券码</th>
-					<th>名称</th>
-					<th>类型</th>
-					<th>优惠内容</th>
+					<th>活动名称</th>
+					<th>优惠券数量</th>
+					<th>分享次数</th>
 					<th>状态</th>
-					<th>有效期</th>
+					<th>活动时间</th>
+					<th>创建时间</th>
 					<th>操作</th>
 				</tr>
 			</thead>
 
 			<tbody>
 				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
-				{query: name=ticket_discount order=id desc page=$page}
+				{query: name=activity order=id desc page=$page}
 				<tr>
-					<td><input type='checkbox' name='id[]' value="{$item['id']}" /></td>
-					<td>{$item['code']}</td>
+					<td><input type='checkbox' name='id[]' value="{$item['id']}" /> {$item['id']}</td>
 					<td>{$item['name']}</td>
-					<td>{set:$text_type=array('','折扣券','抵扣用')}{$text_type[$item['type']]}</td>
-					<td><?php switch($item['type']){
-							case 1: echo '打'.($item['ratio']*10).'折';break;
-							case 2: echo '抵'.$item['money'].'元';break;
-						} ?></td>
-					<td>{set:$text_status=array('','未使用','已使用')}{$text_status[$item['status']]}</td>
-					<td>{echo:date('Y-m-d H:i',$item['start_time'])} ～ {echo:date('Y-m-d H:i',$item['end_time'])}</td>
+					<td>{$item['num']}</td>
+					<td>{$item['share']}</td>
+					<td>{set:$text_status=array('禁用','启用')}{$text_status[$item['status']]}</td>
+					<td>{echo:$item['start_time']>0 ? date('Y-m-d H:i',$item['start_time']) : ''} ～ {echo:$item['end_time']>0 ? date('Y-m-d H:i',$item['end_time']) : ''}</td>
+					<td>{echo:$item['create_time']>0 ? date('Y-m-d H:i',$item['create_time']) : ''}</td>
 					<td>
 						<!-- <a href='{url:/market/ticket_edit/id/$item[id]}'>
 							<img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" title="修改" />
 						</a> -->
 
-						<!-- <a href='{url:/market/ticket_more_list/ticket_id/$item[id]}'>
+						<a href='{url:/market/ticket_more_list/ticket_id/$item[id]}'>
 							<img class="operator" src="{skin:images/admin/icon_check.gif}" alt="查看详情" title="查看详情" />
-						</a> -->
+						</a>
 
 						<!-- <a href='javascript:create_dialog("{$item['id']}");'>
 							<img class="operator" src="{skin:images/admin/icon_add.gif}" alt="生成实体代金券" title="生成实体优惠券" />
@@ -65,14 +62,12 @@
 						<!-- <a href='javascript:void(0)' onclick="delModel({msg:'是否要生成excel表格？',link:'{url:/market/ticket_excel/id/$item[id]}'});">
 							<img class="operator" src="{skin:images/admin/icon_down.gif}" alt="生成EXCEL" title="生成EXCEL" />
 						</a> -->
-						
-
 						<a href='javascript:void(0)' onclick="delModel({link:'{url:/market/ticket_discount_del/id/$item[id]}'});">
 							<img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" />
 						</a>
 					</td>
 				</tr>
-				{/query}
+				{/foreach}
 			</tbody>
 		</table>
 	</form>
