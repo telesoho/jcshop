@@ -154,7 +154,7 @@ class ticket
 			return apireturn::go(002010);
 		if( $data['status'] != 1 )
 			return apireturn::go(002011);
-		return pireturn::go(0,$data);
+		return apireturn::go(0,$data);
 	}
 	
 	

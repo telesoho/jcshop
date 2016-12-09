@@ -194,14 +194,65 @@ class Apic extends IController
         	);
         }
         
-        $this->json_echo( array('code'=>0,'msg'=>'ok','data'=>$data) );
+        $this->json_echo( apireturn::go(0,$data) );
     }
     /**
      * ---------------------------------------------------优惠券---------------------------------------------------*
      */
-    //折扣券详情 TODO:暂不需要
-    public function get_ticket_discount(){
-    	$code          				= IFilter::act(IReq::get('code'),'int');//折扣券code
+    /**
+     * 我的优惠券列表
+     */
+    public function ticket_list_my(){
+    	/* 获取参数 */
+    	$type      					= IFilter::act(IReq::get('type'),'int');//[1可使用-2已过期]
+    	$page        				= IFilter::act(IReq::get('page'),'int');//分页编号
+    	$user_id 					= $this->user['user_id'];
+    	if( empty($user_id) ) $this->json_echo( apireturn::go(001001) );
+    	/* 可使用优惠券 */
+    	$query 						= new IQuery('activity as m');
+    	$query->join 				= 'LEFT JOIN activity_ticket AS t ON t.pid=m.id LEFT JOIN activity_ticket_access AS a ON a.ticket_id=t.id';
+    	switch($type){
+    		//可使用
+    		case 1:
+    			$where 				= 'a.user_id='.$user_id.' AND m.status=1 AND a.status=1 AND m.end_time>='.time();
+    			break;
+    		//已过期
+    		case 2:
+    			$where 				= 'a.user_id='.$user_id.' AND (m.status!=1 OR a.status!=1 OR m.end_time<'.time().')';
+    			break;
+    		default:return apireturn::go(002015);
+    	}
+    	$query->where 				= $where;
+    	$query->fields 				= 't.name,m.start_time,m.end_time,t.type,t.rule';
+    	$query->page 				= $page<1 ? 1 : $page;
+    	$query->pagesize 			= 100;
+    	$data 						= $query->find();
+    	$totalPage 					= $query->getTotalPage();
+    	if ($page > $totalPage) $data = array();
+    	if(!empty($data)){
+    		foreach($data as $k => $v){
+    			$data[$k]['start_time'] 	= date('m-d',$v['start_time']);
+    			$data[$k]['end_time'] 		= date('m-d',$v['end_time']);
+    			switch($v['type']){
+    				//满减券
+    				case 1 :
+    					$rule 				= explode(',',$v['rule']);
+    					$data[$k]['msg'] 	= '满'.$rule[0].'减'.$rule[1].'优惠券';
+    					break;
+    				case 2:
+    					break;
+    				case 3:
+    					break;
+    				case 4:
+    					break;
+    				case 5:
+    					break;
+    				case 6:
+    					break;
+    			}
+    		}
+    	}
+    	$this->json_echo( apireturn::go(0,$data) );
     }
     
     /**
