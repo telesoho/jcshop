@@ -106,6 +106,51 @@ class ticket
 		return apireturn::go('0',$data);
 	}
 	
+	/**
+	 * 最终优惠券码code计算价格
+	 */
+	public static function finalCalculateCode($goodsResult, $ticket_did, $postage){
+		$model_ticket 				= new IModel('ticket_discount');
+		$data_ticket 				= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'type,ratio,money');
+		if( empty($data_ticket ))
+			return apireturn::go('002002');
+		//折扣券已使用状态
+		$model_ticket->setData(array('status'=>2,'user_id'=>$user_id));
+		$model_ticket->update('`id`='.$ticket_did);
+		
+		/* 计算优惠价格 */
+		switch($data_ticket['type']){
+			//折扣券
+			case 1 :
+				$goodsResult['sum'] = $goodsResult['sum']*$data_ticket['ratio'];
+				break;
+				//抵扣券
+			case 2 :
+				$goodsResult['sum'] = $goodsResult['sum']-$data_ticket['money'];
+				break;
+		}
+		/* 计算邮费 */
+		if ($goodsResult['sum'] >= $postage['condition']){
+			$goodsResult['deliveryPrice'] 			= 0;
+		} else {
+			//首重价格
+			$goodsResult['deliveryPrice'] 			= $postage['delivery']['first_price'];
+			//续重价格
+			if($goodsResult['weight'] > $postage['delivery']['first_weight']){
+				$goodsResult['deliveryPrice'] 		+= ceil(($goodsResult['weight']-$postage['delivery']['first_weight'])/$postage['delivery']['second_weight'])*$postage['delivery']['second_price'];
+			}
+		}
+		
+	}
+	
+	/**
+	 * 最终优惠券码code计算价格
+	 */
+	public static function finalCalculateActivity($goodsResult, $ticket_aid, $postage){
+		
+		
+		
+	}
 
 	/**
 	 * 验证优惠券码
@@ -158,7 +203,18 @@ class ticket
 		return apireturn::go('0',$data);
 	}
 	
-	
+	/**
+	 * 获取配送、包邮
+	 */
+	public static function postage(){
+		//满包邮
+		$promotion_query 			= new IQuery("promotion");
+		$promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
+		$condition_price 			= $promotion_query->find()[0]['condition'];
+		//配送方式
+		$delivery 					= Api::run('getDeliveryList');
+		return array('condition'=>$condition_price, 'delivery'=>$delivery);
+	}
 	
 	/**
 	 * @brief 获取代金券状态数值

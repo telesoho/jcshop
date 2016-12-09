@@ -7,8 +7,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
     <title>我的优惠券</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/ticket_list.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/ticket_list.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 <!--收藏页面-->
@@ -87,7 +87,7 @@
     </section>
 </div>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/vue.js"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script>
     var vm=new Vue({
         el:'#ticketInfo',

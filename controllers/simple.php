@@ -519,54 +519,55 @@ class Simple extends IController
 		}
 		
 		//=======================================
-		/* 优惠券券 */
-		$ticket_type 	 			= 0;
-		if($ticket_did > 0){
-    		$model_ticket 			= new IModel('ticket_discount');
-    		$data_ticket 			= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'type,ratio,money');
-    		if(empty($data_ticket)) IError::show(403,"优惠券无效");
-    		//折扣券已使用状态
-    		$model_ticket->setData(array('status'=>2,'user_id'=>$user_id));
-    		$model_ticket->update('`id`='.$ticket_did);
-    		$ticket_type 			= $data_ticket['type'];
-    	}
-    	//满包邮
-    	$promotion_query 			= new IQuery("promotion");
-    	$promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
-    	$condition_price 			= $promotion_query->find()[0]['condition'];
-    	//配送方式
-    	$delivery 					= Api::run('getDeliveryList');
+		/* 包邮金额、配送 */
+		//满包邮
+		$promotion_query 			= new IQuery("promotion");
+		$promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
+		$condition_price 			= $promotion_query->find()[0]['condition'];
+		//配送方式
+		$delivery 					= Api::run('getDeliveryList');
+		$postage 					= array(
+			'condition' 	=> $condition_price,
+			'delivery' 		=>　$delivery[0],
+		);
     	//=======================================
     	
 		//根据商品所属商家不同批量生成订单
-		$orderIdArray  = array();
-		$orderNumArray = array();
-		$final_sum     = 0;
+		$orderIdArray  		= array();
+		$orderNumArray 		= array();
+		$final_sum     		= 0;
 		foreach($orderData as $seller_id => $goodsResult)
 		{
 			//====================================
-			/* 计算优惠价格 */
-			switch($ticket_type){
-				//折扣券
-				case 1 :
-					$goodsResult['sum'] = $goodsResult['sum']*$data_ticket['ratio'];
-					break;
-				//抵扣券
-				case 2 :
-					$goodsResult['sum'] = $goodsResult['sum']-$data_ticket['money'];
-					break;
-			}
-			/* 计算邮费 */
-			if ($goodsResult['sum'] >= $condition_price){
-				$deliveryPrice 			= 0;
-			} else {
-				//首重价格
-				$deliveryPrice 			= $delivery[0]['first_price'];
-				//续重价格
-				if($goodsResult['weight'] > $delivery[0]['first_weight']){
-					$deliveryPrice 		+= ceil(($goodsResult['weight']-$delivery[0]['first_weight'])/$delivery[0]['second_weight'])*$delivery[0]['second_price'];
+			/* 使用优惠券 */
+			$flag 						= 0;
+			if( !empty($ticket_did) ){
+				//使用优惠券码
+				$rel 					= ticket::finalCalculateCode($goodsResult,$ticket_did, $postage);
+				if($rel['code']==0) $flag=1;
+			}else if( !empty($ticket_aid) ){
+				//使用优惠券
+				$rel 					= ticket::finalCalculateActivity($goodsResult,$ticket_aid, $postage);
+				if($rel['code']==0) $flag=1;
+			}else{
+				/* 计算邮费 */
+				if ($goodsResult['sum'] >= $postage['condition']){
+					$goodsResult['deliveryPrice'] 			= 0;
+				} else {
+					//首重价格
+					$goodsResult['deliveryPrice'] 			= $postage['delivery']['first_price'];
+					//续重价格
+					if($goodsResult['weight'] > $postage['delivery']['first_weight']){
+						$goodsResult['deliveryPrice'] 		+= ceil(($goodsResult['weight']-$postage['delivery']['first_weight'])/$postage['delivery']['second_weight'])*$postage['delivery']['second_price'];
+					}
 				}
 			}
+			
+			/* 优惠券使用成功 */
+			if($flag==1){
+				$goodsResult 			= $rel['data'];
+			}
+			
 			//====================================
 			
 			//生成的订单数据
@@ -610,7 +611,7 @@ class Simple extends IController
 				'promotions'          => $goodsResult['proReduce'] + $goodsResult['reduce'],
 
 				//订单应付总额
-				'order_amount'        => $goodsResult['sum']+$deliveryPrice,//$goodsResult['orderAmountPrice'],
+				'order_amount'        => $goodsResult['sum']+$goodsResult['deliveryPrice'],//$goodsResult['orderAmountPrice'],
 
 				//订单保价
 				'insured'             => $goodsResult['insuredPrice'],
@@ -747,7 +748,7 @@ class Simple extends IController
 		$this->payment     = $paymentName;
 		$this->paymentType = $paymentType;
 		$this->delivery    = $deliveryRow['name'];
-		$this->delivery_price    = $deliveryPrice;
+// 		$this->delivery_price    = $deliveryPrice;
 		$this->tax_title   = $tax_title;
 		$this->deliveryType= $deliveryRow['type'];
 		plugin::trigger('setCallback','/ucenter/order');
