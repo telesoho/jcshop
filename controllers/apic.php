@@ -293,14 +293,18 @@ class Apic extends IController
     	}
     	
     	/* 是否已领取 */
-    	if( empty($pid) ){
-	    	$modelTck 				= new IModel('activity_ticket_access');
-	    	$dataTck 				= $modelTck->getObj('from=1 AND user_id='.$user_id.' AND ticket_id in ('.implode(',',$idTck).')');
-	    	if( !empty($dataTck) ) $this->json_echo( apireturn::go('002021') );
-    	}
+	    $modelAcc 					= new IModel('activity_ticket_access');
+    	$dataAcc 					= $modelAcc->getObj('from='.(empty($pid) ? 0 : $pid).' AND user_id='.$user_id.' AND ticket_id in ('.implode(',',$idTck).')');
+    	if( !empty($dataAcc) ) $this->json_echo( apireturn::go('002021') );
     	
     	/* 开始领取 */
-    	$dataTck 					= $dataTck[rand(0,count($dataTck))];
+    	$dataTckOn 					= $dataAcc[rand(0,count($dataAcc)-1)];
+    	$modelTck->setData(array(
+    		'user_id' 		=> $user_id,
+    		'ticket_id' 	=> $dataTckOn['id'],
+    		'status' 		=> 1,
+    		'from' 			=> empty($pid) ? 0 : $pid,
+    	));
     	
     }
     
