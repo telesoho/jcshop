@@ -1,0 +1,162 @@
+body{
+    background:#eee;
+}
+#ticketInfo .top{
+    padding:0.2rem 0 0.2rem 0;
+    height:0.6rem;
+    line-height:0.6rem;
+    background:#fff;
+    position:relative;
+    margin-bottom:0.18rem;
+}
+#ticketInfo .left{
+    border-right:1px solid #bbb;
+    -webkit-flex: 1;
+    text-align: center;
+    font-size:0.3rem;
+    color:#3d4245;
+}
+#ticketInfo .left span{
+    position:absolute;
+    display:none;
+    background:#ff44a0;
+    border-radius:0.27rem;
+    width:0.9rem;
+    height:0.06rem;
+    bottom:0;
+    left:1.4rem;
+}
+#ticketInfo .left.active span{
+    display:block;
+}
+#ticketInfo .left.active{
+    color:#ff44a0;
+}
+#ticketInfo .right{
+    -webkit-flex: 1;
+    text-align: center;
+    font-size:0.3rem;
+    color:#3d4245;
+}
+#ticketInfo .right span{
+    position:absolute;
+    display:none;
+    background:#ff44a0;
+    border-radius:0.27rem;
+    width:0.9rem;
+    height:0.06rem;
+    bottom:0;
+    right:1.4rem;
+}
+#ticketInfo .right.active span{
+    display:block;
+}
+#ticketInfo .right.active{
+    color:#ff44a0;
+}
+#ticketInfo .content{
+    border:1px solid transparent;
+}
+#ticketInfo .content .item{
+    margin-top:0.19rem;
+    position:relative;
+    width:100%;
+    height:1.82rem;
+    display:-webkit-flex;
+    -webkit-justify-content: flex-start;
+    -webkit-align-items: center;
+}
+#ticketInfo .content .item .imgBg{
+    position:absolute;
+    width:7.26rem;
+    height:1.82rem;
+    left:0.12rem;
+    z-index:1;
+}
+#ticketInfo .content .item .text1{
+    position: relative;
+    z-index:4;
+    width:1.65rem;
+    height:1.32rem;
+    margin-left:0.15rem;
+    border-right:1px dashed #bbb;
+}
+#ticketInfo .content .item1 .text1 .tip{
+    color:#ff4aa0 !important;
+}
+#ticketInfo .content .item1 .text1 .tip span{
+    color:#ff4aa0 !important;
+}
+#ticketInfo .content .item .text1 .tip{
+    margin-left:0.1rem;
+
+    font-size:0.30rem;
+    text-align: center;
+}
+#ticketInfo .content .item .text1 .tip1{
+    margin-left:0.5rem;
+}
+#ticketInfo .content .item .text2{
+    margin-left:0.3rem;
+    position:relative;
+    z-index:4
+}
+#ticketInfo .content .item2 .text1 .imgBg2{
+    width:1.71rem;
+    height:1.80rem;
+    position:absolute;
+    top:-0.25rem;
+    left:-0.05rem;
+    z-index:3;
+}
+#ticketInfo .content .item .tip{
+    font-size:0.26rem;
+    color:#3d4245;
+    margin-top:0.15rem;
+    position:relative;
+    z-index:5;
+}
+#ticketInfo .content .item .tip:nth-child(1){
+    margin-top:0;
+}
+
+#ticketInfo .content .item2 .text1 .tip1{
+    margin-top:0.05rem;
+    color:#fff !important;
+}
+#ticketInfo .content .item2 .text1 .tip2{
+    margin-top:0.1rem;
+    color:#fff !important;
+}
+#ticketInfo .content .item2 .text1 .tip span{
+    color:#fff !important;
+}
+#ticketInfo .content .item2 .text3 img{
+    width:1.57rem;
+    height:0.72rem;
+    position:relative;
+    z-index:4;
+    margin-left:0.1rem;
+}
+
+.emptyCart{
+    display:-webkit-flex;
+    -webkit-align-items: center;
+    -webkit-justify-content: center;
+    margin-top:1.77rem;
+}
+.nodata{
+    background:#eee;
+}
+.nodata .content{
+    margin-top:0.27rem;
+    display:-webkit-flex;
+    -webkit-justify-content: center;
+}
+.nodata .content span{
+    font-size:0.28rem;
+    color:#bbbbbb;
+}
+.nodata .content span:nth-child(2){
+    padding:0 0.37rem;
+}
