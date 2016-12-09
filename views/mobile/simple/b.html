@@ -50,6 +50,7 @@
                     <div class="right">
                         <div class="name">{{goodList.name}}</div>
                         <div class="price">
+                        	{{aaa}}
                             <span class="sellprice">￥{{goodList.price}}</span>
                             <span class="num">x{{goodList.goods_price}}</span>
                         </div>
@@ -77,6 +78,9 @@
             infoMessage:[]
         },
         computed: {
+        	aaa:function(){
+                return this.month+"yue";
+            }
             shopTobe: function(){
                 return this.infoMessage;
             }
@@ -110,7 +114,8 @@
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
-                self.showMessage=true;
+            	self.$data.showMessage=true;
+//              self.showMessage=true;
                 data.order.map(function(item){
                     item.show_goods=false;
                 });
