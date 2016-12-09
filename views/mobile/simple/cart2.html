@@ -7,10 +7,10 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="x5-orientation" content="portrait">
 	<title>确认订单</title>
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/shopcar.css" />
-	<script src="/views/mobile/javascript/orderFormClass.js"></script>
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/shopcar.css?v=<?php echo time(); ?>" />
+	<script src="/views/mobile/javascript/orderFormClass.js?v=<?php echo time(); ?>"></script>
 </head>
 <body>
 <!--loading页开始-->
@@ -108,8 +108,21 @@
 		</div>
 		<div class="box totalItemCal" style="width:100%">
 			<div class="left">优惠券</div>
-			<div class="right" @click="promoCho">选择优惠券
-				<img src="/views/mobile/skin/default/image/jmj/cart/right.png" alt="" style="width:0.12rem;height:0.22rem;margin-left:0.13rem"/>
+			<div class="right" @click="showCode">选择优惠券
+				<img src="/views/mobile/skin/default/image/jmj/cart/right.png" alt="" :style="showCodeState?code.style1:code.style2"/>
+			</div>
+		</div>
+		<!--用户点击显示的页面-->
+		<div class="showContent" v-if="showCodeState">
+			<div class="box getCode" style="width:100%" @click="promoCho">
+				<div class="left" style="color:#ff4aa0;font-size:0.3rem;">输入优惠码</div>
+				<div class="right">
+					<img src="/views/mobile/skin/default/image/jmj/cart/right.png" alt="" style="width:0.12rem;height:0.22rem;margin-left:0.13rem"/>
+				</div>
+			</div>
+			<div class="choCodeItem" v-for="item1 in codeMessage" @click="subMessCode(item1)">
+				<img :src="item1.cho==true?img1:img2" alt="" style=""/>
+				<span class="text">{{item1.name}} {{item1.msg}}</span>
 			</div>
 		</div>
 		<div class="box totalItemCal" style="width:100%">
@@ -130,6 +143,7 @@
 	<!--底部fixed定位-->
 	<form action='{url:/simple/cart3}' class="form" method='post' name='order_form'  id="testForm" v-cloak>
 		<!--输入框要提交项目-->
+		<input type='hidden' name='ticket_aid'  v-model="infoMessage.aid" />
 		<input type='hidden' name='ticket_did'  v-model="infoMessage.kicket.id" />
 		<input type='hidden' name='direct_gid'  v-model="infoMessage.gid" />
 		<input type='hidden' name='direct_type'  v-model="infoMessage.type" />
@@ -186,7 +200,7 @@
 				<img src="/views/mobile/skin/default/image/jmj/cart/catgraw.png" alt="" style="width:0.94rem;height:0.51rem;margin-top:0.15rem" />
 			</div>
 			<div class="bottom">
-				喵喵已为您{{infoMessage.kicket.msg}}
+				喵喵已为您使用{{infoMessage.kicket.msg}}
 			</div>
 		</ul>
 	</div>
@@ -198,11 +212,11 @@
 		</ul>
 	</div>
 </div>
-<script src="/views/mobile/javascript/vue.js"></script>
-<script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/template-native.js"></script>
-<script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/jiumao/common.js"></script>
-<script src="/views/mobile/javascript/jiumao/cartTwo.js?v=1.0.1"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jiumao/cartTwo.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

@@ -158,6 +158,39 @@
 	font-size:0.28rem;
 	color:#ff44a0;
 }
+.totalItemCal .right img{
+	width:0.12rem;
+	height:0.22rem;
+	margin-left:0.13rem
+}
+.showContent{
+	width:100%;
+	padding:0 0.16rem 0 0.16rem;
+	background:#eee;
+}
+.showContent .getCode{
+	height:0.84rem;
+	padding:0 0.16rem 0 0.16rem;
+	line-height:0.84rem;
+}
+.showContent .choCodeItem{
+	line-height:0.81rem;
+	height:0.81rem;
+	border-top:1px solid #bbb;
+}
+.showContent .choCodeItem img{
+	width:0.32rem;
+	height:0.32rem;
+	position:relative;
+	top:0.05rem;
+	left:0.1rem;
+}
+.showContent .choCodeItem  .text{
+	font-size:0.3rem;
+	color:#3d4245;
+	display: inline-block;
+	margin-left:0.25rem;
+}
 .tips{
 	padding:0.2rem;
 	font-size:0.22rem;
