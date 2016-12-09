@@ -3,12 +3,16 @@
  * 错误信息控制器
  * @author 夏爽
  */
-class Errormsg
+class Apireturn
 {
 	/**
 	 * 错误汇总
 	 */
  	private static $Msg = array(
+ 		//系统
+ 		-1 			=> '系统错误',
+ 		0 			=> 'ok',
+ 		001001 		=> '当前用户未登录',
  		//优惠券
 		002001		=>'请输入正确的优惠券码',
 		002002		=>'优惠券码不存在',
@@ -24,6 +28,7 @@ class Errormsg
 		002012 		=>'优惠券类型不存在',
 		002013 		=>'优惠券不合法',
 		002014 		=>'不满足满减条件',
+		002015 		=>'优惠券类型不存在',
  	);
  	
  	/**
@@ -35,5 +40,15 @@ class Errormsg
  		return self::$Msg[$code];
  	}
  	
+ 	/**
+ 	 * 接口统一返回参数
+ 	 */
+ 	public static function go($code=-1,$data=''){
+ 		return array(
+ 			'code' 	=> $code,
+ 			'msg' 	=> self::info($code),
+ 			'data' 	=> $data,
+ 		);
+ 	}
  	
 }
