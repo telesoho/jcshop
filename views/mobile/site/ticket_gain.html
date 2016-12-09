@@ -10,26 +10,50 @@
 	<body>
 		<!-- 						第一块头部`					-->
 		<header>
-			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/01.png"/></h1>
+			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/01.jpg"/></h1>
 		</header>
 		<!-- 						第 二 块头部`					-->
 		<section>
-			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/02.png"/></h1>
+			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/02.jpg"/></h1>
 		</section>
 		<!-- 						第 三 块头部`					-->
 		<footer>
 			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/03.jpg"/></h1>
-			<span id="goHome"><a href="/site/index?id=1"><img src="/views/mobile/skin/default/image/jmj/ticket_gain/btn1.png"/></a></span>
-			<span id="share"><img id="shareimg" src="/views/mobile/skin/default/image/jmj/ticket_gain/btn2.png"/></span>
+			<span id="goHome" style="top: 7.58rem;"><a href="/site/index?id=1"><img src="/views/mobile/skin/default/image/jmj/ticket_gain/btn1.png" style="width: 5.48rem;height: 1.02rem;"/></a></span>
+			<span id="share" style="top: 8.89rem;"><img id="shareimg" src="/views/mobile/skin/default/image/jmj/ticket_gain/btn2.png" style="width: 5.48rem;height: 1.02rem;"/></span>
 		</footer>
-		<script src="" type="text/javascript" charset="utf-8"></script>
 		<script src="/views/mobile/javascript/jquery.min.js"></script>
 		<script src="/views/mobile/javascript/jiumao/ticket_gain.js"></script>
-		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
-		
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>	
+	<script type="text/javascript">
+		function GetQueryString(name){
+		    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		    var r = window.location.search.substr(1).match(reg);
+		    if(r!=null)return  unescape(r[2]); return null;
+		}
+ 		var oPid = GetQueryString("pid");
+ 		if(oPid){
+ 			$.ajax({
+				url:"/apic/get_ticket_activity",
+				data:{
+					aid:"2",
+					pid:oPid
+				},
+				success:function(res){
+					console.log(res)
+				}
+			})
+ 		}else{
+ 			$.ajax({
+				url:"/apic/get_ticket_activity",
+				data:{
+					aid:"2",
+					pid:""
+				}
+			})
+ 		}	
+	</script>
 <!-- 微信分享 -->
-
-
 {if:IClient::isWechat() == true}
 <?php 
     require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
@@ -39,7 +63,6 @@
     $this->wechat->jsApiSDK();
 ?>
 <script type="text/javascript">
-console.log(11111111111);
 var wechat_share = {
     title       : "活动名称", //标题
     desc        : "活动描述", //描述
@@ -65,9 +88,7 @@ oShare.onclick = function(){
 	    }
 	});
 }
-
 </script>
 {/if}
-
 	</body>
 </html>
