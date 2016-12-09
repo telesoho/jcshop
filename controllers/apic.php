@@ -223,7 +223,7 @@ class Apic extends IController
     		default:return apireturn::go('002015');
     	}
     	$query->where 				= $where;
-    	$query->fields 				= 't.name,m.start_time,m.end_time,t.type,t.rule';
+    	$query->fields 				= 't.id,t.name,m.start_time,m.end_time,t.type,t.rule';
     	$query->page 				= $page<1 ? 1 : $page;
     	$query->pagesize 			= 100;
     	$data 						= $query->find();
