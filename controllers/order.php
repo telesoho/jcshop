@@ -1864,6 +1864,13 @@ class Order extends IController implements adminAuthorization
             return false;
         }
     }
+    function order_shop_settlement_list(){
+        $id = IFilter::act(IReq::get('id'),'int');
+        $settlement_query = new IQuery('settlement');
+        $settlement_query->where = 'seller_id = ' . $id;
+        $this->order_shop_settlement_data = $settlement_query->find();
+        $this->redirect('order_shop_settlement_list');
+    }
     function qrcode(){
         $identify_id = IFilter::act(IReq::get('identify_id'),'int');
         $qrCode = new QrCode();

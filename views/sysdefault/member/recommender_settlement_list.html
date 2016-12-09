@@ -1,0 +1,90 @@
+<div class="headbar">
+    <div class="position"><span>会员</span><span>></span><span>合伙人结算管理</span><span>></span><span>结算清单列表</span></div>
+</div>
+
+<form action="{url:/member/member_reclaim}" method="post" name="member_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+    <div class="content">
+        <table id="list_table" class="list_table">
+            <colgroup>
+                <col width="30px" />
+                <col width="120px" />
+                <col width="80px" />
+                <col width="70px" />
+                <col width="50px" />
+                <col width="120px" />
+            </colgroup>
+
+            <thead>
+            <tr>
+                <th>选择</th>
+                <th>订单号</th>
+                <th>商品总金额</th>
+                <th>返利比率</th>
+                <th>返利金额</th>
+                <th>注册日期</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {foreach:$items=$this->settlement_recommender_data}
+            <tr>
+                <td><input name="check[]" type="checkbox" value="{$item['user_id']}" /></td>
+                <td title="">{$item['order_id']}</td>
+                <td title="">{$item['goods_amount']}</td>
+                <td title="">{$item['rebate']}</td>
+                <td title="{$item['amount_available']}">{$item['rebate_amount']}</td>
+                <td title="{$item['settlement_time']}">{$item['settlement_time']}</td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+</form>
+
+<script language="javascript">
+    //预加载
+    $(function(){
+        var formObj = new Form('searchuser');
+        formObj.init({'search':'{$search}'});
+    })
+
+    //预付款管理入口
+    function balance_add()
+    {
+        if(!checkboxCheck('check[]','请选择要进行预付款操作的用户！'))
+        {
+            return;
+        }
+
+        art.dialog.open("{url:/member/member_balance}",{
+            title: '预付款管理',
+            ok:function(iframeWin, topWin)
+            {
+                var formObject = iframeWin.document.forms['balanceForm'];
+                formObject.onsubmit();
+
+                if($(formObject).find('.invalid-text').length > 0)
+                {
+                    return false;
+                }
+
+                //进行post提交
+                var postData = $('[name="member_list"]').serialize()+'&'+$(formObject).serialize();
+                $.post('{url:/member/member_recharge}',postData,function(json){
+                    if(json.flag == 'success')
+                    {
+                        tips('操作成功');
+                        window.location.reload();
+                        return false;
+                    }
+                    else
+                    {
+                        alert(json.message);
+                        return false;
+                    }
+                },'json');
+                return false;
+            }
+        });
+    }
+</script>
