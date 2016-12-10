@@ -116,7 +116,7 @@
 				url:"/apic/get_ticket_activity",
 				data:{
 					aid:"{echo:(new Config('site_config'))->activity_id}",
-					pid:"{echo:isset($_GTE['pid']) ? $_GTE['pid'] : ''}"
+					pid:"{echo:isset($_GET['pid']) ? $_GET['pid'] : ''}"
 				},
 				success:function(res){
 					var res = JSON.parse(res);
