@@ -25,7 +25,7 @@
 			<h1><img src="/views/mobile/skin/default/image/jmj/active_goods_list/title.png"/></h1>
 			<div class="logo2">
 				<img src="/views/mobile/skin/default/image/jmj/active_goods_list/zhuan.png"/>
-				<div class="div1"></div>
+				<div class="div1" @click="aaa(newData)"></div>
 				<div class="div2"></div>
 				<div class="div3"></div>
 				<div class="div4"></div>
@@ -70,6 +70,11 @@
 				mounted: function(){
 					var self=this;
 					getActiveInfo(self);
+				},
+				methods:{
+					aaa: function(obj){
+						console.log(obj)
+					}
 				}
 			})
 			function getActiveInfo(self){
