@@ -1315,4 +1315,12 @@ class Site extends IController
         $this->iid_info();
         $this->redirect('ticket_gain');
     }
+    function img(){
+        $a = IFilter::act(IReq::get('a'), 'int');
+        $b = IFilter::act(IReq::get('b'), 'int');
+        $a= !empty($a) ? $a : '0';
+        $b= !empty($b) ? $b : '1';
+        $ret = shop::qrcode('http://m.jiumaojia.com',$a,$b);
+    }
+
 }
