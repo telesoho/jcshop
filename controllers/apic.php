@@ -344,6 +344,35 @@ class Apic extends IController
     	}
     	$this->json_echo( apireturn::go('0',$dataTckOn) );
     }
+    /**
+     * ---------------------------------------------------活动---------------------------------------------------*
+     */
+    /**
+     * 活动商品列表
+     */
+    public function activity_goods_list(){
+    	/* 接收参数 */
+    	$page      					= IFilter::act(IReq::get('page'),'int');//分页
+    	
+    	/* 获取数据 */
+    	$query 						= new IQuery('goods');
+    	$query->where 				= 'is_del=0 AND activity=1';
+    	$query->fields 				= 'id,name,sell_price,original_price,img';
+    	$query->order 				= 'visit desc';
+    	$query->page 				= $page<1 ? 1 : $page;
+    	$query->pagesize 			= 20;
+    	$data 						= $query->find();
+    	$totalPage 					= $query->getTotalPage();
+    	if($page > $totalPage) $data = array();
+    	if(!empty($data)){
+    		foreach( $data as $k => $v){
+    			$data[$k]['img'] 	= empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
+    		}
+    	}
+    	
+    	/* 返回数据 */
+    	$this->json_echo( apireturn::go('0',$page) );
+    }
     
     /**
      * ---------------------------------------------------购物车-收货地址---------------------------------------------------*
@@ -691,13 +720,12 @@ class Apic extends IController
         }
         $goods_info['category'] = $categoryRow ? $categoryRow['id'] : 0;
 
-        //商品图片
-        $tb_goods_photo 		= new IQuery('goods_photo_relation as g');
-        $tb_goods_photo->fields = 'p.id AS photo_id,p.img ';
-        $tb_goods_photo->join = 'left join goods_photo as p on p.id=g.photo_id ';
-        $tb_goods_photo->where =' g.goods_id='.$goods_id;
-        $goods_info['photo'] = $tb_goods_photo->find();
-
+        /* 商品图 */
+        $tb_goods_photo 			= new IQuery('goods_photo_relation as g');
+        $tb_goods_photo->fields 	= 'p.id AS photo_id,p.img ';
+        $tb_goods_photo->join 		= 'left join goods_photo as p on p.id=g.photo_id ';
+        $tb_goods_photo->where 		=' g.goods_id='.$goods_id;
+        $goods_info['photo'] 		= $tb_goods_photo->find();
         foreach ($goods_info['photo'] as $key => $value){
             $goods_info['photo'][$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/600/h/600");
         }
@@ -780,8 +808,7 @@ class Apic extends IController
         //增加浏览次数
         $visit    = ISafe::get('visit');
         $checkStr = "#".$goods_id."#";
-        if($visit && strpos($visit,$checkStr) !== false)
-        {
+        if($visit && strpos($visit,$checkStr) !== false){
         }
         else
         {
@@ -803,15 +830,13 @@ class Apic extends IController
 
         $goods_info['spec_array'] = json_decode($goods_info['spec_array']);
 //        $this->setRenderData($goods_info);
-            $favorite = new IQuery('favorite');
-            $favorite->where = 'user_id='.$this->user['user_id'].' and rid='.$goods_info['id'];
-            $fdata = $favorite->find();
-            if (!empty($fdata)){
-                $goods_info['is_favorite'] = 1;
-            } else {
-                $goods_info['is_favorite'] = 0;
-            }
-            
+		
+        /* 是否已收藏 */
+		$favorite 						= new IQuery('favorite');
+		$favorite->where 				= 'user_id='.$this->user['user_id'].' and rid='.$goods_info['id'];
+		$fdata 							= $favorite->find();
+		$goods_info['is_favorite'] 		= !empty($fdata) ? 1 : 0;
+		
         $this->json_echo($goods_info);
     }
     /**
@@ -1158,20 +1183,32 @@ class Apic extends IController
         $catId 					= IFilter::act(IReq::get('id'),'int'); //分类id
         $cosme 					= IFilter::act(IReq::get('cosme'),'int'); //是否排行榜页面
         $page 					= IFilter::act(IReq::get('page'),'int'); //分页编号
+        $bid 					= IFilter::act(IReq::get('bid'),'int'); //品牌ID
         if($catId == 0){$this->json_echo([]);}
+        
+        /* 获取下级分类 */
+        $queryCat 				= new IQuery('category');
+        $queryCat->where 		= 'visibility=1 AND parent_id='.$catId;
+        $queryCat->fields 		= 'id';
+        $dataCat 				= $queryCat->find();
+        if(!empty($dataCat)){
+        	foreach($dataCat as $k => $v){
+        		$catId 			.= ','.$v['id'];
+        	}
+        }
         
 		/* 获取数据 */
         $query 					= new IQuery('goods as m');
         if($cosme == 1){
         	//cosme排行榜进入
         	$join 				= 'LEFT JOIN cosme AS c ON c.goods_id=m.id';
-        	$where 				= 'm.is_del=0 AND c.type='.$catId;
+        	$where 				= 'm.is_del=0 AND c.type in ('.$catId.')'.(empty($bid) ? '' : ' AND m.brand_id='.$bid);
         	$fields 			= 'm.id,m.name,m.sell_price,m.jp_price,m.market_price,m.img';
         	$order 				= 'c.rank asc';
         }else{
         	//通常进入
         	$join 				= 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
-        	$where 				= 'm.is_del=0 AND c.category_id='.$catId;
+        	$where 				= 'm.is_del=0 AND c.category_id in ('.$catId.')'.(empty($bid) ? '' : ' AND m.brand_id='.$bid);
         	$fields 			= 'm.id,m.name,m.sell_price,m.jp_price,m.market_price,m.img';
 	        //获取汇率
 	        $siteConfig 		= new Config('site_config');
@@ -1956,6 +1993,10 @@ class Apic extends IController
         exit();
     }
     public function test1(){
-    	$model 			= new IModel('');
+    	$goods_nos 				= '45182518,4513441318147,4520699632604,4901133618871,4902201202565,4902206200061,4902206200078,4902206202829,4571104710059,4903351000223,4901202800657,4520699678572,4520699630556,4520699602706,4520699679999,4902397808459,4902397808916,4902397138969,4970501022459,4902397835813,4571104714460,4520699671566,4941605012004,4976555818390,4901133060618,4901133061233,4902162015228,4902201204262,4902201204347,4902201204286';
+    	$model 					= new IModel('goods');
+    	$model->setData(array('original_price'=>'sell_price','activity'=>1));
+    	$model->update('goods_no in ("'.$goods_nos.'")',array('original_price'));
+    	
     }
 }
