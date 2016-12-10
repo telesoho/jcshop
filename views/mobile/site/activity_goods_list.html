@@ -8,6 +8,7 @@
 		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/cosme/activity_goods_list.css?v=<?php echo time(); ?>"/>
 	</head>
 	<style type="text/css">
+		
 	</style>
 	<body>
 	<div id="activeInfo" v-cloak>
@@ -16,19 +17,19 @@
 		</div>
 		<div id="logo">
 			<div class="logo1">
-				<a href="#"><img src="/views/mobile/skin/default/image/jmj/active_goods_list/snackArea.png"/></a>
-				<a href="#"><img src="/views/mobile/skin/default/image/jmj/active_goods_list/drugstoreArea.png"/></a>
-				<a href="#"><img src="/views/mobile/skin/default/image/jmj/active_goods_list/protectionZone.png"/></a>
-				<a href="#"><img src="/views/mobile/skin/default/image/jmj/active_goods_list/petArea.png"/></a>
-				<a href="#"><img src="/views/mobile/skin/default/image/jmj/active_goods_list/petArea.png"/></a>	
+				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/snackArea.png" @click="lingshi()"/></a>
+				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/drugstoreArea.png" @click="yaozhuang()"/></a>
+				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/protectionZone.png" @click="gehu()"/></a>
+				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/healthArea.png" @click="jiankang()"/></a>
+				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/petArea.png" @click="chongwu()"/></a>	
 			</div>
 			<h1><img src="/views/mobile/skin/default/image/jmj/active_goods_list/title.png"/></h1>
 			<div class="logo2">
 				<img src="/views/mobile/skin/default/image/jmj/active_goods_list/zhuan.png"/>
-				<div class="div1" @click="aaa(newData)"></div>
-				<div class="div2"></div>
-				<div class="div3"></div>
-				<div class="div4"></div>
+				<div class="div1" @click="ranfa()"></div>
+				<div class="div2" @click="yaozhuang()"></div>
+				<div class="div3" @click="yama()"></div>
+				<div class="div4" @click="reyanzhao()"></div>
 			</div>
 		</div>
 		<div id="shop_list">
@@ -72,11 +73,114 @@
 					getActiveInfo(self);
 				},
 				methods:{
-					aaa: function(obj){
-//						console.log(obj)
+					
+					lingshi: function(){
+						self.page=1;
+						self.info=[];
+						getActiveInfo2(7,self);
+					},
+					yaozhuang: function(){
+						
+						self.page=1;
+						self.info=[];
+						getActiveInfo2(126,self);
+					},
+					gehu: function(){
+						self.page=1;
+						this.info=[];
+						getActiveInfo2(134,self);
+					},
+					jiankang: function(){
+						self.page=1;
+						this.info=[];
+						getActiveInfo2(2,self);
+					},
+					chongwu: function(){
+						self.page=1;
+						this.info=[];
+						getActiveInfo2(6,self);
+					},
+					ranfa: function(){
+						self.page=1;
+						this.info=[];
+						getActiveInfo2(62,74,self);
+					},
+					yaozhuang: function(){
+						self.page=1;
+						this.info=[];
+						getActiveInfo2(126,74,self);
+					},
+					yama: function(){
+						self.page=1;
+						this.info=[];
+						getActiveInfo2(98,74,self);
+					},
+					reyanzhao: function(){
+						self.page=1;
+						this.info=[];
+						getActiveInfo2("91,152",74,self);
 					}
 				}
 			})
+			var oY = 0
+			document.addEventListener("touchstart",function(ev){
+					oY = ev.touches[0].pageY;
+					console.log(1)
+					
+				})
+			document.addEventListener("touchmove",function(ev){
+					var y = ev.touches[0].pageY - oY
+					if(y<0){
+						$("#top").hide()
+						$("#logo").hide()
+						
+					}else{
+						
+						$("#logo").css({
+							"display":"block",
+							"position":"fixed",
+							"zIndex":"100"
+						})
+					}
+					
+					console.log( ev.touches[0].pageY - oY)
+						
+				})
+			
+			function getActiveInfo2(ide,self,cde){
+					var str = "";
+					mui.ajax('/apic/activity_goods_list',{
+						data:{
+							page:this.page,
+							cid:ide,
+							bid:cde
+						},
+						dataType:'json',//服务器返回json格式数据
+						type:'get',//HTTP请求类型
+						timeout:10000,//超时时间设置为10秒；
+						success:function(data){
+							console.log(data.data)
+							for(var i=0;i<data.data.length;i++){
+								str += '<li>\
+											<a>\
+											<div class="img"><img src='+data.data[i].img+'/></div>\
+											<p>'+data.data[i].name+'</p>\
+											<span class="xian">现价:￥<t class="pirce1">'+data.data[i].sell_price+'</t></span>\
+											<span class="yuanjia">原价:<s>￥<t class="pirce2">'+data.data[i].original_price+'</t></s></span>\
+											<i><img src="/views/mobile/skin/default/image/jmj/active_goods_list/num.png"/></i>\
+										</a>\
+										</li>'
+							}
+							$("#list ul").html(str);
+							if(data.data==''){
+								stop=false;
+							}else{
+								self.page++;
+								stop=true;
+							}
+						}
+					});
+			}	
 			function getActiveInfo(self){
 					mui.ajax('/apic/activity_goods_list',{
 						data:{
@@ -88,7 +192,6 @@
 						type:'get',//HTTP请求类型
 						timeout:10000,//超时时间设置为10秒；
 						success:function(data){
-							console.log(data)
 							for(var i=0;i<data.data.length;i++){
 								self.info.push(data.data[i])
 							}
@@ -102,7 +205,8 @@
 					});
 			}
 			//上拉加载
-			$(window).bind('scroll', function() {
+			$(window).bind('scroll', function(){
+				
 				if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
 					if(stop==true){
 						stop=false;
@@ -110,6 +214,7 @@
 					}
 				}
 			});
+			
 		</script>
 	</body>
 </html>
