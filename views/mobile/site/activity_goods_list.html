@@ -10,6 +10,7 @@
 	<style type="text/css">
 	</style>
 	<body>
+	<div id="activeInfo" v-cloak>
 		<div id="top">
 			<img src="/views/mobile/skin/default/image/jmj/active_goods_list/toplogo.png"/>
 		</div>
@@ -24,7 +25,7 @@
 			<h1><img src="/views/mobile/skin/default/image/jmj/active_goods_list/title.png"/></h1>
 			<div class="logo2">
 				<img src="/views/mobile/skin/default/image/jmj/active_goods_list/zhuan.png"/>
-				<div class="div1"></div>
+				<div class="div1" @click="aaa(newData)"></div>
 				<div class="div2"></div>
 				<div class="div3"></div>
 				<div class="div4"></div>
@@ -33,22 +34,82 @@
 		<div id="shop_list">
 			<div id="list">
 				<ul>
-					<li><a href="#">
-						<div><img src=""/></div>
-						<p>大放送大放送</p>
-						<span class="xian">阿达:$<t class="pirce1">111</t></span>
-						<span class="yuanjia">原价:<s>$<t class="pirce2">10.5</t></s></span>
-						<i><img src="/views/mobile/skin/default/image/jmj/active_goods_list/eight.png"/></i>
-					</a></li>
-					<li><a href="#">
-						<div><img src=""/></div>
-						<p>大放送大放送少时诵诗书所所所所所所所所</p>
-						<span class="xian">阿达:$<t class="pirce1">111</t></span>
-						<span class="yuanjia">原价:<s>$<t class="pirce2">10.5</t></s></span>
-						<i><img src="/views/mobile/skin/default/image/jmj/active_goods_list/eight.png"/></i>
-					</a></li>
+					<li v-for="item in newData">
+						<a :href="item.url">
+						<div class="img"><img :src="item.img"/></div>
+						<p>{{item.name}}</p>
+						<span class="xian">现价:￥<t class="pirce1">{{item.sell_price}}</t></span>
+						<span class="yuanjia">原价:<s>￥<t class="pirce2">{{item.original_price}}</t></s></span>
+						<i><img src="/views/mobile/skin/default/image/jmj/active_goods_list/num.png"/></i>
+					</a>
+					</li>
 				</ul>
 			</div>
 		</div>
+	</div>
+	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<script>
+			var stop=true;
+			var vm=new Vue({
+				el:"#activeInfo",
+				data: {
+					page:1,
+					info:[],
+
+				},
+				computed:{
+					newData: function(){
+						this.info.map(function(item){
+							item.url="/site/products?id="+item.id;
+						})
+						return this.info;
+					}
+				},
+				mounted: function(){
+					var self=this;
+					getActiveInfo(self);
+				},
+				methods:{
+					aaa: function(obj){
+						console.log(obj)
+					}
+				}
+			})
+			function getActiveInfo(self){
+					mui.ajax('/apic/activity_goods_list',{
+						data:{
+							page:self.page,
+							cid:'',
+							bid:''
+						},
+						dataType:'json',//服务器返回json格式数据
+						type:'get',//HTTP请求类型
+						timeout:10000,//超时时间设置为10秒；
+						success:function(data){
+
+							for(var i=0;i<data.data.length;i++){
+								self.info.push(data.data[i])
+							}
+							if(data.data==''){
+								stop=fasle;
+							}else{
+								self.page++;
+								stop=true;
+							}
+						}
+					});
+			}
+			//上拉加载
+			$(window).bind('scroll', function() {
+				if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+					if(stop==true){
+						stop=false;
+						getActiveInfo(vm);
+					}
+				}
+			});
+		</script>
 	</body>
 </html>
