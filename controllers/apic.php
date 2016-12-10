@@ -353,12 +353,27 @@ class Apic extends IController
     public function activity_goods_list(){
     	/* 接收参数 */
     	$page      					= IFilter::act(IReq::get('page'),'int');//分页
+    	$cid 						= IFilter::act(IReq::get('cid'),'int'); //分类id
+    	$bid 						= IFilter::act(IReq::get('bid'),'int'); //品牌ID
+    	
+    	/* 获取下级分类 */
+    	$queryCat 					= new IQuery('category');
+    	$queryCat->where 			= 'visibility=1 AND parent_id='.$cid;
+    	$queryCat->fields 			= 'id';
+    	$dataCat 					= $queryCat->find();
+    	if(!empty($dataCat)){
+    		foreach($dataCat as $k => $v){
+    			$cid 				.= ','.$v['id'];
+    		}
+    	}
     	
     	/* 获取数据 */
-    	$query 						= new IQuery('goods');
-    	$query->where 				= 'is_del=0 AND activity=1';
-    	$query->fields 				= 'id,name,sell_price,original_price,img';
-    	$query->order 				= 'visit desc';
+    	$query 						= new IQuery('goods as m');
+
+    	$query->join 				= 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
+    	$query->where 				= 'm.is_del=0 AND m.activity=1 c.category_id in ('.$cid.')'.(empty($bid) ? '' : ' AND m.brand_id='.$bid);
+    	$query->fields 				= 'm.id,m.name,m.sell_price,m.original_price,m.img';
+    	$query->order 				= 'm.sale desc,m.visit desc';
     	$query->page 				= $page<1 ? 1 : $page;
     	$query->pagesize 			= 20;
     	$data 						= $query->find();
