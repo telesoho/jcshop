@@ -354,13 +354,13 @@ class Apic extends IController
     public function activity_goods_list(){
     	/* 接收参数 */
     	$page      					= IFilter::act(IReq::get('page'),'int');//分页
-    	$cid 						= IFilter::act(IReq::get('cid'),'int'); //分类id
+    	$cid 						= IFilter::act(IReq::get('cid')); //分类id
     	$bid 						= IFilter::act(IReq::get('bid'),'int'); //品牌ID
     	
     	/* 获取下级分类 */
     	if(!empty($cid)){
     		$queryCat 					= new IQuery('category');
-	    	$queryCat->where 			= 'visibility=1 AND parent_id='.$cid;
+	    	$queryCat->where 			= 'visibility=1 AND parent_id IN ('.$cid.')';
 	    	$queryCat->fields 			= 'id';
 	    	$dataCat 					= $queryCat->find();
 	    	if(!empty($dataCat)){
