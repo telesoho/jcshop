@@ -50,6 +50,7 @@
 				width: 5.11rem;
 				height: 1.02rem;
 				margin: 0 auto;
+				width: 5.11rem;
 			}
 	
 		</style>
@@ -66,7 +67,7 @@
 		<footer>
 			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/03.jpg"/></h1>
 			<span id="goHome" style="top: 7.58rem;display:block">
-				<a href="/site/index?id=1"><img src="/views/mobile/skin/default/image/jmj/ticket_gain/btn1.png" style="width: 5.48rem;height: 1.02rem;"/></a>
+				<a href="/site/index"><img src="/views/mobile/skin/default/image/jmj/ticket_gain/btn1.png" style="width: 5.48rem;height: 1.02rem;"/></a>
 			</span>
 			<span id="share" style="top: 8.89rem;display:block">
 				<img id="shareimg" src="/views/mobile/skin/default/image/jmj/ticket_gain/btn2.png" style="width: 5.48rem;height: 1.02rem;"/>
@@ -78,7 +79,7 @@
 		</div>
 		<!--					弹	窗	处	理	红	包								-->
 				    <div id="PopupWindow" style="display: none;border-radius:20px;">
-				    	<div id="logo"><img id="giftBox" src="/views/mobile/skin/default/image/jmj/ticket_gain/bd.png" style="width: 3.14rem;height: 2.47rem;"/></div>
+				    	<div id="logo"><img id="giftBox" src="/views/mobile/skin/default/image/jmj/ticket_gain/bd.png" style="width: 3.14rem;height: 2.47rem;margin: 0 auto;"/></div>
 				    	<p><img src="/views/mobile/skin/default/image/jmj/ticket_gain/002.png" style="width: 5.74rem;height: 0.75rem;"/></p>
 				    	<span ><img id="sess" src="/views/mobile/skin/default/image/jmj/ticket_gain/sess.png" style="width: 5.11rem;"/></span>
 				    	<t style="width: 1px;height: 1.29rem;background: #fff; position: absolute;right:0.42rem ;top: 6.78rem;">
@@ -165,18 +166,30 @@
 	}
 
 //	获取url传递过来的参数
-function GetRequest() {
-    var url = location.search; //获取url中"?"符后的字串
-    var theRequest = new Object();
-    if (url.indexOf("?") != -1) {
-        var str = url.substr(1);
-        strs = str.split("&");
-        for(var i = 0; i < strs.length; i ++) {
-            theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
-        }
-    }
-    return theRequest;
-}
+//function GetRequest() {
+//  var url = location.search; //获取url中"?"符后的字串
+//  var theRequest = new Object();
+//  if (url.indexOf("?") != -1) {
+//      var str = url.substr(1);
+//      strs = str.split("&");
+//      for(var i = 0; i < strs.length; i ++) {
+//          theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+//      }
+//  }
+//  return theRequest;
+//}
+
+
+
+
+
+
+
+
+
+
+
+
 		</script>
 <!-- 微信分享 -->
 {if:IClient::isWechat() == true}
