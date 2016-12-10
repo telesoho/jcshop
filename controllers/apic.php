@@ -369,7 +369,6 @@ class Apic extends IController
 	    	}
     	}
     	
-    	
     	/* 获取数据 */
     	$query 						= new IQuery('goods as m');
     	$query->join 				= 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
