@@ -357,21 +357,23 @@ class Apic extends IController
     	$bid 						= IFilter::act(IReq::get('bid'),'int'); //品牌ID
     	
     	/* 获取下级分类 */
-    	$queryCat 					= new IQuery('category');
-    	$queryCat->where 			= 'visibility=1 AND parent_id='.$cid;
-    	$queryCat->fields 			= 'id';
-    	$dataCat 					= $queryCat->find();
-    	if(!empty($dataCat)){
-    		foreach($dataCat as $k => $v){
-    			$cid 				.= ','.$v['id'];
-    		}
+    	if(!empty($cid)){
+    		$queryCat 					= new IQuery('category');
+	    	$queryCat->where 			= 'visibility=1 AND parent_id='.$cid;
+	    	$queryCat->fields 			= 'id';
+	    	$dataCat 					= $queryCat->find();
+	    	if(!empty($dataCat)){
+	    		foreach($dataCat as $k => $v){
+	    			$cid 				.= ','.$v['id'];
+	    		}
+	    	}
     	}
+    	
     	
     	/* 获取数据 */
     	$query 						= new IQuery('goods as m');
-
     	$query->join 				= 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
-    	$query->where 				= 'm.is_del=0 AND m.activity=1 c.category_id in ('.$cid.')'.(empty($bid) ? '' : ' AND m.brand_id='.$bid);
+    	$query->where 				= 'm.is_del=0 AND m.activity=1'.( empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')' ).(empty($bid) ? '' : ' AND m.brand_id='.$bid);
     	$query->fields 				= 'm.id,m.name,m.sell_price,m.original_price,m.img';
     	$query->order 				= 'm.sale desc,m.visit desc';
     	$query->page 				= $page<1 ? 1 : $page;
@@ -386,7 +388,7 @@ class Apic extends IController
     	}
     	
     	/* 返回数据 */
-    	$this->json_echo( apireturn::go('0',$page) );
+    	$this->json_echo( apireturn::go('0',$data) );
     }
     
     /**
