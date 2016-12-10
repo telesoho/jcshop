@@ -77,21 +77,51 @@
     display:block;
     margin-bottom:0.3rem;
 }
-/*.facAnimate-enter-active{*/
-    /*-webkit-animation: bounce-in .5s;*/
-/*}*/
-/*.circle_ani{*/
-    /*position:relative;*/
-/*}*/
-/*.circle_ani span{*/
-    /*position: absolute;*/
-    /*right:0.64rem;*/
-    /*top:-0.7rem;*/
-    /*display:inline-block;*/
-    /*width:0.5rem;*/
-    /*height:0.5rem;*/
-    /*border-radius: 0.5rem;*/
-    /*-webkit-border-radius: 0.5rem;*/
-    /*border:1px solid #ff4aa0;*/
-/*}*/
+/*活动页*/
+#indexInfo .activity{
+    background:#fff;
+}
+#indexInfo .activity .top{
+    display: -webkit-flex;
+    -webkit-justify-content: center;
+    -webkit-flex-wrap: wrap;
+}
+#indexInfo .activity .top .top1{
+    margin-top:0.23rem;
+    width:100%;
+    text-align:center;
+}
+#indexInfo .activity .top .top1 .text{
+    font-size:0.3rem;
+    color:#3d4245;
+    padding:0 0.44rem;
+    vertical-align: middle;
+}
+#indexInfo .activity .top .top1 .bg{
+    display:inline-block;
+    opacity:0.21;
+    background:#3d4245;
+    width:0.23rem;
+    height:0.04rem;
+}
+#indexInfo .activity .top .top2{
+    margin-top:0.05rem;
+    font-size:0.2rem;
+    color:#bbbbbb;
+    margin-bottom:0.35rem;
+}
+#indexInfo .activity  .img img{
+    width:3.46rem;
+    height:2.06rem;
+    display: inline-block;
+}
+#indexInfo .activity  .img .img1{
+    width:3.46rem;
+    height:2.06rem;
+    display: inline-block;
+    margin-bottom:0.12rem;
+}
+#indexInfo .activity  .img .img1:nth-child(2){
+    margin-left:0.15rem;
+}
 
