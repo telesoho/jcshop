@@ -115,6 +115,7 @@ class ticket
 		if( empty($data_ticket ))
 			return apireturn::go('002002');
 		//折扣券已使用状态
+		$user_id 					= IWeb::$app->getController()->user['user_id'];
 		$model_ticket->setData(array('status'=>2,'user_id'=>$user_id));
 		$model_ticket->update('`id`='.$ticket_did);
 		
@@ -140,7 +141,7 @@ class ticket
 				$data['deliveryPrice'] 		+= ceil(($data['weight']-$postage['delivery']['first_weight'])/$postage['delivery']['second_weight'])*$postage['delivery']['second_price'];
 			}
 		}
-		
+		return apireturn::go('0',$data);
 	}
 	
 	/**

@@ -562,7 +562,6 @@ class Simple extends IController
 					}
 				}
 			}
-			
 			/* 优惠券使用成功 */
 			if($flag==1){
 				$goodsResult 			= $rel['data'];
@@ -628,8 +627,9 @@ class Simple extends IController
 				//备注信息
 				'note'                => '',
 					
-				//折扣券
-				'ticket_did' 		  => $ticket_did,
+				//优惠券
+				'ticket_did' 		  => $ticket_did, //优惠券码
+				'ticket_aid' 		  => $ticket_aid, //活动优惠券
 				
 				//订单购买类型
 				'type_source' 		  => empty($gid) ? 2 : 1, //1单个商品购买-2购物车购买
