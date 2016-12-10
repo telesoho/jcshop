@@ -266,6 +266,7 @@ class Apic extends IController
     	$aid      					= IFilter::act(IReq::get('aid'),'int');//活动ID
     	$pid      					= IFilter::act(IReq::get('pid'),'int');//分享人ID
     	$user_id 					= $this->user['user_id'];
+    	if($aid == $pid) $pid = '';
     	if( empty($user_id) ) $this->json_echo( apireturn::go('001001') );
     	
     	/* 活动详情 */
@@ -353,13 +354,13 @@ class Apic extends IController
     public function activity_goods_list(){
     	/* 接收参数 */
     	$page      					= IFilter::act(IReq::get('page'),'int');//分页
-    	$cid 						= IFilter::act(IReq::get('cid'),'int'); //分类id
+    	$cid 						= IFilter::act(IReq::get('cid')); //分类id
     	$bid 						= IFilter::act(IReq::get('bid'),'int'); //品牌ID
     	
     	/* 获取下级分类 */
     	if(!empty($cid)){
     		$queryCat 					= new IQuery('category');
-	    	$queryCat->where 			= 'visibility=1 AND parent_id='.$cid;
+	    	$queryCat->where 			= 'visibility=1 AND parent_id IN ('.$cid.')';
 	    	$queryCat->fields 			= 'id';
 	    	$dataCat 					= $queryCat->find();
 	    	if(!empty($dataCat)){
@@ -373,7 +374,7 @@ class Apic extends IController
     	$query 						= new IQuery('goods as m');
     	$query->join 				= 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
     	$query->where 				= 'm.is_del=0 AND m.activity=1'.( empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')' ).(empty($bid) ? '' : ' AND m.brand_id='.$bid);
-    	$query->fields 				= 'm.id,m.name,m.sell_price,m.original_price,m.img';
+    	$query->fields 				= 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity';
     	$query->order 				= 'm.sale desc,m.visit desc';
     	$query->page 				= $page<1 ? 1 : $page;
     	$query->pagesize 			= 20;

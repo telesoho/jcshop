@@ -69,7 +69,7 @@
 			</div>
 			<div class="mark">{{info.goods_no}}</div>
 			<div class="rudice_price">
-				<span v-if="info.active_id==0">8.8折</span><span v-if="info.active_id==1">7.5折</span><s>{{info.original_price}}</s>
+				<span v-if="info.activity==0">8.8折</span><span v-if="info.activity==1">7.5折</span><s>{{info.original_price}}</s>
 			</div>
 			<div class="price box">
 				<div class="sell">
@@ -479,9 +479,9 @@
 			var url = "/simple/cart2?id="+id+"&num="+buyNums+"&type="+type;
 
 			//有促销活动（团购，抢购）
-			if(self.info.promo && self.info.active_id)
+			if(self.info.promo && self.info.activity)
 			{
-				url += "&promo="+self.info.promo+"&active_id="+self.info.active_id;
+				url += "&promo="+self.info.promo+"&activity="+self.info.activity;
 			}
 
 			//页面跳转
