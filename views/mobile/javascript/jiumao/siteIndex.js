@@ -284,6 +284,7 @@ var _hmt = _hmt || [];
 			$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
 		}
 		$("#guan").click(function(){
+            window.history.pushState({}, "九猫大百货", "/site/index");
 //			document.body.style.overflow=""
 			$("#bgg").css({
 				"display":"none",
