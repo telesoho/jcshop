@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../plugins/vendor/autoload.php';
+use  Endroid\QrCode\QrCode;
 class Shop
 {
     //关联
@@ -88,8 +90,81 @@ class Shop
                     }
                 }
             }
-
-
         }
+    }
+    static function addFileToZip($path,$zip){
+        $handler=opendir($path); //打开当前文件夹由$path指定。
+        while(($filename=readdir($handler))!==false){
+            if($filename != "." && $filename != ".."){//文件夹文件名字为'.'和‘..'，不要对他们进行操作
+                if(is_dir($path."/".$filename)){// 如果读取的某个对象是文件夹，则递归
+                    addFileToZip($path."/".$filename, $zip);
+                }else{ //将文件加入zip对象
+                    $zip->addFile($path."/".$filename);
+                }
+            }
+        }
+        @closedir($handler);
+    }
+    static function qrcode($info_domain, $a, $b){
+        $qrCode = new QrCode();
+        $dirname = $a.'-'.$b;
+        for ($i=$a;$i<=$b;$i++){
+            $qrCode
+                ->setText($info_domain . '?iid=' . $i)
+                ->setSize(150)
+                ->setPadding(10)
+                ->setErrorCorrection('high')
+                ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+                ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+                ->setLabel($i)
+                ->setLabelFontSize(16)
+                ->setImageType(QrCode::IMAGE_TYPE_PNG);
+            $zip_dirname = './upload/'.$dirname;
+            if (!file_exists($zip_dirname)){
+                mkdir($zip_dirname, 0777);
+            }
+            $save_file = $zip_dirname.'/'.$i.'.png';
+            $ret = $qrCode->save($save_file);
+        }
+        $zip = new ZipArchive; //首先实例化这个类
+        if ($zip->open($zip_dirname.'.zip',ZipArchive::OVERWRITE) === TRUE) {  //然后查看是否存在test.zip这个压缩包
+            self::addFileToZip('upload/'.$dirname, $zip);
+            $zip->close(); //关闭
+            self::delDirAndFile($zip_dirname,true);
+            $url=IWeb::$app->config['image_host1'] .'/'. $zip_dirname.'.zip';
+            self::downfile($url,$a,$b);
+            self::delDirAndFile($zip_dirname.'.zip');
+        } else {
+            echo 'failed';
+        }
+    }
+    static function delDirAndFile($path, $delDir = FALSE) {
+        $handle = opendir($path);
+        if ($handle) {
+            while (false !== ( $item = readdir($handle) )) {
+                if ($item != "." && $item != "..")
+                    is_dir("$path/$item") ? delDirAndFile("$path/$item", $delDir) : unlink("$path/$item");
+            }
+            closedir($handle);
+            if ($delDir)
+                return rmdir($path);
+        }else {
+            if (file_exists($path)) {
+                return unlink($path);
+            } else {
+                return FALSE;
+            }
+        }
+    }
+    static function downfile($get_url,$a,$b)
+    {
+//        http://192.168.0.39:8080/site/img/a/11000545/b/11000604
+        ob_end_clean();
+        header("Content-Type: application/force-download");
+        header('Content-Disposition: attachment; filename='.$a.'至'.$b.'的二维码.zip');
+        error_reporting(0);
+        readfile($get_url);
+        flush();
+        ob_flush();
     }
 }

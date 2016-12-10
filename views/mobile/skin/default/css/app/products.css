@@ -77,6 +77,26 @@ ul li{
     line-height:0.35rem;
     margin-left:0.35rem;
 }
+#goods_detaile .rudice_price{
+    padding:0.2rem 0 0.4rem 0;
+    height:0.35rem;
+    line-height:0.35rem;
+    padding-left:0.35rem;
+}
+#goods_detaile .rudice_price span{
+    display:inline-block;
+    width:1rem;
+    font-size:0.24rem;
+    text-align:center;
+    background:#ff44a0;
+    opacity:0.5;
+    color:#fff;
+}
+#goods_detaile .rudice_price s{
+    padding-left:0.3rem;
+    font-size:0.24rem;
+    color:#bbb;
+}
 #goods_detaile .price{
     margin-top:0.2rem;
     padding:0 0.2rem;
