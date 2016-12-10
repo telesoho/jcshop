@@ -122,13 +122,11 @@
 					}
 				}
 			})
+			console.log(1)
 			var oY = 0
 			document.addEventListener("touchstart",function(ev){
-					$(document).unbind('touchstart');
-					$(document).unbind('touchmove');
-					$(document).unbind('touchend');
+					
 					oY = ev.touches[0].pageY;
-					console.log(1)
 					
 				})
 			document.addEventListener("touchmove",function(ev){
@@ -145,16 +143,14 @@
 							"zIndex":"100"
 						})
 					}
-					
-					console.log( ev.touches[0].pageY - oY)
 						
 				})
 			
 			document.addEventListener("touchend",function(ev){
-				ev.preventDefault();
+				
 			})
-			
 			function getActiveInfo2(ide,self,cde){
+					console.log(1)
 					var str = "";
 					mui.ajax('/apic/activity_goods_list',{
 						data:{
@@ -178,6 +174,7 @@
 										</a>\
 										</li>'
 							}
+							
 							$("#list ul").html(str);
 							if(data.data==''){
 								stop=false;
