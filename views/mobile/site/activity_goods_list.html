@@ -166,6 +166,7 @@
 							for(var i=0;i<data.data.length;i++){
 								str += '<li>\
 											<a>\
+											<span title='+data.data[i].id+'></span>\
 											<div class="img"><img src='+data.data[i].img+'/></div>\
 											<p>'+data.data[i].name+'</p>\
 											<span class="xian">现价:￥<t class="pirce1">'+data.data[i].sell_price+'</t></span>\
@@ -174,7 +175,7 @@
 										</a>\
 										</li>'
 							}
-							
+						
 							$("#list ul").html(str);
 							if(data.data==''){
 								stop=false;
@@ -182,6 +183,15 @@
 								self.page++;
 								stop=true;
 							}
+							var spannum = $("#list ul li span").attr("title")
+							console.log(typeof spannum)
+							$("#list ul li").click(function(){
+								window.location.href = "/site/products?id="+spannum;
+							})
+							
+							
+							
+							
 						}
 					});
 			}	
