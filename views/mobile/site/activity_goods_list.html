@@ -3,95 +3,13 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<title>1212红包节</title>
+		<title>活动页面</title>
 		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
 		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/ticket_gain.css?v=<?php echo time(); ?>"/>
 	</head>
 	<style type="text/css">
 	</style>
 	<body>
-		<!-- 						第一块头部`					-->
-		<header>
-			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/01.jpg"/></h1>
-		</header>
-		<!-- 						第 二 块头部`					-->
-		<section>
-			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/02.jpg"/></h1>
-		</section>
-		<!-- 						第 三 块头部`					-->
-		<footer>
-			<h1><img src="/views/mobile/skin/default/image/jmj/ticket_gain/03.jpg"/></h1>
-			<span id="goHome" style="top: 7.58rem;"><a href="/site/index?id=1"><img src="/views/mobile/skin/default/image/jmj/ticket_gain/btn1.png" style="width: 5.48rem;height: 1.02rem;"/></a></span>
-			<span id="share" style="top: 8.89rem;"><img id="shareimg" src="/views/mobile/skin/default/image/jmj/ticket_gain/btn2.png" style="width: 5.48rem;height: 1.02rem;"/></span>
-		</footer>
-		<div id="backgrounds" style="width: 100%;display: none;height: 100%;background: #000;opacity: 0.5;display: none;position: absolute;left: 0;top: 0;z-index: 88;">
-			<p style=" z-index: 89;position: absolute;top: 0;left: 0;bottom: 0;right: 0;">点击屏幕任意区域取消操作</p>
-			<img src="../../../views/mobile/skin/default/image/jmj/ticket_gain/hander.png" style="width: 0.8rem; height: 1rem;position: absolute;top: 0;right: 0;"/>
-		</div>
-		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-		<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>	
-		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js?v=<?php echo time(); ?>"></script>
 		
-		<script type="text/javascript">
-			var oshareimg = document.getElementById("shareimg");
-				oshareimg.onclick = function(){
-					document.body.scrollTop = 0;
-					document.documentElement.scrollTop =0;
-					$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
-					$("#backgrounds").css({
-						"display":"block"
-					})	
-				}
-			document.getElementById("backgrounds").onclick = function(){
-				$(document).unbind('touchmove');
-				$("#backgrounds").css({
-						"display":"none"
-				})
-			}
-		</script>
-<!-- 微信分享 -->
-{if:IClient::isWechat() == true}
-<?php 
-    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
-    $this->wechat = new wechat();
-    $this->wechat->setConfig();
-    $this->wechat->config['wechat_jsApiSDK']=1;
-    $this->wechat->jsApiSDK();
-?>
-<script type="text/javascript">
-var wechat_share = {
-    title       : "快来领取大礼包换十一区药妆零食护肤品", //标题
-    desc        : "双十二日本原价的基础上还打折，赶快去抢！！", //描述
-    imgUrl      : "{echo:IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/ticket_gain/01.png'}", //图片
-    link        : "{echo:IWeb::$app->config['image_host1']}/site/ticket_gain?pid={$this->user['user_id']}&aid={echo:IWeb::$app->config['aid']}&iid={echo:ISession::get('shop_identify_id')}",
-}
-wechat.share();
-wx.ready(function(){
-	alert("nihao")
-    // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
-	
-		//分享给朋友
-		wx.onMenuShareAppMessage({
-		    title: wechat_share.title, // 分享标题
-		    desc: wechat_share.desc, // 分享描述
-		    link: wechat_share.link, // 分享链接
-		    imgUrl: wechat_share.imgUrl, // 分享图标
-		    type: '', // 分享类型,music、video或link，不填默认为link
-		    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-		    trigger: function (res) {
-                   alert("分享到朋友圈按钮点击");        
-            },
-		    success: function () { 
-			        
-		    },
-		    cancel: function () { 
-		        // 用户取消分享后执行的回调函数
-		    }
-		});
-	})	
-});
-</script>
-{/if}
-
 	</body>
 </html>
