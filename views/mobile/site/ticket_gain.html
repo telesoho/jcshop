@@ -21,6 +21,37 @@
 				50%{-webkit-transform: translateY(0);}
 				100%{-webkit-transform: translateY(0.2rem);}
 			}
+			#PopupWindow{
+				width: 6.51rem;
+				height: 6.78rem;
+				background: #fff;
+				position: absolute;
+				top: 1.26rem;
+				left: 50%;
+				margin-left: -3.26rem;
+				z-index: 999;
+			}
+			#logo{
+				text-align: center;
+				margin-top:0.81rem ;
+			}
+			#PopupWindow p{
+				width: 5.84rem;
+				height: 0.8rem;
+				margin: 0.53rem auto 0.94rem;
+				font-family:AaWanWan;
+				font-size:0.36rem;
+				color:#000000;
+				line-height:0.4rem;
+				text-align:center;
+			}
+			#PopupWindow span{
+				display: block;
+				width: 5.11rem;
+				height: 1.02rem;
+				margin: 0 auto;
+			}
+	
 		</style>
 	</head>
 	<style type="text/css">
@@ -45,6 +76,20 @@
 			<p style="" class="tips">点击屏幕任意区域取消操作</p>
 			<img id="hander" src="/views/mobile/skin/default/image/jmj/ticket_gain/hander.png" style="width: 0.56rem; height: 0.72rem;position: absolute;top: 0;right: 0.2rem;"/>
 		</div>
+		<!--					弹	窗	处	理	红	包								-->
+				    <div id="PopupWindow" style="display: none;border-radius:20px;">
+				    	<div id="logo"><img id="giftBox" src="/views/mobile/skin/default/image/jmj/ticket_gain/bd.png" style="width: 3.14rem;height: 2.47rem;"/></div>
+				    	<p><img src="/views/mobile/skin/default/image/jmj/ticket_gain/002.png" style="width: 5.74rem;height: 0.75rem;"/></p>
+				    	<span ><img id="sess" src="/views/mobile/skin/default/image/jmj/ticket_gain/sess.png" style="width: 5.11rem;"/></span>
+				    	<t style="width: 1px;height: 1.29rem;background: #fff; position: absolute;right:0.42rem ;top: 6.78rem;">
+				    		<strong style="width: 0.5rem;height: 0.5rem;position: absolute;left: -0.25rem;top: 1.29rem;z-index: 88;">
+				    			<img id="guan" src="/views/mobile/skin/default/image/jmj/ticket_gain/guan.png" style="width: 0.5rem;height: 0.5rem;"/>
+				    		</strong>
+				    	</t>
+				    </div>
+				    
+				    <div id="bgg" style="width: 100%;height: 100%;background: #000;opacity: 0.5;display: none;position: absolute;left: 0;top: 0;z-index: 88;"></div>
+		
 		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>	
 		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js?v=<?php echo time(); ?>"></script>
@@ -71,12 +116,67 @@
 				url:"/apic/get_ticket_activity",
 				data:{
 					aid:"{echo:(new Config('site_config'))->activity_id}",
-					pid:"{$this->user['user_id']}"
+					pid:""
 				},
 				success:function(res){
-					console.log(res)
+					var res = JSON.parse(res);
+					console.log(res.code)
+					if(res.code == "0"){
+						 tanchaun()
+					}else{
+						alert(res.msg);
+					}
+					
 				}
 			})
+			
+			
+			// 					弹	窗	处	理
+	function tanchaun(){
+//			document.body.style.overflow="hidden";
+			$("#bgg").css({
+				"display":"block",
+				"overflow":"hidden"
+			})
+			$("#PopupWindow").css({
+				"display":"block",
+			});
+			$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
+			$(".fix-nav").css({
+				"display":"none"
+			})
+		$("#guan").click(function(){
+            window.history.pushState({}, "九猫大百货", "/site/index");
+//			document.body.style.overflow=""
+			$("#bgg").css({
+				"display":"none",
+				"overflow":"hidden"
+			})
+			$("#PopupWindow").css({
+				"display":"none",
+			});
+			$(document).unbind('touchmove');
+			
+		})
+		//   点击去看看
+		$("#sess").click(function(){
+			window.location.href = "/site/ticket_list";
+		})
+	}
+
+//	获取url传递过来的参数
+function GetRequest() {
+    var url = location.search; //获取url中"?"符后的字串
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        strs = str.split("&");
+        for(var i = 0; i < strs.length; i ++) {
+            theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+        }
+    }
+    return theRequest;
+}
 		</script>
 <!-- 微信分享 -->
 {if:IClient::isWechat() == true}
