@@ -1279,6 +1279,7 @@ class Site extends IController
     private function iid_info(){
         if ($this->user['user_id']) {
             $identify_id = IFilter::act(IReq::get('iid'), 'int');
+            if ($identify_id == '999999999'){ISession::set('shop_identify_id', '999999999');return;};
             if (empty($identify_id) && empty(ISession::get('shop_identify_id'))) {
                 ISession::clear('shop_name');
                 ISession::clear('shop_identify_id');
@@ -1315,4 +1316,12 @@ class Site extends IController
         $this->iid_info();
         $this->redirect('ticket_gain');
     }
+    function img(){
+        $a = IFilter::act(IReq::get('a'), 'int');
+        $b = IFilter::act(IReq::get('b'), 'int');
+        $a= !empty($a) ? $a : '0';
+        $b= !empty($b) ? $b : '1';
+        $ret = shop::qrcode('http://m.jiumaojia.com',$a,$b);
+    }
+
 }
