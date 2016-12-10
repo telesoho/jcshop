@@ -124,6 +124,9 @@
 			})
 			var oY = 0
 			document.addEventListener("touchstart",function(ev){
+					$(document).unbind('touchstart');
+					$(document).unbind('touchmove');
+					$(document).unbind('touchend');
 					oY = ev.touches[0].pageY;
 					console.log(1)
 					
@@ -146,6 +149,10 @@
 					console.log( ev.touches[0].pageY - oY)
 						
 				})
+			
+			document.addEventListener("touchend",function(ev){
+				ev.preventDefault();
+			})
 			
 			function getActiveInfo2(ide,self,cde){
 					var str = "";
