@@ -42,7 +42,8 @@
   'exchange_rate_jp' => '15.26', //四位
   'score_rate' => '100', //积分和金额兑换比例
   'score_goods_rate' => '0.07', //商品返金额比例
-  
+  //活动ID
+  'activity_id' 	=> 2,
 		
 		
 		
