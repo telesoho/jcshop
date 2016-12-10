@@ -73,7 +73,7 @@
 				},
 				methods:{
 					aaa: function(obj){
-						console.log(obj)
+//						console.log(obj)
 					}
 				}
 			})
@@ -88,7 +88,7 @@
 						type:'get',//HTTP请求类型
 						timeout:10000,//超时时间设置为10秒；
 						success:function(data){
-
+							console.log(data)
 							for(var i=0;i<data.data.length;i++){
 								self.info.push(data.data[i])
 							}
