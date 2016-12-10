@@ -1279,6 +1279,7 @@ class Site extends IController
     private function iid_info(){
         if ($this->user['user_id']) {
             $identify_id = IFilter::act(IReq::get('iid'), 'int');
+            if ($identify_id == '999999999'){ISession::set('shop_identify_id', '999999999');return;};
             if (empty($identify_id) && empty(ISession::get('shop_identify_id'))) {
                 ISession::clear('shop_name');
                 ISession::clear('shop_identify_id');
