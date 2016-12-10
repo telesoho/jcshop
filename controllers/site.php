@@ -991,8 +991,8 @@ class Site extends IController
         $shop_name = IFilter::act(IReq::get('shop_name'), 'string');
         $recommender = IFilter::act(IReq::get('recommender'), 'string');
         $recommender_id = $this->is_exists_recommender($recommender)['id'];
-        if (!$recommender_id) {
-            $this->redirect('contract');
+        if ($recommender && !$recommender_id) {
+            $this->redirect('contract?iid='.$identify_id);
             return;
         }
         $agree = IFilter::act(IReq::get('agree'));
