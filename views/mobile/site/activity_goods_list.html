@@ -8,14 +8,55 @@
 		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/cosme/activity_goods_list.css?v=<?php echo time(); ?>"/>
 	</head>
 	<style type="text/css">
-		
+		#list ul li .img{
+			border-bottom: 1px solid #000;
+			
+		}
+		#list ul li .img img{
+			width: 3.4rem;
+			height: 3.4rem;
+		}
+		#list ul li{
+			height: 5.13rem;
+			display: -webkit-box;
+			background: #fff;
+		}
+		#list ul li p{
+			margin-left:0.2rem ;
+			margin-top: 0.12rem;
+			height: 0.8rem;
+			overflow:hidden;
+			display: -webkit-box;
+			text-overflow:ellipsis;
+			-webkit-line-clamp: 2;
+			-o-text-overflow:ellipsis;
+			width:90%;
+		    -webkit-box-orient: vertical;
+		    word-break: break-all;
+		}
+		#list ul li span{
+			display: block;
+			margin-left: 0.2rem;
+		}
+		#list ul li .xian{
+			margin-bottom:0.01rem ;
+		}
+		#list ul .xian .pirce1{
+			font-size:0.3rem ;
+			
+		}
+		#wrap_logo{
+			background: #ffc75b;
+			height: 6rem;
+		}
 	</style>
 	<body>
 	<div id="activeInfo" v-cloak>
 		<div id="top">
 			<img src="/views/mobile/skin/default/image/jmj/active_goods_list/toplogo.png"/>
 		</div>
-		<div id="logo">
+		<div id="wrap_logo">
+			<div id="logo">
 			<div class="logo1">
 				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/snackArea.png" @click="lingshi()"/></a>
 				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/drugstoreArea.png" @click="yaozhuang()"/></a>
@@ -27,10 +68,11 @@
 			<div class="logo2">
 				<img src="/views/mobile/skin/default/image/jmj/active_goods_list/zhuan.png"/>
 				<div class="div1" @click="ranfa()"></div>
-				<div class="div2" @click="yaozhuang()"></div>
+				<div class="div2" @click="hwyaozhuang()"></div>
 				<div class="div3" @click="yama()"></div>
 				<div class="div4" @click="reyanzhao()"></div>
 			</div>
+		</div>
 		</div>
 		<div id="shop_list">
 			<div id="list">
@@ -52,12 +94,23 @@
 		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 		<script>
+			var opt = {
+				page : 1,
+			};
+			var rrr = {
+				bid:'',
+				cid:'',
+			};
+			var arr = [];
+			var str ="";
 			var stop=true;
+			var stop2 = true;
 			var vm=new Vue({
 				el:"#activeInfo",
 				data: {
 					page:1,
 					info:[],
+					val : {bid:'',cid:''},
 
 				},
 				computed:{
@@ -73,56 +126,71 @@
 					getActiveInfo(self);
 				},
 				methods:{
-					
 					lingshi: function(){
-						self.page=1;
-						self.info=[];
-						getActiveInfo2(7,self);
+						opt.page = 1;
+					
+						arr=[];
+						str='';
+						getActiveInfo2(7,'',self);
 					},
 					yaozhuang: function(){
-						
-						self.page=1;
-						self.info=[];
-						getActiveInfo2(126,self);
+						opt.page = 1;
+					
+						arr=[];
+						str='';
+						getActiveInfo2(126,'',self);
 					},
 					gehu: function(){
-						self.page=1;
+						opt.page = 1;
 						this.info=[];
-						getActiveInfo2(134,self);
+						arr=[];
+						str='';
+						getActiveInfo2(134,'',self);
 					},
 					jiankang: function(){
-						self.page=1;
-						this.info=[];
-						getActiveInfo2(2,self);
+						opt.page = 1;
+						
+						arr=[];
+						str='';
+						getActiveInfo2(2,'',self);
 					},
 					chongwu: function(){
-						self.page=1;
+						opt.page = 1;
 						this.info=[];
-						getActiveInfo2(6,self);
+						arr=[];
+						str='';
+						getActiveInfo2(6,'',self);
 					},
 					ranfa: function(){
-						self.page=1;
-						this.info=[];
+						opt.page = 1;
+						
+						arr=[];
+						str='';
 						getActiveInfo2(62,74,self);
 					},
-					yaozhuang: function(){
-						self.page=1;
-						this.info=[];
-						getActiveInfo2(126,74,self);
+					hwyaozhuang: function(){
+						opt.page = 1;
+	
+						arr=[];
+						str='';
+						getActiveInfo2("134,135,136",74,self);
 					},
 					yama: function(){
-						self.page=1;
-						this.info=[];
+						opt.page = 1;
+
+						arr=[];
+						str='';
 						getActiveInfo2(98,74,self);
 					},
 					reyanzhao: function(){
-						self.page=1;
-						this.info=[];
+						opt.page = 1;
+
+						arr=[];
+						str='';
 						getActiveInfo2("91,152",74,self);
 					}
 				}
 			})
-			console.log(1)
 			var oY = 0
 			document.addEventListener("touchstart",function(ev){
 					
@@ -145,25 +213,27 @@
 					}
 						
 				})
-			
-			document.addEventListener("touchend",function(ev){
-				
-			})
-			function getActiveInfo2(ide,self,cde){
-					console.log(1)
-					var str = "";
-					mui.ajax('/apic/activity_goods_list',{
+			function getActiveInfo2(cid,bid,self){
+					stop=false;
+					
+					cid = (cid==	undefined ? '' : cid);
+					bid = (bid==	undefined ? '' : bid);
+					rrr.bid = bid;
+					rrr.cid = cid;
+					var bb = {
 						data:{
-							page:this.page,
-							cid:ide,
-							bid:cde
+							page:opt.page,
+							cid:rrr.cid,
+							bid:rrr.bid
 						},
 						dataType:'json',//服务器返回json格式数据
 						type:'get',//HTTP请求类型
 						timeout:10000,//超时时间设置为10秒；
 						success:function(data){
-							console.log(data.data)
+//							console.log(1)
+//							
 							for(var i=0;i<data.data.length;i++){
+								
 								str += '<li>\
 											<a>\
 											<span title='+data.data[i].id+'></span>\
@@ -175,32 +245,38 @@
 										</a>\
 										</li>'
 							}
-						
-							$("#list ul").html(str);
+							console.log(opt.page)
+							arr.push(str);
+							console.log(arr)
+							for(var i in arr){
+								$("#list ul").html(arr[i]);
+							}
+							
 							if(data.data==''){
-								stop=false;
+								stop2=false;
+								
 							}else{
-								self.page++;
-								stop=true;
+								opt.page ++;
+								stop2=true;
+								
 							}
 							var spannum = $("#list ul li span").attr("title")
-							console.log(typeof spannum)
 							$("#list ul li").click(function(){
 								window.location.href = "/site/products?id="+spannum;
-							})
-							
-							
-							
-							
+							})		
 						}
-					});
+					}
+					
+					mui.ajax('/apic/activity_goods_list',bb);
 			}	
+				
+			//第一次
 			function getActiveInfo(self){
-					mui.ajax('/apic/activity_goods_list',{
+					var aa = {
 						data:{
-							page:self.page,
-							cid:'',
-							bid:''
+							page:opt.page,
+							cid:"",
+							bid:"",
 						},
 						dataType:'json',//服务器返回json格式数据
 						type:'get',//HTTP请求类型
@@ -212,11 +288,14 @@
 							if(data.data==''){
 								stop=false;
 							}else{
-								self.page++;
+								opt.page++;
 								stop=true;
 							}
 						}
-					});
+					};
+					
+					mui.ajax('/apic/activity_goods_list',aa);
+					
 			}
 			//上拉加载
 			$(window).bind('scroll', function(){
@@ -225,7 +304,14 @@
 					if(stop==true){
 						stop=false;
 						getActiveInfo(vm);
+						
 					}
+					if(stop2==true){
+						stop2=false;
+						getActiveInfo2(rrr.cid,rrr.bid);
+						
+					}
+					
 				}
 			});
 			
