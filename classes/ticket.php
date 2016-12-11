@@ -110,6 +110,7 @@ class ticket
 	 * 最终优惠券码code计算价格
 	 */
 	public static function finalCalculateCode($data, $ticket_did, $postage){
+		/* 校验优惠券 */
 		$model_ticket 				= new IModel('ticket_discount');
 		$data_ticket 				= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'type,ratio,money');
 		if( empty($data_ticket ))
@@ -125,7 +126,7 @@ class ticket
 			case 1 :
 				$data['sum'] 		= $data['sum']*$data_ticket['ratio'];
 				break;
-				//抵扣券
+			//抵扣券
 			case 2 :
 				$data['sum'] 		= $data['sum']-$data_ticket['money'];
 				break;
@@ -152,6 +153,10 @@ class ticket
 		$rel 						= self::checkActivity($ticket_aid);
 		if($rel['code']>0) return $rel;
 		$ticket_data 				= $rel['data'];
+		/* 优惠券改为已使用 */
+		$model_ticket 				= new IModel('activity_ticket_access');
+		$model_ticket->setData(array('status'=>2));
+		$model_ticket->update('`id`='.$ticket_aid);
 		
 		/* 优惠券类型 */
 		switch ($ticket_data['type']){

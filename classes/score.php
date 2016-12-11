@@ -23,9 +23,9 @@ class Score
     	if(!empty($info) && !empty($info[0]['own_id']) && $info[0]['own_id']!=$uid){
     		$info 					= $info[0];
     		//积分比例配置
-    		$siteConfig 			= new Config('site_config');
-    		$score_goods_rate 		= $siteConfig->score_goods_rate; //商品返金额比例
-    		$score_rate 			= $siteConfig->score_rate; //积分和金额兑换比例
+    		$jmjConfig 				= new Config('jmj_config');
+    		$score_goods_rate 		= $jmjConfig->score_goods_rate; //商品返金额比例
+    		$score_rate 			= $jmjConfig->score_rate; //积分和金额兑换比例
     		/* 店铺主增加积分 */
     		$model 					= new IModel('member');
     		$model->setData(array('point'=>'`point`+'.$info['real_amount']*$score_goods_rate*$score_rate));

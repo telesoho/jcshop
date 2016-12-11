@@ -280,27 +280,27 @@ class Apic extends IController
     	if( $dataAti['status'] != 1 ) $this->json_echo( apireturn::go('002017') );
     	if( $dataAti['start_time'] > time() ) $this->json_echo( apireturn::go('002018') );
     	if( $dataAti['end_time'] < time() ) $this->json_echo( apireturn::go('002019') );
-    	if( $dataAti['end_time'] < time() ) $this->json_echo( apireturn::go('002019') );
     	
     	/* 包含的优惠券列表 */
     	$queryTck 					= new IQuery('activity_ticket');
     	$queryTck->where 			= 'pid='.$aid;
     	$queryTck->fields 			= 'id,name,type,rule';
     	$dataTck 					= $queryTck->find();
+
     	if(empty($dataTck)) $this->json_echo( apireturn::go('002020') );
     	$idTck 						= array(); //优惠券ID
     	foreach($dataTck as $k => $v){
     		$idTck[] 				= $v['id'];
     	}
-    	
+
     	/* 是否已领取 */
 	    $modelAcc 					= new IModel('activity_ticket_access');
     	$dataAcc 					= $modelAcc->getObj('`from`='.(empty($pid) ? 0 : $pid).' AND user_id='.$user_id.' AND ticket_id in ("'.implode(',',$idTck).'")');
-    	if( !empty($dataAcc) ) $this->json_echo( apireturn::go('002021') );
+    	if( !empty($dataAcc) ) $this->json_echo( apireturn::go(empty($pid) ? '002021' : '002024') );
     	/* 是否已领完 */
     	$countAcc 					= $modelAcc->get_count('ticket_id in ("'.implode(',',$idTck).'")');
-    	if( $countAcc > $dataAti['num'] ) $this->json_echo( apireturn::go('002022') );
-    	
+    	if( $countAcc >= $dataAti['num'] ) $this->json_echo( apireturn::go('002022') );
+
     	/* 开始领取 */
     	$dataTckOn 					= $dataTck[rand(0,count($dataTck)-1)];
     	$modelAcc->setData(array(
@@ -359,13 +359,13 @@ class Apic extends IController
     	
     	/* 获取下级分类 */
     	if(!empty($cid)){
-    		$queryCat 					= new IQuery('category');
-	    	$queryCat->where 			= 'visibility=1 AND parent_id IN ('.$cid.')';
-	    	$queryCat->fields 			= 'id';
-	    	$dataCat 					= $queryCat->find();
+    		$queryCat 				= new IQuery('category');
+	    	$queryCat->where 		= 'visibility=1 AND parent_id IN ('.$cid.')';
+	    	$queryCat->fields 		= 'id';
+	    	$dataCat 				= $queryCat->find();
 	    	if(!empty($dataCat)){
 	    		foreach($dataCat as $k => $v){
-	    			$cid 				.= ','.$v['id'];
+	    			$cid 			.= ','.$v['id'];
 	    		}
 	    	}
     	}
@@ -376,6 +376,7 @@ class Apic extends IController
     	$query->where 				= 'm.is_del=0 AND m.activity=1'.( empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')' ).(empty($bid) ? '' : ' AND m.brand_id='.$bid);
     	$query->fields 				= 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity';
     	$query->order 				= 'm.sale desc,m.visit desc';
+    	$query->group 				= 'm.id';
     	$query->page 				= $page<1 ? 1 : $page;
     	$query->pagesize 			= 20;
     	$data 						= $query->find();
