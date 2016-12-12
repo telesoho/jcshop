@@ -44,7 +44,7 @@ var vm = new Vue({
         showCodeState:false,
         code:{
             style1:'-webkit-transform:rotate(90deg)',
-            style2:'-webkit-transform:rotate(270deg)'
+            style2:'-webkit-transform:rotate(0deg)'
         },
         codeMessage:[],
         showCodeMessage:true

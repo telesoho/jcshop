@@ -1,26 +1,48 @@
+var stop=true;
 var vm = new Vue({
-    el: '#order_Total',
+    el: '#orderList',
     data: {
+        // 头部数据处理
+        orderClass:getItem("status"),
+        headData:['全部','待支付','待发货','待收货','已完成'],
+        divC:'color:#bbb',
+        divA:'color:#ff4aa0',
+        spanC:'display:none',
+        spanA:'display:block',
         showMessage:false,
-        orderInfo:{
-            state0:[],
-            state1:[],
-            state2:[],
-            state3:[],
-            state4:[]
-        },
-        contentClass:'mui-slider-item mui-control-content',
+        // 获取主入口数据
+        page:1,
+        orderInfo:[],
+        //下面的小猫不让显示
+        infoState:false,
+        //折叠效果
+        img1:'/views/mobile/skin/default/image/jmj/order/up.png',
+        img2:'/views/mobile/skin/default/image/jmj/order/down.png',
+        showImg:false,
+        //物流效果
         showContainer:false,
         leftClass:'showWrapper',
         rightClass:'hideWrapper'
     },
     computed: {
-        nowStatus: function (){
-            return getItem('status')?getItem('status'):0;
-        },
         // 读取和设置
         orderInfo_new: function() {
-            this.orderInfo.state0.map(function(item){
+            this.orderInfo.map(function(item){
+                //下面是折叠的处理逻辑
+                  item.firstList=[];
+                  item.lastList=[];
+                if(item.goodslist.length<3){
+                    item.firstList=item.goodslist;
+                }else{
+                    item.lastNum=item.goodslist.length-2;
+                    for(var i=0;i<2;i++){
+                        item.firstList.push(item.goodslist[i])
+                    }
+                    for(var j=2;j<item.goodslist.length;j++){
+                        item.lastList.push(item.goodslist[j])
+                    }
+                }
+                //下面是对不同订单状态进行处理
                 item.url="/ucenter/order_detail?id="+item.id;
                 if(item.orderStatusVal==2){
                     item.button1='取消订单';
@@ -38,40 +60,29 @@ var vm = new Vue({
                     item.button1Url='/site/error';
                 };
             });
-            this.orderInfo.state1.map(function(item){
-                item.url="/ucenter/order_detail?id="+item.id;
-                item.button1='取消订单';
-                item.button1Url='/ucenter/order_status/order_id/'+item.id+'/op/cancel';
-                item.button2='去付款';
-                item.button2Url='/block/doPay/order_id/'+item.id;
-            });
-            this.orderInfo.state2.map(function(item){
-                item.url="/ucenter/order_detail?id="+item.id;
-            });
-            this.orderInfo.state3.map(function(item){
-                item.url="/ucenter/order_detail?id="+item.id;
-                item.button1='查看物流';
-                item.button2='确认收货';
-                item.button2Url='/ucenter/order_status/order_id/'+item.id+'/op/confirm';
-            });
-            this.orderInfo.state4.map(function(item){
-                item.url="/ucenter/order_detail?id="+item.id;
-                item.button1='去评价';
-                item.button1Url='/site/error';
-            });
             return  this.orderInfo;
         }
     },
     mounted:function() {
-        $(".mui-control-item").removeClass('mui-active');
-        $(".mui-control-item"+this.nowStatus).addClass('mui-active');
-        $(".mui-slider-item").removeClass('mui-active');
-        $("#order_state"+this.nowStatus).addClass('mui-active');
+        var self=this;
+        // 如果用户从其他入口进入
+        self.orderClass=getItem('status')?getItem('status'):0;
+        getOrder(self)
+
     },
     methods: {
-        getData: function () {
-            var self = this;
+        changeStatus: function (num) {
+            var self=this;
+            //点击重置状态
+            self.orderInfo=[];
+            self.page=1;
+            self.showMessage=false;
+            setItem('status',num);
+            self.orderClass=num;
             getOrder(self);
+        },
+        sho: function(){
+            this.showImg=!this.showImg
         },
         getDelivery: function (eid) {
             console.log(eid);
@@ -90,7 +101,6 @@ var vm = new Vue({
         }
     }
 })
-vm.getData();
 $(window).load(function(){
     $("#loading").fadeOut(300);
     pushHistory();
@@ -103,9 +113,6 @@ $(window).load(function(){
     });
     mui('body').on('tap','.mui-control-item',function(){
         this.click();
-    });
-    mui('.mui-scroll-wrapper').scroll({
-        deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
     });
 });
 //快递跟踪
@@ -128,17 +135,26 @@ function Delivery(id){
 }
 function getOrder(self){
     mui.ajax('/apic/order_list',{
+        data:{
+          class:self.orderClass,
+          page:self.page
+        },
         dataType:'json',//服务器返回json格式数据
         type:'get',//HTTP请求类型
         timeout:10000,//超时时间设置为10秒；
         success:function(data){
             self.showMessage=true;
-            self.orderInfo=data;
-            console.log(data);
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
-            console.log(type);
+            data.data.map(function(item){
+                self.orderInfo.push(item);
+            })
+            if(data.data==''){
+                self.infoState=true;
+                stop=false;
+            }else{
+                stop=true;
+                self.infoState=false;
+            }
+            self.page++;
         }
     });
 }
@@ -151,12 +167,7 @@ function getItem(key){
     var getter= window.localStorage.getItem(key);
     return JSON.parse(getter);
 }
-function saveStatus(num){
-    setItem('status',num);
-//		$(".mui-slider-item").removeClass('mui-active');
-//		$("#order_state"+this.nowStatus).addClass('mui-active');
-}
-
+//引导用户按下返回键
 function pushHistory(statusOrder) {
     var state = {
         title: "title",
@@ -164,3 +175,12 @@ function pushHistory(statusOrder) {
     };
     window.history.pushState(state, 'title', "#");
 }
+// 滚动函数
+$(window).bind('scroll', function() {
+    if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+        if(stop==true){
+            stop=false;
+            getOrder(vm);
+        }
+    }
+});
