@@ -34,7 +34,7 @@
     </div>
     <div class="top box">
         <div v-cloak>店铺名称：<span style="color:#ff4aa0;font-size:0.26rem;">{{infoMessage.name}}</span></div>
-        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">{{infoMessage.amount_available}}</span></div>
+        <div>收益：<span style="color:#ff4aa0;font-size:0.26rem;">{{infoMessage.shop_total_rebate_amount}}</span></div>
     </div>
     <div class="merchant1" v-for="item in shopTobe.orders" v-cloak>
         <div class="box" @click="showGoods(item)">
@@ -101,7 +101,7 @@
         }
     })
     function getInfo(self){
-        mui.ajax('/apic/get_settlement_info',{
+        mui.ajax('/apic/get_shop_settlement_info',{
             data:{
                 year:self.year,
                 month:self.month
@@ -129,11 +129,9 @@
                 var id = this.getAttribute('id');
                 var picker = new $.DtPicker(options);
                 picker.show(function(rs) {
-                    console.log(rs);
                     vm.$data.year=rs.y.text;
                     vm.$data.month=rs.m.value;
                     getInfo(vm);
-                    console.log(vm);
 //                    result.innerText = rs.y.text+"年"+rs.m.value+"月";
                     picker.dispose();
                 });

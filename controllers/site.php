@@ -1323,5 +1323,11 @@ class Site extends IController
         $b= !empty($b) ? $b : '1';
         $ret = shop::qrcode('http://m.jiumaojia.com',$a,$b);
     }
-
+    function s(){
+        $hostdir=__DIR__ . '/../upload/1-1';
+        $filesnames = scandir($hostdir);
+        foreach ($filesnames as $name) {
+            echo $name . '<br>';
+        }
+    }
 }
