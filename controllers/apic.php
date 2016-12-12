@@ -610,7 +610,8 @@ class Apic extends IController
     		$relation_k 			= array_keys($relation);
     		foreach($data as $k => $v){
 				//订单状态
-    			$data[$k]['orderStatusText'] 		= Order_Class::orderStatusText(Order_Class::getOrderStatus($v));
+    			$data[$k]['orderStatusVal'] 		= Order_Class::getOrderStatus($v);
+    			$data[$k]['orderStatusText'] 		= Order_Class::orderStatusText( $data[$k]['orderStatusVal'] );
     			//按键名称
     			$data[$k]['text'] 					= in_array($data[$k]['orderStatusText'],$relation_k) ? $relation[$data[$k]['orderStatusText']] : '';
     			//商品列表
