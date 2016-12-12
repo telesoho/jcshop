@@ -64,13 +64,13 @@
 		}
 	</style>
 	<body>
-	<div id="activeInfo" style="overflow: hidden;" v-cloak>
-		<div id="top" style="overflow: hidden;">
+	<div id="activeInfo" v-cloak>
+		<div id="top">
 			<img src="/views/mobile/skin/default/image/jmj/active_goods_list/toplogo.png"/>
 		</div>
-		<div id="wrap_logo">
-			<div id="logo">
-			<div class="logo1">
+		
+		<div id="logo" style="margin-top: -0.01rem;">
+			<div class="logo1" style="overflow: hidden;">
 				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/snackArea.png" @click="lingshi()"/></a>
 				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/drugstoreArea.png" @click="yaozhuang()"/></a>
 				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/protectionZone.png" @click="gehu()"/></a>
@@ -86,7 +86,7 @@
 				<div class="div4" @click="reyanzhao()"></div>
 			</div>
 		</div>
-		</div>
+	
 		<div id="shop_list">
 			<div id="list">
 				<ul>
