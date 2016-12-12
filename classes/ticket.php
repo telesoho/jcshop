@@ -65,6 +65,7 @@ class ticket
 		$rel 						= self::checkActivity($ticket_aid);
 		if($rel['code']>0) return $rel;
 		$ticket_data 				= $rel['data'];
+		$data['final_sum'] 			= $data['sum'];
 		
 		/* 优惠券类型 */
 		switch ($ticket_data['type']){

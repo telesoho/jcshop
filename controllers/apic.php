@@ -599,7 +599,7 @@ class Apic extends IController
     	/* 查询订单 */
     	$query 						= new IQuery('order');
     	$query->where 				= 'if_del=0 AND '.$where.' AND user_id IN ('.implode(',',array_unique($user)).')';
-    	$query->fields 				= 'id,order_no,order_amount,status,pay_type';
+    	$query->fields 				= 'id,order_no,order_amount,status,pay_type,distribution_status';
     	$query->page 				= $page<1 ? 1 : $page;
     	$query->pagesize 			= 10;
     	$data 						= $query->find();
@@ -612,6 +612,7 @@ class Apic extends IController
 				//订单状态
     			$data[$k]['orderStatusVal'] 		= Order_Class::getOrderStatus($v);
     			$data[$k]['orderStatusText'] 		= Order_Class::orderStatusText( $data[$k]['orderStatusVal'] );
+    			
     			//按键名称
     			$data[$k]['text'] 					= in_array($data[$k]['orderStatusText'],$relation_k) ? $relation[$data[$k]['orderStatusText']] : '';
     			//商品列表
