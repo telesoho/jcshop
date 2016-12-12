@@ -8,6 +8,7 @@
 		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/cosme/activity_goods_list.css?v=<?php echo time(); ?>"/>
 	</head>
 	<style type="text/css">
+		body{background:#ffc75b}
 		#list ul li .img{
 			border-bottom: 1px solid #000;
 			
@@ -102,6 +103,16 @@
 				</ul>
 			</div>
 		</div>
+		<div class="flexbox empty_product" v-if="infoState" style="background:#ffc75b">
+			<div class="img">
+				<img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+			</div>
+			<div class="content">
+				<span style="color:#fff">~</span>
+				<span style="color:#fff">憋拉了，到底了</span>
+				<span style="color:#fff">~</span>
+			</div>
+		</div>
 	</div>
 	<!-- 							回到顶部										-->
 	<div class="fix-toTop hide" @click="fixToTop">
@@ -113,14 +124,13 @@
 		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 		<script>
 			var stop=true;
-			var stop2 = true;
 			var vm=new Vue({
 				el:"#activeInfo",
 				data: {
 					page:1,
 					info:[],
 					val : {bid:'',cid:''},
-
+					infoState:false
 				},
 				computed:{
 					newData: function(){
@@ -168,6 +178,7 @@
 						self.info=[];
 						self.page=1;
 						self.val.cid=126;
+						self.val.bid='';
 						pushSession("active_val",self.val);
 						getActiveInfo(self)
 					},
@@ -178,6 +189,7 @@
 						self.info=[];
 						self.page=1;
 						self.val.cid=134;
+						self.val.bid='';
 						pushSession("active_val",self.val);
 						getActiveInfo(self)
 					},
@@ -188,6 +200,7 @@
 						self.info=[];
 						self.page=1;
 						self.val.cid=2;
+						self.val.bid='';
 						pushSession("active_val",self.val);
 						getActiveInfo(self)
 					},
@@ -198,6 +211,7 @@
 						self.info=[];
 						self.page=1;
 						self.val.cid=6;
+						self.val.bid='';
 						pushSession("active_val",self.val);
 						getActiveInfo(self)
 					},
@@ -271,9 +285,11 @@
 							self.info.push(item);
 						})
 						if(data.data==''){
+							self.infoState=true;
 							stop=false;
 						}else{
 							stop=true;
+							self.infoState=false;
 						}
 						pushSession("active_info",self.info);
 
