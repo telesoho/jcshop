@@ -53,6 +53,14 @@
 		#wrap_logo #logo{
 			overflow: hidden;
 		}
+		.fix-toTop{
+			position: fixed;
+			right: 0.39rem;
+		    bottom: 0.7rem;
+		    z-index: 999;
+		    width: 0.84rem;
+		    height: 0.84rem;
+		}
 	</style>
 	<body>
 	<div id="activeInfo" style="overflow: hidden;" v-cloak>
@@ -94,6 +102,11 @@
 			</div>
 		</div>
 	</div>
+	<!-- 							回到顶部										-->
+	<div class="fix-toTop hide" @click="fixToTop">
+        <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" style="width: 0.84rem;height: 0.84rem;" />
+    </div>
+    
 	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
@@ -195,31 +208,9 @@
 					}
 				}
 			})
-			var oY = 0
-			document.addEventListener("touchstart",function(ev){
-					
-					oY = ev.touches[0].pageY;
-					
-				})
-			document.addEventListener("touchmove",function(ev){
-					var y = ev.touches[0].pageY - oY
-					if(y<0){
-						$("#top").hide()
-						$("#logo").hide()
-						
-					}else{
-						
-						$("#logo").css({
-							"display":"block",
-							"position":"fixed",
-							"zIndex":"100"
-						})
-					}
-						
-				})
+			
 			function getActiveInfo2(cid,bid,self){
 					stop=false;
-					
 					cid = (cid==	undefined ? '' : cid);
 					bid = (bid==	undefined ? '' : bid);
 					rrr.bid = bid;
@@ -249,20 +240,15 @@
 										</a>\
 										</li>'
 							}
-							console.log(opt.page)
 							arr.push(str);
-							console.log(arr)
 							for(var i in arr){
 								$("#list ul").html(arr[i]);
 							}
-							
 							if(data.data==''){
-								stop2=false;
-								
+								stop2=false;				
 							}else{
 								opt.page ++;
 								stop2=true;
-								
 							}
 							var spannum = $("#list ul li span").attr("title")
 							$("#list ul li").click(function(){
@@ -270,10 +256,8 @@
 							})		
 						}
 					}
-					
 					mui.ajax('/apic/activity_goods_list',bb);
 			}	
-				
 			//第一次
 			function getActiveInfo(self){
 					var aa = {
@@ -297,9 +281,7 @@
 							}
 						}
 					};
-					
-					mui.ajax('/apic/activity_goods_list',aa);
-					
+					mui.ajax('/apic/activity_goods_list',aa);	
 			}
 			//上拉加载
 			$(window).bind('scroll', function(){
@@ -308,16 +290,24 @@
 					if(stop==true){
 						stop=false;
 						getActiveInfo(vm);
-						
 					}
 					if(stop2==true){
 						stop2=false;
 						getActiveInfo2(rrr.cid,rrr.bid);
-						
 					}
-					
+				}
+				
+				if (document.body.scrollTop>50){
+					$(".fix-toTop").show();
+					$(".fix-toTop").click(function(){
+						document.body.scrollTop = 0;
+						document.documentElement.scrollTop =0;
+					})
+				}else{
+					$(".fix-toTop").hide()
 				}
 			});
+			//回到顶部
 			
 		</script>
 	</body>
