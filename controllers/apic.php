@@ -545,9 +545,93 @@ class Apic extends IController
      * ---------------------------------------------------订单---------------------------------------------------*
      */
     /**
-     * 获取订单列表
+     * 订单列表
      */
     public function order_list()
+    {
+    	/* 获取数据 */
+    	$type 						= IFilter::act(IReq::get('type'),'string'); //类型为u时，店铺主
+    	$class 						= IFilter::act(IReq::get('class'),'int'); //分类ID[0全部订单-1待付款-2待发货-3待收货-4已完成]
+    	$page 						= IFilter::act(IReq::get('page'),'int'); //分页编号
+    	if($this->user['user_id'] == null) $this->json_echo( apireturn::go('001001') );
+    	$user 						= array($this->user['user_id']);
+    	
+    	/* 分类 */
+    	switch($class){
+    		//全部订单
+    		case 0:
+    			$where 				= 'pay_type!=0 AND status!=3 AND status!=4';
+    			break;
+    		//待付款
+    		case 1:
+    			$where 				= 'pay_type!=0 AND status=1';
+    			break;
+    		//待发货
+    		case 2:
+    			$where 				= 'pay_type!=0 AND status=2 AND distribution_status=0';
+    			break;
+    		//待收货
+    		case 3:
+    			$where 				= 'pay_type!=0 AND status=2 AND distribution_status in (1,2)';
+    			break;
+    		//已完成
+    		case 4:
+    			$where 				= 'pay_type!=0 AND status=5';
+    			break;
+    		default:
+    			$this->json_echo( apireturn::go('003001') );
+    	}
+    	
+    	/* 店铺主 */
+    	if($type == 'u'){
+    		$queryUser 				= new IQuery('user as m');
+    		$queryUser->join 		= 'LEFT JOIN shop AS a ON a.identify_id=m.shop_identify_id';
+    		$queryUser->where 		= 'own_id='.$this->user['user_id'];
+    		$queryUser->fields 		= 'm.id';
+    		$dataUser 		 		= $queryUser->find();
+    		if(!empty($dataUser)){
+    			foreach($dataUser[0] as $k => $v){
+    				$user[] 		= $v['id'];
+    			}
+    		}
+    	}
+    	
+    	/* 查询订单 */
+    	$query 						= new IQuery('order');
+    	$query->where 				= 'if_del=0 AND '.$where.' AND user_id IN ('.implode(',',array_unique($user)).')';
+    	$query->fields 				= 'id,order_no,order_amount,status,pay_type';
+    	$query->page 				= $page<1 ? 1 : $page;
+    	$query->pagesize 			= 10;
+    	$data 						= $query->find();
+    	$totalPage 					= $query->getTotalPage();
+    	if($page > $totalPage) $data = array();
+    	if(!empty($data)){
+    		$relation 				= array('已完成'=>'删除订单', '等待发货'=>'取消订单', '等待付款'=>'去支付', '已发货' => '查看物流', '已取消'=>'已取消','部分发货'=>'查看物流');
+    		$relation_k 			= array_keys($relation);
+    		foreach($data as $k => $v){
+				//订单状态
+    			$data[$k]['orderStatusText'] 		= Order_Class::orderStatusText(Order_Class::getOrderStatus($v));
+    			//按键名称
+    			$data[$k]['text'] 					= in_array($data[$k]['orderStatusText'],$relation_k) ? $relation[$data[$k]['orderStatusText']] : '';
+    			//商品列表
+    			$data[$k]['goodslist'] 				= Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$v['id']));
+    			foreach ($data[$k]['goodslist'] as $k1 => $v1){
+    				$data[$k]['goodslist'][$k1]['goods_array'] 	= json_decode($v1['goods_array'],true);
+    				$data[$k]['goodslist'][$k1]['img'] 			= IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/160/h/160");
+    			}
+    			//订单扩展数据
+//     			$data[$k]['order_info'] 			= (new order_class())->getOrderShow($data[$k]['id'],$this->user['user_id']);
+    		}
+    	}
+    	
+    	$this->json_echo( apireturn::go('0',$data) );
+    }
+    
+    
+    /**
+     * 获取订单列表
+     */
+    public function order_lists()
     {
         if (IFilter::act(IReq::get('type'),'string') == 'u'){
             $shop_query = new IQuery('shop');
