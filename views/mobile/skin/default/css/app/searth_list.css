@@ -218,7 +218,7 @@ body{
 .fix-toTop {
     position: fixed;
     right: 0.39rem;
-    bottom: 1.7rem;
+    bottom: 0.7rem;
     z-index: 999;
     width: 0.84rem;
     height: 0.84rem;

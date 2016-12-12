@@ -8,6 +8,7 @@
 		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/cosme/activity_goods_list.css?v=<?php echo time(); ?>"/>
 	</head>
 	<style type="text/css">
+		body{background:#ffc75b}
 		#list ul li .img{
 			border-bottom: 1px solid #000;
 			
@@ -53,15 +54,23 @@
 		#wrap_logo #logo{
 			overflow: hidden;
 		}
+		.fix-toTop{
+			position: fixed;
+			right: 0.39rem;
+		    bottom: 0.7rem;
+		    z-index: 999;
+		    width: 0.84rem;
+		    height: 0.84rem;
+		}
 	</style>
 	<body>
-	<div id="activeInfo" style="overflow: hidden;" v-cloak>
-		<div id="top" style="overflow: hidden;">
+	<div id="activeInfo" v-cloak>
+		<div id="top">
 			<img src="/views/mobile/skin/default/image/jmj/active_goods_list/toplogo.png"/>
 		</div>
-		<div id="wrap_logo">
-			<div id="logo">
-			<div class="logo1">
+		
+		<div id="logo" style="margin-top: -0.01rem;">
+			<div class="logo1" style="overflow: hidden;">
 				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/snackArea.png" @click="lingshi()"/></a>
 				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/drugstoreArea.png" @click="yaozhuang()"/></a>
 				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/protectionZone.png" @click="gehu()"/></a>
@@ -77,13 +86,14 @@
 				<div class="div4" @click="reyanzhao()"></div>
 			</div>
 		</div>
-		</div>
+	
 		<div id="shop_list">
 			<div id="list">
 				<ul>
 					<li v-for="item in newData">
 						<a :href="item.url">
-						<div class="img"><img :src="item.img"/></div>
+						<div class="img"><img :dataimg="item.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg"
+						/></div>
 						<p>{{item.name}}</p>
 						<span class="xian">现价:￥<t class="pirce1">{{item.sell_price}}</t></span>
 						<span class="yuanjia">原价:<s>￥<t class="pirce2">{{item.original_price}}</t></s></span>
@@ -93,213 +103,203 @@
 				</ul>
 			</div>
 		</div>
+		<div class="flexbox empty_product" v-if="infoState" style="background:#ffc75b">
+			<div class="img">
+				<img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+			</div>
+			<div class="content">
+				<span style="color:#fff">~</span>
+				<span style="color:#fff">憋拉了，到底了</span>
+				<span style="color:#fff">~</span>
+			</div>
+		</div>
 	</div>
-	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+	<!-- 							回到顶部										-->
+	<div class="fix-toTop hide" @click="fixToTop">
+        <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" style="width: 0.84rem;height: 0.84rem;" />
+    </div>
+		<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 		<script>
-			var opt = {
-				page : 1,
-			};
-			var rrr = {
-				bid:'',
-				cid:'',
-			};
-			var arr = [];
-			var str ="";
 			var stop=true;
-			var stop2 = true;
 			var vm=new Vue({
 				el:"#activeInfo",
 				data: {
 					page:1,
 					info:[],
 					val : {bid:'',cid:''},
-
+					infoState:false
 				},
 				computed:{
 					newData: function(){
 						this.info.map(function(item){
 							item.url="/site/products?id="+item.id;
-						})
+						});
 						return this.info;
 					}
 				},
 				mounted: function(){
 					var self=this;
-					getActiveInfo(self);
+					if(getSession("active_info")){
+						self.val=getSession("active_val");
+						self.info=getSession("active_info");
+						self.page=getSession("active_page")
+					}else{
+						self.page=1;
+						getActiveInfo(self);
+					}
+
+				},
+				updated:function() {
+					// 页面加载完成执行的函数;
+					lazyload.init({
+						anim:false,
+						selectorName:".samLazyImg"
+					});
 				},
 				methods:{
 					lingshi: function(){
-						opt.page = 1;
-					
-						arr=[];
-						str='';
-						getActiveInfo2(7,'',self);
+						var self=this;
+						removeSessionItem("active_info");
+						removeSessionItem("active_val");
+						self.info=[];
+						self.page=1;
+						self.val.cid=7;
+						pushSession("active_val",self.val);
+						getActiveInfo(self)
+
 					},
 					yaozhuang: function(){
-						opt.page = 1;
-					
-						arr=[];
-						str='';
-						getActiveInfo2(126,'',self);
+						var self=this;
+						removeSessionItem("active_val");
+						removeSessionItem("active_info");
+						self.info=[];
+						self.page=1;
+						self.val.cid=126;
+						self.val.bid='';
+						pushSession("active_val",self.val);
+						getActiveInfo(self)
 					},
 					gehu: function(){
-						opt.page = 1;
-						this.info=[];
-						arr=[];
-						str='';
-						getActiveInfo2(134,'',self);
+						var self=this;
+						removeSessionItem("active_val");
+						removeSessionItem("active_info");
+						self.info=[];
+						self.page=1;
+						self.val.cid=134;
+						self.val.bid='';
+						pushSession("active_val",self.val);
+						getActiveInfo(self)
 					},
 					jiankang: function(){
-						opt.page = 1;
-						
-						arr=[];
-						str='';
-						getActiveInfo2(2,'',self);
+						var self=this;
+						removeSessionItem("active_val");
+						removeSessionItem("active_info");
+						self.info=[];
+						self.page=1;
+						self.val.cid=2;
+						self.val.bid='';
+						pushSession("active_val",self.val);
+						getActiveInfo(self)
 					},
 					chongwu: function(){
-						opt.page = 1;
-						this.info=[];
-						arr=[];
-						str='';
-						getActiveInfo2(6,'',self);
+						var self=this;
+						removeSessionItem("active_val");
+						removeSessionItem("active_info");
+						self.info=[];
+						self.page=1;
+						self.val.cid=6;
+						self.val.bid='';
+						pushSession("active_val",self.val);
+						getActiveInfo(self)
 					},
 					ranfa: function(){
-						opt.page = 1;
-						
-						arr=[];
-						str='';
-						getActiveInfo2(62,74,self);
+						var self=this;
+						removeSessionItem("active_val");
+						removeSessionItem("active_info");
+						self.info=[];
+						self.page=1;
+						self.val={
+							cid:62,
+							bid:74
+						};
+						pushSession("active_val",self.val);
+						getActiveInfo(self)
 					},
 					hwyaozhuang: function(){
-						opt.page = 1;
-	
-						arr=[];
-						str='';
-						getActiveInfo2("134,135,136",74,self);
+						var self=this;
+						removeSessionItem("active_val");
+						removeSessionItem("active_info");
+						self.info=[];
+						self.page=1;
+						self.val={
+							cid:"134,135,136",
+							bid:74
+						};
+						pushSession("active_val",self.val);
+						getActiveInfo(self)
 					},
 					yama: function(){
-						opt.page = 1;
-
-						arr=[];
-						str='';
-						getActiveInfo2(98,74,self);
+						var self=this;
+						removeSessionItem("active_val");
+						removeSessionItem("active_info");
+						self.info=[];
+						self.page=1;
+						self.val={
+							cid:98,
+							bid:74
+						};
+						pushSession("active_val",self.val);
+						getActiveInfo(self)
 					},
 					reyanzhao: function(){
-						opt.page = 1;
-
-						arr=[];
-						str='';
-						getActiveInfo2("91,152",74,self);
+						var self=this;
+						removeSessionItem("active_val");
+						removeSessionItem("active_info");
+						self.info=[];
+						self.page=1;
+						self.val={
+							cid:"91,152",
+							bid:74
+						};
+						pushSession("active_val",self.val);
+						getActiveInfo(self);
 					}
 				}
-			})
-			var oY = 0
-			document.addEventListener("touchstart",function(ev){
-					
-					oY = ev.touches[0].pageY;
-					
-				})
-			document.addEventListener("touchmove",function(ev){
-					var y = ev.touches[0].pageY - oY
-					if(y<0){
-						$("#top").hide()
-						$("#logo").hide()
-						
-					}else{
-						
-						$("#logo").css({
-							"display":"block",
-							"position":"fixed",
-							"zIndex":"100"
-						})
-					}
-						
-				})
-			function getActiveInfo2(cid,bid,self){
-					stop=false;
-					
-					cid = (cid==	undefined ? '' : cid);
-					bid = (bid==	undefined ? '' : bid);
-					rrr.bid = bid;
-					rrr.cid = cid;
-					var bb = {
-						data:{
-							page:opt.page,
-							cid:rrr.cid,
-							bid:rrr.bid
-						},
-						dataType:'json',//服务器返回json格式数据
-						type:'get',//HTTP请求类型
-						timeout:10000,//超时时间设置为10秒；
-						success:function(data){
-//							console.log(1)
-//							
-							for(var i=0;i<data.data.length;i++){
-								
-								str += '<li>\
-											<a>\
-											<span title='+data.data[i].id+'></span>\
-											<div class="img"><img src='+data.data[i].img+'/></div>\
-											<p>'+data.data[i].name+'</p>\
-											<span class="xian">现价:￥<t class="pirce1">'+data.data[i].sell_price+'</t></span>\
-											<span class="yuanjia">原价:<s>￥<t class="pirce2">'+data.data[i].original_price+'</t></s></span>\
-											<i><img src="/views/mobile/skin/default/image/jmj/active_goods_list/num.png"/></i>\
-										</a>\
-										</li>'
-							}
-							console.log(opt.page)
-							arr.push(str);
-							console.log(arr)
-							for(var i in arr){
-								$("#list ul").html(arr[i]);
-							}
-							
-							if(data.data==''){
-								stop2=false;
-								
-							}else{
-								opt.page ++;
-								stop2=true;
-								
-							}
-							var spannum = $("#list ul li span").attr("title")
-							$("#list ul li").click(function(){
-								window.location.href = "/site/products?id="+spannum;
-							})		
-						}
-					}
-					
-					mui.ajax('/apic/activity_goods_list',bb);
-			}	
-				
-			//第一次
+			});
+
 			function getActiveInfo(self){
-					var aa = {
-						data:{
-							page:opt.page,
-							cid:"",
-							bid:"",
-						},
-						dataType:'json',//服务器返回json格式数据
-						type:'get',//HTTP请求类型
-						timeout:10000,//超时时间设置为10秒；
-						success:function(data){
-							for(var i=0;i<data.data.length;i++){
-								self.info.push(data.data[i])
-							}
-							if(data.data==''){
-								stop=false;
-							}else{
-								opt.page++;
-								stop=true;
-							}
+				mui.ajax('/apic/activity_goods_list', {
+					data:{
+						page:self.page,
+						cid:self.val.cid,
+						bid:self.val.bid
+					},
+					dataType: 'json',
+					type: 'get',
+					timeout: 10000,
+					success: function (data) {
+						data.data.map(function(item){
+							self.info.push(item);
+						})
+						if(data.data==''){
+							self.infoState=true;
+							stop=false;
+						}else{
+							stop=true;
+							self.infoState=false;
 						}
-					};
-					
-					mui.ajax('/apic/activity_goods_list',aa);
-					
+						pushSession("active_info",self.info);
+
+						self.page++;
+						pushSession("active_page",self.page);
+//						pushSession("article_category_list",self.indexInfo.article_category_list);
+					},
+					error: function(type){
+					}
+				});
 			}
 			//上拉加载
 			$(window).bind('scroll', function(){
@@ -308,17 +308,41 @@
 					if(stop==true){
 						stop=false;
 						getActiveInfo(vm);
-						
 					}
-					if(stop2==true){
-						stop2=false;
-						getActiveInfo2(rrr.cid,rrr.bid);
-						
-					}
-					
+				}
+				if (document.body.scrollTop>50){
+					$(".fix-toTop").show();
+					$(".fix-toTop").click(function(){
+						document.body.scrollTop = 0;
+						document.documentElement.scrollTop =0;
+					})
+				}else{
+					$(".fix-toTop").hide()
 				}
 			});
-			
+
+//			缓存
+			function pushSession(key,value){
+				var val=JSON.stringify(value)?JSON.stringify(value):[];
+				if(window.sessionStorage){
+					sessionStorage.setItem(key,val);
+				}else{
+					console.log("无法使用缓存");
+					return "";
+				}
+			}
+			function getSession(key){
+				if(window.sessionStorage){
+					var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+					return JSON.parse(state);
+				}else{
+					console.log("无法使用缓存");
+					return "";
+				}
+			}
+			function removeSessionItem(key){
+				window.sessionStorage.removeItem(key);
+			}
 		</script>
 	</body>
 </html>
