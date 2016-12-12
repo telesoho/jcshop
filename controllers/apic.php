@@ -1544,208 +1544,6 @@ class Apic extends IController
 //            var_dump($curl->data());
         }
     }
-    function test(){
-        $a = [
-            'name' => 'a',
-            'price' => '25',
-            'order' => [
-                [
-                    'order_num' => '123',
-                    'status' => '已完成',
-                    'price' => '55.00',
-                    'goods' => [
-                        [
-                            'goods_price' => '20',
-                            'name' => '商品名称',
-                            'img'=>'/',
-                            'id' => '2',
-                            'price' => '520.0'
-                        ],
-                        [
-                            'goods_price' => '20',
-                            'name' => '商品名称',
-                            'img'=>'/',
-                            'id' => '21',
-                            'price' => '520.0'
-                        ]
-                    ]
-                ],
-                [
-                    'order_num' => '123',
-                    'status' => '已完成',
-                    'price' => '55.00',
-                    'goods' => [
-                        [
-                            'goods_price' => '20',
-                            'name' => '商品名称',
-                            'img'=>'/',
-                            'id' => '22',
-                            'price' => '5230.0'
-                        ],
-                        [
-                            'goods_price' => '20',
-                            'name' => '商品名称',
-                            'img'=>'/',
-                            'id' => '121',
-                            'price' => '5220.0'
-                        ]
-                    ]
-                ]
-            ]
-        ];
-        $this->json_echo($a);
-
-    }
-    function tests(){
-        $a=[
-            [
-                'name' => 'a',
-                'price' => '25',
-                'order' => [
-                    [
-                        'order_num' => '123',
-                        'status' => '已完成',
-                        'price' => '55.00',
-                        'goods' => [
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '2',
-                                'price' => '520.0'
-                            ],
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '21',
-                                'price' => '520.0'
-                            ]
-                        ]
-                    ],
-                    [
-                        'order_num' => '123',
-                        'status' => '已完成',
-                        'price' => '55.00',
-                        'goods' => [
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '22',
-                                'price' => '5230.0'
-                            ],
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '121',
-                                'price' => '5220.0'
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            [
-                'name' => 'b',
-                'price' => '25',
-                'order' => [
-                    [
-                        'order_num' => '123',
-                        'status' => '已完成',
-                        'price' => '55.00',
-                        'goods' => [
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '2',
-                                'price' => '520.0'
-                            ],
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '21',
-                                'price' => '520.0'
-                            ]
-                        ]
-                    ],
-                    [
-                        'order_num' => '123',
-                        'status' => '已完成',
-                        'price' => '55.00',
-                        'goods' => [
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '22',
-                                'price' => '5230.0'
-                            ],
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '121',
-                                'price' => '5220.0'
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            [
-                'name' => 'c',
-                'price' => '25',
-                'order' => [
-                    [
-                        'order_num' => '123',
-                        'status' => '已完成',
-                        'price' => '55.00',
-                        'goods' => [
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '2',
-                                'price' => '520.0'
-                            ],
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '21',
-                                'price' => '520.0'
-                            ]
-                        ]
-                    ],
-                    [
-                        'order_num' => '123',
-                        'status' => '已完成',
-                        'price' => '55.00',
-                        'goods' => [
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '22',
-                                'price' => '5230.0'
-                            ],
-                            [
-                                'goods_price' => '20',
-                                'name' => '商品名称',
-                                'img'=>'/',
-                                'id' => '121',
-                                'price' => '5220.0'
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-        ];
-        $this->json_echo($a);
-    }
-
     /**
      * 推荐人旗下店铺的订单信息
      */
@@ -1834,7 +1632,7 @@ class Apic extends IController
         } else {
             $temp = '( user_id = ' . $this->user['user_id'] . ')';
         }
-        $temp .= ' and id_shop_checkout = 0 and seller_id = ' . $shop_data[0]['identify_id'];
+        $temp .= ' and is_shop_checkout = 0 and seller_id = ' . $shop_data[0]['identify_id'];
         $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
         $last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
         $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
@@ -1902,89 +1700,99 @@ class Apic extends IController
         }
         return $amount_tobe_booked;
     }
-    function get_settlement_info(){
-        $settlement_query = new IQuery('settlement');
+
+    /**
+     * 店铺收益明显数据
+     */
+    function get_shop_settlement_info(){
+        $shop_identify_id = ISession::get('shop_identify_id');
+        $year = IFilter::act(IReq::get('year'),'int');
+        $month = IFilter::act(IReq::get('month'),'int');
+
+        $ret=[]; //店铺收益明细数据
+        $ret['orders'] = [];
+        $shop_total_rebate_amount = 0.00;
+        $shop_total_goods_amount = 0.00;
+
         $shop_query = new IQuery('shop');
-        $settlement_query->where = 'seller_id = ' . ISession::get('shop_identify_id');
-        $shop_query->where = 'identify_id = ' . ISession::get('shop_identify_id');
-        $data = $settlement_query->find();
+        $shop_query->where = 'identify_id = ' . $shop_identify_id;
         $shop_data = $shop_query->find();
         $ret['name'] = $shop_data[0]['name'];
-        $ret['amount_available'] = $shop_data[0]['amount_available'];
+
+
+        $shop_settlement_query = new IQuery('settlement_shop');
+        $shop_settlement_query->where = 'seller_id = ' . $shop_identify_id . ' and date_format( settlement_time, \'%Y%m\' ) =' . $year . $month;
+
+        $shop_settlement_data = $shop_settlement_query->find();
         $order_query = new IQuery('order');
-        foreach ($data as $k=>$v){
+        foreach ($shop_settlement_data as $k=>$v){
             $order_query->where = 'id = ' . $v['order_id'];
             $order_data = $order_query->find()[0];
             $order_data['rebate_amount'] = $v['rebate_amount'];
+            $shop_total_rebate_amount += $v['rebate_amount'];
+            $shop_total_goods_amount += $v['goods_amount'];
             $ret['orders'][] = $order_data;
         }
-        $merge_data = $ret['orders'];
-        foreach ($merge_data as $k=>$value){
-            $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
-            $goods_total_price = 0;
+        $ret['shop_total_rebate_amount'] = $shop_total_rebate_amount;
+        $ret['shop_total_goods_amount'] = $shop_total_goods_amount;
+
+
+        foreach ($ret['orders'] as $k=>$v){
+            $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$v['id']));
             foreach($temp as $key => $good){
-                $goods_total_price += $good['real_price'];
                 $good_info = JSON::decode($good['goods_array']);
                 $temp[$key]['good_info'] = $good_info;
                 $temp[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$temp[$key]['img']."/w/160/h/160");
             }
-            $shop_category = new IQuery('shop_category');
-            $shop_category->where = 'id = ' . $shop_data[0]['category_id'];
-            $shop_category_data = $shop_category->find();
-            $merge_data[$k]['goods_total_price'] = $goods_total_price;
-            $merge_data[$k]['goods_list'] = $temp;
-            $merge_data[$k]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
-            if ($merge_data[$k]['orderStatusText'] == '已完成'){
-                $merge_data[$k]['goods_total_tobe_booked'] = $goods_total_price* $shop_category_data[0]['rebate'];
-            } else {
-                $merge_data[$k]['goods_total_tobe_booked'] = '0.00';
-            }
+            $ret['orders'][$k]['goods_list'] = $temp;
+            $ret['orders'][$k]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($v));
         }
-        $ret['orders'] = $merge_data;
+
         $this->json_echo($ret);
     }
 
+    /**
+     * 获取合伙人的收益明细数据
+     */
     function get_recommender_settlement_info(){
+        $year = IFilter::act(IReq::get('year'),'int');
+        $month = IFilter::act(IReq::get('month'),'int');
+        $recommender_total_rebate_amount = 0.00; //收益总金额
+        $recommender_total_goods_amount = 0.00; //商品总金额
+        $ret = []; //合伙人收益明细
         $shop_query = new IQuery('shop');
         $shop_query->where = 'recommender = ' . $this->user['user_id'];
         $shop_data = $shop_query->find();
-        $recommender_total_rebate_amount = 0;
-        $recommender_total_goods_amount = 0;
         foreach ($shop_data as $key=>$value){
-            $settlement_query = new IQuery('settlement');
-            $shop_query = new IQuery('shop');
-            $settlement_query->where = 'seller_id = ' . $value['identify_id'];
-            $shop_query->where = 'identify_id = ' . $value['identify_id'];
-            $data = $settlement_query->find();
+            $settlement_shop_query = new IQuery('settlement_shop');
+            $settlement_shop_query->where = 'seller_id = ' . $value['identify_id'] . ' and date_format( settlement_time, \'%Y%m\' ) =' . $year . $month;
+            $settlement_shop_data = $settlement_shop_query->find();
             $ret[$key]['name'] = $value['name'];
             $ret[$key]['amount_available'] = $value['amount_available'];
             $order_query = new IQuery('order');
-            foreach ($data as $k=>$v){
+            $ret[$key]['orders'] = [];
+            foreach ($settlement_shop_data as $k=>$v){
                 $order_query->where = 'id = ' . $v['order_id'];
                 $order_data = $order_query->find()[0];
                 $order_data['rebate_amount'] = $v['rebate_amount'];
                 $recommender_total_rebate_amount += $v['rebate_amount'];
+                $recommender_total_goods_amount += $v['goods_amount'];
                 $ret[$key]['orders'][] = $order_data;
             }
-            $merge_data = $ret[$key]['orders'];
-            foreach ($merge_data as $k=>$value){
-                $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
-                $goods_total_price = 0;
+            foreach ($ret[$key]['orders'] as $k=>$v){
+                $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$v['id']));
+                $goods_total_price = 0; //商品总金额
                 foreach($temp as $key => $good){
                     $goods_total_price += $good['real_price'];
                     $good_info = JSON::decode($good['goods_array']);
                     $temp[$key]['good_info'] = $good_info;
                     $temp[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$temp[$key]['img']."/w/160/h/160");
                 }
-                $shop_category = new IQuery('shop_category');
-                $shop_category->where = 'id = ' . $shop_data[0]['category_id'];
-                $shop_category_data = $shop_category->find();
-                $merge_data[$k]['goods_total_price'] = $goods_total_price;
-                $recommender_total_goods_amount += $goods_total_price;
-                $merge_data[$k]['goods_list'] = $temp;
-                $merge_data[$k]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($value));
+                $ret[$key]['orders'][$k]['goods_total_price'] = $goods_total_price;
+//                $recommender_total_goods_amount += $goods_total_price;
+                $ret[$key]['orders'][$k]['goods_list'] = $temp;
+                $ret[$key]['orders'][$k]['orderStatusText'] = Order_Class::orderStatusText(Order_Class::getOrderStatus($v));
             }
-            $ret[$key]['orders'] = $merge_data;
         }
         $ret[0]['recommender_total_goods_amount'] = $recommender_total_goods_amount;
         $ret[0]['recommender_total_rebate_amount'] = $recommender_total_rebate_amount;

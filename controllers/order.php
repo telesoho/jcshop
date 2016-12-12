@@ -1671,7 +1671,7 @@ class Order extends IController implements adminAuthorization
         $shop_category_query->where = ' id = ' . $category_id;
         $shop_category_data = $shop_category_query->find();
         foreach ($order_data as $k=>$v){
-            $settlement_model = new IModel('settlement');
+            $settlement_model = new IModel('settlement_shop');
             $rebate = $shop_category_data[0]['rebate'];
             $rebate_amount = $v['real_amount']*$shop_category_data[0]['rebate'];
             $settlement_model->setData(['order_id'=>$v['id'], 'goods_amount'=>$v['real_amount'],'rebate'=> $rebate, 'rebate_amount' => $rebate_amount,'settlement_time'=>date('Y-m-d H:i:s', time()), 'seller_id'=>$seller_id ]);
@@ -1866,7 +1866,7 @@ class Order extends IController implements adminAuthorization
     }
     function order_shop_settlement_list(){
         $id = IFilter::act(IReq::get('id'),'int');
-        $settlement_query = new IQuery('settlement');
+        $settlement_query = new IQuery('settlement_shop');
         $settlement_query->where = 'seller_id = ' . $id;
         $this->order_shop_settlement_data = $settlement_query->find();
         $this->redirect('order_shop_settlement_list');

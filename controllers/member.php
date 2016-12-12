@@ -818,10 +818,9 @@ class Member extends IController implements adminAuthorization
 		}
 	}
 	public function verified(){
-//        $ret = password_verify('88888888', $a);
         $search = IFilter::act(IReq::get('search'),'strict');
         $keywords = IFilter::act(IReq::get('keywords'));
-        $where = ' 1 ';
+        $where = ' sfz_name <> "" ';
         if($search && $keywords)
         {
             $where .= " and $search like '%{$keywords}%' ";
