@@ -22,9 +22,9 @@
 		<thead>
 		<tr>
 			<th>店铺名称</th>
+			<th>店铺创建时间</th>
 			<th>注册开店时间</th>
 			<th>店铺编号</th>
-			<th>店铺二维码</th>
 			<th>店铺类别</th>
 			<th>状态</th>
 			<th>操作</th>
@@ -40,10 +40,8 @@
 				</a>
 			</td>
 			<td title="{$item['register_time']}">{$item['register_time']}</td>
+			<td title="{$item['register_time']}">{$item['register_time']}</td>
 			<td title="{$item['register_time']}">{$item['identify_id']}</td>
-			<td title="{$item['register_time']}">
-				<img width="50" src="<?php echo IWeb::$app->config['image_host1'] . '/order/qrcode/identify_id/' . $item['identify_id'];?>">
-			</td>
 			<td title="{$item['category_name']}">{$item['category_name']} / {$item['rebate']}</td>
 			<td title="{$item['register_time']}">{if:$item['own_id']}已经被使用{else:}无人使用{/if}</td>
 			<td title="结算">

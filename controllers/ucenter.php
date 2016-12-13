@@ -51,20 +51,10 @@ class Ucenter extends IController implements userAuthorization
         $this->redirect('index');
     }
     function recommender_shop(){
-        $shop_query = new IQuery('shop');
-        $shop_query->where = 'recommender = ' . $this->user['user_id'];
-        $ret = $shop_query->find();
-        $this->shop_nums = null;
-        if(!empty($ret)) {
-            foreach ($ret as $key => $value){
-                $data[$key]['amount_tobe_booked'] = $this->get_amount_tobe_booked($value['identify_id']);
-                $data[$key]['identify_id'] = $value['identify_id'];
-                $data[$key]['name'] = $value['name'];
-                $data[$key]['address'] = $value['address'];
-            }
-            $this->data = $data;
-            $this->shop_nums= count($data);
-        }
+        $user_id   = $this->user['user_id'];
+        $memberObj = new IModel('member','balance');
+        $where     = 'user_id = '.$user_id;
+        $this->memberRow = $memberObj->getObj($where);
         $this->redirect('recommender_shop');
     }
     /*获取待ru'zhang*/
