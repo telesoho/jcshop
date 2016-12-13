@@ -117,7 +117,7 @@ class ticket
 		}
 		
 		/* 计算邮费 */
-        if ($is_delivery=1 || ($data['sum']>=$data['condition_price'] && $is_delivery!=2)){
+        if ($is_delivery==1 || ($data['sum']>=$data['condition_price'] && $is_delivery!=2)){
         	$data['delivery_money'] 	= 0; //满金额包邮
         } else {
         	//首重价格
@@ -234,7 +234,7 @@ class ticket
 		}
 		
 		/* 计算邮费 */
-		if ($is_delivery=1 || ($data['sum']>=$postage['condition'] && $is_delivery!=2)){
+		if ($is_delivery==1 || ($data['sum']>=$postage['condition'] && $is_delivery!=2)){
 			$data['deliveryPrice'] 			= 0;
 		} else {
 			//首重价格
