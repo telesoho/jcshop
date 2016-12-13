@@ -162,8 +162,8 @@
             <header class="flexbox">
                 <div class="choName" @click="showCate">{{choName}}</div>
                 <div class="brandList hidewrap">
-                    <select name="choBrand" id=""  @change="getSel">
-                        <option v-for="option in brand" :value="option.id">{{option.text}}</option>
+                    <select name="choBrand" id=""  @change="getSel" v-model="selected">
+                        <option v-for="option in brand" :value="option.brand_id">{{option.text}}</option>
                     </select>
                 </div>
             </header>
@@ -219,7 +219,7 @@
          data: {
              info:[],
              brand:[],
-             selected:'',
+             selected:'选择品牌',
              choName:'选择分类',
              choId:'',
              showModel:false,
