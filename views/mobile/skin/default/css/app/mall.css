@@ -1,0 +1,111 @@
+body,html{
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+}
+li{
+	list-style: none;
+}
+header{
+	width: 100%;
+	height: 2.4rem;
+}
+header img{
+	width: 100%;
+}
+#top{
+	height: 1.6rem;
+	width: 100%;
+	position: relative;
+}
+#top ul{
+	height: 1.6rem;
+	width: 100%;
+	display: -webkit-box;
+	text-align: center;
+}
+#top ul li{
+	-webkit-box-flex: 2;
+}
+#top ul li img{
+	margin-top:0.35rem ;
+}
+#top ul li p{
+	font-size:0.28rem;
+	color:#3d4245;
+	margin-top:0.15rem ;
+}
+#bottom{
+	width: 100%;
+	height: 2rem;
+}
+#bottom img{
+	width: 100%;
+}
+footer{
+	width: 100%;
+}
+footer ul{
+	/*margin:0 0.8rem 0 0.8rem;*/
+	width: 100%;
+	display:-webkit-flex;
+	-webkit-flex-wrap: wrap;
+	/*-webkit-justify-content: space-between;*/
+}
+footer ul li{
+	padding-left: 0.1rem;
+	border-left:1px solid #bbbbbb;
+	border-bottom:1px solid #bbbbbb;	
+}
+
+footer ul .shop{
+	width: 1.9rem;
+	display: block;
+	margin: 0 auto;
+	margin-top:0.48rem ;
+}
+footer ul li .p1{
+	width: 3.4rem;
+	overflow:hidden;
+	display: -webkit-box;
+	text-overflow:ellipsis;
+	-webkit-line-clamp: 2;
+	-o-text-overflow:ellipsis;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+	font-size:0.24rem;
+	color:#3d4245;
+	margin:0.32rem 0.1rem;
+}
+footer ul li .p2{
+	float: left;
+	width: 2.1rem;
+	margin-left:0.1rem;
+}
+footer ul li .p2 img{
+	width: 0.34rem;
+	height: 0.32rem;
+}
+
+footer ul li .p2 span{
+	font-size:0.22rem;
+	color:#ff6a49;
+}
+footer ul li .p3{
+	float: left;
+	font-size:0.24rem;
+	color:#bbbbbb;
+	margin-bottom:0.25rem ;
+}
+footer ul li .p3 span{
+	color:#ff6a49;
+}
+#xian{
+	background: #bbbbbb;
+	width:1px;
+	height:0.93rem;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-top:-0.46rem;
+}

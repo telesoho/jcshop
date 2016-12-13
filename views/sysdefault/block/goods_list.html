@@ -27,7 +27,7 @@
 				<tr>
 					<td>
 						<label class='attr'>
-							<input type='{echo:($this->type == null) ? 'checkbox' : $this->type}' name='id[]' value="{$item['goods_id']}" data='{echo:JSON::encode($item)}' />
+							<input type='{echo:($this->type == null) ? 'checkbox' : $this->type}' name='id[]' value="{$item['goods_id']}" data='{echo:str_replace("'","",JSON::encode($item))}' />
 							{$item['goods_no']}
 						</label>
 					</td>
