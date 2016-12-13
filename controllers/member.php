@@ -878,7 +878,7 @@ class Member extends IController implements adminAuthorization
     }
     function recommender_settlement(){
         $recommender_id = IFilter::act(IReq::get('uid'),'int');
-        shop::settlement_recommender_orders($recommender_id);
+        shop::settlement_recommender_orders($recommender_id, $this->admin['admin_id']);
         $this->redirect('recommender_list');
 //        var_dump($shop_data);
     }

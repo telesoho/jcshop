@@ -65,6 +65,9 @@ class ticket
 		$ticket_data 				= $rel['data'];
 		$data['final_sum'] 			= $data['sum'];
 		
+		/* 包邮 */
+		$is_delivery 				= 0; //是否包邮[0正常计算-1包邮-2不包邮]
+		
 		/* 优惠券类型 */
 		switch ($ticket_data['type']){
 			//满减券
@@ -76,15 +79,45 @@ class ticket
 				if($data['sum'] < $rule[0])
 					return apireturn::go('002014');
 				//计算优惠
-				$data['sum'] = $data['final_sum'] = $data['sum'] - $rule[1];
+				$money 					= $data['sum']-$rule[1];
+				$data['sum'] = $data['final_sum'] = $money<=0 ? 0 : $money;
 				$msg 					= '满'.$rule[0].'减'.$rule[1].'优惠券';
 				break;
+			//无门槛券
+    		case 2:
+    			//计算优惠
+				$money 					= $data['sum']-$ticket_data['rule'];
+				$data['sum'] = $data['final_sum'] = $money<=0 ? 0 : $money;
+				$msg 					= $ticket_data['rule'].'元，无门槛券';
+    			break;
+    		//折扣券
+    		case 3:
+    			//计算优惠
+				$money 					= $data['sum']*$ticket_data['rule'];
+				$data['sum'] = $data['final_sum'] = $money<=0 ? 0 : $money;
+				$msg 					= ($ticket_data['rule']*10).'折，折扣券';
+    			break;
+    		//商务合作券
+    		case 4:
+    			$is_delivery 			= 2; //不包邮
+    			//计算优惠
+    			$money 					= $data['sum']-$ticket_data['rule'];
+				$data['sum'] = $data['final_sum'] = $money<=0 ? 0 : $money;
+				$msg 					= $ticket_data['rule'].'元，商务合作券（不包邮）';
+    			break;
+    		//包邮券
+    		case 5:
+    			$is_delivery 			= 1; //包邮
+    			break;
+    		//税值券
+    		case 6:
+//     			break;
 			default:
 				return apireturn::go('002012');
 		}
 		
 		/* 计算邮费 */
-        if ($data['sum'] >= $data['condition_price']){
+        if ($is_delivery=1 || ($data['sum']>=$data['condition_price'] && $is_delivery!=2)){
         	$data['delivery_money'] 	= 0; //满金额包邮
         } else {
         	//首重价格
@@ -152,10 +185,9 @@ class ticket
 		$rel 						= self::checkActivity($ticket_aid);
 		if($rel['code']>0) return $rel;
 		$ticket_data 				= $rel['data'];
-		/* 优惠券改为已使用 */
-		$model_ticket 				= new IModel('activity_ticket_access');
-		$model_ticket->setData(array('status'=>2));
-		$model_ticket->update('`id`='.$ticket_aid);
+		
+		/* 是否包邮 */
+		$is_delivery 				= 0; //是否包邮[0正常计算-1包邮-2不包邮]
 		
 		/* 优惠券类型 */
 		switch ($ticket_data['type']){
@@ -168,14 +200,41 @@ class ticket
 				if($data['sum'] < $rule[0])
 					return apireturn::go('002014');
 				//计算优惠
-				$data['sum'] 			= $data['sum'] - $rule[1];
+				$money 					= $data['sum'] - $rule[1];
+				$data['sum'] 			= $money<=0 ? 0 : $money;
 				break;
+			//无门槛券
+			case 2:
+				//计算优惠
+				$money 					= $data['sum']-$ticket_data['rule'];
+				$data['sum'] 			= $money<=0 ? 0 : $money;
+				break;
+			//折扣券
+			case 3:
+				//计算优惠
+				$money 					= $data['sum']*$ticket_data['rule'];
+				$data['sum'] 			= $money<=0 ? 0 : $money;
+				break;
+			//商务合作券
+			case 4:
+				$is_delivery 			= 2; //不包邮
+				//计算优惠
+				$money 					= $data['sum']-$ticket_data['rule'];
+				$data['sum'] 			= $money<=0 ? 0 : $money;
+				break;
+			//包邮券
+			case 5:
+				$is_delivery 			= 1; //包邮
+				break;
+			//税值券
+			case 6:
+//     			break;
 			default:
 				return apireturn::go('002012');
 		}
 		
 		/* 计算邮费 */
-		if ($data['sum'] >= $postage['condition']){
+		if ($is_delivery=1 || ($data['sum']>=$postage['condition'] && $is_delivery!=2)){
 			$data['deliveryPrice'] 			= 0;
 		} else {
 			//首重价格
@@ -185,6 +244,12 @@ class ticket
 				$data['deliveryPrice'] 		+= ceil(($data['weight']-$postage['delivery']['first_weight'])/$postage['delivery']['second_weight'])*$postage['delivery']['second_price'];
 			}
 		}
+		
+		/* 优惠券改为已使用 */
+		$model_ticket 				= new IModel('activity_ticket_access');
+		$model_ticket->setData(array('status'=>2));
+		$model_ticket->update('`id`='.$ticket_aid);
+		
 		return apireturn::go('0',$data);
 	}
 
@@ -218,10 +283,10 @@ class ticket
 	public static function checkActivity($ticket_aid){
 		$user_id 					= IWeb::$app->getController()->user['user_id'];
 		/* 获取优惠券信息 */
-		$query 						= new IQuery('activity as m');
-		$query->join 				= 'LEFT JOIN activity_ticket AS t ON t.pid=m.id LEFT JOIN activity_ticket_access AS a ON a.ticket_id=t.id';
+		$query 						= new IQuery('activity_ticket as m');
+		$query->join 				= 'LEFT JOIN activity_ticket_access AS a ON a.ticket_id=m.id';
 		$query->where 				= 'a.id='.$ticket_aid.' AND a.user_id='.$user_id;
-		$query->fields 				= 'm.start_time,m.end_time,m.status as astatus,t.name,t.type,t.rule,a.status';
+		$query->fields 				= 'm.start_time,m.end_time,m.name,m.type,m.rule,a.status';
 		$query->limit 				= 1;
 		$data 						= $query->find();
 		//判断优惠券是否存在
@@ -232,8 +297,6 @@ class ticket
 			return apireturn::go('002008');
 		if( $data['end_time'] < time() )
 			return apireturn::go('002009');
-		if( $data['astatus'] != 1 )
-			return apireturn::go('002010');
 		if( $data['status'] != 1 )
 			return apireturn::go('002011');
 		return apireturn::go('0',$data);

@@ -209,21 +209,21 @@ class Apic extends IController
     	$user_id 					= $this->user['user_id'];
     	if( empty($user_id) ) $this->json_echo( apireturn::go('001001') );
     	/* 可使用优惠券 */
-    	$query 						= new IQuery('activity as m');
-    	$query->join 				= 'LEFT JOIN activity_ticket AS t ON t.pid=m.id LEFT JOIN activity_ticket_access AS a ON a.ticket_id=t.id';
+    	$query 						= new IQuery('activity_ticket as m');
+    	$query->join 				= 'LEFT JOIN activity_ticket_access AS a ON a.ticket_id=m.id';
     	switch($type){
     		//可使用
     		case 1:
-    			$where 				= 'a.user_id='.$user_id.' AND m.status=1 AND a.status=1 AND m.end_time>='.time();
+    			$where 				= 'a.user_id='.$user_id.' AND a.status=1 AND m.end_time>='.time();
     			break;
     		//已过期
     		case 2:
-    			$where 				= 'a.user_id='.$user_id.' AND (m.status!=1 OR a.status!=1 OR m.end_time<'.time().')';
+    			$where 				= 'a.user_id='.$user_id.' AND (a.status!=1 OR m.end_time<'.time().')';
     			break;
-    		default:return apireturn::go('002015');
+    		default: $this->json_echo( apireturn::go('002015') );
     	}
     	$query->where 				= $where;
-    	$query->fields 				= 'a.id,t.name,m.start_time,m.end_time,t.type,t.rule';
+    	$query->fields 				= 'a.id,m.name,m.start_time,m.end_time,m.type,m.rule';
     	$query->page 				= $page<1 ? 1 : $page;
     	$query->pagesize 			= 100;
     	$data 						= $query->find();
@@ -245,13 +245,25 @@ class Apic extends IController
     					$data[$k]['msg'] 	= '抵'.$v['rule'].'元';
     					$data[$k]['detail'] = $v['rule'].'元无门槛券';
     					break;
+    				//折扣券
     				case 3:
+    					$data[$k]['msg'] 	= '全场'.($v['rule']*10).'折';
+    					$data[$k]['detail'] = ($v['rule']*10).'折折扣券';
     					break;
+    				//商务合作券
     				case 4:
+    					$data[$k]['msg'] 	= '抵'.$v['rule'].'元（不包邮）';
+    					$data[$k]['detail'] = $v['rule'].'元商务合作券';
     					break;
+    				//包邮券
     				case 5:
+    					$data[$k]['msg'] 	= '包邮券';
+    					$data[$k]['detail'] = '全场无上限包邮';
     					break;
+    				//税值券
     				case 6:
+    					$data[$k]['msg'] 	= '税值券';
+    					$data[$k]['detail'] = '税值券';
     					break;
     			}
     		}
@@ -590,7 +602,7 @@ class Apic extends IController
     		$queryUser->fields 		= 'm.id';
     		$dataUser 		 		= $queryUser->find();
     		if(!empty($dataUser)){
-    			foreach($dataUser[0] as $k => $v){
+    			foreach($dataUser as $k => $v){
     				$user[] 		= $v['id'];
     			}
     		}
@@ -1719,7 +1731,11 @@ class Apic extends IController
         } else {
             $temp = '( user_id = ' . $this->user['user_id'] . ')';
         }
-        $temp .= ' and is_shop_checkout = 0 and seller_id = ' . $shop_data[0]['identify_id'];
+        if ($if_partner){
+            $temp .= ' and is_recommender_checkout = 0 and seller_id = ' . $shop_data[0]['identify_id'];
+        } else {
+            $temp .= ' and is_shop_checkout = 0 and seller_id = ' . $shop_data[0]['identify_id'];
+        }
         $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
         $last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
         $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
@@ -1731,7 +1747,7 @@ class Apic extends IController
             $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
             $goods_total_price = 0;
             foreach($temp as $key => $good){
-                $goods_total_price += $good['real_price'];
+                $goods_total_price += $good['real_price'] * $good['goods_nums'];
                 $good_info = JSON::decode($good['goods_array']);
                 $temp[$key]['good_info'] = $good_info;
                 $temp[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$temp[$key]['img']."/w/160/h/160");
@@ -1851,8 +1867,8 @@ class Apic extends IController
         $shop_query->where = 'recommender = ' . $this->user['user_id'];
         $shop_data = $shop_query->find();
         foreach ($shop_data as $key=>$value){
-            $settlement_shop_query = new IQuery('settlement_shop');
-            $settlement_shop_query->where = 'seller_id = ' . $value['identify_id'] . ' and date_format( settlement_time, \'%Y%m\' ) =' . $year . $month;
+            $settlement_shop_query = new IQuery('settlement_recommender');
+            $settlement_shop_query->where = 'recommender_id = ' . $this->user['user_id'] . ' and date_format( settlement_time, \'%Y%m\' ) =' . $year . $month;
             $settlement_shop_data = $settlement_shop_query->find();
             $ret[$key]['name'] = $value['name'];
             $ret[$key]['amount_available'] = $value['amount_available'];
@@ -1870,7 +1886,7 @@ class Apic extends IController
                 $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$v['id']));
                 $goods_total_price = 0; //商品总金额
                 foreach($temp as $key => $good){
-                    $goods_total_price += $good['real_price'];
+                    $goods_total_price += $good['real_price']*$good['goods_nums'];
                     $good_info = JSON::decode($good['goods_array']);
                     $temp[$key]['good_info'] = $good_info;
                     $temp[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$temp[$key]['img']."/w/160/h/160");

@@ -27,8 +27,8 @@
 				<tr>
 					<th>活动时间：</th>
 					<td>
-						<input type='text' name='start_time' class='Wdate' pattern='date' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" alt='请填写一个日期' /> ～
-						<input type='text' name='end_time' class='Wdate' pattern='date' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" alt='请填写一个日期' />
+						<input type='text' name='start_time' class='Wdate' pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' /> ～
+						<input type='text' name='end_time' class='Wdate' pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' />
 						<label>* 活动时间段</label>
 					</td>
 				</tr>
@@ -65,8 +65,8 @@
 								</span>
 							</label>
 							<label style="display:block;">有效时间段：
-								<input type='text' name='ticket_start_time[]' class='Wdate' pattern='date' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" alt='请填写一个日期' /> ～
-								<input type='text' name='ticket_end_time[]' class='Wdate' pattern='date' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" alt='请填写一个日期' />
+								<input type='text' name='ticket_start_time[]' class='Wdate' pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' /> ～
+								<input type='text' name='ticket_end_time[]' class='Wdate' pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' />
 							</label>
 						</fieldset>
 					</td>
@@ -89,7 +89,10 @@
 							</label>
 							<div id="grow_ticket"></div>
 							<div id="grow_goods">
-								<button class='btn' type='button' onclick="searchGoods('{url:/block/search_goods/type/checkbox}',searchGoodsCallback);"><span>选择商品</span></button>
+								<button class='btn' type='button' onclick="page.searchGoods(this);"><span>选择商品</span></button>
+								<div id="goodsListBox" style="border:1px solid #F99840;">
+									<input type='hidden' name='goods_id[]' value='' />
+								</div>
 							</div>
 						</fieldset>
 					</td>
@@ -99,6 +102,38 @@
 		</form>
 	</div>
 </div>
+
+
+<!--商品模板-->
+<script type="text/html" id="goodsItemTemplate">
+<tr>
+	<td>
+		<input value="{{<%=templateData['goods_no']%>}}">
+	</td>
+	<td>
+		<input type='hidden' name='goods_id[]' value='<%=templateData['goods_id']%>' />
+		<img src="<?php echo IUrl::creatUrl("")."<%=templateData['img']%>";?>" style="width:80px;" />
+		<%=templateData['name']%>
+	</td>
+	<td>
+
+		    <%if(templateData['is_del'] =='0'){%>
+		        已上架
+			<%}%>
+            <%if(templateData['is_del'] =='1'){%>
+				已删除
+			<%}%>
+            <%if(templateData['is_del'] =='2'){%>
+				已下架
+			<%}%>
+            <%if(templateData['is_del'] =='3'){%>
+				申请上架中
+			<%}%>
+	</td>
+	<td style="text-align:center"><img src="<?php echo $this->getWebSkinPath()."images/admin/icon_del.gif";?>" alt="删除" title="删除" onclick="$(this).parent().parent().remove();" /></td>
+</tr>
+</script>
+
 
 <script type='text/javascript'>
 window.onload = function(){
@@ -111,6 +146,7 @@ var page = {
 	maxlength 			: 5, //最多数据条数
 	htmlTicket 			: null, //优惠券的html
 	htmlGrow 			: null, //礼品优惠券的html
+	goodsList 			: null,
 	//初始化
 	init 	 			: function(){
 		page.changeType( '#acticity_type_1' ); //活动类型
@@ -137,14 +173,15 @@ var page = {
 	//更改礼包类型
 	changeTypeGrow 				: function(obj){
 		var thisObj 	= $(obj);
+		var thisInfo 	= thisObj.parents('.datainfo');
 		switch(thisObj.val()){
 			case '1':
-				$('#grow_ticket').show();
-				$('#grow_goods').hide();
+				thisInfo.find('#grow_ticket').show();
+				thisInfo.find('#grow_goods').hide();
 				break;
 			case '2':
-				$('#grow_ticket').hide();
-				$('#grow_goods').show();
+				thisInfo.find('#grow_ticket').hide();
+				thisInfo.find('#grow_goods').show();
 				break;
 		}
 	},
@@ -192,94 +229,51 @@ var page = {
 		page.htmlTicket 	= html.prop('outerHTML');
 
 		//礼品优惠券
-		html.find('input[name="ticket_name[]"]').attr('name','grow_name[]');
-		html.find('select[name="ticket_type[]"]').attr('name','grow_type[]');
-		html.find('input[name="ticket_rule[]"]').attr('name','grow_rule[]');
-		html.find('input[name="ticket_start_time[]"]').attr('name','grow_start_time[]');
-		html.find('input[name="ticket_end_time[]"]').attr('name','grow_end_time[]');
+		html.find('input[name="ticket_name[]"]').attr('name','grow_ticket_name[]');
+		html.find('select[name="ticket_type[]"]').attr('name','grow_ticket_type[]');
+		html.find('input[name="ticket_rule[]"]').attr('name','grow_ticket_rule[]');
+		html.find('input[name="ticket_start_time[]"]').attr('name','grow_ticket_start_time[]');
+		html.find('input[name="ticket_end_time[]"]').attr('name','grow_ticket_end_time[]');
 		html.find('legend').remove();
 		$('#grow_ticket').append( html.html() ); //礼品优惠券html
 
 		//礼包html
 		var htmlGrow 		= $('#htmlGrow').clone(true);
 		htmlGrow.find('input:not(:button)').val(''); //清空内容
+		htmlGrow.find('#grow_ticket').show();
+		htmlGrow.find('#grow_goods').hide();
 		page.htmlGrow = htmlGrow.prop('outerHTML');
+	},
+	//开始搜索商品
+	searchGoods 			: function(obj){
+		page.goodsList 		= $(obj).next('#goodsListBox');
+		searchGoods('{url:/block/search_goods/type/checkbox}',page.searchGoodsCallback);
+	},
+	//输入筛选商品的条件
+	searchGoodsCallback 	: function(goodsList){
+		var result = [];
+		if(goodsList.length != 1){
+			_inform('只能选择一件商品');
+			return false;
+		}
+		goodsList.each(function(k,v){
+			var temp = $.parseJSON($(this).attr('data'));
+			if(temp.is_del != '0'){
+				_inform('必须选择上架商品');
+				return false;
+			}
+			result.push(temp);
+		});
+		page.createGoodsList(result);
+	},
+	//创建商品数据
+	createGoodsList 		: function(goodsList){
+		for(var i in goodsList){
+			var templateHTML = template.render('goodsItemTemplate',{"templateData":goodsList[i]});
+			page.goodsList.html(templateHTML);
+		}
 	},
 }
 
-//输入筛选商品的条件
-function searchGoodsCallback(goodsList)
-{
-	var result = [];
-	goodsList.each(function()
-	{
-		var temp = $.parseJSON($(this).attr('data'));
-		result.push(temp);
-	});
-	createGoodsList(result);
-}
-
-//创建商品数据
-function createGoodsList(goodsList)
-{
-	for(var i in goodsList)
-	{
-		var templateHTML = template.render('goodsItemTemplate',{"templateData":goodsList[i]});
-		$('#goodsListBox').append(templateHTML);
-	}
-}
-
-/**
- * 进行商品筛选
- * @param url string 执行的URL
- * @param callback function 筛选成功后执行的回调函数
- */
-function searchGoods(url,callback)
-{
-	var step = 0;
-	art.dialog.open(url,
-	{
-		"id":"searchGoods",
-		"title":"商品筛选",
-		"okVal":"执行",
-		"button":
-		[{
-			"name":"后退",
-			"callback":function(iframeWin,topWin)
-			{
-				if(step > 0)
-				{
-					iframeWin.window.history.go(-1);
-					this.size(1,1);
-					step--;
-				}
-				return false;
-			}
-		}],
-		"ok":function(iframeWin,topWin)
-		{
-			if(step == 0)
-			{
-				iframeWin.document.forms[0].submit();
-				step++;
-				return false;
-			}
-			else if(step == 1)
-			{
-				var goodsList = $(iframeWin.document).find('input[name="id[]"]:checked');
-
-				//添加选中的商品
-				if(goodsList.length == 0)
-				{
-					alert('请选择要添加的商品');
-					return false;
-				}
-				//执行处理回调
-				callback(goodsList);
-				return true;
-			}
-		}
-	});
-}
 
 </script>

@@ -32,6 +32,7 @@
                 <col width="30px" />
                 <col width="120px" />
                 <col width="80px" />
+                <col width="80px" />
                 <col width="70px" />
                 <col width="50px" />
                 <col width="120px" />
@@ -42,6 +43,7 @@
             <tr>
                 <th>选择</th>
                 <th>用户名</th>
+                <th>合伙人编号</th>
                 <th>身份证姓名</th>
                 <th>性别</th>
                 <th>余额</th>
@@ -52,13 +54,14 @@
 
             <tbody>
             {set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
-            {query: name=user as u join=left join member as m on m.user_id eq u.id fields=m.*,u.username,u.sfz_name,u.amount_available where=m.status neq 2 and $where order=m.user_id desc page=$page}
+            {query: name=user as u join=left join member as m on m.user_id eq u.id fields=m.*,u.username,u.sfz_name,u.recommender_id,u.amount_available where=m.status neq 2 and $where order=m.user_id desc page=$page}
             <tr>
                 <td><input name="check[]" type="checkbox" value="{$item['user_id']}" /></td>
                 <td title="{echo:htmlspecialchars($item['username'])}">{$item['username']}</td>
-                <td title="{$group[$item['group_id']]}">{$item['sfz_name']}</td>
+                <td title="">{$item['recommender_id']}</td>
+                <td title="">{$item['sfz_name']}</td>
                 <td>{if:$item['sex']=='1'}男{else:}女{/if}</td>
-                <td title="{$item['amount_available']}">{$item['amount_available']}</td>
+                <td title="{$item['balance']}">{$item['balance']}</td>
                 <td title="{$item['time']}">{$item['time']}</td>
                 <td>
                     <a href="{url:/member/recommender_settlement/uid/$item[user_id]}">结算</a>
