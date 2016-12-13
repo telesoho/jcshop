@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="content" v-if="state==1">
-            <template v-if="info1">
+            <template v-if="info1.length>0">
                 <div class="item item1" v-for="item1 in info1">
                     <img src="/views/mobile/skin/default/image/jmj/ticket/002.png" alt="" class="imgBg"/>
                     <div class="text1 flexbox">
@@ -57,7 +57,7 @@
             </section>
         </div>
         <div class="content" v-if="state==2" >
-            <template v-if="info2">
+            <template v-if="info2.length>0">
                 <div class="item item2" v-for="item2 in info2">
                     <img src="/views/mobile/skin/default/image/jmj/ticket/002.png" alt="" class="imgBg"/>
                     <div class="text1 flexbox">

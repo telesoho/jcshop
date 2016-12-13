@@ -10,11 +10,92 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/score/products.css?v=<?php echo time(); ?>" />
 </head>
 <body>
+<div id="productInfo">
+    <header>
+        <div class="headImg flexbox">
+            <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""   />
+        </div>
+        <div class="headTitle">
+            <div class="name">
+                这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+            </div>
+            <div class="time">
+                兑换日期：  2016-10-11  10:00 ～ 2017-01-12 20:16
+            </div>
+            <div class="price">
+                <div class="price1">
+                    <span style="font-size:0.24rem;">¥</span> <span style="margin-left:-0.1rem;">320.00元</span>
+                </div>
+                <div class="score">
+                    <span >需使用积分:</span><span>5000</span>
+                </div>
+            </div>
+            <div class="orignPrice">
+                <span>原价:</span><s> <span>¥</span><span>640.00元</span> </s>
+            </div>
+        </div>
+    </header>
+    <article class="product_article">
+        <div class="dis">
+            <div class="top">
+                <img src="/views/mobile/skin/default/image/jmj/score/dis.png" alt="" />
+                <span>基本描述</span>
+            </div>
+            <div class="content">
+                POLA宝丽white shot ix美白丸180粒，POLA宝丽whiteshot ix美白丸180粒POLA宝丽。white shot ix美白丸丸180粒POLA宝丽。whiteshot ix美白丸180粒POLA宝丽。white shot ix美白丸180粒POLA宝丽white。
+                shot ix美白丸180粒POLA宝丽white shot ix美白丸180粒POLA宝丽whiteshot ix美白丸。
+            </div>
+        </div>
+        <div class="rule">
+            <div class="top">
+                <img src="/views/mobile/skin/default/image/jmj/score/tip2.png" alt="" style="width:0.28rem;height:0.34rem"/>
+                <span style="top:0">兑换规则</span>
+            </div>
+            <div class="content">
+                申请兑换即可，扣除相应积分。仅供10件，先到先得。
+            </div>
+        </div>
+        <div class="tips">
+            <div class="top">
+                <img src="/views/mobile/skin/default/image/jmj/score/tip1.png" alt="" style="width:0.28rem;height:0.25rem"/>
+                <span style="top:0.02rem">温馨提示</span>
+            </div>
+            <div class="content">
+                1，到货时间通常为成功兑换后的10天<br/>
+                2，兑换成功后，不支持退换<br/>
+                3，每位只能兑换一个<br/>
+            </div>
+        </div>
+    </article>
+    <div style="height:2.78rem"></div>
+    <footer class="cal">
+        <div class="top">
+            <div class="price">
+                <span>¥</span><span>320.00</span><span>（积分已抵扣320元）</span>
+            </div>
+            <div class="num">
+                剩余12件
+            </div>
+        </div>
+        <div class="bottom flexbox">
+            <span>立即兑换</span>
+        </div>
+    </footer>
+</div>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+<script>
+    var vm= new Vue({
+        el:'#productInfo',
+        data:{
+
+        },
+    })
+</script>
 </body>
 </html>
