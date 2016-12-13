@@ -1712,7 +1712,7 @@ class Order extends IController implements adminAuthorization
 //                $identify_id = $i . rand(1000, 9999) . date('is',time());
                 $initial_num = $this->get_shop_category_initial_num($category_id);
                 $identify_id = $initial_num;
-                $shop_model->setData(['name'=>$name . ($count + $i),'register_time'=>date('Y-m-d H:i:s') ,'address'=>$address,'identify_id'=>$identify_id,'category_id'=>$category_id]);
+                $shop_model->setData(['name'=>$name . ($count + $i),'create_time'=>date('Y-m-d H:i:s') ,'address'=>$address,'identify_id'=>$identify_id,'category_id'=>$category_id]);
                 $ret = $shop_model->add();
                 if ($ret){
                     continue;

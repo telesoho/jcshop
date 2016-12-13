@@ -7,13 +7,10 @@
 </div>
 
 	<div class="content">
-		<form method="post">
+		<form method="post" action="">
 			<input name="name" placeholder="店铺名称"><br>
 			<input name="address" placeholder="店铺地址"><br>
-			<hr>批处理生成个数：<br>
-			5个<input type="radio" name="nums" value="5"><br>
-			10个<input type="radio" name="nums" value="10"><br>
-			20个<input type="radio" name="nums" value="20"><br>
+			<input name="nums" placeholder="批处理生成个数"><br>
 			<hr>
 			店铺类别：<select name="category_id">
 				{foreach:items = $this->shop_category_query->find()}
