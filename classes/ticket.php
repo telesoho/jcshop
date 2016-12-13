@@ -17,14 +17,12 @@ class ticket
 		switch($ticket_data['type']){
 			//折扣券
 			case 1 :
-				$data['sum'] 			= $data['sum'] * $ticket_data['ratio'];
-				$data['final_sum'] 		= $data['sum'];
+				$data['sum'] = $data['final_sum'] = $data['sum'] * $ticket_data['ratio'];
 				$msg 					= ($ticket_data['ratio']*10).'折优惠券';
 				break;
-				//抵扣券
+			//抵扣券
 			case 2 :
-				$data['sum'] 			= $data['sum'] - $ticket_data['money'];
-				$data['final_sum'] 		= $data['sum'];
+				$data['sum'] = $data['final_sum'] = $data['sum'] - $ticket_data['money'];
 				$msg 					= '抵'.$ticket_data['money'].'元优惠券';
 				break;
 			default:
@@ -78,7 +76,7 @@ class ticket
 				if($data['sum'] < $rule[0])
 					return apireturn::go('002014');
 				//计算优惠
-				$data['sum'] 			= $data['sum'] - $rule[1];
+				$data['sum'] = $data['final_sum'] = $data['sum'] - $rule[1];
 				$msg 					= '满'.$rule[0].'减'.$rule[1].'优惠券';
 				break;
 			default:

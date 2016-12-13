@@ -8,3 +8,4 @@ config.php/
 test.html/
 .gitignore/
 /config/config.php
+/config/site_config.php
