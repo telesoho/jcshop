@@ -51,6 +51,9 @@ class Ucenter extends IController implements userAuthorization
         $this->redirect('index');
     }
     function recommender_shop(){
+        $shop_query = new IQuery('shop');
+        $shop_query->where = 'recommender = ' . $this->user['user_id'];
+        $this->shop_nums = count($shop_query->find());
         $user_id   = $this->user['user_id'];
         $memberObj = new IModel('member','balance');
         $where     = 'user_id = '.$user_id;

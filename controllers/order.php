@@ -1622,71 +1622,47 @@ class Order extends IController implements adminAuthorization
             foreach ($user_data as $key=>$value){
                 $temp .= ' or user_id = ' . $value['id'];
             }
-            $temp = explode('or',$temp,2)[1];
-//            $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
-//            $ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval); // 已完成
+            $temp = '(' . explode('or',$temp,2)[1] . ')';
             $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
-            $this->order_data = Api::run('getOrderList', $temp, 'is_shop_checkout=0 and pay_type != 0 and status = 5 ' . $date_interval)->find(); // 已完成
+            $this->order_data = Api::run('getOrderList', $temp, ' is_shop_checkout=0 and pay_type != 0 and status = 5 ' . $date_interval)->find(); // 已完成
         } else {
             $this->shop_data = null;
             $this->order_data = null;
         }
-//        var_dump($this->order_data);
-
-//        $url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers';
-//        $nonce_str = $this->generate_password(30);
-//        $params = array(
-//            'appid' => 'jmj20161111',
-//            'mchid' => '1406917802',
-//            'device_info' => '',
-//            'nonce_str' => $nonce_str,
-//            'sign' => '',
-//            'partner_trade_no' => '321654987',
-//            'openid' => '',
-//            'check_name' => '',
-//            're_user_name' => '',
-//            'amount' => '',
-//            'desc' => '',
-//            'spbill_create_ip' => '',
-//        );
-////        sort($params);
-//        ksort($params,SORT_STRING);
-////        $data = $this->curl_post_ssl('https://api.mch.weixin.qq.com/secapi/pay/refund', 'merchantid=1001000');
-//        $data = $this->curl_post_ssl('https://api.mch.weixin.qq.com/secapi/pay/refund', $params);
-//        var_dump($data);
         $this->redirect('order_shop_settlement');
     }
     function settlement_money(){
         $id = IFilter::act(IReq::get('id'),'int');
-        $shop_query = new IQuery('shop');
-        $shop_query->where = 'id = ' . $id;
-        $shop_data = $shop_query->find()[0];
-        $seller_id = $shop_data['identify_id'];
-        $amount_available = $shop_data['amount_available'];
-        $category_id = $shop_data['category_id'];
-        $temp = 'is_shop_checkout = 0 and seller_id = ' . $seller_id;
-        $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
-        $order_data = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval)->find(); // 已完成
-        $shop_category_query = new IQuery('shop_category');
-        $shop_category_query->where = ' id = ' . $category_id;
-        $shop_category_data = $shop_category_query->find();
-        foreach ($order_data as $k=>$v){
-            $settlement_model = new IModel('settlement_shop');
-            $rebate = $shop_category_data[0]['rebate'];
-            $rebate_amount = $v['real_amount']*$shop_category_data[0]['rebate'];
-            $settlement_model->setData(['order_id'=>$v['id'], 'goods_amount'=>$v['real_amount'],'rebate'=> $rebate, 'rebate_amount' => $rebate_amount,'settlement_time'=>date('Y-m-d H:i:s', time()), 'seller_id'=>$seller_id ]);
-            $ret = $settlement_model->add();
-            if ($ret){
-                $order_model = new IModel('order');
-                $order_model->setData(['is_shop_checkout' => 1]);
-                $ret = $order_model->update('id = ' . $v['id']);
-                if ($ret){
-                    $shop_model = new IModel('shop');
-                    $shop_model->setData(['amount_available' =>$amount_available+$rebate_amount ]);
-                    $shop_model->update('identify_id = ' . $seller_id);
-                }
-            }
-        }
+        shop::settlement_shop_orders($id, $this->admin['admin_id']);
+//        $shop_query = new IQuery('shop');
+//        $shop_query->where = 'id = ' . $id;
+//        $shop_data = $shop_query->find()[0];
+//        $seller_id = $shop_data['identify_id'];
+//        $amount_available = $shop_data['amount_available'];
+//        $category_id = $shop_data['category_id'];
+//        $temp = 'is_shop_checkout = 0 and seller_id = ' . $seller_id;
+//        $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
+//        $order_data = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 5 ' . $date_interval)->find(); // 已完成
+//        $shop_category_query = new IQuery('shop_category');
+//        $shop_category_query->where = ' id = ' . $category_id;
+//        $shop_category_data = $shop_category_query->find();
+//        foreach ($order_data as $k=>$v){
+//            $settlement_model = new IModel('settlement_shop');
+//            $rebate = $shop_category_data[0]['rebate'];
+//            $rebate_amount = $v['real_amount']*$shop_category_data[0]['rebate'];
+//            $settlement_model->setData(['order_id'=>$v['id'], 'goods_amount'=>$v['real_amount'],'rebate'=> $rebate, 'rebate_amount' => $rebate_amount,'settlement_time'=>date('Y-m-d H:i:s', time()), 'seller_id'=>$seller_id ]);
+//            $ret = $settlement_model->add();
+//            if ($ret){
+//                $order_model = new IModel('order');
+//                $order_model->setData(['is_shop_checkout' => 1]);
+//                $ret = $order_model->update('id = ' . $v['id']);
+//                if ($ret){
+//                    $shop_model = new IModel('shop');
+//                    $shop_model->setData(['amount_available' =>$amount_available+$rebate_amount ]);
+//                    $shop_model->update('identify_id = ' . $seller_id);
+//                }
+//            }
+//        }
         $this->redirect('order_shop_settlement/id/'.$id);
     }
     function order_shop_category(){
@@ -1712,7 +1688,7 @@ class Order extends IController implements adminAuthorization
 //                $identify_id = $i . rand(1000, 9999) . date('is',time());
                 $initial_num = $this->get_shop_category_initial_num($category_id);
                 $identify_id = $initial_num;
-                $shop_model->setData(['name'=>$name . ($count + $i),'create_time'=>date('Y-m-d H:i:s') ,'address'=>$address,'identify_id'=>$identify_id,'category_id'=>$category_id]);
+                $shop_model->setData(['name'=>$name . ($count + $i),'create_time'=>date('Y-m-d H:i:s',time()) ,'address'=>$address,'identify_id'=>$identify_id,'category_id'=>$category_id]);
                 $ret = $shop_model->add();
                 if ($ret){
                     continue;
