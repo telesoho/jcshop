@@ -600,6 +600,7 @@ class Apic extends IController
     	$query 						= new IQuery('order');
     	$query->where 				= 'if_del=0 AND '.$where.' AND user_id IN ('.implode(',',array_unique($user)).')';
     	$query->fields 				= 'id,order_no,order_amount,status,pay_type,distribution_status';
+    	$query->order 				= 'id desc';
     	$query->page 				= $page<1 ? 1 : $page;
     	$query->pagesize 			= 10;
     	$data 						= $query->find();

@@ -1,12 +1,11 @@
 {js:my97date}
 
 <div class="headbar">
-	<div class="position"><span>营销</span><span>></span><span>优惠券活动</span><span>></span><span>批量添加优惠券</span></div>
+	<div class="position"><span>营销</span><span>></span><span>活动</span><span>></span><span>添加活动</span></div>
 </div>
 <div class="content_box">
 	<div class="content form_content">
-		<form action="{url:/market/acticity_add}" name='ticket_edit'  method="post">
-			<input type='hidden' name='id' />
+		<form action="{url:/market/activity_add}" name='ticket_edit'  method="post">
 			<table class="form_table">
 				<col width="150px" />
 				<col />
@@ -16,38 +15,6 @@
 						<input type='text' name='name' class='normal' pattern='required' alt='' />
 						<label>* 请为此次活动命名</label>
 					</td>
-				</tr>
-				<tr>
-					<th>包含优惠券：</th>
-					<td class="datalist">
-						<fieldset style="width:100%;" class="datainfo">
-							<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>
-							<label>优惠券名称：<input name="ticket_name[]" class="small" type="text" value="" /></label>　
-							<label>类型：
-								<select name="ticket_type[]" class="auto" onchange="page.changeType(this);">
-									<option value="1">满减券</option>
-									<option value="2">无门槛券</option>
-									<option value="3">折扣券</option>
-									<option value="4">商务合作券</option>
-									<option value="5">包邮券</option>
-									<option value="6">税值券</option>
-								</select>
-							</label>　
-							<label id="rule_type">规则：
-								<input name="ticket_rule[]" class="small" type="text" value=""/>
-								<span id="rule_type_intro">
-									<span>*满m元减n元，如满300减50写作“300,50”</span>
-									<span>*抵扣金额，如抵50元则填“50”</span>
-									<span>*折扣率，如：八折则填“0.8”</span>
-									<span>*抵扣金额，如抵2000元则填“2000”</span>
-								</span>
-							</label>
-						</fieldset>
-					</td>
-				</tr>
-				<tr>
-					<th>优惠券总数量：</th>
-					<td><input name='num' type='text' class='small' pattern='int' alt='必须填写数字' /><label>* 优惠券总数量</label></td>
 				</tr>
 				<tr>
 					<th>分享获得积分数：</th>
@@ -65,6 +32,68 @@
 						<label>* 活动时间段</label>
 					</td>
 				</tr>
+				<tr>
+					<th>活动类型：</th>
+					<td>
+						优惠券<input id="acticity_type_1" type='checkbox' name='type[]' value="1" onchange="page.changeType(this);"/>　
+						消费成长<input id="acticity_type_2" type='checkbox' name='type[]' value="2" onchange="page.changeType(this);"/>
+					</td>
+				</tr>
+				<tr class="ticket" style="background-color:#DBEAF9;display:none;">
+					<th style="background-color:#DBEAF9;">包含优惠券：</th>
+					<td class="datalist">
+						<fieldset style="width:80%;" class="datainfo" id="htmlTicket">
+							<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>
+							<label>优惠券名称：<input name="ticket_name[]" class="small" type="text" value="" /></label>　
+							<label>类型：
+								<select name="ticket_type[]" class="auto" onchange="page.changeTypeTicket(this);">
+									<option value="1">满减券</option>
+									<option value="2">无门槛券</option>
+									<option value="3">折扣券</option>
+									<option value="4">商务合作券</option>
+									<option value="5">包邮券</option>
+									<option value="6">税值券</option>
+								</select>
+							</label>
+							<label id="rule_type">规则：
+								<input name="ticket_rule[]" class="small" type="text" value=""/>
+								<span id="rule_type_intro">
+									<span>*满m元减n元，如满300减50写作“300,50”</span>
+									<span>*抵扣金额，如抵50元则填“50”</span>
+									<span>*折扣率，如：八折则填“0.8”</span>
+									<span>*抵扣金额，如抵2000元则填“2000”</span>
+								</span>
+							</label>
+							<label style="display:block;">有效时间段：
+								<input type='text' name='ticket_start_time[]' class='Wdate' pattern='date' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" alt='请填写一个日期' /> ～
+								<input type='text' name='ticket_end_time[]' class='Wdate' pattern='date' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" alt='请填写一个日期' />
+							</label>
+						</fieldset>
+					</td>
+				</tr>
+				<tr class="ticket" style="background-color:#DBEAF9;display:none;">
+					<th style="background-color:#DBEAF9;">优惠券总数量：</th>
+					<td><input name='num' type='text' class='small' pattern='int' alt='必须填写数字' /><label>* 优惠券总数量</label></td>
+				</tr>
+				<tr class="grow" style="background-color:#FDEDE2;display:none;">
+					<th style="background-color:#FDEDE2;">包含礼品：</th>
+					<td class="datalist">
+						<fieldset style="width:80%;" class="datainfo" id="htmlGrow">
+							<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>
+							<label>消费金额数：<input name='grow_money[]' type='text' class='small' pattern='int' alt='必须填写数字' /></label>　
+							<label>
+								礼品类型：<select name="grow_type[]" class="auto" onchange="page.changeTypeGrow(this);">
+									<option value="1">优惠券</option>
+									<option value="2">商品</option>
+								</select>
+							</label>
+							<div id="grow_ticket"></div>
+							<div id="grow_goods">
+								<button class='btn' type='button' onclick="searchGoods('{url:/block/search_goods/type/checkbox}',searchGoodsCallback);"><span>选择商品</span></button>
+							</div>
+						</fieldset>
+					</td>
+				</tr>
 				<tr><td></td><td><button class="submit" type='submit'><span>确 定</span></button></td></tr>
 			</table>
 		</form>
@@ -73,26 +102,61 @@
 
 <script type='text/javascript'>
 window.onload = function(){
-	page.initTyle();
+	page.init();
 };
 
 var page = {
 	loading 			: false,
 	minlength 			: 1, //最少数据条数
 	maxlength 			: 5, //最多数据条数
-	//更改优惠券类型
+	htmlTicket 			: null, //优惠券的html
+	htmlGrow 			: null, //礼品优惠券的html
+	//初始化
+	init 	 			: function(){
+		page.changeType( '#acticity_type_1' ); //活动类型
+		page.changeType( '#acticity_type_2' ); //活动类型
+		page.changeTypeTicket( 'select[name="ticket_type[]"]' ); //优惠券类型
+		page.changeTypeGrow( 'select[name="grow_type[]"]' ); //礼包类型
+		page.getHtmlTicketGrow(); 	//获取优惠券、礼包html
+	},
+	//更改活动类型
 	changeType 			: function(obj){
+		var thisObj 	= $(obj);
+		// console.log(thisObj.prop('checked'));
+		switch(thisObj.val()){
+			//优惠券
+			case '1':
+				thisObj.prop('checked')==true ? $('.ticket').show() : $('.ticket').hide();
+				break;
+			//经验值活动
+			case '2':
+				thisObj.prop('checked')==true ? $('.grow').show() : $('.grow').hide();
+				break;
+		}
+	},
+	//更改礼包类型
+	changeTypeGrow 				: function(obj){
+		var thisObj 	= $(obj);
+		switch(thisObj.val()){
+			case '1':
+				$('#grow_ticket').show();
+				$('#grow_goods').hide();
+				break;
+			case '2':
+				$('#grow_ticket').hide();
+				$('#grow_goods').show();
+				break;
+		}
+	},
+	//更改优惠券类型
+	changeTypeTicket 			: function(obj){
 		var thisObj 	= $(obj);
 		var index 		= thisObj.val();
 		if(index==5 || index==6){
-			thisObj.parents('fieldset').find('#rule_type_intro').find('span').hide();
+			thisObj.parents('.datainfo').find('#rule_type_intro').find('span').hide();
 		}else{
-			thisObj.parents('fieldset').find('#rule_type_intro').find('span').eq(index-1).show().siblings().hide();
+			thisObj.parents('.datainfo').find('#rule_type_intro').find('span').eq(index-1).show().siblings().hide();
 		}
-	},
-	//初始化优惠券类型
-	initTyle 			: function(){
-		page.changeType( 'select[name="ticket_type[]"]' );
 	},
 	//添加一条数据
 	datalistAdd 		: function(obj){
@@ -102,15 +166,15 @@ var page = {
 			_inform('最多填写'+page.maxlength+'条数据');
 			return false;
 		}
-		var html 		= '';
-		html 			+= '<fieldset style="width:100%;" class="datainfo"><legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>';
-		html 			+= '<label>优惠券名称：<input name="ticket_name[]" class="small" type="text" value="" /></label>　<label>类型：<select name="ticket_type[]" class="auto" onchange="page.changeType(this);">';
-		html 			+= '<option value="1">满减券</option><option value="2">无门槛券</option><option value="3">折扣券</option><option value="4">商务合作券</option><option value="5">包邮券</option><option value="6">税值券</option>';
-		html 			+= '</select></label>　<span id="rule_type">';
-		html 			+= '<label id="rule_type">规则：<input name="ticket_rule[]" class="small" type="text" value=""/><span id="rule_type_intro">';
-		html 			+= '<span>*满m元减n元，如满300减50写作“300,50”</span><span style="display:none;">*抵扣金额，如抵50元则填“50”</span><span style="display:none;">*折扣率，如：八折则填“0.8”</span><span style="display:none;">*抵扣金额，如抵2000元则填“2000”</span>';
-		html 			+= '</span></label></fieldset>';
-		thisObj.parents('.datalist').append(html);
+		switch(thisObj.parents('fieldset').attr('id')){
+			case 'htmlTicket':
+				var html 	= page.htmlTicket;
+				break;
+			case 'htmlGrow':
+				var html 	= page.htmlGrow;
+				break;
+		}
+		thisObj.parents('.datalist').append( html );
 	},
 	//删除一条
 	datalistDel 		: function(obj){
@@ -121,5 +185,101 @@ var page = {
 		}
 		thisObj.parents('.datainfo').remove();
 	},
+	//获取优惠券、礼包html
+	getHtmlTicketGrow 		: function(){
+		var html 			= $('#htmlTicket').clone(true);
+		html.find('input:not(:button)').val(''); //清空内容
+		page.htmlTicket 	= html.prop('outerHTML');
+
+		//礼品优惠券
+		html.find('input[name="ticket_name[]"]').attr('name','grow_name[]');
+		html.find('select[name="ticket_type[]"]').attr('name','grow_type[]');
+		html.find('input[name="ticket_rule[]"]').attr('name','grow_rule[]');
+		html.find('input[name="ticket_start_time[]"]').attr('name','grow_start_time[]');
+		html.find('input[name="ticket_end_time[]"]').attr('name','grow_end_time[]');
+		html.find('legend').remove();
+		$('#grow_ticket').append( html.html() ); //礼品优惠券html
+
+		//礼包html
+		var htmlGrow 		= $('#htmlGrow').clone(true);
+		htmlGrow.find('input:not(:button)').val(''); //清空内容
+		page.htmlGrow = htmlGrow.prop('outerHTML');
+	},
 }
+
+//输入筛选商品的条件
+function searchGoodsCallback(goodsList)
+{
+	var result = [];
+	goodsList.each(function()
+	{
+		var temp = $.parseJSON($(this).attr('data'));
+		result.push(temp);
+	});
+	createGoodsList(result);
+}
+
+//创建商品数据
+function createGoodsList(goodsList)
+{
+	for(var i in goodsList)
+	{
+		var templateHTML = template.render('goodsItemTemplate',{"templateData":goodsList[i]});
+		$('#goodsListBox').append(templateHTML);
+	}
+}
+
+/**
+ * 进行商品筛选
+ * @param url string 执行的URL
+ * @param callback function 筛选成功后执行的回调函数
+ */
+function searchGoods(url,callback)
+{
+	var step = 0;
+	art.dialog.open(url,
+	{
+		"id":"searchGoods",
+		"title":"商品筛选",
+		"okVal":"执行",
+		"button":
+		[{
+			"name":"后退",
+			"callback":function(iframeWin,topWin)
+			{
+				if(step > 0)
+				{
+					iframeWin.window.history.go(-1);
+					this.size(1,1);
+					step--;
+				}
+				return false;
+			}
+		}],
+		"ok":function(iframeWin,topWin)
+		{
+			if(step == 0)
+			{
+				iframeWin.document.forms[0].submit();
+				step++;
+				return false;
+			}
+			else if(step == 1)
+			{
+				var goodsList = $(iframeWin.document).find('input[name="id[]"]:checked');
+
+				//添加选中的商品
+				if(goodsList.length == 0)
+				{
+					alert('请选择要添加的商品');
+					return false;
+				}
+				//执行处理回调
+				callback(goodsList);
+				return true;
+			}
+		}
+	});
+}
+
 </script>
