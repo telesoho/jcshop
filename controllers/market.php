@@ -18,20 +18,18 @@ class Market extends IController implements adminAuthorization
 	 * 活动新增
 	 */
 	public function activity_add(){
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			/* 活动 */
-			$type 						= implode(',',$_POST['type']);
-			if(empty($type)) exit('请至少包含一个活动');
-			foreach($_POST as $k => $v)
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){			foreach($_POST as $k => $v)
 				if(empty($v)) exit('数据填写不完整');
+			if(!isset($_POST['type']) || empty(implode(',',$_POST['type'])))
+				exit('至少包含一种活动');
+			/* 活动 */
 			$dataActivity 				= array(
-				'type' 			=> 1, //活动类型
 				'status' 		=> 1,
 				'type' 			=> implode(',',$_POST['type']), //包含活动类型[1优惠券随机领取-2消费成长]
 				'name' 			=> $_POST['name'], //活动名称
 				'num' 			=> $_POST['num'], //优惠券总数
 				'share_score' 	=> $_POST['share_score'], //分享获得积分数
-				'share_num' 	=> $_POST['share_num'], //分享获得积分数
+				'share_num' 	=> $_POST['share_num'], //分享积分次数
 				'start_time' 	=> strtotime($_POST['start_time']), //分享获得积分数
 				'end_time' 		=> strtotime($_POST['end_time']), //分享获得积分数
 				'create_time' 	=> time(), //创建时间
@@ -42,25 +40,49 @@ class Market extends IController implements adminAuthorization
 			if($activity_id == false) exit('数据写入错误');
 			$modelTicket 				= new IModel('activity_ticket');
 			/* 优惠券随机领取活动 */
-			if(in_array(1,$type)){
-				$dataTicket 			= array();
+			if(in_array(1,$_POST['type'])){
 				foreach($_POST['ticket_name'] as $k => $v){
 					$dataTicket 		= array(
-						'pid' 			=> $activity_id, //活动ID
+						'pid' 			=> $activity_id, //活动ID，0为普通优惠券
 						'name' 			=> $_POST['ticket_name'][$k], //优惠券名称
 						'type' 			=> $_POST['ticket_type'][$k], //优惠券类型
 						'rule' 			=> $_POST['ticket_rule'][$k], //优惠规则
 						'create_time' 	=> time(),
-						'status' 		=> 1,
-						'start_time' 	=> strtotime($_POST['ticket_start_time']),
-						'end_time' 		=> strtotime($_POST['ticket_end_time']),
+						'start_time' 	=> strtotime($_POST['ticket_start_time'][$k]),
+						'end_time' 		=> strtotime($_POST['ticket_end_time'][$k]),
 					);
 					$modelTicket->setData($dataTicket);
 					$modelTicket->add();
 				}
 			}
 			/* 消费成长活动 */
-			if(in_array(2,$type)){
+			if(in_array(2,$_POST['type'])){
+				$modelGrow 				= new IModel('activity_grow');
+				foreach($_POST['grow_money'] as $k => $v){
+					$did 				= $_POST['goods_id'][$k];
+					//优惠券
+					if( $_POST['grow_type'][$k]==1 ){
+						$dataTicket 		= array(
+							'pid' 			=> 0, //活动ID，0为普通优惠券
+							'name' 			=> $_POST['grow_ticket_name'][$k], //优惠券名称
+							'type' 			=> $_POST['grow_ticket_type'][$k], //优惠券类型
+							'rule' 			=> $_POST['grow_ticket_rule'][$k], //优惠规则
+							'create_time' 	=> time(),
+							'start_time' 	=> strtotime($_POST['grow_ticket_start_time'][$k]),
+							'end_time' 		=> strtotime($_POST['grow_ticket_end_time'][$k]),
+						);
+						$modelTicket->setData($dataTicket);
+						$did 				= $modelTicket->add();
+					}
+					$dataGrow 			= array(
+						'pid' 			=> $activity_id, //活动ID
+						'grow' 			=> $_POST['grow_money'][$k], //成长值
+						'type' 			=> $_POST['grow_type'][$k], //礼品类型[1优惠券-2商品]
+						'did' 			=> $did, //礼品ID
+					);
+					$modelGrow->setData($dataGrow);
+					$modelGrow->add();
+				}
 				
 			}
 			
