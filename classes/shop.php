@@ -20,7 +20,7 @@ class Shop
         $order_model->setData(['seller_id' => $shop_identify_id]);
         $order_model->update('id = ' . $order_id);
     }
-    static function settlement_shop_orders($shop_id){
+    static function settlement_shop_orders($shop_id, $admin_id){
         $order_model = new IModel('order');
         $user_query = new IQuery('user');
         $shop_query = new IQuery('shop');
@@ -54,12 +54,12 @@ class Shop
 //                    $shop_model->update('identify_id = ' . $seller_id);
                     $user_query->where = 'shop_identify_id = ' . $seller_id;
                     $user_id = $user_query->find()[0]['id'];
-                    shop::member_balance($user_id, $rebate_amount);
+                    shop::member_balance($user_id, $rebate_amount, $admin_id);
                 }
             }
         }
     }
-    static function settlement_recommender_orders($recommender_id){
+    static function settlement_recommender_orders($recommender_id, $admin_id){
         $shop_query = new IQuery('shop');
         $user_query = new IQuery('user');
         $settlement_model = new IModel('settlement_recommender');
@@ -86,7 +86,7 @@ class Shop
 //                        $user_model = new IModel('user');
 //                        $user_model->setData(['amount_available' => $amount_available+$rebate_amount ]);
 //                        $user_model->update('id = ' . $recommender_id);
-                        shop::member_balance($recommender_id, $rebate_amount);
+                        shop::member_balance($recommender_id, $rebate_amount, $admin_id);
                     }
                 }
             }
@@ -173,12 +173,12 @@ class Shop
      * @param $balance
      * @param string $type //操作类型 recharge充值,withdraw提现金
      */
-    static function member_balance($user_id, $balance, $type = 'recharge'){
+    static function member_balance($user_id, $balance, $admin_id, $type = 'recharge'){
         $log = new AccountLog();
         $config=array
         (
             'user_id'  => $user_id,
-            'admin_id' => 999,
+            'admin_id' => $admin_id,
             'event'    => $type,
             'num'      => $balance,
         );

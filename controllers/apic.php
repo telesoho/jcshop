@@ -590,7 +590,7 @@ class Apic extends IController
     		$queryUser->fields 		= 'm.id';
     		$dataUser 		 		= $queryUser->find();
     		if(!empty($dataUser)){
-    			foreach($dataUser[0] as $k => $v){
+    			foreach($dataUser as $k => $v){
     				$user[] 		= $v['id'];
     			}
     		}
@@ -1719,7 +1719,11 @@ class Apic extends IController
         } else {
             $temp = '( user_id = ' . $this->user['user_id'] . ')';
         }
-        $temp .= ' and is_shop_checkout = 0 and seller_id = ' . $shop_data[0]['identify_id'];
+        if ($if_partner){
+            $temp .= ' and is_recommender_checkout = 0 and seller_id = ' . $shop_data[0]['identify_id'];
+        } else {
+            $temp .= ' and is_shop_checkout = 0 and seller_id = ' . $shop_data[0]['identify_id'];
+        }
         $date_interval = ' and PERIOD_DIFF( date_format( now( ) , \'%Y%m\' ) , date_format( create_time, \'%Y%m\' ) ) =1'; //上个月
         $last_month_distribute_order_ret = Api::run('getOrderList', $temp, 'pay_type != 0 and status = 2 and (distribution_status = 0 or distribution_status = 1)' . $date_interval)->find(); // 待发货 待收货
         $date_interval = ' and DATE_FORMAT( completion_time, \'%Y%m\' ) = DATE_FORMAT( CURDATE( ) , \'%Y%m\' )'; //本月
@@ -1731,7 +1735,7 @@ class Apic extends IController
             $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$value['id']));
             $goods_total_price = 0;
             foreach($temp as $key => $good){
-                $goods_total_price += $good['real_price'];
+                $goods_total_price += $good['real_price'] * $good['goods_nums'];
                 $good_info = JSON::decode($good['goods_array']);
                 $temp[$key]['good_info'] = $good_info;
                 $temp[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$temp[$key]['img']."/w/160/h/160");
@@ -1851,8 +1855,8 @@ class Apic extends IController
         $shop_query->where = 'recommender = ' . $this->user['user_id'];
         $shop_data = $shop_query->find();
         foreach ($shop_data as $key=>$value){
-            $settlement_shop_query = new IQuery('settlement_shop');
-            $settlement_shop_query->where = 'seller_id = ' . $value['identify_id'] . ' and date_format( settlement_time, \'%Y%m\' ) =' . $year . $month;
+            $settlement_shop_query = new IQuery('settlement_recommender');
+            $settlement_shop_query->where = 'recommender_id = ' . $this->user['user_id'] . ' and date_format( settlement_time, \'%Y%m\' ) =' . $year . $month;
             $settlement_shop_data = $settlement_shop_query->find();
             $ret[$key]['name'] = $value['name'];
             $ret[$key]['amount_available'] = $value['amount_available'];
@@ -1870,7 +1874,7 @@ class Apic extends IController
                 $temp = Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$v['id']));
                 $goods_total_price = 0; //商品总金额
                 foreach($temp as $key => $good){
-                    $goods_total_price += $good['real_price'];
+                    $goods_total_price += $good['real_price']*$good['goods_nums'];
                     $good_info = JSON::decode($good['goods_array']);
                     $temp[$key]['good_info'] = $good_info;
                     $temp[$key]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/".$temp[$key]['img']."/w/160/h/160");
