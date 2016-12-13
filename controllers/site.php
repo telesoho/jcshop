@@ -1005,7 +1005,7 @@ class Site extends IController
 
             } else {
                 $shop_model = new IModel('shop');
-                $shop_model->setData(['own_id' => $this->user['user_id'], 'name' => $shop_name, 'recommender' => $recommender_id]);
+                $shop_model->setData(['own_id' => $this->user['user_id'], 'register_time' => date('Y-m-d H:i:s'), 'name' => $shop_name, 'recommender' => $recommender_id]);
                 $ret = $shop_model->update('identify_id=' . $identify_id);
                 if ($ret) {
                     $user_model = new IModel('user');
