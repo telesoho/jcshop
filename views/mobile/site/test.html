@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>限时抢购</title>
+    <title>九猫大百货</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/timePurchase.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
 </head>
 <body>
 <section class="timePurchasePage">
@@ -177,12 +178,22 @@
     <div class="timePurchaseContent timePurchaseContent3" id="timePurchaseContent3"></div>
 </section>
 <!--底部空隙-->
+<script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/time.js"></script>
 <script>
     //页面加载完成后调用的功能
+    $(window).load(function(){
+        $("#loading").fadeOut(300);
+    })
+    mui('body').on('tap','.nav-item',function(){
+        $('.nav-item').removeClass("active");
+        $(this).addClass('active');
+        $('.timePurchaseContent').addClass('hide');
+        $($(this).attr('href')).removeClass('hide');
+    })
 </script>
 </body>
 </html>
