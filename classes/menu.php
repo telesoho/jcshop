@@ -90,8 +90,9 @@ class Menu
         	// '代金券管理'=>array(
         	// 	'/market/ticket_list'       => '代金券列表',
         	// ),
-			'优惠券活动' 	=> array(
+			'活动' 	=> array(
 				'/market/activity_list' => '活动列表',
+				'/market/activity_add' => '添加活动',
 			),
 			'优惠券码' 	=> array(
         		'/market/ticket_discount_list'   => '优惠券码列表',
