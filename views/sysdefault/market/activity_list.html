@@ -49,8 +49,8 @@
 					<td>{echo:$item['start_time']>0 ? date('Y-m-d H:i',$item['start_time']) : ''} ～ {echo:$item['end_time']>0 ? date('Y-m-d H:i',$item['end_time']) : ''}</td>
 					<td>{echo:$item['create_time']>0 ? date('Y-m-d H:i',$item['create_time']) : ''}</td>
 					<td>
-						<a href='{url:/market/activity_goods_add/id/$item[id]}'>
-							<img class="operator" src="{skin:images/admin/icon_add.gif}" alt="添加活动商品" title="添加活动商品" />
+						<a href='{url:/market/activity_goods_edit/id/$item[id]}'>
+							<img class="operator" src="{skin:images/admin/icon_add.gif}" alt="编辑活动商品" title="编辑活动商品" />
 						</a>
 
 						<!-- <a href='{url:/market/ticket_more_list/ticket_id/$item[id]}'>

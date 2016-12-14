@@ -101,22 +101,49 @@ class Market extends IController implements adminAuthorization
 		$this->redirect('activity_add');
 	}
 	/**
-	 * 活动添加商品
+	 * 编辑活动商品
 	 */
-	public function activity_goods_add(){
+	public function activity_goods_edit(){
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+// 			exit(json_encode( $_POST ));
+			/* 商品添加、删除操作 */
+			if(isset($_POST['play'])){
+				$modelGoods 			= new IModel('goods');
+				switch($_POST['play']){
+					case 'add':
+						$goods_ids 		= array();
+						foreach($_POST['data'] as $k => $v)
+							$goods_ids[] 	= $v['goods_id'];
+						$modelGoods->setData(array('activity'=>$_POST['aid']));
+						$rel 			= $modelGoods->update('activity=0 AND id IN ('.implode(',',$goods_ids).')');
+						$rel>0 ? exit(json_encode( array('code'=>'0','msg'=>'有'.$rel.'条数据添加成功') )) : exit(json_encode( array('code'=>'100','data'=>'数据写入错误') ) );
+						break;
+					case 'del':
+						
+						break;
+				}
+			}
+			/* 正常提交 */
 			
+			exit(json_encode( $_POST ));
 		}
 		/* 获取参数 */
-		$aid        					= IFilter::act(IReq::get('id'),'int');//活动
+		$aid        					= IFilter::act(IReq::get('id'),'int');//活动ID
 		if(empty($aid)) exit('ID不存在');
 		$model 							= new IModel('activity');
 		$data 							= $model->getObj('id='.$aid);
-		if(!empty($data)) exit('活动不存在');
+		if(empty($data)) exit('活动不存在');
+		
+		/* 获取活动商品 */
+		$query 							= new IQuery('goods');
+		$query->where 					= 'activity='.$aid;
+		$query->fields 					= 'id,goods_no,img,name,is_del';
+		$query->limit 		= 10;
+		$data['list'] 					= $query->find();
 		
 		/* 模板赋值 */
 		$this->setRenderData(array('data'=>$data));
-		$this->redirect('activity_list');
+		$this->redirect('activity_goods_edit',false);
 	}
 
 	/**
