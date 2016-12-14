@@ -116,16 +116,23 @@ class Market extends IController implements adminAuthorization
 							$goods_ids[] 	= $v['goods_id'];
 						$modelGoods->setData(array('activity'=>$_POST['aid']));
 						$rel 			= $modelGoods->update('activity=0 AND id IN ('.implode(',',$goods_ids).')');
-						$rel>0 ? exit(json_encode( array('code'=>'0','msg'=>'有'.$rel.'条数据添加成功') )) : exit(json_encode( array('code'=>'100','data'=>'数据写入错误') ) );
+						exit(json_encode( $rel>0 ? array('code'=>'0','msg'=>'有'.$rel.'条数据添加成功') : array('code'=>'100','data'=>'数据写入错误') ));
 						break;
 					case 'del':
-						
+						$modelGoods->setData(array('activity'=>0));
+						$rel 			= $modelGoods->update('id='.$_POST['data']);
+						exit(json_encode( $rel>0 ? array('code'=>'0','msg'=>'删除成功') : array('code'=>'100','data'=>'删除失败') ));
 						break;
 				}
 			}
 			/* 正常提交 */
-			
-			exit(json_encode( $_POST ));
+			if(!isset($_POST['ratio']) || $_POST['ratio']<=0 || $_POST['ratio']>=1)
+				exit('请正确配置折扣率');
+			$model 						= new IModel('activity');
+			$model->setData(array('ratio'=>$_POST['ratio']));
+			$model->update('id='.$_POST['id']);
+			/* 成功跳转 */
+			$this->redirect('activity_list');
 		}
 		/* 获取参数 */
 		$aid        					= IFilter::act(IReq::get('id'),'int');//活动ID
@@ -138,7 +145,7 @@ class Market extends IController implements adminAuthorization
 		$query 							= new IQuery('goods');
 		$query->where 					= 'activity='.$aid;
 		$query->fields 					= 'id,goods_no,img,name,is_del';
-		$query->limit 		= 10;
+// 		$query->limit 		= 10;
 		$data['list'] 					= $query->find();
 		
 		/* 模板赋值 */

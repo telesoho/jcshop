@@ -8,6 +8,39 @@
  */
 class APIGoods
 {
+	/**
+	 * 活动商品价格
+	 * @param array $data 商品数据，必须包含商品id
+	 * @return array
+	 */
+	public function goodsActivity($data=array()){
+		//如果直接包含ID则为单个商品
+		if(isset($data['id']))
+			$data 			= array($data);
+		//商品ID集
+		$ids 				= array();
+		foreach($data as $k => $v)
+			$ids[] 			= $v['id'];
+		if(empty($ids)) return $data; //不包含id时直接返回
+		/* 获取活动详情 */
+		$query 				= new IQuery('goods as m');
+		$query->join 		= 'LEFT JOIN activity AS a ON a.id=m.activity';
+		$query->where 		= 'm.id IN ('.implode(',',$ids).') AND a.start_time<='.time().' AND a.end_time>='.time().' AND a.status=1';
+		$query->fields 		= 'm.id,m.sell_price,m.activity,a.start_time,a.end_time,a.ratio,a.status';
+		$list 				= $query->find();
+		if(!empty($list)){
+			$aGoods 	= array(); //参与活动的商品
+			foreach($list as $k => $v){
+				$aGoods[$v['id']] = array('ratio'=>$v['ratio'], 'sell_price'=>$v['sell_price']);
+			}
+			foreach($data as $k => $v){
+				if( isset($aGoods[$v['id']]) )
+					$data[$k]['sell_price'] 	= round($aGoods[$v['id']]['sell_price']*$aGoods[$v['id']]['ratio'],2);
+			}
+		}
+		return $data;
+	}
+	
 	//获取全部商品特价活动
 	public function getSaleList()
 	{

@@ -1,5 +1,9 @@
 <?php
 return array(
+	/* 活动商品价格 */
+	'goodsActivity' => array(
+		'file' => 'goods.php','class' => 'APIGoods'
+	),
 	//取商品数据
 	'getGoodsInfo' => array(
 		'query' => array(
@@ -601,4 +605,5 @@ return array(
 	'getFavorite' => array(
 		'file' => 'ucenter.php','class' => 'APIUcenter'
 	),
+	
 );

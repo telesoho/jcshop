@@ -114,7 +114,6 @@ class Order extends IController implements adminAuthorization
 	 			return;
 	 		}
 	 	}
-
 	 	$this->redirect('refundment_list');
 	}
 	//删除申请退款单

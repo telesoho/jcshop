@@ -40,6 +40,8 @@ class Apireturn
 		'002024' 		=>'已领取过该好友的红包',
  		//订单
  		'003001' 		=> '订单分类不存在',
+ 		//购物车
+ 		'004001' 		=> '订单分类不存在',
  	);
  	
  	/**
@@ -54,10 +56,10 @@ class Apireturn
  	/**
  	 * 接口统一返回参数
  	 */
- 	public static function go($code=-1,$data=''){
+ 	public static function go($code=-1,$data='',$msg=''){
  		return array(
  			'code' 	=> $code,
- 			'msg' 	=> self::info($code),
+ 			'msg' 	=> self::info($code).(empty($msg) ? '' : ':'.$msg),
  			'data' 	=> $data,
  		);
  	}

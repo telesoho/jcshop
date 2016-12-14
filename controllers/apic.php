@@ -51,45 +51,24 @@ class Apic extends IController
      */
     public function cart2()
     {
-        $id        				= IFilter::act(IReq::get('id'),'int');
+        $id        				= IFilter::act(IReq::get('id'),'int'); //商品ID
         $type      				= IFilter::act(IReq::get('type'));//goods,product
         $promo     				= IFilter::act(IReq::get('promo'));
         $active_id 				= IFilter::act(IReq::get('active_id'),'int');
         $buy_num   				= IReq::get('num') ? IFilter::act(IReq::get('num'),'int') : 1;
-        $tourist   				= IReq::get('tourist');//游客方式购物
+//         $tourist   				= IReq::get('tourist');//游客方式购物
         $code 	   				= IFilter::act(IReq::get('code'),'int');
         $ticket_aid 	   		= IFilter::act(IReq::get('ticket_aid'),'int');
         
         //必须为登录用户
-        if($tourist === null && $this->user['user_id'] == null)
-        {
-            if($id == 0 || $type == '')
-            {
-//                $this->redirect('/simple/login?tourist&callback=/simple/cart2');
-                $this->log->addError('必须为登录用户');
-            }
-            else
-            {
-                $url  = '/simple/login?tourist&callback=/simple/cart2/id/'.$id.'/type/'.$type.'/num/'.$buy_num;
-                $url .= $promo     ? '/promo/'.$promo         : '';
-                $url .= $active_id ? '/active_id/'.$active_id : '';
-//                $this->redirect($url);
-                $this->log->addError('跳转URL'.$url);
-            }
-        }
-
-        //游客的user_id默认为0
-        $user_id = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
-
+        if($this->user['user_id'] == null)
+            $this->json_echo( apireturn::go('001001') );
+        
         //计算商品
         $countSumObj 		= new CountSum($user_id);
         $result 			= $countSumObj->cart_count($id,$type,$buy_num,$promo,$active_id);
-
         if($countSumObj->error)
-        {
-//            IError::show(403,$countSumObj->error);
-            $this->log->addError($countSumObj->error);
-        }
+        	$this->json_echo( apireturn::go('-1','',$countSumObj->error) );
 
         //获取收货地址
         $addressObj  		= new IModel('address');
