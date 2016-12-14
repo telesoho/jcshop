@@ -11,8 +11,48 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/timePurchase.css" />
 </head>
 <body>
-<section id="timePurchasePage">
-
+<section id="timePurchasePage" v-cloak>
+      <header class="headerTitle flexbox" v-cloak>
+          <div :class="initState==key?class2:class1" v-for="(item,key) in head" @click="changeState(key)">
+              <div class="time">{{item.time}}</div>
+              <div class="tip">{{item.tip}}</div>
+          </div>
+      </header>
+      <div class="content" v-if="initState==1">
+          <div class="top">
+              限时限量抢购中……
+          </div>
+          <div class="wareContent" v-cloak>
+              <div class="item" v-for="item in new_data">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
+                    </div>
+                      <div class="text">
+                            <div class="name">
+                                {{item.name}}{{item.name}}
+                            </div>
+                          <div class="box box2">
+                              <div class="price1"><span>抢购价</span>
+                                  <span style="margin-left:0.18rem;font-size:0.22rem">¥</span>
+                                  <span style="font-size:0.32rem">{{item.price1}}</span></div>
+                              <div class="price2"><span>市场价</span>
+                                  <s><span style="margin-left:0.11rem;font-size:0.22rem">¥</span>
+                                      <span style="font-size:0.26rem">{{item.price2}}</span></s></div>
+                          </div>
+                          <div class="box bottom">
+                                <div class="num">
+                                    仅剩 <span>{{item.nowNum}}</span>件
+                                    <div class="bg" :style="item.style">
+                                    </div>
+                                </div>
+                              <div class="buy" :style="item.nowNum==0?style1:style2" @click="ToBuy(item)">
+                                  马上抢
+                              </div>
+                          </div>
+                      </div>
+              </div>
+          </div>
+      </div>
 </section>
 <!--底部空隙-->
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
@@ -23,10 +63,48 @@
     var vm= new Vue({
         el:'#timePurchasePage',
         data:{
-
+//            头部处理
+            head:[{time:'11:00',tip:'明天再来'},
+                {time:'16:00',tip:'抢购中'},
+                {time:'22:00',tip:'准备开抢'}],
+            initState:1,
+            class1:'title flexbox',
+            class2:'title flexbox active',
+//            限时购商品数据
+            info:[
+                {price1:'38.00',price2:'56.00',tota1:30,nowNum:12,name:'商品名称商品名称商品名称商品名称商品名称'},
+                {price1:'38.00',price2:'56.00',tota1:30,nowNum:0,name:'商品名称'},
+                {price1:'38.00',price2:'56.00',tota1:30,nowNum:30,name:'商品名称'},
+                {price1:'38.00',price2:'56.00',tota1:30,nowNum:18,name:'商品名称'},
+                {price1:'38.00',price2:'56.00',tota1:20,nowNum:12,name:'商品名称'},
+                {price1:'38.00',price2:'56.00',tota1:20,nowNum:12,name:'商品名称'}
+            ],
+//            对剩余数量进行处理
+            style1:"opacity:0.5",
+            style2:'opacity:1'
+        },
+        computed: {
+            new_data: function(){
+                this.info.map(function(item){
+                    item.style="width:"+item.nowNum*100/item.tota1+"%";
+                })
+                return this.info;
+            }
         },
         mounted: function(){
 
+        },
+        methods: {
+            changeState: function(num){
+                this.initState=num
+            },
+            ToBuy: function(obj){
+                if(obj.nowNum>0){
+                    alert("可以买")
+                }else{
+                    alert("不能买")
+                }
+            }
         }
 
     })
