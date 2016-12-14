@@ -81,7 +81,7 @@
 						}
 				}
 				$query->where = $where;
-				$query->order = "ar.sort asc,ar.id desc";
+				$query->order = "ar.sort desc,ar.id desc";
 				$query->fields = "ar.id,ar.title,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ac.name";
 				$items = $query->find();
 				foreach($items as $key => $item){?>

@@ -1049,7 +1049,7 @@ class Apic extends IController
     	$query->join 		= 'left join article_category as c on c.id=m.category_id';
     	$query->where 		= 'm.top=0 and m.visibility=1 '.(empty($cid) ? '' : ' and m.category_id='.$cid);
     	$query->fields 		= 'm.id,m.title,m.image,m.visit_num,m.category_id,c.icon,c.name as category_name';
-    	$query->order 		= 'm.sort asc';
+    	$query->order 		= 'm.sort desc,m.id desc';
     	$query->page 		= $page>1 ? $page : 1;
     	$query->pagesize 	= 5;
     	$list 				= $query->find();
@@ -1113,7 +1113,7 @@ class Apic extends IController
     	$query 				= new IQuery('article as m');
     	$query->where 		= 'top=0 and visibility=1 '.(empty($cid) ? '' : ' and m.category_id='.$cid);
     	$query->fields 		= 'm.id,m.title,m.image,m.visit_num';
-    	$query->order 		= 'm.sort asc';
+    	$query->order 		= 'm.sort desc,m.id desc';
     	$query->page 		= $page>1 ? $page : 1;
     	$query->pagesize 	= 10;
     	$list 				= $query->find();
