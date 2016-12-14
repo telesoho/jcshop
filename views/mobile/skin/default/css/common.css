@@ -552,6 +552,7 @@ input[type='search']{
 }
 /*专辑页面*/
 .albumn_index{
+  overflow-x: hidden;
   margin-top:0.22rem;
   background:#f8f8f8;
 }
