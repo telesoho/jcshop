@@ -138,6 +138,9 @@ $(document).ready(function(){
         }
     });
     mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
+    // $('body').on('touchmove', function (event) {
+    //     event.preventDefault();
+    // });
 })
 function getBanner(self){
     mui.ajax('/apic/banner_list',{

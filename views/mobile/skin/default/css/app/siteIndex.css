@@ -1,7 +1,8 @@
 /*轮播图样式*/
 body{
     width:100%;
-    overflow-x: hidden;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 .mui-slider-indicator .mui-indicator{
     margin-left:3px !important;
