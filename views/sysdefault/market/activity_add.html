@@ -1,11 +1,16 @@
 {js:my97date}
 
-<div class="headbar">
+<div class="headbar clearfix">
 	<div class="position"><span>营销</span><span>></span><span>活动</span><span>></span><span>添加活动</span></div>
+	<ul class="tab" name="menu1">
+		<li id="li_1" class="selected"><a href="javascript:void(0)" hidefocus="true" onclick="page.select_tab('1')">商品信息</a></li>
+		<li id="li_2"><a href="javascript:void(0)" hidefocus="true" onclick="page.select_tab('2')">活动商品</a></li>
+	</ul>
 </div>
 <div class="content_box">
 	<div class="content form_content">
-		<form action="{url:/market/activity_add}" name='ticket_edit'  method="post">
+		<form action="{url:/market/activity_add}" name='activity_add'  method="post">
+		<div id="table_box_1">
 			<table class="form_table">
 				<col width="150px" />
 				<col />
@@ -35,8 +40,8 @@
 				<tr>
 					<th>活动类型：</th>
 					<td>
-						优惠券<input id="acticity_type_1" type='checkbox' name='type[]' value="1" onchange="page.changeType(this);"/>　
-						消费成长<input id="acticity_type_2" type='checkbox' name='type[]' value="2" onchange="page.changeType(this);"/>
+						优惠券<input id="activity_type_1" type='checkbox' name='type[]' value="1" onchange="page.changeType(this);"/>　
+						消费成长<input id="activity_type_2" type='checkbox' name='type[]' value="2" onchange="page.changeType(this);"/>
 					</td>
 				</tr>
 				<tr class="ticket" style="background-color:#DBEAF9;display:none;">
@@ -97,8 +102,30 @@
 						</fieldset>
 					</td>
 				</tr>
-				<tr><td></td><td><button class="submit" type='submit'><span>确 定</span></button></td></tr>
 			</table>
+		</div>
+		<div id="table_box_2" cellpadding="0" cellspacing="0" style="display:none">
+				<table class="form_table">
+					<col width="150px" />
+					<col />
+					<tr>
+						<th></th>
+						<td>
+							
+						</td>
+					</tr>
+				</table>
+			</div>
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<td></td>
+					<td><button class="submit" type='submit'><span>确 定</span></button>
+					</td>
+				</tr>
+			</table>
+
 		</form>
 	</div>
 </div>
@@ -149,8 +176,8 @@ var page = {
 	goodsList 			: null,
 	//初始化
 	init 	 			: function(){
-		page.changeType( '#acticity_type_1' ); //活动类型
-		page.changeType( '#acticity_type_2' ); //活动类型
+		page.changeType( '#activity_type_1' ); //活动类型
+		page.changeType( '#activity_type_2' ); //活动类型
 		page.changeTypeTicket( 'select[name="ticket_type[]"]' ); //优惠券类型
 		page.changeTypeGrow( 'select[name="grow_type[]"]' ); //礼包类型
 		page.getHtmlTicketGrow(); 	//获取优惠券、礼包html
@@ -272,6 +299,13 @@ var page = {
 			var templateHTML = template.render('goodsItemTemplate',{"templateData":goodsList[i]});
 			page.goodsList.html(templateHTML);
 		}
+	},
+	//tab标签切换
+	select_tab 				: function(curr_tab){
+		$("form[name='activity_add'] > div").hide();
+		$("#table_box_"+curr_tab).show();
+		$("ul[name=menu1] > li").removeClass('selected');
+		$('#li_'+curr_tab).addClass('selected');
 	},
 }
 

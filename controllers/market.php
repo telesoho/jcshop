@@ -14,11 +14,21 @@ class Market extends IController implements adminAuthorization
 
 	}
 
+
+	/**
+	 * 活动列表
+	 */
+	public function activity_list(){
+		/* 模板赋值 */
+		$this->redirect('activity_list');
+	}
+	
 	/**
 	 * 活动新增
 	 */
 	public function activity_add(){
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){			foreach($_POST as $k => $v)
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			foreach($_POST as $k => $v)
 				if(empty($v)) exit('数据填写不完整');
 			if(!isset($_POST['type']) || empty(implode(',',$_POST['type'])))
 				exit('至少包含一种活动');
@@ -83,14 +93,152 @@ class Market extends IController implements adminAuthorization
 					$modelGrow->setData($dataGrow);
 					$modelGrow->add();
 				}
-				
 			}
-			
+				
 			/* 成功跳转 */
 			$this->redirect('activity_list');
 		}
 		$this->redirect('activity_add');
 	}
+	/**
+	 * 活动添加商品
+	 */
+	public function activity_goods_add(){
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			
+		}
+		/* 获取参数 */
+		$aid        					= IFilter::act(IReq::get('id'),'int');//活动
+		if(empty($aid)) exit('ID不存在');
+		$model 							= new IModel('activity');
+		$data 							= $model->getObj('id='.$aid);
+		if(!empty($data)) exit('活动不存在');
+		
+		/* 模板赋值 */
+		$this->setRenderData(array('data'=>$data));
+		$this->redirect('activity_list');
+	}
+
+	/**
+	 * 优惠券码批量添加
+	 */
+	public function ticket_discount_add(){
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			/* 检查参数 */
+			$_POST['start_time'] 		= strtotime($_POST['start_time']); 	//开始时间
+			$_POST['end_time'] 			= strtotime($_POST['end_time']); 	//结束时间
+			if($_POST['end_time']<=time() || $_POST['start_time']>=$_POST['end_time'])  exit( '有效时间不合理' );
+			if($_POST['num']>500) exit( '每次请勿生成超过500张' );
+			switch ($_POST['type']){
+				case 1:
+					if($_POST['ratio']<=0 || $_POST['ratio']>=1) exit( '折扣比例必须为0~1之间的数值' );
+					break;
+				case 2:
+					if($_POST['money']<=0 || $_POST['money']>3000) exit( '请输入合理的抵扣金额' );
+					break;
+				default:
+					exit( '优惠券类型不存在' );
+			}
+			/* 清空未使用但已过期优惠券 */
+			$model 						= new IModel('ticket_discount');
+			$model->del('status!=2 AND end_time<'.time());
+			
+			/* 生成折扣券 */
+			$num 						= 0;
+			$count 						= $model->get_count('');
+			if($count+$_POST['num'] >= 899999) exit( '所有号段已用完，请扩展号段' );
+			while( $num<$_POST['num'] ){
+				//检查没有重复
+				$rand 					= rand(100000,999999);
+				$info 					= $model->getObj('code='.$rand,'id');
+				if( !empty($info) ) continue;
+				//写入数据库
+				$model->setData(array(
+					'name' 			=> $_POST['name'],
+					'code' 			=> $rand,
+					'type' 			=> $_POST['type'],
+					'ratio' 		=> $_POST['ratio'],
+					'money' 		=> $_POST['money'],
+					'status' 		=> 1,
+					'start_time' 	=> $_POST['start_time'],
+					'end_time' 		=> $_POST['end_time'],
+					'create_time' 	=> time(),
+				));
+				$model->add();
+				$num++;
+			}
+			$this->redirect('ticket_discount_list');
+		}
+		$this->redirect('ticket_discount_add');
+	}
+	
+	/**
+	 * 优惠券码删除
+	 */
+	function ticket_discount_del(){
+		//接收参数
+		$id        			= IFilter::act(IReq::get('id'),'int');
+		if(empty($id)){
+			$this->redirect('ticket_discount_list',false);
+			Util::showMessage('请选择要删除的id值');exit();
+		}
+		//执行删除
+		$ticketObj 			= new IModel('ticket_discount');
+		$where 				= is_array($id) ? ' id in ('.join(',',$id).')' : 'id = '.$id;
+		$ticketObj->del($where);
+		$this->redirect('ticket_discount_list',false);
+		Util::showMessage('删除成功');exit();
+	}
+	
+	/**
+	 * 优惠券码-输出excel表格
+	 */
+	function ticket_discount_excel()
+	{
+	
+		$excelStr = '<table width="500" border="1"><tr>
+					<th style="text-align:center;font-size:12px;width:120px;">卷码</th>
+					<th style="text-align:center;font-size:12px;width:120px;">名称</th>
+					<th style="text-align:center;font-size:12px;width:120px;">类型</th>
+					<th style="text-align:center;font-size:12px;width:120px;">优惠内容</th>
+					<th style="text-align:center;font-size:12px;width:120px;">状态</th>
+					<th style="text-align:center;font-size:12px;width:120px;">开始时间</th>
+					<th style="text-align:center;font-size:12px;width:120px;">结束时间</th></tr>';
+	
+		$query_ticket 		 	= new IQuery('ticket_discount');
+		$query_ticket->limit 	= 10000;
+		$data_ticket 			= $query_ticket->find();
+		$text_type 				= array('','折扣券','抵扣券');
+		$text_status 			= array('','未使用','已使用');
+		foreach($data_ticket as $key => $val)
+		{
+			$content 			= '';
+			switch($val['type']){
+				case 1:
+					$content 	= '打'.($val['ratio']*10).'折';
+					break;
+				case 2:
+					$content 	= '抵'.$val['money'].'元';
+					break;
+			}
+			$excelStr 			.='<tr>';
+			$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$val['code'].'</td>';
+			$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$val['name'].'</td>';
+			$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$text_type[$val['type']].'</td>';
+			$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$content.'</td>';
+			$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$text_status[$val['status']].'</td>';
+			$excelStr 			.='<td style="text-align:left;font-size:12px;">'.date('Y-m-d H:i',$val['start_time']).'</td>';
+			$excelStr 			.='<td style="text-align:left;font-size:12px;">'.date('Y-m-d H:i',$val['end_time']).'</td>';
+			$excelStr 			.='</tr>';
+		}
+		$excelStr 				.='</table>';
+		$reportObj 				= new report();
+		$reportObj->setFileName('优惠券');
+		$reportObj->toDownload($excelStr);
+		exit();
+	
+	}
+	
 	
 	//修改代金券状态is_close和is_send
 	function ticket_status()
@@ -378,125 +526,6 @@ class Market extends IController implements adminAuthorization
 		$ticketObj  = new IModel('ticket');
 		$ticketList = $ticketObj->query();
 		echo JSON::encode($ticketList);
-	}
-	
-	//[优惠券]新增
-	function ticket_discount_add(){
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			/* 检查参数 */
-			$_POST['start_time'] 		= strtotime($_POST['start_time']); 	//开始时间
-			$_POST['end_time'] 			= strtotime($_POST['end_time']); 	//结束时间
-			if($_POST['end_time']<=time() || $_POST['start_time']>=$_POST['end_time'])  exit( '有效时间不合理' );
-			if($_POST['num']>500) exit( '每次请勿生成超过500张' );
-			switch ($_POST['type']){
-				case 1:
-					if($_POST['ratio']<=0 || $_POST['ratio']>=1) exit( '折扣比例必须为0~1之间的数值' );
-					break;
-				case 2:
-					if($_POST['money']<=0 || $_POST['money']>3000) exit( '请输入合理的抵扣金额' );
-					break;
-				default:
-					exit( '优惠券类型不存在' );
-			}
-			/* 生成折扣券 */
-			$num 						= 0;
-			$model 						= new IModel('ticket_discount');
-			$count 						= $model->get_count('');
-			if($count+$num >= 899999) exit( '所有号段已用完，请扩展号段' );
-			while( $num<$_POST['num'] ){
-				//检查没有重复
-				$rand 					= rand(100000,999999);
-				$info 					= $model->getObj('code='.$rand,'id');
-				if( !empty($info) ) continue;
-				//写入数据库
-				$model->setData(array(
-					'name' 			=> $_POST['name'],
-					'code' 			=> $rand,
-					'type' 			=> $_POST['type'],
-					'ratio' 		=> $_POST['ratio'],
-					'money' 		=> $_POST['money'],
-					'status' 		=> 1,
-					'start_time' 	=> $_POST['start_time'],
-					'end_time' 		=> $_POST['end_time'],
-					'create_time' 	=> time(),
-				));
-				$model->add();
-				$num++;
-			}
-			$this->redirect('ticket_discount_list');
-		}
-		$this->redirect('ticket_discount_add');
-	}
-	
-	//[优惠券]删除
-	function ticket_discount_del(){
-		//接收参数
-		$id        			= IFilter::act(IReq::get('id'),'int');
-		if(empty($id)){
-			$this->redirect('ticket_discount_list',false);
-			Util::showMessage('请选择要删除的id值');exit();
-		}
-		//执行删除
-		$ticketObj 			= new IModel('ticket_discount');
-		$where 				= is_array($id) ? ' id in ('.join(',',$id).')' : 'id = '.$id;
-		$ticketObj->del($where);
-		$this->redirect('ticket_discount_list',false);
-		Util::showMessage('删除成功');exit();
-	}
-	
-	//[优惠券] 输出excel表格
-	function ticket_discount_excel()
-	{
-		
-			$excelStr = '<table width="500" border="1"><tr>
-					<th style="text-align:center;font-size:12px;width:120px;">卷码</th>
-					<th style="text-align:center;font-size:12px;width:120px;">名称</th>
-					<th style="text-align:center;font-size:12px;width:120px;">类型</th>
-					<th style="text-align:center;font-size:12px;width:120px;">优惠内容</th>
-					<th style="text-align:center;font-size:12px;width:120px;">状态</th>
-					<th style="text-align:center;font-size:12px;width:120px;">开始时间</th>
-					<th style="text-align:center;font-size:12px;width:120px;">结束时间</th></tr>';
-	
-			$query_ticket 		 	= new IQuery('ticket_discount');
-			$query_ticket->limit 	= 10000;
-			$data_ticket 			= $query_ticket->find();
-			$text_type 				= array('','折扣券','抵扣券');
-			$text_status 			= array('','未使用','已使用');
-			foreach($data_ticket as $key => $val)
-			{
-				$content 			= '';
-				switch($val['type']){
-					case 1:
-						$content 	= '打'.($val['ratio']*10).'折';
-						break;
-					case 2:
-						$content 	= '抵'.$val['money'].'元';
-						break;
-				}
-				$excelStr 			.='<tr>';
-				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$val['code'].'</td>';
-				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$val['name'].'</td>';
-				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$text_type[$val['type']].'</td>';
-				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$content.'</td>';
-				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.$text_status[$val['status']].'</td>';
-				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.date('Y-m-d H:i',$val['start_time']).'</td>';
-				$excelStr 			.='<td style="text-align:left;font-size:12px;">'.date('Y-m-d H:i',$val['end_time']).'</td>';
-				$excelStr 			.='</tr>';
-			}
-			$excelStr 				.='</table>';
-			$reportObj 				= new report();
-			$reportObj->setFileName('优惠券');
-			$reportObj->toDownload($excelStr);
-			exit();
-		
-	}
-	
-	/**
-	 * 活动列表
-	 */
-	public function activity_list(){
-		/* 模板赋值 */
-		$this->redirect('activity_list');
 	}
 
 	//[促销活动] 添加修改 [单页]

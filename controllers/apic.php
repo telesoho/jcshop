@@ -366,7 +366,8 @@ class Apic extends IController
     public function activity_goods_list(){
     	/* 接收参数 */
     	$page      					= IFilter::act(IReq::get('page'),'int');//分页
-    	$cid 						= IFilter::act(IReq::get('cid')); //分类id
+    	$aid 						= IFilter::act(IReq::get('aid'),'int'); //活动ID
+    	$cid 						= IFilter::act(IReq::get('cid')); //分类ID
     	$bid 						= IFilter::act(IReq::get('bid'),'int'); //品牌ID
     	
     	/* 获取下级分类 */

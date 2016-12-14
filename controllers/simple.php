@@ -386,7 +386,7 @@ class Simple extends IController
     	$address_id    = IFilter::act(IReq::get('radio_address'),'int');//收货地址ID
     	$delivery_id   = IFilter::act(IReq::get('delivery_id'),'int');//快递ID
     	$accept_time   = IFilter::act(IReq::get('accept_time'));//收货时间
-    	$payment       = IFilter::act(IReq::get('payment'),'int');
+    	$payment       = IFilter::act(IReq::get('payment'),'int'); //支付方式
     	$order_message = IFilter::act(IReq::get('message'));
     	$ticket_id     = IFilter::act(IReq::get('ticket_id'),'int');
     	$taxes         = IFilter::act(IReq::get('taxes'),'float');
@@ -401,119 +401,72 @@ class Simple extends IController
     	$ticket_aid    = IFilter::act(IReq::get('ticket_aid'),'int'); //活动优惠券ID
     	$order_type    = 0;
     	$dataArray     = array();
-    	$user_id       = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
+    	$user_id       = ($this->user['user_id'] == null) ? IError::show(403,'请先登录') : $this->user['user_id'];
     	
 		//获取商品数据信息
-    	$countSumObj = new CountSum($user_id);
-		$goodsResult = $countSumObj->cart_count($gid,$type,$num,$promo,$active_id);
-		
-		if($countSumObj->error)
-		{
-			IError::show(403,$countSumObj->error);
-		}
+    	$countSumObj 			= new CountSum($user_id);
+		$goodsResult 			= $countSumObj->cart_count($gid,$type,$num,$promo,$active_id);
+		if($countSumObj->error) IError::show(403,$countSumObj->error);
 
-		//处理收件地址
-		//1,访客; 2,注册用户
-		if($user_id == 0)
-		{
-			$addressRow = ISafe::get('address');
-		}
-		else
-		{
-			$addressDB = new IModel('address');
-			$addressRow= $addressDB->getObj('id = '.$address_id.' and user_id = '.$user_id);
-		}
-
-		if(!$addressRow)
-		{
-			IError::show(403,"收货地址信息不存在");
-		}
-    	$accept_name   = IFilter::act($addressRow['accept_name'],'name');
-    	$province      = $addressRow['province'];
-    	$city          = $addressRow['city'];
-    	$area          = $addressRow['area'];
-    	$address       = IFilter::act($addressRow['address']);
-    	$mobile        = IFilter::act($addressRow['mobile'],'mobile');
-    	$telphone      = IFilter::act($addressRow['telphone'],'phone');
-    	$zip           = IFilter::act($addressRow['zip'],'zip');
+		//收件地址
+		$addressDB 				= new IModel('address');
+		$addressRow 			= $addressDB->getObj('id='.$address_id.' AND user_id='.$user_id);
+		if(!$addressRow) IError::show(403,"收货地址信息不存在");
+    	$accept_name   			= IFilter::act($addressRow['accept_name'],'name'); //收货人
+    	$province      			= $addressRow['province']; //省ID
+    	$city          			= $addressRow['city']; //市ID
+    	$area          			= $addressRow['area']; //区ID
+    	$address       			= IFilter::act($addressRow['address']); //详细地址
+    	$mobile        			= IFilter::act($addressRow['mobile'],'mobile'); //联系方式
+    	$telphone      			= IFilter::act($addressRow['telphone'],'phone'); //手机
+    	$zip           			= IFilter::act($addressRow['zip'],'zip'); //邮编
 
 		//检查订单重复
-    	$checkData = array(
-    		"accept_name" => $accept_name,
-    		"address"     => $address,
-    		"mobile"      => $mobile,
-    		"distribution"=> $delivery_id,
+    	$checkData 				= array(
+    		"accept_name" 		=> $accept_name,
+    		"address"     		=> $address,
+    		"mobile"      		=> $mobile,
+    		"distribution"		=> $delivery_id,
     	);
-    	$result = order_class::checkRepeat($checkData,$goodsResult['goodsList']);
-    	if( is_string($result) )
-    	{
-			IError::show(403,$result);
-    	}
+    	$result 				= order_class::checkRepeat($checkData,$goodsResult['goodsList']);
+    	if( is_string($result) ) IError::show(403,$result);
 
 		//配送方式,判断是否为货到付款
-		$deliveryObj = new IModel('delivery');
-		$deliveryRow = $deliveryObj->getObj('id = '.$delivery_id);
-		if(!$deliveryRow)
-		{
-			IError::show(403,'配送方式不存在');
-		}
+		$deliveryObj 			= new IModel('delivery');
+		$deliveryRow 			= $deliveryObj->getObj('id='.$delivery_id);
+		if(!$deliveryRow) IError::show(403,'配送方式不存在');
 
-		if($deliveryRow['type'] == 0)
-		{
-			if($payment == 0)
-			{
-				IError::show(403,'请选择正确的支付方式');
-			}
-		}
-		else if($deliveryRow['type'] == 1)
-		{
+		if($deliveryRow['type'] == 0){
+			if($payment == 0) IError::show(403,'请选择正确的支付方式');
+		}else if($deliveryRow['type'] == 1){
 			$payment = 0;
+		}else if($deliveryRow['type'] == 2){
+			if($takeself == 0) IError::show(403,'请选择正确的自提点');
 		}
-		else if($deliveryRow['type'] == 2)
-		{
-			if($takeself == 0)
-			{
-				IError::show(403,'请选择正确的自提点');
-			}
-		}
-		//如果不是自提方式自动清空自提点
-		if($deliveryRow['type'] != 2)
-		{
-			$takeself = 0;
-		}
-		//不清空购物车
-// 		if(!$gid)
-// 		{
-// 			//清空购物车
-// 			IInterceptor::reg("cart@onFinishAction");
-// 		}
+		if($deliveryRow['type'] != 2) $takeself = 0; //如果不是自提方式自动清空自提点
+		
+// 		if(!$gid) IInterceptor::reg("cart@onFinishAction"); //清空购物车
 
     	//判断商品是否存在
     	if(is_string($goodsResult) || empty($goodsResult['goodsList']))
-    	{
     		IError::show(403,'商品数据错误');
-    	}
 
     	//加入促销活动
-    	if($promo && $active_id)
-    	{
-    		$activeObject = new Active($promo,$active_id,$user_id,$gid,$type,$num);
-    		$order_type = $activeObject->getOrderType();
+    	if($promo && $active_id){
+    		$activeObject 		= new Active($promo,$active_id,$user_id,$gid,$type,$num);
+    		$order_type 		= $activeObject->getOrderType();
     	}
 
-		$paymentObj = new IModel('payment');
-		$paymentRow = $paymentObj->getObj('id = '.$payment,'type,name');
-		if(!$paymentRow)
-		{
-			IError::show(403,'支付方式不存在');
-		}
-		$paymentName= $paymentRow['name'];
-		$paymentType= $paymentRow['type'];
+    	//支付方式
+		$paymentObj 			= new IModel('payment');
+		$paymentRow 			= $paymentObj->getObj('id='.$payment,'type,name');
+		if(!$paymentRow) IError::show(403,'支付方式不存在');
+		$paymentName 			= $paymentRow['name']; //支付方式名称
+		$paymentType 			= $paymentRow['type']; //1线上2线下
 
 		//最终订单金额计算
-		$orderData = $countSumObj->countOrderFee($goodsResult,$province,$delivery_id,$payment,$taxes,0,$promo,$active_id);
-		if(is_string($orderData))
-		{
+		$orderData 				= $countSumObj->countOrderFee($goodsResult,$province,$delivery_id,$payment,$taxes,0,$promo,$active_id);
+		if(is_string($orderData)){
 			IError::show(403,$orderData);
 			exit;
 		}
