@@ -49,20 +49,20 @@
 					<td>{echo:$item['start_time']>0 ? date('Y-m-d H:i',$item['start_time']) : ''} ～ {echo:$item['end_time']>0 ? date('Y-m-d H:i',$item['end_time']) : ''}</td>
 					<td>{echo:$item['create_time']>0 ? date('Y-m-d H:i',$item['create_time']) : ''}</td>
 					<td>
-						<!-- <a href='{url:/market/ticket_edit/id/$item[id]}'>
-							<img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" title="修改" />
-						</a> -->
+						<a href='{url:/market/activity_goods_add/id/$item[id]}'>
+							<img class="operator" src="{skin:images/admin/icon_add.gif}" alt="添加活动商品" title="添加活动商品" />
+						</a>
 
-						<a href='{url:/market/ticket_more_list/ticket_id/$item[id]}'>
+						<!-- <a href='{url:/market/ticket_more_list/ticket_id/$item[id]}'>
 							<img class="operator" src="{skin:images/admin/icon_check.gif}" alt="查看详情" title="查看详情" />
 						</a>
 
-						<!-- <a href='javascript:create_dialog("{$item['id']}");'>
+						<a href='javascript:create_dialog("{$item['id']}");'>
 							<img class="operator" src="{skin:images/admin/icon_add.gif}" alt="生成实体代金券" title="生成实体优惠券" />
-						</a> -->
+						</a>
 
 						
-						<!-- <a href='javascript:void(0)' onclick="delModel({msg:'是否要生成excel表格？',link:'{url:/market/ticket_excel/id/$item[id]}'});">
+						<a href='javascript:void(0)' onclick="delModel({msg:'是否要生成excel表格？',link:'{url:/market/ticket_excel/id/$item[id]}'});">
 							<img class="operator" src="{skin:images/admin/icon_down.gif}" alt="生成EXCEL" title="生成EXCEL" />
 						</a> -->
 						<a href='javascript:void(0)' onclick="delModel({link:'{url:/market/ticket_discount_del/id/$item[id]}'});">
