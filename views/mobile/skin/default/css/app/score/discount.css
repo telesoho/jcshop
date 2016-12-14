@@ -1,0 +1,127 @@
+.header{
+    margin-top:-0.05rem;
+    height:0.98rem;
+    background:#fff;
+}
+.header .item{
+    -webkit-flex:1;
+    text-align: center;
+    height:0.59rem;
+    line-height:0.59rem;
+    position:relative;
+    font-size:0.3rem;
+    color:#3d4245;
+}
+.header .item div{
+    position:relative;
+    z-index:1;
+}
+.header .item span{
+    display: block;
+    position: absolute;
+    background:#ffdfc2;
+    width:0.61rem;
+    height:0.16rem;
+    left:0.46rem;
+    bottom:0.16rem;
+    z-index:0;
+}
+.header .item1{
+    border-right:1px solid #979797;
+}
+.header .item2 span{
+    background:#ddd8ff;
+}
+.header .item2{
+    border-right:1px solid #979797;
+}
+.header .item3 span{
+    background:#ffbceb;
+}
+#discount .content{
+
+}
+#discount .content .banner{
+    background:rgba(246,93,255,0.1);
+    width:7.5rem;
+    height:1.1rem;
+    line-height:1.1rem;
+    text-align: center;
+}
+#discount .content2 .banner{
+    background:rgba(8,88,255,0.1);
+}
+#discount .content3 .banner{
+    background:rgba(37,255,37,0.1);
+}
+#discount .content .ware{
+    display: -webkit-flex;
+    -webkit-justify-content: space-between;
+    -webkit-flex-wrap: wrap;
+    background:#fff;
+}
+/*处理格子*/
+#discount .content .ware .wareItem{
+    width:50%;
+    border-bottom:1px solid #bbb;
+}
+#discount .content .ware .wareItem:nth-child(2n){
+    border-left:1px solid #bbb;
+}
+#discount .content .ware .wareItem:nth-last-child(1){
+    border-bottom:none;
+}
+#discount .content .ware .wareItem:nth-last-child(2){
+    border-bottom:none;
+}
+/*处理图片*/
+#discount .content .ware .wareItem .img{
+    height:3.75rem;
+    position:relative;
+    border-bottom:1px solid #eee;
+}
+#discount .content .ware .wareItem .img .tipImg{
+    width:0.79rem;
+    height:0.85rem;
+    position:absolute;
+    top:0.17rem;
+    left:0.17rem;
+}
+#discount .content .ware .wareItem .img .wareimg{
+    width:3.1rem;
+    height:3.1rem;
+}
+#discount .content .ware .wareItem .mes{
+    padding:0.15rem;
+}
+#discount .content .ware .wareItem .mes .name{
+    font-size:0.24rem;
+    color:#3d4245;
+    margin-bottom:0.15rem;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+#discount .content .ware .wareItem .mes .box{
+    margin-bottom:0.1rem;
+}
+#discount .content .ware .wareItem .mes .price1 span{
+    color:#ff4aa0;
+    font-size:0.3rem;
+}
+#discount .content .ware .wareItem .mes .price1 span:nth-child(1){
+    font-size:0.24rem;
+}
+#discount .content .ware .wareItem .mes .price2 s{
+    color:#bbb;
+}
+
+#discount .content .ware .wareItem .mes .price2 span{
+    color:#bbb;
+    font-size:0.3rem;
+}
+#discount .content .ware .wareItem .mes .price2 span:nth-child(1){
+    font-size:0.24rem;
+}

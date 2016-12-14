@@ -1,10 +1,250 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="x5-orientation" content="portrait">
+    <title></title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/score/discount.css?v=<?php echo time(); ?>" />
 </head>
 <body>
-
+<div id="discount">
+    <header>
+        <img src="/views/mobile/skin/default/image/jmj/score/discount1.png" alt="" style="width:7.5rem;height:2.8rem" />
+        <div class="header flexbox">
+            <a href="#content1" class="item item1" :style="initState==1?color1:color2" @click="setState(1)"><div>50%off专区</div><span></span></a>
+            <a href="#content2" class="item item2" :style="initState==2?color1:color2" @click="setState(2)"><div>60%off专区</div><span></span></a>
+            <a href="#content3" class="item item3" :style="initState==3?color1:color2" @click="setState(3)"><div>70%off专区</div><span></span></a>
+        </div>
+    </header>
+    <section>
+        <div class="content content1" id="content1">
+            <div class="banner">
+                <span style="font-size:0.64rem">50</span><span style="font-size:0.4rem">%off专区</span>
+            </div>
+            <div class="ware">
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content content2" id="content2">
+            <div class="banner">
+                <span style="font-size:0.64rem">60</span><span style="font-size:0.4rem">%off专区</span>
+            </div>
+            <div class="ware">
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group6.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group6.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group6.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group6.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content content3" id="content3">
+            <div class="banner">
+                <span style="font-size:0.64rem">70</span><span style="font-size:0.4rem">%off专区</span>
+            </div>
+            <div class="ware">
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group2.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group2.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group2.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wareItem">
+                    <div class="img flexbox">
+                        <img src="/views/mobile/skin/default/image/jmj/score/Group2.png" alt=""  class="tipImg" />
+                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt=""  class="wareimg"/>
+                    </div>
+                    <div class="mes">
+                        <div class="name">
+                            这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字这里是商品的名字
+                        </div>
+                        <div class="box">
+                            <div class="price1"><span>¥</span> <span>250.00</span></div>
+                            <div class="price2"><s><span>¥</span> <span>550.00</span></s></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+<script>
+    var vm= new Vue({
+        el:'#discount',
+        data:{
+//            header状态调整
+            initState:1,
+            color1:'color:#ff4aa0',
+            color2:'color:#3d4245'
+        },
+        methods: {
+            setState: function(num){
+                this.initState=num;
+            }
+        }
+    })
+</script>
 </body>
 </html>
