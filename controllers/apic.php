@@ -59,7 +59,7 @@ class Apic extends IController{
 		if(!isset($this->user['user_id']) || $this->user['user_id']==null)
 			$this->json_echo(apireturn::go('001001'));
 
-		$user_id    = $this->user['user_id'];
+		$user_id = $this->user['user_id'];
 		//计算商品
 		$countSumObj = new CountSum($user_id);
 		$result      = $countSumObj->cart_count($id, $type, $buy_num, $promo, $active_id);
@@ -248,9 +248,9 @@ class Apic extends IController{
 		/* 接收参数 */
 		$aid     = IFilter::act(IReq::get('aid'), 'int');//活动ID，必填
 		$pid     = IFilter::act(IReq::get('pid'), 'int');//分享人ID，选填
+		if(!isset($this->user['user_id']) || empty($this->user['user_id'])) $this->json_echo(apireturn::go('001001'));
 		$user_id = $this->user['user_id'];
 		if($user_id==$pid) $pid = '';
-		if(empty($user_id)) $this->json_echo(apireturn::go('001001'));
 
 		/* 活动详情 */
 		$queryAti         = new IQuery('activity');
@@ -274,23 +274,41 @@ class Apic extends IController{
 		foreach($dataTck as $k => $v)
 			$idTck[] = $v['id'];
 
-		/* 是否已领取 */
 		$modelAcc = new IModel('activity_ticket_access');
-//		$dataAcc  = $modelAcc->getObj('user_id='.$user_id.' AND ticket_id in ("'.implode(',', $idTck).'")');
-		
-		$dataAcc  = $modelAcc->getObj('`from`='.(empty($pid) ? 0 : $pid).' AND user_id='.$user_id.' AND ticket_id in ("'.implode(',', $idTck).'")');
-		if(!empty($dataAcc)) $this->json_echo(apireturn::go(empty($pid) ? '002021' : '002024')); //已领取过优惠券
 		/* 是否已领完 */
 		$countAcc = $modelAcc->get_count('ticket_id in ("'.implode(',', $idTck).'")');
 		if($countAcc>=$dataAti['num']) $this->json_echo(apireturn::go('002022')); //优惠券已领完
+		/* 是否已领取 */
+		switch($aid){
+			case 1: //新人活动
+				$dataAcc = $modelAcc->getObj('`from`='.(empty($pid) ? 0 : $pid).' AND user_id='.$user_id.' AND ticket_id in ('.implode(',', $idTck).')');
+				if(!empty($dataAcc)) $this->json_echo(apireturn::go(empty($pid) ? '002021' : '002024')); //已领取过优惠券
+				/* 开始领取 */
+				$dataTckOn = $dataTck[rand(0, count($dataTck)-1)];
+				break;
+			case 2: //圣诞活动
+				$where   = 'user_id='.$user_id.' AND ticket_id in ("'.implode(',', $idTck).'") AND `from`=0';
+				$dataAcc = $modelAcc->query($where, '*', 'id desc', 1);
+				if(!empty($dataAcc) && strtotime(date('Y-m-d', time()))<=$dataAcc[0]['create_time'])
+					$this->json_echo(apireturn::go('002025')); //今天已经领取过优惠券
+				if(!empty($pid)){
+					$dataAcc = $modelAcc->getObj('user_id='.$user_id.' AND ticket_id in ('.implode(',', $idTck).') AND `from`!=0');
+					if(!empty($dataAcc)) $this->json_echo(apireturn::go('002025')); //好友分享的优惠券只能领取一次
+				}
+				/* 开始领取 */
+				$dataTckOn = rand(1, 5)==1 ? $dataTck[0] : $dataTck[rand(1, count($dataTck)-1)];
+				break;
+			default:
+				$dataAcc = $modelAcc->getObj('user_id='.$user_id.' AND ticket_id in ('.implode(',', $idTck).')');
+				if(!empty($dataAcc)) $this->json_echo(apireturn::go('002026')); //只能领取一次
+		}
 
-		/* 开始领取 */
-		$dataTckOn = $dataTck[rand(0, count($dataTck)-1)];
+		/* 写入数据 */
 		$modelAcc->setData(array(
-			'user_id'   => $user_id,
-			'ticket_id' => $dataTckOn['id'],
-			'status'    => 1,
-			'from'      => empty($pid) ? 0 : $pid,
+			'user_id'     => $user_id,
+			'ticket_id'   => $dataTckOn['id'],
+			'status'      => 1,
+			'from'        => empty($pid) ? 0 : $pid,
 			'create_time' => time(),
 		));
 		$rel = $modelAcc->add();
@@ -386,6 +404,33 @@ class Apic extends IController{
 
 		/* 返回数据 */
 		$this->json_echo(apireturn::go('0', $data));
+	}
+
+	/**
+	 * 获取活动消费金额
+	 */
+	public function activity_grow_val(){
+		/* 获取参数 */
+//		$aid  = IFilter::act(IReq::get('aid'), 'int'); //活动ID，必填
+//		if(!isset($this->user['user_id']) || empty($this->user['user_id'])) $this->json_echo(apireturn::go('001001'));
+//		$user_id = $this->user['user_id'];
+//
+//		/* 活动详情 */
+//		$modelAti = new IModel('activity');
+//		$dataAti = $modelAti->getObj('id='.$aid);
+//		if(empty($dataAti)) $this->json_echo(apireturn::go('002016')); //活动不存在
+//		if($dataAti['status']!=1) $this->json_echo(apireturn::go('002017')); //活动禁用
+//		if($dataAti['start_time']>time()) $this->json_echo(apireturn::go('002018')); //活动未开始
+//		if($dataAti['end_time']<time()) $this->json_echo(apireturn::go('002019')); //活动已结束
+		$user_id=20;
+		$dataAti = array(
+			'start_time' => 0,
+			'end_time' => time(),
+		);
+		/*  *///TODO
+		$modelOrder = new IModel('order');
+		$dataOrder = $modelOrder->getObj('user_id='.$user_id.' AND `pay_type`!=0 AND `status` IN (2,5) AND `pay_time`>="'.date('Y-m-d H:i:s',$dataAti['start_time']).'" AND `pay_time`<="'.date('Y-m-d H:i:s',$dataAti['end_time']).'"','SUM(`real_amount`)');
+		var_dump($dataOrder);var_dump($modelOrder->getSql());exit();
 	}
 
 	/**
@@ -1510,7 +1555,7 @@ class Apic extends IController{
 		$data1                 = $favorite_query->find();
 		if(!empty($data1)){
 			/* 计算活动商品价格 */
-			$list = api::run('goodsActivity', $list);
+			$data1 = api::run('goodsActivity', $data1);
 			foreach($data1 as $key => $value){
 				$data1[$key]['img'] = empty($value['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/200/h/200");
 			}
