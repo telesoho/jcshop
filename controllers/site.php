@@ -1332,4 +1332,32 @@ class Site extends IController
             echo $name . '<br>';
         }
     }
+
+    /**
+     * User: chenbo
+     * 生成关注访问量统计的二维码
+     */
+    function recommender_qrcode (){
+        $qrcode_id = IFilter::act(IReq::get('id'), 'int');
+        require_once __DIR__ . '/../plugins/wechat/wechat.php';
+        $wechat = new \wechat();
+        $wechat->setConfig();
+        $token =  $wechat->getAccessToken();
+        $url = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=' . $token;
+        $params = array(
+            'action_name' => 'QR_LIMIT_SCENE',
+            'action_info' => array(
+                'scene' => array(
+                    'scene_id' => $qrcode_id
+                )
+            )
+        );
+        $ret = shop::http_post_json($url, json_encode($params));
+        list($returnCode, $returnContent) = $ret;
+        $returnContent = json_decode($returnContent);
+        $ticket = $returnContent->ticket;
+        $url = $returnContent->url;
+        $qrcode_image_url = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . $ticket;
+        echo '<img src="'.$qrcode_image_url.'">';
+    }
 }
