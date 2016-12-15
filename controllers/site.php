@@ -250,9 +250,6 @@ class Site extends IController
                 if (!empty($goods_list)) {
                 	/* 计算活动商品价格 */
                 	$goods_list 				= api::run('goodsActivity',$goods_list);
-                	foreach ($data1 as $key=>$value){
-                		$data1[$key]['img'] 		= empty($value['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$value['img']."/w/200/h/200");
-                	}
                     foreach ($goods_list as $k1 => $v1) {
                         $goods_list[$k1]['img'] = IWeb::$app->config['image_host'] . IUrl::creatUrl("/pic/thumb/img/" . $v1['img'] . "/w/240/h/240");
                     }
