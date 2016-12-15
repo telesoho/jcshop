@@ -54,12 +54,12 @@ class Apic extends IController{
 		//         $tourist   				= IReq::get('tourist');//游客方式购物
 		$code       = IFilter::act(IReq::get('code'), 'int');
 		$ticket_aid = IFilter::act(IReq::get('ticket_aid'), 'int');
-		$user_id    = $this->user['user_id'];
 
 		//必须为登录用户
-		if($this->user['user_id']==null)
+		if(!isset($this->user['user_id']) || $this->user['user_id']==null)
 			$this->json_echo(apireturn::go('001001'));
 
+		$user_id    = $this->user['user_id'];
 		//计算商品
 		$countSumObj = new CountSum($user_id);
 		$result      = $countSumObj->cart_count($id, $type, $buy_num, $promo, $active_id);
@@ -246,10 +246,10 @@ class Apic extends IController{
 	 */
 	public function get_ticket_activity(){
 		/* 接收参数 */
-		$aid     = IFilter::act(IReq::get('aid'), 'int');//活动ID
-		$pid     = IFilter::act(IReq::get('pid'), 'int');//分享人ID
+		$aid     = IFilter::act(IReq::get('aid'), 'int');//活动ID，必填
+		$pid     = IFilter::act(IReq::get('pid'), 'int');//分享人ID，选填
 		$user_id = $this->user['user_id'];
-		if($aid==$pid) $pid = '';
+		if($user_id==$pid) $pid = '';
 		if(empty($user_id)) $this->json_echo(apireturn::go('001001'));
 
 		/* 活动详情 */
@@ -258,31 +258,31 @@ class Apic extends IController{
 		$queryAti->fields = 'id,start_time,end_time,num,share_num,share_score,status';
 		$queryAti->limit  = 1;
 		$dataAti          = $queryAti->find();
-		if(empty($dataAti)) $this->json_echo(apireturn::go('002016'));
+		if(empty($dataAti)) $this->json_echo(apireturn::go('002016')); //活动不存在
 		$dataAti = $dataAti[0];
-		if($dataAti['status']!=1) $this->json_echo(apireturn::go('002017'));
-		if($dataAti['start_time']>time()) $this->json_echo(apireturn::go('002018'));
-		if($dataAti['end_time']<time()) $this->json_echo(apireturn::go('002019'));
+		if($dataAti['status']!=1) $this->json_echo(apireturn::go('002017')); //活动禁用
+		if($dataAti['start_time']>time()) $this->json_echo(apireturn::go('002018')); //活动未开始
+		if($dataAti['end_time']<time()) $this->json_echo(apireturn::go('002019')); //活动已结束
 
 		/* 包含的优惠券列表 */
 		$queryTck         = new IQuery('activity_ticket');
 		$queryTck->where  = 'pid='.$aid;
 		$queryTck->fields = 'id,name,type,rule';
 		$dataTck          = $queryTck->find();
-
-		if(empty($dataTck)) $this->json_echo(apireturn::go('002020'));
+		if(empty($dataTck)) $this->json_echo(apireturn::go('002020')); //活动不包含优惠券
 		$idTck = array(); //优惠券ID
-		foreach($dataTck as $k => $v){
+		foreach($dataTck as $k => $v)
 			$idTck[] = $v['id'];
-		}
 
 		/* 是否已领取 */
 		$modelAcc = new IModel('activity_ticket_access');
+//		$dataAcc  = $modelAcc->getObj('user_id='.$user_id.' AND ticket_id in ("'.implode(',', $idTck).'")');
+		
 		$dataAcc  = $modelAcc->getObj('`from`='.(empty($pid) ? 0 : $pid).' AND user_id='.$user_id.' AND ticket_id in ("'.implode(',', $idTck).'")');
-		if(!empty($dataAcc)) $this->json_echo(apireturn::go(empty($pid) ? '002021' : '002024'));
+		if(!empty($dataAcc)) $this->json_echo(apireturn::go(empty($pid) ? '002021' : '002024')); //已领取过优惠券
 		/* 是否已领完 */
 		$countAcc = $modelAcc->get_count('ticket_id in ("'.implode(',', $idTck).'")');
-		if($countAcc>=$dataAti['num']) $this->json_echo(apireturn::go('002022'));
+		if($countAcc>=$dataAti['num']) $this->json_echo(apireturn::go('002022')); //优惠券已领完
 
 		/* 开始领取 */
 		$dataTckOn = $dataTck[rand(0, count($dataTck)-1)];
@@ -291,9 +291,10 @@ class Apic extends IController{
 			'ticket_id' => $dataTckOn['id'],
 			'status'    => 1,
 			'from'      => empty($pid) ? 0 : $pid,
+			'create_time' => time(),
 		));
 		$rel = $modelAcc->add();
-		if($rel==false) $this->json_echo(apireturn::go('002023'));
+		if($rel==false) $this->json_echo(apireturn::go('002023')); //领取失败
 
 		/* 分享人增加积分 */
 		if(!empty($pid)){
@@ -311,23 +312,32 @@ class Apic extends IController{
 			//满减券
 			case 1 :
 				$rule             = explode(',', $dataTckOn['rule']);
-				$dataTckOn['msg'] = '满'.$rule[0].'减'.$rule[1];
+				$dataTckOn['msg'] = '满'.$rule[0].'减'.$rule[1].'券';
 				break;
 			//无门槛券
 			case 2:
-				$dataTckOn['msg'] = '抵'.$dataTckOn['rule'].'元';
+				$dataTckOn['msg'] = '抵扣券'.$dataTckOn['rule'].'元';
 				break;
+			//折扣券
 			case 3:
+				$dataTckOn['msg'] = ($dataTckOn['rule']*10).'折券';
 				break;
+			//商务合作券
 			case 4:
+				$dataTckOn['msg'] = '商务合作券'.$dataTckOn['rule'].'元（不包邮）';
 				break;
+			//包邮券
 			case 5:
+				$dataTckOn['msg'] = '包邮券';
 				break;
+			//税值券
 			case 6:
+				$dataTckOn['msg'] = '税值券';
 				break;
 		}
 		$this->json_echo(apireturn::go('0', $dataTckOn));
 	}
+
 	/**
 	 * ---------------------------------------------------活动---------------------------------------------------*
 	 */
@@ -336,10 +346,10 @@ class Apic extends IController{
 	 */
 	public function activity_goods_list(){
 		/* 接收参数 */
-		$page = IFilter::act(IReq::get('page'), 'int');//分页
-		$aid  = IFilter::act(IReq::get('aid'), 'int'); //活动ID
-		$cid  = IFilter::act(IReq::get('cid')); //分类ID
-		$bid  = IFilter::act(IReq::get('bid'), 'int'); //品牌ID
+		$page = IFilter::act(IReq::get('page'), 'int');//分页，选填
+		$aid  = IFilter::act(IReq::get('aid'), 'int'); //活动ID，选填
+		$cid  = IFilter::act(IReq::get('cid')); //分类ID，选填
+		$bid  = IFilter::act(IReq::get('bid'), 'int'); //品牌ID，选填
 
 		/* 获取下级分类 */
 		if(!empty($cid)){
@@ -357,7 +367,7 @@ class Apic extends IController{
 		/* 获取数据 */
 		$query           = new IQuery('goods as m');
 		$query->join     = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
-		$query->where    = 'm.is_del=0 AND m.activity=1'.(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')').(empty($bid) ? '' : ' AND m.brand_id='.$bid);
+		$query->where    = 'm.is_del=0 AND m.activity'.(empty($aid) ? '>0' : '='.$aid).(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')').(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')').(empty($bid) ? '' : ' AND m.brand_id='.$bid);
 		$query->fields   = 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity';
 		$query->order    = 'm.sale desc,m.visit desc';
 		$query->group    = 'm.id';
@@ -375,6 +385,85 @@ class Apic extends IController{
 		}
 
 		/* 返回数据 */
+		$this->json_echo(apireturn::go('0', $data));
+	}
+
+	/**
+	 * 圣诞节活动首页
+	 */
+	public function christmas_index(){
+		/* 获取活动热销商品 */
+		$query = new IQuery('goods as m');
+		$data  = array();
+		for($i = 1; $i<=7; $i++){
+			$limit = 4;
+			switch($i){
+				case 1: //排行商品
+					$limit = 10;
+					break;
+				case 2: //大牌专场
+					break;
+				case 3: //聚划算
+					break;
+				case 4: //喵酱推荐
+					break;
+				case 5:
+					break;
+				case 6:
+					break;
+				case 7:
+					break;
+			}
+			$query->join     = 'LEFT JOIN brand AS b ON b.id=m.brand_id';
+			$query->where    = 'm.is_del=0 AND m.activity=1';
+			$query->fields   = 'm.id,m.name,m.sell_price,m.original_price,m.img,b.name as brand_name,b.logo as brand_logo';
+			$query->order    = 'm.sale desc,visit desc';
+			$query->limit    = $limit;
+			$data['list'.$i] = $query->find();
+			if(!empty($data['list'.$i])){
+				/* 计算活动商品价格 */
+				$data['list'.$i] = api::run('goodsActivity', $data['list'.$i]);
+				foreach($data['list'.$i] as $k => $v){
+					$data['list'.$i][$k]['diff_price'] = $v['original_price']-$v['sell_price']; //差价
+					$data['list'.$i][$k]['img']        = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
+					$data['list'.$i][$k]['brand_logo'] = empty($v['brand_logo']) ? '' : IWeb::$app->config['image_host'].'/'.$v['brand_logo'];
+				}
+			}
+		}
+		var_dump($data);
+
+		$cat  = array(
+			array(
+				'id'   => 1,
+				'name' => '个护',
+				'cid'  => '',
+			),
+			array(
+				'id'   => 2,
+				'name' => '个护',
+				'cid'  => '',
+			),
+			array(
+				'id'   => 3,
+				'name' => '个护',
+				'cid'  => '',
+			),
+			array(
+				'id'   => 4,
+				'name' => '个护',
+				'cid'  => '',
+			),
+			array(
+				'id'   => 5,
+				'name' => '个护',
+				'cid'  => '',
+			),
+		);
+		$data = array(
+			'cat'  => $cat,
+			'list' => $list,
+		);
+
 		$this->json_echo(apireturn::go('0', $data));
 	}
 
@@ -435,7 +524,7 @@ class Apic extends IController{
 			'user_id'     => $user_id,
 			'accept_name' => $accept_name,
 			'zip'         => $zip,
-			'telphone'    => $telphone,
+//			'telphone'    => $telphone,
 			'province'    => $province,
 			'city'        => $city,
 			'area'        => $area,
