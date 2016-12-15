@@ -406,6 +406,7 @@ class Simple extends IController
 		//获取商品数据信息
     	$countSumObj 			= new CountSum($user_id);
 		$goodsResult 			= $countSumObj->cart_count($gid,$type,$num,$promo,$active_id);
+		
 		if($countSumObj->error) IError::show(403,$countSumObj->error);
 
 		//收件地址

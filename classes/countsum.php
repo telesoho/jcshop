@@ -184,7 +184,8 @@ class CountSum
 	    		$goodsIdStr = join(',',$buyInfo['goods']['id']);
 	    		$goodsObj   = new IModel('goods as go');
 	    		$goodsList  = $goodsObj->query('go.id in ('.$goodsIdStr.')','go.name,go.cost_price,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id');
-
+				/* 计算活动商品价格 */
+	    		$goodsList 	= api::run('goodsActivity',$goodsList,'goods_id');
 	    		//开始优惠情况判断
 	    		foreach($goodsList as $key => $val)
 	    		{

@@ -145,7 +145,6 @@ class Market extends IController implements adminAuthorization
 		$query 							= new IQuery('goods');
 		$query->where 					= 'activity='.$aid;
 		$query->fields 					= 'id,goods_no,img,name,is_del';
-// 		$query->limit 		= 10;
 		$data['list'] 					= $query->find();
 		
 		/* 模板赋值 */
