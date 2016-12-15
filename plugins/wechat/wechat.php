@@ -603,6 +603,7 @@ class wechat extends pluginBase
 			//开始订阅
 			case "subscribe":
 			{
+			    $this->add_qrcode_follow($postObj->EventKey);
 				$this->textReplay('亲爱的喵们！ 
  
 欢迎来到九猫家微信服务号～
@@ -893,4 +894,14 @@ OEF;
 			header('location: '.$url);
 		}
 	}
+
+    /**
+     * User: chenbo
+     * 添加用户扫码关注
+     */
+	public function add_qrcode_follow($scene_id){
+	    $follow_model = new IModel('follow');
+        $follow_model->setData(['scene_id'=>$scene_id, 'follow_time'=>date('Y-m-d H:i:s',time())]);
+        $follow_model->add();
+    }
 }
