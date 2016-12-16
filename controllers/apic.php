@@ -269,7 +269,7 @@ class Apic extends IController{
 
 		$modelAcc = new IModel('activity_ticket_access');
 		/* 是否已领完 */
-		$countAcc = $modelAcc->get_count('ticket_id in ("'.implode(',', $idTck).'")');
+		$countAcc = $modelAcc->get_count('ticket_id in ('.implode(',', $idTck).')');
 		if($countAcc>=$dataAti['num']) $this->json_echo(apiReturn::go('002022')); //优惠券已领完
 		/* 是否已领取 */
 		switch($aid){
@@ -280,7 +280,7 @@ class Apic extends IController{
 				$dataTckOn = $dataTck[rand(0, count($dataTck)-1)];
 				break;
 			case 2: //圣诞活动
-				$where   = 'user_id='.$user_id.' AND ticket_id in ("'.implode(',', $idTck).'") AND `from`=0';
+				$where   = 'user_id='.$user_id.' AND ticket_id in ('.implode(',', $idTck).') AND `from`=0';
 				$dataAcc = $modelAcc->query($where, '*', 'id desc', 1);
 				if(!empty($dataAcc) && strtotime(date('Y-m-d', time()))<=$dataAcc[0]['create_time'])
 					$this->json_echo(apiReturn::go('002025')); //今天已经领取过优惠券
@@ -646,20 +646,39 @@ class Apic extends IController{
 	}
 
 	/**
-	 * 圣诞活动banner、tietle
+	 * 大牌专区
 	 */
-	public function christmas_title(){
-		$tid = IFilter::act(IReq::get('tid'), 'int'); //类型ID，必填
-
-		$data = array();
-		switch($tid){
-			case 1:
-				break;
-			case 2:
-				break;
-			default:
-				$this->json_echo(apiReturn::go('-1'));
+	public function christmas_brand_list(){
+		$brand_ids = '26,32,56,74,78,82,100'; //需要显示的品牌ID
+		/* 品牌列表 */
+		$queryBrand         = new IQuery('brand');
+		$queryBrand->where  = 'id IN ('.$brand_ids.') AND logo IS NOT NULL';
+		$queryBrand->fields = 'id,name,logo';
+		$queryBrand->limit  = 6;
+		$listBrand          = $queryBrand->find();
+		foreach($listBrand as $k => $v){
+			//logo
+			$listBrand[$k]['log'] = empty($v['logo']) ? '' : IWeb::$app->config['image_host'].'/'.$v['logo'];
 		}
+
+		/* 品牌下的最热商品3个 */
+		$queryGoods         = new IQuery('goods');
+		$queryGoods->where  = 'is_del=0 AND brand_id IN ('.$brand_ids.')';
+		$queryGoods->fields = 'id,name,sell_price,img';
+		$queryGoods->order  = 'sale DESC,visit DESC';
+		$queryGoods->limit  = 3;
+		$listGoods          = $queryGoods->find();
+		/* 更新活动商品价格 */
+		$listGoods = Api::run('goodsActivity', $listGoods);
+		foreach($listGoods as $k => $v){
+			$listGoods[$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
+		}
+
+		/* 返回参数 */
+		$data = array(
+			'goods_list' => $listGoods, //商品列表
+			'brand_list' => $listBrand, //品牌列表
+		);
 		$this->json_echo(apiReturn::go('0', $data));
 	}
 
@@ -955,9 +974,25 @@ class Apic extends IController{
 	/**
 	 * 商品详情
 	 */
-	function products_details(){
+	public function goods_details(){
 		/* 获取参数 */
-		$goods_id = IFilter::act(IReq::get('id'), 'int');
+		$goods_id = IFilter::act(IReq::get('id'), 'int'); //商品ID
+
+		/* 获取商品详情 */
+		$modelGoods = new IModel('goods');
+		$fields     = 'id,name,sell_price,original_price';
+		$dataGoods  = $modelGoods->getObj('is_del=0 AND id='.$goods_id);
+		if(empty($dataGoods)) $this->json_echo(apiReturn::go('006001')); //商品不存在
+		/* 计算活动商品价格 */
+		$dataGoods = Api::run('goodsActivity', $dataGoods);
+	}
+
+	/**
+	 * 商品详情
+	 */
+	public function products_details(){
+		/* 获取参数 */
+		$goods_id = IFilter::act(IReq::get('id'), 'int'); //商品ID
 		if(!$goods_id){
 			IError::show(403, "传递的参数不正确");
 			exit();
