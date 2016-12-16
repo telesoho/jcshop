@@ -53,6 +53,8 @@ class APIGoods
 			$goods_ratio = (new Config('jmj_config'))->goods_ratio; //全场折扣率
 			$goods_ratio = $goods_ratio>1||$goods_ratio<=0 ? 1 : $goods_ratio;
 			foreach($data as $k => $v){
+				if(isset($v['original_price']))
+					$data[$k]['original_price']	= round($v['original_price']*1.2,2);
 				if(!isset($v['sell_price'])) continue;
 				if( isset($aGoods[$v[$key]]) ){
 					//活动打折商品

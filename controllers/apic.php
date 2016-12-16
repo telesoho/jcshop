@@ -477,7 +477,7 @@ class Apic extends IController{
 				$dataGoods['product_id'] = 0; //货号
 				$dataGoods['count']      = 1; //商品数量
 				$dataGoods['seller_id']  = 0; //卖家ID
-				$dataGoods['reduce'] 	= $dataGoods['sell_price'];
+				$dataGoods['reduce']     = $dataGoods['sell_price'];
 				//查询收货地址 TODO
 				$modelAdr = new IModel('address');
 				$dataAdr  = $modelAdr->getObj('id='.$did.' AND user_id='.$user_id);
@@ -568,28 +568,38 @@ class Apic extends IController{
 		$query = new IQuery('goods as m');
 		$data  = array();
 		for($i = 1; $i<=7; $i++){
-			$limit = 4;
+			$limit = 3;
 			switch($i){
 				case 1: //排行商品
 					$limit = 10;
+					$where = 'm.is_del=0';
 					break;
 				case 2: //大牌专场
+					$where = 'm.is_del=0 AND b.name IN ("资生堂","花王","嘉娜宝","ROSETTE","dhc","高丝","小林制药")';
 					break;
 				case 3: //聚划算
+					$where = 'm.is_del=0 AND m.activity=2';
 					break;
-				case 4: //喵酱推荐
+				case 4: //狗子推荐
+					$where = 'm.is_del=0 AND d.commend_id=4 AND c.category_id IN ('.goods_class::catChild(126).')';
 					break;
-				case 5:
+				case 5: //奶糖推荐
+					$where = 'm.is_del=0 AND d.commend_id=4 AND c.category_id IN ('.goods_class::catChild(134).')';
 					break;
-				case 6:
+				case 6: //腿毛推荐
+					$where = 'm.is_del=0 AND d.commend_id=4 AND c.category_id IN ('.goods_class::catChild(6).')';
 					break;
-				case 7:
+				case 7: //昔君推荐
+					$where = 'm.is_del=0 AND d.commend_id=4 AND c.category_id IN ('.goods_class::catChild(2).')';
+					break;
+				case 8: //一哥推荐
+					$where = 'm.is_del=0 AND d.commend_id=4 AND c.category_id IN ('.goods_class::catChild(7).')';
 					break;
 			}
-			$query->join     = 'LEFT JOIN brand AS b ON b.id=m.brand_id';
-			$query->where    = 'm.is_del=0 AND m.activity=1';
+			$query->join     = 'LEFT JOIN brand AS b ON b.id=m.brand_id LEFT JOIN commend_goods AS d ON d.goods_id=m.id LEFT JOIN category_extend AS c ON c.goods_id=m.id ';
+			$query->where    = $where;
 			$query->fields   = 'm.id,m.name,m.sell_price,m.original_price,m.img,b.name as brand_name,b.logo as brand_logo';
-			$query->order    = 'm.sale desc,visit desc';
+			$query->order    = 'm.sale desc,m.visit desc';
 			$query->limit    = $limit;
 			$data['list'.$i] = $query->find();
 			if(!empty($data['list'.$i])){
@@ -602,34 +612,16 @@ class Apic extends IController{
 				}
 			}
 		}
+		/* 专场分类 */
 		$data['cat'] = array(
-			array(
-				'id'   => 1,
-				'name' => '个护',
-				'cid'  => '',
-			),
-			array(
-				'id'   => 2,
-				'name' => '个护',
-				'cid'  => '',
-			),
-			array(
-				'id'   => 3,
-				'name' => '个护',
-				'cid'  => '',
-			),
-			array(
-				'id'   => 4,
-				'name' => '个护',
-				'cid'  => '',
-			),
-			array(
-				'id'   => 5,
-				'name' => '个护',
-				'cid'  => '',
-			),
+			array('id' => 1, 'name' => '药妆', 'cid' => 126,),
+			array('id' => 2, 'name' => '个护', 'cid' => 134,),
+			array('id' => 3, 'name' => '宠物', 'cid' => 6,),
+			array('id' => 4, 'name' => '健康', 'cid' => 2,),
+			array('id' => 5, 'name' => '零食', 'cid' => 7,),
 		);
 
+		/* 数据返回 */
 		$this->json_echo(apiReturn::go('0', $data));
 	}
 
