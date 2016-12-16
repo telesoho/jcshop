@@ -1,0 +1,33 @@
+body,html{
+	width: 100%;
+	height: 100%;
+	background: #eeeeee;
+	
+}
+p{
+	font-size:0.3rem;
+	color:#3d4245;
+	letter-spacing:0px;
+	line-height:0.32rem;
+	margin-bottom:0.17rem ;
+	padding-left:0.3rem ;
+}
+span{
+	font-size:0.28rem;
+	color:#bbbbbb;
+	line-height:0.3rem;
+	width: 6.91rem;
+	display: block;
+	margin: 0 auto;
+	
+}
+section{
+	height: 6.95rem;
+	width: 100%;
+	background: #fff;
+	padding-top:0.4rem ;
+	
+}
+.span1{
+	text-align: justify;
+}
