@@ -26,7 +26,7 @@ class ticket
 				$msg 					= '抵'.$ticket_data['money'].'元优惠券';
 				break;
 			default:
-				return apireturn::go('002006');
+				return apiReturn::go('002006');
 		}
 		
 		/* 计算邮费 */
@@ -52,7 +52,7 @@ class ticket
         	'name' 				=> $ticket_data['name'], 	//优惠券名称
         	'msg' 				=> $msg,
         );
-		return apireturn::go('0',$data);
+		return apiReturn::go('0',$data);
 	}
 	
 	/**
@@ -67,6 +67,7 @@ class ticket
 		
 		/* 包邮 */
 		$is_delivery 				= 0; //是否包邮[0正常计算-1包邮-2不包邮]
+		$msg = '';
 		
 		/* 优惠券类型 */
 		switch ($ticket_data['type']){
@@ -75,9 +76,9 @@ class ticket
 				//优惠券规则
 				$rule 					= explode(',',$ticket_data['rule']);
 				if(count($rule)!=2 || $rule[0]<=0 || $rule[1]<=0)
-					return apireturn::go('002013');
+					return apiReturn::go('002013');
 				if($data['sum'] < $rule[0])
-					return apireturn::go('002014');
+					return apiReturn::go('002014');
 				//计算优惠
 				$money 					= $data['sum']-$rule[1];
 				$data['sum'] = $data['final_sum'] = $money<=0 ? 0 : $money;
@@ -113,7 +114,7 @@ class ticket
     		case 6:
 //     			break;
 			default:
-				return apireturn::go('002012');
+				return apiReturn::go('002012');
 		}
 		
 		/* 计算邮费 */
@@ -135,7 +136,7 @@ class ticket
 			'name' 				=> $ticket_data['name'], 	//优惠券名称
 			'msg' 				=> $msg,
 		);
-		return apireturn::go('0',$data);
+		return apiReturn::go('0',$data);
 	}
 	
 	/**
@@ -146,7 +147,7 @@ class ticket
 		$model_ticket 				= new IModel('ticket_discount');
 		$data_ticket 				= $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did,'type,ratio,money');
 		if( empty($data_ticket ))
-			return apireturn::go('002002');
+			return apiReturn::go('002002');
 		//折扣券已使用状态
 		$user_id 					= IWeb::$app->getController()->user['user_id'];
 		$model_ticket->setData(array('status'=>2,'user_id'=>$user_id));
@@ -174,7 +175,7 @@ class ticket
 				$data['deliveryPrice'] 		+= ceil(($data['weight']-$postage['delivery']['first_weight'])/$postage['delivery']['second_weight'])*$postage['delivery']['second_price'];
 			}
 		}
-		return apireturn::go('0',$data);
+		return apiReturn::go('0',$data);
 	}
 	
 	/**
@@ -196,9 +197,9 @@ class ticket
 				//优惠券规则
 				$rule 					= explode(',',$ticket_data['rule']);
 				if(count($rule)!=2 || $rule[0]<=0 || $rule[1]<=0)
-					return apireturn::go('002013');
+					return apiReturn::go('002013');
 				if($data['sum'] < $rule[0])
-					return apireturn::go('002014');
+					return apiReturn::go('002014');
 				//计算优惠
 				$money 					= $data['sum'] - $rule[1];
 				$data['sum'] 			= $money<=0 ? 0 : $money;
@@ -230,7 +231,7 @@ class ticket
 			case 6:
 //     			break;
 			default:
-				return apireturn::go('002012');
+				return apiReturn::go('002012');
 		}
 		
 		/* 计算邮费 */
@@ -250,7 +251,7 @@ class ticket
 		$model_ticket->setData(array('status'=>2));
 		$model_ticket->update('`id`='.$ticket_aid);
 		
-		return apireturn::go('0',$data);
+		return apiReturn::go('0',$data);
 	}
 
 	/**
@@ -258,7 +259,7 @@ class ticket
 	 */
 	public static function checkCode($code=0){
 		/* 优惠券 */
-		if(empty($code) || $code<=0 || $code>999999) return apireturn::go('002001');
+		if(empty($code) || $code<=0 || $code>999999) return apiReturn::go('002001');
 		/* 获取折扣券数据 */
 		$query 				 		= new IQuery('ticket_discount');
 		$query->where 				= 'code='.$code;
@@ -266,15 +267,15 @@ class ticket
 		$query->limit 				= 1;
 		$ticket_data 				= $query->find();
 		if(empty($ticket_data))
-			return apireturn::go('002002');
+			return apiReturn::go('002002');
 		$ticket_data 				= $ticket_data[0];
 		if($ticket_data['start_time']>time() || $ticket_data['end_time']<time())
-			return apireturn::go('002003');
+			return apiReturn::go('002003');
 		if($ticket_data['status'] == 2)
-			return apireturn::go('002004');
+			return apiReturn::go('002004');
 		if($ticket_data['status'] != 1)
-			return apireturn::go('002005');
-		return apireturn::go('0',$ticket_data);
+			return apiReturn::go('002005');
+		return apiReturn::go('0',$ticket_data);
 	}
 	
 	/**
@@ -291,15 +292,15 @@ class ticket
 		$data 						= $query->find();
 		//判断优惠券是否存在
 		if( empty($data) )
-			return apireturn::go('002007');
+			return apiReturn::go('002007');
 		$data 						= $data[0];
 		if( $data['start_time'] > time() )
-			return apireturn::go('002008');
+			return apiReturn::go('002008');
 		if( $data['end_time'] < time() )
-			return apireturn::go('002009');
+			return apiReturn::go('002009');
 		if( $data['status'] != 1 )
-			return apireturn::go('002011');
-		return apireturn::go('0',$data);
+			return apiReturn::go('002011');
+		return apiReturn::go('0',$data);
 	}
 	
 	/**
