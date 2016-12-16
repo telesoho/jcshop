@@ -19,7 +19,7 @@ var em = new Vue({
 					"/views/mobile/skin/default/image/jmj/new_active/banner/9.png",
 					"/views/mobile/skin/default/image/jmj/new_active/banner/10.png",
 					"/views/mobile/skin/default/image/jmj/new_active/banner/11.png",
-//					"/views/mobile/skin/default/image/jmj/new_active/banner/12.png"
+					"/views/mobile/skin/default/image/jmj/new_active/banner/12.png"
 				]
 //		banner图为专场
 		
@@ -106,7 +106,7 @@ function getActiveInfo(self){
 ////			data.data.map(function(item){
 ////				self.info.push(item);
 ////			})
-//		console.log(data.data)
+		console.log(data.data)
 		},
 
 	});

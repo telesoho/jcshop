@@ -134,7 +134,8 @@ nav ul li span{
 	margin-top:0.3rem ;
 	display: -webkit-flex;
 	-webkit-flex-wrap: wrap;
-	-webkit-justify-content: space-around;
+	-webkit-justify-content: space-between;
+	padding:0 0.15rem;
 }
 .t ul li{
 	width: 3.5rem;
@@ -150,7 +151,7 @@ nav ul li span{
 	width: 3.43rem;
 	margin-left: 0.09rem;
 	overflow:hidden; 
-	height: 0.75rem;
+	height: 0.7rem;
 	text-overflow:ellipsis;
 	display:-webkit-box; 
 	-webkit-box-orient:vertical;
