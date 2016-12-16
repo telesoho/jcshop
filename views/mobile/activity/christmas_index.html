@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>圣诞好礼</title>
+	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
+	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/christmas_index.css?v=<?php echo time(); ?>"/>
+
+</head>
+<body>
+	<div id="wrap" v-cloak>
+		
+	
+	<div id="top">
+		<a href="/activity/christmas_ticket"><img src="/views/mobile/skin/default/image/jmj/new_active/index1.jpg"/></a>
+		<a href="/activity/christmas_grow"><img src="/views/mobile/skin/default/image/jmj/new_active/index2.jpg"/></a>
+		<img src="/views/mobile/skin/default/image/jmj/new_active/index3.jpg"/>
+		<a href="/activity/christmas_ticket"><img src="/views/mobile/skin/default/image/jmj/new_active/index4.jpg"/></a>
+	</div>
+	<!--						导航					-->
+	<nav>
+		<ul>
+			<li v-for="catitem in newcat"><a :href="catitem.url">
+				<img :src="catitem.src"/>
+				<span>{{catitem.name}}专区</span>
+			</a>	
+			</li>
+			<!--<li>
+				<img src="/views/mobile/skin/default/image/jmj/new_active/yaozhuang.png"/>
+				<span>药妆专区</span>
+			</li>
+			<li>
+				<img src="/views/mobile/skin/default/image/jmj/new_active/chongwu.png"/>
+				<span>宠物专区</span>
+			</li>
+			<li>
+				<img src="/views/mobile/skin/default/image/jmj/new_active/jiankang.png"/>
+				<span>健康专区</span>
+			</li>
+			<li>
+				<img src="/views/mobile/skin/default/image/jmj/new_active/lingshi.png"/>
+				<span>零食专区</span>
+			</li>-->
+		</ul>
+	</nav>
+	<!--			更多折扣				-->
+	<div id="zhe">
+		<div id="zhe_ul">
+			<ul>
+				<li v-for="(items,key) in newlist1"><a :href="items.url">
+					
+					<p class="p1"><img :src="items.img" style="width: 1.8rem;height: 1.8rem;"/></p>
+					<p class="p2" style="height: 0.6rem;">{{items.name}}</p>
+					<p class="p3">¥<span>{{items.sell_price}}</span></p>
+					<p class="p4">
+						<img src="/views/mobile/skin/default/image/jmj/new_active/921ED65A-23EE-47FE-B735-E47A8508FB2C@1x.png" style="width: 0.65rem;"/>
+						<span style="display:block;text-align:center;position: absolute;top: 0.35rem;left: 0.22rem;color: white;"><t>{{key+1}}</t></span>
+					</p>
+				</a></li>
+
+			</ul>
+		</div>
+		<!--<div class="btn"><a href="#">更多折扣商品</a></div>-->
+	</div>
+	<!--			大牌专场					-->
+	<div id="dapai" class="t" v-for="itemlist in newlist">
+		<div class="top_img"><img :src="itemlist.bannerimg" style="width: 100%;"/></div>
+		<ul>
+			<li v-for="items in itemlist" style="height:auto"><a :href="items.url" >
+				<p class="p5"><img :dataimg="items.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg"  style="width: 2.85rem;"/></p>
+				<p class="p6">{{items.name}}</p>
+				<div style="overflow: hidden;margin-left:0.09rem ;margin-top:0.11rem ;">
+					<p class="p7">¥ <span>{{items.sell_price}}</span></p>
+					<p class="p8">原价: <s>{{items.original_price}}</s></p>
+				</div>
+				<p class="p9" style="display:block" :style="items.brand_logo?style1:style2">省 <span>{{items.diff_price}}</span> 元</p>
+				<p class="p10" v-if="items.brand_logo"><img :src="items.brand_logo" style="width: 0.51rem;height: 0.32rem;"/></p>
+			</a></li>
+			
+		</ul>
+	</div>
+
+	</div>
+	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/christmas_index.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var init = 0,scorll=0;
+		var ox;
+		var ozhe = document.getElementById("zhe")
+		var oUl = ozhe.getElementsByTagName("ul")[0];
+		oUl.addEventListener("touchstart",function(ev){
+			ox = ev.touches[0].pageX;
+			init = scorll;
+		})
+		oUl.addEventListener("touchmove",function(ev){
+			var oxmove = ev.touches[0].pageX;
+			scorll = ev.touches[0].pageX - ox ;
+//			console.log(oUl.style.left)
+			
+			oUl.style.left =(init + scorll) +"px";
+			scorll = init + scorll;
+			var t =scorll;
+				if(t >= 50){
+					scorll = 0;
+					console.log(1)
+					oUl.style.left = 0 +"px";
+				}
+			var e = $(window).width(); 
+			var ouiw = $("#zhe ul").width();
+			console.log(-(ouiw - e),scorll)
+			if(   scorll<-(ouiw - e +20) ){
+				scorll = -(ouiw - e +20);
+				oUl.style.left =-(ouiw - e) +"px";
+			}
+		})
+
+	</script>
+</body>
+</html>
