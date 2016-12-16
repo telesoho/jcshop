@@ -5,11 +5,12 @@ var em = new Vue({
 	el:"#PopupWindow",
 	data:{
 		aid:"2",
-		pid:oInputval
+		pid:oInputval,
+		info:[]
 	},
 	computed:{
 		newactivity:function(){
-			
+			return this.info
 		}
 	},
 	mounted: function(){
@@ -29,9 +30,7 @@ function activity(self){
 		type: 'get',
 		timeout: 10000,
 		success: function (data) {
-//			data.data.map(function(item){
-//				self.info.push(item);
-//			})
+			self.info = data.msg
 		console.log(data)
 		}
 	});

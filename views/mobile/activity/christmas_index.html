@@ -53,11 +53,11 @@
 				<li v-for="(items,key) in newlist1"><a :href="items.url">
 					
 					<p class="p1"><img :src="items.img" style="width: 1.8rem;height: 1.8rem;"/></p>
-					<p class="p2" style="height: 0.6rem;">{{items.name}}</p>
+					<p class="p2" style="height: 0.7rem;">{{items.name}}</p>
 					<p class="p3">¥<span>{{items.sell_price}}</span></p>
 					<p class="p4">
 						<img src="/views/mobile/skin/default/image/jmj/new_active/921ED65A-23EE-47FE-B735-E47A8508FB2C@1x.png" style="width: 0.65rem;"/>
-						<span style="display:block;text-align:center;position: absolute;top: 0.35rem;left: 0.22rem;color: white;"><t>{{key+1}}</t></span>
+						<span style="display:block;text-align:center;position: absolute;top: 0.35rem;left: 0.08rem;color: white;width: 0.5rem;display: block;"><t>{{key+1}}</t></span>
 					</p>
 				</a></li>
 
@@ -113,7 +113,6 @@
 				}
 			var e = $(window).width(); 
 			var ouiw = $("#zhe ul").width();
-			console.log(-(ouiw - e),scorll)
 			if(   scorll<-(ouiw - e +20) ){
 				scorll = -(ouiw - e +20);
 				oUl.style.left =-(ouiw - e) +"px";
