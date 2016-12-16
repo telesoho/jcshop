@@ -378,7 +378,7 @@ class Apic extends IController{
 		/* 获取数据 */
 		$query           = new IQuery('goods as m');
 		$query->join     = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id LEFT JOIN brand AS b ON b.id=m.brand_id';
-		$query->where    = 'm.is_del=0 AND m.activity'.(empty($aid) ? '>0' : '='.$aid).(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')').(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')').(empty($bid) ? '' : ' AND m.brand_id='.$bid);
+		$query->where    = 'm.is_del=0'.(empty($aid) ? '' : ' AND m.activity='.$aid).(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')').(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')').(empty($bid) ? '' : ' AND m.brand_id='.$bid);
 		$query->fields   = 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity,b.name AS brand_name,b.logo AS brand_logo';
 		$query->order    = 'm.sale desc,m.visit desc';
 		$query->group    = 'm.id';
@@ -567,7 +567,7 @@ class Apic extends IController{
 		/* 获取活动热销商品 */
 		$query = new IQuery('goods as m');
 		$data  = array();
-		for($i = 1; $i<=7; $i++){
+		for($i = 1; $i<=8; $i++){
 			$limit = 3;
 			switch($i){
 				case 1: //排行商品
@@ -620,7 +620,6 @@ class Apic extends IController{
 			array('id' => 4, 'name' => '健康', 'cid' => 2,),
 			array('id' => 5, 'name' => '零食', 'cid' => 7,),
 		);
-
 		/* 数据返回 */
 		$this->json_echo(apiReturn::go('0', $data));
 	}
