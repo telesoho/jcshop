@@ -13,15 +13,15 @@ var em = new Vue({
 		style2:"padding-bottom:0.3rem",
 		style1:"padding-bottom:0.3rem",
 		banner:[
-					"",
-					"",
+					"/views/mobile/skin/default/image/jmj/new_active/banner/6.png",
+					"/views/mobile/skin/default/image/jmj/new_active/banner/7.png",
 					"/views/mobile/skin/default/image/jmj/new_active/banner/8.png",
 					"/views/mobile/skin/default/image/jmj/new_active/banner/9.png",
 					"/views/mobile/skin/default/image/jmj/new_active/banner/10.png",
 					"/views/mobile/skin/default/image/jmj/new_active/banner/11.png",
 //					"/views/mobile/skin/default/image/jmj/new_active/banner/12.png"
 				]
-//		banner图
+//		banner图为专场
 		
 	},
 	computed:{
@@ -72,27 +72,30 @@ function getActiveInfo(self){
 		type: 'get',
 		timeout: 10000,
 		success: function (data){
+			//获取专区的图片(img自己定义的)
 			for(var i=0;i<data.data.cat.length;i++){
 				data.data.cat[i].src=self.img[i];
 				
 			}
-			self.cat=data.data.cat;
+			
 //			data.data.map(function(val){
 //				console.log(val);
 //			})
-	
+			//循环list2-list7的object 推入数组
           for( var item in data.data){
           	if(item!="cat"&&item!="list1"){
           		self.list.push(data.data[item]);
           	}
           	
           };
+          //获取专场的图片(banner图自己定义的)
           for(var j =0;j<self.banner.length;j++){
           		console.log(self.banner.length);
           		self.list[j].bannerimg = self.banner[j];
-          	}
-          
-//        console.log(self.list);
+          }
+          	//获取专区(5个专区)
+          	self.cat=data.data.cat;
+			//打折的商品分类
 			self.list1=data.data.list1;
 //			self.list2=data.data.list2;
 //			self.list3=data.data.list3;
@@ -103,7 +106,7 @@ function getActiveInfo(self){
 ////			data.data.map(function(item){
 ////				self.info.push(item);
 ////			})
-		console.log(data.data)
+//		console.log(data.data)
 		},
 
 	});
