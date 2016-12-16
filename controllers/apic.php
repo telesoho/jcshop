@@ -377,9 +377,9 @@ class Apic extends IController{
 
 		/* 获取数据 */
 		$query           = new IQuery('goods as m');
-		$query->join     = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
+		$query->join     = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id LEFT JOIN brand AS b ON b.id=m.brand_id';
 		$query->where    = 'm.is_del=0 AND m.activity'.(empty($aid) ? '>0' : '='.$aid).(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')').(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')').(empty($bid) ? '' : ' AND m.brand_id='.$bid);
-		$query->fields   = 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity';
+		$query->fields   = 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity,b.name AS brand_name,b.logo AS brand_logo';
 		$query->order    = 'm.sale desc,m.visit desc';
 		$query->group    = 'm.id';
 		$query->page     = $page<1 ? 1 : $page;
@@ -391,7 +391,9 @@ class Apic extends IController{
 			/* 计算活动商品价格 */
 			$data = api::run('goodsActivity', $data);
 			foreach($data as $k => $v){
-				$data[$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
+				$data[$k]['diff_price'] = $v['original_price']-$v['sell_price']; //差价
+				$data[$k]['brand_logo'] = empty($v['brand_logo']) ? '' : IWeb::$app->config['image_host'].'/'.$v['brand_logo'];
+				$data[$k]['img']        = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
 			}
 		}
 
@@ -436,6 +438,7 @@ class Apic extends IController{
 		$dataOrder          = $queryOrder->find();
 		$sumMoney           = empty($dataOrder) ? 0 : floor($dataOrder[0]['sum']);
 		if($dataGrow['grow']>$sumMoney) $this->json_echo(apiReturn::go('002027')); //不满足礼包领取条件
+
 		switch($dataGrow['type']){
 			/* 领取优惠券 */
 			case 1:
@@ -461,19 +464,24 @@ class Apic extends IController{
 					$rel = $modelAcc->add();
 					if($rel>0) $this->json_echo(apiReturn::go('0')); //领取成功
 				}
+				$modelRec->rollback(); //事务回滚
 				$this->json_echo(apiReturn::go('002031')); //领取失败
 				break;
 			/* 领取商品 */
 			case 2:
 				//商品信息 TODO
 				$modelGoods = new IModel('goods');
-				$dataGoods  = $modelGoods->getObj('id='.$dataGrow['did'],'id as goods_id,name,goods_no,img,sell_price,weight');
+				$dataGoods  = $modelGoods->getObj('is_del!=1 AND id='.$dataGrow['did'], 'id as goods_id,name,goods_no,img,sell_price,weight,store_nums');
 				if(empty($dataGoods)) $this->json_echo(apiReturn::go('005001')); //商品不存在
-
+				if($dataGoods['store_nums']<1) $this->json_echo(apiReturn::go('002033')); //商品库存不足已领完
+				$dataGoods['product_id'] = 0; //货号
+				$dataGoods['count']      = 1; //商品数量
+				$dataGoods['seller_id']  = 0; //卖家ID
+				$dataGoods['reduce'] 	= $dataGoods['sell_price'];
 				//查询收货地址 TODO
 				$modelAdr = new IModel('address');
-				$dataAdr = $modelAdr->getObj('id='.$did.' AND user_id='.$user_id);
-				if(empty($dataAdr)) $this->json_echo(apiReturn::go('005001'));
+				$dataAdr  = $modelAdr->getObj('id='.$did.' AND user_id='.$user_id);
+				if(empty($dataAdr)) $this->json_echo(apiReturn::go('005001')); //收货地址不存在
 
 				//生成的订单数据
 				$dataArray = array(
@@ -498,18 +506,28 @@ class Apic extends IController{
 					'note'            => '活动商品赠送',
 					'type_source'     => 1, //单个商品购买
 				);
-				//生成订单插入order表中
-				$orderObj = new IModel('order');
-				$orderObj->setData($dataArray);
-				$order_id = $orderObj->add();
-				if($order_id>0){
-					//将订单中的商品插入到order_goods表
-					$orderInstance = new Order_Class();
-					$orderInstance->insertOrderGoods($order_id);
-					//直接免单
-					$rel = Order_Class::updateOrderStatus($dataArray['order_no']);
-					if($rel>0) $this->json_echo(apiReturn::go('0')); //领取成功
+				//记录领取记录
+				$modelRec->setData(array(
+					'user_id'     => $user_id,
+					'grow_id'     => $gid,
+					'create_time' => time(),
+				));
+				$rel = $modelRec->add();
+				if($rel>0){
+					//生成订单插入order表中
+					$orderObj = new IModel('order');
+					$orderObj->setData($dataArray);
+					$order_id = $orderObj->add();
+					if($order_id>0){
+						//将订单中的商品插入到order_goods表
+						$orderInstance = new Order_Class();
+						$orderInstance->insertOrderGoods($order_id, array('goodsList' => array($dataGoods)));
+						//直接免单
+						$rel = Order_Class::updateOrderStatus($dataArray['order_no']);
+						if($rel>0) $this->json_echo(apiReturn::go('0')); //领取成功
+					}
 				}
+				$modelRec->rollback(); //事务回滚
 				$this->json_echo(apiReturn::go('002031')); //领取失败
 				break;
 			default:
@@ -584,7 +602,7 @@ class Apic extends IController{
 				}
 			}
 		}
-		$data['cat']  = array(
+		$data['cat'] = array(
 			array(
 				'id'   => 1,
 				'name' => '个护',
@@ -612,6 +630,24 @@ class Apic extends IController{
 			),
 		);
 
+		$this->json_echo(apiReturn::go('0', $data));
+	}
+
+	/**
+	 * 圣诞活动banner、tietle
+	 */
+	public function christmas_title(){
+		$tid = IFilter::act(IReq::get('tid'), 'int'); //类型ID，必填
+
+		$data = array();
+		switch($tid){
+			case 1:
+				break;
+			case 2:
+				break;
+			default:
+				$this->json_echo(apiReturn::go('-1'));
+		}
 		$this->json_echo(apiReturn::go('0', $data));
 	}
 
