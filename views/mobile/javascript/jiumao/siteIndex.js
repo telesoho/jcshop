@@ -264,10 +264,6 @@ function hotSearth(self){
         }
     });
 }
-function test(e){
-    alert(111);
-    alert(e.keyCode);
-}
 // 百度统计
 var _hmt = _hmt || [];
 (function() {

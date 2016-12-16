@@ -2,9 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>邀请好友领积分</title>
+    <link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
+	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/score/invite_friends.css?v=<?php echo time(); ?>"/>
 </head>
 <body>
+	<!--top-->
+	<header>
+		<img src="/views/mobile/skin/default/image/jmj/score/pic6.png" style="width: 7.5rem;height: 4.5rem;"/>
+	</header>
+	<div id="top">
+		<p id="shareimg">活动规则 <img src="/views/mobile/skin/default/image/jmj/score/pic7.png"/ style="width: 0.23rem;height: 0.23rem;"></p>
+	</div>
+	<div id="wrap">
+		<ul>
+			<li>
+				<img src="/views/mobile/skin/default/image/jmj/score/pic8.png"/>
+				<p>每日分享立得 <span>50</span> 积分</p>
+			</li>
+			<li>
+				<img src="/views/mobile/skin/default/image/jmj/score/pic8.png"/>
+				<p>好友每日第一次登录送 <span>50</span> 积分</p>
+			</li>
+			<li>
+				<img src="/views/mobile/skin/default/image/jmj/score/pic8.png"/>
+				<p>好友每日第一次登录送 <span>7%</span> 付款金额的积分</p>
+			</li>
+		</ul>
+	</div>
+	<div id="bottom">
+		<a>立即分享</a>
+	</div>
+	
+	
+	<!--					弹	窗	处	理	红	包								-->
+    <div id="PopupWindow" style="display: none;border-radius:20px;">
+    	<div id="logo">
+    		<p>活动规则</p>
+    		<span>
+    			活动规则活动规则，活动规则活动规则活动规则。
 
+活动规则，活动规则活动规则活动规则活动规则活动规则活动规则。活动规则活动规则活动规则活动规则。活动规则活动规则活动规则活动规则活，动规则活动规则活动规则活动。
+
+则活动规则活动规则活，动规则活动规则活动规则活动规则活动规则活动。规则活动规则活动规则活动，规则活动规则活动规则活动，规则活动规则活动规则，活动规则活动规则活动规则活动规则活动规则活动。
+    		</span>
+    	</div>
+    	<t style="width: 1px;height: 1.29rem;background: #fff; position: absolute;right:0.42rem ;top: 6.78rem;">
+    		<strong style="width: 0.5rem;height: 0.5rem;position: absolute;left: -0.25rem;top: 1.29rem;z-index: 88;">
+    			<img id="guan" src="/views/mobile/skin/default/image/jmj/ticket_gain/guan.png" style="width: 0.5rem;height: 0.5rem;"/>
+    		</strong>
+    	</t>
+    </div>
+    <div id="bgg" style="width: 100%;height: 100%;background: #000;opacity: 0.5;display: none;position: absolute;left: 0;top: 0;z-index: 88;"></div>
+	
+	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+	<script type="text/javascript">
+					
+			// 					弹	窗	处	理
+			$("#shareimg").click(function(){
+				tanchaun()
+			})
+			
+	function tanchaun(){
+//			document.body.style.overflow="hidden";
+			$("#bgg").css({
+				"display":"block",
+				"overflow":"hidden"
+			})
+			$("#PopupWindow").css({
+				"display":"block",
+			});
+			$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
+		$("#guan").click(function(){
+            window.history.pushState({}, "九猫大百货", "/site/index");
+//			document.body.style.overflow=""
+			$("#bgg").css({
+				"display":"none",
+				"overflow":"hidden"
+			})
+			$("#PopupWindow").css({
+				"display":"none",
+			});
+			$(document).unbind('touchmove');
+			
+		})
+	}
+
+	</script>
 </body>
 </html>

@@ -1,0 +1,254 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>活动专场</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/christmas_list.css?v=<?php echo time(); ?>" />
+</head>
+<body>
+<div id="activityInfo" v-cloak>
+     <header class="banner">
+         <img src="/views/mobile/skin/default/image/jmj/new_active/banner/banner_01.png" alt="" />
+     </header>
+    <section class="goodsList">
+        <div class="goodsItem" v-for="item in new_info">
+            <a :href="item.url" class="classA">
+                <div class="img flexbox">
+                    <img :src="item.img" alt="" />
+                </div>
+                <div class="text">
+                    <div class="name hideCamp">
+                        {{item.name}}
+                    </div>
+                    <div class="price box">
+                        <div class="price1"><span style="font-size:0.24rem;color:#ff82a0;padding-right:0.02rem;">¥</span>580.00</div>
+                        <div class="price2"><span>原价：</span><s>580.00</s></div>
+                    </div>
+                    <div class="tip">
+                        <span>省</span>
+                        <span style="font-size:0.26rem;color:#ff82a0">200.00</span>
+                        <span>元</span>
+                    </div>
+                    <div class="emp">
+
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+    <footer>
+        <div class="flexbox empty_product" style="background:#a5eced">
+            <div class="img">
+                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+            </div>
+            <div class="content">
+                <span style="color:#fff">~</span>
+                <span style="color:#fff">憋拉了，到底了</span>
+                <span style="color:#fff">~</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- 							回到顶部										-->
+<div class="fix-toTop hide" @click="fixToTop">
+    <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" style="width: 0.84rem;height: 0.84rem;" />
+</div>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script type="text/javascript" charset="utf-8">
+    //	接收页面传过来的状态值
+    var stop=true;
+    var Request = new Object();
+    Request = GetRequest();
+    var statusOrder=Request["id"];
+    var vm = new Vue({
+        el: '#activityInfo',
+        data: {
+            showMessage:false,
+            page:1,
+            info:[],
+            infoState:false
+        },
+        computed: {
+            new_info: function(){
+                this.info.map(function(item){
+                    item.url="/site/products?id="+item.id;
+                })
+                return this.info;
+            }
+        },
+        mounted: function(){
+            var self=this;
+            if(getSession("active_info")){
+                self.info=getSession("active_info");
+                self.page=getSession("active_page")
+            }else{
+                self.page=1;
+                getChristmasList(statusOrder,self);
+            }
+
+        },
+        methods: {
+        }
+    });
+
+    $(window).load(function(){
+        mui('body').on("tap",".classA",function(){
+            window.location.href=this.href;
+        });
+        mui('.mui-scroll-wrapper').scroll({
+            deceleration: 0.0005
+        });
+//
+    });
+    function getChristmasList(eid,self){
+        mui.ajax('/apic/activity_goods_list',{
+            data:{
+              cid:'',
+              page:self.page,
+              aid:1,
+              bid:''
+            },
+            dataType:'json',
+            type:'get',
+            timeout:10000,
+            success:function(data){
+                data.data.map(function(item){
+                    self.info.push(item);
+                });
+                pushSession("active_info",self.info);
+                if(data.data==''){
+                    self.infoState=true;
+                    stop=false;
+                }else{
+                    stop=true;
+                    self.infoState=false;
+                }
+                self.page++;
+                pushSession("active_page",self.page);
+            }
+        });
+    };
+    //上拉加载
+    $(window).bind('scroll', function() {
+        if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+            if(stop==true){
+                stop=false;
+                getChristmasList(statusOrder,vm);
+            }
+        }
+        if (document.body.scrollTop>50){
+            $(".fix-toTop").show();
+            $(".fix-toTop").click(function(){
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop =0;
+            })
+        }else{
+            $(".fix-toTop").hide()
+        }
+    });
+    //	获取url传递过来的参数
+    function GetRequest() {
+      var url = location.search; //获取url中"?"符后的字串
+      var theRequest = new Object();
+      if (url.indexOf("?") != -1) {
+          var str = url.substr(1);
+          strs = str.split("&");
+          for(var i = 0; i < strs.length; i ++) {
+              theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+          }
+      }
+      return theRequest;
+    }
+
+    //			缓存
+    function pushSession(key,value){
+        var val=JSON.stringify(value)?JSON.stringify(value):[];
+        if(window.sessionStorage){
+            sessionStorage.setItem(key,val);
+        }else{
+            console.log("无法使用缓存");
+            return "";
+        }
+    }
+    function getSession(key){
+        if(window.sessionStorage){
+            var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+            return JSON.parse(state);
+        }else{
+            console.log("无法使用缓存");
+            return "";
+        }
+    }
+    function removeSessionItem(key){
+        window.sessionStorage.removeItem(key);
+    }
+    //获取banner图和title
+    function getBanner(cid){
+        var banner={}
+        switch(cid)
+        {
+            case 1:
+                banner.img="";
+                banner.title="个护专区";
+                break;
+            case 2:
+                banner.img="";
+                banner.title="药妆专区";
+                break;
+            case 3:
+                banner.img="";
+                banner.title="宠物专区";
+                break;
+            case 4:
+                banner.img="";
+                banner.title="健康专区";
+                break;
+            case 5:
+                banner.img="";
+                banner.title="零食专区";
+                break;
+            case 6:
+                banner.img="";
+                banner.title="大牌专场";
+                break;
+            case 7:
+                banner.img="";
+                banner.title="聚划算专场";
+                break;
+            case 8:
+                banner.img="";
+                banner.title="个护专场";
+                break;
+            case 9:
+                banner.img="";
+                banner.title="个护专场";
+                break;
+            case 10:
+                banner.img="";
+                banner.title="个护专场";
+                break;
+            case 11:
+                banner.img="";
+                banner.title="个护专场";
+                break;
+            case 12:
+                banner.img="";
+                banner.title="个护专场";
+                break;
+            default:
+               break;
+        }
+        return banner;
+    }
+</script>
+
+</body>
+</html>
