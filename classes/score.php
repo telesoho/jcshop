@@ -4,7 +4,7 @@
  * @author 夏爽
  */
 
-class Score
+class score
 {
 	/**
 	 * 购买完成，店铺主增加积分
