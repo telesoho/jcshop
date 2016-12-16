@@ -134,7 +134,8 @@ nav ul li span{
 	margin-top:0.3rem ;
 	display: -webkit-flex;
 	-webkit-flex-wrap: wrap;
-	-webkit-justify-content: space-around;
+	-webkit-justify-content: space-between;
+	padding:0 0.15rem;
 }
 .t ul li{
 	width: 3.5rem;
