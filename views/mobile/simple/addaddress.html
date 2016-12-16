@@ -6,114 +6,110 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>新增收货地址</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css" />
-
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css?v=<?php echo time(); ?>" />
 </head>
 <body>
-<!--loading页开始-->
-<div id="loading">
-    <div class="spinner">
-        <div class="spinner-container container1">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container2">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container3">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-    </div>
-</div>
-<!--loading页结束-->
-    <div id="addressNew">
-        <div class="inputName">
-            <input type="text" class="mui-input-clear"  placeholder="输入收货人的姓名" id="username" onkeyup=check()>
-        </div>
-        <div class="inputContent">
-            <input type="text" class="mui-input-clear" placeholder="输入手机号"  id="userphone">
-            <input type="text" class="mui-input-clear"  placeholder="选择城市"  id="usercity">
-            <input type="text" class="mui-input-clear" placeholder="详细收货地址"  id="useraddr" onkeyup=check()>
-            <input type="text" class="mui-input-clear" placeholder="邮编"  id="useryoubian" onkeyup=check()>
-        </div>
-    </div>
-<footer>
-    <div id="footer-fixed">
-        <div class="add_newAddrSub">
-            <button id="submitAdd" disabled="disabled" class="submitAdd">保存</button>
-        </div>
-    </div>
-</footer>
-<script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/template-native.js"></script>
-<script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/mui.picker.min.js"></script>
-<script src="/views/mobile/javascript/mui.poppicker.js"></script>
-<script src="/views/mobile/javascript/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+   <div id="addAddress">
+       <div id="addressNew">
+           <div class="inputName">
+               <input type="text" class="mui-input-clear" v-model="info.accept_name" placeholder="输入收货人的姓名" id="username" >
+           </div>
+           <div class="inputContent">
+               <input type="number" class="mui-input-clear" v-model="info.mobile" placeholder="输入手机号"  id="userphone" >
+               <input type="text" class="mui-input-clear" v-model="info.text" placeholder="选择城市"  id="usercity" @focus="checkCity" >
+               <input type="text" class="mui-input-clear"v-model="info.address" placeholder="详细收货地址"  id="useraddr" >
+               <input type="text" class="mui-input-clear" v-model="info.zip" placeholder="邮编"  id="useryoubian">
+           </div>
+       </div>
+       <footer>
+           <div id="footer-fixed">
+               <div class="add_newAddrSub">
+                   <button id="submitAdd" :disabled="new_dis" class="submitAdd"  @click="submitAdd">保存</button>
+               </div>
+           </div>
+       </footer>
+   </div>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.picker.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.poppicker.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/city.data-3.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 <script>
+
+    //初始化cityPicker
+    var cityPicker3 = new mui.PopPicker({
+        layer: 3
+    });
+    cityPicker3.setData(cityData3);
     //	接收页面传过来的状态值
     var Request = new Object();
     Request = GetRequest();
     var statusOrder=Request["from"];
     var statusOrder1=Request["rev"];
-    var pro,cit,are;
-    $(window).load(function(){
-        $("#loading").fadeOut(300);
 
-    })
+    var vm=new Vue({
+        el:"#addAddress",
+        data:{
+            info:{
+                accept_name:'',
+                province:'',
+                city:'',
+                area:'',
+                address:'',
+                mobile:'',
+                text:'',
+                zip:'',
+                dis:true
+            }
+        },
+        computed:{
+            new_dis:function(){
+                if(this.info.accept_name&&this.info.text&&this.info.address&&this.info.mobile){
+                    this.dis=false;
+                }else{
+                    this.dis=true;
+                }
+                return this.dis;
+            }
+        },
+        methods:{
+            //验证并填写收货城市
+            checkCity: function(){
+                var self=this;
+                document.activeElement.blur();
+                cityPicker3.show(function(items) {
+                    item3=(items[2] || {}).text?(items[2] || {}).text:'';
+                    self.info.text = (items[0] || {}).text + " " + (items[1] || {}).text + " " + item3;
+                    //返回 false 可以阻止选择框的关闭
+                    self.info.province=(items[0] || {}).value;
+                    self.info.city=(items[1] || {}).value;
+                    self.info.area=(items[2] || {}).value?(items[2] || {}).value:'';
+                    //return false;
 
-    var cityPicker3 = new mui.PopPicker({
-        layer: 3
+                });
+            },
+            submitAdd: function(){
+                var self=this;
+                subaddr(self);
+            }
+        }
     });
-    cityPicker3.setData(cityData3);
-    var showCityPickerInput = document.getElementById('usercity');
-    showCityPickerInput.onfocus=function(event) {
-        document.activeElement.blur();
-        cityPicker3.show(function(items) {
-            item3=(items[2] || {}).text?(items[2] || {}).text:'';
-            showCityPickerInput.value = (items[0] || {}).text + " " + (items[1] || {}).text + " " + item3;
-            //返回 false 可以阻止选择框的关闭
-            pro=(items[0] || {}).value;
-            cit=(items[1] || {}).value;
-            are=(items[2] || {}).value?(items[2] || {}).value:'';
-            //return false;
-
-        });
-    }
-    //  获取登录的表单信息
-    var username=document.getElementById("username");
-    var phone=document.getElementById("userphone");
-    var address=document.getElementById("useraddr");
-    var useryoubian=document.getElementById("useryoubian");
-    var submitaddr=document.getElementById("submitAdd");
-    submitaddr.addEventListener('tap',function(){
-        if(checkPhone()==true){
-            var addaddressInfo={
-                accept_name:username.value,
-                province:pro,
-                city:cit,
-                area:are,
-                address:address.value,
-                mobile:phone.value,
-                zip:useryoubian.value
-            };
-            var self=this;
-            mui.ajax('index.php?controller=apic&action=address_add',{
-                data:addaddressInfo,
+    //收货地址提交加bug
+    function subaddr(self){
+        if(!(/^1[34578]\d{9}$/.test(self.info.mobile))){
+            alert( '请输出正确的电话号码');
+            self.info.mobile='';
+            return false;
+        }else{
+            mui.ajax('/apic/address_add',{
+                data:self.info,
                 dataType:'json',	// 服务器返回json格式数据
                 type:'post',		// HTTP请求类型
                 timeout:10000,		// 超时时间设置为10秒；
@@ -126,31 +122,8 @@
                     }else{
                         document.location.href="{url:/simple/addresslist}";
                     }
-                },
-                error:function(xhr,type,errorThrown){
-                    //异常处理；
-                    console.log(type);
                 }
             });
-        }else{
-            return false;
-        }
-    });
-    function checkPhone(){
-        var phone = document.getElementById('userphone').value;
-        if(!(/^1[34578]\d{9}$/.test(phone))){
-            alert( '请输出正确的电话号码');
-            document.getElementById('userphone').value="";
-            return false;
-        }else{
-            return true;
-        }
-    }
-    function check(){
-        if(username.value&&address.value&&phone.value&&showCityPickerInput.value){
-            submitaddr.disabled='';
-        }else{
-            submitaddr.disabled='disabled';
         }
     }
     //	获取url传递过来的参数
