@@ -19,11 +19,11 @@ ul li{
 .contentInfo .info02 p:last-child img{width:0.32rem;height:0.19rem;margin-right:0.3rem;}
  .leftlog{
     position:absolute;
-    width:1.4rem;
-    height:0.83rem;
+    width:2.14rem;
+    height:0.8rem;
     z-index:2;
-     left:0.4rem;
-     top:0.6rem;
+     left:0.3rem;
+     top:0.3rem;
 }
 .bottomlog{
     position:absolute;
