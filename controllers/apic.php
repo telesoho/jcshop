@@ -360,7 +360,8 @@ class Apic extends IController{
 		$page = IFilter::act(IReq::get('page'), 'int');//分页，选填
 		$aid  = IFilter::act(IReq::get('aid'), 'int'); //活动ID，选填
 		$cid  = IFilter::act(IReq::get('cid')); //分类ID，选填
-		$bid  = IFilter::act(IReq::get('bid'), 'int'); //品牌ID，选填
+		$bid  = IFilter::act(IReq::get('bid')); //品牌ID，选填
+		$did  = IFilter::act(IReq::get('did'), 'int'); //推荐ID，选填
 
 		/* 获取下级分类 */
 		if(!empty($cid)){
@@ -377,8 +378,14 @@ class Apic extends IController{
 
 		/* 获取数据 */
 		$query           = new IQuery('goods as m');
-		$query->join     = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id LEFT JOIN brand AS b ON b.id=m.brand_id';
-		$query->where    = 'm.is_del=0'.(empty($aid) ? '' : ' AND m.activity='.$aid).(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')').(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')').(empty($bid) ? '' : ' AND m.brand_id='.$bid);
+		$query->join     = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id '.
+			'LEFT JOIN brand AS b ON b.id=m.brand_id '.
+			'LEFT JOIN commend_goods AS d ON d.goods_id=m.id';
+		$query->where    = 'm.is_del=0'.
+			(empty($aid) ? '' : ' AND m.activity='.$aid). //活动ID
+			(empty($cid) ? '' : ' AND c.category_id IN ('.$cid.')'). //分类ID
+			(empty($bid) ? '' : ' AND m.brand_id IN ('.$bid.')'). //品牌ID
+			(empty($did) ? '' : ' AND d.commend_id='.$did); //推荐ID
 		$query->fields   = 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity,b.name AS brand_name,b.logo AS brand_logo';
 		$query->order    = 'm.sale desc,m.visit desc';
 		$query->group    = 'm.id';
@@ -556,8 +563,22 @@ class Apic extends IController{
 		$dataOrder          = $queryOrder->find();
 		$dataOrder          = empty($dataOrder) ? 0 : floor($dataOrder[0]['sum']);
 
+		/* 礼品列表 */
+		$queryGrow         = new IQuery('activity_grow');
+		$queryGrow->where  = 'pid='.$aid;
+		$queryGrow->fields = 'id,grow,type';
+		$queryGrow->order  = 'grow asc,id asc';
+		$dataGrow          = $queryGrow->find();
+		if(empty($dataGrow)){
+			$modelRec = new IModel('activity_grow_record');
+			foreach($dataGrow as $k => $v){
+				$rel                     = $modelRec->getObj('user_id='.$user_id.' AND grow_id='.$v['id']);
+				$dataGrow[$k]['is_play'] = $rel>0 ? 1 : 0; //是否已领取
+			}
+		}
+
 		/* 返回数据 */
-		$this->json_echo(apiReturn::go('0', $dataOrder));
+		$this->json_echo(apiReturn::go('0', array('money' => $dataOrder, 'list' => $dataGrow)));
 	}
 
 	/**
@@ -575,7 +596,7 @@ class Apic extends IController{
 					$where = 'm.is_del=0';
 					break;
 				case 2: //大牌专场
-					$where = 'm.is_del=0 AND b.name IN ("资生堂","花王","嘉娜宝","ROSETTE","dhc","高丝","小林制药")';
+					$where = 'm.is_del=0 AND b.id IN (26,32,56,74,78,82,100)'; //"资生堂","花王","嘉娜宝","ROSETTE","dhc","高丝","小林制药"
 					break;
 				case 3: //聚划算
 					$where = 'm.is_del=0 AND m.activity=2';
