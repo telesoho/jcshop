@@ -1,0 +1,77 @@
+body{
+    background:#a5eced;
+}
+.banner img{
+    width:100%;
+    height:3rem;
+    margin-bottom:-0.06rem;
+}
+.goodsList {
+    padding:0 0.15rem;
+    background:#a5eced;
+    min-height:100%;
+    width:100%;
+    display: -webkit-flex;
+    -webkit-flex-wrap: wrap;
+    -webkit-justify-content: space-between;
+}
+.goodsList .goodsItem{
+    margin-top:0.2rem;
+    width:3.5rem;
+    background:#fff;
+}
+.goodsList .goodsItem .img{
+    width:3.5rem;
+    height:3.5rem;
+    border-bottom:1px solid #eee;
+}
+.goodsList .goodsItem .img img{
+    width:2.85rem;
+    height:2.85rem;
+}
+.goodsList .goodsItem .text{
+    padding:0.09rem;
+}
+.goodsList .goodsItem .text .name{
+    font-size:0.24rem;
+    line-height:0.33rem;
+    height:0.66rem;
+}
+.goodsList .goodsItem .text .price{
+    margin-top:0.05rem;
+}
+.goodsList .goodsItem .text .price .price1{
+    font-size:0.26rem;
+    color:#ff82a0;
+}
+.goodsList .goodsItem .text .price .price2{
+    font-size:0.26rem;
+    color:#bbbbbb;
+}
+.goodsList .goodsItem .text .price .price2 span{
+    font-size:0.26rem;
+    color:#bbbbbb;
+}
+.goodsList .goodsItem .text .tip {
+margin-top:0.1rem;
+}
+.goodsList .goodsItem .text .tip span{
+    font-size:0.24rem;
+    color:#3d4245;
+}
+.goodsList .goodsItem .text  .emp{
+    height:0.4rem;
+}
+.fix-toTop{
+    position:fixed;
+    right:0.39rem;
+    bottom:0.7rem;
+    z-index:999;
+    width:0.84rem;
+    height:0.84rem;
+
+}
+.fix-toTop img{
+    position:absolute;
+    width:0.84rem;
+}
