@@ -28,7 +28,8 @@ var vm = new Vue({
     },
     computed: {
         searth_pla: function (){
-            return this.placeHolder+"件商品等你来搜";
+        	return "圣诞神秘大礼等你来拿"
+//          return this.placeHolder+"件商品等你来搜";
         },
         new_data: function(){
             this.indexInfo.articleDetail.map(function(item){
@@ -115,9 +116,9 @@ var vm = new Vue({
         },
         // 跳转活动页面
         toActive: function(){
-            removeSessionItem("active_val");
-            removeSessionItem("active_info");
-            window.location.href="/site/activity_goods_list";
+//          removeSessionItem("active_val");
+//          removeSessionItem("active_info");
+            window.location.href="/activity/christmas_grow";
         }
     }
 })

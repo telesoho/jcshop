@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<title>大牌专区</title>
 	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
 	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/christmas_brand_list.css?v=<?php echo time(); ?>"/>
@@ -13,11 +16,11 @@
 	</header>
 	<section>
 		<ul>
-			<li v-for="items in brand_list">
+			<li v-for="items in brand_list"><a :href="items.url">
 				<h1><img :src="items.img" style="width:2rem;margin-top:0.2rem ;"/></h1>
 				<p class="p1">{{items.name}}</p>
 				<p class="p2">¥<span>{{items.sell_price}}</span></p>
-			</li>
+			</a></li>
 		</ul>
 	</section>
 	<!--									品牌专区											-->
@@ -37,23 +40,16 @@
 	</div>
 	<div id="subhot">
 		<ul>
-			<li v-for="items in brand_lists">
+			<li v-for="items in brand_lists"><a :href="items.url">
 				<h1><img :dataimg="items.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style="width:2rem;margin-top: 0.2rem;"/></h1>
 				<p class="p1">{{items.name}}</p>
 				<p class="p2">¥<span>{{items.sell_price}}</span></p>
-			</li>
+			</a></li>
 		</ul>
 	</div>
-	<div class="flexbox empty_product" v-if="infoState" style="background:#ffc75b">
-			<div class="img">
-				<img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
-			</div>
-			<div class="content">
-				<span style="color:#fff">~</span>
-				<span style="color:#fff">憋拉了，到底了</span>
-				<span style="color:#fff">~</span>
-			</div>
-		</div>
+	<!-- 							回到顶部										-->
+	<div class="fix-toTop" @click="fan()">
+	    <img src="/views/mobile/skin/default/image/jmj/new_active/mainicon.png" alt="" style="width: 1.1rem;height: 1.1rem;" />
 	</div>
 	</div>
 	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
@@ -68,12 +64,14 @@
 				infologo:[],
 				infolist:[],
 				aid:'',
-				infoState:false
+				bid:"26,32,56,74,78,82,100"
 			},
 			computed:{
 				brand_list:function(){
 					this.info.map(function(item){
 						
+						item.url="/site/products?id="+item.id;
+						console.log(item.url)
 					})
 					return this.info;
 				},
@@ -85,7 +83,7 @@
 				},
 				brand_lists:function(){
 					this.infolist.map(function(item){
-						
+						item.url="/site/products?id="+item.id;
 					})
 					return this.infolist;
 				}
@@ -93,13 +91,17 @@
 			mounted:function(){
 				var self = this;
 				getActiveInfo(self);
-				getActivelist(self,'');
+				getActivelist(self);
 			},
 			methods:{
 				click: function(id){
 					var self=this;
+					self.infolist=[]
 					getActivelist(self,id)
-				}
+				},
+				fan: function(){
+	      			window.location.href = "/activity/christmas_index";
+	      		}
 			},
 			updated:function() {
 				// 页面加载完成执行的函数;
@@ -117,7 +119,7 @@
 				type: 'get',
 				timeout: 10000,
 				success: function(data){
-//					console.log(data.data.brand_list)
+					console.log(data.data.goods_list)
 					self.info = data.data.goods_list;
 					self.infologo = data.data.brand_list;
 					
@@ -128,15 +130,13 @@
 		function getActivelist(self,id){
 			mui.ajax('/apic/activity_goods_list', {
 				data:{
-					bid:"26,32,56,74,78,82,100",
-					aid:id,
-					did:"",
-					cid:""
+					bid:id?id:self.bid,
 				},
 				dataType: 'json',
 				type: 'get',
 				timeout: 10000,
 				success: function(data){
+					
 					self.infolist = data.data;
 				}
 			

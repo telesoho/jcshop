@@ -41,11 +41,11 @@
         <div class="inputContent">
             <form onsubmit="searthSubmit()">
                 <input type="search" :placeholder="searth_pla" id="search" @focus="showSearth" v-model="searth_word" />
-                <img class="search_ico" src="/views/mobile/skin/default/image/xinzeng/search.png" alt="" />
+                <img class="search_ico" src="/views/mobile/skin/default/image/jmj/new_active/index/search.png" alt="" />
             </form>
-            <img src="/views/mobile/skin/default/image/jmj/icon/leftear.png" alt="" class="left-icon" />
-            <img src="/views/mobile/skin/default/image/jmj/icon/rightear.png" alt="" class="right-icon" />
-            <img src="/views/mobile/skin/default/image/jmj/icon/flower.png" alt="" class="img-flower" />
+            <img src="/views/mobile/skin/default/image/jmj/new_active/index/leftear.png" alt="" class="left-icon" />
+            <img src="/views/mobile/skin/default/image/jmj/new_active/index/rightear.png" alt="" class="right-icon" />
+            <img src="/views/mobile/skin/default/image/jmj/new_active/index/flower.png" alt="" class="img-flower" />
             <div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
         </div>
         <!--模态框-->
@@ -213,7 +213,8 @@
         },
         computed: {
             searth_pla: function (){
-                return getItem('placeHolder')+"件商品等你来搜";
+//              return getItem('placeHolder')+"件商品等你来搜";
+				return "圣诞神秘大礼等你来拿"
             },
             // 读取和设置
             new_info_goods: function() {

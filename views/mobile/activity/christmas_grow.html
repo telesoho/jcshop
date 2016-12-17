@@ -6,8 +6,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="x5-orientation" content="portrait">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/christmas_grow.css" />
+
     <title>麋鹿不迷路</title>
 </head>
 <body>
@@ -22,49 +24,244 @@
         <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu04.png" alt="" class="bgimg"/>
         <!--麋鹿位置判定-->
         <div class="milu">
-            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu.png" alt="" :style="miluPosition.position5" class="miluImg" />
+            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu.png" alt="" :style="miluPosition" class="miluImg" />
         </div>
         <!--领取状态以及领取位置-->
-        <div class="position1">
-            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/get.png" alt="" style="width:0.86rem;height:0.86rem" class="button" />
-            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/ungetFont.png" style="height:0.27rem;width:auto" alt="" class="font" />
-        </div>
-        <div class="position2">
-            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/unget.png" style="width:0.86rem;height:0.86rem" alt="" class="button">
-            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/ungetFont.png" style="height:0.27rem;width:auto" alt="" class="font">
-        </div>
-        <div class="position3">
-            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/unget.png" style="width:0.86rem;height:0.86rem" alt="" class="button">
-            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/ungetFont.png" style="height:0.27rem;width:auto" alt="" class="font">
-        </div>
-        <div class="position4">
-            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/unget.png" style="width:0.86rem;height:0.86rem" alt="" class="button">
-            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/ungetFont.png" style="height:0.27rem;width:auto" alt="" class="font">
+        <div :class="item.className" v-for="item in newState">
+            <img :src="item.buttonState" alt=""  class="button" @click="subWard(item)"/>
+            <img :src="item.fontState" style="height:0.27rem;width:auto" alt="" class="font" />
         </div>
     </div>
     <div class="img">
         <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu05.jpg" alt="" />
     </div>
-    <div class="button">
+    <div class="button_bottom">
         <a href="/activity/christmas_index">回到主会场</a>
+    </div>
+    <!--领取界面-->
+    <!--翻译弹出-->
+    <div id="sheet" class="mui-popover mui-popover-action mui-popover-bottom">
+        <ul class="mui-table-view">
+            <div class="addr">
+                <div class="addrList box" v-for="item1 in addrlist" @click="changeId(item1)">
+                    <div class="img">
+                        <img :src="giveId==item1.id?img1:img2" style="width:0.4rem;height:0.4rem" />
+                    </div>
+                    <div class="right">
+                        <div class="box">
+                            <div class="name">{{item1.accept_name}}</div>
+                            <div class="phone">{{item1.mobile}}</div>
+                        </div>
+                        <div class="listAddr hideCamp">
+                            {{item1.province_val}}{{item1.city_val}}{{item1.area_val}}{{item1.address}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="getWareGoods" @click="getWareGoods">领取</div>
+        </ul>
+        <div id="close" style="text-align:center">
+            <div class="line_height"></div>
+            <a href="#sheet" ><img src="/views/mobile/skin/default/image/jmj/icon/close.png"  class="closeImg"></a>
+        </div>
+
     </div>
 </div>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script>
     var vm= new Vue({
         el:"#info",
         data:{
+//            地址的两个状态
+                img1:'/views/mobile/skin/default/image/jmj/new_active/milu/cho.png',
+                img2:'/views/mobile/skin/default/image/jmj/new_active/milu/uncho.png',
+//             按钮的三个状态
+                buttonState1:'/views/mobile/skin/default/image/jmj/new_active/milu/get.png',//可以获取
+                buttonState2:'/views/mobile/skin/default/image/jmj/new_active/milu/unget.png',//不能获取
+                buttonState3:'/views/mobile/skin/default/image/jmj/new_active/milu/alget.png',//已经获取
+//            文字的三个状态
+                fontState1:'/views/mobile/skin/default/image/jmj/new_active/milu/getFont.png',//可以获取,
+                fontState2:'/views/mobile/skin/default/image/jmj/new_active/milu/ungetFont.png',//不能获取
+                fontState3:'/views/mobile/skin/default/image/jmj/new_active/milu/algetFont.png',//已经获取
 //            麋鹿的四个位置
-            miluPosition:{
+            position:{
                 position1:'top:0.1rem;left:0.3rem;',
                 position2:'top:1.7rem;left:4.5rem;',
                 position3:'top:3.4rem;left:3rem;transform:rotateY(180deg)',
                 position4:'top:5.2rem;left:1.6rem;transform:rotate(90deg)',
                 position5:'top:6.5rem;left:3rem;'
+            },
+//            数据展示
+            info_data:{
+                list:[]
+            },
+            newPosition:'',
+            //收货地址展示
+            addrlist:[],
+            //需要向后台传入的id
+            giveId:'',
+            nowGid:''
+        },
+        computed:{
+            //麋鹿的位置判定
+            miluPosition:function(){
+                var money=parseInt(this.info_data.money);
+                console.log(money)
+                if(money<88){this.newPosition=this.position.position1};
+                if(88<=money&&money<388){this.newPosition=this.position.position2};
+                if(388<=money&&money<888){this.newPosition=this.position.position3};
+                if(888<=money&&money<1288){this.newPosition=this.position.position4};
+                if(money>=1288){this.newPosition=this.position.position5};
+                return this.newPosition;
+            },
+            //判定各个按钮的状态
+            newState: function(){
+                var i=1;
+                var self=this;
+                this.info_data.list.map(function(item){
+                    item.className="position"+i;
+                    i++;
+                    switch(item.is_play)
+                    {
+                        case 1:
+//                            不能领取
+                            item.buttonState=self.buttonState2;
+                            item.fontState=self.fontState2;
+                            break;
+                        case 2:
+                            item.buttonState=self.buttonState1;
+                            item.fontState=self.fontState1;
+                            break;
+                        case 3:
+                            item.buttonState=self.buttonState3;
+                            item.fontState=self.fontState3;
+                            break;
+                    }
+                })
+                return this.info_data.list;
+            },
+
+        },
+        mounted:function(){
+            var self=this;
+                getPresentCode(self);
+                getAddrList(self);
+
+        },
+        methods: {
+            subWard: function(item){
+                this.nowGid=item.id;
+                switch(item.is_play)
+                {
+                    case 1:
+                        alert("你还未达到领取条件")
+                        break;
+                    case 2:
+                        getWard(item);
+                        break;
+                    case 3:
+                        alert("你已经领取过了");
+                        break;
+                }
+            },
+            changeId: function(item){
+                this.giveId=item.id;
+            },
+            getWareGoods: function(){
+                var self=this;
+                getGoods(self);
             }
         }
     })
+    //获取初始状态
+    function getPresentCode(self){
+        $.ajax('/apic/activity_grow_val', {
+            data: {
+                aid:2
+            },
+            dataType: 'json',	// 服务器返回json格式数据
+            type: 'post',		// HTTP请求类型
+            timeout: 10000,		// 超时时间设置为10秒；
+            success: function (data) {
+                self.info_data=data.data;
+                console.log(self.info_data.money)
+            }
+        })
+    };
+    //获取收货地址页面
+    function getAddrList(self){
+        $.ajax('/apic/address_list', {
+            dataType: 'json',	// 服务器返回json格式数据
+            type: 'post',		// HTTP请求类型
+            timeout: 10000,		// 超时时间设置为10秒；
+            success: function (data) {
+                self.giveId=data[0].id;
+                for(var i=0,j=data.length;i<j&&i<3;i++){
+                    self.addrlist.push(data[i])
+                }
+                console.log(self.addrlist);
+
+            }
+        })
+    }
+    function getGoods(self){
+        $.ajax('/apic/activity_grow_gift', {
+            data: {
+                aid:2,
+                gid:self.nowGid,
+                did:self.giveId
+            },
+            dataType: 'json',	// 服务器返回json格式数据
+            type: 'post',		// HTTP请求类型
+            timeout: 10000,		// 超时时间设置为10秒；
+            success: function (data) {
+                mui("#sheet").popover("hide");
+                setTimeout(function(){
+                    var btnArray = ['取消', '查看'];
+                    mui.confirm('领取成功，查看订单？', '领取礼品成功', btnArray, function(e) {
+                        if (e.index == 1) {
+                            window.location.href="/ucenter/order"
+                        } else {
+                            self.info_data.list.map(function(item){
+                                if(item.id==self.nowGid){
+                                    item.is_play=3;
+                                }
+                            })
+                        }
+                    })
+                },1000);
+            }
+        })
+    }
+    function getWard(item){
+        //能获取优惠券了
+        if(item.type==1){
+            $.ajax('/apic/activity_grow_gift', {
+                data: {
+                    aid:2,
+                    gid:item.id
+                },
+                dataType: 'json',	// 服务器返回json格式数据
+                type: 'post',		// HTTP请求类型
+                timeout: 10000,		// 超时时间设置为10秒；
+                success: function (data) {
+                    var btnArray = ['取消', '查看'];
+                    mui.confirm('领取成功，查看优惠券？', '领取成功', btnArray, function(e) {
+                        if (e.index == 1) {
+                            window.location.href="/site/ticket_list"
+                        } else {
+                            item.is_play=3;
+                        }
+                    })
+                }
+            })
+        }else{
+            mui("#sheet").popover("show");
+
+        }
+    }
 </script>
 </body>
 </html>
