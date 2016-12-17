@@ -218,14 +218,20 @@
             timeout: 10000,		// 超时时间设置为10秒；
             success: function (data) {
                 mui("#sheet").popover("hide");
-                var btnArray = ['取消', '查看'];
-                mui.confirm('领取成功，查看订单？', '领取礼品成功', btnArray, function(e) {
-                    if (e.index == 1) {
-                        window.location.href="/ucenter/order"
-                    } else {
-                        item.is_play=3;
-                    }
-                })
+                setTimeout(function(){
+                    var btnArray = ['取消', '查看'];
+                    mui.confirm('领取成功，查看订单？', '领取礼品成功', btnArray, function(e) {
+                        if (e.index == 1) {
+                            window.location.href="/ucenter/order"
+                        } else {
+                            self.info_data.list.map(function(item){
+                                if(item.id==self.nowGid){
+                                    item.is_play=3;
+                                }
+                            })
+                        }
+                    })
+                },1000);
             }
         })
     }
