@@ -534,7 +534,7 @@ class Apic extends IController{
 			'tag'      => IFilter::act(IReq::get('tag')), //标签，选填
 		);
 		$data  = Api::run('goodsList', $param);
-		$this->json_echo($data);
+		$this->json_echo(apiReturn::go('0', $data));
 	}
 
 	/**
