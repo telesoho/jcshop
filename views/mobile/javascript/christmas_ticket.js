@@ -16,8 +16,12 @@ var em = new Vue({
 	mounted: function(){
 		var self = this;
 		activity(self);
+	},
+	methods:{
+		tiao:function(){
+			window.location.href="/site/ticket_list"
+		}
 	}
-	
 })
 function activity(self){
 	mui.ajax('/apic/get_ticket_activity', {

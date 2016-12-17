@@ -11,7 +11,7 @@ li{
 	overflow: hidden;
 	text-overflow:ellipsis;
 	display:-webkit-box; 
-	height: 0.62rem;
+	height: 0.64rem;
 	-webkit-box-orient:vertical;
 	-webkit-line-clamp:2;
 }
@@ -96,7 +96,7 @@ article p{
 	padding:0 0.1rem ;
 }
 #hot ul li{
-	width: 1.3rem;
+	width: 2.3rem;
 	height: 0.82rem;
 	background: #fff;
 	overflow: hidden;
