@@ -36,36 +36,36 @@ class Apic extends IController{
 			case 1: //药妆
 				$cid   = 126; //个性美妆
 				$aid   = 15; //专辑分类
+				$data['pic']   = '/views/mobile/skin/default/image/jmj/product/gou.png';
 				$name  = '药妆'; //个性美妆
-				$pic   = 'gou';
 				$title = '狗子推荐';
 				break;
 			case 2: //个护
 				$cid   = 126; //基础护肤
 				$aid   = 18; //专辑分类
+				$data['pic']   = '/views/mobile/skin/default/image/jmj/product/nai.png';
 				$name  = '个护'; //基础护肤
-				$pic   = 'nai';
 				$title = '奶瓶推荐';
 				break;
 			case 3: //宠物
 				$cid   = 126; //宠物用品
 				$aid   = 17; //专辑分类
+				$data['pic']   = '/views/mobile/skin/default/image/jmj/product/tui.png';
 				$name  = '宠物'; //宠物用品
-				$pic   = 'tui';
 				$title = '腿毛推荐';
 				break;
 			case 4: //健康
 				$cid   = 126; //居家药品
 				$aid   = 16; //专辑分类
+				$data['pic']   = '/views/mobile/skin/default/image/jmj/product/xi.png';
 				$name  = '健康'; //居家药品
-				$pic   = 'xi';
 				$title = '昔君推荐';
 				break;
 			case 5: //零食
 				$cid   = 126; //日式美食
 				$aid   = 19; //专辑分类
+				$data['pic']   = '/views/mobile/skin/default/image/jmj/product/yi.png';
 				$name  = '零食'; //日式美食
-				$pic   = 'yi';
 				$title = '一哥推荐';
 				break;
 			default:
@@ -170,7 +170,6 @@ class Apic extends IController{
 				}
 				$where .= ')';
 			}
-
 			$queryBrand->where  = $where;
 			$queryBrand->fields = 'id,name,logo,url';
 			$queryBrand->order  = 'sort desc';
@@ -186,7 +185,6 @@ class Apic extends IController{
 		/* 返回参数 */
 		$data['article_list'] = $listArt; //文章列表
 		$data['brand_list']   = $listBrand; //品牌列表
-//		print_r($data);exit();
 		$this->json_echo($data);
 	}
 
@@ -1215,6 +1213,7 @@ class Apic extends IController{
 			$visit = $visit===null ? $checkStr : $visit.$checkStr;
 			ISafe::set('visit', $visit);
 		}
+
 		/* 返回参数 */
 		$this->json_echo($dataGoods);
 	}
