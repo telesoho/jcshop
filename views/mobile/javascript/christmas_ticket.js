@@ -20,7 +20,6 @@ var em = new Vue({
 	
 })
 function activity(self){
-	
 	mui.ajax('/apic/get_ticket_activity', {
 		data:{
 			aid:self.aid,

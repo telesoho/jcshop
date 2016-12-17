@@ -4,14 +4,14 @@ var em = new Vue({
 		cat:[{
 			src:''
 		}],
-		img:["/views/mobile/skin/default/image/jmj/new_active/gehu.png","/views/mobile/skin/default/image/jmj/new_active/yaozhuang.png",
+		img:["/views/mobile/skin/default/image/jmj/new_active/yaozhuang.png","/views/mobile/skin/default/image/jmj/new_active/gehu.png",
 		"/views/mobile/skin/default/image/jmj/new_active/chongwu.png",
 		"/views/mobile/skin/default/image/jmj/new_active/jiankang.png",
 		"/views/mobile/skin/default/image/jmj/new_active/lingshi.png"],
 		list1:[],
 		list:[],
-		style2:"padding-bottom:0.3rem",
-		style1:"padding-bottom:0.3rem",
+		style2:"padding-bottom:0.1rem",
+		style1:"padding-bottom:0.1rem",
 		banner:[
 					"/views/mobile/skin/default/image/jmj/new_active/banner/6.png",
 					"/views/mobile/skin/default/image/jmj/new_active/banner/7.png",
@@ -22,12 +22,11 @@ var em = new Vue({
 					"/views/mobile/skin/default/image/jmj/new_active/banner/12.png"
 				]
 //		banner图为专场
-		
 	},
 	computed:{
 		newcat:function(){
 			this.cat.map(function(item){				
-				item.url="/activity/christmas_list?id="+item.id+"&cid="+item.cid;
+				item.url="/activity/christmas_list?id="+item.id;
 				
 			})
 			return this.cat;
@@ -40,12 +39,17 @@ var em = new Vue({
 			return this.list1;
 		},
 		newlist:function(){
+			var t = 6
 			this.list.map(function(item){
 				item.map(function(itemList){
 					itemList.url="/site/products?id="+itemList.id;
-				})
-//				
-				
+					
+				})	
+				item.url = "/activity/christmas_list?id="+t;
+				if(t==6){
+					item.url = "/activity/christmas_brand_list";
+				}
+				t++
 			})
 			return this.list;
 		}
@@ -90,7 +94,6 @@ function getActiveInfo(self){
           };
           //获取专场的图片(banner图自己定义的)
           for(var j =0;j<self.banner.length;j++){
-          		console.log(self.banner.length);
           		self.list[j].bannerimg = self.banner[j];
           }
           	//获取专区(5个专区)
