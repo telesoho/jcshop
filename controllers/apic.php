@@ -28,54 +28,89 @@ class Apic extends IController{
 	 */
 	public function pro_list(){
 		/* 获取参数 */
-		$tid     = IFilter::act(IReq::get('id'), 'int'); //分类ID
+		$tid     = IFilter::act(IReq::get('tid'), 'int'); //分类ID
 		$user_id = isset($this->user['user_id']) ? $this->user['user_id'] : 0;
 
 		/* 分类 */
 		switch($tid){
-			case 1:
-				$cid   = 126;
+			case 1: //药妆
+				$cid   = 126; //个性美妆
+				$aid   = 15; //专辑分类
 				$name  = '药妆'; //个性美妆
-				$aid   = 15;
 				$pic   = 'gou';
 				$title = '狗子推荐';
 				break;
-			case 2:
-				$cid   = 126;
+			case 2: //个护
+				$cid   = 126; //基础护肤
+				$aid   = 18; //专辑分类
 				$name  = '个护'; //基础护肤
-				$aid   = 18;
 				$pic   = 'nai';
 				$title = '奶瓶推荐';
 				break;
-			case 3:
-				$cid   = 126;
+			case 3: //宠物
+				$cid   = 126; //宠物用品
+				$aid   = 17; //专辑分类
 				$name  = '宠物'; //宠物用品
-				$aid   = 17;
 				$pic   = 'tui';
 				$title = '腿毛推荐';
 				break;
-			case 4:
-				$cid   = 126;
+			case 4: //健康
+				$cid   = 126; //居家药品
+				$aid   = 16; //专辑分类
 				$name  = '健康'; //居家药品
-				$aid   = 16;
 				$pic   = 'xi';
 				$title = '昔君推荐';
 				break;
-			case 5:
-				$cid   = 126;
+			case 5: //零食
+				$cid   = 126; //日式美食
+				$aid   = 19; //专辑分类
 				$name  = '零食'; //日式美食
-				$aid   = 19;
 				$pic   = 'yi';
 				$title = '一哥推荐';
 				break;
 			default:
 				$this->json_echo(apiReturn::go('007001'));
 		}
+		//商品分类
+		$cids = goods_class::catChild($cid);
+		/* 商品分类 */
+		$queryCat = new IQuery('category');
+		$queryCat->where = '';
+		$queryCat->fields = '';
+		$queryCat->limit = 10;
+		$queryCat->order = 'sort desc';
+
 		/* 商品列表 */
-		$queryGoods = new IQuery('goods');
-		$queryGoods->where = 'parent_id='.$cid.' AND visibility=1';
-
-
+		$queryGoods         = new IQuery('goods AS m');
+		$queryGoods->join   = 'LEFT JOIN commend_goods AS d ON d.goods_id=m.id LEFT JOIN category_extend AS c ON c.goods_id=m.id';
+		$queryGoods->fields = 'm.id,m.name,m.sell_price,m.img';
+		$queryGoods->limit  = 6;
+		$queryGoods->group  = 'm.id';
+		for($i = 1; $i<=3; $i++){
+			switch($i){
+				case 1: //最新品
+					$queryGoods->where = 'm.is_del=0 AND c.category_id in ('.$cids.')';
+					$queryGoods->order = 'm.id desc';
+					break;
+				case 2: //最热卖
+					$queryGoods->where = 'm.is_del=0 AND c.category_id in ('.$cids.')';
+					$queryGoods->order = 'm.sale desc,m.visit desc';
+					break;
+				case 3: //推荐
+					$queryGoods->where = 'm.is_del=0 AND c.category_id in ('.$cids.') AND commend_id=4';
+					$queryGoods->order = 'm.sale desc,m.visit desc';
+					break;
+			}
+			$listGoods = $queryGoods->find();
+			if(!empty($listGoods)){
+				/* 计算活动商品价格 */
+				$listGoods = api::run('goodsActivity', $listGoods);
+				foreach($listGoods as $k => $v){
+					$listGoods[$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$v['img'].'/w/220/h/220');
+				}
+			}
+			$data['goods_list'.$i] = $listGoods;
+		}
 
 		/* 专辑 */
 		$queryArt         = new IQuery('article as m');
@@ -116,16 +151,13 @@ class Apic extends IController{
 			}
 		}
 
-		//商品分类
-		$cid = goods_class::catChild($cid);
-
 		/* 品牌 */
 		$queryBcat         = new IQuery('brand_category');
-		$queryBcat->where  = 'goods_category_id in ('.$cid.')';
+		$queryBcat->where  = 'goods_category_id in ('.$cids.')';
 		$queryBcat->fields = 'id';
 		$queryBcat->limit  = 1000;
 		$listBcat          = $queryBcat->find();
-		$listBrand        = array();
+		$listBrand         = array();
 		if(!empty($listBcat)){
 			//关联的品牌
 			$queryBrand = new IQuery('brand');
@@ -152,10 +184,9 @@ class Apic extends IController{
 		}
 
 		/* 返回参数 */
-		$data = array(
-			'article_list' => $listArt, // 文章列表
-			'brand_list' => $listBrand, //品牌列表
-		);
+		$data['article_list'] = $listArt; //文章列表
+		$data['brand_list']   = $listBrand; //品牌列表
+//		print_r($data);exit();
 		$this->json_echo($data);
 	}
 
@@ -1136,7 +1167,7 @@ class Apic extends IController{
 
 		/* 商品详情 */
 		$modelGoods = new IModel('goods');
-		$fields     = 'id,name,sell_price,original_price,img,content';
+		$fields     = 'id,name,sell_price,original_price,jp_price,market_price,img,content';
 		$dataGoods  = $modelGoods->getObj('is_del=0 AND id='.$goods_id, $fields);
 		if(empty($dataGoods)) $this->json_echo(apiReturn::go('006001')); //商品不存在
 		/* 计算活动商品价格 */
