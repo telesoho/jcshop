@@ -7,13 +7,13 @@
 img{
     width:100%;
 }
-#info .button{
+#info .button_bottom{
     background:#aadcf3;
     height:3.7rem;
     display: -webkit-flex;
     -webkit-justify-content: center;
 }
-#info .button a{
+#info .button_bottom a{
     display: block;
     margin-top:0.7rem;
     background:#ffffff;
@@ -48,26 +48,28 @@ img{
 #info .activeImg .position1 .button{
     position:absolute;
     z-index:2;
-    top:0.9rem;
-    left:1.9rem;
+    top:0.92rem;
+    left:1.87rem;
 }
 #info .activeImg .position2 .button{
     position:absolute;
     z-index:2;
-    top:4rem;
-    left:5.2rem;
+    width:0.86rem;
+    height:0.86rem;
+    top:3.95rem;
+    left:5.22rem;
 }
 #info .activeImg .position3 .button{
     position:absolute;
     z-index:2;
-    top:4rem;
-    left:1.33rem;
+    top:4.01rem;
+    left:1.4rem;
 }
 #info .activeImg .position4 .button{
     position:absolute;
     z-index:2;
-    top:7.1rem;
-    left:1.33rem;
+    top:7.15rem;
+    left:1.43rem;
 }
 /*给四个按钮定位*/
 #info .activeImg .position1 .font{
@@ -91,6 +93,93 @@ img{
 #info .activeImg .position4 .font{
     position:absolute;
     z-index:2;
-    top:8.77rem;
+    top:8.8rem;
     left:3rem;
+}
+/*弹窗窗口*/
+#sheet .mui-table-view{
+    border-radius:0.2rem;
+    margin-left:10%;
+    width:80%;
+    height:7.5rem;
+    background:#fff;
+}
+.mui-popover .mui-table-view{
+    max-height:1300px;
+}
+#sheet .mui-table-view .text{
+    text-align:left !important;
+    font-size:0.26rem;
+    padding:0.2rem;
+    color:#3d4245;
+}
+#sheet.mui-popover {
+    bottom:27% !important;
+}
+.line_height{
+    background:rgba(255,255,255,0.5);
+    width:1px;
+    height:1.32rem;
+    position:absolute;
+    bottom:-1.35rem;
+    right:1.2rem;
+    z-index:3;
+}
+.closeImg{
+    width:0.62rem;
+    position:absolute;
+    bottom:-2rem;
+    right:0.9rem;
+}
+/*展示收货地址*/
+#sheet .addr{
+    padding-top:0.5rem;
+    width:100%;
+    height:6.22rem;
+    overflow-y: scroll;
+}
+.addrList{
+    margin-top:0.2rem;
+    border-bottom:1px solid #eee;
+}
+input[type="radio"] {
+    /*padding:0.5rem;*/
+    /*visibility: hidden;*/
+    display: none;
+}
+.addrList .img{
+    text-align:left;
+    margin-left:0.2rem;
+}
+.addrList .right{
+    width:5.25rem;
+}
+.addrList .right .name{
+    font-size:0.28rem;
+    color:#979797;
+    text-align:left;
+}
+.addrList .right .phone{
+    margin-right:0.4rem;
+    font-size:0.28rem;
+    color:#979797;
+    text-align:left;
+}
+.addrList .right .listAddr{
+    margin-top:0.2rem;
+    text-align:left;
+    font-size:0.28rem;
+    color:#979797;
+    height:0.8rem;
+}
+.getWareGoods{
+    border:1px solid #ff44a0;
+    border-radius:0.68rem;
+    width:3.93rem;
+    height:0.68rem;
+    font-size:0.3rem;
+    color:#ff44a0;
+    line-height: 0.68rem;
+    margin-left:1.12rem;
+    margin-top:0.2rem;
 }
