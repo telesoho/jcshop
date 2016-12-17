@@ -523,8 +523,13 @@ class Apic extends IController{
 		if(!empty($dataGrow)){
 			$modelRec = new IModel('activity_grow_record');
 			foreach($dataGrow as $k => $v){
-				$rel                     = $modelRec->getObj('user_id='.$user_id.' AND grow_id='.$v['id']);
-				$dataGrow[$k]['is_play'] = empty($rel) ? 0 : 1; //是否已领取
+				if($dataOrder<$v['grow']){
+					$dataGrow[$k]['is_play'] = 1; //1不能领
+				}else{
+					$rel                     = $modelRec->getObj('user_id='.$user_id.' AND grow_id='.$v['id']);
+					$dataGrow[$k]['is_play'] = empty($rel) ? 2 : 3; //2可以领-3已领取
+				}
+
 			}
 
 		}
@@ -933,7 +938,7 @@ class Apic extends IController{
 		$cid  = IFilter::act(IReq::get('cid')); //分类ID，选填
 		$bid  = IFilter::act(IReq::get('bid')); //品牌ID，选填
 		$did  = IFilter::act(IReq::get('did'), 'int'); //推荐ID，选填
-		$tag  = IFilter::act(IReq::get('tag')); //品牌ID，选填
+		$tag  = IFilter::act(IReq::get('tag')); //标签，选填
 
 		/* 获取下级分类 */
 		if(!empty($cid)){
@@ -976,7 +981,6 @@ class Apic extends IController{
 				$data[$k]['img']        = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
 			}
 		}
-
 		/* 返回数据 */
 		$this->json_echo(apiReturn::go('0', $data));
 	}

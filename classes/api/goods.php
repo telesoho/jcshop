@@ -43,12 +43,12 @@ class APIGoods{
 					}
 				}
 			}
-			//结束活动
-			if(!empty($aids)){
-				$model = new IModel('goods');
-				$model->setData(array('activity' => 0));
-				$model->update('activity IN ('.implode(',', $aids).')');
-			}
+			//结束活动 TODO 先不结束
+//			if(!empty($aids)){
+//				$model = new IModel('goods');
+//				$model->setData(array('activity' => 0));
+//				$model->update('activity IN ('.implode(',', $aids).')');
+//			}
 			//更新价格
 			$jmj_config           = new Config('jmj_config');
 			$goods_ratio          = $jmj_config->goods_ratio; //全场折扣率

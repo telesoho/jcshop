@@ -17,12 +17,14 @@ class ticket
 		switch($ticket_data['type']){
 			//折扣券
 			case 1 :
-				$data['sum'] = $data['final_sum'] = $data['sum'] * $ticket_data['ratio'];
+				$money 					= $data['sum'] * $ticket_data['ratio'];
+				$data['sum'] = $data['final_sum'] = $money<=0 ? 0 : $money;
 				$msg 					= ($ticket_data['ratio']*10).'折优惠券';
 				break;
 			//抵扣券
 			case 2 :
-				$data['sum'] = $data['final_sum'] = $data['sum'] - $ticket_data['money'];
+				$money 					= $data['sum'] - $ticket_data['money'];
+				$data['sum'] = $data['final_sum'] = $money<=0 ? 0 : $money;
 				$msg 					= '抵'.$ticket_data['money'].'元优惠券';
 				break;
 			default:
