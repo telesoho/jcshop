@@ -4,6 +4,10 @@ return array(
 	'goodsActivity' => array(
 		'file' => 'goods.php','class' => 'APIGoods'
 	),
+	/* 商品列表 */
+	'goodsList' => array(
+		'file' => 'goods.php','class' => 'APIGoods'
+	),
 	//取商品数据
 	'getGoodsInfo' => array(
 		'query' => array(
