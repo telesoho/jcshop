@@ -34,39 +34,39 @@ class Apic extends IController{
 		/* 分类 */
 		switch($tid){
 			case 1: //药妆
-				$cid   = 126; //个性美妆
-				$aid   = 15; //专辑分类
-				$data['pic']   = '/views/mobile/skin/default/image/jmj/product/gou.png';
-				$name  = '药妆'; //个性美妆
-				$title = '狗子推荐';
+				$cid         = 126; //个性美妆
+				$aid         = 15; //专辑分类
+				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/gou.png';
+				$name        = '药妆'; //个性美妆
+				$title       = '狗子推荐';
 				break;
 			case 2: //个护
-				$cid   = 126; //基础护肤
-				$aid   = 18; //专辑分类
-				$data['pic']   = '/views/mobile/skin/default/image/jmj/product/nai.png';
-				$name  = '个护'; //基础护肤
-				$title = '奶瓶推荐';
+				$cid         = 126; //基础护肤
+				$aid         = 18; //专辑分类
+				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/nai.png';
+				$name        = '个护'; //基础护肤
+				$title       = '奶瓶推荐';
 				break;
 			case 3: //宠物
-				$cid   = 126; //宠物用品
-				$aid   = 17; //专辑分类
-				$data['pic']   = '/views/mobile/skin/default/image/jmj/product/tui.png';
-				$name  = '宠物'; //宠物用品
-				$title = '腿毛推荐';
+				$cid         = 126; //宠物用品
+				$aid         = 17; //专辑分类
+				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/tui.png';
+				$name        = '宠物'; //宠物用品
+				$title       = '腿毛推荐';
 				break;
 			case 4: //健康
-				$cid   = 126; //居家药品
-				$aid   = 16; //专辑分类
-				$data['pic']   = '/views/mobile/skin/default/image/jmj/product/xi.png';
-				$name  = '健康'; //居家药品
-				$title = '昔君推荐';
+				$cid         = 126; //居家药品
+				$aid         = 16; //专辑分类
+				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/xi.png';
+				$name        = '健康'; //居家药品
+				$title       = '昔君推荐';
 				break;
 			case 5: //零食
-				$cid   = 126; //日式美食
-				$aid   = 19; //专辑分类
-				$data['pic']   = '/views/mobile/skin/default/image/jmj/product/yi.png';
-				$name  = '零食'; //日式美食
-				$title = '一哥推荐';
+				$cid         = 126; //日式美食
+				$aid         = 19; //专辑分类
+				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/yi.png';
+				$name        = '零食'; //日式美食
+				$title       = '一哥推荐';
 				break;
 			default:
 				$this->json_echo(apiReturn::go('007001'));
@@ -74,11 +74,11 @@ class Apic extends IController{
 		//商品分类
 		$cids = goods_class::catChild($cid);
 		/* 商品分类 */
-		$queryCat = new IQuery('category');
-		$queryCat->where = '';
+		$queryCat         = new IQuery('category');
+		$queryCat->where  = '';
 		$queryCat->fields = '';
-		$queryCat->limit = 10;
-		$queryCat->order = 'sort desc';
+		$queryCat->limit  = 10;
+		$queryCat->order  = 'sort desc';
 
 		/* 商品列表 */
 		$queryGoods         = new IQuery('goods AS m');
@@ -185,7 +185,7 @@ class Apic extends IController{
 		/* 返回参数 */
 		$data['article_list'] = $listArt; //文章列表
 		$data['brand_list']   = $listBrand; //品牌列表
-		$this->json_echo(apiReturn::go('0',$data));
+		$this->json_echo(apiReturn::go('0', $data));
 	}
 
 	/**
@@ -524,7 +524,17 @@ class Apic extends IController{
 	 * 活动商品列表
 	 */
 	public function activity_goods_list(){
-		$this->goods_list();
+		$param = array(
+			'pagesize' => 20, //每页显示条数
+			'page'     => IFilter::act(IReq::get('page'), 'int'),//分页，选填
+			'aid'      => IFilter::act(IReq::get('aid'), 'int'), //活动ID，选填
+			'cid'      => IFilter::act(IReq::get('cid')), //分类ID，选填
+			'bid'      => IFilter::act(IReq::get('bid')), //品牌ID，选填
+			'did'      => IFilter::act(IReq::get('did'), 'int'), //推荐ID，选填
+			'tag'      => IFilter::act(IReq::get('tag')), //标签，选填
+		);
+		$data  = Api::run('goodsList', $param);
+		$this->json_echo($data);
 	}
 
 	/**
@@ -1165,7 +1175,7 @@ class Apic extends IController{
 
 		/* 商品详情 */
 		$modelGoods = new IModel('goods');
-		$fields     = 'id,name,sell_price,original_price,jp_price,market_price,img,content';
+		$fields     = 'id,name,sell_price,original_price,jp_price,market_price,store_nums,img,content';
 		$dataGoods  = $modelGoods->getObj('is_del=0 AND id='.$goods_id, $fields);
 		if(empty($dataGoods)) $this->json_echo(apiReturn::go('006001')); //商品不存在
 		/* 计算活动商品价格 */
@@ -1216,6 +1226,47 @@ class Apic extends IController{
 
 		/* 返回参数 */
 		$this->json_echo($dataGoods);
+	}
+
+	/**
+	 * 更多商品
+	 */
+	public function goods_more(){
+		/* 获取参数 */
+		$tid = IFilter::act(IReq::get('tid'), 'int'); //分类ID
+		$mid = IFilter::act(IReq::get('mid'), 'int'); //分类ID
+
+		/*  */
+		/* 分类 */
+		switch($tid){
+			case 1: //药妆
+				$cid   = 126; //个性美妆
+				$name  = '药妆'; //个性美妆
+				$title = '狗子推荐';
+				break;
+			case 2: //个护
+				$cid   = 126; //基础护肤
+				$name  = '个护'; //基础护肤
+				$title = '奶瓶推荐';
+				break;
+			case 3: //宠物
+				$cid   = 126; //宠物用品
+				$name  = '宠物'; //宠物用品
+				$title = '腿毛推荐';
+				break;
+			case 4: //健康
+				$cid   = 126; //居家药品
+				$name  = '健康'; //居家药品
+				$title = '昔君推荐';
+				break;
+			case 5: //零食
+				$cid   = 126; //日式美食
+				$name  = '零食'; //日式美食
+				$title = '一哥推荐';
+				break;
+			default:
+				$this->json_echo(apiReturn::go('007001'));
+		}
 	}
 
 	/**
