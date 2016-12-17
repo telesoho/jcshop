@@ -524,7 +524,7 @@ class Apic extends IController{
 			$modelRec = new IModel('activity_grow_record');
 			foreach($dataGrow as $k => $v){
 				$rel                     = $modelRec->getObj('user_id='.$user_id.' AND grow_id='.$v['id']);
-				$dataGrow[$k]['is_play'] = $rel>0 ? 1 : 0; //是否已领取
+				$dataGrow[$k]['is_play'] = empty($rel) ? 0 : 1; //是否已领取
 			}
 
 		}
