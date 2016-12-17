@@ -56,7 +56,16 @@ sit_products.css更改
 .row_b_t{border-top:1px solid #eee;}
 #addressNew .title{height:0.6rem;line-height:0.7rem;font-size:0.28rem;padding:0.1rem 0.1rem;margin-bottom:0.1rem;}
 .row_margin{margin-top:0.13rem;}
-.mui-input-row input{border-bottom:1px solid #eee;border-left:0;border-right:0;border-radius:0;height:0.92rem;color:#040404;font-size:0.3rem;border-top:1px solid #eee;padding-left:0.16rem;}
+.mui-input-row input{
+    border-top:none;
+    border-left:0;
+    border-right:0;
+    border-bottom:1px solid #eee;
+    border-radius:0;
+    height:0.92rem;
+    color:#040404;
+    font-size:0.3rem;
+    padding-left:0.16rem;}
 .newAddrSub_position{width:100%;overflow:hidden;position:fixed; left:0;bottom:0;}
 .newAddrSub_position .submit_suc{width:100%;background:#f3026a;color:#fff;border:0;border-radius:0;height:1rem;font-size:0.36rem;}
 

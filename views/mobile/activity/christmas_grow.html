@@ -7,51 +7,64 @@
     <meta name="x5-orientation" content="portrait">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/christmas_grow.css" />
     <title>麋鹿不迷路</title>
-    <style>
-        #info .img{
-            margin-bottom:-0.1rem;
-        }
-        #info .img img{
-            width:100%;
-        }
-        #info .button{
-            background:#aadcf3;
-            height:3.7rem;
-            display: -webkit-flex;
-            -webkit-justify-content: center;
-        }
-        #info .button a{
-            display: block;
-            margin-top:0.7rem;
-            background:#ffffff;
-            border-radius:0.84rem;
-            width:5.5rem;
-            height:0.84rem;
-            line-height:0.84rem;
-            text-align:center;
-            color:#ff9c9c;
-            font-size:0.32rem;
-        }
-    </style>
 </head>
 <body>
 <div id="info">
     <div class="img">
-        <img src="/views/mobile/skin/default/image/jmj/new_active/milu02.jpg" alt="" />
+        <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu02.jpg" alt="" />
     </div>
     <div class="img">
-        <img src="/views/mobile/skin/default/image/jmj/new_active/milu03.jpg" alt="" />
+        <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu03.jpg" alt="" />
+    </div>
+    <div class="img activeImg">
+        <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu04.png" alt="" class="bgimg"/>
+        <!--麋鹿位置判定-->
+        <div class="milu">
+            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu.png" alt="" :style="miluPosition.position5" class="miluImg" />
+        </div>
+        <!--领取状态以及领取位置-->
+        <div class="position1">
+            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/get.png" alt="" style="width:0.86rem;height:0.86rem" class="button" />
+            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/ungetFont.png" style="height:0.27rem;width:auto" alt="" class="font" />
+        </div>
+        <div class="position2">
+            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/unget.png" style="width:0.86rem;height:0.86rem" alt="" class="button">
+            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/ungetFont.png" style="height:0.27rem;width:auto" alt="" class="font">
+        </div>
+        <div class="position3">
+            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/unget.png" style="width:0.86rem;height:0.86rem" alt="" class="button">
+            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/ungetFont.png" style="height:0.27rem;width:auto" alt="" class="font">
+        </div>
+        <div class="position4">
+            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/unget.png" style="width:0.86rem;height:0.86rem" alt="" class="button">
+            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/ungetFont.png" style="height:0.27rem;width:auto" alt="" class="font">
+        </div>
     </div>
     <div class="img">
-        <img src="/views/mobile/skin/default/image/jmj/new_active/milu04.jpg" alt="" />
-    </div>
-    <div class="img">
-        <img src="/views/mobile/skin/default/image/jmj/new_active/milu05.jpg" alt="" />
+        <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu05.jpg" alt="" />
     </div>
     <div class="button">
         <a href="/activity/christmas_index">回到主会场</a>
     </div>
 </div>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script>
+    var vm= new Vue({
+        el:"#info",
+        data:{
+//            麋鹿的四个位置
+            miluPosition:{
+                position1:'top:0.1rem;left:0.3rem;',
+                position2:'top:1.7rem;left:4.5rem;',
+                position3:'top:3.4rem;left:3rem;transform:rotateY(180deg)',
+                position4:'top:5.2rem;left:1.6rem;transform:rotate(90deg)',
+                position5:'top:6.5rem;left:3rem;'
+            }
+        }
+    })
+</script>
 </body>
 </html>

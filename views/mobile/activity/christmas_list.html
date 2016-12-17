@@ -13,7 +13,7 @@
 <body>
 <div id="activityInfo" v-cloak>
      <header class="banner">
-         <img src="/views/mobile/skin/default/image/jmj/new_active/banner/banner_01.png" alt="" />
+         <img :src="banner.img" alt="" />
      </header>
     <section class="goodsList">
         <div class="goodsItem" v-for="item in new_info">
@@ -53,28 +53,40 @@
             </div>
         </div>
     </footer>
+	    <!-- 							回到顶部										-->
+	<div class="fix-toTop" @click="fan()">
+	    <img src="/views/mobile/skin/default/image/jmj/new_active/mainicon.png" alt="" style="width: 0.84rem;height: 0.84rem;" />
+	</div>
 </div>
 
-<!-- 							回到顶部										-->
-<div class="fix-toTop hide" @click="fixToTop">
-    <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" style="width: 0.84rem;height: 0.84rem;" />
-</div>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script type="text/javascript" charset="utf-8">
     //	接收页面传过来的状态值
+    var banner={
+        	img:"",
+            title:"",
+            cid:'',
+            bid:'',
+            aid:"",
+            did:""
+        }
     var stop=true;
     var Request = new Object();
     Request = GetRequest();
     var statusOrder=Request["id"];
+    var banner_data=getBanner(statusOrder);
+    console.log(banner_data);
     var vm = new Vue({
         el: '#activityInfo',
         data: {
             showMessage:false,
+            banner:banner_data,
             page:1,
             info:[],
             infoState:false
+            
         },
         computed: {
             new_info: function(){
@@ -86,16 +98,15 @@
         },
         mounted: function(){
             var self=this;
-            if(getSession("active_info")){
-                self.info=getSession("active_info");
-                self.page=getSession("active_page")
-            }else{
-                self.page=1;
                 getChristmasList(statusOrder,self);
-            }
-
+                document.title=self.banner.title;
+               
         },
-        methods: {
+      methods:{
+      		fan: function(){
+      			window.location.href = "/activity/christmas_index";
+      			console.log(1)
+      		}
         }
     });
 
@@ -110,12 +121,7 @@
     });
     function getChristmasList(eid,self){
         mui.ajax('/apic/activity_goods_list',{
-            data:{
-              cid:'',
-              page:self.page,
-              aid:1,
-              bid:''
-            },
+            data:self.banner,
             dataType:'json',
             type:'get',
             timeout:10000,
@@ -191,57 +197,99 @@
         window.sessionStorage.removeItem(key);
     }
     //获取banner图和title
-    function getBanner(cid){
-        var banner={}
-        switch(cid)
+    function getBanner(id){
+        var id=id;
+        switch(id)
         {
-            case 1:
-                banner.img="";
-                banner.title="个护专区";
-                break;
-            case 2:
-                banner.img="";
+        	 case "1":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/1.png";
                 banner.title="药妆专区";
+                banner.cid='126';
+                banner.bid='';
+                banner.aid="";
                 break;
-            case 3:
-                banner.img="";
+            case "2":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/2.png";
+                banner.title="个护专区";
+                banner.cid='134';
+                banner.bid='';
+                banner.aid="";
+                break;
+            case "3":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/3.png";
                 banner.title="宠物专区";
+                banner.cid='6';
+                banner.bid='';
+                banner.aid="";
                 break;
-            case 4:
-                banner.img="";
+            case "4":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/4.png";
                 banner.title="健康专区";
+                banner.cid='2';
+                banner.bid='';
+                banner.aid="";
                 break;
-            case 5:
-                banner.img="";
+            case "5":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/5.png";
                 banner.title="零食专区";
+                banner.cid='7';
+                banner.bid='';
+                banner.aid="";
+                
                 break;
-            case 6:
-                banner.img="";
+            case "6":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/6.png";
                 banner.title="大牌专场";
+                banner.cid='';
+                banner.bid='26,32,56,74,78,82,100';
+                banner.aid="";
                 break;
-            case 7:
-                banner.img="";
+            case "7":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/7.png";
                 banner.title="聚划算专场";
+                banner.cid='';
+                banner.bid='';
+                banner.aid="2";
                 break;
-            case 8:
-                banner.img="";
-                banner.title="个护专场";
+            case "8":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/8.png";
+                banner.title="狗子推荐";
+                banner.cid='126';
+                banner.bid='';
+                banner.aid="";
+                banner.did="4";
                 break;
-            case 9:
-                banner.img="";
-                banner.title="个护专场";
+            case "9":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/9.png";
+                banner.title="奶糖推荐";
+                banner.cid='134';
+                banner.bid='';
+                banner.aid="";
+                banner.did="4";
                 break;
-            case 10:
-                banner.img="";
-                banner.title="个护专场";
+            case "10":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/10.png";
+                banner.title="腿毛推荐";
+                banner.cid='6';
+                banner.bid='';
+                banner.aid="";
+                banner.did="4";
                 break;
-            case 11:
-                banner.img="";
-                banner.title="个护专场";
+            case "11":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/11.png";
+                banner.title="昔君推荐";
+                banner.cid='2';
+                banner.bid='';
+                banner.aid="";
+                banner.did="4";
                 break;
-            case 12:
-                banner.img="";
-                banner.title="个护专场";
+            case "12":
+                banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/12.png";
+                banner.title="一哥推荐";
+                banner.cid='7';
+                banner.bid='';
+                banner.aid="";
+                banner.did="4";
                 break;
             default:
                break;
