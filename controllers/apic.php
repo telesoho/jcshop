@@ -384,10 +384,12 @@ class Apic extends IController{
 		$queryGrow        = new IQuery('activity_grow');
 		$queryGrow->where = 'pid='.$aid;
 		$queryGrow->order = 'grow asc,id asc';
-		$dataGrow         = $queryGrow->find();
-		if(empty($dataGrow) || !isset($dataGrow[$gid-1]))
+		$listGrow         = $queryGrow->find();
+		foreach($listGrow as $k => $v){
+			if($v['id'] == $gid) $dataGrow = $v;
+		}
+		if(!isset($dataGrow) || empty($dataGrow))
 			$this->json_echo(apiReturn::go('002030')); //礼包不存在
-		$dataGrow = $dataGrow[$gid-1];
 
 		/* 计算活动期间内的消费金额 */
 		$queryOrder         = new IQuery('order');
@@ -1190,8 +1192,6 @@ class Apic extends IController{
 		$fdata                     = $favorite->find();
 		$goods_info['is_favorite'] = !empty($fdata) ? 1 : 0;
 
-		var_dump($goods_info);
-		exit();
 		$this->json_echo($goods_info);
 	}
 
