@@ -21,6 +21,145 @@ class Apic extends IController{
 		//        header("Content-type: application/json");
 	}
 	/**
+	 * ---------------------------------------------------主要页面---------------------------------------------------*
+	 */
+	/**
+	 * 主分类：药妆、个护、宠物、健康、零食
+	 */
+	public function pro_list(){
+		/* 获取参数 */
+		$tid     = IFilter::act(IReq::get('id'), 'int'); //分类ID
+		$user_id = isset($this->user['user_id']) ? $this->user['user_id'] : 0;
+
+		/* 分类 */
+		switch($tid){
+			case 1:
+				$cid   = 126;
+				$name  = '药妆'; //个性美妆
+				$aid   = 15;
+				$pic   = 'gou';
+				$title = '狗子推荐';
+				break;
+			case 2:
+				$cid   = 126;
+				$name  = '个护'; //基础护肤
+				$aid   = 18;
+				$pic   = 'nai';
+				$title = '奶瓶推荐';
+				break;
+			case 3:
+				$cid   = 126;
+				$name  = '宠物'; //宠物用品
+				$aid   = 17;
+				$pic   = 'tui';
+				$title = '腿毛推荐';
+				break;
+			case 4:
+				$cid   = 126;
+				$name  = '健康'; //居家药品
+				$aid   = 16;
+				$pic   = 'xi';
+				$title = '昔君推荐';
+				break;
+			case 5:
+				$cid   = 126;
+				$name  = '零食'; //日式美食
+				$aid   = 19;
+				$pic   = 'yi';
+				$title = '一哥推荐';
+				break;
+			default:
+				$this->json_echo(apiReturn::go('007001'));
+		}
+		/* 商品列表 */
+		$queryGoods = new IQuery('goods');
+		$queryGoods->where = 'parent_id='.$cid.' AND visibility=1';
+
+
+
+		/* 专辑 */
+		$queryArt         = new IQuery('article as m');
+		$queryArt->join   = 'left join article_category as c on c.id=m.category_id';
+		$queryArt->where  = 'm.top=0 and m.visibility=1 and m.category_id='.$aid;
+		$queryArt->fields = 'm.id,m.title,m.visit_num,m.favorite,m.image,c.name';
+		$queryArt->order  = 'm.sort desc';
+		$queryArt->limit  = 2;
+		$listArt          = $queryArt->find();
+		if(!empty($listArt)){
+			$queryGoods         = new IQuery('goods as m');
+			$queryGoods->join   = 'left join relation as r on r.goods_id=m.id';
+			$queryGoods->fields = 'm.id,m.name,m.sell_price,m.img';
+			$queryGoods->order  = 'm.sale desc,m.visit desc';
+			$queryGoods->limit  = 5;
+			$db_favorite        = new IQuery('favorite_article');
+			$db_favorite->field = 'count(id)';
+			foreach($listArt as $k => $v){
+				$listArt[$k]['image'] = empty($v['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
+				//是否已收藏
+				$listArt[$k]['is_favorite'] = 0;
+				if(!empty($user_id)){
+					$db_favorite->where = 'aid='.$v['id'].' and user_id='.$user_id;
+					$data_favorite      = $db_favorite->find();
+					if(!empty($data_favorite)) $listArt[$k]['is_favorite'] = 1;
+				}
+				//相关商品
+				$queryGoods->where = 'm.is_del=0 and r.article_id='.$v['id'];
+				$listGoods         = $queryGoods->find();
+				if(!empty($listGoods)){
+					/* 计算活动商品价格 */
+					$listGoods = api::run('goodsActivity', $listGoods);
+					foreach($listGoods as $k1 => $v1){
+						$listGoods[$k1]['img'] = empty($v1['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/240/h/240");
+					}
+				}
+				$listArt[$k]['goods_list'] = $listGoods;
+			}
+		}
+
+		//商品分类
+		$cid = goods_class::catChild($cid);
+
+		/* 品牌 */
+		$queryBcat         = new IQuery('brand_category');
+		$queryBcat->where  = 'goods_category_id in ('.$cid.')';
+		$queryBcat->fields = 'id';
+		$queryBcat->limit  = 1000;
+		$listBcat          = $queryBcat->find();
+		$listBrand        = array();
+		if(!empty($listBcat)){
+			//关联的品牌
+			$queryBrand = new IQuery('brand');
+			$where      = 'logo is not null ';
+			if(!empty($listBcat)){
+				$where .= 'AND (';
+				foreach($listBcat as $k => $v){
+					$where .= 'category_ids like "%,'.$v['id'].',%"';
+					if(count($listBcat)-1!=$k) $where .= ' OR ';
+				}
+				$where .= ')';
+			}
+
+			$queryBrand->where  = $where;
+			$queryBrand->fields = 'id,name,logo,url';
+			$queryBrand->order  = 'sort desc';
+			$queryBrand->limit  = 20;
+			$listBrand          = $queryBrand->find();
+			if(!empty($listBrand)){
+				foreach($listBrand as $k => $v){
+					$listBrand[$k]['logo'] = empty($v['logo']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['logo']."/w/200/h/120");
+				}
+			}
+		}
+
+		/* 返回参数 */
+		$data = array(
+			'article_list' => $listArt, // 文章列表
+			'brand_list' => $listBrand, //品牌列表
+		);
+		$this->json_echo($data);
+	}
+
+	/**
 	 * ---------------------------------------------------购物车---------------------------------------------------*
 	 */
 	//购物车商品列表页面
@@ -386,7 +525,7 @@ class Apic extends IController{
 		$queryGrow->order = 'grow asc,id asc';
 		$listGrow         = $queryGrow->find();
 		foreach($listGrow as $k => $v){
-			if($v['id'] == $gid) $dataGrow = $v;
+			if($v['id']==$gid) $dataGrow = $v;
 		}
 		if(!isset($dataGrow) || empty($dataGrow))
 			$this->json_echo(apiReturn::go('002030')); //礼包不存在
@@ -531,9 +670,7 @@ class Apic extends IController{
 					$rel                     = $modelRec->getObj('user_id='.$user_id.' AND grow_id='.$v['id']);
 					$dataGrow[$k]['is_play'] = empty($rel) ? 2 : 3; //2可以领-3已领取
 				}
-
 			}
-
 		}
 
 		/* 返回数据 */
@@ -993,6 +1130,9 @@ class Apic extends IController{
 	public function goods_detail(){
 		/* 获取参数 */
 		$goods_id = IFilter::act(IReq::get('id'), 'int'); //商品ID
+		if(!isset($this->user['user_id']) || $this->user['user_id']==null)
+			$this->json_echo(apiReturn::go('001001'));
+		$user_id = $this->user['user_id'];
 
 		/* 商品详情 */
 		$modelGoods = new IModel('goods');
@@ -1001,7 +1141,7 @@ class Apic extends IController{
 		if(empty($dataGoods)) $this->json_echo(apiReturn::go('006001')); //商品不存在
 		/* 计算活动商品价格 */
 		$dataGoods             = Api::run('goodsActivity', $dataGoods);
-		$dataGoods['discount'] = round($dataGoods['sell_price']/$dataGoods['original_price'], 2)*10; //计算折扣率
+		$dataGoods['discount'] = empty($dataGoods['original_price']) ? '' : round($dataGoods['sell_price']/$dataGoods['original_price'], 2)*10; //计算折扣率
 		$dataGoods['img']      = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$dataGoods['img']."/w/500/h/500");
 
 		/* 商品图 */
@@ -1030,7 +1170,7 @@ class Apic extends IController{
 
 		/* 是否已收藏 */
 		$queryFor                 = new IQuery('favorite');
-		$queryFor->where          = 'user_id='.$this->user['user_id'].' AND rid='.$dataGoods['id'];
+		$queryFor->where          = 'user_id='.$user_id.' AND rid='.$dataGoods['id'];
 		$infoFav                  = $queryFor->find();
 		$dataGoods['is_favorite'] = !empty($infoFav) ? 1 : 0;
 
