@@ -39,7 +39,7 @@
 	height:60%;
 	display:none;
 	position:absolute;
-	background:url('../../image/jmj/icon/button.png');
+	background:url('../../image/jmj/new_active/index/bg.png');
 	background-size:100% 100%;
 	bottom:-0.3rem;
 	left:0.1rem;
@@ -48,7 +48,7 @@
 	background:#f8f8f8 !important;
 }
 .mui-control-item.mui-active .text{
-	color:#ff44a0 !important;
+	color:#cba5ed !important;
 	z-index:9;
 }
 .mui-control-item.mui-active .bg{

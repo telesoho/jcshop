@@ -42,9 +42,9 @@
 							<img :src="info.photo[info.photo.length-1].img">
 						</a>
 					</div>
-					<div class="mui-slider-item" v-for="item in info.photo">
+					<div class="mui-slider-item" v-for="item in aaa">
 						<a href="#">
-							<img :src="item.img">
+							<img :src="item">
 						</a>
 					</div>
 					<div class="mui-slider-item mui-slider-item-duplicate">
@@ -69,7 +69,7 @@
 			</div>
 			<div class="mark">{{info.goods_no}}</div>
 			<div class="rudice_price">
-				<span v-if="info.activity==0">8.8折</span><span v-if="info.activity==1">7.5折</span><s>{{info.original_price}}</s>
+				<span v-if="info.activity==0">8.8折</span><span v-if="info.activity==1">7.5折</span><span style="font-size: 0.26rem;color: #bbbbbb;display: inline-block;width: 2.2rem;">原价: <s>{{info.original_price}}</s></span>
 			</div>
 			<div class="price box">
 				<div class="sell">
@@ -121,7 +121,7 @@
 			</div>
 		</section>
 		<!--相关专辑-->
-		<section>
+		<section v-if="hides==true">
 			<div class="relatedContent" id="showArticle" v-if="article">
 				<p class="title">相关专辑</p>
 				<div class="contentInfo">
@@ -262,13 +262,17 @@
 				text2:'已种草',
 				style1:'color:#979797',
 				style2:'color:#ff4aa0',
-				showCar:''
+				showCar:'',
+				hides:false
 			},
 			computed: {
+				
 				article: function(){
 					this.relateArticle.map(function(item){
 						item.url="/site/article_detail?id="+item.id;
 					});
+					
+					
 					return this.relateArticle;
 				},
 				spec: function(){
@@ -280,6 +284,11 @@
 						item.size=item.value.split(",")
 					});
 					return arr;
+				},
+				aaa:function(){
+					console.log(this.info)
+					return this.info.photo;
+					
 				}
 			},
 			mounted: function(){
@@ -354,7 +363,7 @@
 		});
 		function getProductDetail(obj,self){
 			var product_detail=obj;
-			mui.ajax('/apic/products_details',{
+			mui.ajax('/apic/goods_detail',{
 				data:{id:product_detail},
 				dataType:'json',//服务器返回json格式数据
 				type:'get',//HTTP请求类型
@@ -362,15 +371,16 @@
 				success:function(data){
 					//轮播图展示页面
 					self.showMessage=true;
-                    console.log(data);
+                   
 					setItem("collection",data);
 					self.info=data;
-					console.log(self.info);
-
+ 					if(self.info.article_list.length>1){
+						self.hides = true;
+					}
 				},
 				error:function(xhr,type,errorThrown){
 					//异常处理；
-					console.log(type);
+//					console.log(type);
 				}
 			});
 		}
@@ -381,6 +391,7 @@
 				type:'get',//HTTP请求类型
 				timeout:10000,//超时时间设置为10秒；
 				success:function(data){
+//					console.log(data)
 					self.relateArticle=data;
 				}
 			});

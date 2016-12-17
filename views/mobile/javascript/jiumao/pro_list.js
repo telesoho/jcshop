@@ -65,9 +65,7 @@ function pullupRefresh() {
             console.log(data);
             var pageAlbum={};
             pageAlbum.data=data;
-            <!--var html3=template('albumPage',pageAlbum);-->
-            <!--var div = document.createElement('div');-->
-            <!--div.innerHTML=html3;-->
+           
 //				document.getElementById("pullContainer").appendChild(div);
 //               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
             if(data[0].totalpage>pageData.page){

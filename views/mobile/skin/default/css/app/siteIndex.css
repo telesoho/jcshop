@@ -97,17 +97,16 @@ body{
     text-align:center;
 }
 #indexInfo .activity .top .top1 .text{
+	display: inline-block;
     font-size:0.3rem;
-    color:#3d4245;
-    padding:0 0.44rem;
-    vertical-align: middle;
+    /*color:#3d4245;*/
+    padding:0 0.22rem;
+    /*vertical-align: middle;*/
+	color:#ff44a0;
 }
 #indexInfo .activity .top .top1 .bg{
     display:inline-block;
-    opacity:0.21;
-    background:#3d4245;
-    width:0.23rem;
-    height:0.04rem;
+    margin-top: 0.1rem;
 }
 #indexInfo .activity .top .top2{
     margin-top:0.05rem;
