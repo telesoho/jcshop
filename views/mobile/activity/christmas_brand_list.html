@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>大牌专区</title>
+	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
+	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/christmas_brand_list.css?v=<?php echo time(); ?>"/>
+</head>
+<body>
+	<div id="wrap" v-clack>
+	<header>
+		<img src="/views/mobile/skin/default/image/jmj/new_active/banner/6.png" style="width: 100%;"/>
+	</header>
+	<section>
+		<ul>
+			<li v-for="items in brand_list">
+				<h1><img :src="items.img" style="width:2rem;margin-top:0.2rem ;"/></h1>
+				<p class="p1">{{items.name}}</p>
+				<p class="p2">¥<span>{{items.sell_price}}</span></p>
+			</li>
+		</ul>
+	</section>
+	<!--									品牌专区											-->
+	<article>
+		<span class="span1"></span>
+		<p>品牌专区</p>
+		<span class="span2"></span>
+	</article>
+	<!--									品牌												-->
+	<div id="hot">
+		<ul>
+			<li v-for="item in brand_logo" @click="click(item.id)">
+				<img :src="item.log" style="width: 0.71rem;height: 0.57rem;"/>
+			</li>
+
+		</ul>
+	</div>
+	<div id="subhot">
+		<ul>
+			<li v-for="items in brand_lists">
+				<h1><img :dataimg="items.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style="width:2rem;margin-top: 0.2rem;"/></h1>
+				<p class="p1">{{items.name}}</p>
+				<p class="p2">¥<span>{{items.sell_price}}</span></p>
+			</li>
+		</ul>
+	</div>
+	<div class="flexbox empty_product" v-if="infoState" style="background:#ffc75b">
+			<div class="img">
+				<img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+			</div>
+			<div class="content">
+				<span style="color:#fff">~</span>
+				<span style="color:#fff">憋拉了，到底了</span>
+				<span style="color:#fff">~</span>
+			</div>
+		</div>
+	</div>
+	</div>
+	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+	<script type="text/javascript">
+		var em = new Vue({
+			el:"#wrap",
+			data:{
+				info:[],
+				infologo:[],
+				infolist:[],
+				aid:'',
+				infoState:false
+			},
+			computed:{
+				brand_list:function(){
+					this.info.map(function(item){
+						
+					})
+					return this.info;
+				},
+				brand_logo:function(){
+					this.infologo.map(function(item){
+						
+					})
+					return this.infologo;
+				},
+				brand_lists:function(){
+					this.infolist.map(function(item){
+						
+					})
+					return this.infolist;
+				}
+			},
+			mounted:function(){
+				var self = this;
+				getActiveInfo(self);
+				getActivelist(self,'');
+			},
+			methods:{
+				click: function(id){
+					var self=this;
+					getActivelist(self,id)
+				}
+			},
+			updated:function() {
+				// 页面加载完成执行的函数;
+				lazyload.init({
+					anim:false,
+					selectorName:".samLazyImg"
+				});
+			}
+		})
+		function getActiveInfo(self){
+			mui.ajax('/apic/christmas_brand_list', {
+				data:{
+				},
+				dataType: 'json',
+				type: 'get',
+				timeout: 10000,
+				success: function(data){
+//					console.log(data.data.brand_list)
+					self.info = data.data.goods_list;
+					self.infologo = data.data.brand_list;
+					
+				}
+		
+			});
+		};
+		function getActivelist(self,id){
+			mui.ajax('/apic/activity_goods_list', {
+				data:{
+					bid:"26,32,56,74,78,82,100",
+					aid:id,
+					did:"",
+					cid:""
+				},
+				dataType: 'json',
+				type: 'get',
+				timeout: 10000,
+				success: function(data){
+					self.infolist = data.data;
+				}
+			
+			});
+		}
+	</script>
+</body>
+</html>

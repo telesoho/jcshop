@@ -21,6 +21,7 @@ li{
 nav{
 	width: 100%;
 	overflow: hidden;
+	background: #fff;
 }
 nav ul{
 	width: 100%;
@@ -41,15 +42,15 @@ nav ul li img{
 	width: 0.76rem;
 }
 nav ul li span{
-	font-size:0.28rem ;
-	color: #fff;
+	font-size:0.26rem;
+	color:#d5bbeb;
 }
 
 
 #zhe{
 	width: 100%;
 	overflow: hidden;
-	margin-top:0.43rem ;
+	margin-top:0.15rem ;
 	position: relative;
 	height: 3.7rem;
 }
@@ -134,11 +135,11 @@ nav ul li span{
 	margin-top:0.3rem ;
 	display: -webkit-flex;
 	-webkit-flex-wrap: wrap;
-	-webkit-justify-content: space-between;
-	padding:0 0.15rem;
+	-webkit-justify-content: space-around;
+	/*padding:0 0.2rem;*/
 }
 .t ul li{
-	width: 3.5rem;
+	width: 2.36rem;
 	height: 5.6rem;
 	background: #fff;
 	margin-bottom:0.16rem ;
@@ -148,7 +149,7 @@ nav ul li span{
 	display: block;
 }
 .t ul li .p6{
-	width: 3.43rem;
+	width: 2.25rem;
 	margin-left: 0.09rem;
 	overflow:hidden; 
 	height: 0.7rem;
@@ -179,12 +180,12 @@ nav ul li span{
 	margin-left: 0.09rem;
 	font-size:0.24rem;
 	color:#3d4245;
+	
 }
 .t ul li .p9 span{
 	font-size:0.26rem;
 	color:#ff82a0;
 }
 .t ul li .p10{
-	margin-left:0.09rem ;
-	margin-top:0.02rem ;
+	margin-left:0.06rem ;
 }
