@@ -185,7 +185,7 @@ class Apic extends IController{
 		/* 返回参数 */
 		$data['article_list'] = $listArt; //文章列表
 		$data['brand_list']   = $listBrand; //品牌列表
-		$this->json_echo($data);
+		$this->json_echo(apiReturn::go('0',$data));
 	}
 
 	/**
