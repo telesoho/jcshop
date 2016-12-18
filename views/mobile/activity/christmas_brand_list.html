@@ -48,9 +48,12 @@
 		</ul>
 	</div>
 	<!-- 							回到顶部										-->
-	<div class="fix-toTop" @click="fan()">
+	<div class="fix-toTop" @click="fan()" style="right: 0.5rem; ">
 	    <img src="/views/mobile/skin/default/image/jmj/new_active/mainicon.png" alt="" style="width: 1.1rem;height: 1.1rem;" />
 	</div>
+	<div class="fix-toTop2" @click="fixToTop" style="position: fixed;right: 0.4rem;bottom: 1.8rem;display: none;">
+        <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" style="width: 0.8rem;" />
+    </div>
 	</div>
 	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
@@ -101,7 +104,11 @@
 				},
 				fan: function(){
 	      			window.location.href = "/activity/christmas_index";
-	      		}
+	      	},
+	      	fixToTop: function(){
+	            $("html,body").animate({scrollTop:0},0);
+//	            return false;
+	        },
 			},
 			updated:function() {
 				// 页面加载完成执行的函数;
@@ -142,6 +149,16 @@
 			
 			});
 		}
+		$(window).bind('scroll', function() {
+		   
+		    if($(window).scrollTop()>100){
+		        $(".fix-toTop2").show();
+		        $(".fix-toTop2").css("position","fixed");
+		    }else{
+		        $(".fix-toTop2").hide();
+		        $(".fix-toTop2").css("position","fixed");
+		    }
+		});
 	</script>
 </body>
 </html>

@@ -10,7 +10,9 @@ var em = new Vue({
 	},
 	computed:{
 		newactivity:function(){
+			console.log(this.info)
 			return this.info
+			
 		}
 	},
 	mounted: function(){

@@ -7,6 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>活动专场</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/christmas_list.css?v=<?php echo time(); ?>" />
 </head>
@@ -54,9 +55,12 @@
         </div>
     </footer>
 	    <!-- 							回到顶部										-->
-	<div class="fix-toTop" @click="fan()">
+	<div class="fix-toTop" @click="fan()" style="right: 0.5rem;">
 	    <img src="/views/mobile/skin/default/image/jmj/new_active/mainicon.png" alt="" style="width: 1.1rem;height: 1.1rem;" />
 	</div>
+	<div class="fix-toTop2" @click="fixToTop" style="position: fixed;right: 0.4rem;bottom: 1.8rem;">
+        <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" style="width: 0.8rem;" />
+    </div>
 </div>
 
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
@@ -107,7 +111,11 @@
       		fan: function(){
       			window.location.href = "/activity/christmas_index";
       			console.log(1)
-      		}
+      		},
+      		fixToTop: function(){
+	            $("html,body").animate({scrollTop:0},0);
+//	            return false;
+	        },
         }
     });
 
@@ -161,6 +169,13 @@
         }else{
             $(".fix-toTop").hide()
         }
+         if($(window).scrollTop()>100){
+	        $(".fix-toTop2").show();
+	        $(".fix-toTop2").css("position","fixed");
+	    }else{
+	        $(".fix-toTop2").hide();
+	        $(".fix-toTop2").css("position","fixed");
+	    }
     });
     //	获取url传递过来的参数
     function GetRequest() {
