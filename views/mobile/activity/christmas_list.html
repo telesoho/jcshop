@@ -70,7 +70,8 @@
             cid:'',
             bid:'',
             aid:"",
-            did:""
+            did:"",
+            page:1
         }
     var stop=true;
     var Request = new Object();
@@ -137,8 +138,9 @@
                     stop=true;
                     self.infoState=false;
                 }
-                self.page++;
-                pushSession("active_page",self.page);
+                self.banner.page++;
+                pushSession("active_page",self.banner.page);
+                console.log(self.banner.page);
             }
         });
     };
@@ -207,34 +209,35 @@
                 banner.cid='126';
                 banner.bid='';
                 banner.aid="";
+                 banner.page=1;
                 break;
             case "2":
                 banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/2.png";
                 banner.title="个护专区";
                 banner.cid='134';
                 banner.bid='';
-                banner.aid="";
+                banner.aid=""; banner.page=1;
                 break;
             case "3":
                 banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/3.png";
                 banner.title="宠物专区";
                 banner.cid='6';
                 banner.bid='';
-                banner.aid="";
+                banner.aid=""; banner.page=1;
                 break;
             case "4":
                 banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/4.png";
                 banner.title="健康专区";
                 banner.cid='2';
                 banner.bid='';
-                banner.aid="";
+                banner.aid=""; banner.page=1;
                 break;
             case "5":
                 banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/5.png";
                 banner.title="零食专区";
                 banner.cid='7';
                 banner.bid='';
-                banner.aid="";
+                banner.aid=""; banner.page=1;
                 
                 break;
             case "6":
@@ -242,14 +245,14 @@
                 banner.title="大牌专场";
                 banner.cid='';
                 banner.bid='26,32,56,74,78,82,100';
-                banner.aid="";
+                banner.aid=""; banner.page=1;
                 break;
             case "7":
                 banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/7.png";
                 banner.title="聚划算专场";
                 banner.cid='';
                 banner.bid='';
-                banner.aid="2";
+                banner.aid="2"; banner.page=1;
                 break;
             case "8":
                 banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/8.png";
@@ -257,7 +260,7 @@
                 banner.cid='126';
                 banner.bid='';
                 banner.aid="";
-                banner.did="4";
+                banner.did="4"; banner.page=1;
                 break;
             case "9":
                 banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/9.png";
@@ -265,7 +268,7 @@
                 banner.cid='134';
                 banner.bid='';
                 banner.aid="";
-                banner.did="4";
+                banner.did="4"; banner.page=1;
                 break;
             case "10":
                 banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/10.png";
@@ -273,7 +276,7 @@
                 banner.cid='6';
                 banner.bid='';
                 banner.aid="";
-                banner.did="4";
+                banner.did="4"; banner.page=1;
                 break;
             case "11":
                 banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/11.png";
@@ -281,7 +284,7 @@
                 banner.cid='2';
                 banner.bid='';
                 banner.aid="";
-                banner.did="4";
+                banner.did="4"; banner.page=1;
                 break;
             case "12":
                 banner.img="/views/mobile/skin/default/image/jmj/new_active/banner/12.png";
@@ -289,7 +292,7 @@
                 banner.cid='7';
                 banner.bid='';
                 banner.aid="";
-                banner.did="4";
+                banner.did="4"; banner.page=1;
                 break;
             default:
                break;
