@@ -48,9 +48,12 @@
 		</ul>
 	</div>
 	<!-- 							回到顶部										-->
-	<div class="fix-toTop" @click="fan()">
+	<div class="fix-toTop" @click="fan()" style="right: 0.5rem; ">
 	    <img src="/views/mobile/skin/default/image/jmj/new_active/mainicon.png" alt="" style="width: 1.1rem;height: 1.1rem;" />
 	</div>
+	<div class="fix-toTop2" @click="fixToTop" style="position: fixed;right: 0.4rem;bottom: 1.8rem;display: none;">
+        <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" style="width: 0.8rem;" />
+    </div>
 	</div>
 	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
@@ -64,7 +67,8 @@
 				infologo:[],
 				infolist:[],
 				aid:'',
-				bid:"26,32,56,74,78,82,100"
+				bid:"26,32,56,74,78,82,100",
+				page:1
 			},
 			computed:{
 				brand_list:function(){
@@ -95,13 +99,20 @@
 			},
 			methods:{
 				click: function(id){
+					 
 					var self=this;
-					self.infolist=[]
+					self.infolist=[];
+					self.page=1;
+					self.bid=id
 					getActivelist(self,id)
 				},
 				fan: function(){
 	      			window.location.href = "/activity/christmas_index";
-	      		}
+	      	},
+	      	fixToTop: function(){
+	            $("html,body").animate({scrollTop:0},0);
+//	            return false;
+	        },
 			},
 			updated:function() {
 				// 页面加载完成执行的函数;
@@ -130,18 +141,66 @@
 		function getActivelist(self,id){
 			mui.ajax('/apic/activity_goods_list', {
 				data:{
+					page:self.page,
 					bid:id?id:self.bid,
 				},
 				dataType: 'json',
 				type: 'get',
 				timeout: 10000,
 				success: function(data){
-					
-					self.infolist = data.data;
+					data.data.map(function(item){
+	                    self.infolist.push(item);
+	               });
+					if(data.data==''){
+	                    
+	                    stop=false;
+	                }else{
+	                    stop=true; 
+	                }       
+	                self.page++;
 				}
 			
 			});
 		}
+		$(window).bind('scroll', function() {
+			if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+	            if(stop==true){
+	                stop=false;
+	                getActivelist(em,self.bid);
+	            }
+	        }
+		   
+		    if($(window).scrollTop()>100){
+		        $(".fix-toTop2").show();
+		        $(".fix-toTop2").css("position","fixed");
+		    }else{
+		        $(".fix-toTop2").hide();
+		        $(".fix-toTop2").css("position","fixed");
+		    }
+		});
+//		
+//		//			缓存
+//  function pushSession(key,value){
+//      var val=JSON.stringify(value)?JSON.stringify(value):[];
+//      if(window.sessionStorage){
+//          sessionStorage.setItem(key,val);
+//      }else{
+//          console.log("无法使用缓存");
+//          return "";
+//      }
+//  }
+//  function getSession(key){
+//      if(window.sessionStorage){
+//          var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+//          return JSON.parse(state);
+//      }else{
+//          console.log("无法使用缓存");
+//          return "";
+//      }
+//  }
+//  function removeSessionItem(key){
+//      window.sessionStorage.removeItem(key);
+//  }
 	</script>
 </body>
 </html>
