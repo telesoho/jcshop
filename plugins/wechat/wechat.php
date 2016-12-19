@@ -603,7 +603,7 @@ class wechat extends pluginBase
 			//开始订阅
 			case "subscribe":
 			{
-			    $this->add_qrcode_follow($postObj->EventKey);
+			    $this->add_qrcode_follow($postObj->EventKey,$postObj->FromUserName);
 				$this->textReplay('亲爱的喵们！ 
  
 欢迎来到九猫家微信服务号～
@@ -622,8 +622,8 @@ class wechat extends pluginBase
 			//取消订阅
 			case "unsubscribe":
 			{
-
-			}
+                $this->add_qrcode_follow(null,$postObj->FromUserName);
+            }
 			break;
 
 			//点击菜单跳转链接时的事件推送
@@ -639,6 +639,23 @@ class wechat extends pluginBase
 
 			}
 			break;
+
+            //点击菜单拉取消息时的事件推送
+            case "SCAN":
+            {
+                $this->textReplay('亲爱的喵们！ 
+ 
+欢迎来到九猫家微信服务号～
+ 
+九猫家汇集药妆、个护、零食、健康、宠物用品等上万种商品。我们承诺官方直供、东京直邮，全场100%正品，同时努力实现日本同价！
+ 
+人气护肤精华面霜、健康用品热门零食，还有喵汪主子们的食粮，想要的全都有   戳右边→<a href="http://m.jiumaojia.com/site/ticket_gain">领取58元红包</a>
+
+立刻点击下方“九猫大百货”逛逛逛吧~！
+ 
+偷偷告诉你：添加九猫个人微信：jiumaojia001 加入九猫VIP群，群里发放优惠券哦~');
+            }
+                break;
 		}
 	}
 
@@ -899,9 +916,24 @@ OEF;
      * User: chenbo
      * 添加用户扫码关注
      */
-	public function add_qrcode_follow($scene_id){
-	    $follow_model = new IModel('follow');
-        $follow_model->setData(['scene_id'=>$scene_id, 'follow_time'=>date('Y-m-d H:i:s',time())]);
-        $follow_model->add();
+	public function add_qrcode_follow($scene_id,$open_id){
+        if (!empty($scene_id)){
+	        $follow_query = new IQuery('follow');
+            $follow_query->where = 'open_id = "' . $open_id.'"';
+            $follow_data = $follow_query->find();
+            if (!empty($follow_data)){
+	            $follow_model = new IModel('follow');
+                $follow_model->setData(['scene_id'=>$scene_id ,'follow_time'=>date('Y-m-d H:i:s',time())]);
+                $follow_model->update('open_id = "' . $open_id . '"');
+            } else {
+	            $follow_model = new IModel('follow');
+                $follow_model->setData(['scene_id'=>$scene_id, 'open_id'=>$open_id ,'follow_time'=>date('Y-m-d H:i:s',time())]);
+                $follow_model->add();
+            }
+        } else {
+            $follow_model = new IModel('follow');
+            $follow_model->setData(['unsubscribe_time'=>date('Y-m-d H:i:s',time())]);
+            $follow_model->update('open_id="'.$open_id.'"');
+        }
     }
 }

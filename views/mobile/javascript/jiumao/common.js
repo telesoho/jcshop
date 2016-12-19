@@ -123,32 +123,6 @@ function toPageThird(obj){
     setItem("siteMap",obj)
     window.location.href="/site/category_third";
 }
-function changeSite(eid,num,obj){
-    pushSession("siteMapState",eid);
-    $(".controlItem").removeClass("active");
-    $(".controlItem"+eid).addClass("active");
-    $(".siteid").addClass("hide");
-    $(".site"+eid).removeClass("hide");
-    mui('#right-scroll').scroll().scrollTo(0,0,100);
-    var height=$(".controlItem"+eid).height();
-    var totalHeight=$("#left-scroll").height();
-    var offsetTop=$(".controlItem"+eid).offset().top;//相对于容器的高度
-//		点击改变图标状态
-    var img_arr=[];
-    for(var i=0,m=obj.length;i<m;i++){
-        img_arr.push(obj[i].split(","));
-        $(".icon_first").eq(i).attr("src",img_arr[i][1])
-    }
-
-    $("#icon_first_"+eid).attr("src",img_arr[num][0])
-//		一级分类位置判定
-    if(num<6){
-        mui('#left-scroll').scroll().scrollTo(0,0,100);
-    }
-    if(num>=6){
-        mui('#left-scroll').scroll().scrollToBottom();
-    }
-}
 //记录三级页面位置函数
 function getPosition(){
     var pid=getItem('product');
@@ -228,32 +202,6 @@ function hotSearth1(){
             console.log(data);
             var html = template('searth_keyword',dat);
             $(".search-content").html(html);
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
-            console.log(type);
-        }
-    });
-}
-//分类页面接口
-function getSitemapInfo(){
-    mui.ajax('/apic/category_top',{
-        dataType:'json',
-        type:'get',
-        timeout:10000,
-        success:function(data){
-            console.log(data);
-            var dat={};
-            dat.data=data;
-            dat.state=getSession("siteMapState")?getSession("siteMapState"):data[0].id;
-            var html = template('controlTopTemp',dat);
-            document.getElementById("controlTop").innerHTML=html;
-            var html2 = template('contentToptemp',dat);
-            document.getElementById("contentTop").innerHTML=html2;
-            lazyload.init({
-                anim:false,
-                selectorName:".samLazyImg"
-            });
         },
         error:function(xhr,type,errorThrown){
             //异常处理；
