@@ -172,7 +172,7 @@ class Site extends IController{
 
 	//[列表页]商品
 	function pro_list(){
-
+/*
 		$this->catId = IFilter::act(IReq::get('cat'), 'int');//分类id
 
 		switch($this->catId){
@@ -286,6 +286,7 @@ class Site extends IController{
 		// 模板赋值
 		$this->article_list = $data_article;    //文章列表
 		$this->data_brand   = $data_brand;        //品牌
+*/
 		$this->redirect('pro_list');
 	}
 
