@@ -413,6 +413,7 @@ class Apic extends IController{
 		}
 		$this->json_echo(apiReturn::go('0', $data));
 	}
+
 	/**
 	 * 领取优惠券
 	 */
@@ -424,24 +425,24 @@ class Apic extends IController{
 
 		/* 优惠券详情 */
 		$modelTic = new IModel('activity_ticket');
-		$infoTic = $modelTic->getObj('pid=0 AND id='.$tid.' AND end_time>'.time());
+		$infoTic  = $modelTic->getObj('pid=0 AND id='.$tid.' AND end_time>'.time());
 		if(empty($infoTic)) $this->json_echo(apiReturn::go('002007')); //优惠券不存在
 
 		/* 是否已领取 */
 		$modelAcc = new IModel('activity_ticket_access');
-		$infoAcc = $modelAcc->getObj('`from`=0 AND user_id='.$user_id.' AND ticket_id='.$tid);
+		$infoAcc  = $modelAcc->getObj('`from`=0 AND user_id='.$user_id.' AND ticket_id='.$tid);
 		if(!empty($infoAcc)) $this->json_echo(apiReturn::go('002034')); //已经领取过该优惠券
 
 		/* 开始领取 */
 		$modelAcc->setData(array(
-			'user_id' => $user_id,
-			'ticket_id' => $tid,
-			'status' => 1,
-			'from' => 0,
+			'user_id'     => $user_id,
+			'ticket_id'   => $tid,
+			'status'      => 1,
+			'from'        => 0,
 			'create_time' => time(),
 		));
 		$rel = $modelAcc->add();
-		$this->json_echo(apiReturn::go($rel>0 ? '0' : '002031','','恭喜您已领取“'.$infoTic['name'].'”'));
+		$this->json_echo(apiReturn::go($rel>0 ? '0' : '002031', '', '恭喜您已领取“'.$infoTic['name'].'”'));
 	}
 
 	/**
@@ -1210,7 +1211,7 @@ class Apic extends IController{
 
 		/* 商品详情 */
 		$modelGoods = new IModel('goods');
-		$fields     = 'id,name,sell_price,original_price,jp_price,market_price,store_nums,img,content';
+		$fields     = 'id,name,goods_no,sell_price,original_price,jp_price,market_price,store_nums,img,content';
 		$dataGoods  = $modelGoods->getObj('is_del=0 AND id='.$goods_id, $fields);
 		if(empty($dataGoods)) $this->json_echo(apiReturn::go('006001')); //商品不存在
 		/* 计算活动商品价格 */
