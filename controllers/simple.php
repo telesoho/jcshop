@@ -713,6 +713,10 @@ class Simple extends IController
 		}
 		else
 		{
+			if(!$gid){
+				//清空购物车
+				IInterceptor::reg("cart@onFinishAction");
+			}
 			$this->redirect('/block/doPay/order_id/'.$order_id);
 // 			$this->setRenderData($dataArray);
 // 			$this->redirect('cart3');

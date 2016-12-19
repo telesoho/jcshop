@@ -41,28 +41,28 @@ class Apic extends IController{
 				$title       = '狗子推荐';
 				break;
 			case 2: //个护
-				$cid         = 126; //基础护肤
+				$cid         = 134; //基础护肤
 				$aid         = 18; //专辑分类
 				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/nai.png';
 				$name        = '个护'; //基础护肤
 				$title       = '奶瓶推荐';
 				break;
 			case 3: //宠物
-				$cid         = 126; //宠物用品
+				$cid         = 6; //宠物用品
 				$aid         = 17; //专辑分类
 				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/tui.png';
 				$name        = '宠物'; //宠物用品
 				$title       = '腿毛推荐';
 				break;
 			case 4: //健康
-				$cid         = 126; //居家药品
+				$cid         = 2; //居家药品
 				$aid         = 16; //专辑分类
 				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/xi.png';
 				$name        = '健康'; //居家药品
 				$title       = '昔君推荐';
 				break;
 			case 5: //零食
-				$cid         = 126; //日式美食
+				$cid         = 7; //日式美食
 				$aid         = 19; //专辑分类
 				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/yi.png';
 				$name        = '零食'; //日式美食
@@ -75,10 +75,14 @@ class Apic extends IController{
 		$cids = goods_class::catChild($cid);
 		/* 商品分类 */
 		$queryCat         = new IQuery('category');
-		$queryCat->where  = '';
-		$queryCat->fields = '';
+		$queryCat->where  = 'visibility=1 AND parent_id='.$cid;
+		$queryCat->fields = 'id,name,image';
 		$queryCat->limit  = 10;
 		$queryCat->order  = 'sort desc';
+		$listCat          = $queryCat->find();
+		foreach($listCat as $k => $v){
+			$listCat[$k]['image'] = empty($v['image']) ? '' : IWeb::$app->config['image_host'].'/'.$v['image'];
+		}
 
 		/* 商品列表 */
 		$queryGoods         = new IQuery('goods AS m');
@@ -89,15 +93,15 @@ class Apic extends IController{
 		for($i = 1; $i<=3; $i++){
 			switch($i){
 				case 1: //最新品
-					$queryGoods->where = 'm.is_del=0 AND c.category_id in ('.$cids.')';
+					$queryGoods->where = 'm.is_del=0 AND c.category_id IN ('.$cids.')';
 					$queryGoods->order = 'm.id desc';
 					break;
 				case 2: //最热卖
-					$queryGoods->where = 'm.is_del=0 AND c.category_id in ('.$cids.')';
+					$queryGoods->where = 'm.is_del=0 AND c.category_id IN ('.$cids.')';
 					$queryGoods->order = 'm.sale desc,m.visit desc';
 					break;
 				case 3: //推荐
-					$queryGoods->where = 'm.is_del=0 AND c.category_id in ('.$cids.') AND commend_id=4';
+					$queryGoods->where = 'm.is_del=0 AND c.category_id IN ('.$cids.') AND commend_id=4';
 					$queryGoods->order = 'm.sale desc,m.visit desc';
 					break;
 			}
@@ -183,8 +187,9 @@ class Apic extends IController{
 		}
 
 		/* 返回参数 */
-		$data['article_list'] = $listArt; //文章列表
-		$data['brand_list']   = $listBrand; //品牌列表
+		$data['category_list'] = $listCat; //分类列表
+		$data['article_list']  = $listArt; //文章列表
+		$data['brand_list']    = $listBrand; //品牌列表
 		$this->json_echo(apiReturn::go('0', $data));
 	}
 
@@ -600,7 +605,7 @@ class Apic extends IController{
 						'create_time' => time(),
 					));
 					$rel = $modelAcc->add();
-					if($rel>0) $this->json_echo(apiReturn::go('0')); //领取成功
+					if($rel>0) $this->json_echo(apiReturn::go('0', '', '恭喜您已成功领取“'.$dataTic['name'].'”')); //领取成功
 				}
 				$modelRec->rollback(); //事务回滚
 				$this->json_echo(apiReturn::go('002031')); //领取失败
@@ -662,7 +667,7 @@ class Apic extends IController{
 						$orderInstance->insertOrderGoods($order_id, array('goodsList' => array($dataGoods)));
 						//直接免单
 						$rel = Order_Class::updateOrderStatus($dataArray['order_no']);
-						if($rel>0) $this->json_echo(apiReturn::go('0')); //领取成功
+						if($rel>0) $this->json_echo(apiReturn::go('0', '', '恭喜您已成功领取“'.$dataGoods['name'].'”')); //领取成功
 					}
 				}
 				$modelRec->rollback(); //事务回滚
