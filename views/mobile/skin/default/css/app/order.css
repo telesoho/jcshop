@@ -24,7 +24,7 @@
     left:25%;
     background:#ff4aa0;
     border-radius:0.06rem;
-    width:0.75rem;
+    width:47%;
     height:0.06rem;
 }
 /*订单内容*/
@@ -98,14 +98,14 @@
     line-height:0.9rem;
 }
 .order_menu_list .top .left{
-    font-size:0.28rem;
+    font-size:0.26rem;
     color:#bbbbbb;
     margin-left:0.3rem;
 }
 .order_menu_list .top .status{
-    font-size:0.28rem;
+    font-size:0.26rem;
     color:#ff4aa0;
-    margin-right:0.36rem;
+    margin-right:0.25rem;
 }
 .order_menu_list .goodsList .content{
     display: -webkit-flex;
