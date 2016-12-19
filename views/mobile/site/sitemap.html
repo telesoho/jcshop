@@ -39,47 +39,74 @@
 <!--头部-->
 <section id="siteMap">
 	<section class="search-header" id="homeHeader">
-	<div class="inputContent">
-		<form onsubmit="searthSubmit()" action="/site/search_list">
-			<input type="search" placeholder="" id="search" onfocus="getSearth();" />
-			<img class="search_ico" src="/views/mobile/skin/default/image/jmj/new_active/index/search.png" alt="" />
-		</form>
-		<img src="/views/mobile/skin/default/image/jmj/new_active/index/leftear.png" alt="" class="left-icon" />
-		<img src="/views/mobile/skin/default/image/jmj/new_active/index/rightear.png" alt="" class="right-icon" />
-		<img src="/views/mobile/skin/default/image/jmj/new_active/index/flower.png" alt="" class="img-flower" />
-		<div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
-	</div>
-	<!--模态框-->
-	<div id="modalid-search" class="hide">
-		<div class="title">
-			猫猫都在搜
+		<div class="inputContent">
+			<form onsubmit="searthSubmit()" action="/site/search_list">
+				<input type="search" placeholder="" id="search" onfocus="getSearth();" />
+				<img class="search_ico" src="/views/mobile/skin/default/image/jmj/new_active/index/search.png" alt="" />
+			</form>
+			<img src="/views/mobile/skin/default/image/jmj/new_active/index/leftear.png" alt="" class="left-icon" />
+			<img src="/views/mobile/skin/default/image/jmj/new_active/index/rightear.png" alt="" class="right-icon" />
+			<img src="/views/mobile/skin/default/image/jmj/new_active/index/flower.png" alt="" class="img-flower" />
+			<div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
 		</div>
-		<div class="search-content">
-			<a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in hotWord" v-if="key<10">{{item.word}}</a>
+		<!--模态框-->
+		<div id="modalid-search" class="hide">
+			<div class="title">
+				猫猫都在搜
+			</div>
+			<div class="search-content">
+				<a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in hotWord" v-if="key<10">{{item.word}}</a>
+			</div>
+			<button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
+			<button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
 		</div>
-		<button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
-		<button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
-	</div>
+	</section>
+	<!--分类页面-->
+	<section class="box" id="scroll_sitemap" v-if="showMessage">
+		<div class="mui-scroll-wrapper" id="left-scroll" v-cloak>
+			<div class="mui-scroll">
+				<ul id="controlTop">
+					<li :class="state==item1.id?item1.class1:item1.class2" @click="changeSite(item1,key)" v-for="(item1,key) in new_top_info">
+						<div class="content">
+							<div class="flexbox">
+								<img :src="state==item1.id?item1.red:item1.black" alt="" class="icon img-dark icon_first" id="icon_first_<%=Fsite.id%>">
+								<span class="name">{{item1.name}}</span>
+							</div>
+							<span class="bg"></span>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="mui-scroll-wrapper" id="right-scroll" v-if='state==item2.id'  v-for="item2 in new_top_info" v-cloak>
+			<div class="mui-scroll" id="contentTop">
+				<div class="siteid" >
+						<div class="banner" v-if="item2.banner_image">
+							<img :src="item2.banner_image" alt="">
+						</div>
+						<div class="S_classification">
+							<div class="type" v-for="item3 in item2.child">
+								<a :href="item3.url" class="locationA">
+									<div class="img">
+										<img :dataimg="item3.image" alt="" width="1.54rem" height="1.54rem" style=""
+											 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" />
+									</div>
+									<div class="name">
+										{{item3.name}}
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+			</div>
+		</div>
+	</section>
+
+
+
 </section>
 
 
-
-
-</section>
-
-<!--分类页面-->
-<section class="box" id="scroll_sitemap">
-	<div class="mui-scroll-wrapper" id="left-scroll">
-		<div class="mui-scroll">
-			<ul id="controlTop">
-			</ul>
-		</div>
-	</div>
-	<div class="mui-scroll-wrapper" id="right-scroll">
-		<div class="mui-scroll" id="contentTop">
-		</div>
-	</div>
-</section>
 <footer>
 	<nav class="mui-bar mui-bar-tab"  style="z-index:25">
 		<a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">
@@ -118,70 +145,7 @@
 <!--模态框-->
 
 <!--<span class="mui-icon-extra mui-icon-extra-top" id="pagetop"></span>-->
-<!--头信息结束-->
-<!--一级分类-->
-<script type="text/html" id="controlTopTemp">
-	<% var allstring =JSONreduce(data) %>
-	<% var string =JSONstringfly(data[0].image) %>
-	<% for(var i=0; i<data.length; i++){%>
-	<% var Fsite =data[i] %>
-	<% var string1 =JSONstringfly(Fsite.image) %>
-		<!--判定状态开始-->
-		<%if(state==Fsite.id){%>
-		<li class="controlItem controlItem<%=Fsite.id%> active" onclick="changeSite(<%=Fsite.id%>,<%=i%>,<%=allstring%>)">
-			<div class="content">
-				<div class="flexbox">
-					<img src="<%=JSONsplit(Fsite.image)[0]%>" alt="" class="icon img-dark icon_first" id="icon_first_<%=Fsite.id%>">
-		<%}else{%>
-		<li class="controlItem controlItem<%=Fsite.id%>" onclick="changeSite(<%=Fsite.id%>,<%=i%>,<%=allstring%>)">
-			<div class="content">
-				<div class="flexbox">
-					<img src="<%=JSONsplit(Fsite.image)[1]%>" alt="" class="icon img-dark icon_first" id="icon_first_<%=Fsite.id%>">
-		<%}%>
-		<!--判定状态结束-->
-					<span class="name"><%=Fsite.name %></span>
-				</div>
-				<span class="bg"></span>
-			</div>
-		</li>
-	<%}%>
-</script>
-<script type="text/html" id="contentToptemp">
-	<% for(var i=0; i<data.length; i++){%>
-	<% var Fsite =data[i] %>
-		<%if(state==Fsite.id){%>
-		<div class="siteid site<%=Fsite.id%>">
-		<%}else{%>
-		<div class="siteid site<%=Fsite.id%> hide">
-		<%}%>
-		<%if(Fsite.banner_image){%>
-			<div class="banner">
-				<img src="<%=Fsite.banner_image %>" alt="">
-			</div>
-		<%}%>
-		<div class="S_classification">
-			<% for(var j=0; j<Fsite.child.length; j++){%>
-			<% var Ssite =Fsite.child[j] %>
-			<% var Ssitestring =JSONstringfly(Fsite.child[j]) %>
-				<div class="type">
-					<a href="{url:site/category_third}/id/<%=Ssite.id %>/title/<%=Ssite.name %>" class="locationA">
-						<div class="img">
-								<img dataimg="<%=Ssite.image %>" alt="" width="1.54rem" height="1.54rem" style=""
-									 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" />
-						</div>
-						<div class="name">
-							<%=Ssite.name %>
-						</div>
-					</a>
-				</div>
-			<%}%>
-		</div>
-	</div>
-	<%}%>
-</script>
-<script id="searth_keyword" type="text/html">
-	
-</script>
+
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
@@ -194,12 +158,49 @@
 		var vm=new Vue({
 			el:'#siteMap',
 			data:{
-				hotWord:[]
-				
+				showMessage:false,
+				hotWord:[],
+				info:[],
+				state:''
+			},
+			computed:{
+				new_top_info: function(){
+					this.info.map(function(item){
+						item.red=item.image.split(",")[0];
+						item.black=item.image.split(",")[1];
+						item.class1="controlItem active";
+						item.class2="controlItem";
+						item.child.map(function(itemList){
+							itemList.url="/site/category_third/id/"+itemList.id+"/title/"+itemList.name;
+						})
+					});
+					return this.info;
+				}
 			},
 			mounted:function(){
 				var self=this;
 				hotSearth1(self);
+				getSitemapInfo(self);
+			},
+			updated: function(){
+				mui('.mui-scroll-wrapper').scroll();
+				lazyload.init({
+					anim:false,
+					selectorName:".samLazyImg"
+				});
+			},
+			methods:{
+				changeSite:function(item,num){
+					pushSession("siteMapState",item.id);
+					this.state=item.id;
+					mui('#right-scroll').scroll().scrollTo(0,0,100);
+					if(num<6){
+						mui('#left-scroll').scroll().scrollTo(0,0,100);
+					}
+					if(num>=6){
+						mui('#left-scroll').scroll().scrollToBottom();
+					}
+				}
 			}
 		})
 	//页面加载动画的调用
@@ -208,8 +209,7 @@
 		var temp=getItem("placeHolder");
 //		document.getElementById("search").placeholder=temp+"件商品等你来搜"
 		document.getElementById("search").placeholder = "圣诞神秘大礼等你来拿"
-		getSitemapInfo();
-		hotSearth1();
+
 		//解决tab选项卡a标签无法跳转的问题
 		mui('body').on('tap','.mui-tab-item',function(){
 			if(!$(this).hasClass("mui-active")){
@@ -217,20 +217,39 @@
 				document.location.href=this.href;
 			}});
 		mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
-		mui('.mui-scroll-wrapper').scroll();
+
 	})
 	
-	//分类获取数据
+	//分类获取数据搜索
 	function hotSearth1(self){
-    mui.ajax('/apic/search_words',{
-        dataType:'json',//服务器返回json格式数据
-        type:'get',//HTTP请求类型
-        timeout:10000,//超时时间设置为10秒；
-        success:function(data){
-            self.hotWord=data;
-        }
-    });
-}
+		mui.ajax('/apic/search_words',{
+			dataType:'json',//服务器返回json格式数据
+			type:'get',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			success:function(data){
+				self.hotWord=data;
+			}
+		});
+	}
+	 //分类页面接口
+		function getSitemapInfo(self){
+			mui.ajax('/apic/category_top',{
+				dataType:'json',
+				type:'get',
+				timeout:10000,
+				success:function(data){
+					self.showMessage=true;
+					self.info=data;
+					self.state=getSession("siteMapState")?getSession("siteMapState"):data[0].id;
+					console.log(data);
+
+//					var html = template('controlTopTemp',dat);
+//					document.getElementById("controlTop").innerHTML=html;
+//					var html2 = template('contentToptemp',dat);
+//					document.getElementById("contentTop").innerHTML=html2;
+				}
+			});
+		}
 </script>
 
 <!-- 微信分享 -->
