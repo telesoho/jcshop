@@ -413,9 +413,39 @@ class Apic extends IController{
 		}
 		$this->json_echo(apiReturn::go('0', $data));
 	}
-
 	/**
 	 * 领取优惠券
+	 */
+	public function get_ticket(){
+		/* 接收参数 */
+		$tid = IFilter::act(IReq::get('tid'), 'int');//活动ID，必填
+		if(!isset($this->user['user_id']) || empty($this->user['user_id'])) $this->json_echo(apiReturn::go('001001'));
+		$user_id = $this->user['user_id'];
+
+		/* 优惠券详情 */
+		$modelTic = new IModel('activity_ticket');
+		$infoTic = $modelTic->getObj('pid=0 AND id='.$tid.' AND end_time>'.time());
+		if(empty($infoTic)) $this->json_echo(apiReturn::go('002007')); //优惠券不存在
+
+		/* 是否已领取 */
+		$modelAcc = new IModel('activity_ticket_access');
+		$infoAcc = $modelAcc->getObj('`from`=0 AND user_id='.$user_id.' AND ticket_id='.$tid);
+		if(!empty($infoAcc)) $this->json_echo(apiReturn::go('002034')); //已经领取过该优惠券
+
+		/* 开始领取 */
+		$modelAcc->setData(array(
+			'user_id' => $user_id,
+			'ticket_id' => $tid,
+			'status' => 1,
+			'from' => 0,
+			'create_time' => time(),
+		));
+		$rel = $modelAcc->add();
+		$this->json_echo(apiReturn::go($rel>0 ? '0' : '002031','','恭喜您已领取“'.$infoTic['name'].'”'));
+	}
+
+	/**
+	 * 领取活动优惠券（随机）
 	 */
 	public function get_ticket_activity(){
 		/* 接收参数 */
