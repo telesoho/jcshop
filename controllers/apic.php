@@ -1207,33 +1207,34 @@ class Apic extends IController{
 	 */
 	public function goods_more(){
 		/* 获取参数 */
-		$tid = IFilter::act(IReq::get('tid'), 'int'); //商品分类ID
-		$mid = IFilter::act(IReq::get('mid'), 'int'); //推荐分类ID
+		$tid  = IFilter::act(IReq::get('tid'), 'int'); //商品分类ID
+		$mid  = IFilter::act(IReq::get('mid'), 'int'); //推荐分类ID
+		$page = IFilter::act(IReq::get('page'), 'int'); //推荐分类ID
 		
 		/* 商品分类 */
 		switch($tid){
 			case 1:
-				$cid   = 126;
+				$cid   = goods_class::catChild(126);
 				$name1 = '药妆';
 				$name2 = '狗子推荐';
 				break;
 			case 2:
-				$cid   = 126;
+				$cid   = goods_class::catChild(134);
 				$name1 = '个护';
 				$name2 = '奶瓶推荐';
 				break;
 			case 3:
-				$cid   = 126;
+				$cid   = goods_class::catChild(6);
 				$name1 = '宠物';
 				$name2 = '腿毛推荐';
 				break;
 			case 4:
-				$cid   = 126;
+				$cid   = goods_class::catChild(2);
 				$name1 = '健康';
 				$name2 = '昔君推荐';
 				break;
 			case 5:
-				$cid   = 126;
+				$cid   = goods_class::catChild(7);
 				$name1 = '零食';
 				$name2 = '一哥推荐';
 				break;
@@ -1243,17 +1244,45 @@ class Apic extends IController{
 		/* 推荐分类 */
 		switch($mid){
 			case 1:
-				$title = $name1.'最新品';
+				$title = $name1.'-最新品';
+				$where = 'm.is_del=0 AND c.category_id IN ('.$cid.')';
+				$order = 'm.id desc';
 				break;
 			case 2:
-				$title = $name1.'最热卖';
+				$title = $name1.'-最热卖';
+				$where = 'm.is_del=0 AND c.category_id IN ('.$cid.')';
+				$order = 'm.sale desc,m.visit desc';
 				break;
 			case 3:
 				$title = $name2;
+				$where = 'm.is_del=0 AND c.category_id IN ('.$cid.') AND commend_id=4';
+				$order = 'm.sale desc,m.visit desc';
 				break;
 			default:
 				$this->json_echo(apiReturn::go('007001'));
 		}
+		/* 商品列表 */
+		$queryGoods           = new IQuery('goods AS m');
+		$queryGoods->join     = 'LEFT JOIN commend_goods AS d ON d.goods_id=m.id LEFT JOIN category_extend AS c ON c.goods_id=m.id';
+		$queryGoods->fields   = 'm.id,m.name,m.sell_price,m.img';
+		$queryGoods->where    = $where;
+		$queryGoods->order    = $order;
+		$queryGoods->page     = $page<1 ? 1 : $page;
+		$queryGoods->pagesize = 20;
+		$queryGoods->group    = 'm.id';
+		$listGoods            = $queryGoods->find();
+		$totalPage            = $queryGoods->getTotalPage();
+		if($page>$totalPage) $listGoods = array();
+		if(!empty($listGoods)){
+			/* 计算活动商品价格 */
+			$listGoods = api::run('goodsActivity', $listGoods);
+			foreach($listGoods as $k => $v){
+				$listGoods[$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$v['img'].'/w/220/h/220');
+			}
+		}
+		
+		/* 返回参数 */
+		$this->json_echo(array('title' => $title, 'goods_list' => $listGoods));
 	}
 	
 	/**

@@ -124,5 +124,27 @@
 		})
 
 	</script>
+
+<!-- 微信分享 -->
+{if:IClient::isWechat() == true}
+<?php 
+    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+    $this->wechat = new wechat();
+    $this->wechat->setConfig();
+    $this->wechat->config['wechat_jsApiSDK']=1;
+    $this->wechat->jsApiSDK();
+?>
+<script type="text/javascript">
+var wechat_share = {
+    title: "我偷偷在你的圣诞袜子里放了好多礼物，来看看都有什么吧", //标题
+    desc: "圣诞节许愿得丰厚大奖，帮迷路的麋鹿找到圣诞老爷爷！！", //描述
+    imgUrl: "{echo:IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/new_active/index/pic1.png'}", //图片
+    link: "{echo:IWeb::$app->config['image_host']}/activity/christmas_list?pid={$this->user['user_id']}&iid={echo:ISession::get('shop_identify_id')}",
+}
+wechat.share();
+</script>
+{/if}
+
+	
 </body>
 </html>
