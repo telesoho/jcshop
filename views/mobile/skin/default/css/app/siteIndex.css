@@ -100,6 +100,8 @@ body{
 	display: inline-block;
     font-size:0.3rem;
     /*color:#3d4245;*/
+    position:relative;
+    top:-0.1rem;
     padding:0 0.22rem;
     /*vertical-align: middle;*/
 	color:#ff44a0;
