@@ -90,7 +90,17 @@ class APIGoods{
 		);
 
 		/* 获取下级分类 */
-		$param['cid'] = goods_class::catChild($param['cid']);
+		if(!empty($param['cid'])){
+			$queryCat         = new IQuery('category');
+			$queryCat->where  = 'visibility=1 AND parent_id IN ('.$param['cid'].')';
+			$queryCat->fields = 'id';
+			$dataCat          = $queryCat->find();
+			if(!empty($dataCat)){
+				foreach($dataCat as $k => $v){
+					$param['cid'] .= ','.$v['id'];
+				}
+			}
+		}
 
 		/* 获取数据 */
 		$query           = new IQuery('goods as m');
@@ -104,7 +114,7 @@ class APIGoods{
 			(empty($param['did']) ? '' : ' AND d.commend_id='.$param['did']). //推荐ID
 			(empty($param['tag']) ? '' : ' AND m.search_words LIKE "%,'.$param['tag'].',%"'); //标签
 		$query->fields   = $param['fields'];
-		$query->order    = 'm.sale desc,m.visit desc';
+		$query->order    = 'm.sale desc,m.visit desc'; //默认销量排序
 		$query->group    = 'm.id';
 		$query->page     = $param['page']<1 ? 1 : $param['page'];
 		$query->pagesize = $param['pagesize'];

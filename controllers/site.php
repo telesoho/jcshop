@@ -172,6 +172,7 @@ class Site extends IController{
 
 	//[列表页]商品
 	function pro_list(){
+
 		$this->catId = IFilter::act(IReq::get('cat'), 'int');//分类id
 
 		switch($this->catId){
@@ -208,7 +209,7 @@ class Site extends IController{
 			default:
 				IError::show(403, '分类不存在');
 		}
-		/* 专辑 */
+		// 专辑
 		$db_article         = new IQuery('article as m');
 		$db_article->join   = 'left join article_category as c on c.id=m.category_id';
 		$db_article->where  = 'm.top=0 and m.visibility=1 and m.category_id='.$this->ac_id;
@@ -237,7 +238,7 @@ class Site extends IController{
 				$db_goods->where = 'm.is_del=0 and r.article_id='.$v['id'];
 				$goods_list      = $db_goods->find();
 				if(!empty($goods_list)){
-					/* 计算活动商品价格 */
+					// 计算活动商品价格
 					$goods_list = api::run('goodsActivity', $goods_list);
 					foreach($goods_list as $k1 => $v1){
 						$goods_list[$k1]['img'] = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/240/h/240");
@@ -249,7 +250,7 @@ class Site extends IController{
 		//商品分类
 		$this->childId = goods_class::catChild($this->catId);
 
-		/* 品牌 */
+		// 品牌
 		//关联的品牌分类
 		$db_brand_category         = new IQuery('brand_category');
 		$db_brand_category->where  = 'goods_category_id in ('.$this->childId.')';
@@ -282,7 +283,7 @@ class Site extends IController{
 			}
 		}
 
-		/* 模板赋值 */
+		// 模板赋值
 		$this->article_list = $data_article;    //文章列表
 		$this->data_brand   = $data_brand;        //品牌
 		$this->redirect('pro_list');
