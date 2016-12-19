@@ -36,345 +36,266 @@
 		</div>
 	</div>
 </div>
-<!--loading页结束-->
-<!--下拉刷新容器-->
-<!--<div id="pullrefresh" class="mui-content mui-scroll-wrapper">-->
-<!--<div class="mui-scroll" id="muiScroll">-->
-<!--头部-->
-<section class="search-header" id="homeHeader">
-	<div class="inputContent">
-		<form onsubmit="searthSubmit()" action="/site/search_list">
-			<input type="search" placeholder="" id="search" onfocus="getSearth();" />
-			<img class="search_ico" src="/views/mobile/skin/default/image/jmj/new_active/index/search.png" alt="" />
-		</form>
-		<img src="/views/mobile/skin/default/image/jmj/new_active/index/leftear.png" alt="" class="left-icon" />
-		<img src="/views/mobile/skin/default/image/jmj/new_active/index/rightear.png" alt="" class="right-icon" />
-		<img src="/views/mobile/skin/default/image/jmj/new_active/index/flower.png" alt="" class="img-flower" />
-		<div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
-	</div>
-	<!--模态框-->
-	<div id="modalid-search" class="hide">
-		<div class="title">
-			猫猫都在搜
+<!--pro_list页面的开始-->
+<div id="prolistInfo">
+	<section class="search-header" id="homeHeader">
+		<div class="inputContent">
+			<form onsubmit="searthSubmit()" action="/site/search_list">
+				<input type="search" :placeholder="placeHolder" id="search" onfocus="getSearth();" />
+				<img class="search_ico" src="/views/mobile/skin/default/image/jmj/new_active/index/search.png" alt="" />
+			</form>
+			<img src="/views/mobile/skin/default/image/jmj/new_active/index/leftear.png" alt="" class="left-icon" />
+			<img src="/views/mobile/skin/default/image/jmj/new_active/index/rightear.png" alt="" class="right-icon" />
+			<img src="/views/mobile/skin/default/image/jmj/new_active/index/flower.png" alt="" class="img-flower" />
+			<div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
 		</div>
-		<div class="search-content">
-			<!--<a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in search" v-if="key<10">{{item.word}}</a>-->
-		</div>
-		<button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
-		<button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
-	</div>
-</section>
-<section id="nav-slider">
-	<div  class="mui-slider">
-		<div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-			<div class="mui-scroll">
-				<a class="mui-control-item locationA" href="{url:/site/index}">
-					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg1.png" alt=""  />
-					<span class="text">推荐</span>
-					<span class="bg"></span>
-				</a>
-				<a class="mui-control-item mui-control-item126 locationA" href="{url:/site/pro_list}?cat=126">
-					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg2.png" alt=""/>
-					<span class="text">药妆</span>
-					<span class="bg"></span>
-				</a>
-				<a class="mui-control-item mui-control-item134 locationA" href="{url:/site/pro_list}?cat=134">
-					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg3.png" alt=""  />
-					<span class="text">个护</span>
-					<span class="bg"></span>
-				</a>
-				<a class="mui-control-item mui-control-item6 locationA" href="{url:/site/pro_list}?cat=6">
-					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg4.png" alt="" />
-					<span class="text">宠物</span>
-					<span class="bg"></span>
-				</a>
-				<a class="mui-control-item mui-control-item2 locationA" href="{url:/site/pro_list}?cat=2">
-					<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg5.png" alt="" />
-					<span class="text">健康</span>
-					<span class="bg"></span>
-				</a>
-                <a class="mui-control-item mui-control-item7 locationA" href="{url:/site/pro_list}?cat=7">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/page1_bg6.png" alt="" />
-                    <span class="text">零食</span>
-                    <span class="bg"></span>
-                </a>
+		<!--模态框-->
+		<div id="modalid-search" class="hide">
+			<div class="title">
+				猫猫都在搜
 			</div>
-		</div>
-	</div>
-</section>
-<section id="pro_list" >
-	<!--热门分类-->
-	<div class="categroyHot">
-		<div class="title">
-			<div class="top">
-				<span class="line-h"></span>
-				<span>热门分类</span>
-				<span class="line-h"></span>
+			<div class="search-content">
+				<a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in searchWord" v-if="key<10">{{item.word}}</a>
 			</div>
-			<div class="middle">
-				ヒット分類
-			</div>
+			<button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
+			<button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
 		</div>
-        <div class="mark">
-		<div class="banner">
-            <div class="wrapper">
-                {query:name=category 
-                    where=parent_id eq $this->catId and visibility eq 1 
-                    fields=id,name,image 
-                    limit=1000 
-                    order=sort desc}
-                <a href="/site/category_third/id/{$item['id']}/title/{$item['name']}" class="locationA">
-                <div class="item" >
-                    <img dataimg="{echo:IWeb::$app->config['image_host'].'/'.$item['image']}" alt=""  src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
-                    <div class="name hidewrap">
-                        {$item['name']}
-                    </div>
-                </div>
-                </a>
-                {/query}
-            </div>
-        </div>
-		</div>
-	</div>
-	<!--最新品-->
-	<div class="prolistItem">
-		<div class="box new">
-			<div class="left">
-				<img src="/views/mobile/skin/default/image/jmj/product/new.png" alt="" style="width:3.07rem;height:0.66rem" />
-			</div>
-			<a href="{url:/site/goods_more}?commend_id=1&category_id={$this->childId}&title={$this->name}-最新品"  class="locationA">
-				<div class="right">
-					<span>更多</span>
-					<img src="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" />
-				</div>
-			</a>
-		</div>
-		<div class="product">
-			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
-				where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 1 
-				fields=m.id,m.name,m.sell_price,m.img 
-				group=m.id 
-				limit=6 
-				order=m.id desc}
-			<a href="{url:/site/products?id=$item['id']}"  class="locationA">
-				<div class="item">
-					<div class="img">
-						<img dataimg="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/220/h/220')}" alt=""
-							 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
-					</div>
-					<div class="content">
-						<div class="name hidewrap">{$item['name']}</div>
-						<div class="sellprice price">¥{$item['sell_price']}</div>
-					</div>
-				</div>
-			</a>
-			{/query}
-		</div>
-	</div>
-	<!--随机专辑1-->
-	{if:!empty($this->article_list[0])}
-	<section class="recommended line albumn_index">
-		<!-- <div class="title">
-            <span class="logo" >
-                <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
-            </span>
-			<span class="name">
-				{$this->article_list[0]['name']}
-            </span>
-			<span class="num mui-pull-right favorite{$this->article_list[0]['id']}">
-            	{$this->article_list[0]['favorite']}
-            </span>
-			<span class="like mui-pull-right">
-				{if:$this->article_list[0]['is_favorite'] == 0}
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png"  alt="" class="img-like shareContent{$this->article_list[0]['id']}" onclick="collection({$this->article_list[0]['id']})" />
-                {else:}
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like shareContent{$this->article_list[0]['id']}" onclick=collection({$this->article_list[0]['id']}) />
-                {/if}
-            </span>
-		</div> -->
-		<a href="index.php?controller=site&action=article_detail&id={$this->article_list[0]['id']}" class="locationA">
-			<div class="content">
-				<div class="img">
-					<img dataimg="{$this->article_list[0]['image']}" alt="" width="100%" style="height:3.8rem;" src="{$this->article_list[0]['image']}"  class="samLazyImg"  />
-				</div>
-				<div class="mark1">{echo:count($this->article_list[0]['goods_list'])}件商品
-				</div>
-				<div class="mark2">
-					<img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-					{$this->article_list[0]['visit_num']}</div>
-			</div>
-		</a>
-		{if:count($this->article_list[0]['goods_list']) > 3}
-		<div class="single"></div>
-		<div class="mark">
-			<div class="product">
-				<div class="slider">
-					{foreach:items=$this->article_list[0]['goods_list']}
-					<div class="item">
-						<a href="index.php?controller=site&action=products&id={$item['id']}" class="locationA">
-							<div class="img"><img dataimg="{$item['img']}" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
-							<div class="name hidewrap">{$item['name']}</div>
-							<div class="sellprice">¥{$item['sell_price']}</div>
-						</a>
-					</div>
-					<div class="singleline"></div>
-					{/foreach}
-				</div>
-				<div class="mark"></div>
-			</div>
-		</div>
-		{/if}
 	</section>
-	{/if}
-	<!--品牌-->
-	{if:!empty($this->data_brand)}
-	<div class="relateBrand">
-		<div class="title">
-			<div class="top">
-				<span class="line-h"></span>
-				<span>热门品牌</span>
-				<span class="line-h"></span>
-			</div>
-			<div class="middle">
-				ヒットブランド
-			</div>
-		</div>
-		<div class="banner">
-			{foreach:items=$this->data_brand}
-			<div class="item">
-				<a href="javascript:;{url:site/brand_detail}/id/{$item['id']}" class="locationA"><img src="{$item['logo']}" alt="{$item['name']}" style="width:1.61rem;height:1.03rem" /></a>
-			</div>
-			{/foreach}
-		</div>
-	</div>
-	{/if}
-	<!--最热卖-->
-	<div class="prolistItem" style="margin-top:0.12rem;">
-		<div class="box new">
-			<div class="left">
-				<img src="/views/mobile/skin/default/image/jmj/product/hot.png" alt="" style="width:3.06rem;height:0.66rem" />
-			</div>
-			<div class="right">
-				<a href="{url:/site/goods_more}?commend_id=3&category_id={$this->childId}&title={$this->name}-最热卖"  class="locationA">
-					<span>更多</span>
-					<img dataimg="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
-				</a>
-			</div>
-		</div>
-		<div class="product">
-			{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
-				where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 3 
-				fields=m.id,m.name,m.sell_price,m.img 
-				group=m.id 
-				limit=6 
-				order=m.id desc}
-			<a href="{url:/site/products?id=$item['id']}"  class="locationA">
-				<div class="item">
-					<div class="img">
-						<img dataimg="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/220/h/220')}" alt=""
-							 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
-					</div>
-					<div class="content">
-						<div class="name hidewrap">{$item['name']}</div>
-						<div class="sellprice price">¥{$item['sell_price']}</div>
-					</div>
-				</div>
-			</a>
-			{/query}
-		</div>
-	</div>
-	<!--随机专辑2-->
-	{if:!empty($this->article_list[1])}
-	<section class="recommended line albumn_index">
-		<!-- <div class="title">
-            <span class="logo" >
-                <img src="/views/mobile/skin/default/image/jmj/icon/hot.png" alt="" class="img-hot">
-            </span>
-			<span class="name">
-				{$this->article_list[1]['name']}
-            </span>
-			<span class="num mui-pull-right favorite{$this->article_list[1]['id']}">
-            	{$this->article_list[1]['favorite']}
-            </span>
-			<span class="like mui-pull-right">
-				{if:$this->article_list[1]['is_favorite'] == 0}
-                <img src="/views/mobile/skin/default/image/jmj/icon/like.png"  alt="" class="img-like shareContent{$this->article_list[1]['id']}" onclick="collection({$this->article_list[1]['id']})" />
-                {else:}
-                <img src="/views/mobile/skin/default/image/jmj/icon/like-ed.png"  alt="" class="img-like shareContent{$this->article_list[1]['id']}" onclick=collection({$this->article_list[1]['id']}) />
-                {/if}
-            </span>
-		</div> -->
-		<a href="index.php?controller=site&action=article_detail&id={$this->article_list[1]['id']}" class="locationA">
-			<div class="content">
-				<div class="img">
-					<img dataimg="{$this->article_list[1]['image']}" alt="" width="100%" style="height:3.8rem;" src="{$this->article_list[1]['image']}"  class="samLazyImg"  />
-				</div>
-				<div class="mark1">{echo:count($this->article_list[1]['goods_list'])}件商品
-				</div>
-				<div class="mark2">
-					<img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
-					{$this->article_list[1]['visit_num']}</div>
-			</div>
-		</a>
-		{if:count($this->article_list[1]['goods_list']) > 3}
-		<div class="single"></div>
-	<div class="mark">
-		<div class="product">
-			<div class="slider">
-				{foreach:items=$this->article_list[1]['goods_list']}
-				<div class="item">
-					<a href="index.php?controller=site&action=products&id={$item['id']}" class="locationA">
-						<div class="img"><img dataimg="{$item['img']}" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" /></div>
-						<div class="name hidewrap">{$item['name']}</div>
-						<div class="sellprice">¥{$item['sell_price']}</div>
+	<section id="nav-slider">
+		<div  class="mui-slider">
+			<div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+				<div class="mui-scroll">
+					<a class="mui-control-item locationA" href="{url:/site/index}">
+						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg1.png" alt=""  />
+						<span class="text">推荐</span>
+						<span class="bg"></span>
+					</a>
+					<a class="mui-control-item mui-control-item1 locationA" href="{url:/site/pro_list}?cat=1">
+						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg2.png" alt=""/>
+						<span class="text">药妆</span>
+						<span class="bg"></span>
+					</a>
+					<a class="mui-control-item mui-control-item2 locationA" href="{url:/site/pro_list}?cat=2">
+						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg3.png" alt=""  />
+						<span class="text">个护</span>
+						<span class="bg"></span>
+					</a>
+					<a class="mui-control-item mui-control-item3 locationA" href="{url:/site/pro_list}?cat=3">
+						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg4.png" alt="" />
+						<span class="text">宠物</span>
+						<span class="bg"></span>
+					</a>
+					<a class="mui-control-item mui-control-item4 locationA" href="{url:/site/pro_list}?cat=4">
+						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg5.png" alt="" />
+						<span class="text">健康</span>
+						<span class="bg"></span>
+					</a>
+					<a class="mui-control-item mui-control-item5 locationA" href="{url:/site/pro_list}?cat=5">
+						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg6.png" alt="" />
+						<span class="text">零食</span>
+						<span class="bg"></span>
 					</a>
 				</div>
-				<div class="singleline"></div>
-				{/foreach}
 			</div>
-			<div class="mark"></div>
 		</div>
-	</div>
-		{/if}
 	</section>
-	{/if}
-</section>
-<!--推荐商品-->
-<section id="relate_product">
-	<div class="title">
-		<div class="box new">
-			<div class="left">
-				<img src="/views/mobile/skin/default/image/jmj/product/{$this->pic}.png" alt="" style="width:3.75rem;height:0.66rem" />
+	<!--热门分类-->
+	<section id="pro_list" v-cloak>
+		<!--热门分类-->
+		<div class="categroyHot" v-cloak>
+			<div class="title">
+				<div class="top">
+					<span class="line-h"></span>
+					<span>热门分类</span>
+					<span class="line-h"></span>
+				</div>
+				<div class="middle">
+					ヒット分類
+				</div>
 			</div>
-			<a href="{url:/site/goods_more}?commend_id=4&category_id={$this->childId}&title={$this->title}"  class="locationA">
-				<div class="right">
-					<span>更多</span>
-					<img src="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" />
+			<div class="mark">
+				<div class="banner">
+					<div class="wrapper">
+						<a :href="item1.url" class="locationA" v-for="item1 in hotCat">
+							<div class="item" >
+								<img :dataimg="item1.image" alt=""  src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
+								<div class="name hidewrap">
+									{{item1.name}}
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--最新品-->
+		<div class="prolistItem" v-cloak>
+			<div class="box new">
+				<div class="left">
+					<img src="/views/mobile/skin/default/image/jmj/product/new.png" alt="" style="width:3.07rem;height:0.66rem" />
+				</div>
+				<a href="{url:/site/goods_more}?commend_id=1&category_id={$this->childId}&title={$this->name}-最新品"  class="locationA">
+					<div class="right">
+						<span>更多</span>
+						<img src="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" />
+					</div>
+				</a>
+			</div>
+			<div class="product">
+				<a :href="item2.url"  class="locationA" v-for="item2 in goods1">
+					<div class="item">
+						<div class="img">
+							<img :dataimg="item2.img" alt=""
+								 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
+						</div>
+						<div class="content">
+							<div class="name hidewrap">{{item2.name}}</div>
+							<div class="sellprice price">¥{{item2.sell_price}}</div>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		<!--随机专辑-->
+		<section class="recommended line albumn_index" v-cloak>
+			<a :href="article[0].url" class="locationA">
+				<div class="content">
+					<div class="img">
+						<img :dataimg="article[0].image" alt="" width="100%" style="height:3.8rem;" src=""  class="samLazyImg"  />
+					</div>
+					<div class="mark1">{{article[0].goods_count}}件商品
+					</div>
+					<div class="mark2">
+						<img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
+						{{article[0].visit_num}}</div>
 				</div>
 			</a>
+			<div class="single"></div>
+			<div class="mark" v-if="article[0].len>3">
+				<div class="product">
+					<div class="slider">
+						<div class="item" v-for="itemList in article[0].goods_list">
+							<a :href="itemList.url" class="locationA">
+								<div class="img"><img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
+								<div class="name hidewrap">{{itemList.name}}</div>
+								<div class="sellprice">¥{{itemList.sell_price}}</div>
+							</a>
+						</div>
+						<div class="singleline"></div>
+					</div>
+					<div class="mark"></div>
+				</div>
+			</div>
+		</section>
+		<!--品牌-->
+		<div class="relateBrand" v-cloak>
+			<div class="title">
+				<div class="top">
+					<span class="line-h"></span>
+					<span>热门品牌</span>
+					<span class="line-h"></span>
+				</div>
+				<div class="middle">
+					ヒットブランド
+				</div>
+			</div>
+			<div class="banner">
+				<div class="item" v-for="ite in brand">
+					<a href="#" class="locationA" tip="如果要跳转 填ite.url即可">
+						<img :src="ite.logo" :alt="ite.name" style="width:1.61rem;height:1.03rem" /></a>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="content" id="getRelateWare">
-		{query:name=goods as m join=left join commend_goods as d on d.goods_id eq m.id left join category_extend as c on c.goods_id eq m.id 
-			where=m.is_del eq 0 and c.category_id in ($this->childId) and d.commend_id eq 4 
-			fields=m.id,m.name,m.sell_price,m.img 
-			limit=50 
-			order=m.id desc}
-		<div class="item">
-			<a href="{url:/site/products?id=$item['id']}"  class="locationA"><div class="img"><img dataimg="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" /></div>
-				<div class="name">{$item['name']}</div>
-				<div class="box">
-					<div class="sellprice price">¥{$item['sell_price']}</div>
-				</div></a>
+		<!--最热卖-->
+		<div class="prolistItem" style="margin-top:0.12rem;" v-cloak>
+			<div class="box new">
+				<div class="left">
+					<img src="/views/mobile/skin/default/image/jmj/product/hot.png" alt="" style="width:3.06rem;height:0.66rem" />
+				</div>
+				<div class="right">
+					<a href="{url:/site/goods_more}?commend_id=3&category_id={$this->childId}&title={$this->name}-最热卖"  class="locationA">
+						<span>更多</span>
+						<img dataimg="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
+					</a>
+				</div>
+			</div>
+			<div class="product">
+				<a :href="ite1.url"  class="locationA" v-for="ite1 in goods2">
+					<div class="item">
+						<div class="img">
+							<img :dataimg="ite1.img" alt=""
+								 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
+						</div>
+						<div class="content">
+							<div class="name hidewrap">{{ite1.name}}</div>
+							<div class="sellprice price">¥{{ite1.sell_price}}</div>
+						</div>
+					</div>
+				</a>
+			</div>
 		</div>
-		{/query}
-	</div>
-</section>
-
-<div style="padding-bottom:1.42rem;background:#f8f8f8"></div>
-<div class="fix-toTop hide">
-	<img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt=""  />
+		<!--随机专辑-->
+		<section class="recommended line albumn_index" v-cloak>
+			<a :href="article[1].url" class="locationA">
+				<div class="content">
+					<div class="img">
+						<img :dataimg="article[1].image" alt="" width="100%" style="height:3.8rem;" src=""  class="samLazyImg"  />
+					</div>
+					<div class="mark1">{{article[1].goods_count}}件商品
+					</div>
+					<div class="mark2">
+						<img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">
+						{{article[1].visit_num}}</div>
+				</div>
+			</a>
+			<div class="single"></div>
+			<div class="mark" v-if="article[1].len>3">
+				<div class="product">
+					<div class="slider">
+						<div class="item" v-for="itemList in article[1].goods_list">
+							<a :href="itemList.url" class="locationA">
+								<div class="img"><img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
+								<div class="name hidewrap">{{itemList.name}}</div>
+								<div class="sellprice">¥{{itemList.sell_price}}</div>
+							</a>
+						</div>
+						<div class="singleline"></div>
+					</div>
+					<div class="mark"></div>
+				</div>
+			</div>
+		</section>
+		<!--推荐商品	-->
+		<section id="relate_product" v-cloak>
+			<div class="title">
+				<div class="box new">
+					<div class="left">
+						<img :src="info.pic" alt="" style="width:3.75rem;height:0.66rem" />
+					</div>
+					<a href="{url:/site/goods_more}?commend_id=4&category_id={$this->childId}&title={$this->title}"  class="locationA">
+						<div class="right">
+							<span>更多</span>
+							<img src="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" />
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="content" id="getRelateWare">
+				<div class="item" v-for="ite3 in goods3">
+					<a :href="ite3.url"  class="locationA" >
+						<div class="img"><img :dataimg="ite3.img" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" /></div>
+						<div class="name">{{ite3.name}}</div>
+						<div class="box">
+							<div class="sellprice price">¥{{ite3.sell_price}}</div>
+						</div></a>
+				</div>
+			</div>
+		</section>
+	</section>
 </div>
+<div style="height:1.42rem;background:#f8f8f8"></div>
+
+
 <footer>
 	<nav class="mui-bar mui-bar-tab"  style="z-index:25">
         <a id="defaultTab" class="mui-tab-item mui-active home" href="{url:/site/index}" >
@@ -412,11 +333,7 @@
 </footer>
 <!--专辑分页模板-->
 <!--头信息结束-->
-<script id="searth_keyword" type="text/html">
-	<% for(var i=0; i<data.length&&i<12; i++){%>
-	<a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
-	<%}%>
-</script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>

@@ -519,12 +519,14 @@ input[type='search']{
 #button-submit{
   border:1px solid #ff44a0;
   border-radius:0.1rem;
+  font-size:0.3rem;
   width:78%;
   height:0.96rem;
   margin:1.74rem 11% 0;
   color:#ff44a0;
 }
 #button-cancel{
+  font-size:0.3rem;
   border:1px solid #bbb;
   border-radius:0.1rem;
   width:78%;

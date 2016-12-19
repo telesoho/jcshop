@@ -191,24 +191,6 @@ function getScrollTop1()
 //            }
 //        });
 //    }
-function hotSearth1(){
-    mui.ajax('/apic/search_words',{
-        dataType:'json',//服务器返回json格式数据
-        type:'get',//HTTP请求类型
-        timeout:10000,//超时时间设置为10秒；
-        success:function(data){
-            var dat={};
-            dat.data=data;
-            console.log(data);
-            var html = template('searth_keyword',dat);
-            $(".search-content").html(html);
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
-            console.log(type);
-        }
-    });
-}
 //获得分类三级商品
 function getcategory_thirdInfo(id){
     mui.ajax('/apic/category_child',{

@@ -6,16 +6,89 @@ var Request = new Object();
 Request = GetRequest();
 var getId=Request["cat"];
 $(".mui-control-item"+getId).addClass("mui-active");
+var sub_data={
+    tid:getId
+};
 var pageData = {
     page:1
 };
+var vm= new Vue({
+    el:"#prolistInfo",
+    data:{
+        placeHolder:'圣诞神秘好礼等你来拿',
+        info:{
+            category_list:[],
+            goods_list1:[],
+            goods_list2:[],
+            goods_list3:[],
+            article_list:[{url:'', len:'', goods_list:[]},
+                {url:'', goods_list:[]}],
+            brand_list:[]
+        },
+        searchWord:[]
+
+    },
+    computed:{
+        hotCat: function(){
+            this.info.category_list.map(function(item){
+                item.url="/site/category_third/id/"+item.id+"/title/"+item.name;
+            })
+            return this.info.category_list;
+        },
+        goods1: function(){
+            this.info.goods_list1.map(function(item){
+                item.url="/site/products?id="+item.id;
+            })
+            return this.info.goods_list1;
+        },
+        goods2: function(){
+            this.info.goods_list2.map(function(item){
+                item.url="/site/products?id="+item.id;
+            })
+            return this.info.goods_list2;
+        },
+        goods3: function(){
+            this.info.goods_list3.map(function(item){
+                item.url="/site/products?id="+item.id;
+            })
+            return this.info.goods_list3;
+        },
+        // 相关品牌
+        brand: function(){
+            this.info.brand_list.map(function(item){
+                item.url="site/brand_detail?id="+item.id;
+            })
+            return this.info.brand_list;
+        },
+        // 随机文章
+        article: function(){
+            this.info.article_list.map(function(item){
+                item.url="/site/article_detail?id="+item.id;
+                item.len=item.goods_list.length;
+                item.goods_list.map(function(item1){
+                    item1.url="/site/products?id="+item1.id;
+                })
+            })
+            return this.info.article_list;
+        }
+    },
+    mounted: function(){
+        var self=this;
+        getPro_list(self,sub_data);
+        hotSearth1(self);
+    },
+    updated:function(){
+        lazyload.init({
+            anim:false,
+            selectorName:".samLazyImg"
+        });
+    }
+})
 //页面加载完成后调用的功能
 window.onload=function(){
     $("#loading").fadeOut(300);
     var temp=getItem("placeHolder");
-    document.getElementById("search").placeholder=temp+"件商品等你来搜"
-    getIndex();
-    hotSearth1();
+    // document.getElementById("search").placeholder=temp+"件商品等你来搜"
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.mui-tab-item',function(){
         if(!$(this).hasClass("mui-active")){
@@ -27,10 +100,7 @@ window.onload=function(){
 //		mui('body').on('tap','a',function(){
 //			document.location.href=this.href;
 //		});
-    lazyload.init({
-        anim:false,
-        selectorName:".samLazyImg"
-    });
+
     //点击直达顶部
 //		mui("body").on("tap",".fix-toTop",function(){
 //			$("html,body").animate({scrollTop:0},0);
@@ -82,17 +152,24 @@ function pullupRefresh() {
         }
     });
 }
-function getIndex(){
-    mui.ajax('index.php?controller=apic&action=banner_list',{
+function getPro_list(self,sub_data){
+    mui.ajax('/apic/pro_list',{
+        data:sub_data,
         dataType:'json',//服务器返回json格式数据
         type:'get',//HTTP请求类型
         timeout:10000,//超时时间设置为10秒
         success:function(data){
-//				console.log(data);
-
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
+            self.info=data.data;
+        }
+    });
+}
+function hotSearth1(self){
+    mui.ajax('/apic/search_words',{
+        dataType:'json',//服务器返回json格式数据
+        type:'get',//HTTP请求类型
+        timeout:10000,//超时时间设置为10秒；
+        success:function(data){
+            self.searchWord=data;
         }
     });
 }
