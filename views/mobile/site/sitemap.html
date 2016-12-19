@@ -37,7 +37,8 @@
 </div>
 <!--loading页结束-->
 <!--头部-->
-<section class="search-header" id="homeHeader">
+<section id="siteMap">
+	<section class="search-header" id="homeHeader">
 	<div class="inputContent">
 		<form onsubmit="searthSubmit()" action="/site/search_list">
 			<input type="search" placeholder="" id="search" onfocus="getSearth();" />
@@ -54,12 +55,18 @@
 			猫猫都在搜
 		</div>
 		<div class="search-content">
-			<!--<a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in search" v-if="key<10">{{item.word}}</a>-->
+			<a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in hotWord" v-if="key<10">{{item.word}}</a>
 		</div>
 		<button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
 		<button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
 	</div>
 </section>
+
+
+
+
+</section>
+
 <!--分类页面-->
 <section class="box" id="scroll_sitemap">
 	<div class="mui-scroll-wrapper" id="left-scroll">
@@ -173,17 +180,28 @@
 	<%}%>
 </script>
 <script id="searth_keyword" type="text/html">
-	<% for(var i=0; i<data.length&&i<12; i++){%>
-	<a href="#"  onclick="ToSearthPage('<%=data[i].word %>')"><%=data[i].word %></a>
-	<%}%>
+	
 </script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
+
 <script>
+		var vm=new Vue({
+			el:'#siteMap',
+			data:{
+				hotWord:[]
+				
+			},
+			mounted:function(){
+				var self=this;
+				hotSearth1(self);
+			}
+		})
 	//页面加载动画的调用
 	$(window).load(function(){
 		$("#loading").fadeOut(300);
@@ -201,6 +219,18 @@
 		mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
 		mui('.mui-scroll-wrapper').scroll();
 	})
+	
+	//分类获取数据
+	function hotSearth1(self){
+    mui.ajax('/apic/search_words',{
+        dataType:'json',//服务器返回json格式数据
+        type:'get',//HTTP请求类型
+        timeout:10000,//超时时间设置为10秒；
+        success:function(data){
+            self.hotWord=data;
+        }
+    });
+}
 </script>
 
 <!-- 微信分享 -->
