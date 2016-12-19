@@ -52,7 +52,8 @@ var em = new Vue({
 				t++
 			})
 			return this.list;
-		}
+		},
+		
 	},
 	
 	mounted:function(){
@@ -65,6 +66,12 @@ var em = new Vue({
 			anim:false,
 			selectorName:".samLazyImg"
 		});
+	},
+	methods:{
+		getTicket:function(tid){
+//			console.log(tid)
+			youhuijian(tid)
+		}
 	}
 })
 function getActiveInfo(self){
@@ -113,4 +120,32 @@ function getActiveInfo(self){
 		},
 
 	});
+}
+//优惠劵  领取
+function youhuijian(tid){
+	mui.ajax('/apic/get_ticket', {
+		data:{
+			tid:tid
+		},
+		dataType: 'json',
+		type: 'get',
+		timeout: 10000,
+		success: function (data){
+			if(data.code==0){
+				var btnArray = ['取消', '查看'];
+                    mui.confirm('领取成功，查看优惠券？', '领取成功', btnArray, function(e) {
+                        if (e.index == 1) {
+                         
+                            window.location.href="/site/ticket_list"
+                        } else {
+                            
+                        }
+                    })
+			}else{
+				alert(data.msg);
+			}
+			
+
+		}
+	})
 }

@@ -6,13 +6,24 @@ var em = new Vue({
 	data:{
 		aid:"2",
 		pid:oInputval,
-		info:[]
+		info:[],
+		p:"",
+		info1:""
 	},
 	computed:{
 		newactivity:function(){
 			console.log(this.info)
-			return this.info
 			
+			return this.info	
+		},
+		aaa:function(){
+			console.log(typeof this.info1)
+			if(this.info1 == "0"){
+				this.p="恭喜您"
+			}else{
+				this.p=""
+			}
+			return this.p
 		}
 	},
 	mounted: function(){
@@ -35,7 +46,8 @@ function activity(self){
 		type: 'get',
 		timeout: 10000,
 		success: function (data) {
-			self.info = data.msg
+			self.info = data.msg;
+			self.info1 = data.code
 		console.log(data)
 		}
 	});
