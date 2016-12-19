@@ -6,9 +6,20 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<title>圣诞好礼</title>
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
 	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/christmas_index.css?v=<?php echo time(); ?>"/>
-
+	<style type="text/css">
+		#top{
+			position: relative
+		}
+		#top p{
+			width: 2rem;
+			height: 1rem;
+			position: absolute;
+			bottom:0.2rem
+		}
+	</style>
 </head>
 <body>
 	<div id="wrap" v-cloak>
@@ -19,7 +30,9 @@
 		<!--<a href="/activity/christmas_grow"><img src="/views/mobile/skin/default/image/jmj/new_active/index2.jpg"/></a>-->
 		<!--<img src="/views/mobile/skin/default/image/jmj/new_active/index3.jpg"/>-->
 		<img src="/views/mobile/skin/default/image/jmj/new_active/index5.jpg" style="width: 100;"/>
-		
+		<p style="left: 0.4rem;" @click="getTicket(7)"></p>
+		<p style="left: 2.8rem;" @click="getTicket(8)"></p>
+		<p style="left: 5.2rem;" @click="getTicket(9)"></p>
 		<!--<a href="/activity/christmas_ticket"><img src="/views/mobile/skin/default/image/jmj/new_active/index4.jpg"/></a>-->
 	</div>
 	<!--						导航					-->
@@ -38,13 +51,13 @@
 		<img src="/views/mobile/skin/default/image/jmj/new_active/bannerbig.png" width="100%"/>
 	</div>
 	<!--			更多折扣				-->
-	<div id="zhe" >
-		<div id="zhe_ul">
-			<ul>
-				<li v-for="(items,key) in newlist1"><a :href="items.url">
+	<div id="zhe" style="height: 3.9rem;">
+		<div id="zhe_ul" style="height: auto;">
+			<ul style="height: auto;">
+				<li v-for="(items,key) in newlist1" style="height: 3.9rem;"><a :href="items.url">
 					
 					<p class="p1"><img :src="items.img" style="width: 1.8rem;height: 1.8rem;"/></p>
-					<p class="p2" style="height: 0.7rem;">{{items.name}}</p>
+					<p class="p2" style="margin-bottom:0.1rem ;color: #3D4245;font-size: 0.24rem;padding: 0 0.05rem;">{{items.name}}</p>
 					<p class="p3" style="margin-bottom: 0.15rem;">¥<span>{{items.sell_price}}</span></p>
 					<p class="p4">
 						<img src="/views/mobile/skin/default/image/jmj/new_active/921ED65A-23EE-47FE-B735-E47A8508FB2C@1x.png" style="width: 0.65rem;"/>
@@ -57,7 +70,7 @@
 		<!--<div class="btn"><a href="#">更多折扣商品</a></div>-->
 	</div>
 	<!--			大牌专场					-->
-	<div id="dapai" class="t" v-for="itemlist in newlist">
+	<div id="dapai" class="t" v-for="(itemlist,key) in newlist">
 		<div class="top_img"><a :href="itemlist.url"><img :src="itemlist.bannerimg" style="width: 100%;"/></div></a>
 		<ul>
 			<li v-for="items in itemlist" style="height:auto"><a :href="items.url" >
@@ -68,7 +81,7 @@
 					<p class="p8">原价: <s>{{items.original_price}}</s></p>
 				</div>
 				<p class="p9" style="display:block;padding: 0;" :style="items.brand_logo?style1:style2">省 <span>{{items.diff_price}}</span> 元</p>
-				<p class="p10" v-if="items.brand_logo"><img :src="items.brand_logo" style="width: 0.9rem;"/></p>
+				<p class="p10" v-if="items.brand_logo&&key==0"><img :src="items.brand_logo" style="width: 0.9rem;"/></p>
 			</a></li>
 			
 		</ul>
