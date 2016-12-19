@@ -901,7 +901,9 @@ OEF;
      */
 	public function add_qrcode_follow($scene_id){
 	    $follow_model = new IModel('follow');
-        $follow_model->setData(['scene_id'=>$scene_id, 'follow_time'=>date('Y-m-d H:i:s',time())]);
-        $follow_model->add();
+        if (!empty($scene_id)){
+            $follow_model->setData(['scene_id'=>$scene_id, 'follow_time'=>date('Y-m-d H:i:s',time())]);
+            $follow_model->add();
+        }
     }
 }
