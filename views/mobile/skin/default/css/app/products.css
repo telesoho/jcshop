@@ -276,12 +276,23 @@ ul li{
     background:#ff4aa0;
     color:#fff;
     font-size:0.3rem;
-}
+}#sheet .mui-table-view .parent{
+     position: relative;
+     height:6rem;
+    overflow-y: hidden;
+ }
 #sheet .mui-table-view .text{
     text-align:left !important;
+    position:absolute;
+    top:0;
+    left:0;
+    display: inline-block;
     font-size:0.26rem;
     padding:0.2rem;
     color:#3d4245;
+    height:6rem;
+    overflow-y: scroll;
+
 }
 #sheet.mui-popover {
     bottom:20% !important;
