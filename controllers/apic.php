@@ -519,7 +519,7 @@ class Apic extends IController{
 				$dataTckOn['msg'] = '税值券';
 				break;
 		}
-		$this->json_echo(apiReturn::go('0', $dataTckOn));
+		$this->json_echo(apiReturn::go('0', $dataTckOn, '恭喜您已领取“'.$dataTckOn['msg'].'”'));
 	}
 
 	/**
