@@ -222,6 +222,11 @@
                     var btnArray = ['取消', '查看'];
                     mui.confirm('领取成功，查看订单？', '领取礼品成功', btnArray, function(e) {
                         if (e.index == 1) {
+                            self.info_data.list.map(function(item){
+                                if(item.id==self.nowGid){
+                                    item.is_play=3;
+                                }
+                            });
                             window.location.href="/ucenter/order"
                         } else {
                             self.info_data.list.map(function(item){
@@ -250,6 +255,7 @@
                     var btnArray = ['取消', '查看'];
                     mui.confirm('领取成功，查看优惠券？', '领取成功', btnArray, function(e) {
                         if (e.index == 1) {
+                            item.is_play=3;
                             window.location.href="/site/ticket_list"
                         } else {
                             item.is_play=3;
