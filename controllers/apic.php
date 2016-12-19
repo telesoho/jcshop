@@ -2093,16 +2093,17 @@ class Apic extends IController{
 	}
 
 	function qrcode(){
-		if(IClient::isWechat()==true){
+        $id = IFilter::act(IReq::get('id'), 'int');
+        if(IClient::isWechat()==true){
 			require_once __DIR__.'/../plugins/wechat/wechat.php';
 			require_once __DIR__.'/../plugins/curl/Curl.php';
 			$this->wechat = new wechat();
 			$curl         = new \Wenpeng\Curl\Curl();
 			$access_token = $this->wechat->getAccessToken();
 			$url          = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token='.$access_token;
-			$curl->post(json_encode(['action_name' => 'QR_LIMIT_SCENE', 'action_info' => ['scene' => ['scene_id' => 'chenbo']]]))->url($url);
+			$curl->post(json_encode(['action_name' => 'QR_LIMIT_SCENE', 'action_info' => ['scene' => ['scene_id' => $id]]]))->url($url);
 			$ret = json_decode($curl->data());
-			echo 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.urlencode($ret->ticket);
+			echo '<img src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.urlencode($ret->ticket).'">';
 			echo '<br>';
 			echo $ret->url;
 			//            var_dump($curl->data());

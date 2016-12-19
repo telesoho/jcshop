@@ -156,8 +156,10 @@
 				<div class="title">
 					翻译结果
 				</div>
-				<div class="text">
-					正在翻译，请稍等...
+				<div class="parent" @touchstart="moveStart" @touchmove="move">
+					<div class="text" :style="nowStyle">
+						正在翻译，请稍等...
+					</div>
 				</div>
 			</ul>
 			<div id="close" style="text-align:center">
@@ -264,10 +266,18 @@
 				style1:'color:#979797',
 				style2:'color:#ff4aa0',
 				showCar:'',
-				hides:false
+				hides:false,
+				y0:'',
+				y01:'',
+				y1:'',
+				scroll:'',
+				nowTop:0
 			},
 			computed: {
-				
+//				滚动位置的样式
+				nowStyle:function(){
+					return "top:"+this.nowTop+"px";
+				},
 				article: function(){
 					this.relateArticle.map(function(item){
 						item.url="/site/article_detail?id="+item.id;
@@ -346,6 +356,27 @@
 				buyNow: function(){
 					var self=this;
 					buyNowFun(self);
+				},
+//				翻译弹窗事件
+				moveStart: function(ev){
+					this.y01=ev.touches[0].pageY;
+					this.y0=this.scroll;
+
+				},
+				move: function(ev){
+					var textTop=$('.text').height();
+					var par=$('.parent').height();
+					if(textTop>par){
+						this.y1=ev.touches[0].pageY;
+						this.scroll=this.y1-this.y01;
+						this.nowTop=this.y0+this.scroll;
+						if(this.nowTop>0){
+							this.nowTop=0;
+						};
+						if((-par+textTop)<-this.nowTop&&(-par+textTop)>0){
+							this.nowTop=-textTop+par;
+						}
+					}
 				}
 
 			}
