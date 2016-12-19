@@ -115,20 +115,26 @@ class Apic extends IController{
 		$queryArt->limit  = 2;
 		$listArt          = $queryArt->find();
 		if(!empty($listArt)){
+			//商品模型
 			$queryGoods         = new IQuery('goods as m');
 			$queryGoods->join   = 'left join relation as r on r.goods_id=m.id';
 			$queryGoods->fields = 'm.id,m.name,m.sell_price,m.img';
 			$queryGoods->order  = 'm.sale desc,m.visit desc';
 			$queryGoods->limit  = 5;
-			$db_favorite        = new IQuery('favorite_article');
-			$db_favorite->field = 'count(id)';
+			//收藏模型
+			$queryFavo        = new IQuery('favorite_article');
+			$queryFavo->field = 'count(id)';
+			//相关商品数量模型
+			$queryGoodsCount         = new IQuery('goods as m');
+			$queryGoodsCount->join   = 'left join relation as r on r.goods_id=m.id';
+			$queryGoodsCount->fields = 'COUNT(*) AS count';
 			foreach($listArt as $k => $v){
 				$listArt[$k]['image'] = empty($v['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/750/h/380");
 				//是否已收藏
 				$listArt[$k]['is_favorite'] = 0;
 				if(!empty($user_id)){
-					$db_favorite->where = 'aid='.$v['id'].' and user_id='.$user_id;
-					$data_favorite      = $db_favorite->find();
+					$queryFavo->where = 'aid='.$v['id'].' and user_id='.$user_id;
+					$data_favorite    = $queryFavo->find();
 					if(!empty($data_favorite)) $listArt[$k]['is_favorite'] = 1;
 				}
 				//相关商品
@@ -141,7 +147,10 @@ class Apic extends IController{
 						$listGoods[$k1]['img'] = empty($v1['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/240/h/240");
 					}
 				}
-				$listArt[$k]['goods_list'] = $listGoods;
+				$queryGoodsCount->where     = 'm.is_del=0 and r.article_id='.$v['id'];
+				$goodsCount                 = $queryGoodsCount->find();
+				$listArt[$k]['goods_count'] = $goodsCount[0]['count'];
+				$listArt[$k]['goods_list']  = $listGoods;
 			}
 		}
 		
