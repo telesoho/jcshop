@@ -25,10 +25,23 @@ var vm= new Vue({
                 {url:'', goods_list:[]}],
             brand_list:[]
         },
-        searchWord:[]
+        searchWord:[],
+      
 
     },
     computed:{
+//  	最新
+		new_goodsMore:function(){
+			return "/site/goods_more?tid="+getId+"&mid=1";
+		},
+		//  	最热卖
+		hot_goodsMore:function(){
+			return "/site/goods_more?tid="+getId+"&mid=2";
+		},
+		//  	推荐
+		recommended_goodsMore:function(){
+			return "/site/goods_more?tid="+getId+"&mid=3";
+		},
         hotCat: function(){
             this.info.category_list.map(function(item){
                 item.url="/site/category_third/id/"+item.id+"/title/"+item.name;
