@@ -147,7 +147,7 @@ class wechat extends pluginBase
 					$unId = $this->bindUser($result);
 					$this->login($unId);
 				}
-				header('location: '.urldecode($state));
+				header('location: '.$_SERVER['HTTP_HOST'].urldecode($state));
 			}
     	}
     	else
@@ -579,13 +579,14 @@ class wechat extends pluginBase
 	 */
 	public function oauthUrl($url,$snsType = "snsapi_userinfo")
 	{
-		$url = $this->converUrl($url);
+//		$url = $this->converUrl($url);
+		$urlArr = parse_url($url);
 		$urlparam = array(
 			'appid='.$this->config['wechat_AppID'],
 			'redirect_uri='.urlencode($this->getOauthCallback()),
 			'response_type=code',
 			'scope='.$snsType,
-			'state='.urlencode($url),
+			'state='.urlencode((isset($urlArr['path']) ? $urlArr['path'] : '').(isset($urlArr['query']) ? '&'.$urlArr['query'] : '')),//urlencode($url),
 			'connect_redirect=1',
 		);
 		$apiUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?".join("&",$urlparam)."#wechat_redirect";
