@@ -277,22 +277,7 @@ iframe{
   -webkit-justify-content: center;
 }
 /*底部导航样式*/
-/*.icon-home{*/
-  /*background:url('../image/jmj/icon/home.png') no-repeat 100%;*/
-  /*background-size:100% 100%;*/
-/*}*/
-/*.icon-classification{*/
-  /*background:url('../image/jmj/icon/mune.png') no-repeat 100% ;*/
-  /*background-size:100% 100%;*/
-/*}*/
-/*.icon-shopcar{*/
-  /*background:url('../image/jmj/icon/buy.png') no-repeat 100% ;*/
-  /*background-size:100% 100%;*/
-/*}*/
-/*.icon-my{*/
-  /*background:url('../image/jmj/icon/my.png') no-repeat 100% ;*/
-  /*background-size:100% 100%;*/
-/*}*/
+
 .icon-vedio{
   display:inline-block;
   position:absolute;
@@ -313,12 +298,6 @@ iframe{
   left:0;
   bottom:0;
   background:#fff;
-}
-.img-move02{
-  position:relative;
-  z-index:24;
-  width:1.06rem;
-  margin-top:0.125rem;
 }
 .img-move02{
   position:relative;
@@ -782,3 +761,58 @@ input[type='search']{
   height:0.88rem;
   line-height:0.88rem;
 }
+/*底部导航栏开始*/
+.footerNav{
+  width:100%;
+  height:1rem;
+  border-top:1px solid #eee;
+  position:fixed;
+  left:0;
+  bottom:0;
+  background:#fff;
+  z-index:25;
+  display: -webkit-flex;
+  -webkit-justify-content: center;
+  /*-webkit-align-items: center;*/
+}
+.footerNav .tabelitem{
+  -webkit-flex:1;
+  text-align: center;
+  position:relative;
+  z-index:24;
+}
+.footerNav .tabelitem.active .mui-tab-label{
+  color:#ff4aa0 !important
+}
+.footerNav .tabelitem img{
+  width:0.5rem;
+  height:0.5rem;
+}
+.footerNav .tabelitem .showGrass{
+  position:absolute;
+  z-index:23;
+  width:1.31rem;
+  height:1.31rem;
+  border-radius: 50%;
+  border-top:1px solid #eee;
+  display: block;
+  background:#fff;
+  overflow-y: hidden;
+  bottom:0;
+  left:0.08rem;
+}
+.footerNav .tabelitem .mui-tab-label{
+  position: absolute;
+  width:100%;
+  text-align: center;
+  z-index:26;
+  bottom:0.05rem;
+  font-size:0.20rem;
+  color:#bbb;
+}
+.footerNav .tabelitem .showGrass img{
+      width:0.83rem !important;
+     height:0.83rem !important;
+}
+
+/*底部导航栏结束*/

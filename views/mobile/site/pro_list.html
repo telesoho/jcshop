@@ -254,7 +254,10 @@
 					<div class="slider">
 						<div class="item" v-for="itemList in article[1].goods_list">
 							<a :href="itemList.url" class="locationA">
-								<div class="img"><img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
+								<div class="img">
+									<img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;"
+										 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
+								</div>
 								<div class="name hidewrap">{{itemList.name}}</div>
 								<div class="sellprice">¥{{itemList.sell_price}}</div>
 							</a>
@@ -292,6 +295,7 @@
 			</div>
 		</section>
 	</section>
+	<footer-nav :state="0"></footer-nav>
 </div>
 <div style="height:1.42rem;background:#f8f8f8"></div>
 
@@ -335,6 +339,8 @@
 <!--头信息结束-->
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<!--//底部导航样式的引入-->
+<script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>

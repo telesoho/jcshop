@@ -8,6 +8,7 @@ var Request = new Object();
 var vm = new Vue({
     el: '#indexInfo',
     data: {
+        // components:{"Nav": Nav},
         showMessage:false,
         page:1,
         search:[],
@@ -132,12 +133,6 @@ $(document).ready(function(){
 
     }
     //解决tab选项卡a标签无法跳转的问题
-    mui('body').on('tap','.mui-tab-item',function(){
-        if(!$(this).hasClass("mui-active")){
-            $(this).find(".mui-tab-label").addClass("tabBar_color");
-            document.location.href=this.href;
-        }
-    });
     mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
     // $('body').on('touchmove', function (event) {
     //     event.preventDefault();
