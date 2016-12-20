@@ -277,41 +277,6 @@ iframe{
   -webkit-justify-content: center;
 }
 /*底部导航样式*/
-
-.icon-vedio{
-  display:inline-block;
-  position:absolute;
-  bottom:0;
-  left:0;
-  width:1.31rem;
-  height:1.31rem;
-  border-radius:50%;
-  background:#fff;
-  box-shadow: 0 0 0.01rem rgba(0, 0, 0, .2);
-}
-.tab-mark{
-  display:inline-block;
-  position:absolute;
-  height:0.98rem;
-  width:1.4rem;
-  z-index:3;
-  left:0;
-  bottom:0;
-  background:#fff;
-}
-.img-move02{
-  position:relative;
-  z-index:24;
-  width:0.79rem;
-  margin-top:0.125rem;
-
-}
-.mui-tab-item .grow{
-  position:relative;
-  margin-top:0.08rem;
-  z-index:23;
-  color:#929292;
-}
 .mui-tab-item.mui-active .grow{
   color:#ff4aa0;
 }
@@ -785,6 +750,8 @@ input[type='search']{
   color:#ff4aa0 !important
 }
 .footerNav .tabelitem img{
+  position:relative;
+  top:0.05rem;
   width:0.5rem;
   height:0.5rem;
 }
@@ -808,7 +775,7 @@ input[type='search']{
   z-index:26;
   bottom:0.05rem;
   font-size:0.20rem;
-  color:#bbb;
+  color:#929292;
 }
 .footerNav .tabelitem .showGrass img{
       width:0.83rem !important;
