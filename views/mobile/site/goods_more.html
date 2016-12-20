@@ -36,7 +36,7 @@
 </div>
 <!--loading页结束-->
 <!--三级分类-->
-<section id="category" v-clack>
+<section id="category" v-cloak>
     <div id="category_third" >
         <div class="product_item" v-for="item in brand_list">
             <a :href="item.url">
@@ -59,7 +59,7 @@
         </div>
     </div>
     <footer>
-    <div class="flexbox empty_product" style="background:#a5eced" v-if="infoState">
+    <div class="flexbox empty_product" style="background:#f8f8f8" v-if="infoState">
         <div class="img">
             <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
         </div>
@@ -113,9 +113,9 @@ var stop=true;
 			},
 			mounted:function(){
 				var self = this;
-				if(getSession("info")){
-					self.info=getSession("info");
-					self.page=getSession("page")
+				if(getSession("goodsinfo")){
+					self.info=getSession("goodsinfo");
+					self.page=getSession("goodsinfo")
 				}else{
 						self.page=1;
 						getActiveInfo(self);
@@ -147,7 +147,7 @@ var stop=true;
 					data.goods_list.map(function(item){
 						self.info.push(item);
 					})
-					pushSession("info",self.info)
+					pushSession("goodsinfo",self.info)
 					self.tre = data.title;
 					if(data.goods_list==''){
 						self.infoState=true;
@@ -159,7 +159,7 @@ var stop=true;
 	                console.log(self.page)
 	                self.page++;
 	                
-	                pushSession("page",self.page)
+	                pushSession("goodspage",self.page)
 	                
 				}
 

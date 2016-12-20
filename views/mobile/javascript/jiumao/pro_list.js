@@ -30,18 +30,7 @@ var vm= new Vue({
 
     },
     computed:{
-//  	最新
-		new_goodsMore:function(){
-			return "/site/goods_more?tid="+getId+"&mid=1";
-		},
-		//  	最热卖
-		hot_goodsMore:function(){
-			return "/site/goods_more?tid="+getId+"&mid=2";
-		},
-		//  	推荐
-		recommended_goodsMore:function(){
-			return "/site/goods_more?tid="+getId+"&mid=3";
-		},
+//  	
         hotCat: function(){
             this.info.category_list.map(function(item){
                 item.url="/site/category_third/id/"+item.id+"/title/"+item.name;
@@ -95,6 +84,13 @@ var vm= new Vue({
             anim:false,
             selectorName:".samLazyImg"
         });
+    },
+    methods:{
+    	toGoodsMore:function(mid){
+    		removeSessionItem("goodsinfo");
+    		removeSessionItem("goodspage");
+    		window.location.href="/site/goods_more?tid="+sub_data.tid+"&mid="+mid;
+    	}
     }
 })
 //页面加载完成后调用的功能
@@ -198,4 +194,7 @@ function GetRequest() {
         }
     }
     return theRequest;
-}
+};
+    function removeSessionItem(key){
+        window.sessionStorage.removeItem(key);
+    };

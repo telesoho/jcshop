@@ -134,7 +134,7 @@
 				<div class="left">
 					<img src="/views/mobile/skin/default/image/jmj/product/new.png" alt="" style="width:3.07rem;height:0.66rem" />
 				</div>
-				<a :href="new_goodsMore"  class="locationA">
+				<a href="#" @click="toGoodsMore(1)">
 					<div class="right">
 						<span>更多</span>
 						<img src="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" />
@@ -213,7 +213,7 @@
 					<img src="/views/mobile/skin/default/image/jmj/product/hot.png" alt="" style="width:3.06rem;height:0.66rem" />
 				</div>
 				<div class="right">
-					<a :href="hot_goodsMore"  class="locationA">
+					<a href="#" @click="toGoodsMore(2)">
 						<span>更多</span>
 						<img dataimg="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
 					</a>
@@ -272,7 +272,7 @@
 					<div class="left">
 						<img :src="info.pic" alt="" style="width:3.75rem;height:0.66rem" />
 					</div>
-					<a :href="recommended_goodsMore"  class="locationA">
+					<a href="#" @click="toGoodsMore(3)">
 						<div class="right">
 							<span>更多</span>
 							<img src="/views/mobile/skin/default/image/jmj/icon/more.png" alt="" />
