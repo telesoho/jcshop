@@ -1198,6 +1198,9 @@ class Apic extends IController{
 			ISafe::set('visit', $visit);
 		}
 		
+		/* 记录用户操作 */
+		
+		
 		/* 返回参数 */
 		$this->json_echo($dataGoods);
 	}

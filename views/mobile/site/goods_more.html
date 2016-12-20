@@ -38,26 +38,24 @@
 <!--三级分类-->
 <section id="category">
     <div id="category_third">
-        {foreach:items=$this->data_goods}
-        <div class="product_item" id="product_item{$item['id']}">
-            <a href="{url:/site/products?id=$item['id']}">
+        <div class="product_item" id="product_item'id'">
+            <a href="{url:/site/products?id='id'}">
                 <div class="img">
                     <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"  />
-                    <img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$item['img'].'/w/360/h/360')}" alt="" class="samLazyImg img-ware" />
+                    <img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.'img'.'/w/360/h/360')}" alt="" class="samLazyImg img-ware" />
                 </div>
                 <div class="content">
                     <div class="name">
-                        {$item['name']}
+                        'name'
                     </div>
                     <div class="price">
-                        <span class="sellprice">¥{$item['sell_price']}</span>
-                        <span class="japanprice">日本价：{$item['jp_price']}円</span>
-                        <span class="openprice">国内价：¥{$item['market_price']}</span>
+                        <span class="sellprice">¥'sell_price'</span>
+                        <span class="japanprice">日本价：'jp_price'円</span>
+                        <span class="openprice">国内价：¥'market_price'</span>
                     </div>
                 </div>
             </a>
         </div>
-        {/foreach}
     </div>
 </section>
 <script src="/views/mobile/javascript/template-native.js"></script>
