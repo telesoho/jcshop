@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
-    <title>{echo:IReq::get('title')}</title>
+    <title></title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css" />
 </head>
@@ -36,50 +36,183 @@
 </div>
 <!--loading页结束-->
 <!--三级分类-->
-<section id="category">
-    <div id="category_third">
-        <div class="product_item" id="product_item'id'">
-            <a href="{url:/site/products?id='id'}">
+<section id="category" v-clack>
+    <div id="category_third" >
+        <div class="product_item" v-for="item in brand_list">
+            <a :href="item.url">
                 <div class="img">
                     <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"  />
-                    <img src="{echo:IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.'img'.'/w/360/h/360')}" alt="" class="samLazyImg img-ware" />
+                    <img :dataimg="item.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg img-ware" />
+                    <img src="" alt="" class="" />
                 </div>
                 <div class="content">
                     <div class="name">
-                        'name'
+						{{item.name}}
                     </div>
                     <div class="price">
-                        <span class="sellprice">¥'sell_price'</span>
-                        <span class="japanprice">日本价：'jp_price'円</span>
-                        <span class="openprice">国内价：¥'market_price'</span>
+                        <span class="sellprice">¥{{item.sell_price}}</span>
+                        <span class="japanprice">日本价：{{item.jp_price}}円</span>
+                        <span class="openprice">国内价：¥{{item.market_price}}</span>
                     </div>
                 </div>
             </a>
         </div>
     </div>
+    <footer>
+    <div class="flexbox empty_product" style="background:#a5eced" v-if="infoState">
+        <div class="img">
+            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+        </div>
+        <div class="content">
+            <span style="color:#fff">~</span>
+            <span style="color:#fff">憋拉了，到底了</span>
+            <span style="color:#fff">~</span>
+        </div>
+    </div>
+</footer>
 </section>
-<script src="/views/mobile/javascript/template-native.js"></script>
-<script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/lazyload.js"></script>
-<script src="/views/mobile/javascript/jiumao/common.js"></script>
-<script>
-//     页面加载动画的调用
-    var stop=true;
-    $(window).bind('scroll', function() {
-        if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
-            stop=true;
-            if(stop==true){
-                $("#category_third").clone().appendTo("#category");
-                stop=false;
-            }
-        }
-    });
-    $(window).load(function(){
+
+
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+
+<script type="text/javascript">
+ $(window).load(function(){
         $("#loading").fadeOut(300);
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','a',function(){document.location.href=this.href;});
     })
+var stop=true;
+	var Request = new Object();
+    Request = GetRequest();
+    var tidOrder=Request["tid"];
+    var midOrder=Request["mid"];
+		var em = new Vue({
+			el:"#category",
+			data:{
+				tid:tidOrder,
+				mid:midOrder,
+				info:[],
+				tre:"",
+				page:1,
+				stop:false,
+				infoState:false
+			},
+			computed:{
+				brand_list:function(){
+					this.info.map(function(item){
+						item.url="/site/products?id="+item.id;
+						
+					})
+					document.title=this.tre;
+					
+					return this.info;
+				},
+			},
+			mounted:function(){
+				var self = this;
+				if(getSession("info")){
+					self.info=getSession("info");
+					self.page=getSession("page")
+				}else{
+						self.page=1;
+						getActiveInfo(self);
+				}	
+			},
+			updated:function() {
+				// 页面加载完成执行的函数;
+				lazyload.init({
+					anim:false,
+					selectorName:".samLazyImg"
+				});
+			},
+			methods:{
+
+			},
+		})
+		function getActiveInfo(self){
+			mui.ajax('/apic/goods_more', {
+				data:{
+					tid:self.tid,
+					mid:self.mid,
+					page:self.page
+				},
+				dataType: 'json',
+				type: 'get',
+				timeout: 10000,
+				success: function(data){
+					console.log(data)
+					data.goods_list.map(function(item){
+						self.info.push(item);
+					})
+					pushSession("info",self.info)
+					self.tre = data.title;
+					if(data.goods_list==''){
+						self.infoState=true;
+	                    stop=false;
+	                }else{
+	                	 self.infoState=false;
+	                    stop=true; 
+	                }
+	                console.log(self.page)
+	                self.page++;
+	                
+	                pushSession("page",self.page)
+	                
+				}
+
+			});
+		};
+
+
+$(window).bind('scroll', function() {
+	if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+        if(stop==true){
+            stop=false;
+            getActiveInfo(em);
+        }
+   }
+});
+
+ //	获取url传递过来的参数
+    function GetRequest() {
+      var url = location.search; //获取url中"?"符后的字串
+      var theRequest = new Object();
+      if (url.indexOf("?") != -1) {
+          var str = url.substr(1);
+          strs = str.split("&");
+          for(var i = 0; i < strs.length; i ++) {
+              theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+          }
+      }
+      return theRequest;
+    };
+   
+		//			缓存
+    function pushSession(key,value){
+        var val=JSON.stringify(value)?JSON.stringify(value):[];
+        if(window.sessionStorage){
+            sessionStorage.setItem(key,val);
+        }else{
+            console.log("无法使用缓存");
+            return "";
+        }
+    }
+    function getSession(key){
+        if(window.sessionStorage){
+            var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+            return JSON.parse(state);
+        }else{
+            console.log("无法使用缓存");
+            return "";
+        }
+    }
+    function removeSessionItem(key){
+        window.sessionStorage.removeItem(key);
+    }
+
 
 </script>
 </body>
