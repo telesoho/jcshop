@@ -23,6 +23,18 @@ class Common{
 	}
 	
 	/**
+	 * 调试-数据库写入
+	 * @param $data
+	 */
+	public static function dblog($data){
+		//数据库
+		$data  = json_encode($data);
+		$model = new IModel('log_debug');
+		$model->setData(array('msg' => $data, 'date' => date('Y-m-d H:i:s', time())));
+		return $model->add();
+	}
+	
+	/**
 	 * @brief 获取评价分数
 	 * @param $grade float 分数
 	 * @param $comments int 评论次数
