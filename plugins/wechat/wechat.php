@@ -148,7 +148,7 @@ class wechat extends pluginBase
 					$unId = $this->bindUser($result);
 					$this->login($unId);
 				}
-				header('location: '.$_SERVER['HTTP_HOST'].urldecode($state));
+				header('location: http://'.$_SERVER['HTTP_HOST'].urldecode($state));
 			}
     	}
     	else
