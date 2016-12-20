@@ -131,7 +131,8 @@ class wechat extends pluginBase
     {
     	$code  = IReq::get('code');
     	$state = IReq::get('state');
-
+	
+		Common::dblog(array(3,'location: '.$_SERVER['HTTP_HOST'].urldecode($state),$state));
     	//oauth回调处理
     	if($code && $state)
     	{
@@ -147,8 +148,7 @@ class wechat extends pluginBase
 					$unId = $this->bindUser($result);
 					$this->login($unId);
 				}
-				Common::dblog('location: '.$_SERVER['HTTP_HOST'].urldecode($state));
-				header('location: '.$_SERVER['HTTP_HOST'].urldecode($state));
+				header('location: http://'.$_SERVER['HTTP_HOST'].urldecode($state));
 			}
     	}
     	else
@@ -583,14 +583,14 @@ class wechat extends pluginBase
 //		$url = $this->converUrl($url);
 		$urlArr = parse_url($url);
 		
-		Common::dblog($url);
-		Common::dblog(urlencode((isset($urlArr['path']) ? $urlArr['path'] : '').(isset($urlArr['query']) ? '&'.$urlArr['query'] : '')));
+		Common::dblog(array(1,$url));
+		Common::dblog(array(2,urlencode((isset($urlArr['path']) ? $urlArr['path'] : '').(isset($urlArr['query']) ? '&'.$urlArr['query'] : ''))));
 		$urlparam = array(
 			'appid='.$this->config['wechat_AppID'],
 			'redirect_uri='.urlencode($this->getOauthCallback()),
 			'response_type=code',
 			'scope='.$snsType,
-			'state='.urlencode((isset($urlArr['path']) ? $urlArr['path'] : '').(isset($urlArr['query']) ? '&'.$urlArr['query'] : '')),//urlencode($url),
+			'state='.urlencode((isset($urlArr['path']) ? $urlArr['path'] : '').(isset($urlArr['query']) ? '?'.$urlArr['query'] : '')),//urlencode($url),
 			'connect_redirect=1',
 		);
 		$apiUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?".join("&",$urlparam)."#wechat_redirect";
