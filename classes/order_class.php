@@ -983,7 +983,9 @@ class Order_Class
 	 * @return array 查询条件（$join,$where）数据组
 	 */
 	public static function getSearchCondition($search){
-		$join  = "LEFT JOIN delivery AS d ON o.distribution=d.id LEFT JOIN payment AS p ON o.pay_type=p.id";
+		$join  = "LEFT JOIN delivery AS d ON o.distribution=d.id ".
+			"LEFT JOIN payment AS p ON o.pay_type=p.id ".
+			"LEFT JOIN user AS u ON u.id=o.user_id";
 		$where = "if_del = 0";
 		
 		/* 搜索条件 */
@@ -992,7 +994,7 @@ class Order_Class
 			$keywords = IFilter::act($search['keywords'], 'string');
 			//订单号、收货人
 			if(!empty($keywords))
-				$where .= " AND (o.order_no='".$keywords."' OR o.accept_name='".$keywords."')";
+				$where .= " AND (o.order_no='".$keywords."' OR o.accept_name='".$keywords."' OR u.username='".$keywords."')";
 		}
 		//是否平台自营
 		if(isset($search['is_seller'])){
@@ -1018,32 +1020,14 @@ class Order_Class
 			$status = IFilter::act($search['status'], 'int');
 			$where .= " and o.status = ".$status;
 		}
-		
-		// 下单时间
-		if(isset($search['create_time']) && !empty($search['create_time'])){
-			$create_time = explode(",", $search['create_time']);
-			// 验证日期
-			$is_check_0 = ITime::checkDateTime($create_time[0]);
-			$is_check_1 = false;
-			if(isset($create_time[1])){
-				$is_check_1 = ITime::checkDateTime($create_time[1]);
-			}
-			if($is_check_0 && $is_check_1){
-				// 是否相等
-				if($create_time[0] == $create_time[1]){
-					$where .= " and o.create_time between '".$create_time[0]." 00:00:00' and '".$create_time[0]." 23:59:59'";
-				}else{
-					$difference = ITime::getDiffSec($create_time[0].' 00:00:00', $create_time[1].' 00:00:00');
-					if(0 < $difference){
-						$where .= " and o.create_time between '".$create_time[1]." 00:00:00' and '".$create_time[0]." 23:59:59'";
-					}else{
-						$where .= " and o.create_time between '".$create_time[0]." 00:00:00' and '".$create_time[1]." 23:59:59'";
-					}
-				}
-			}elseif($is_check_0){
-				$where .= " and o.create_time between '".$create_time[0]." 00:00:00' and '".$create_time[0]." 23:59:59'";
-			}
+		//下单时间
+		if(isset($search['create_time_start']) && !empty($search['create_time_start'])){
+			$where .= " AND o.create_time>='".$search['create_time_start']."'";
 		}
+		if(isset($search['create_time_end']) && !empty($search['create_time_end'])){
+			$where .= " AND o.create_time<='".$search['create_time_end']."'";
+		}
+		
 		//关键字搜索
 //		if(isset($search['name']) && isset($search['keywords'])){
 //			$name = IFilter::act($search['name'], 'string');

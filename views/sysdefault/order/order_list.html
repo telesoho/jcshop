@@ -19,8 +19,8 @@
 				<option value="seller">商家订单</option>
 			</select> -->
 
-			<button class="btn" type="submit"  onclick='changeAction(false)'><span class="sel">筛 选</span></button>
-			关键词：<input class="small" name="search[keywords]" type="text" value="" placeholder="订单号、收货人"/>
+			<button class="btn" type="submit"  onclick='changeAction()'><span class="sel">筛 选</span></button>
+			关键词：<input class="small" name="search[keywords]" type="text" value="" placeholder="单号|收货人|用户名" style="width:120px;" />
 			<select name="search[pay_status]" class="auto">
 				<option value="">支付状态</option>
 				<option value="0">未支付</option>
@@ -51,11 +51,12 @@
 				<option value="order_no">订单号</option>
 				<option value="seller_name">商户真实名称</option>
 			</select> -->
-			下单：<input class="small" type="text" name="create_time_start" id="create_time_start" onfocus="WdatePicker()" value="" placeholder="开始时间" style="width:70px;"/>-
-			<input class="small" type="text" name="create_time_end" id="create_time_end" onfocus="WdatePicker()" value="" placeholder="结束时间" style="width:70px;"//>
+			下单：<input class="Wdate" type="text" name="search[create_time_start]" id="create_time_start" readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" placeholder="开始时间" />-
+			<input class="Wdate" type="text" name="search[create_time_end]" id="create_time_end" readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" placeholder="结束时间" //>
 			
 			<button class="btn" type="button" onclick='initSearchbar(1)'><span class="add">更 多</span></button>
-			<button class="btn" onclick='changeAction(true)'><span class="sel">导出Excel</span></button>
+			<button class="btn" onclick='changeAction("order_report");'><span class="sel">导出Excel</span></button>
+			<button class="btn" onclick='changeAction("order_report_easy")'><span class="sel">导出未发货商品Excel</span></button>
 			<input type="hidden" name="search[adv_search]" value="" />
 			<input type="hidden" name="search[send_time]" value="" />
 			<input type="hidden" name="search[create_time]" value="" />
@@ -183,18 +184,21 @@ $(function(){
 	$('[name="orderStatusColor4"]').addClass('red');
 	$('[name="orderStatusColor5"]').addClass('green');
 });
-function changeAction(excel)
+function changeAction(url)
 {
 	setDatetimeVal('send_time');
 	setDatetimeVal('create_time');
 	setDatetimeVal('completion_time');
-	if (excel){
-		$("input[name=\"action\"]").val("order_report");
-		$("form[name=\"order_list\"]").attr("target", "_blank");
-	}else{
-		$("input[name=\"action\"]").val("order_list");
-		$("form[name=\"order_list\"]").attr("target", "_self");
-	}
+	$("input[name=\"action\"]").val((url==undefined ? 'order_list' : url));
+	$("form[name=\"order_list\"]").attr("target", (url==undefined ? '_self' : '_blank'));
+	
+	// if (excel){
+	// 	$("input[name=\"action\"]").val("order_report");
+	// 	$("form[name=\"order_list\"]").attr("target", "_blank");
+	// }else{
+	// 	$("input[name=\"action\"]").val("order_list");
+	// 	$("form[name=\"order_list\"]").attr("target", "_self");
+	// }
 }
 
 // 设置订单总额的值
@@ -310,4 +314,10 @@ function convertDatetimeVal(name)
 	}
 	return true;
 }
+
+var page = {
+	loading 			: false,
+	
+};
+
 </script>

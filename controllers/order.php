@@ -678,12 +678,11 @@ class Order extends IController implements adminAuthorization
     /**
      * @brief 订单列表
      */
-    public function order_list()
-    {
+    public function order_list(){
+    	
 		//搜索条件
 		$search = IReq::get('search');
 		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
-		
 		//条件筛选处理
 		list($join,$where) = order_class::getSearchCondition($search);
 
@@ -1463,10 +1462,10 @@ class Order extends IController implements adminAuthorization
 	}
 
 	//订单导出excel 参考订单列表
-	public function order_report()
-	{
+	public function order_report(){
+		
 		//搜索条件
-		$search = IFilter::act(IReq::get('search'),'strict');
+		$search = IFilter::act(IReq::get('search'));
 		//条件筛选处理
 		list($join,$where) = order_class::getSearchCondition($search);
 		//拼接sql
@@ -1474,10 +1473,6 @@ class Order extends IController implements adminAuthorization
 		$orderHandle->order  = "o.id desc";
 		$orderHandle->fields = "o.*,d.name as distribute_name,p.name as payment_name";
 		$orderHandle->join   = $join;
-
-		//下单时间
-		if(!empty($_GET['create_time_start'])) $where .= " and o.create_time >= '".$_GET['create_time_start']." 00:00:00'";
-		if(!empty($_GET['create_time_end'])) $where .= " and o.create_time <= '".$_GET['create_time_end']." 23:59:59'";
 		$orderHandle->where  = $where;
 		$orderList = $orderHandle->find();
 		
@@ -1565,6 +1560,67 @@ class Order extends IController implements adminAuthorization
 		$reportObj->toDownload($strTable);
 		exit();
 	}
+	
+	/**
+	 * 导出未发货商品excel
+	 */
+	public function order_report_easy(){
+		//搜索条件
+		$search = IFilter::act(IReq::get('search'));
+		//条件筛选处理
+		list($join,$where) = order_class::getSearchCondition($search);
+		//拼接sql
+		$orderHandle = new IQuery('order as o');
+		$orderHandle->order  = "o.id desc";
+		$orderHandle->fields = "o.id AS order_id,o.status,o.pay_status,o.distribution_status,g.id AS goods_id,g.goods_no,g.name,g.name_jp,c.goods_nums,c.is_send";
+		$orderHandle->join   = $join.' LEFT JOIN order_goods AS c ON c.order_id=o.id LEFT JOIN goods AS g ON g.id=c.goods_id';
+		$orderHandle->where  = $where;
+		$orderList = $orderHandle->find();
+		
+		$goodsData = array();
+		foreach($orderList as $k => $v){
+			if($v['status']==2 && $v['pay_status']==1 && $v['distribution_status']!=1 && $v['is_send']==0 ){
+				if(isset($goodsData[$v['goods_id']])){
+					//更新数量
+					$goodsData[$v['goods_id']]['goods_nums'] += $v['goods_nums'];
+				}else{
+					//添加商品
+					$goodsData[$v['goods_id']] = array(
+						'goods_name' => $v['name'],
+						'goods_name_jp' => $v['name_jp'],
+						'goods_no' => $v['goods_no'],
+						'goods_nums' => $v['goods_nums'],
+					);
+				}
+			}
+		}
+		
+		$strTable ='<table width="500" border="1">';
+		$strTable .= '<tr>';
+		$strTable .= '<td style="text-align:center;font-size:12px;width:120px;">商品编号</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品名称</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品日文名</td>';
+		$strTable .= '</tr>';
+		
+		foreach($goodsData as $k => $v){
+			$strTable .= '<tr>';
+			$strTable .= '<td style="text-align:center;font-size:12px;">&nbsp;'.$v['goods_no'].'</td>';
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$v['goods_nums'].' </td>';
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$v['goods_name'].' </td>';
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$v['goods_name_jp'].' </td>';
+			$strTable .= '</tr>';
+		}
+		$strTable .='</table>';
+		
+		$reportObj = new report();
+		$reportObj->setFileName('未发货商品');
+		$reportObj->toDownload($strTable);
+		exit();
+		
+	}
+	
+	
 	function order_settlement(){
         $order_id = IFilter::act(IReq::get('id'),'int');
         $order_model = new IModel('order');
