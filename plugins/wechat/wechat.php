@@ -132,6 +132,7 @@ class wechat extends pluginBase
     	$code  = IReq::get('code');
     	$state = IReq::get('state');
 	
+		Common::dblog(array(3,'location: '.$_SERVER['HTTP_HOST'].urldecode($state),$state));
     	//oauth回调处理
     	if($code && $state)
     	{
@@ -581,6 +582,9 @@ class wechat extends pluginBase
 	{
 //		$url = $this->converUrl($url);
 		$urlArr = parse_url($url);
+		
+		Common::dblog(array(1,$url));
+		Common::dblog(array(2,urlencode((isset($urlArr['path']) ? $urlArr['path'] : '').(isset($urlArr['query']) ? '&'.$urlArr['query'] : ''))));
 		$urlparam = array(
 			'appid='.$this->config['wechat_AppID'],
 			'redirect_uri='.urlencode($this->getOauthCallback()),
