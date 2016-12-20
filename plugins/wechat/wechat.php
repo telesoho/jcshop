@@ -147,6 +147,7 @@ class wechat extends pluginBase
 					$unId = $this->bindUser($result);
 					$this->login($unId);
 				}
+				Common::dblog('location: '.$_SERVER['HTTP_HOST'].urldecode($state));
 				header('location: '.$_SERVER['HTTP_HOST'].urldecode($state));
 			}
     	}
@@ -581,6 +582,9 @@ class wechat extends pluginBase
 	{
 //		$url = $this->converUrl($url);
 		$urlArr = parse_url($url);
+		
+		Common::dblog($url);
+		Common::dblog(urlencode((isset($urlArr['path']) ? $urlArr['path'] : '').(isset($urlArr['query']) ? '&'.$urlArr['query'] : '')));
 		$urlparam = array(
 			'appid='.$this->config['wechat_AppID'],
 			'redirect_uri='.urlencode($this->getOauthCallback()),
