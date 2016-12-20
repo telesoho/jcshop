@@ -67,6 +67,9 @@ class Menu
                 '/order/order_shop' => '店铺列表',
                 '/order/order_shop_category' => '店铺分类'
         	),
+			'物流管理'=>array(
+				'/order/order_list' => '入库记录',
+			),
         	'单据管理'=>array(
              	'/order/order_collection_list'  => '收款单',
              	'/order/order_refundment_list'  => '退款单',
