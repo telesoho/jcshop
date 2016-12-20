@@ -7,9 +7,12 @@
  */
 class Common{
 	
+	
 	/**
 	 * 记录用户操作
-	 *
+	 * @param int $type
+	 * @param int $did
+	 * @return bool
 	 */
 	public static function record($type = 0, $did = 0){
 		/* 获取当前用户 */
