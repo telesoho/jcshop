@@ -1267,7 +1267,7 @@ class Apic extends IController{
 		/* 商品列表 */
 		$queryGoods           = new IQuery('goods AS m');
 		$queryGoods->join     = 'LEFT JOIN commend_goods AS d ON d.goods_id=m.id LEFT JOIN category_extend AS c ON c.goods_id=m.id';
-		$queryGoods->fields   = 'm.id,m.name,m.sell_price,m.img';
+		$queryGoods->fields   = 'm.id,m.name,m.sell_price,m.img,m.market_price,m.jp_price';
 		$queryGoods->where    = $where;
 		$queryGoods->order    = $order;
 		$queryGoods->page     = $page<1 ? 1 : $page;
