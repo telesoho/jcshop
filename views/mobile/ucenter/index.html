@@ -45,11 +45,11 @@
     </header>-->
     <section id="user_Info">
     	<div class="headBox">
-	        <div class="whiteBack">
+	        <div class="whiteBack" v-cloak>
 	            <img src="/views/mobile/skin/default/image/jmj/img/cat_logo.png" v-if='info.head_ico == null' />
 	            <img :src="info.head_ico" v-else />
 	        </div>
-	        <div id="nameLogn">
+	        <div id="nameLogn" v-cloak>
 			    <div class="userName hidewrap" v-if="info.username == null">九猫家的小小猫</div>
 			    <div class="userName hidewrap" style="width:1.7rem;height: 0.5rem;" v-else>{{info.username}}</div>
 	        </div>

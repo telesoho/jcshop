@@ -37,29 +37,7 @@
 </div>
 <!--loading页结束-->
 <div id="searth_container">
-    <section class="search-header" id="homeHeader">
-        <div class="inputContent">
-            <form onsubmit="searthSubmit()">
-                <input type="search" :placeholder="searth_pla" id="search" @focus="showSearth" v-model="searth_word" />
-                <img class="search_ico" src="/views/mobile/skin/default/image/jmj/new_active/index/search.png" alt="" />
-            </form>
-            <img src="/views/mobile/skin/default/image/jmj/new_active/index/leftear.png" alt="" class="left-icon" />
-            <img src="/views/mobile/skin/default/image/jmj/new_active/index/rightear.png" alt="" class="right-icon" />
-            <img src="/views/mobile/skin/default/image/jmj/new_active/index/flower.png" alt="" class="img-flower" />
-            <div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
-        </div>
-        <!--模态框-->
-        <div id="modalid-search" class="hide">
-            <div class="title">
-                猫猫都在搜
-            </div>
-            <div class="search-content">
-                <a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in search" v-if="key<12">{{item.word}}</a>
-            </div>
-            <button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
-            <button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
-        </div>
-    </section>
+    <search-nav :search="search" :val="searth_word"></search-nav>
     <template v-if="showMessage && infoMessage.goods==''&&infoMessage.article==''" v-cloak>
         <div class="empty">
             <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;">
@@ -167,6 +145,8 @@
 <!--头信息结束-->
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
+<!--搜索组件引入-->
+<script src="/views/mobile/components/search_nav.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/base64.js?v=<?php echo time(); ?>"></script>

@@ -38,29 +38,7 @@
 <!--loading页结束-->
 <!--头部-->
 <section id="siteMap">
-	<section class="search-header" id="homeHeader">
-		<div class="inputContent">
-			<form onsubmit="searthSubmit()" action="/site/search_list">
-				<input type="search" placeholder="" id="search" onfocus="getSearth();" />
-				<img class="search_ico" src="/views/mobile/skin/default/image/jmj/new_active/index/search.png" alt="" />
-			</form>
-			<img src="/views/mobile/skin/default/image/jmj/new_active/index/leftear.png" alt="" class="left-icon" />
-			<img src="/views/mobile/skin/default/image/jmj/new_active/index/rightear.png" alt="" class="right-icon" />
-			<img src="/views/mobile/skin/default/image/jmj/new_active/index/flower.png" alt="" class="img-flower" />
-			<div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
-		</div>
-		<!--模态框-->
-		<div id="modalid-search" class="hide">
-			<div class="title">
-				猫猫都在搜
-			</div>
-			<div class="search-content">
-				<a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in hotWord" v-if="key<10">{{item.word}}</a>
-			</div>
-			<button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
-			<button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
-		</div>
-	</section>
+    <search-nav :search="hotWord" :val="null"></search-nav>
 	<!--分类页面-->
 	<section class="box" id="scroll_sitemap" v-if="showMessage">
 		<div class="mui-scroll-wrapper" id="left-scroll" v-cloak>
@@ -113,6 +91,8 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<!--搜索组件引入-->
+<script src="/views/mobile/components/search_nav.js?v=<?php echo time(); ?>"></script>
 <!--//底部导航样式的引入-->
 <script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
