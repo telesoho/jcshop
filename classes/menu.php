@@ -112,7 +112,10 @@ class Menu
 			'商户数据统计'=>array(
 				'/market/order_goods_list' => '货款明细列表',
 				'/market/bill_list' => '货款结算申请',
-			)
+			),
+			'用户行为统计'=>array(
+				'/market/user_record_list' => '用户浏览记录',
+			),
 		),
 
 

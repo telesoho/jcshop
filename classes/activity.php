@@ -12,13 +12,13 @@ class Activity{
 		$modelAti = new IModel('activity');
 		$dataAti  = $modelAti->getObj('id='.$aid);
 		if(empty($dataAti))
-			return apireturn::go('002016'); //活动不存在
+			return apiReturn::go('002016'); //活动不存在
 		if($dataAti['status']!=1)
-			return apireturn::go('002017'); //活动禁用
+			return apiReturn::go('002017'); //活动禁用
 		if($dataAti['start_time']>time())
-			return apireturn::go('002018'); //活动未开始
+			return apiReturn::go('002018'); //活动未开始
 		if($dataAti['end_time']<time())
-			return apireturn::go('002019'); //活动已结束
-		return apireturn::go('0',$dataAti);
+			return apiReturn::go('002019'); //活动已结束
+		return apiReturn::go('0',$dataAti);
 	}
 }
