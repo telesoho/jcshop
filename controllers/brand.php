@@ -140,6 +140,11 @@ class Brand extends IController implements adminAuthorization
 		$description = IFilter::act(IReq::get('description'),'text');
 
 		$tb_brand = new IModel('brand');
+        $data = $tb_brand->getObj('name = "' . $name . '"');
+        if ($data){
+            $this->brand_list();
+        }
+
 		$brand = array(
 			'name'=>$name,
 			'sort'=>$sort,
