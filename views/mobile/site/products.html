@@ -42,7 +42,7 @@
 				<div class="mui-slider-group mui-slider-loop">
 					<div class="mui-slider-item mui-slider-item-duplicate">
 						<a href="#">
-							<img :src="info.photo[info.photo.length-1].img">
+							<img :src="showLastImg" >
 						</a>
 					</div>
 					<div class="mui-slider-item" v-for="item in aaa">
@@ -52,7 +52,7 @@
 					</div>
 					<div class="mui-slider-item mui-slider-item-duplicate">
 						<a href="#">
-							<img :src="info.photo[0].img">
+							<img :src="info.photo[0]">
 						</a>
 					</div>
 				</div>
@@ -293,6 +293,11 @@
 				nowTop:0
 			},
 			computed: {
+				showLastImg:function(){
+					var len=this.info.photo.length-1;
+					console.log(len);
+					return 	this.info.photo[len];
+				},
 //				滚动位置的样式
 				nowStyle:function(){
 					return "top:"+this.nowTop+"px";

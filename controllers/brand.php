@@ -143,7 +143,6 @@ class Brand extends IController implements adminAuthorization
 //        if ($data){
 //            $this->brand_list();
 //        }
-
 		$brand = array(
 			'name'=>$name,
 			'sort'=>$sort,
@@ -176,14 +175,11 @@ class Brand extends IController implements adminAuthorization
 		}
 		
 		$tb_brand->setData($brand);
-		if($brand_id)
-		{
+		if($brand_id){
 			//保存修改分类信息
 			$where = "id=".$brand_id;
 			$tb_brand->update($where);
-		}
-		else
-		{
+		}else{
 			//添加新品牌
 			$tb_brand->add();
 		}
