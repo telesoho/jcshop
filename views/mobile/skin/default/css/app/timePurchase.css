@@ -34,8 +34,8 @@ body{
 .headerTitle  .title.active:after{
     position:absolute;
     content:'';
-    left:1.1rem;
-    bottom:-0.12rem;
+    left:1.15rem;
+    bottom:-0.11rem;
     width: 0;
     height: 0;
     border-left: 0.12rem solid transparent;
@@ -69,6 +69,8 @@ body{
     width:1.6rem;
     height:1.6rem;
     position:absolute;
+    top:0.665rem;
+    left:0.395rem;
 }
 #timePurchasePage .content .item .text{
     height:2.93rem;
@@ -107,10 +109,11 @@ body{
 #timePurchasePage .content .item .bottom .num{
     position:relative;
     margin-top:0.37rem;
-    border:0.02rem solid #ff6161;
+    border:1px solid #ff6161;
     border-radius:0.44rem;
     width:1.95rem;
     height:0.44rem;
+    line-height:0.43rem;
     text-align:center;
     overflow: hidden;
     font-size:0.26rem;
