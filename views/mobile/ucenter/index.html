@@ -45,20 +45,16 @@
     </header>-->
     <section id="user_Info">
     	<div class="headBox">
-	        <div class="whiteBack">
-	            
+	        <div class="whiteBack" v-cloak>
 	            <img src="/views/mobile/skin/default/image/jmj/img/cat_logo.png" v-if='info.head_ico == null' />
-	           
 	            <img :src="info.head_ico" v-else />
-	        </div> 
-	        <div id="nameLogn">
-
+	        </div>
+	        <div id="nameLogn" v-cloak>
 			    <div class="userName hidewrap" v-if="info.username == null">九猫家的小小猫</div>
-
 			    <div class="userName hidewrap" style="width:1.7rem;height: 0.5rem;" v-else>{{info.username}}</div>
-
+	        </div>
 	    </div>
-	    </div>
+        <footer-nav :state="4"></footer-nav>
     </section>
     <section id="section-user-info">
             <ul class="myOrders mui-table-view">
@@ -209,75 +205,36 @@
                 </li>
             </ul>-->
     </section>
-<footer>
-    <nav class="mui-bar mui-bar-tab"  style="z-index:25">
-        <a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">
-                <span class="mui-icon nav-icon icon-home">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/home-ed.png" data-img="homeactive.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">首页</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/site/sitemap}">
-                <span class="mui-icon nav-icon icon-classification">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/mune.png" data-img="muneed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">分类</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/site/favorite}">
-                <span class="nav-icon icon-vedio">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/grass.png" data-img="grass.png" alt="" class="img-move02">
-                    <div class="grow" style="margin-top:0 ;">种草</div>
-                    <span class="tab-mark"></span>
-                </span>
-        </a>
-        <a class="mui-tab-item" href="{url:simple/cart}">
-                <span class="mui-icon nav-icon icon-shopcar">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/buy.png"  data-img="buybg.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">购物车</div>
-        </a>
-        <a class="mui-tab-item  mui-active" href="{url:/ucenter/index}">
-                <span class="mui-icon nav-icon icon-my">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/myed.png"  data-img="my.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">我的</div>
-        </a>
-    </nav>
-</footer>
 
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/template-native.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<!--//底部导航样式的引入-->
+<script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script>
     $(window).load(function(){
         $("#loading").fadeOut(300);
         //解决tab选项卡a标签无法跳转的问题
-        mui('body').on('tap','.mui-tab-item',function(){
-            if(!$(this).hasClass("mui-active")){
-                $(this).find(".mui-tab-label").addClass("tabBar_color");
-                document.location.href=this.href;
-            }
-        });
         mui('body').on("tap",'.locationA',function(){
             window.location.href=this.href;
         })
     })
-    
+
     var em = new Vue({
     	el:"#user_Info",
 		data:{
 			info:""
 		},
-	
+
 		mounted: function(){
 			var self = this;
 			getInfo(self);
 		}
     })
-    
-    
+
+
     function getInfo(self){
         mui.ajax('/apic/info',{
             dataType:'json',	// 服务器返回json格式数据
@@ -285,9 +242,9 @@
             timeout:10000,		// 超时时间设置为10秒；
             success:function(data){
             	console.log(data)
-            	self.info=data 	
+            	self.info=data
             }
-//            
+//
         });
     }
     function setState(sta){

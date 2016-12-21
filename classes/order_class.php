@@ -982,199 +982,136 @@ class Order_Class
 	 * @param int $search 条件数组
 	 * @return array 查询条件（$join,$where）数据组
 	 */
-	public static function getSearchCondition($search)
-	{
-		$join  = "left join delivery as d on o.distribution = d.id left join payment as p on o.pay_type = p.id";
+	public static function getSearchCondition($search){
+		$join  = "LEFT JOIN delivery AS d ON o.distribution=d.id ".
+			"LEFT JOIN payment AS p ON o.pay_type=p.id ".
+			"LEFT JOIN user AS u ON u.id=o.user_id";
 		$where = "if_del = 0";
-		//条件筛选处理
-		if(isset($search['is_seller']))
-		{
-			$is_seller = IFilter::act($search['is_seller']);
-			if($is_seller == "self")
-			{
-				$where .= " and o.seller_id = 0 ";
-			}
-			else if($is_seller == "seller")
-			{
-				$where .= " and o.seller_id != 0 ";
-			}
+		
+		/* 搜索条件 */
+		/* 关键字搜索 */
+		if(isset($search['keywords'])){
+			$keywords = IFilter::act($search['keywords'], 'string');
+			//订单号、收货人
+			if(!empty($keywords))
+				$where .= " AND (o.order_no='".$keywords."' OR o.accept_name='".$keywords."' OR u.username='".$keywords."')";
 		}
-
-		if(isset($search['pay_status']) && $search['pay_status'] !== '')
-		{
+		//是否平台自营
+//		if(isset($search['is_seller'])){
+//			$is_seller = IFilter::act($search['is_seller']);
+//			if($is_seller == "self"){
+//				$where .= " and o.seller_id = 0 ";
+//			}else if($is_seller == "seller"){
+//				$where .= " and o.seller_id != 0 ";
+//			}
+//		}
+		//支付状态
+		if(isset($search['pay_status']) && $search['pay_status'] !== ''){
 			$pay_status = IFilter::act($search['pay_status'], 'int');
 			$where .= " and o.pay_status = ".$pay_status;
 		}
-
-		if(isset($search['distribution_status']) && $search['distribution_status'] !== '')
-		{
+		//发货状态
+		if(isset($search['distribution_status']) && $search['distribution_status'] !== ''){
 			$distribution_status = IFilter::act($search['distribution_status'], 'int');
 			$where .= " and o.distribution_status = ".$distribution_status;
 		}
-
-		if(isset($search['status']) && $search['status'] !== '')
-		{
+		//订单状态
+		if(isset($search['status']) && $search['status'] !== ''){
 			$status = IFilter::act($search['status'], 'int');
 			$where .= " and o.status = ".$status;
 		}
-
-		if(isset($search['name']) && isset($search['keywords']))
-		{
-			$name = IFilter::act($search['name'], 'string');
-			$keywords = IFilter::act($search['keywords'], 'string');
-			if ($name && $keywords)
-			{
-				switch ($name)
-				{
-					case "seller_name":
-					{
-						$sellerObj = new IModel('seller');
-						$sellerRow = $sellerObj->getObj('true_name = "'.$keywords.'"');
-						$where .= $sellerRow ? " and o.seller_id = ".$sellerRow['id'] : " and null ";
-					}
-					break;
-
-					default:
-						$where .= " and o.".$name." = '".$keywords."'";
-					break;
-				}
-			}
+		//下单时间
+		if(isset($search['create_time_start']) && !empty($search['create_time_start'])){
+			$where .= " AND o.create_time>='".$search['create_time_start']."'";
 		}
+		if(isset($search['create_time_end']) && !empty($search['create_time_end'])){
+			$where .= " AND o.create_time<='".$search['create_time_end']."'";
+		}
+		
+		//关键字搜索
+//		if(isset($search['name']) && isset($search['keywords'])){
+//			$name = IFilter::act($search['name'], 'string');
+//			$keywords = IFilter::act($search['keywords'], 'string');
+//			if($name && $keywords){
+//				switch ($name){
+//					case "seller_name":
+//						$sellerObj = new IModel('seller');
+//						$sellerRow = $sellerObj->getObj('true_name = "'.$keywords.'"');
+//						$where .= $sellerRow ? " and o.seller_id = ".$sellerRow['id'] : " and null ";
+//						break;
+//					default:
+//						$where .= " and o.".$name." = '".$keywords."'";
+//						break;
+//				}
+//			}
+//		}
 
-		// 高级筛选
-		if (isset($search['adv_search']) && 1 == $search['adv_search'])
-		{
+		/* 高级筛选 */
+		if (isset($search['adv_search']) && 1 == $search['adv_search']){
 			// 订单总额
-			if (isset($search['order_amount']) && !empty($search['order_amount']))
-			{
+			if (isset($search['order_amount']) && !empty($search['order_amount'])){
 				$order_amount = explode(",", $search['order_amount']);
 				$order_amount_0 = IFilter::act($order_amount[0], 'float');
-				if (isset($order_amount[1]))
-				{
+				if (isset($order_amount[1])){
 					$order_amount_1 = IFilter::act($order_amount[1], 'float');
-				}
-				else
-				{
+				}else{
 					$order_amount_1 = 0;
 				}
-				if ($order_amount_0 == $order_amount_1)
-				{
+				if ($order_amount_0 == $order_amount_1){
 					$where .= " and o.order_amount = $order_amount_0 ";
-				}
-				else if ($order_amount_0 > $order_amount_1)
-				{
+				}else if ($order_amount_0 > $order_amount_1){
 					$where .= " and o.order_amount between $order_amount_1 and $order_amount_0 ";
-				}
-				else
-				{
+				}else{
 					$where .= " and o.order_amount between $order_amount_0 and $order_amount_1 ";
 				}
 			}
 			// 发货时间
-			if (isset($search['send_time']) && !empty($search['send_time']))
-			{
+			if (isset($search['send_time']) && !empty($search['send_time'])){
 				$send_time = explode(",", $search['send_time']);
 				// 验证日期
 				$is_check_0 = ITime::checkDateTime($send_time[0]);
 				$is_check_1 = false;
-				if (isset($send_time[1]))
-				{
+				if (isset($send_time[1])){
 					$is_check_1 = ITime::checkDateTime($send_time[1]);
 				}
-				if ($is_check_0 && $is_check_1)
-				{
+				if ($is_check_0 && $is_check_1){
 					// 是否相等
-					if ($send_time[0] == $send_time[1])
-					{
+					if ($send_time[0] == $send_time[1]){
 						$where .= " and o.send_time between '".$send_time[0]." 00:00:00' and '".$send_time[0]." 23:59:59'";
-					}
-					else
-					{
+					}else{
 						$difference = ITime::getDiffSec($send_time[0].' 00:00:00', $send_time[1].' 00:00:00');
-						if (0 < $difference)
-						{
+						if (0 < $difference){
 							$where .= " and o.send_time between '".$send_time[1]." 00:00:00' and '".$send_time[0]." 23:59:59'";
-						}
-						else
-						{
+						}else{
 							$where .= " and o.send_time between '".$send_time[0]." 00:00:00' and '".$send_time[1]." 23:59:59'";
 						}
 					}
-				}
-				elseif ($is_check_0)
-				{
+				}elseif ($is_check_0){
 					$where .= " and o.send_time between '".$send_time[0]." 00:00:00' and '".$send_time[0]." 23:59:59'";
 				}
 			}
-			// 下单时间
-			if (isset($search['create_time']) && !empty($search['create_time']))
-			{
-				$create_time = explode(",", $search['create_time']);
-				// 验证日期
-				$is_check_0 = ITime::checkDateTime($create_time[0]);
-				$is_check_1 = false;
-				if (isset($create_time[1]))
-				{
-					$is_check_1 = ITime::checkDateTime($create_time[1]);
-				}
-				if ($is_check_0 && $is_check_1)
-				{
-					// 是否相等
-					if ($create_time[0] == $create_time[1])
-					{
-						$where .= " and o.create_time between '".$create_time[0]." 00:00:00' and '".$create_time[0]." 23:59:59'";
-					}
-					else
-					{
-						$difference = ITime::getDiffSec($create_time[0].' 00:00:00', $create_time[1].' 00:00:00');
-						if (0 < $difference)
-						{
-							$where .= " and o.create_time between '".$create_time[1]." 00:00:00' and '".$create_time[0]." 23:59:59'";
-						}
-						else
-						{
-							$where .= " and o.create_time between '".$create_time[0]." 00:00:00' and '".$create_time[1]." 23:59:59'";
-						}
-					}
-				}
-				elseif ($is_check_0)
-				{
-					$where .= " and o.create_time between '".$create_time[0]." 00:00:00' and '".$create_time[0]." 23:59:59'";
-				}
-			}
 			// 完成时间
-			if (isset($search['completion_time']) && !empty($search['completion_time']))
-			{
+			if (isset($search['completion_time']) && !empty($search['completion_time'])){
 				$completion_time = explode(",", $search['completion_time']);
 				// 验证日期
 				$is_check_0 = ITime::checkDateTime($completion_time[0]);
 				$is_check_1 = false;
-				if (isset($completion_time[1]))
-				{
+				if (isset($completion_time[1])){
 					$is_check_1 = ITime::checkDateTime($completion_time[1]);
 				}
-				if ($is_check_0 && $is_check_1)
-				{
+				if ($is_check_0 && $is_check_1){
 					// 是否相等
-					if ($completion_time[0] == $completion_time[1])
-					{
+					if ($completion_time[0] == $completion_time[1]){
 						$where .= " and o.completion_time between '".$completion_time[0]." 00:00:00' and '".$completion_time[0]." 23:59:59'";
-					}
-					else
-					{
+					}else{
 						$difference = ITime::getDiffSec($completion_time[0].' 00:00:00', $completion_time[1].' 00:00:00');
-						if (0 < $difference)
-						{
+						if (0 < $difference){
 							$where .= " and o.completion_time between '".$completion_time[1]." 00:00:00' and '".$completion_time[0]." 23:59:59'";
-						}
-						else
-						{
+						}else{
 							$where .= " and o.completion_time between '".$completion_time[0]." 00:00:00' and '".$completion_time[1]." 23:59:59'";
 						}
 					}
-				}
-				elseif ($is_check_0)
-				{
+				}elseif ($is_check_0){
 					$where .= " and o.completion_time between '".$completion_time[0]." 00:00:00' and '".$completion_time[0]." 23:59:59'";
 				}
 			}

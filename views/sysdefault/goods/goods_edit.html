@@ -277,7 +277,7 @@
 						<td>
 							<select class="auto" name="brand_id">
 								<option value="0">请选择</option>
-								{query:name=brand}
+								{query:name=brand order=name asc}
 								<option value="{$item['id']}">{$item['name']}</option>
 								{/query}
 							</select>

@@ -78,6 +78,7 @@ class IClient
 	 */
 	public static function getDevice()
 	{
+		return self::MOBILE;
 		//如果有HTTP_X_WAP_PROFILE则一定是移动设备
 		if (isset ($_SERVER['HTTP_X_WAP_PROFILE']))
 		{

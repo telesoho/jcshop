@@ -128,47 +128,14 @@
             </template>
         <div style="height:1rem;"></div>
     </div>
+    <footer-nav :state="2"></footer-nav>
 </section>
-<footer>
-    <nav class="mui-bar mui-bar-tab"  style="z-index:25">
-        <a id="defaultTab" class="mui-tab-item home" href="{url:/site/index}">
-                <span class="mui-icon nav-icon icon-home">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/home-ed.png" data-img="homeactive.png"  alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">首页</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/site/sitemap}">
-                <span class="mui-icon nav-icon icon-classification">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/mune.png" data-img="muneed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">分类</div>
-        </a>
-        <a class="mui-tab-item mui-active" href="{url:/site/favorite}">
-                <span class="nav-icon icon-vedio">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/grass.png" data-img="grass.png"  alt="" class="img-move02">
-                    <div class="grow" style="margin-top:0 ;">种草</div>
-                    <span class="tab-mark"></span>
-                </span>
-        </a>
-        <a class="mui-tab-item" href="{url:simple/cart}">
-                <span class="mui-icon nav-icon icon-shopcar">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/buy.png"  data-img="buybg.png"  alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">购物车</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/ucenter/index}">
-                <span class="mui-icon nav-icon icon-my">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/my.png"  data-img="myed.png"  alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">我的</div>
-        </a>
-    </nav>
-</footer>
 <!--<span class="mui-icon-extra mui-icon-extra-top" id="pagetop"></span>-->
 <!--头信息结束-->
 <script src="/views/mobile/javascript/vue.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
-<!--<script src="/views/mobile/javascript/template-native.js"></script>-->
+<!--//底部导航样式的引入-->
+<script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/jiumao/favorite.js"></script>
 </body>

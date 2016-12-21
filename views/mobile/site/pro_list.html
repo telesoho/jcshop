@@ -38,29 +38,7 @@
 </div>
 <!--pro_list页面的开始-->
 <div id="prolistInfo">
-	<section class="search-header" id="homeHeader">
-		<div class="inputContent">
-			<form onsubmit="searthSubmit()" action="/site/search_list">
-				<input type="search" :placeholder="placeHolder" id="search" onfocus="getSearth();" />
-				<img class="search_ico" src="/views/mobile/skin/default/image/jmj/new_active/index/search.png" alt="" />
-			</form>
-			<img src="/views/mobile/skin/default/image/jmj/new_active/index/leftear.png" alt="" class="left-icon" />
-			<img src="/views/mobile/skin/default/image/jmj/new_active/index/rightear.png" alt="" class="right-icon" />
-			<img src="/views/mobile/skin/default/image/jmj/new_active/index/flower.png" alt="" class="img-flower" />
-			<div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>
-		</div>
-		<!--模态框-->
-		<div id="modalid-search" class="hide">
-			<div class="title">
-				猫猫都在搜
-			</div>
-			<div class="search-content">
-				<a href="#"  @click="ToSearthPage(item.word)" v-for="(item,key) in searchWord" v-if="key<10">{{item.word}}</a>
-			</div>
-			<button type="button" id="button-submit"  onclick="searthSubmit();">确定</button>
-			<button type="button" id="button-cancel"  onclick="searthCancel();">取消</button>
-		</div>
-	</section>
+	<search-nav :search="searchWord" :val="null"></search-nav>
 	<section id="nav-slider">
 		<div  class="mui-slider">
 			<div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
@@ -254,7 +232,10 @@
 					<div class="slider">
 						<div class="item" v-for="itemList in article[1].goods_list">
 							<a :href="itemList.url" class="locationA">
-								<div class="img"><img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
+								<div class="img">
+									<img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;"
+										 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
+								</div>
 								<div class="name hidewrap">{{itemList.name}}</div>
 								<div class="sellprice">¥{{itemList.sell_price}}</div>
 							</a>
@@ -292,49 +273,17 @@
 			</div>
 		</section>
 	</section>
+	<footer-nav :state="0"></footer-nav>
 </div>
 <div style="height:1.42rem;background:#f8f8f8"></div>
-
-
-<footer>
-	<nav class="mui-bar mui-bar-tab"  style="z-index:25">
-        <a id="defaultTab" class="mui-tab-item mui-active home" href="{url:/site/index}" >
-                <span class="mui-icon nav-icon icon-home">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/homeactive.png" data-img="home-ed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">首页</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/site/sitemap}" >
-                <span class="mui-icon nav-icon icon-classification">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/mune.png" data-img="muneed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">分类</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/site/favorite}">
-                <span class="nav-icon icon-vedio">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/grass.png" data-img="grass.png" alt="" class="img-move02">
-                    <div class="grow" style="margin-top:0 ;">种草</div>
-                    <span class="tab-mark"></span>
-                </span>
-        </a>
-        <a class="mui-tab-item" href="{url:simple/cart}">
-                <span class="mui-icon nav-icon icon-shopcar">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/buy.png"  data-img="buy.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">购物车</div>
-        </a>
-        <a class="mui-tab-item" href="{url:/ucenter/index}">
-                <span class="mui-icon nav-icon icon-my">
-                    <img src="/views/mobile/skin/default/image/jmj/new_active/index/my.png" data-img="myed.png" alt="" style="width:0.5rem;height:0.5rem;"/>
-                </span>
-            <div class="mui-tab-label">我的</div>
-        </a>
-    </nav>
-</footer>
 <!--专辑分页模板-->
 <!--头信息结束-->
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<!--搜索组件引入-->
+<script src="/views/mobile/components/search_nav.js?v=<?php echo time(); ?>"></script>
+<!--//底部导航样式的引入-->
+<script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>

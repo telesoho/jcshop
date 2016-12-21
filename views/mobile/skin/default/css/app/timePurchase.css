@@ -34,18 +34,21 @@ body{
 .headerTitle  .title.active:after{
     position:absolute;
     content:'';
-    left:1.1rem;
-    bottom:-0.12rem;
+    left:1.15rem;
+    bottom:-0.11rem;
     width: 0;
     height: 0;
     border-left: 0.12rem solid transparent;
     border-right: 0.12rem solid transparent;
     border-top: 0.12rem solid #f70a7f;
 }
+#timePurchasePage .content{
+    background:#fff;
+}
  #timePurchasePage .content .top{
      font-size:0.28rem;
      color:#bbbbbb;
-     padding:0.3rem 0.2rem;
+     padding:0.3rem 0.2rem 0.2rem 0.2rem;
  }
 #timePurchasePage .content .item{
     height:2.93rem;
@@ -61,6 +64,13 @@ body{
 #timePurchasePage .content .item .img img{
     width:2.15rem;
     height:2.15rem;
+}
+#timePurchasePage .content .item .img .over_img{
+    width:1.6rem;
+    height:1.6rem;
+    position:absolute;
+    top:0.665rem;
+    left:0.395rem;
 }
 #timePurchasePage .content .item .text{
     height:2.93rem;
@@ -99,11 +109,11 @@ body{
 #timePurchasePage .content .item .bottom .num{
     position:relative;
     margin-top:0.37rem;
-    border:0.02rem solid #ff6161;
+    border:1px solid #ff6161;
     border-radius:0.44rem;
     width:1.95rem;
     height:0.44rem;
-    line-height:0.44rem;
+    line-height:0.43rem;
     text-align:center;
     overflow: hidden;
     font-size:0.26rem;
@@ -116,13 +126,12 @@ body{
 }
 #timePurchasePage .content .item .bottom .num .bg{
     z-index:3;
-    opacity:0.5;
-    background:#ffa0a0;
-    height:0.4rem;
+    background:rgba(255,74 ,74,0.3);
+    height:0.41rem;
     border-radius:0.4rem 0 0 0.4rem;
     position:absolute;
     left:0;
-    bottom:0.005rem;
+    bottom:0;
 }
 #timePurchasePage .content .item .bottom .buy{
     margin-top:0.37rem;

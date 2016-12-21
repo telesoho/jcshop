@@ -19,11 +19,14 @@
 		<form action="{url:/}" method="get" name="searchListForm">
 			<input type='hidden' name='controller' value='goods' />
 			<input type='hidden' name='action' value='goods_list' />
-			<select class="auto" name="search[seller_id]">
+			<!-- <select class="auto" name="search[seller_id]">
 				<option value="">选择商品所属</option>
 				<option value="=0">平台商品</option>
 				<option value="!=0">商户商品</option>
-			</select>
+			</select> -->
+
+			<button class="btn" type="submit"  onclick='changeAction(false)'><span class="sel">筛 选</span></button>
+			关键字：<input class="small" name="search[keywords]" type="text" value="" placeholder="商品名|jcode" />
 			<select class="auto" name="search[is_del]">
 				<option value="">上下架</option>
 				<option value="0">上架</option>
@@ -31,7 +34,7 @@
 				<option value="3">待审</option>
 			</select>
 			<select class="auto" name="search[store_nums]">
-				<option value="">选择库存</option>
+				<option value="">库存</option>
 				<option value="go.store_nums < 1">无货</option>
 				<option value="go.store_nums >= 1 and go.store_nums < 10">低于10</option>
 				<option value="go.store_nums <= 100 and go.store_nums >= 10">10-100</option>
@@ -44,11 +47,11 @@
 				<option value="3">热卖商品</option>
 				<option value="4">推荐商品</option>
 			</select>
-			<select class="auto" name="search[name]">
+			<!-- <select class="auto" name="search[name]">
 				<option value="go.name">商品名</option>
 				<option value="go.goods_no">商品货号</option>
 				<option value="seller.true_name">商户真实名称</option>
-			</select>
+			</select> -->
 			<select class="auto" name="search[is_zh_title]">
 				<option value="">标题为中文</option>
 				<option value="0">否</option>
@@ -59,15 +62,12 @@
 				<option value="0">否</option>
 				<option value="1">是</option>
 			</select>
-			<input class="small" name="search[keywords]" type="text" value="" />
 			<!--分类数据显示-->
 			<span id="__categoryBox" style="margin-bottom:8px"></span>
 			<button class="btn" type="button" name="_goodsCategoryButton"><span class="add">设置分类</span></button>
 			{set:plugin::trigger('goodsCategoryWidget',array("name" => "search[category_id]","value" => isset($this->search['category_id']) ? $this->search['category_id'] : ""))}
-
 			<button class="btn" type="button" onclick='initSearchbar(1)'><span class="add">更 多</span></button>
 			<input class="small" name="search[pagesize]" type="text" value = "" style="width:30px"/>
-			<button class="btn" type="submit"  onclick='changeAction(false)'><span class="sel">筛 选</span></button>
 			<button class="btn" onclick='changeAction(true)'><span class="sel">导出Excel</span></button>
 			<input type="hidden" name="search[adv_search]" value="" />
 			<input type="hidden" name="search[brand_id]" value="" />
