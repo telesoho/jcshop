@@ -715,8 +715,12 @@ class Apic extends IController{
 	 */
 	public function christmas_index(){
 		/* 获取活动热销商品 */
-		$query = new IQuery('goods as m');
-		$data  = array();
+		$query         = new IQuery('goods as m');
+		$query->join   = 'LEFT JOIN brand AS b ON b.id=m.brand_id LEFT JOIN commend_goods AS d ON d.goods_id=m.id LEFT JOIN category_extend AS c ON c.goods_id=m.id ';
+		$query->fields = 'm.id,m.name,m.sell_price,m.original_price,m.img,b.name as brand_name,b.logo as brand_logo';
+		$query->order  = 'm.sale desc,m.visit desc';
+		$query->group  = 'm.id';
+		$data          = array();
 		for($i = 1; $i<=8; $i++){
 			$limit = 3;
 			switch($i){
@@ -746,10 +750,7 @@ class Apic extends IController{
 					$where = 'm.is_del=0 AND d.commend_id=4 AND c.category_id IN ('.goods_class::catChild(7).')';
 					break;
 			}
-			$query->join     = 'LEFT JOIN brand AS b ON b.id=m.brand_id LEFT JOIN commend_goods AS d ON d.goods_id=m.id LEFT JOIN category_extend AS c ON c.goods_id=m.id ';
 			$query->where    = $where;
-			$query->fields   = 'm.id,m.name,m.sell_price,m.original_price,m.img,b.name as brand_name,b.logo as brand_logo';
-			$query->order    = 'm.sale desc,m.visit desc';
 			$query->limit    = $limit;
 			$data['list'.$i] = $query->find();
 			if(!empty($data['list'.$i])){
@@ -1199,7 +1200,6 @@ class Apic extends IController{
 		}
 		
 		/* 记录用户操作 */
-		
 		
 		/* 返回参数 */
 		$this->json_echo($dataGoods);
