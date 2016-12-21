@@ -51,17 +51,17 @@
 		<img src="/views/mobile/skin/default/image/jmj/new_active/bannerbig.png" width="100%"/>
 	</div>
 	<!--			更多折扣				-->
-	<div id="zhe" style="height: 3.9rem;">
-		<div id="zhe_ul" style="height: auto;">
-			<ul style="height: auto;">
-				<li v-for="(items,key) in newlist1" style="height: 3.9rem;"><a :href="items.url">
+	<div id="zhe" class="">
+		<div id="zhe_ul" class="" >
+			<ul class="">
+				<li class="" v-for="(items,key) in newlist1" style="width: 3rem;"><a :href="items.url" style="display: block;">
 					
 					<p class="p1"><img :src="items.img" style="width: 1.8rem;height: 1.8rem;"/></p>
 					<p class="p2" style="margin-bottom:0.1rem ;color: #3D4245;font-size: 0.24rem;padding: 0 0.05rem;">{{items.name}}</p>
 					<p class="p3" style="margin-bottom: 0.15rem;">¥<span>{{items.sell_price}}</span></p>
 					<p class="p4">
 						<img src="/views/mobile/skin/default/image/jmj/new_active/921ED65A-23EE-47FE-B735-E47A8508FB2C@1x.png" style="width: 0.65rem;"/>
-						<span style="display:block;text-align:center;position: absolute;top: 0.35rem;left: 0.08rem;color: white;width: 0.5rem;display: block;"><t>{{key+1}}</t></span>
+						<span style="display:block;text-align:center;position: absolute;top: 0.33rem;left: 0.08rem;color: white;width: 0.5rem;display: block;"><t>{{key+1}}</t></span>
 					</p>
 				</a></li>
 
@@ -86,44 +86,25 @@
 			
 		</ul>
 	</div>
-
+	<footer>
+        <div class="flexbox empty_product" style="background:#a5eced" v-if="">
+            <div class="img">
+                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+            </div>
+            <div class="content">
+                <span style="color:#fff">~</span>
+                <span style="color:#fff">憋拉了，到底了</span>
+                <span style="color:#fff">~</span>
+            </div>
+        </div>
+    </footer>
 	</div>
 	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/christmas_index.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
-	<script type="text/javascript">
-		var init = 0,scorll=0;
-		var ox;
-		var ozhe = document.getElementById("zhe")
-		var oUl = ozhe.getElementsByTagName("ul")[0];
-		oUl.addEventListener("touchstart",function(ev){
-			ox = ev.touches[0].pageX;
-			init = scorll;
-		})
-		oUl.addEventListener("touchmove",function(ev){
-			var oxmove = ev.touches[0].pageX;
-			scorll = ev.touches[0].pageX - ox ;
-//			console.log(oUl.style.left)
-			
-			oUl.style.left =(init + scorll) +"px";
-			scorll = init + scorll;
-			var t =scorll;
-				if(t >= 50){
-					scorll = 0;
-					console.log(1)
-					oUl.style.left = 0 +"px";
-				}
-			var e = $(window).width(); 
-			var ouiw = $("#zhe ul").width();
-			if(   scorll<-(ouiw - e +20) ){
-				scorll = -(ouiw - e +20);
-				oUl.style.left =-(ouiw - e) +"px";
-			}
-		})
 
-	</script>
 
 <!-- 微信分享 -->
 {if:IClient::isWechat() == true}
