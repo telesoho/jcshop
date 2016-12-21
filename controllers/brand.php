@@ -143,6 +143,7 @@ class Brand extends IController implements adminAuthorization
         $data = $tb_brand->getObj('name = "' . $name . '"');
         if ($data){
             $this->brand_list();
+            return;
         }
 
 		$brand = array(
