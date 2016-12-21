@@ -18,6 +18,42 @@
               <div class="tip">{{item.tip}}</div>
           </div>
       </header>
+    <div class="content" v-if="initState==0">
+        <div class="top">
+            限时限量抢购中……
+        </div>
+        <div class="wareContent" v-cloak>
+            <div class="item" v-for="item in new_data">
+                <div class="img flexbox">
+                    <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
+                    <img v-if ="item.nowNum==0" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
+                </div>
+                <div class="text">
+                    <div class="name">
+                        {{item.name}}{{item.name}}
+                    </div>
+                    <div class="box box2">
+                        <div class="price1"><span>抢购价</span>
+                            <span style="margin-left:0.18rem;font-size:0.22rem">¥</span>
+                            <span style="font-size:0.32rem">{{item.price1}}</span></div>
+                        <div class="price2"><span>市场价</span>
+                            <s><span style="margin-left:0.11rem;font-size:0.22rem">¥</span>
+                                <span style="font-size:0.26rem">{{item.price2}}</span></s></div>
+                    </div>
+                    <div class="box bottom">
+                        <div class="num">
+                            仅剩 <span>{{item.nowNum}}</span>件
+                            <div class="bg" :style="item.style">
+                            </div>
+                        </div>
+                        <div class="buy" :style="item.nowNum==0?style1:style2" @click="ToBuy(item)">
+                            马上抢
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
       <div class="content" v-if="initState==1">
           <div class="top">
               限时限量抢购中……
@@ -26,6 +62,7 @@
               <div class="item" v-for="item in new_data">
                     <div class="img flexbox">
                         <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
+                        <img v-if ="item.nowNum==0" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
                     </div>
                       <div class="text">
                             <div class="name">
@@ -53,6 +90,41 @@
               </div>
           </div>
       </div>
+    <div class="content" v-if="initState==2">
+        <div class="top">
+            准备开抢……
+        </div>
+        <div class="wareContent" v-cloak>
+            <div class="item" v-for="item in new_data">
+                <div class="img flexbox">
+                    <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
+                </div>
+                <div class="text">
+                    <div class="name">
+                        {{item.name}}{{item.name}}
+                    </div>
+                    <div class="box box2">
+                        <div class="price1"><span>抢购价</span>
+                            <span style="margin-left:0.18rem;font-size:0.22rem">¥</span>
+                            <span style="font-size:0.32rem">{{item.price1}}</span></div>
+                        <div class="price2"><span>市场价</span>
+                            <s><span style="margin-left:0.11rem;font-size:0.22rem">¥</span>
+                                <span style="font-size:0.26rem">{{item.price2}}</span></s></div>
+                    </div>
+                    <div class="box bottom">
+                        <div class="num">
+                            仅剩 <span>{{item.nowNum}}</span>件
+                            <div class="bg" :style="item.style">
+                            </div>
+                        </div>
+                        <div class="buy" :style="item.nowNum==0?style1:style2" @click="ToBuy(item)">
+                            马上抢
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <!--底部空隙-->
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
