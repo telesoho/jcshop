@@ -68,9 +68,8 @@ class Menu
                 '/order/order_shop_category' => '店铺分类'
         	),
 			'物流管理'=>array(
-				'/logistics/forecastList' => '入库预报记录',
-				'/logistics/inventoryList' => '已入库记录',
-				'/logistice/deliveryList' => '已配送记录',
+				'/order/inventory_list' => '入库记录',
+				'/order/delivery_list' => '已配送记录',
 			),
         	'单据管理'=>array(
              	'/order/order_collection_list'  => '收款单',

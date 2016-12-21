@@ -16,6 +16,33 @@ class Order extends IController implements adminAuthorization
 	}
 	
 	/**
+	 * 入库记录
+	 */
+	public function inventory_list(){
+
+//		var_dump('2323');exit();
+//		$queryInv = new IQuery('logistics_inventory');
+//		$queryInv->where = '';
+		$this->redirect('inventory_list');
+	}
+	
+	/**
+	 * 已配送记录
+	 */
+	public function delivery_list(){
+		
+		$this->redirect('delivery_list');
+	}
+	
+	/**
+	 * 发送入库预报
+	 */
+	public function forecast_add(){
+		
+	}
+	
+	
+	/**
 	 * @brief查看订单
 	 */
 	public function order_show()
