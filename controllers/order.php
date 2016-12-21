@@ -14,6 +14,7 @@ class Order extends IController implements adminAuthorization
 	{
 
 	}
+	
 	/**
 	 * @brief查看订单
 	 */

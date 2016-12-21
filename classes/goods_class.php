@@ -676,156 +676,113 @@ class goods_class
 		$where = array();
 
 		//条件筛选处理
-		if(isset($search['name']) && isset($search['keywords']))
-		{
-			$name     = IFilter::act($search['name'], 'string');
+		
+		/* 关键字搜索 */
+		if(isset($search['keywords'])){
 			$keywords = IFilter::act($search['keywords'], 'string');
-			if($keywords)
-			{
-				if($name == "seller.true_name")
-				{
-					$sellerDB = new IModel('seller');
-					$sellerRow= $sellerDB->getObj('true_name like "%'.$keywords.'%"');
-					$seller_id= isset($sellerRow['id']) ? $sellerRow['id'] : "NULL";
-					$where[]  = "go.seller_id = ".$seller_id;
-				}
-				else
-				{
-					$where[] = $name." like '%".$keywords."%'";
-				}
-			}
+			//商品名、jcode
+			if(!empty($keywords))
+				$where[] = " (go.name LIKE '%".$keywords."%' OR go.goods_no='".$keywords."')";
 		}
 
-		if(isset($search['category_id']))
-		{
+		/* 商品分类 */
+		if(isset($search['category_id'])){
 			$category_id = IFilter::act($search['category_id'], 'int');
-			if (0 < $category_id)
-			{
+			if (0 < $category_id){
 				$join[]  = "left join category_extend as ce on ce.goods_id = go.id";
 				$where[] = "ce.category_id = ".$category_id;
 			}
 		}
-
-		if(isset($search['is_del']) && $search['is_del'] !== '')
-		{
+		
+		/* 上下架 */
+		if(isset($search['is_del']) && $search['is_del'] !== ''){
 			$is_del  = IFilter::act($search['is_del'], 'int');
 			$where[] = "go.is_del = ".$is_del;
-		}
-		else
-		{
+		}else{
 			$where[] = "go.is_del != 1";
 		}
 
-		if(isset($search['store_nums']))
-		{
+		/* 库存数 */
+		if(isset($search['store_nums'])){
 			$store_nums = IFilter::act($search['store_nums'], 'string');
-			if ('' != $store_nums)
-			{
+			if ('' != $store_nums){
 				$store_nums = htmlspecialchars_decode($store_nums);
 				$where[] = $store_nums;
 			}
 		}
 
-		if(isset($search['commend_id']))
-		{
+		/* 商品标签 */
+		if(isset($search['commend_id'])){
 			$commend_id = IFilter::act($search['commend_id'], 'int');
-			if (0 < $commend_id)
-			{
+			if (0 < $commend_id){
 				$join[] = "left join commend_goods as cg on go.id = cg.goods_id";
 				$where[]= "cg.commend_id = ".$commend_id;
 			}
 		}
 
-		if(isset($search['seller_id']))
-		{
+		if(isset($search['seller_id'])){
 			$seller_id = IFilter::act($search['seller_id'], 'string');
-			if ('' != $seller_id)
-			{
+			if ('' != $seller_id){
 				$where[] = "go.seller_id ".$seller_id;
 			}
 		}
 		//标题和专辑内容是否是中文
-        if(isset($search['is_zh_title']))
-        {
+        if(isset($search['is_zh_title'])){
             $is_zh_title = IFilter::act($search['is_zh_title'], 'int');
-            if ('' != $is_zh_title)
-            {
+            if ('' != $is_zh_title){
                 $where[] = "go.is_zh_title = ".$is_zh_title;
             }
         }
-        if(isset($search['is_zh_content']))
-        {
+        if(isset($search['is_zh_content'])) {
             $is_zh_content = IFilter::act($search['is_zh_content'], 'int');
-            if ('' != $is_zh_content)
-            {
+            if ('' != $is_zh_content) {
                 $where[] = "go.is_zh_content = ".$is_zh_content;
             }
         }
-		// 高级筛选
-		if (isset($search['adv_search']) && 1 == $search['adv_search'])
-		{
-			if (isset($search['brand_id']) && !empty($search['brand_id']))
-			{
+		
+        /* 高级筛选 */
+		if (isset($search['adv_search']) && 1 == $search['adv_search']){
+			if (isset($search['brand_id']) && !empty($search['brand_id'])){
 				$brand_id = IFilter::act($search['brand_id'], 'int');
 				$where[] = "go.brand_id = ".$brand_id;
 			}
-			if (isset($search['sell_price']) && !empty($search['sell_price']))
-			{
+			if (isset($search['sell_price']) && !empty($search['sell_price'])){
 				$sell_price = explode(",", $search['sell_price']);
 				$sell_price_0 = IFilter::act($sell_price[0], 'float');
-				if (isset($sell_price[1]))
-				{
+				if (isset($sell_price[1])){
 					$sell_price_1 = IFilter::act($sell_price[1], 'float');
-				}
-				else
-				{
+				}else{
 					$sell_price_1 = 0;
 				}
-				if ($sell_price_0 == $sell_price_1)
-				{
+				if ($sell_price_0 == $sell_price_1){
 					$where[] = "go.sell_price = $sell_price_0";
-				}
-				else if ($sell_price_0 > $sell_price_1)
-				{
+				}else if ($sell_price_0 > $sell_price_1){
 					$where[] = "go.sell_price between $sell_price_1 and $sell_price_0";
-				}
-				else
-				{
+				}else{
 					$where[] = "go.sell_price between $sell_price_0 and $sell_price_1";
 				}
 			}
-			if (isset($search['create_time']) && !empty($search['create_time']))
-			{
+			if (isset($search['create_time']) && !empty($search['create_time'])){
 				$create_time = explode(",", $search['create_time']);
 				// 验证日期
 				$is_check_0 = ITime::checkDateTime($create_time[0]);
 				$is_check_1 = false;
-				if (isset($create_time[1]))
-				{
+				if (isset($create_time[1])){
 					$is_check_1 = ITime::checkDateTime($create_time[1]);
 				}
-				if ($is_check_0 && $is_check_1)
-				{
+				if ($is_check_0 && $is_check_1){
 					// 是否相等
-					if ($create_time[0] == $create_time[1])
-					{
+					if ($create_time[0] == $create_time[1]){
 						$where[] = "go.create_time between '".$create_time[0]." 00:00:00' and '".$create_time[0]." 23:59:59'";
-					}
-					else
-					{
+					}else{
 						$difference = ITime::getDiffSec($create_time[0].' 00:00:00', $create_time[1].' 00:00:00');
-						if (0 < $difference)
-						{
+						if (0 < $difference){
 							$where[] = "go.create_time between '".$create_time[1]." 00:00:00' and '".$create_time[0]." 23:59:59'";
-						}
-						else
-						{
+						}else{
 							$where[] = "go.create_time between '".$create_time[0]." 00:00:00' and '".$create_time[1]." 23:59:59'";
 						}
 					}
-				}
-				elseif ($is_check_0)
-				{
+				}elseif ($is_check_0){
 					$where[] = "go.create_time between '".$create_time[0]." 00:00:00' and '".$create_time[0]." 23:59:59'";
 				}
 			}

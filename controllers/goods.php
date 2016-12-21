@@ -245,7 +245,7 @@ class Goods extends IController implements adminAuthorization
 		$id       					= IFilter::act(IReq::get('id'),'int');
 		$callback 					= IFilter::act(IReq::get('callback'));
 		$callback 					= strpos($callback,'goods/goods_list') === false ? '' : $callback;
-
+		
 		//检查表单提交状态
 		if(!$_POST)
 		{
@@ -411,13 +411,12 @@ class Goods extends IController implements adminAuthorization
 	/**
 	 * @brief 商品列表
 	 */
-	function goods_list()
-	{
+	function goods_list(){
 		//搜索条件
 		$search = IReq::get('search');
 		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
 		$search['pagesize'] = isset($search['pagesize'])?IFilter::act($search['pagesize'],'int'):20;
-
+		
 		//条件筛选处理
 		list($join,$where) = goods_class::getSearchCondition($search);
 

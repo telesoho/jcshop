@@ -997,14 +997,14 @@ class Order_Class
 				$where .= " AND (o.order_no='".$keywords."' OR o.accept_name='".$keywords."' OR u.username='".$keywords."')";
 		}
 		//是否平台自营
-		if(isset($search['is_seller'])){
-			$is_seller = IFilter::act($search['is_seller']);
-			if($is_seller == "self"){
-				$where .= " and o.seller_id = 0 ";
-			}else if($is_seller == "seller"){
-				$where .= " and o.seller_id != 0 ";
-			}
-		}
+//		if(isset($search['is_seller'])){
+//			$is_seller = IFilter::act($search['is_seller']);
+//			if($is_seller == "self"){
+//				$where .= " and o.seller_id = 0 ";
+//			}else if($is_seller == "seller"){
+//				$where .= " and o.seller_id != 0 ";
+//			}
+//		}
 		//支付状态
 		if(isset($search['pay_status']) && $search['pay_status'] !== ''){
 			$pay_status = IFilter::act($search['pay_status'], 'int');
