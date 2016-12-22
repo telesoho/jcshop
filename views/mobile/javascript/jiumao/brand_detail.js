@@ -1,94 +1,132 @@
-var oPhpnum = $("#phpnum");
-var oLogo = $("#logo");
-var oName = $("#name");
-var oTop = $("#top");
-var oUl = $("#list");
-var oStrong1 = $("#strong1");
-var oStrong2 = $("#strong2");
-var oArticle_top = $("#article_top");
-var oArticle_top1 = $("#article_top1");
-var oSlider = $(".slider");
-var stop=true;
-var y = 0
-var str="",str1="",str2="",str3="",oLii,page=1;
-//oPhpnum.val()res.goods_list.length
-	// ajax
-	(function(page){
-		showajax(page);
-	})(page)
-	
-function showajax(pagenum){
-	$.ajax({
-		type:"get",
-		dataType:"json",
-		url:"/apic/brand",
-		data:{
-			"id":oPhpnum.val(),
-			"page": pagenum
+var stop = true;
+var Request = new Object();
+Request = GetRequest();
+var statusOrder=Request["id"];
+var em = new Vue({
+	el:"#wrap",
+	data:{
+		info:[],
+		img1:'/views/mobile/skin/default/image/jmj/article/brank_banner.jpg',
+		page:1,
+		infolist:[],
+		infoac:[],
+		infoState:false
+	},
+	computed: {
+		showLastImg:function(){
+			return 	this.info
 		},
-		success:function(res){
-			var length = res.goods_list.length;
-			if(length != 0){
-				
-				console.log(res.goods_list.length)
-				if(res.logo){
-					str = "<img src="+res.logo+" />";//logo
-				}
-				if(res.banner){
-					str1 = "<img src="+res.banner+" />"//logo大图;
-				}
-				for(var i = 0;i<length;i++){
-					str2 += '<li><a href="/site/products?id='+res.goods_list[i].id+'">\
-								<img src='+ res.goods_list[i].img +'/>\
-								<div class="right-list">\
-									<p class="p1">'+res.goods_list[i].name+'</p>\
-									<p class="p2">'+res.goods_list[i].description+'</p>\
-									<span class="span1"><span class="span3">¥</span>'+res.goods_list[i].sell_price+'</span>\
-									<span class="span2">日本价：' + res.goods_list[i].jp_price+ '円</span>\
-								</div>\
-								<t></t>\
-							</a></li>'
-				}
-				
-				if(res.article_list){
-					for(var j = 0;j<res.article_list.length;j++){
-						str3 += '<li>\
-									<a href="/site/article_detail/id/'+res.article_list[j].id+'">\
-										<img src='+res.article_list[j].image+' />\
-									</a>\
-								</li>'
-					}
-				}
-				oUl.append(str2);         //商品列表
-				oLogo.append(str);       //logo图标
-				oName.html(res.name);      //品牌名
-				oTop.append(str1);  //头部大图
-				oArticle_top.html(res.description)  //介绍收起
-				oArticle_top1.html(res.description) //介绍展开
-				oStrong1.html(res.goods_sum);//商品款数
-				oStrong2.html(res.article_sum);//专辑数量
-				oSlider.append(str3);  //相关专辑
-	//			oLii = $("#list li")[0].offsetHeight;
-					
-			}else if(length == 0){
-					console.log(res.goods_list.length)
-					var oEmpty_product = $(".empty_product");
-					oEmpty_product.css("display","block");
-				}
-			
+		
+		showLastac:function(){
+			this.infoac.map(function(item){
+				item.url="/site/article_detail?id="+item.id;
+			})
+			return 	this.infoac
+		},
+		
+		showLastgood:function(){
+			this.infolist.map(function(item){
+				item.url="/site/products?id="+item.id;
+			})
+			return 	this.infolist
+		}
+	},
+	mounted: function(){
+		var self=this;
+		if(getSession("pinpai_infolist")||getSession("pinpai_page")){
+			self.page = getSession("pinpai_page");
+			self.infolist = getSession("pinpai_infolist");
+		}
+		else{
+			getRelateArticle(statusOrder,self);
+		}
+		getRelateArticle(statusOrder,self)
+	},
+	updated:function() {
+
+
+	},
+	 methods:{
+	 	
+	 }
+})
+
+function getRelateArticle(statusOrder,self){
+	mui.ajax('/apic/brand',{
+		data:{
+			"id":statusOrder,
+			"page": self.page
+		},
+		dataType:'json',//服务器返回json格式数据
+		type:'get',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		success:function(data){
+			console.log(data);
+			self.info = data;
+			self.infoac=data.article_list;
+			data.goods_list.map(function(item){
+				self.infolist.push(item);
+			})
+			pushSession("pinpai_infolist", self.infolist)
+			if(data.goods_list==''){
+                self.infoState=true;
+                stop=false;
+            }else{
+            	self.infoState=false;
+                stop=true; 
+            }       
+            console.log(self.page);
+            pushSession("pinpai_page", self.page)
+            self.page++;
 		}
 	});
-};
+}
+
+//获取id值
+function GetRequest() {
+  var url = location.search; //获取url中"?"符后的字串
+  var theRequest = new Object();
+  if (url.indexOf("?") != -1) {
+      var str = url.substr(1);
+      strs = str.split("&");
+      for(var i = 0; i < strs.length; i ++) {
+          theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+      }
+  }
+  return theRequest;
+}
+
 	//懒加载
-	$(window).bind('scroll', function() {
-		console.log($(window).scrollTop() + $(window).height(),$(document).height())
-	    if ($(window).scrollTop() + $(window).height()>= $(document).height()) {
-           	if( stop) {
-           		
-           		page++
-            	showajax(page);		
-           	}
-           			
-	    }
-	    
-	})
+$(window).bind('scroll', function() {
+	if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+        if(stop==true){
+            stop=false;
+            getRelateArticle(statusOrder,em);
+        }
+   }
+});
+
+
+		//			缓存
+    function pushSession(key,value){
+        var val=JSON.stringify(value)?JSON.stringify(value):[];
+        if(window.sessionStorage){
+            sessionStorage.setItem(key,val);
+        }else{
+            console.log("无法使用缓存");
+            return "";
+        }
+    }
+    function getSession(key){
+        if(window.sessionStorage){
+            var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+            return JSON.parse(state);
+        }else{
+            console.log("无法使用缓存");
+            return "";
+        }
+    }
+    function removeSessionItem(key){
+        window.sessionStorage.removeItem(key);
+    }
+
