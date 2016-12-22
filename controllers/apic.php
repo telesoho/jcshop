@@ -1150,7 +1150,7 @@ class Apic extends IController{
 		
 		/* 商品详情 */
 		$modelGoods = new IModel('goods');
-		$fields     = 'id,name,goods_no,sell_price,original_price,jp_price,market_price,store_nums,img,content';
+		$fields     = 'id,name,goods_no,brand_id,sell_price,original_price,jp_price,market_price,store_nums,img,content';
 		$dataGoods  = $modelGoods->getObj('is_del=0 AND id='.$goods_id, $fields);
 		if(empty($dataGoods)) $this->json_echo(apiReturn::go('006001')); //商品不存在
 		/* 计算活动商品价格 */
@@ -1180,6 +1180,24 @@ class Apic extends IController{
 			foreach($dataGoods['article_list'] as $k => $v){
 				$dataGoods['article_list'][$k]['image'] = empty($v['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/250/h/127");
 			}
+		}
+		
+		/* 品牌信息 */
+		$modelBrand                 = new IModel('brand');
+		$dataGoods['brand']         = $modelBrand->getObj('id='.$dataGoods['brand_id'], 'id,name,logo,description');
+		if(!empty($dataGoods['brand'])){
+			$dataGoods['brand']['logo'] = empty($dataGoods['brand']['logo']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$dataGoods['brand']['logo'].'/w/160/h/102');
+			//品牌商品
+			$queryGoods                 = new IQuery('goods');
+			$queryGoods->where          = 'is_del=0 AND brand_id='.$dataGoods['brand_id'];
+			$queryGoods->fields         = 'count(*) AS count';
+			$count = $queryGoods->find();
+			$dataGoods['brand']['count'] = $count[0]['count'];
+			//商品列表
+			$queryGoods->order          = 'sale DESC,visit DESC';
+			$queryGoods->limit          = 10;
+			$queryGoods->fields         = 'id,name,sell_price,img';
+			$dataGoods['brand']['list'] = $queryGoods->find();
 		}
 		
 		/* 是否已收藏 */
@@ -1623,22 +1641,22 @@ class Apic extends IController{
 	 * 好货推荐
 	 */
 	public function article_good(){
-		$tid     = IFilter::act(IReq::get('tid'), 'int'); //分类ID
+		$tid = IFilter::act(IReq::get('tid'), 'int'); //分类ID
 		switch($tid){
 			case 1: //狗子推荐
-				$aid         = 15; //专辑分类
+				$aid = 15; //专辑分类
 				break;
 			case 2: //奶糖推荐
-				$aid         = 18; //专辑分类
+				$aid = 18; //专辑分类
 				break;
 			case 3: //腿毛推荐
-				$aid         = 17; //专辑分类
+				$aid = 17; //专辑分类
 				break;
 			case 4: //昔君推荐
-				$aid         = 16; //专辑分类
+				$aid = 16; //专辑分类
 				break;
 			case 5: //一哥推荐
-				$aid         = 19; //专辑分类
+				$aid = 19; //专辑分类
 				break;
 			default:
 				$this->json_echo(apiReturn::go('007001'));
