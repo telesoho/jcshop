@@ -13,32 +13,16 @@
 	    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/recommendation.css?v=<?php echo time(); ?>" />
 	</head>
 	<body>
-		<div id="articleList">
+		<div id="articleList" v-cloak>
 			<header>
 				<img src="/views/mobile/skin/default/image/jmj/article/banner.png" style="width: 100%;"/>
 			</header>
 			<div id="nav_tijian">
 				<ul>
-					<li @clock="tuijian(1)">
-						<img src="/views/mobile/skin/default/image/jmj/article/logo1.png"/>
-						<p>狗子推荐</p>
-						<span class="rgbtable"></span>
-					</li>
-					<li @clock="tuijian(2)">
-						<img src="/views/mobile/skin/default/image/jmj/article/logo2.png"/>
-						<p>昔君推荐</p>
-					</li>
-					<li @clock="tuijian(3)">
-						<img src="/views/mobile/skin/default/image/jmj/article/logo3.png"/>
-						<p>一哥推荐</p>
-					</li>
-					<li @clock="tuijian(4)">
-						<img src="/views/mobile/skin/default/image/jmj/article/logo4.png"/>
-						<p>奶糖推荐</p>
-					</li>
-					<li @clock="tuijian(5)">
-						<img src="/views/mobile/skin/default/image/jmj/article/logo5.png"/>
-						<p>腿毛推荐</p>
+					<li  @click="changeTabState(key)" v-for="item,key in tab">
+						<img :src="tabState==key?item.img_hot:item.img"/>
+						<p :style="tabState==key?style1:style2">{{item.name}}</p>
+						<span class="rgbtable" v-if="tabState==key"></span>
 					</li>
 				</ul>
 			</div>
@@ -75,11 +59,11 @@
 		                                <div class="name hidewrap">{{itemList.name}}</div>
 		                                <div class="sellprice" style="font-size:0.26rem;">
 		                                    <span style="font-size:0.2rem;color:#ff4aa0;margin-right:-0.08rem;">￥</span> {{itemList.sell_price}} </div>
+										<div class="singleline"></div>
 		                            </a>
 		                        </div>
-		                        <div class="singleline"></div>
+
 		                    </div>
-		                    <div class="mark"></div>
 		                </div>
 		            </div>
 		        </section>
