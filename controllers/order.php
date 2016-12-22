@@ -27,35 +27,35 @@ class Order extends IController implements adminAuthorization
 	 */
 	public function inventory_add(){
 		/* 发送 */
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
 			/* 接收参数 */
 			$param = array(
 				'oversea_express_no' => IFilter::act(IReq::get('oversea_express_no')), //快递单号
-				'ware_house_id' => IFilter::act(IReq::get('ware_house_id')), //物流仓库
-				'goods_no' => IFilter::act(IReq::get('goods_no')), //商品jcode
-				'goods_num' => IFilter::act(IReq::get('goods_num')), //商品数量
+				'ware_house_id'      => IFilter::act(IReq::get('ware_house_id')), //物流仓库
+				'goods_no'           => IFilter::act(IReq::get('goods_no')), //商品jcode
+				'goods_num'          => IFilter::act(IReq::get('goods_num')), //商品数量
 			);
 			//检测数据
 			foreach($param as $k => $v)
-				if(empty($v)) exit( json_encode( array('code'=>1,'msg'=>'数据填写有误') ) );
+				if(empty($v)) exit(json_encode(array('code' => 1, 'msg' => '数据填写有误')));
 			//商品列表
 			$goodsList = array();
 			foreach($param['goods_no'] as $k => $v){
-				if($param['goods_num'][$k] < 1) exit( json_encode( array('code'=>1,'msg'=>'商品数量至少为1') ) );
-				$goodsList[] = array('goods_no'=>$v,'goods_num'=>$param['goods_num'][$k]);
+				if($param['goods_num'][$k]<1) exit(json_encode(array('code' => 1, 'msg' => '商品数量至少为1')));
+				$goodsList[] = array('goods_no' => $v, 'goods_num' => $param['goods_num'][$k]);
 			}
 			/* 发送 */
 			$data = array(
 				'oversea_express_no' => $param['oversea_express_no'],
-				'ware_house_id' => $param['ware_house_id'],
-				'goods_list' => $goodsList,
+				'ware_house_id'      => $param['ware_house_id'],
+				'goods_list'         => $goodsList,
 			);
-			
+
 //			exit( json_encode( array('code'=>0,'msg'=>'数据填写有误' ,'data'=>$data) ) );
 			
 			$rel = (new logistics())->createInventory($data);
 			
-			exit( json_encode( $rel ) );
+			exit(json_encode($rel));
 		}
 		
 		/* 模板赋值 */
@@ -66,7 +66,23 @@ class Order extends IController implements adminAuthorization
 	 * 入库详情
 	 */
 	public function inventory_info(){
+		/* 接收参数 */
+		$id       = IFilter::act(IReq::get('id'), 'int');
+		$modelInv = new IModel('logistics_inventory AS m');
+		$infoInv  = $modelInv->getObj('id='.$id);
+		if(empty($infoInv)) exit('数据不存在');
+		$queryAss         = new IQuery('logistics_inventory_access AS m');
+		$queryAss->join   = 'LEFT JOIN goods AS g ON g.goods_no=m.goods_no';
+		$queryAss->where  = 'pid='.$infoInv['id'];
+		$queryAss->fields = 'm.num,g.id,g.goods_no,g.name,g.img,g.sell_price,g.is_del';
+		$queryAss->order  = 'g.id ASC';
+		$infoInv['list']  = $queryAss->find();
 		
+//		var_dump($infoInv);exit();
+		
+		/* 模板赋值 */
+//		$this->setRenderData(array('data' => $infoInv));
+		$this->redirect('inventory_info',false);
 	}
 	
 	/**

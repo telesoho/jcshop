@@ -75,7 +75,7 @@ class apiReturn{
 	public static function go($code = -1, $data = '', $msg = ''){
 		return array(
 			'code' => $code,
-			'msg'  => empty($msg) ? self::info($code) : ':'.$msg,
+			'msg'  => empty($msg) ? self::info($code) : $msg,
 			'data' => $data,
 		);
 	}
