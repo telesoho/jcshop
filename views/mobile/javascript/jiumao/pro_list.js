@@ -58,7 +58,7 @@ var vm= new Vue({
         // 相关品牌
         brand: function(){
             this.info.brand_list.map(function(item){
-                item.url="site/brand_detail?id="+item.id;
+                item.url="/site/brand_detail?id="+item.id;
             })
             return this.info.brand_list;
         },
