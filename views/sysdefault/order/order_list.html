@@ -52,7 +52,7 @@
 				<option value="seller_name">商户真实名称</option>
 			</select> -->
 			下单：<input class="Wdate" type="text" name="search[create_time_start]" id="create_time_start" readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" placeholder="开始时间" />-
-			<input class="Wdate" type="text" name="search[create_time_end]" id="create_time_end" readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" placeholder="结束时间" //>
+			<input class="Wdate" type="text" name="search[create_time_end]" id="create_time_end" readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" placeholder="结束时间" />
 			
 			<button class="btn" type="button" onclick='initSearchbar(1)'><span class="add">更 多</span></button>
 			<button class="btn" onclick='changeAction("order_report");'><span class="sel">导出Excel</span></button>
@@ -72,6 +72,8 @@
 		<input class="small" type="text" name="send_time_end" id="send_time_end" onfocus="WdatePicker()" value="" />
 		完成：<input class="small" type="text" name="completion_time_start" id="completion_time_start" onfocus="WdatePicker()" value="" />-
 		<input class="small" type="text" name="completion_time_end" id="completion_time_end" onfocus="WdatePicker()" value="" />
+		支付时间：<input class="Wdate" type="text" name="search[pay_time_start]" readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" placeholder="开始时间" />-
+		<input class="Wdate" type="text" name="search[pay_time_end]" readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" placeholder="结束时间" />
 	</div>
 </div>
 
