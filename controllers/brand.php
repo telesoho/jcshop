@@ -130,8 +130,7 @@ class Brand extends IController implements adminAuthorization
 	/**
 	 * @brief 保存品牌
 	 */
-	function brand_save()
-	{
+	function brand_save(){
 		$brand_id = IFilter::act(IReq::get('brand_id'),'int');
 		$name = IFilter::act(IReq::get('name'));
 		$sort = IFilter::act(IReq::get('sort'),'int');
@@ -141,10 +140,9 @@ class Brand extends IController implements adminAuthorization
 
 		$tb_brand = new IModel('brand');
         $data = $tb_brand->getObj('name = "' . $name . '"');
-        if ($data){
-            $this->brand_list();
-        }
-
+//        if ($data){
+//            $this->brand_list();
+//        }
 		$brand = array(
 			'name'=>$name,
 			'sort'=>$sort,
@@ -152,45 +150,36 @@ class Brand extends IController implements adminAuthorization
 			'description' => $description,
 		);
 
-		if($category && is_array($category))
-		{
+		if($category && is_array($category)){
 			$categorys = join(',',$category);
 			$brand['category_ids'] = ','.$categorys.',';
-		}
-		else
-		{
+		}else{
 			$brand['category_ids'] = '';
 		}
 		//上传logo
-		if(isset($_FILES['logo']['name']) && $_FILES['logo']['name']!='')
-		{
+		if(isset($_FILES['logo']['name']) && $_FILES['logo']['name']!=''){
 			$uploadObj = new PhotoUpload();
 			$photoInfo = $uploadObj->run();
-			if(isset($photoInfo['logo']['img']) && file_exists($photoInfo['logo']['img']))
-			{
+			if(isset($photoInfo['logo']['img']) && file_exists($photoInfo['logo']['img'])){
 				$brand['logo'] = $photoInfo['logo']['img'];
 			}
 		}
 
 		//上传banner
-		if(isset($_FILES['banner']['name']) && $_FILES['banner']['name']!='')
-		{
+		if(isset($_FILES['banner']['name']) && $_FILES['banner']['name']!=''){
 			$uploadObj 			= new PhotoUpload();
 			$photoInfo 			= $uploadObj->run();
-			if(isset($photoInfo['banner']['img']) && file_exists($photoInfo['banner']['img']))
-			{
+			if(isset($photoInfo['banner']['img']) && file_exists($photoInfo['banner']['img'])){
 				$brand['banner'] = $photoInfo['banner']['img'];
 			}
 		}
+		
 		$tb_brand->setData($brand);
-		if($brand_id)
-		{
+		if($brand_id){
 			//保存修改分类信息
 			$where = "id=".$brand_id;
 			$tb_brand->update($where);
-		}
-		else
-		{
+		}else{
 			//添加新品牌
 			$tb_brand->add();
 		}

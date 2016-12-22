@@ -27,6 +27,7 @@
 
 			<button class="btn" type="submit"  onclick='changeAction(false)'><span class="sel">筛 选</span></button>
 			关键字：<input class="small" name="search[keywords]" type="text" value="" placeholder="商品名|jcode" />
+			每页条数：<input class="small" name="search[pagesize]" type="text" value = "" style="width:30px"/>
 			<select class="auto" name="search[is_del]">
 				<option value="">上下架</option>
 				<option value="0">上架</option>
@@ -67,7 +68,6 @@
 			<button class="btn" type="button" name="_goodsCategoryButton"><span class="add">设置分类</span></button>
 			{set:plugin::trigger('goodsCategoryWidget',array("name" => "search[category_id]","value" => isset($this->search['category_id']) ? $this->search['category_id'] : ""))}
 			<button class="btn" type="button" onclick='initSearchbar(1)'><span class="add">更 多</span></button>
-			<input class="small" name="search[pagesize]" type="text" value = "" style="width:30px"/>
 			<button class="btn" onclick='changeAction(true)'><span class="sel">导出Excel</span></button>
 			<input type="hidden" name="search[adv_search]" value="" />
 			<input type="hidden" name="search[brand_id]" value="" />
