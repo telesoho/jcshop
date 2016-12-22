@@ -41,7 +41,6 @@ var FOOTERINFOR={
 }
 Vue.component('footer-nav', {
     data:function(){
-        console.log(FOOTERINFOR);
         return FOOTERINFOR
     },
     props:['state'],
