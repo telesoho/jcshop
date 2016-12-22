@@ -1048,6 +1048,15 @@ class Order_Class
 
 		/* 高级筛选 */
 		if (isset($search['adv_search']) && 1 == $search['adv_search']){
+			
+			//支付时间
+			if(isset($search['pay_time_start']) && !empty($search['pay_time_start'])){
+				$where .= " AND o.pay_time>='".$search['pay_time_start']."'";
+			}
+			if(isset($search['pay_time_end']) && !empty($search['pay_time_end'])){
+				$where .= " AND o.pay_time<='".$search['pay_time_end']."'";
+			}
+			
 			// 订单总额
 			if (isset($search['order_amount']) && !empty($search['order_amount'])){
 				$order_amount = explode(",", $search['order_amount']);
