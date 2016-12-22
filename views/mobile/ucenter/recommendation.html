@@ -17,7 +17,7 @@
 			<header>
 				<img src="/views/mobile/skin/default/image/jmj/article/banner.png" style="width: 100%;"/>
 			</header>
-			<div id="nav_tijian">
+			<div id="nav_tijian" style="background:#fff;margin-top:-0.05rem;">
 				<ul>
 					<li  @click="changeTabState(key)" v-for="item,key in tab">
 						<img :src="tabState==key?item.img_hot:item.img"/>
@@ -27,7 +27,7 @@
 				</ul>
 			</div>
 		    <template >
-		        <section class="recommended line albumn_index" v-for="(item,key) in new_data" :style="key==0?style.firstArticle:style.ortherArticle">
+		        <section class="recommended line albumn_index" v-for="(item,key) in new_data" >
 		            <div class="title">
 		                <span class="logo">
 			                <img :src="tab[tabState].img_hot" alt="" class="img-hot">

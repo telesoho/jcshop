@@ -38,10 +38,6 @@ var vm = new Vue({
         page:1,
         articleDetail:[],
         state:getSession('favoriteState'),
-        style:{
-            firstArticle:'margin-top:0',
-            ortherArticle:'margin-top:0.22rem'
-        },
         img:{},
         changeState:true,
         img1:"/views/mobile/skin/default/image/jmj/icon/like.png",
