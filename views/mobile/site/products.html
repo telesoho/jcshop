@@ -67,7 +67,7 @@
 			<div class="top box">
 				<div class="name">{{info.name}}</div>
 				<div class="log">
-					<img src="/views/mobile/skin/default/image/jmj/img/title_icon01.png" alt="" />
+					<img v-if="info.drug!=1" src="/views/mobile/skin/default/image/jmj/img/title_icon01.png" alt="" />
 				</div>
 			</div>
 			<div class="mark">{{info.goods_no}}</div>
@@ -101,6 +101,44 @@
 						<li><span class="mui-icon mui-icon-arrowright"></span></li>
 					</ul>
 				</a>
+			</div>
+		</section>
+		<!--品牌链路-->
+		<section class="brand_product" v-if="Object.keys(info.brand).length">
+			<div class="head box">
+				<div class="left">品牌介绍</div>
+				<div class="right" @click="brands()">
+					查看<span style="color:#ff0000">{{info.brand.count}}</span>件商品
+					<span class="mui-icon mui-icon-arrowright" style="color:#bbb;font-size:0.3rem;"></span>
+				</div>
+			</div>
+			<div class="content">
+				<div class="top">
+					<div class="img flexbox">
+						<img :src="info.brand.logo" alt="" style="width:0.91rem;" />
+					</div>
+					<div class="text">
+						<div class="name">{{info.brand.name}}</div>
+						<div class="dis hidewrap">{{info.brand.description}}</div>
+					</div>
+				</div>
+			</div>
+			<div class="goodsbox">
+				<div class="mark">
+					<div class="goos">
+						<a  :href='item.url' class="item test11" v-for="item in brandList">
+							<div class="img">
+								<img :src="item.img" alt="" style="width:1.8rem;height:1.8rem"/>
+							</div>
+							<div class="name hidewrap">
+								{{item.name}}
+							</div>
+							<div class="price">
+								¥ {{item.sell_price}}
+							</div>
+						</a>
+					</div>
+				</div>
 			</div>
 		</section>
 		<!--服务说明-->
@@ -199,7 +237,7 @@
 						<img src="/views/mobile/skin/default/image/jmj/product/zhi_you.png"/>
 						<p>每日直邮<br/>安全快捷</p>
 					</li>
-					<li>
+					<li v-if="info.drug!=1">
 						<img src="/views/mobile/skin/default/image/jmj/product/renbao.png"/>
 						<p>产品<br/>质量保障</p>
 					</li>
@@ -306,9 +344,17 @@
 					this.relateArticle.map(function(item){
 						item.url="/site/article_detail?id="+item.id;
 					});
-					
-					
+
 					return this.relateArticle;
+				},
+				brandList: function(){
+					if(this.info.brand){
+						this.info.brand.list.map(function(item){
+							item.url="/site/products?id="+item.id;
+						})
+						return this.info.brand.list;
+					}
+
 				},
 				spec: function(){
 					var arr=[];
@@ -377,6 +423,11 @@
 					var self=this;
 					joinCartFun(self);
 				},
+				brands:function () {
+					removeSessionItem("pinpai_infolist");
+					removeSessionItem("pinpai_page");
+					window.location.href="/site/brand_detail?id="+this.info.brand.id;
+				},
 				buyNow: function(){
 					var self=this;
 					buyNowFun(self);
@@ -427,7 +478,6 @@
 				success:function(data){
 					//轮播图展示页面
 					self.showMessage=true;
-                   
 					setItem("collection",data);
 					self.info=data;
  					if(self.info.article_list.length>1){

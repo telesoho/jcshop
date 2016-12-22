@@ -46,6 +46,100 @@ ul li{
     margin-left:0.1rem;
     margin-right:0.03rem !important;
 }
+/*商品详情里面的品牌*/
+.brand_product{
+    padding:0 0.13rem;
+    background:#fff;
+    margin-top:0.2rem;
+}
+.brand_product .head{
+    height:0.9rem;
+    line-height:0.9rem;
+    border-bottom:1px solid #eee;
+}
+.brand_product .head .left{
+     font-size:0.3rem;
+     color:#3d4245;
+     margin-left:0.1rem;
+ }
+.brand_product .head .right{
+    font-size:0.24rem;
+    color:#bbb;
+    margin-right:0.1rem;
+}
+.brand_product .content .top{
+    padding-top:0.2rem;
+    display: -webkit-flex;
+    -webkit-justify-content: flex-start;
+    /*border-bottom:1px solid #eee;*/
+}
+.brand_product .content .top .img{
+    width:1rem;
+    height:1rem;
+    border-radius:50%;
+    border:1px solid #eee;
+    margin-left:0.1rem;
+}
+.brand_product .content .top .text{
+    margin-left:0.18rem;
+}
+.brand_product .content .top .text .name{
+    margin-top:0.05rem;
+    font-size:0.28rem;
+    color:#3d4245;
+}
+.brand_product .content .top .text .dis{
+    width:4rem;
+    margin-top:0.1rem;
+    font-size:0.26rem;
+    color:#bbbbbb;
+}
+.brand_product .goodsbox {
+    width:100%;
+    margin-top:0.36rem;
+    height:2.76rem;
+    overflow: hidden;
+    position:relative;
+    z-index: 3;
+}
+.brand_product .goodsbox .mark{
+    width:100%;
+    height:2.94rem;
+    position:absolute;
+    z-index:2;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+.brand_product .goodsbox .mark .goos{
+    display: -webkit-box;
+    display: -webkit-inline-flex;
+    -webkit-justify-content: flex-start;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    z-index:1;
+    height:3rem;
+}
+.brand_product .goodsbox .mark .goos .item{
+    display: block;
+    margin-right:0.17rem;
+
+}
+.brand_product .goodsbox .mark .goos .item .name{
+    margin-top:0.1rem;
+    font-size:0.24rem;
+    color:#3d4245;
+    line-height:0.35rem;
+    width:1.8rem;
+}
+.brand_product .goodsbox .mark .goos .item .price{
+    width:1.8rem;
+    margin-top:0.05rem;
+    text-align:center;
+    font-size:0.24rem;
+    color:#fe0000;
+
+}
+
 /*商品简介样式*/
 #goods_detaile{
     background:#fff;
