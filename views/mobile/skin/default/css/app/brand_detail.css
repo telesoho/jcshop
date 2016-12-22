@@ -189,7 +189,7 @@ li{
 .product .slider li{
 	width: 3.06rem;
 	height: 1.72rem ;
-	margin-right:0.2rem;
+	margin:0 0.2rem;
 }
 .product .slider li a{
 	width: 100%;
