@@ -1619,6 +1619,34 @@ class Apic extends IController{
 		$this->json_echo($data);
 	}
 	
+	/**
+	 * 好货推荐
+	 */
+	public function article_good(){
+		$tid     = IFilter::act(IReq::get('tid'), 'int'); //分类ID
+		switch($tid){
+			case 1: //狗子推荐
+				$aid         = 15; //专辑分类
+				break;
+			case 2: //奶糖推荐
+				$aid         = 18; //专辑分类
+				break;
+			case 3: //腿毛推荐
+				$aid         = 17; //专辑分类
+				break;
+			case 4: //昔君推荐
+				$aid         = 16; //专辑分类
+				break;
+			case 5: //一哥推荐
+				$aid         = 19; //专辑分类
+				break;
+			default:
+				$this->json_echo(apiReturn::go('007001'));
+		}
+		$_GET['cid'] = $aid;
+		$this->article_list();
+	}
+	
 	//通过专辑获取相关商品
 	public function article_rel_goods(){
 		$article_id        = IFilter::act(IReq::get('id'), 'int');

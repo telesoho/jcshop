@@ -63,6 +63,13 @@ class Order extends IController implements adminAuthorization
 	}
 	
 	/**
+	 * 入库详情
+	 */
+	public function inventory_info(){
+		
+	}
+	
+	/**
 	 * 已配送记录
 	 */
 	public function delivery_list(){
