@@ -2,8 +2,40 @@ var stop=true;
 var vm = new Vue({
     el: '#articleList',
     data: {
+        // tab数据
+        tab:[
+            {
+                img_hot:'/views/mobile/skin/default/image/jmj/article/logo1ed.png',
+                img:'/views/mobile/skin/default/image/jmj/article/logo1.png',
+                name:'狗子推荐'
+            },
+            {
+                img_hot:'/views/mobile/skin/default/image/jmj/article/logo2ed.png',
+                img:'/views/mobile/skin/default/image/jmj/article/logo2.png',
+                name:'昔君推荐'
+            },
+            {
+                img_hot:'/views/mobile/skin/default/image/jmj/article/logo3ed.png',
+                img:'/views/mobile/skin/default/image/jmj/article/logo3.png',
+                name:'一哥推荐'
+            },
+            {
+                img_hot:'/views/mobile/skin/default/image/jmj/article/logo4ed.png',
+                img:'/views/mobile/skin/default/image/jmj/article/logo4.png',
+                name:'奶糖推荐'
+            },
+            {
+                img_hot:'/views/mobile/skin/default/image/jmj/article/logo5ed.png',
+                img:'/views/mobile/skin/default/image/jmj/article/logo5.png',
+                name:'腿毛推荐'
+            }
+        ],
+        style1:'color:#3d4245',
+        style2:'color:#bbb',
+        tabState:getSession('tabState')?getSession('tabState'):0,
+        tid:getSession('tabState')?getSession('tabState')+1:1,
+        // tab数据结束
         page:1,
-        storePage:getItem("storePage"),
         articleDetail:[],
         state:getSession('favoriteState'),
         style:{
@@ -45,17 +77,13 @@ var vm = new Vue({
     },
     mounted: function(){
         var self=this;
-        var nowPage=getItem("articlePage")?getItem("articlePage"):1;
-        console.log(nowPage);
         //如果数据来自首页重新请求
         //如果数据来自详情，从storePage开始加载
-        if(nowPage!=1){
-            self.page=nowPage;
-            self.articleDetail=getItem("articleData");
+        if(getSession("articleGoodData")){
+            self.page=getSession("articleGoodPage");
+            self.articleDetail=getSession("articleGoodData");
             console.log(self.articleDetail.length);
         }else{
-            setItem("articleData",[]);
-            setItem("articlePage",nowPage);
             pullupArticleRefresh(self);
             console.log(self.articleDetail.length);
         }
@@ -68,11 +96,20 @@ var vm = new Vue({
         });
     },
     methods: {
-    	tuijian:function(id){
-    		if(id==1){
-    			img="/views/mobile/skin/default/image/jmj/article/logo1ed.png"
-    		}
-    	},
+        // 改变状态并且清除每次进来的缓存
+        changeTabState: function(num){
+            var self=this;
+            //主函数 记录用户进来的的位置  点击删除原有的状态,重置函数
+          this.tabState=num;
+            pushSession('tabState',num);
+            removeSessionItem('articleGoodData');
+            removeSessionItem('articleGoodPage');
+            self.page=1;
+            self.articleDetail=[];
+            this.tid=num+1;
+            pullupArticleRefresh(self)
+
+        },
         store: function(item){
             setItem("product1",item.eid)
             window.location.href=item.url;
@@ -115,9 +152,9 @@ $(window).bind('scroll', function() {
     }
 });
 function pullupArticleRefresh(self){
-    mui.ajax('/apic/article_list', {
+    mui.ajax('/apic/article_good', {
         data:{
-            cid:getItem("articleId"),
+            tid:self.tid,
             page:self.page
         },
         dataType: 'json',
@@ -125,7 +162,6 @@ function pullupArticleRefresh(self){
         timeout: 10000,
         success: function (data) {
             data.map(function(item){
-                item.page=self.page;
                 self.articleDetail.push(item);
             });
             self.showMessage=true;
@@ -135,9 +171,9 @@ function pullupArticleRefresh(self){
                stop=true;
            }
            // console.log(self.page);
-            setItem('articleData',self.articleDetail);
+            pushSession("articleGoodData",self.articleDetail);
             self.page++;
-            setItem('articlePage',self.page);
+            pushSession("articleGoodPage",self.page);
         }
     });
 };
@@ -164,7 +200,7 @@ function collection(item,self){
                 item.is_favorite=0;
                 item.favorite_num=parseInt(item.favorite_num)-1
             }
-            setItem('articleData',self.articleDetail);
+            pushSession('articleGoodData',self.articleDetail);
         }
     });
 }
