@@ -133,7 +133,7 @@
             </div>
         </div>
     </div>
-    <section class="recommended line albumn_index" v-for="(item,key) in new_data">
+    <section class="recommended line albumn_index" v-for="(item,key) in new_data" v-if="item.goods_num>2">
         <div class="title">
                 <span class="logo" >
                 <img :src="item.icon" alt="" class="img-hot">
