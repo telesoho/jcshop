@@ -104,7 +104,7 @@
 			</div>
 		</section>
 		<!--品牌链路-->
-		<section class="brand_product" v-if="Object.keys(info.brand).length">
+		<section class="brand_product" v-if="info.brand.id" v-cloak>
 			<div class="head box">
 				<div class="left">品牌介绍</div>
 				<div class="right" @click="brands()">
@@ -115,7 +115,7 @@
 			<div class="content">
 				<div class="top">
 					<div class="img flexbox">
-						<img :src="info.brand.logo" alt="" style="width:0.91rem;" />
+						<img :src="info.brand.logo" alt="" style="width:0.95rem;" />
 					</div>
 					<div class="text">
 						<div class="name">{{info.brand.name}}</div>
