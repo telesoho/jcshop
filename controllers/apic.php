@@ -1186,7 +1186,7 @@ class Apic extends IController{
 		$modelBrand                 = new IModel('brand');
 		$dataGoods['brand']         = $modelBrand->getObj('id='.$dataGoods['brand_id'], 'id,name,logo,description');
 		if(!empty($dataGoods['brand'])){
-			$dataGoods['brand']['logo'] = empty($dataGoods['brand']['logo']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$dataGoods['brand']['logo'].'/w/160/h/102');
+			$dataGoods['brand']['logo'] = empty($dataGoods['brand']['logo']) ? '' : IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$dataGoods['brand']['logo'].'/w/160/h/102');
 			//品牌商品
 			$queryGoods                 = new IQuery('goods');
 			$queryGoods->where          = 'is_del=0 AND brand_id='.$dataGoods['brand_id'];
