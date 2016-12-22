@@ -39,7 +39,7 @@
 			            	{{item.favorite_num}}
 			            </span>
 		                <span class="like mui-pull-right">
-			                <img :src="item.is_favorite==0?img1:img2"  alt="" class="img-like" @click="collection(item)" />
+			                <img :src="item.is_favorite==0?img1:img2"  alt="" class="img-like" @click="collection(item)" style="width:0.4rem;height:0.34rem"/>
 			            </span>
 		            </div>
 		            <a href="#" @click="store(item)" :id="item.product_id">

@@ -40,8 +40,8 @@ var vm = new Vue({
         state:getSession('favoriteState'),
         img:{},
         changeState:true,
-        img1:"/views/mobile/skin/default/image/jmj/icon/like.png",
-        img2:"/views/mobile/skin/default/image/jmj/icon/like-ed.png"
+        img1:"/views/mobile/skin/default/image/jmj/article/grass.png",
+        img2:"/views/mobile/skin/default/image/jmj/article/grassed.png"
     },
     computed: {
         new_data: function(){
