@@ -19,7 +19,7 @@ var em = new Vue({
 		aaa:function(){
 			console.log(typeof this.info1)
 			if(this.info1 == "0"){
-				this.p="酱喵提醒"
+				this.p="喵酱提醒"
 			}else{
 				this.p=""
 			}
