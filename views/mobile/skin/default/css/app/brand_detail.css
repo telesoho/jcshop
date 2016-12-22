@@ -206,6 +206,10 @@ li{
 	padding-bottom:0.29rem ;
 	overflow: hidden;
 	position: relative;
+	border-bottom:1px solid #BBBBBB ;
+}
+#list li img{
+	margin-top: 0.15rem;
 }
 #list li t{
 		position: absolute;
@@ -235,7 +239,7 @@ li{
 #list .right-list .p2{
 	font-size:0.26rem;
 	color:#979797;	
-	height: 0.8rem;
+	height: 0.7rem;
 	text-align:left;
 	margin-top:0.19rem ;
 	

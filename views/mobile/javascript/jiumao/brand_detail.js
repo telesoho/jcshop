@@ -61,7 +61,7 @@ function getRelateArticle(statusOrder,self){
 		type:'get',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
 		success:function(data){
-			console.log(data);
+			console.log(data.article_list);
 			self.info = data;
 			self.infoac=data.article_list;
 			data.goods_list.map(function(item){
