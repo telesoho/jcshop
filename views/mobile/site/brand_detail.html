@@ -57,25 +57,25 @@
 				</div>
 			</div>
 			<!--                 分割线                                                      -->
-			<div v-if="showLastac.length>2" style="overflow: hidden;">
+			<div v-if="showLastac.length>0" style="overflow: hidden;">
 				<div class="divider"></div>
 
 			<!--                  相关标签                                                 -->
 			
-				<div class="label" style="clear: both;">
+				<div class="label" style="clear: both;border-bottom:1px solid #eee ;">
 					<div style="">
 						<img src="/views/mobile/skin/default/image/jmj/brand_detail/video02.png" style="width: 0.31rem;height: 0.31rem;margin-top:0.19rem ;"/></div>
 					<p class="label1">相关专辑</p>
 				</div>
 	
 				<!--                  线条                                                    -->
-				<div class="line"></div>
+				<!--<div class="line"></div>-->
 				<!--                   相关专辑                                   -->
 				<div class="mark">
 					<div class="product">
 						<ul class="slider">
 						<li v-for="items in showLastac">
-							<a :href="items.url">
+							<a :href="items.url" style="display: block;">
 								<img :src="items.image" />
 							</a>
 						</li>

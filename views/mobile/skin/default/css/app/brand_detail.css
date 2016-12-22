@@ -153,12 +153,15 @@ li{
 	height: 1.72rem;
 	margin-top: 0.19rem;
 	overflow-y:hidden ;
+	z-index:12;
 }
 .mark .product{
-	position: absolute;
+	 z-index:11;
+	position: relative;
 	width: 100%;
 	height: 1.72rem;
 	overflow: hidden;
+	-webkit-overflow-scrolling: touch;
 }
 
 .slider li img{
@@ -166,23 +169,32 @@ li{
 	height: 1.72rem;
 }
 
-.product .slider {
-    z-index: 13;
+.mark .product .slider {
     height: 2rem;
     width: 100%;
+    display: block;
     display: -webkit-flex;
+    display: -ms-flexbox;
+    display: -webkit-box;
     -webkit-justify-content: flex-start;
-    -webkit-overflow-scrolling: touch;
+    /*-moz-justify-content: flex-start;*/
+     position:absolute;
     overflow-x: scroll;
-    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  /*  overflow-y: hidden;*/
 }
 .divider1{
 	margin-top: 0.2rem;
 }
 .product .slider li{
-	margin-left:0.2rem;
+	width: 3.06rem;
+	height: 1.72rem ;
+	margin:0 0.2rem;
 }
-
+.product .slider li a{
+	width: 100%;
+	height: 100%;
+}
 
 /*列表*/
 #list_table #list img{
