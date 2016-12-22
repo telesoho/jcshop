@@ -10,118 +10,131 @@
 	</head>
 	<body>
 		<!--               top                         -->
-		<div id="band_top">
-			<div id="top">
-				
+		<div id="wrap" v-cloak>
+			<div id="band_top">
+				<div id="top">
+					<img  :src="showLastImg.banner?showLastImg.banner:img1"/>
+					<!--<img v-else="" src="/views/mobile/skin/default/image/jmj/article/brank_banner.jpg" style="width: 100%;"/>-->
+				</div>
+				<div id="footer">
+					<div><a href="#" id="logo"><img :src="showLastImg.logo"/></a></div>
+						<span id="name">
+							{{showLastImg.name}}
+						</span>
+						<dl>
+							<dt><a href="#"><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop01.png" style="width: 0.19rem;height: 0.19rem;"/></a></dt>		
+							<dd>商品<strong id="strong1">{{showLastImg.goods_sum}}</strong>款</dd>
+						</dl>
+						<dl>
+							<dt><a href="#"><img src="/views/mobile/skin/default/image/jmj/brand_detail/video01.png" style="width: 0.24rem;height: 0.22rem;"/></a></dt>
+							<dd>专辑<strong id="strong2">{{showLastImg.article_sum}}</strong>场</dd>
+						</dl>
+				</div>
 			</div>
-			<div id="footer">
-				<div><a href="#" id="logo"></a></div>
-					<span id="name">
-						
-					</span>
-					<dl>
-						<dt><a href="#"><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop01.png" style="width: 0.19rem;height: 0.19rem;"/></a></dt>		
-						<dd>商品<strong id="strong1"></strong>款</dd>
-					</dl>
-					<dl>
-						<dt><a href="#"><img src="/views/mobile/skin/default/image/jmj/brand_detail/video01.png" style="width: 0.24rem;height: 0.22rem;"/></a></dt>
-						<dd>专辑<strong id="strong2"></strong>场</dd>
-					</dl>
+			
+			<!--                  线条                                                    -->
+			<div class="line"></div>
+			
+			<!--                  文章                                                    -->
+				<!-- 收起     -->
+			<div id="article">
+				<div id="article_top" style="overflow : hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;">
+					{{showLastImg.description}}
+				</div>
+				<div class="article_footer">
+					<img src="/views/mobile/skin/default/image/jmj/brand_detail/zhan.png"/>
+				</div>
 			</div>
-		</div>
-		
-		<!--                  线条                                                    -->
-		<div class="line"></div>
-		
-		<!--                  文章                                                    -->
-			<!-- 收起     -->
-		<div id="article">
-			<div id="article_top" style="overflow : hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;height: 1.0rem;">
-				
+				<!--- 展开  -->
+			<div id="article1">
+				<div id="article_top1" v-html='showLastImg.description'>
+					<!--{{showLastImg.description}}-->
+				</div>
+				<div class="article_footer">
+					<img src="/views/mobile/skin/default/image/jmj/brand_detail/shou.png"/>
+				</div>
 			</div>
-			<div class="article_footer">
-				<img src="/views/mobile/skin/default/image/jmj/brand_detail/zhan.png"/>
+			
+			<!--                 分割线                                                      -->
+			<div class="divider"></div>
+			
+			<!--                  相关标签                                                 -->
+			<div class="label" style="clear: both;">
+				<div style="">
+					<img src="/views/mobile/skin/default/image/jmj/brand_detail/video02.png" style="width: 0.31rem;height: 0.31rem;"/></div>
+				<p class="label1">相关专辑</p>
 			</div>
-		</div>
-			<!--- 展开  -->
-		<div id="article1">
-			<div id="article_top1">
-				
+			
+			<!--                  线条                                                    -->
+			<div class="line"></div>
+			<!--                   视频                                   -->
+			<div class="mark">
+				<div class="product">
+					<ul class="slider">
+					<li v-for="items in showLastac">
+						<a :href="items.url">
+							<img :src="items.image" />
+						</a>
+					</li>
+					</ul>
+				</div>	
 			</div>
-			<div class="article_footer">
-				<img src="/views/mobile/skin/default/image/jmj/brand_detail/shou.png"/>
+			<!--                   分割线                                                      -->
+			<div class="divider divider1"></div>
+			<!--                  相关标签                                                 -->
+			<div class="label">
+				<div><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop02.png" style="width: 0.31rem;height: 0.31rem;"/></div>
+				<div class="label1">全部商品</div>
 			</div>
-		</div>
-		
-		<!--                 分割线                                                      -->
-		<div class="divider"></div>
-		
-		<!--                  相关标签                                                 -->
-		<div class="label" style="clear: both;">
-			<div style="">
-				<img src="/views/mobile/skin/default/image/jmj/brand_detail/video02.png" style="width: 0.31rem;height: 0.31rem;"/></div>
-			<p class="label1">相关专辑</p>
-		</div>
-		
-		<!--                  线条                                                    -->
-		<div class="line"></div>
-		<!--                   视频                                   -->
-		<div class="mark">
-			<div class="product">
-				<ul class="slider">
-					
+			<!--                  线条                                                    -->
+			<div class="line"></div>
+			<!--                  list列表                                                    -->
+			<div id="list_table">
+				<ul id="list">
+					<li v-for="items in showLastgood">
+						<a :href="items.url"><img :src="items.img"/>
+						<div class="right-list">
+							<p class="p1">{{items.name}}</p>
+							<p class="p2">{{items.description}}</p>
+							<span class="span1"><span class="span3">¥</span>{{items.sell_price}}</span>
+							<span class="span2">日本价：{{items.jp_price}}円</span>
+						</div>
+					</a></li>
 				</ul>
-			</div>	
+			</div>
+			<footer>
+		        <div class="flexbox empty_product" style="background:#fff" v-if="infoState">
+		            <div class="img">
+		                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+		            </div>
+		            <div class="content">
+		                <span style="color:#fff">~</span>
+		                <span style="color:#fff">憋拉了，到底了</span>
+		                <span style="color:#fff">~</span>
+		            </div>
+		        </div>
+		    </footer>
 		</div>
-		<!--                   分割线                                                      -->
-		<div class="divider divider1"></div>
-		<!--                  相关标签                                                 -->
-		<div class="label">
-			<div><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop02.png" style="width: 0.31rem;height: 0.31rem;"/></div>
-			<div class="label1">全部商品</div>
-		</div>
-		<!--                  线条                                                    -->
-		<div class="line"></div>
-		<!--                  list列表                                                    -->
-		<div id="list_table">
-			<ul id="list">
-				<!--<li>
-					<a href="#"><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop02.png""/></a>
-					<div class="right-list">
-						<p class="p1">运动伴侣</p>
-						<p class="p2">商品名称商品名称商品名称商品名称商品名称商品名称商品名称120ml</p>
-						<span class="span1"><span class="span3">¥</span>286.36</span>
-						<span class="span2">日本价：286.36円</span>
-					</div>
-				</li>-->
-			</ul>
-		</div>
-		<div class="flexbox empty_product" style="width:100%; display: none;">
-            <div class="img" style="text-align: center;">
-                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt="" style="width: 0.73rem;margin-top: 0.65rem;"/>
-            </div>
-           <div class="content">
-               <span>~</span>
-               <span>憋拉了，到底了</span>
-               <span>~</span>
-           </div>
-       </div>
 		<input type="hidden" value="<?php echo $_GET['id']; ?>" id="phpnum" />
-		<script src="/views/mobile/javascript/jquery.min.js"></script>
-		<script src="/views/mobile/javascript/jiumao/brand_detail.js"></script>
+		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/jiumao/brand_detail.js?v=<?php echo time(); ?>"></script>
 		<script type="text/javascript">
 			var oArticle_footer = document.getElementsByClassName("article_footer")[0];
 			var oArticle_footer1 = document.getElementsByClassName("article_footer")[1];
 			var oArticle = document.getElementById("article");
 			var oArticle1 = document.getElementById("article1");
-			oArticle_footer.onclick = function(){
+				oArticle_footer.onclick = function(){
 					oArticle1.style.display = "block";
 					oArticle.style.display = "none";
-			}
-			oArticle_footer1.onclick = function(){
+				}
+				oArticle_footer1.onclick = function(){
 					oArticle.style.display = "block";
 					oArticle1.style.display = "none";
-			}
+				}
+
+			
 		</script>
 	</body>
 </html>
