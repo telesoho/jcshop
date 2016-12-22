@@ -1183,21 +1183,26 @@ class Apic extends IController{
 		}
 		
 		/* 品牌信息 */
-		$modelBrand                 = new IModel('brand');
-		$dataGoods['brand']         = $modelBrand->getObj('id='.$dataGoods['brand_id'], 'id,name,logo,description');
+		$modelBrand         = new IModel('brand');
+		$dataGoods['brand'] = $modelBrand->getObj('id='.$dataGoods['brand_id'], 'id,name,logo,description');
 		if(!empty($dataGoods['brand'])){
-			$dataGoods['brand']['logo'] = empty($dataGoods['brand']['logo']) ? '' : IWeb::$app->config['image_host'].'/'.IUrl::creatUrl('/pic/thumb/img/'.$dataGoods['brand']['logo'].'/w/160/h/102');
+			$dataGoods['brand']['logo'] = empty($dataGoods['brand']['logo']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$dataGoods['brand']['logo'].'/w/160/h/102');
 			//品牌商品
-			$queryGoods                 = new IQuery('goods');
-			$queryGoods->where          = 'is_del=0 AND brand_id='.$dataGoods['brand_id'];
-			$queryGoods->fields         = 'count(*) AS count';
-			$count = $queryGoods->find();
+			$queryGoods                  = new IQuery('goods');
+			$queryGoods->where           = 'is_del=0 AND brand_id='.$dataGoods['brand_id'];
+			$queryGoods->fields          = 'count(*) AS count';
+			$count                       = $queryGoods->find();
 			$dataGoods['brand']['count'] = $count[0]['count'];
 			//商品列表
 			$queryGoods->order          = 'sale DESC,visit DESC';
 			$queryGoods->limit          = 10;
 			$queryGoods->fields         = 'id,name,sell_price,img';
 			$dataGoods['brand']['list'] = $queryGoods->find();
+			foreach($dataGoods['brand']['list'] as $k => $v){
+				$dataGoods['brand']['list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$dataGoods['img']."/w/250/h/250");
+			}
+		}else{
+			$dataGoods['brand'] = (object)array();
 		}
 		
 		/* 是否已收藏 */
