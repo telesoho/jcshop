@@ -36,54 +36,59 @@
 			<div class="line"></div>
 			
 			<!--                  文章                                                    -->
+			<div v-if="showLastImg.description!=''">
 				<!-- 收起     -->
-			<div id="article">
-				<div id="article_top" style="overflow : hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;">
-					{{showLastImg.description}}
-				</div>
-				<div class="article_footer">
-					<img src="/views/mobile/skin/default/image/jmj/brand_detail/zhan.png"/>
-				</div>
-			</div>
-				<!--- 展开  -->
-				<div id="article1">
-					<div id="article_top1" v-html='showLastImg.description'>
+				<div id="article">
+					<div id="article_top" v-html='showLastImg.description' style="overflow : hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;">
 						<!--{{showLastImg.description}}-->
 					</div>
 					<div class="article_footer">
-						<img src="/views/mobile/skin/default/image/jmj/brand_detail/shou.png"/>
+						<img src="/views/mobile/skin/default/image/jmj/brand_detail/zhan.png"/>
 					</div>
-			</div>
-			
-			<!--                 分割线                                                      -->
-			<div class="divider"></div>
-
-			<!--                  相关标签                                                 -->
-			<div class="label" style="clear: both;">
-				<div style="">
-					<img src="/views/mobile/skin/default/image/jmj/brand_detail/video02.png" style="width: 0.31rem;height: 0.31rem;"/></div>
-				<p class="label1">相关专辑</p>
-			</div>
-
-			<!--                  线条                                                    -->
-			<div class="line"></div>
-			<!--                   相关专辑                                   -->
-			<div class="mark">
-				<div class="product">
-					<ul class="slider">
-					<li v-for="items in showLastac">
-						<a :href="items.url">
-							<img :src="items.image" />
-						</a>
-					</li>
-					</ul>
+				</div>
+					<!--- 展开  -->
+					<div id="article1">
+						<div id="article_top1" v-html='showLastImg.description'>
+							<!--{{showLastImg.description}}-->
+						</div>
+						<div class="article_footer">
+							<img src="/views/mobile/skin/default/image/jmj/brand_detail/shou.png"/>
+						</div>
 				</div>
 			</div>
-			<!--                   分割线                                                      -->
-			<div class="divider divider1"></div>
+			<!--                 分割线                                                      -->
+			<div v-if="showLastac.length>2" style="overflow: hidden;">
+				<div class="divider"></div>
+
 			<!--                  相关标签                                                 -->
-			<div class="label">
-				<div><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop02.png" style="width: 0.31rem;height: 0.31rem;"/></div>
+			
+				<div class="label" style="clear: both;">
+					<div style="">
+						<img src="/views/mobile/skin/default/image/jmj/brand_detail/video02.png" style="width: 0.31rem;height: 0.31rem;margin-top:0.19rem ;"/></div>
+					<p class="label1">相关专辑</p>
+				</div>
+	
+				<!--                  线条                                                    -->
+				<div class="line"></div>
+				<!--                   相关专辑                                   -->
+				<div class="mark">
+					<div class="product">
+						<ul class="slider">
+						<li v-for="items in showLastac">
+							<a :href="items.url">
+								<img :src="items.image" />
+							</a>
+						</li>
+						</ul>
+					</div>
+				</div>
+			
+			<!--                   分割线                                                      -->
+				<div class="divider divider1"></div>
+			</div>
+			<!--                  相关标签                                                 -->
+			<div class="label" v-if="showLastgood!=''">
+				<div><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop02.png" style="width: 0.31rem;height: 0.31rem;margin-top:0.19rem ;"/></div>
 				<div class="label1">全部商品</div>
 			</div>
 			<!--                  线条                                                    -->
@@ -126,6 +131,7 @@
 			var oArticle = document.getElementById("article");
 			var oArticle1 = document.getElementById("article1");
 				oArticle_footer.onclick = function(){
+		
 					oArticle1.style.display = "block";
 					oArticle.style.display = "none";
 				}
