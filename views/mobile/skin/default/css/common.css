@@ -619,7 +619,7 @@ input[type='search']{
 .albumn_index .product{
   z-index:11;
   position:relative;
-  height:3.3rem;
+  height:3.32rem;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   background:#fff;
@@ -652,6 +652,7 @@ input[type='search']{
 }
 
 .albumn_index .product .slider .item{
+  position:relative;
   width:1.8rem;
   height:3rem;
   margin-top:0.2rem;
@@ -674,10 +675,12 @@ input[type='search']{
   margin-top:0.17rem;
 }
 .singleline{
-  margin:0.2rem 0 0 0.4rem;
+  position:absolute;
+  top:0.1rem;
+  left:1.95rem;
   width:1px;
   border-left:1px solid #eee;
-  height:2.5rem;
+  height:2.2rem;
 }
 /*弹出样式*/
 .mui-popup-button{

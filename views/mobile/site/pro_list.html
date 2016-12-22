@@ -179,7 +179,7 @@
 			</div>
 			<div class="banner">
 				<div class="item" v-for="ite in brand">
-					<a href="#" class="locationA" tip="如果要跳转 填ite.url即可">
+					<a :href="ite.url" class="locationA" tip="如果要跳转 填ite.url即可">
 						<img :src="ite.logo" :alt="ite.name" style="width:1.61rem;height:1.03rem" /></a>
 				</div>
 			</div>
