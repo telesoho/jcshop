@@ -50,15 +50,13 @@ class Order extends IController implements adminAuthorization
 				'ware_house_id'      => $param['ware_house_id'],
 				'goods_list'         => $goodsList,
 			);
-
-//			exit( json_encode( array('code'=>0,'msg'=>'数据填写有误' ,'data'=>$data) ) );
 			
 			$rel = (new logistics())->createInventory($data);
 			
 			exit(json_encode($rel));
 		}
 		
-		/* 模板赋值 */
+		/* 视图 */
 		$this->redirect('inventory_add');
 	}
 	
@@ -68,6 +66,8 @@ class Order extends IController implements adminAuthorization
 	public function inventory_info(){
 		/* 接收参数 */
 		$id       = IFilter::act(IReq::get('id'), 'int');
+		
+		/* 获取详情 */
 		$modelInv = new IModel('logistics_inventory AS m');
 		$infoInv  = $modelInv->getObj('id='.$id);
 		if(empty($infoInv)) exit('数据不存在');
@@ -78,11 +78,19 @@ class Order extends IController implements adminAuthorization
 		$queryAss->order  = 'g.id ASC';
 		$infoInv['list']  = $queryAss->find();
 		
-//		var_dump($infoInv);exit();
-		
-		/* 模板赋值 */
-//		$this->setRenderData(array('data' => $infoInv));
+		/* 视图 */
+		$this->setRenderData(array('data' => $infoInv));
 		$this->redirect('inventory_info',false);
+	}
+	
+	/**
+	 * 入库状态查询
+	 */
+	public function inboundStatus(){
+		$id       = IFilter::act(IReq::get('id'), 'int');
+		
+		/* 从邮客获取状态 */
+		$rel = (new logistics)->inboundStatus($id);
 	}
 	
 	/**
