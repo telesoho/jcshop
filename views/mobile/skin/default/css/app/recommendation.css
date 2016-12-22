@@ -1,0 +1,38 @@
+#nav_tijian{
+	width: 100%;
+	height: 1.39rem;
+}
+li{
+	list-style: none;
+}
+#nav_tijian ul{
+	width: 100%;
+	height: 1.39rem;
+	display: -webkit-flex;
+	-webkit-align-content: space-around;
+	justify-content: space-around;
+}
+#nav_tijian ul li{
+	text-align: center;
+}
+#nav_tijian ul li img{
+	display: block;
+	margin: 0.05rem auto;
+	width: 0.64rem;
+	height: 0.64rem;
+}
+#nav_tijian ul li p{
+	font-size:0.26rem;
+	color:#bbbbbb;
+	margin-bottom:0.05rem ;
+}
+.rgbtable{
+	margin-top:0.1rem ;
+	display: block;
+	background:#ff44a0;
+	box-shadow:0px -0.05rem 0.21rem 0px rgba(255,67,160,0.77);
+	border-radius:1rem;
+	width:1rem;
+	height:0.08rem;
+	margin: 0 auto;
+}
