@@ -1205,6 +1205,14 @@ class Apic extends IController{
 			$dataGoods['brand'] = (object)array();
 		}
 		
+		/* 是否药品 */
+		$cid               = goods_class::catChild(2);
+		$queryCat          = new IQuery('category_extend');
+		$queryCat->where   = 'goods_id='.$dataGoods['id'].' AND category_id IN ('.$cid.')';
+		$queryCat->limit   = 1;
+		$infoCat           = $queryCat->find();
+		$dataGoods['drug'] = empty($infoCat) ? 0 : 1;
+		
 		/* 是否已收藏 */
 		$queryFor                 = new IQuery('favorite');
 		$queryFor->where          = 'user_id='.$user_id.' AND rid='.$dataGoods['id'];
