@@ -200,7 +200,7 @@ function collection(item,self){
                 item.is_favorite=0;
                 item.favorite_num=parseInt(item.favorite_num)-1
             }
-            setItem('articleData',self.articleDetail);
+            pushSession('articleGoodData',self.articleDetail);
         }
     });
 }
