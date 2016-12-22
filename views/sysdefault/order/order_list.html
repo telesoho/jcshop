@@ -9,8 +9,8 @@
 		<a href="javascript:void(0);"><button class="operating_btn" onclick="location.href='{url:/order/print_template}'"><span class="export">单据模板</span></button></a>
 		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="location.href='{url:/order/order_recycle_list}'"><span class="recycle">回收站</span></button></a>
 	</div>
-	<div class="searchbar">
 		<form action="{url:/}" method="get" name="order_list">
+	<div class="searchbar">
 			<input type='hidden' name='controller' value='order' />
 			<input type='hidden' name='action' value='order_list' />
 			<!-- <select name="search[is_seller]" class="auto">
@@ -62,9 +62,14 @@
 			<input type="hidden" name="search[create_time]" value="" />
 			<input type="hidden" name="search[completion_time]" value="" />
 			<input type="hidden" name="search[order_amount]" value="" />
-		</form>
+		
 	</div>
-	<div class="searchbar" id="adv_searchbar" style="display:none;">
+	<div class="searchbar adv_searchbar"  style="display:none;">
+		支付时间：<input class="Wdate" type="text" name="search[pay_time_start]" readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" placeholder="开始时间" />-
+		<input class="Wdate" type="text" name="search[pay_time_end]" readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="" placeholder="结束时间" />
+	</div>
+	</form>
+	<div class="searchbar adv_searchbar"  style="display:none;">
 		订单总额：<input type="text" class="tiny" name="order_amount_start" id="order_amount_start" pattern="float" value="" />-
 		<input type="text" class="tiny" name="order_amount_end" id="order_amount_end" pattern="float" value="" />
 		
@@ -277,7 +282,7 @@ function initSearchbar(from)
 	}
 	if('1' == adv_search)
 	{
-		$('#adv_searchbar').show();
+		$('.adv_searchbar').show();
 		var order_amount = $('input[name="search[order_amount]"]').val();
 		if('' != order_amount)
 		{
@@ -291,7 +296,7 @@ function initSearchbar(from)
 	}
 	else
 	{
-		$('#adv_searchbar').hide();
+		$('.adv_searchbar').hide();
 	}
 }
 
