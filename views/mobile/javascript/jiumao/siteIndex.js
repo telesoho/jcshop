@@ -16,7 +16,7 @@ var vm = new Vue({
             banner: [
                 {
                     url:'',
-                    img:''
+                    // img:''
                 }
             ],
             article_category_list:[],
@@ -146,7 +146,6 @@ function getBanner(self){
         success:function(data){
             self.showMessage=true;
             self.placeHolder=data.goods_nums;
-            // console.log(data.banner);
             setItem("placeHolder",data.goods_nums);
             self.indexInfo.banner=data.banner;
             pushSession("banner",self.indexInfo.banner);

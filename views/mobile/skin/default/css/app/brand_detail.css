@@ -75,6 +75,11 @@ li{
 	margin-top: 0.12rem;
 	height: 0.96rem;
 	position: relative;
+	/*overflow: hidden;
+	text-overflow:ellipsis;
+	display:-webkit-box; 
+	-webkit-box-orient:vertical;
+	-webkit-line-clamp:3;*/
 	
 }
 #article_top{
@@ -100,13 +105,11 @@ li{
 }
 #article1{
 	margin-top: 0.12rem;
-	height: 2.24rem;
 	position: relative;
 	display: none;
 }
 #article_top1{
 	width: 7.08rem;
-	height:2.24rem;
 	margin: 0 auto;
 	font-size:0.26rem;
 	color:#3d4245;
@@ -203,6 +206,10 @@ li{
 	padding-bottom:0.29rem ;
 	overflow: hidden;
 	position: relative;
+	border-bottom:1px solid #eee ;
+}
+#list li img{
+	margin-top: 0.15rem;
 }
 #list li t{
 		position: absolute;
@@ -231,8 +238,8 @@ li{
 }
 #list .right-list .p2{
 	font-size:0.26rem;
-	color:#979797;
-	line-height:0.3rem;
+	color:#979797;	
+	height: 0.7rem;
 	text-align:left;
 	margin-top:0.19rem ;
 	
