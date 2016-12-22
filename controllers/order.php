@@ -19,11 +19,47 @@ class Order extends IController implements adminAuthorization
 	 * 入库记录
 	 */
 	public function inventory_list(){
-
-//		var_dump('2323');exit();
-//		$queryInv = new IQuery('logistics_inventory');
-//		$queryInv->where = '';
 		$this->redirect('inventory_list');
+	}
+	
+	/**
+	 * 发送入库预报
+	 */
+	public function inventory_add(){
+		/* 发送 */
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			/* 接收参数 */
+			$param = array(
+				'oversea_express_no' => IFilter::act(IReq::get('oversea_express_no')), //快递单号
+				'ware_house_id' => IFilter::act(IReq::get('ware_house_id')), //物流仓库
+				'goods_no' => IFilter::act(IReq::get('goods_no')), //商品jcode
+				'goods_num' => IFilter::act(IReq::get('goods_num')), //商品数量
+			);
+			//检测数据
+			foreach($param as $k => $v)
+				if(empty($v)) exit( json_encode( array('code'=>1,'msg'=>'数据填写有误') ) );
+			//商品列表
+			$goodsList = array();
+			foreach($param['goods_no'] as $k => $v){
+				if($param['goods_num'][$k] < 1) exit( json_encode( array('code'=>1,'msg'=>'商品数量至少为1') ) );
+				$goodsList[] = array('goods_no'=>$v,'goods_num'=>$param['goods_num'][$k]);
+			}
+			/* 发送 */
+			$data = array(
+				'oversea_express_no' => $param['oversea_express_no'],
+				'ware_house_id' => $param['ware_house_id'],
+				'goods_list' => $goodsList,
+			);
+			
+//			exit( json_encode( array('code'=>0,'msg'=>'数据填写有误' ,'data'=>$data) ) );
+			
+			$rel = (new logistics())->createInventory($data);
+			
+			exit( json_encode( $rel ) );
+		}
+		
+		/* 模板赋值 */
+		$this->redirect('inventory_add');
 	}
 	
 	/**
@@ -34,12 +70,7 @@ class Order extends IController implements adminAuthorization
 		$this->redirect('delivery_list');
 	}
 	
-	/**
-	 * 发送入库预报
-	 */
-	public function forecast_add(){
-		
-	}
+	
 	
 	
 	/**
