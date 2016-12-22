@@ -30,7 +30,7 @@
 		        <section class="recommended line albumn_index" v-for="(item,key) in new_data" :style="key==0?style.firstArticle:style.ortherArticle">
 		            <div class="title">
 		                <span class="logo">
-			                <img :src="item.icon" alt="" class="img-hot">
+			                <img :src="tab[tabState].img_hot" alt="" class="img-hot">
 			            </span>
 		                <span class="name">
 				            {{item.category_name}}
