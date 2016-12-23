@@ -494,6 +494,7 @@ class Simple extends IController
 		{
 			//====================================
 			/* 使用优惠券 */
+			$goodsResult['final_sum'] = $goodsResult['sum']; //原价
 			$flag 						= 0;
 			if( !empty($ticket_did) ){
 				//使用优惠券码
@@ -545,8 +546,8 @@ class Simple extends IController
 				'type'                => $order_type,
 
 				//商品价格
-				'payable_amount'      => $goodsResult['sum'],
-				'real_amount'         => $goodsResult['sum'], //$goodsResult['final_sum']
+				'payable_amount'      => $goodsResult['final_sum'], //原价
+				'real_amount'         => $goodsResult['sum'], //实付价格//$goodsResult['final_sum']
 
 				//运费价格
 				'payable_freight'     => $goodsResult['deliveryOrigPrice'],

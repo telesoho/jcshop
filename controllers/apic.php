@@ -1199,7 +1199,7 @@ class Apic extends IController{
 			$queryGoods->fields         = 'id,name,sell_price,img';
 			$dataGoods['brand']['list'] = $queryGoods->find();
 			foreach($dataGoods['brand']['list'] as $k => $v){
-				$dataGoods['brand']['list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$dataGoods['img']."/w/250/h/250");
+				$dataGoods['brand']['list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
 			}
 		}else{
 			$dataGoods['brand'] = (object)array();
