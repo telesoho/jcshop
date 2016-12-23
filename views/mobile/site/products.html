@@ -119,7 +119,7 @@
 					</div>
 					<div class="text">
 						<div class="name">{{info.brand.name}}</div>
-						<div class="dis hidewrap">{{info.brand.description}}</div>
+						<div class="dis hidewrap" v-html="info.brand.description"></div>
 					</div>
 				</div>
 			</div>
@@ -454,8 +454,6 @@
 		})
 
 		$(window).load(function(){
-			$("#loading").fadeOut(300);
-
             mui('body').on("tap",".test11",function(){
                 window.location.href=this.href;
             })
