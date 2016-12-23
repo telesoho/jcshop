@@ -92,12 +92,12 @@
         </div>
         <?php $favorite_article = new IQuery('favorite_article'); $favorite_article->where='user_id = ' . $this->user['user_id'] . ' and aid=' . $this->articleRow['id']; if(!empty($favorite_article->find())){ ?>
             <div onclick="growGrass({$this->articleRow['id']})" class="articleState active">
-                <img src="/views/mobile/skin/default/image/jmj/article/grass.png" alt="" />
+                <img src="/views/mobile/skin/default/image/jmj/article/grass1.png" alt="" />
                 <span class="articleStateContent">取消种草</span>
                 </div>
         <?php } else { ?>
             <div onclick="growGrass({$this->articleRow['id']})" class="articleState">
-                <img src="/views/mobile/skin/default/image/jmj/article/grass.png" alt="" />
+                <img src="/views/mobile/skin/default/image/jmj/article/grass1.png" alt="" />
                 <span class="articleStateContent">立即种草</span>
 
             </div>
