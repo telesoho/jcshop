@@ -43,7 +43,7 @@ var em = new Vue({
 		getRelateArticle(statusOrder,self)
 	},
 	updated:function() {
-
+		document.title = this.info.name
 
 	},
 	 methods:{

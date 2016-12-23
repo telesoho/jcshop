@@ -25,7 +25,7 @@
 							<dt><a href="#"><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop01.png" style="width: 0.19rem;height: 0.19rem;"/></a></dt>		
 							<dd>商品<strong id="strong1">{{showLastImg.goods_sum}}</strong>款</dd>
 						</dl>
-						<dl>
+						<dl class="dd">
 							<dt><a href="#"><img src="/views/mobile/skin/default/image/jmj/brand_detail/video01.png" style="width: 0.24rem;height: 0.22rem;"/></a></dt>
 							<dd>专辑<strong id="strong2">{{showLastImg.article_sum}}</strong>场</dd>
 						</dl>
@@ -57,7 +57,7 @@
 				</div>
 			</div>
 			<!--                 分割线                                                      -->
-			<div v-if="showLastac.length>0" style="overflow: hidden;">
+			<div v-if="showLastac.length>0" style="overflow: hidden;margin-top:0.2rem ;">
 				<div class="divider"></div>
 
 			<!--                  相关标签                                                 -->
@@ -87,7 +87,7 @@
 				<div class="divider divider1"></div>
 			</div>
 			<!--                  相关标签                                                 -->
-			<div class="label" v-if="showLastgood!=''">
+			<div class="label" style="margin-top: 0.3rem;" v-if="showLastgood!=''">
 				<div><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop02.png" style="width: 0.31rem;height: 0.31rem;margin-top:0.19rem ;"/></div>
 				<div class="label1">全部商品</div>
 			</div>
@@ -130,6 +130,9 @@
 			var oArticle_footer1 = document.getElementsByClassName("article_footer")[1];
 			var oArticle = document.getElementById("article");
 			var oArticle1 = document.getElementById("article1");
+			var fontSize =  0.26;
+			var lineHeight = 0.32;
+			
 				oArticle_footer.onclick = function(){
 		
 					oArticle1.style.display = "block";
