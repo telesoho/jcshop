@@ -177,7 +177,7 @@
 			</div>
 		</section>
 		<!--相关专辑-->
-		<section v-if="hides==true">
+		<section v-if="relateArticle.length>1" v-cloak>
 			<div class="relatedContent" id="showArticle" v-if="article">
 				<p class="title">相关专辑</p>
 				<div class="contentInfo">
@@ -322,7 +322,6 @@
 				style1:'color:#979797',
 				style2:'color:#ff4aa0',
 				showCar:'',
-				hides:false,
 				y0:'',
 				y01:'',
 				y1:'',
@@ -477,10 +476,7 @@
 					self.showMessage=true;
 					setItem("collection",data);
 					self.info=data;
- 					if(self.info.article_list.length>1){
-						self.hides = true;
-						self.relateArticle=data.article_list;
-					}
+					self.relateArticle=data.article_list;
 				}
 			});
 		}
