@@ -80,6 +80,7 @@ ul li{
     border-radius:50%;
     border:1px solid #eee;
     margin-left:0.1rem;
+    margin-top:0.15rem;
 }
 .brand_product .content .top .text{
     margin-left:0.18rem;
@@ -90,7 +91,8 @@ ul li{
     color:#3d4245;
 }
 .brand_product .content .top .text .dis{
-    width:4rem;
+    width:5.8rem;
+    height:0.8rem;
     margin-top:0.1rem;
     font-size:0.26rem;
     color:#bbbbbb;
