@@ -122,6 +122,7 @@
 		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 		<script>
 			var stop=true;
 			var vm=new Vue({
@@ -320,29 +321,6 @@
 					$(".fix-toTop").hide()
 				}
 			});
-
-//			缓存
-			function pushSession(key,value){
-				var val=JSON.stringify(value)?JSON.stringify(value):[];
-				if(window.sessionStorage){
-					sessionStorage.setItem(key,val);
-				}else{
-					console.log("无法使用缓存");
-					return "";
-				}
-			}
-			function getSession(key){
-				if(window.sessionStorage){
-					var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
-					return JSON.parse(state);
-				}else{
-					console.log("无法使用缓存");
-					return "";
-				}
-			}
-			function removeSessionItem(key){
-				window.sessionStorage.removeItem(key);
-			}
 		</script>
 	</body>
 </html>

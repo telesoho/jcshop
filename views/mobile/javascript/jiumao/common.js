@@ -1,52 +1,6 @@
 /**
  * Created by yb on 2016/11/14.
  */
-// 模板引擎函数
-//处理分享数据
-template.helper('cal', function(obj){
-    if(obj>=1000000){
-        return parseInt(obj/1000000)+"万";
-    }
-    if(obj>=100000){
-        return (obj/100000).toFixed(1)+"万";
-    }
-    if(obj>=10000){
-        return (obj/10000).toFixed(2)+"万";
-    }
-    if(obj<10000){
-        return obj;
-    }
-    return JSON.stringify(obj);
-});
-template.helper('Base64', function(obj){
-    return Base64.encode(obj);
-})
-template.helper('JSONsplit', function(obj){
-    return obj.split(",")
-});
-template.helper('JSONreduce', function(obj){
-    var arr=[];
-    for(var m=0;m<obj.length;m++){
-        arr.push(obj[m].image);
-    }
-    return JSON.stringify(arr)
-});
-template.helper('JSONstringfly', function(obj){
-    return JSON.stringify(obj)
-});
-template.helper('JSONparse', function(obj){
-    return JSON.parse(obj);
-});
-template.helper('JSONarray', function(obj){
-    var arr=[];
-    for(var i in obj){
-        arr.push(obj[i])
-    }
-    return arr;
-});
-template.helper('parseInt', function(obj){
-   return parseInt(obj);
-});
 //本地缓存函数
 function setItem(key,value){
     var val=JSON.stringify(value)?JSON.stringify(value):[];
@@ -170,33 +124,6 @@ function getScrollTop1()
     removeSessionItem('product1');
 //        console.log(position);
 }
-// api接口请求
-//首页限时购接口
-//    function getTimePurchase(){
-//        var url1='index.php?controller=apic&action=pro_speed_list';
-//        mui.ajax(url1,{
-//            dataType:'json',//服务器返回json格式数据
-//            type:'get',//HTTP请求类型
-//            timeout:10000,//超时时间设置为10秒；
-//            success:function(data1){
-//                //服务器返回响应，根据响应结果，分析是否登录成功；
-//                document.getElementById("timer").setAttribute("data_timer",data1.end_time);
-//                var html2=template('timeWare',data1);
-//                document.getElementById("timePurchase_body").innerHTML = html2;
-//                timer('timer');
-//            },
-//            error:function(xhr,type,errorThrown){
-//                //异常处理；
-//                console.log(type);
-//            }
-//        });
-//    }
-
-
-
-
-
-
 //	获取url传递过来的参数
 function GetRequest() {
     var url = location.search; //获取url中"?"符后的字串
