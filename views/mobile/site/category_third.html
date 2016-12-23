@@ -36,33 +36,26 @@
 </div>
 <!--loading页结束-->
 <!--三级分类-->
-<section id="category">
-
-
-</section>
-<script type="text/html" id="category_third_temp">
-    <div id="category_third">
-    <% for(var i=0; i<data.length; i++){%>
-    <% var category=data[i] %>
-        <div class="product_item" id="product_item<%=category.id %>">
-            <a href="/site/products?id=<%=category.id %>">
+<section id="category" v-if="showmessage">
+    <div id="category_third" v-cloak>
+        <div class="product_item" :id="item.eid" v-for="item in new_info">
+            <a :href="item.url">
                 <div class="img">
                     <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"  />
-                    <img src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg img-ware" dataimg="<%=category.img%>" />
+                    <img src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg img-ware" :dataimg="item.img" />
                 </div>
                 <div class="content">
                     <div class="name">
-                        <%=category.name%>
+                        {{item.name}}
                     </div>
                     <div class="price">
-                        <span class="sellprice">¥<%=category.sell_price%></span>
-                        <span class="japanprice">日本价：<%=parseInt(category.jp_price) %>円</span>
-                        <span class="openprice">国内价：¥<%=category.market_price%></span>
+                        <span class="sellprice">¥{{item.sell_price}}</span>
+                        <span class="japanprice">日本价：{{item.jp_price}}円</span>
+                        <span class="openprice">国内价：¥{{item.market_price}}</span>
                     </div>
                 </div>
             </a>
         </div>
-    <%}%>
     </div>
     <div class="flexbox empty_product">
         <div class="img">
@@ -74,22 +67,62 @@
             <span>~</span>
         </div>
     </div>
-</script>
+</section>
 <script src="/views/mobile/javascript/template-native.js"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/lazyload.js"></script>
 <script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js"></script>
 <script>
+    var vm= new Vue({
+        el:'#category',
+        data:{
+            showmessage:false,
+            info:[]
+        },
+        computed:{
+            new_info:function(){
+                this.info.map(function(item){
+                    item.pid='product_item'+item.id;
+                    item.url='/site/products?id='+item.id;
+                })
+                return this.info;
+            }
+        },
+        updated:function(){
+            lazyload.init({
+                anim:false,
+                selectorName:".samLazyImg"
+            });
+        },
+        mounted:function(){
+            var self=this;
+            getcategory_thirdInfo(self,"{$_GET['id']}");
+        }
+    })
     //页面加载动画的调用
     $(window).load(function(){
         $("#loading").fadeOut(300);
-        getcategory_thirdInfo("{$_GET['id']}");
+        getScrollTop();
         // document.title = getinfo.name;
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','a',function(){document.location.href=this.href;});
     })
+    //获得分类三级商品
+    function getcategory_thirdInfo(self,id){
+        mui.ajax('/apic/category_child',{
+            data:{id:id},
+            dataType:'json',
+            type:'get',
+            timeout:10000,
+            success:function(data){
+                self.showmessage=true;
+                self.info=data;
+            }
+        });
+    }
 </script>
 
 <!-- 微信分享 -->

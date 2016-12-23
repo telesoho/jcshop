@@ -191,31 +191,7 @@ function getScrollTop1()
 //            }
 //        });
 //    }
-//获得分类三级商品
-function getcategory_thirdInfo(id){
-    mui.ajax('/apic/category_child',{
-        data:{id:id},
-        dataType:'json',
-        type:'get',
-        timeout:10000,
-        success:function(data){
-            var dat={};
-            dat.data=data;
-            console.log(data);
-            var html = template('category_third_temp',dat);
-            document.getElementById("category").innerHTML=html;
-            lazyload.init({
-                anim:false,
-                selectorName:".samLazyImg"
-            });
-            getScrollTop();
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
-            console.log(type);
-        }
-    });
-}
+
 
 
 
