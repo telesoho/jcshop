@@ -375,8 +375,6 @@
 			mounted: function(){
 				var self=this;
 				getProductDetail(statusOrder,self);
-				getRelateArticle(statusOrder,self);
-
 			},
 			updated:function() {
 				var gallery = mui('#carousel');
@@ -482,28 +480,13 @@
 					self.info=data;
  					if(self.info.article_list.length>1){
 						self.hides = true;
+						self.relateArticle=data.article_list;
 					}
-				},
-				error:function(xhr,type,errorThrown){
-					//异常处理；
-//					console.log(type);
-				}
-			});
-		}
-		function getRelateArticle(obj,self){
-			mui.ajax('/apic/products_details_article',{
-				data:{id:obj},
-				dataType:'json',//服务器返回json格式数据
-				type:'get',//HTTP请求类型
-				timeout:10000,//超时时间设置为10秒；
-				success:function(data){
-//					console.log(data)
-					self.relateArticle=data;
 				}
 			});
 		}
 		function Collection1(obj){
-			var data=getItem("collection")
+			var data=getItem("collection");
             mui.ajax('/simple/favorite_add/_paramKey_/_paramVal_',{
                 data:{
 					goods_id:data.id,
@@ -571,7 +554,15 @@
 						$('[name="mycart_count"]').text(json.count);
 						$('[name="mycart_sum"]').text(json.sum);
 						mui('#select_product').popover('toggle');
-						alert("加入购物车成功");
+						//加入购物车提示信息
+						var btnArray = ['取消', '确认'];
+						mui.confirm('跳转到购物车页面？', '添加成功', btnArray, function(e) {
+							if (e.index == 1) {
+								window.location.href='/simple/cart'
+							} else {
+
+							}
+						})
 					});
 				}
 				else
