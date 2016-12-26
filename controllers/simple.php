@@ -550,8 +550,8 @@ class Simple extends IController
 				'real_amount'         => $goodsResult['sum'], //实付价格//$goodsResult['final_sum']
 
 				//运费价格
-				'payable_freight'     => $goodsResult['deliveryOrigPrice'],
-				'real_freight'        => $goodsResult['deliveryPrice'],
+				'payable_freight'     => $goodsResult['deliveryOrigPrice'], //运费价格
+				'real_freight'        => $goodsResult['deliveryPrice'], //实付运费价格
 
 				//手续费
 				'pay_fee'             => $goodsResult['paymentPrice'],

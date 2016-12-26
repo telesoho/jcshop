@@ -280,7 +280,7 @@ class ticket{
 	private static function goodsPrice($data, $lessenMoney, $totleMoney){
 		if($lessenMoney<=0 || $totleMoney<=0) return $data;
 		foreach($data as $k => $v){
-			$data[$k]['sell_price'] = round($v['sell_price']-($v['sell_price']/$totleMoney*$lessenMoney), 2);
+			$data[$k]['reduce'] = round(($v['sell_price']/$totleMoney*$lessenMoney), 2);
 		}
 		return $data;
 	}
