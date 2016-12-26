@@ -61,10 +61,10 @@
         <div class="img">
             <img :src="img" alt=""/>
         </div>
-        <div class="content">
-            <span>~</span>
-            <span>憋拉了，到底了</span>
-            <span>~</span>
+        <div class="content" v-cloak>
+            <span>{{span1}}</span>
+            <span>{{span}}</span>
+            <span>{{span1}}</span>
         </div>
     </div>
 </section>
@@ -80,7 +80,9 @@
         data:{
             showmessage:false,
             info:[],
-            img:'/views/mobile/skin/default/image/jmj/icon/nomore.png'
+            img:'/views/mobile/skin/default/image/jmj/icon/nomore.png',
+            span:'憋拉了，到底了',
+            span1:'~'
         },
         computed:{
             new_info:function(){
