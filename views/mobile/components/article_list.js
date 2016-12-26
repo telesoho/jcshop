@@ -1,21 +1,22 @@
 /**
  * Created by yb on 2016/12/26.
  */
-// 专辑列表组件 用到的地方有四个  首页专辑  article-list  pro_list 以及今日好货推荐
+// 专辑列表组件 用到的地方有三个  首页专辑  article-list  pro_list(字段不对暂时未列入) 以及今日好货推荐
 Vue.component('article-list', {
-    template:'<div class="title">\
-    <span class="logo" >\
-    <img :src="item.icon" alt="" class="img-hot">\
-    </span>\
-    <span class="name">\
-    {{item.category_name}}\
-</span>\
-<span class="num mui-pull-right favorite<%=dat.id %>">\
-    {{item.favorite_num}}\
-</span>\
-<span class="like mui-pull-right">\
-    <img :src="item.is_favorite==0?img1:img2"  alt="" class="img-like" @click="collection(item)" />\
-    </span>\
+    template:'<div>\
+    <div class="title" v-if="state==0">\
+        <span class="logo" >\
+        <img :src="item.icon" alt="" class="img-hot" />\
+        </span>\
+        <span class="name">\
+        {{item.category_name}}\
+        </span>\
+        <span class="num mui-pull-right favorite">\
+            {{item.favorite_num}}\
+        </span>\
+        <span class="like mui-pull-right">\
+        <img :src="item.is_favorite==0?img1:img2"  alt="" class="img-like" @click="collection(item)" />\
+        </span>\
     </div>\
     <a href="#" @click="store(item)" :id="item.product_id">\
     <div class="content">\
@@ -44,16 +45,21 @@ Vue.component('article-list', {
     </div>\
     </div>\
     </div>\
-    </div>',
+    </div></div>',
     data:function(){
         return {
-            searth_pla:'圣诞神秘大礼等你来拿'
+
         }
     },
-    props:['item','state'],
+    props:['item','state','img1','img2'],
     methods:{
-        showSearth:function(){
-            getSearth()
+        store:function(item){
+            pushSession("product1",item.eid);
+            window.location.href=item.url;
+        },
+        collection: function(item){
+            // 向父组件传递参数
+            this.$emit('col', item)
         }
     }
 });

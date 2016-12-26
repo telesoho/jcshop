@@ -29,7 +29,7 @@ var vm = new Vue({
     },
     computed: {
         searth_pla: function (){
-        	return "圣诞神秘大礼等你来拿"
+        	return "圣诞神秘大礼等你来拿";
 //          return this.placeHolder+"件商品等你来搜";
         },
         new_data: function(){
@@ -39,15 +39,21 @@ var vm = new Vue({
                 item.product_id="product_item"+item.id;
                 if(item.visit_num>=1000000){
                     item.visit_num=parseInt(item.visit_num/1000000)+"万";
-                    item.favorite_num=parseInt(item.favorite_num/1000000)+"万";
                 }
                 if(item.visit_num>=100000){
                     item.visit_num=(item.visit_num/100000).toFixed(1)+"万";
-                    item.favorite_num=(item.favorite_num/100000).toFixed(1)+"万";
                 }
                 if(item.visit_num>=10000){
                     item.visit_num=(item.visit_num/10000).toFixed(2)+"万";
+                }
+                if(item.favorite_num>=1000000){
+                    item.favorite_num=parseInt(item.favorite_num/1000000)+"万";
+                }
+                if(item.favorite_num>=100000){
                     item.favorite_num=(item.favorite_num/100000).toFixed(1)+"万";
+                }
+                if(item.favorite_num>=10000){
+                    item.favorite_num=(item.favorite_num/10000).toFixed(2)+"万";
                 }
                 // item.cls="item box favoriteArticle"+item.id;
                 item.list.map(function(itemList){
@@ -98,15 +104,11 @@ var vm = new Vue({
             setItem("articlePage",1);
             window.location.href='/site/article_list'
         },
-        store: function(item){
-            pushSession("product1",item.eid);
-            window.location.href=item.url;
-        },
         fixToTop: function(){
             $("html,body").animate({scrollTop:0},0);
             return false;
         },
-        collection:function(item){
+        collect:function(item){
             var self=this;
             if(this.changeState){this.changeState=false;
                 collection(item,self);
