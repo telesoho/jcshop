@@ -134,15 +134,12 @@ $(document).ready(function(){
     }
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
-    // $('body').on('touchmove', function (event) {
-    //     event.preventDefault();
-    // });
 })
 function getBanner(self){
     mui.ajax('/apic/banner_list',{
         dataType:'json',//服务器返回json格式数据
         type:'get',//HTTP请求类型
-        timeout:10000,//超时时间设置为10秒；
+        timeout:10000,//超时时间设置为10秒
         success:function(data){
             self.showMessage=true;
             self.placeHolder=data.goods_nums;

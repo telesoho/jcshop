@@ -473,9 +473,9 @@
 				success:function(data){
 					//轮播图展示页面
 					self.showMessage=true;
-					setItem("collection",data);
-					self.info=data;
-					self.relateArticle=data.article_list;
+					setItem("collection",data.data);
+					self.info=data.data;
+					self.relateArticle=data.data.article_list;
 				}
 			});
 		}
