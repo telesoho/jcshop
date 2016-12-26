@@ -1,0 +1,117 @@
+<div class="headbar">
+	<div class="position"><span>订单</span><span>></span><span>物流管理</span><span>></span><span>入库记录</span></div>
+	<div class="operating">
+		<a href="javascript:;" onclick="event_link('{url:/order/inventory_add}')"><button class="operating_btn" type="button"><span class="addition">发送入库预报</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<!-- <a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_discount_excel}';delModel({msg:'是否要生成excel表格'});"><button class="operating_btn" type="button"><span class="export">生成EXCEL</span></button></a> -->
+		<!-- <a href="javascript:void(0)" onclick="batch_del({link:'{url:/market/ticket_discount_del}'});"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a> -->
+	</div>
+</div>
+<div class="content">
+	<form method='post' action='#' name="ticket_discount">
+		<table class="list_table">
+			<colgroup>
+				<col width="40px" />
+				<col width="100px" />
+				<col width="80px" />
+				<col width="100px" />
+				<col width="100px" />
+				<col width="100px" />
+				<col width="140px" />
+			</colgroup>
+
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>快递单号</th>
+					<th>包裹重量（单位kg）</th>
+					<th>状态</th>
+					<th>创建时间</th>
+					<th>更新时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=logistics_inventory order=id desc page=$page}
+				<tr>
+					<td><input type='checkbox' name='id[]' value="{$item['id']}" />{$item['id']}</td>
+					<td>{$item['oversea_express_no']}</td>
+					<td>{echo:$item['inbound_weight']==0 ? '' : $item['inbound_weight']}</td>
+					<td><?php switch($item['status']){
+							case 0: echo '未预报已入库';break;
+							case 1: echo '已预报未入库';break;
+							case 2: echo '已预报已入库';break;
+							case 3: echo '入库异常（包裹商品和预报不符合）';break;
+							default: echo '状态异常';
+						} ?></td>
+					<td>{echo:$item['create_time']>0 ? date('Y-m-d H:i',$item['create_time']) : ''}</td>
+					<td>{echo:$item['update_time']>0 ? date('Y-m-d H:i',$item['update_time']) : ''}</td>
+					<td>
+						<a href='javascript:;' onclick="page.inboundStatus('{$item['id']}');">
+							<img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="查看状态" title="查看状态" />
+						</a>
+
+						<a href='{url:/order/inventory_info/id/$item[id]}'>
+							<img class="operator" src="{skin:images/admin/icon_check.gif}" alt="查看详情" title="查看详情" />
+						</a>
+
+						<!-- <a href='javascript:create_dialog("{$item['id']}");'>
+							<img class="operator" src="{skin:images/admin/icon_add.gif}" alt="生成实体代金券" title="生成实体优惠券" />
+						</a> -->
+
+						
+						<!-- <a href='javascript:void(0)' onclick="delModel({msg:'是否要生成excel表格？',link:'{url:/market/ticket_excel/id/$item[id]}'});">
+							<img class="operator" src="{skin:images/admin/icon_down.gif}" alt="生成EXCEL" title="生成EXCEL" />
+						</a> -->
+						
+
+						<!-- <a href='javascript:void(0)' onclick="delModel({link:'{url:/market/ticket_discount_del/id/$item[id]}'});">
+							<img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" />
+						</a> -->
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$query->getPageBar()}
+
+<script type='text/javascript'>
+	//批量删除
+	function batch_del(conf)
+	{
+		var flag = 0;
+		$('input[name="id[]"]:checked').each(function(i){flag = 1;});
+		if(flag == 0)
+		{
+			alert('请选择要删除的数据');
+			return false;
+		}
+		$("form[name='ticket_discount']").attr('action',conf.link);
+		confirm('确定要删除所选中的信息吗？','formSubmit(\'ticket_discount\')');
+	}
+
+window.onload = function(){
+	page.init();
+};
+
+var page = {
+	loading 			: false,
+	//初始化
+	init 	 			: function(){
+	},
+	inboundStatus 		: function(id){
+		if(page.loading == true) return false;
+		page.loading = true;
+		$.post("{url:/order/inboundStatus}",{id:id},function(data,status){
+			if(status == 'success'){
+				console.log(data);
+			}
+			page.loading = false;
+		},'json');
+	}
+}
+</script>
