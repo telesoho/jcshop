@@ -298,10 +298,11 @@
 	<script src="/views/mobile/javascript/jiumao/custombox.min.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
     <script type="text/javascript" charset="utf-8">
-		//	接收页面传过来的状态值
-		var Request = new Object();
-		Request = GetRequest();
-		var statusOrder=Request["id"];
+//		//	接收页面传过来的状态值
+//		var Request = new Object();
+//		Request = GetRequest();
+//		var statusOrder=Request["id"];
+		var statusOrder={echo:IReq::get('id')};
 		//记录访问位置的id
 		setItem("product",statusOrder);
 		var vm = new Vue({
