@@ -12,6 +12,7 @@
 			<col width="100px" />
 			<col width="300px" />
 			<col width="100px" />
+			<col width="100px" />
 			<col width="220px" />
 		</colgroup>
 
@@ -20,6 +21,7 @@
 				<th>排序</th>
 				<th>分类名称</th>
 				<th>首页显示</th>
+				<th>贝海分类</th>
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -30,6 +32,7 @@
 				<td><input class="tiny" id="s{$item['id']}" size="2" type="text" onblur="toSort({$item['id']});" value="{$item['sort']}" /></td>
 				<td><img style='margin-left:{echo:$item['floor']*20}px' class="operator" src="{skin:images/admin/close.gif}" onclick="displayData(this);" alt="关闭" />{$item['name']}</td>
 				<td>{if:$item['visibility']=='1'}<span class="green">是</span>{else:}<span class="brown">否</span>{/if}</td>
+				<td>{$item['xlobo']}</td>
 				<td>
 					<a href="{url:/goods/category_edit/cid/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" title="修改" /></a>
 					<a href="javascript:void(0)" onclick="delModel({link:'{url:/goods/category_del/cid/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>

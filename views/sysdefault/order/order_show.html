@@ -454,6 +454,8 @@
 		<button type="button" class="submit" id="to_refundment" onclick="refundment({$order_id});"><span>退款</span></button>
 		<button type="button" class="submit" id="to_finish" onclick="complete({$order_id},5)"><span>完成</span></button>
 		<button type="button" class="submit" id="to_cancel" onclick="complete({$order_id},4)"><span>作废</span></button>
+
+		<button type="button" class="submit" id="to_deliver_xlobo" onclick="deliver_xlobo({$order_id});"><span>贝海做单</span></button>
 	</div>
 </div>
 
@@ -494,6 +496,11 @@ function initButton()
 	{if:in_array($orderStatus,array(1,4,8,9))}
 	$('#to_deliver').removeAttr('disabled');
 	$('#to_deliver').removeClass('inactive');
+	{/if}
+	//贝海发货
+	{if:in_array($orderStatus,array(1,4,8,9))}
+	$('#to_deliver_xlobo').removeAttr('disabled');
+	$('#to_deliver_xlobo').removeClass('inactive');
 	{/if}
 
 	//退款
@@ -596,6 +603,37 @@ function deliver(id)
 	    },
 	    cancel:function (){
 	    	return true;
+		}
+	});
+}
+
+//贝海做单
+function deliver_xlobo(id)
+{
+	var tempUrl = '{url:/order/order_deliver_xlobo/id/@id@}';
+	tempUrl     = tempUrl.replace('@id@',id);
+
+	var deliv = art.dialog.open(tempUrl,{
+		id:'deliver',
+		title: '订单号:{$order_no}【发货】',
+		cancelVal:'关闭',
+		okVal:'做单',
+		ok:function(iframeWin, topWin){
+			var checkedNums = $(iframeWin.document).find('[name="sendgoods[]"]:checked').length;
+			if(checkedNums == 0)
+			{
+				alert('请选择要发货的商品');
+				return false;
+			}
+			var isResult = iframeWin.document.forms[0].onsubmit();
+			if(isResult != false)
+			{
+				iframeWin.document.forms[0].submit();
+			}
+			return false;
+		},
+		cancel:function (){
+			return true;
 		}
 	});
 }

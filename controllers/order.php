@@ -551,6 +551,19 @@ class Order extends IController implements adminAuthorization
 		$this->setRenderData($data);
 		$this->redirect('order_deliver');
 	}
+	public function order_deliver_xlobo(){
+        //去掉左侧菜单和上部导航
+        $this->layout='';
+        $order_id = IFilter::act(IReq::get('id'),'int');
+        $data = array();
+        if($order_id)
+        {
+            $order_show = new Order_Class();
+            $data = $order_show->getOrderShow($order_id);
+        }
+        $this->setRenderData($data);
+        $this->redirect('order_deliver_xlobo');
+    }
 	/**
 	 * @brief 发货操作
 	 */
@@ -575,6 +588,48 @@ class Order extends IController implements adminAuthorization
 		}
 		die('<script type="text/javascript">parent.actionCallback("'.$result.'");</script>');
 	}
+    public function order_delivery_doc_xlobo()
+    {
+        //获得post变量参数
+        $order_id = IFilter::act(IReq::get('id'),'int');
+
+        //发送的商品关联
+        $sendgoods = IFilter::act(IReq::get('sendgoods'));
+
+        xlobo::init();
+        $ret = xlobo::create_logistic_single($order_id);
+        if (isset($ret->Succeed) && $ret->Succeed){
+            $ret = $this->add_xlobo($ret->Result, $order_id);
+            if (is_array($ret)) die('<script type="text/javascript">parent.actionCallback("'.$ret['msg'].'");</script>');
+            if ($ret) die('<script type="text/javascript">parent.actionCallback();</script>');
+        } else {
+            die('<script type="text/javascript">parent.actionCallback("做单失败");</script>');
+            common::log_write('做单失败' . print_r($ret,true));
+        }
+    }
+    public function add_xlobo($ret, $order_id){
+        $xlobo_single = new IModel('xlobo_single');
+        $data = $xlobo_single->getObj('billcode = "' . $ret->BillCode . '"');
+        $xlobo_single->setData([
+            'billcode' => $ret->BillCode,
+            'businessno' => $ret->BusinessNo,
+            'deliveryfee' => $ret->DeliveryFee,
+            'taxfee' => $ret->TaxFee,
+            'insurance' => $ret->Insurance,
+            'ispostpay' => $ret->IsPostPay,
+            'order_id' => $order_id
+        ]);
+        if (empty($data)){
+            $ret = $xlobo_single->add();
+            if ($ret){
+                return true;
+            } else {
+                return ['msg' => '面单信息保存失败'];
+            }
+        } else {
+            return ['msg' => '面单已经存在'];
+        }
+    }
 	/**
 	 * @brief 保存修改订单
 	 */
@@ -2019,5 +2074,17 @@ class Order extends IController implements adminAuthorization
             ->setImageType(QrCode::IMAGE_TYPE_PNG);
         header('Content-Type: '.$qrCode->getContentType());
         $qrCode->render();
+    }
+    function express(){
+        $id = IFilter::act(IReq::get('id'),'int');
+        $xlobo_single_query = new IQuery('xlobo_single');
+        $xlobo_single_query->where = 'order_id = ' . $id;
+        $data = $xlobo_single_query->find();
+        if (empty($data)) die('暂无该贝海面单');
+        xlobo::init();
+        $ret = xlobo::get_logistic_single_a4([$data[0]['billcode']]);
+        if (is_array($ret)) die($ret['msg']);
+        header("Content-Type: application/pdf");
+        echo base64_decode($ret);
     }
 }
