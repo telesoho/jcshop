@@ -101,6 +101,14 @@
             </span>
         </div>
     </div>
+    <!--							限时购											-->
+    <!--<div id="" style="overflow: hidden;margin: 0.6rem 0;height: 1.4rem;">
+    	<div class="clock" >
+			<img src="/views/mobile/skin/default/image/jmj/article/time.png" style=" width:100%"/>
+		</div>
+    </div>-->
+
+    <!--							分类												-->
     <div id="article_list">
         <div class="banner_img flexbox">
             <img src="/views/mobile/skin/default/image/xinzeng/baner_tip.png" alt="" />
@@ -174,8 +182,39 @@ var wechat_share = {
     imgUrl      : "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
 }
 wechat.share();
+
+
 </script>
 {/if}
 <script type="text/javascript" src="/views/mobile/javascript/jiumao/siteIndex.js?v=<?php echo time(); ?>"></script>
+<script type="text/javascript">
+	
+//
+//window.onload=function(){
+//	var clock=document.getElementsByClassName("clock")[0];
+//	var time=new Date();
+//	var h=drawpointer(0.04,0.22,"#000",time.getHours()*30+time.getMinutes()*6/12);
+//	var m=drawpointer(0.03,0.3,"#000",time.getMinutes()*6);
+//	var s=drawpointer(0.02,0.38,"red",time.getSeconds()*6);
+//	setInterval(function(){
+//		var time=new Date();
+//		h.style.WebkitTransform="rotate("+(time.getHours()*30+time.getMinutes()*6/12)+"deg)";
+//		m.style.WebkitTransform="rotate("+time.getMinutes()*6+"deg)";
+//		s.style.WebkitTransform="rotate("+time.getSeconds()*6+"deg)"
+//	},1000);
+//	
+//	
+//	function drawpointer(w,h,b,d){
+//		var newdiv=document.createElement("div");
+//	//                中间的圆
+//		var newd=document.createElement("div");
+////		newd.style.cssText="width:10px;height:10px;border-radius:50%;background:;position:absolute;left:0px;top:0px;"
+//		newdiv.style.cssText="width:"+w+"rem;height:"+h+"rem;position:absolute;left:"+((7.48-w/100)/2)+"rem;top:"+(0.7-h)+"rem;background:"+b+";-webkit-transform:rotate("+d+"deg);-webkit-transform-origin:center bottom;";
+//			clock.appendChild(newdiv);
+//			clock.appendChild(newd);
+//			return newdiv;
+//		}
+//	}
+</script>
 </body>
 </html>

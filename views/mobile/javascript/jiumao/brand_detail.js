@@ -14,7 +14,9 @@ var em = new Vue({
 	},
 	computed: {
 		showLastImg:function(){
-			return 	this.info
+			
+			return 	this.info;
+			
 		},
 		
 		showLastac:function(){
@@ -43,8 +45,12 @@ var em = new Vue({
 		getRelateArticle(statusOrder,self)
 	},
 	updated:function() {
-		document.title = this.info.name
-
+		document.title = this.info.name;
+		var heights = $("#article_top").height()
+		if(heights!=0 && heights<=39){
+			$("#article_footer").hide()
+		}
+		
 	},
 	 methods:{
 	 	
