@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/siteIndex.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/mao.css" />
 </head>
 <body>
 <section id="indexInfo"  v-cloak>
@@ -126,24 +127,11 @@
                 </div>
             </div>
         </div>
-        <div class="hot_article">
-            <div class="head flexbox">
-                <span class="darkline"></span>
-                <span>特别推荐</span>
-                <span class="darkline"></span>
-            </div>
-            <div v-for="item in indexInfo.article_category_list.ar">
-                <div class="item_img">
-                    <a href="#" @click="toArticle(item)">
-                        <img :dataimg="item.image" alt="" width="100%"  src="/views/mobile/skin/default/image/jmj/icon/big_lazy.png"  class="samLazyImg" />
-                    </a>
-                </div>
-            </div>
-        </div>
     </div>
     <section class="recommended line albumn_index" v-for="(item,key) in new_data" v-if="item.goods_num>2">
         <article-list :item="item" :img1="img1" :img2="img2" @col="collect" :state="0"></article-list>
     </section>
+    <!--<cat-refresh v-show="showCat"></cat-refresh>-->
     <div class="fix-toTop hide" @click="fixToTop">
         <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt=""  />
     </div>
@@ -162,6 +150,8 @@
  
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<!--下拉刷新加载小猫-->
+<script src="/views/mobile/components/refresh.js?v=<?php echo time(); ?>"></script>
 <!--article-list组件引入-->
 <script src="/views/mobile/components/article_list.js?v=<?php echo time(); ?>"></script>
 <!--搜索组件引入-->

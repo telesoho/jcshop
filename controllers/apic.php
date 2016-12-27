@@ -1690,19 +1690,19 @@ class Apic extends IController{
 			}
 		}
 		/* 特别推荐专辑 */
-		$query_ar         = new IQuery('article');
-		$query_ar->where  = 'top=1 and visibility=1';
-		$query_ar->order  = 'sort desc';
-		$query_ar->limit  = 3;
-		$query_ar->fields = 'id,title,image';
-		$list_ar          = $query_ar->find();
-		if(!empty($list_ar)){
-			foreach($list_ar as $k => $v){
-				$list_ar[$k]['image'] = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/738/h/353");
-			}
-		}
+//		$query_ar         = new IQuery('article');
+//		$query_ar->where  = 'top=1 and visibility=1';
+//		$query_ar->order  = 'sort desc';
+//		$query_ar->limit  = 3;
+//		$query_ar->fields = 'id,title,image';
+//		$list_ar          = $query_ar->find();
+//		if(!empty($list_ar)){
+//			foreach($list_ar as $k => $v){
+//				$list_ar[$k]['image'] = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['image']."/w/738/h/353");
+//			}
+//		}
 		/* 返回数据 */
-		$data = array('ac' => $list_ac, 'ar' => $list_ar);
+		$data = array('ac' => $list_ac, 'ar' => array());
 		$this->json_echo($data);
 	}
 	

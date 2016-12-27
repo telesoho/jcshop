@@ -111,16 +111,7 @@ window.onload=function(){
         }
     });
     mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
-//		mui('body').on('tap','a',function(){
-//			document.location.href=this.href;
-//		});
-
-    //点击直达顶部
-//		mui("body").on("tap",".fix-toTop",function(){
-//			$("html,body").animate({scrollTop:0},0);
-//			return false;
-//		});
-}
+};
 
 //上拉加载
 var stop=true;

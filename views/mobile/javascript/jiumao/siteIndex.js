@@ -25,7 +25,8 @@ var vm = new Vue({
         placeHolder:getItem('placeHolder'),
         changeState:true,
         img1:"/views/mobile/skin/default/image/jmj/icon/like.png",
-        img2:"/views/mobile/skin/default/image/jmj/icon/like-ed.png"
+        img2:"/views/mobile/skin/default/image/jmj/icon/like-ed.png",
+        showCat:false
     },
     computed: {
         searth_pla: function (){
@@ -94,9 +95,6 @@ var vm = new Vue({
         
     },
     methods: {
-        toArticle: function(item){
-            window.location.href='/site/article_detail?id='+item.id;
-        },
         toArticle_list: function(item){
             // 保存分类的名字和id
             setItem("artileName",item.name);
@@ -185,6 +183,7 @@ function pullupInfoRefresh(self){
             }else{
                 stop=true;
             }
+            self.showCat=false;
             self.page++;
             pushSession("indexPage",self.page);
 
@@ -197,6 +196,7 @@ $(window).bind('scroll', function() {
     if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
             stop=false;
+            vm.showCat=true;
             pullupInfoRefresh(vm);
         }
     }
