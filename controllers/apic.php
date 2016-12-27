@@ -411,7 +411,7 @@ class Apic extends IController{
 	 */
 	public function get_ticket(){
 		/* 接收参数 */
-		$tid = IFilter::act(IReq::get('tid'), 'int');//活动ID，必填
+		$tid = IFilter::act(IReq::get('tid'), 'int');//优惠券ID，必填
 		if(!isset($this->user['user_id']) || empty($this->user['user_id'])) $this->json_echo(apiReturn::go('001001'));
 		$user_id = $this->user['user_id'];
 		
@@ -468,7 +468,7 @@ class Apic extends IController{
 				/* 开始领取 */
 				$dataTckOn = $dataTck[rand(0, count($dataTck)-1)];
 				break;
-			case 2: //圣诞活动
+			case 2||3: //圣诞元旦活动
 				$where   = 'user_id='.$user_id.' AND ticket_id in ('.implode(',', $idTck).') AND `from`=0';
 				$dataAcc = $modelAcc->query($where, '*', 'id desc', 1);
 				if(!empty($dataAcc) && strtotime(date('Y-m-d', time()))<=$dataAcc[0]['create_time']) $this->json_echo(apiReturn::go('002025')); //今天已经领取过优惠券
@@ -538,13 +538,14 @@ class Apic extends IController{
 	 * 活动商品列表
 	 */
 	public function activity_goods_list(){
-		$param = array('pagesize' => 20, //每页显示条数
-					   'page'     => IFilter::act(IReq::get('page'), 'int'),//分页，选填
-					   'aid'      => IFilter::act(IReq::get('aid'), 'int'), //活动ID，选填
-					   'cid'      => IFilter::act(IReq::get('cid')), //分类ID，选填
-					   'bid'      => IFilter::act(IReq::get('bid')), //品牌ID，选填
-					   'did'      => IFilter::act(IReq::get('did'), 'int'), //推荐ID，选填
-					   'tag'      => IFilter::act(IReq::get('tag')), //标签，选填
+		$param = array(
+			'pagesize' => 20, //每页显示条数
+			'page'     => IFilter::act(IReq::get('page'), 'int'),//分页，选填
+			'aid'      => IFilter::act(IReq::get('aid'), 'int'), //活动ID，选填
+			'cid'      => IFilter::act(IReq::get('cid')), //分类ID，选填
+			'bid'      => IFilter::act(IReq::get('bid')), //品牌ID，选填
+			'did'      => IFilter::act(IReq::get('did'), 'int'), //推荐ID，选填
+			'tag'      => IFilter::act(IReq::get('tag')), //标签，选填
 		);
 		$data  = Api::run('goodsList', $param);
 		$this->json_echo(apiReturn::go('0', $data));
@@ -732,7 +733,7 @@ class Apic extends IController{
 					$where = 'm.is_del=0 AND b.id IN (26,32,56,74,78,82,100)'; //"资生堂","花王","嘉娜宝","ROSETTE","dhc","高丝","小林制药"
 					break;
 				case 3: //聚划算
-					$where = 'm.is_del=0 AND m.activity=2';
+					$where = 'm.is_del=0 AND m.activity=3';
 					break;
 				case 4: //狗子推荐
 					$where = 'm.is_del=0 AND d.commend_id=4 AND c.category_id IN ('.goods_class::catChild(126).')';
