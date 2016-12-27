@@ -116,7 +116,7 @@ function getActiveInfo(self){
 ////			data.data.map(function(item){
 ////				self.info.push(item);
 ////			})
-		console.log(data.data)
+
 		},
 
 	});
@@ -135,7 +135,7 @@ function youhuijian(tid){
 				var btnArray = ['取消', '查看'];
                     mui.confirm('领取成功，查看优惠券？', '领取成功', btnArray, function(e) {
                         if (e.index == 1) {
-                         
+                            
                             window.location.href="/site/ticket_list"
                         } else {
                             

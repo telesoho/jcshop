@@ -134,6 +134,8 @@ class APIGoods{
 		return $data;
 	}
 
+
+
 	//获取全部商品特价活动
 	public function getSaleList(){
 		$promoDB   = new IModel('promotion');
@@ -154,6 +156,7 @@ class APIGoods{
 		$promoDB  = new IModel('promotion');
 		$promoRow = $promoDB->getObj("is_close = 0 and award_type = 7 and id = {$id}");
 		if($promoRow){
+            
 			$intro                 = JSON::decode($promoRow['intro']);
 			$intro                 = array_keys($intro);
 			$intro                 = join(",", $intro);
