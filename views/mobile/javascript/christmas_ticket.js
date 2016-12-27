@@ -1,10 +1,10 @@
 var oInput = document.getElementById("inputs");
 var	oInputval = oInput.value
-
+var pages = 0;
 var em = new Vue({
 	el:"#PopupWindow",
 	data:{
-		aid:"2",
+		aid:"3",
 		pid:oInputval,
 		info:[],
 		p:"",
@@ -12,8 +12,6 @@ var em = new Vue({
 	},
 	computed:{
 		newactivity:function(){
-			console.log(this.info)
-			
 			return this.info	
 		},
 		aaa:function(){
@@ -46,9 +44,52 @@ function activity(self){
 		type: 'get',
 		timeout: 10000,
 		success: function (data) {
+			console.log(2);
 			self.info = data.msg;
 			self.info1 = data.code
 		console.log(data)
 		}
 	});
 }
+// 					弹	窗	处	理
+		 
+			$("#btn_img").click(function(){
+				pages++
+				tanchaun();
+				if(pages>=2){
+					activity(em)
+				}
+			})
+	function tanchaun(){
+//			document.body.style.overflow="hidden";
+			$("#bgg").css({
+				"display":"block",
+				"overflow":"hidden"
+			})
+		
+			$("#PopupWindow").css({
+				"display":"block",
+			}).animate({
+				"top": "1.2rem",
+			},500);
+			
+			$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
+			$(".fix-nav").css({
+				"display":"none"
+			})
+		$("#guan").click(function(){
+           
+//			document.body.style.overflow=""
+			$("#bgg").css({
+				"display":"none",
+				"overflow":"hidden"
+			})
+			$("#PopupWindow").css({
+				"display":"none",
+				"top": "-6.78rem"
+			});
+			$(document).unbind('touchmove');
+			
+		})
+		
+	}

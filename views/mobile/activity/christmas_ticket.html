@@ -33,7 +33,7 @@
     <div id="PopupWindow" style="display: none;border-radius:20px;left: 3.8rem;">
     	<div id="logo"><img id="giftBox" src="/views/mobile/skin/default/image/jmj/new_active/hander-ed.png" style="width: 2.6rem;height: 2.6rem;margin: 0 auto;"/></div>
     	<div style="width: 100%;margin-bottom:0.8rem ;">
-    		<p v-if="info1" >{{aaa}}</p>
+    		<p v-if="info1" style="color:#ff6060;">{{aaa}}</p>
     		<p><t>{{newactivity}}</t></p>
     	</div>
     	<span @click="tiao">去看看</span>
@@ -53,43 +53,7 @@
 	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/christmas_ticket.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
-				// 					弹	窗	处	理
-		 
-			$("#btn_img").click(function(){
-				tanchaun();
-			})
-	function tanchaun(){
-//			document.body.style.overflow="hidden";
-			$("#bgg").css({
-				"display":"block",
-				"overflow":"hidden"
-			})
 		
-			$("#PopupWindow").css({
-				"display":"block",
-			}).animate({
-				"top": "1.2rem",
-			},500);
-			
-			$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
-			$(".fix-nav").css({
-				"display":"none"
-			})
-		$("#guan").click(function(){
-           
-//			document.body.style.overflow=""
-			$("#bgg").css({
-				"display":"none",
-				"overflow":"hidden"
-			})
-			$("#PopupWindow").css({
-				"display":"none",
-				"top": "-6.78rem"
-			});
-			$(document).unbind('touchmove');
-			
-		})
-	}
 	var oshareimg = document.getElementsByClassName("span2")[0]
 	oshareimg.onclick = function(){
 		document.body.scrollTop = 0;
