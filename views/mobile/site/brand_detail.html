@@ -57,7 +57,7 @@
 				</div>
 			</div>
 			<!--                 分割线                                                      -->
-			<div v-if="showLastac.length>0" style="overflow: hidden;margin-top:0.2rem ;">
+			<div v-if="showLastac.length>0" style="overflow: hidden;background: #fff;">
 				<div class="divider"></div>
 
 			<!--                  相关标签                                                 -->
@@ -87,7 +87,7 @@
 				<div class="divider divider1"></div>
 			</div>
 			<!--                  相关标签                                                 -->
-			<div class="label" style="margin-top: 0.3rem;" v-if="showLastgood!=''">
+			<div class="label" style="padding-top: 0.3rem;" v-if="showLastgood!=''">
 				<div><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop02.png" style="width: 0.31rem;height: 0.31rem;margin-top:0.19rem ;"/></div>
 				<div class="label1">全部商品</div>
 			</div>
@@ -108,7 +108,7 @@
 				</ul>
 			</div>
 			<footer>
-		        <div class="flexbox empty_product" style="background:#fff" v-if="infoState">
+		        <div class="flexbox empty_product" style="background:#eee" v-if="infoState">
 		            <div class="img">
 		                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
 		            </div>
@@ -131,7 +131,7 @@
 			var oArticle = document.getElementById("article");
 			var oArticle1 = document.getElementById("article1");
 			var fontSize =  0.26;
-			var lineHeight = 0.32;
+			var lineHeight = 0.32;	
 				oArticle_footer.onclick = function(){
 		
 					oArticle1.style.display = "block";

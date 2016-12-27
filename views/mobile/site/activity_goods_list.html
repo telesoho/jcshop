@@ -7,69 +7,13 @@
 		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
 		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/cosme/activity_goods_list.css?v=<?php echo time(); ?>"/>
 	</head>
-	<style type="text/css">
-		body{background:#ffc75b}
-		#list ul li .img{
-			border-bottom: 1px solid #000;
-			
-		}
-		#list ul li .img img{
-			width: 3.4rem;
-			height: 3.4rem;
-		}
-		#list ul li{
-			height: 5.13rem;
-			display: -webkit-box;
-			background: #fff;
-		}
-		#list ul li p{
-			margin-left:0.2rem ;
-			margin-top: 0.12rem;
-			
-			overflow:hidden;
-			display: -webkit-box;
-			text-overflow:ellipsis;
-			-webkit-line-clamp: 2;
-			-o-text-overflow:ellipsis;
-			width:90%;
-		    -webkit-box-orient: vertical;
-		    word-break: break-all;
-		}
-		#list ul li span{
-			display: block;
-			margin-left: 0.2rem;
-		}
-		#list ul li .xian{
-			margin-bottom:0.01rem ;
-		}
-		#list ul .xian .pirce1{
-			font-size:0.3rem ;
-			
-		}
-		#wrap_logo{
-			background: #ffc75b;
-			height: 6rem;
-			overflow: hidden;
-		}
-		#wrap_logo #logo{
-			overflow: hidden;
-		}
-		.fix-toTop{
-			position: fixed;
-			right: 0.39rem;
-		    bottom: 0.7rem;
-		    z-index: 999;
-		    width: 0.84rem;
-		    height: 0.84rem;
-		}
-	</style>
 	<body>
 	<div id="activeInfo" v-cloak>
 		<div id="top">
 			<img src="/views/mobile/skin/default/image/jmj/active_goods_list/toplogo.png"/>
 		</div>
 		
-		<div id="logo" style="margin-top: -0.01rem;">
+		<div id="logo">
 			<div class="logo1" style="overflow: hidden;">
 				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/snackArea.png" @click="lingshi()"/></a>
 				<a><img src="/views/mobile/skin/default/image/jmj/active_goods_list/drugstoreArea.png" @click="yaozhuang()"/></a>
@@ -151,7 +95,6 @@
 						self.page=1;
 						getActiveInfo(self);
 					}
-
 				},
 				updated:function() {
 					// 页面加载完成执行的函数;
@@ -304,7 +247,6 @@
 			}
 			//上拉加载
 			$(window).bind('scroll', function(){
-				
 				if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
 					if(stop==true){
 						stop=false;
@@ -321,6 +263,29 @@
 					$(".fix-toTop").hide()
 				}
 			});
+
+//			缓	存
+			function pushSession(key,value){
+				var val	= JSON.stringify(value)?JSON.stringify(value):[];
+				if(window.sessionStorage){
+					sessionStorage.setItem(key,val);
+				}else{
+					console.log("无法使用缓存");
+					return "";
+				}
+			}
+			function getSession(key){
+				if(window.sessionStorage){
+					var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+					return JSON.parse(state);
+				}else{
+					console.log("无法使用缓存");
+					return "";
+				}
+			}
+			function removeSessionItem(key){
+				window.sessionStorage.removeItem(key);
+			}
 		</script>
 	</body>
 </html>

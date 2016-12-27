@@ -5,24 +5,24 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<title>圣诞许愿</title>
+	<title>元旦爆竹</title>
 	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
 	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/christmas_ticket.css?v=<?php echo time(); ?>"/>
 </head>
 <body>
 	
 	<div id="top">
-		<img src="/views/mobile/skin/default/image/jmj/new_active/xuyuan_02.jpg"/>
+		<img src="/views/mobile/skin/default/image/jmj/new_active/xuyuan02-ed.png" style="width: 100%;"/>
 	</div>
 	<div id="top_two">
-		<img id="btn_img" src="/views/mobile/skin/default/image/jmj/new_active/xuyuan_03.png" style="width: 2.78rem;"/>
+		<img id="btn_img" src="/views/mobile/skin/default/image/jmj/new_active/xuyuan03-ed.png" style="width: 2.8rem;"/>
 	</div>
-	<div id="main">
+	<!--<div id="main">
 		<img src="/views/mobile/skin/default/image/jmj/new_active/xuyuan_04.jpg"/>
-	</div>
+	</div>-->
 	<div id="foorter">
-		<span class="span1"><a href="/activity/christmas_index" style="color: #fff;">回到主会场</a></span>
-		<span class="span2">分享给好友</span>
+		<span class="span1"><a href="/activity/christmas_index"><img src="/views/mobile/skin/default/image/jmj/new_active/fanhui.png" style="width: 5.4rem;"/></a></span>
+		<span class="span2"><img src="/views/mobile/skin/default/image/jmj/new_active/share.png" style="width: 5.4rem;"/></span>
 	</div>
 	<!--					弹	窗	处	理	领	奬													-->
 	<div id="backgrounds" style="position:relative;width: 100%;display: none;height: 100%;background: #000;opacity: 0.5;display: none;position: absolute;left: 0;top: 0;z-index: 88;">
@@ -30,10 +30,10 @@
 			<img id="hander" src="/views/mobile/skin/default/image/jmj/ticket_gain/hander.png" style="width: 0.56rem; height: 0.72rem;position: absolute;top: 0;right: 0.2rem;"/>
 		</div>
 	<!--					弹	窗	处	理	领	奬								-->
-    <div id="PopupWindow" style="display: none;border-radius:20px;">
-    	<div id="logo"><img id="giftBox" src="/views/mobile/skin/default/image/jmj/new_active/laoren.png" style="width: 2.6rem;height: 2.6rem;margin: 0 auto;"/></div>
+    <div id="PopupWindow" style="display: none;border-radius:20px;left: 3.8rem;">
+    	<div id="logo"><img id="giftBox" src="/views/mobile/skin/default/image/jmj/new_active/hander-ed.png" style="width: 2.6rem;height: 2.6rem;margin: 0 auto;"/></div>
     	<div style="width: 100%;margin-bottom:0.8rem ;">
-    		<p v-if="info1">{{aaa}}</p>
+    		<p v-if="info1" style="color:#ff6060;">{{aaa}}</p>
     		<p><t>{{newactivity}}</t></p>
     	</div>
     	<span @click="tiao">去看看</span>
@@ -53,43 +53,7 @@
 	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/christmas_ticket.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
-				// 					弹	窗	处	理
-		 
-			$("#btn_img").click(function(){
-				tanchaun();
-			})
-	function tanchaun(){
-//			document.body.style.overflow="hidden";
-			$("#bgg").css({
-				"display":"block",
-				"overflow":"hidden"
-			})
 		
-			$("#PopupWindow").css({
-				"display":"block",
-			}).animate({
-				"top": "1.2rem",
-			},500);
-			
-			$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
-			$(".fix-nav").css({
-				"display":"none"
-			})
-		$("#guan").click(function(){
-           
-//			document.body.style.overflow=""
-			$("#bgg").css({
-				"display":"none",
-				"overflow":"hidden"
-			})
-			$("#PopupWindow").css({
-				"display":"none",
-				"top": "-6.78rem"
-			});
-			$(document).unbind('touchmove');
-			
-		})
-	}
 	var oshareimg = document.getElementsByClassName("span2")[0]
 	oshareimg.onclick = function(){
 		document.body.scrollTop = 0;

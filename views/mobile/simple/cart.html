@@ -176,22 +176,15 @@
 		//定义template方法
 	});
 function getCartInfo(self){
-	mui.ajax('index.php?controller=apic&action=cart',{
+	mui.ajax('/apic/cart',{
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
-		headers:{'Content-Type':'application/json'},
 		success:function(data){
 			console.log(data);
 			self.infoMessage=data;
 			self.showMessage=true;
 			setItem("condition_price",data.condition_price);
-//			var html = template('shopCarTemplate',data);
-//			document.getElementById("shopcarContent").innerHTML = html;
-		},
-		error:function(xhr,type,errorThrown){
-			//异常处理；
-			console.log(type);
 		}
 	});
 }

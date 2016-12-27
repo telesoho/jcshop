@@ -66,7 +66,6 @@ var vm= new Vue({
         article: function(){
             this.info.article_list.map(function(item){
                 item.url="/site/article_detail?id="+item.id;
-            
                 item.len=item.goods_list.length;
                 item.goods_list.map(function(item1){
                     item1.url="/site/products?id="+item1.id;
@@ -112,16 +111,7 @@ window.onload=function(){
         }
     });
     mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
-//		mui('body').on('tap','a',function(){
-//			document.location.href=this.href;
-//		});
-
-    //点击直达顶部
-//		mui("body").on("tap",".fix-toTop",function(){
-//			$("html,body").animate({scrollTop:0},0);
-//			return false;
-//		});
-}
+};
 
 //上拉加载
 var stop=true;

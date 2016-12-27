@@ -10,33 +10,27 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/christmas_grow.css" />
 
-    <title>麋鹿不迷路</title>
+    <title>元旦点灯笼</title>
 </head>
 <body>
-<div id="info">
-    <div class="img">
-        <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu02.jpg" alt="" />
-    </div>
-    <div class="img">
-        <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu03.jpg" alt="" />
-    </div>
-    <div class="img activeImg">
-        <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu04.png" alt="" class="bgimg"/>
-        <!--麋鹿位置判定-->
-        <div class="milu">
-            <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu.png" alt="" :style="miluPosition" class="miluImg" />
+<div id="info" v-if="showmessage">
+    <div class="img activeImg" v-cloak>
+        <img src="/views/mobile/skin/default/image/jmj/new_active/milu/bg.png" alt="" class="bgimg"/>
+        <div class="text flexbox">
+           {{money}}
         </div>
+        <div class="button_bottom">
+            <a href="/activity/christmas_index">回到主会场</a>
+        </div>
+        <!--麋鹿位置判定-->
+        <!--<div class="milu">-->
+            <!--<img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu.png" alt="" :style="miluPosition" class="miluImg" />-->
+        <!--</div>-->
         <!--领取状态以及领取位置-->
         <div :class="item.className" v-for="item in newState">
-            <img :src="item.buttonState" alt=""  class="button" @click="subWard(item)"/>
-            <img :src="item.fontState" style="height:0.27rem;width:auto" alt="" class="font" />
+            <img :src="item.buttonState" alt=""  class="button" @click="subWard(item)" style="width:4.86rem;height:4.86rem;"/>
+            <img :src="item.fontState" style="width:2rem" alt="" class="font" />
         </div>
-    </div>
-    <div class="img">
-        <img src="/views/mobile/skin/default/image/jmj/new_active/milu/milu05.jpg" alt="" />
-    </div>
-    <div class="button_bottom">
-        <a href="/activity/christmas_index">回到主会场</a>
     </div>
     <!--领取界面-->
     <!--翻译弹出-->
@@ -74,25 +68,19 @@
     var vm= new Vue({
         el:"#info",
         data:{
+            showmessage:false,
 //            地址的两个状态
                 img1:'/views/mobile/skin/default/image/jmj/new_active/milu/cho.png',
                 img2:'/views/mobile/skin/default/image/jmj/new_active/milu/uncho.png',
 //             按钮的三个状态
-                buttonState1:'/views/mobile/skin/default/image/jmj/new_active/milu/get.png',//可以获取
-                buttonState2:'/views/mobile/skin/default/image/jmj/new_active/milu/unget.png',//不能获取
-                buttonState3:'/views/mobile/skin/default/image/jmj/new_active/milu/alget.png',//已经获取
+                buttonState1l:'/views/mobile/skin/default/image/jmj/new_active/milu/getleft.png',//左边可以获取
+                buttonState2l:'/views/mobile/skin/default/image/jmj/new_active/milu/ungetleft.png',//左边不能获取
+                buttonState1r:'/views/mobile/skin/default/image/jmj/new_active/milu/getright.png',//右边可以获取
+                buttonState2r:'/views/mobile/skin/default/image/jmj/new_active/milu/ungetright.png',//右边不能获取
 //            文字的三个状态
                 fontState1:'/views/mobile/skin/default/image/jmj/new_active/milu/getFont.png',//可以获取,
                 fontState2:'/views/mobile/skin/default/image/jmj/new_active/milu/ungetFont.png',//不能获取
                 fontState3:'/views/mobile/skin/default/image/jmj/new_active/milu/algetFont.png',//已经获取
-//            麋鹿的四个位置
-            position:{
-                position1:'top:0.1rem;left:0.3rem;',
-                position2:'top:1.7rem;left:4.5rem;',
-                position3:'top:3.4rem;left:3rem;transform:rotateY(180deg)',
-                position4:'top:5.2rem;left:1.6rem;transform:rotate(90deg)',
-                position5:'top:6.5rem;left:3rem;'
-            },
 //            数据展示
             info_data:{
                 list:[]
@@ -105,16 +93,8 @@
             nowGid:''
         },
         computed:{
-            //麋鹿的位置判定
-            miluPosition:function(){
-                var money=parseInt(this.info_data.money);
-                console.log(money)
-                if(money<88){this.newPosition=this.position.position1};
-                if(88<=money&&money<388){this.newPosition=this.position.position2};
-                if(388<=money&&money<888){this.newPosition=this.position.position3};
-                if(888<=money&&money<1288){this.newPosition=this.position.position4};
-                if(money>=1288){this.newPosition=this.position.position5};
-                return this.newPosition;
+            money:function(){
+                return parseInt(this.info_data.money);
             },
             //判定各个按钮的状态
             newState: function(){
@@ -122,23 +102,43 @@
                 var self=this;
                 this.info_data.list.map(function(item){
                     item.className="position"+i;
-                    i++;
-                    switch(item.is_play)
-                    {
-                        case 1:
+                    if(i==1||i==3){
+                        switch(item.is_play)
+                        {
+                            case 1:
 //                            不能领取
-                            item.buttonState=self.buttonState2;
-                            item.fontState=self.fontState2;
-                            break;
-                        case 2:
-                            item.buttonState=self.buttonState1;
-                            item.fontState=self.fontState1;
-                            break;
-                        case 3:
-                            item.buttonState=self.buttonState3;
-                            item.fontState=self.fontState3;
-                            break;
+                                item.buttonState=self.buttonState2l;
+                                item.fontState=self.fontState2;
+                                break;
+                            case 2:
+                                item.buttonState=self.buttonState1l;
+                                item.fontState=self.fontState1;
+                                break;
+                            case 3:
+                                item.buttonState=self.buttonState1l;
+                                item.fontState=self.fontState3;
+                                break;
+                        }
                     }
+                    if(i==2||i==4){
+                        switch(item.is_play)
+                        {
+                            case 1:
+//                            不能领取
+                                item.buttonState=self.buttonState2r;
+                                item.fontState=self.fontState2;
+                                break;
+                            case 2:
+                                item.buttonState=self.buttonState1l;
+                                item.fontState=self.fontState1;
+                                break;
+                            case 3:
+                                item.buttonState=self.buttonState1l;
+                                item.fontState=self.fontState3;
+                                break;
+                        }
+                    }
+                    i++;
                 })
                 return this.info_data.list;
             },
@@ -179,12 +179,13 @@
     function getPresentCode(self){
         $.ajax('/apic/activity_grow_val', {
             data: {
-                aid:2
+                aid:3
             },
             dataType: 'json',	// 服务器返回json格式数据
             type: 'post',		// HTTP请求类型
             timeout: 10000,		// 超时时间设置为10秒；
             success: function (data) {
+                self.showmessage=true;
                 self.info_data=data.data;
                 console.log(self.info_data.money)
             }
@@ -209,7 +210,7 @@
     function getGoods(self){
         $.ajax('/apic/activity_grow_gift', {
             data: {
-                aid:2,
+                aid:3,
                 gid:self.nowGid,
                 did:self.giveId
             },
@@ -251,7 +252,7 @@
         if(item.type==1){
             $.ajax('/apic/activity_grow_gift', {
                 data: {
-                    aid:2,
+                    aid:3,
                     gid:item.id
                 },
                 dataType: 'json',	// 服务器返回json格式数据

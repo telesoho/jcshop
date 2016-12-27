@@ -1,3 +1,6 @@
+body{
+	background:#ffc75b;
+}
 #top{
 	width: 100%;
 	height: 4.22rem;
@@ -9,6 +12,7 @@ li{
 	width: 100%;
 }
 #logo{
+	margin-top: -0.01rem;
 	width: 100%;
 	background: url(../../../image/jmj/active_goods_list/bg.gif);
 	background-size: 100% 100%;
@@ -83,6 +87,23 @@ li{
 	-webkit-justify-content: space-between;
 	-webkit-flex-wrap: wrap;
 }
+#list ul li{
+	height: 5.13rem;
+	display: -webkit-box;
+	background: #fff;
+}
+#list ul li p{
+	margin-left:0.2rem ;
+	margin-top: 0.12rem;
+	overflow:hidden;
+	display: -webkit-box;
+	text-overflow:ellipsis;
+	-webkit-line-clamp: 2;
+	-o-text-overflow:ellipsis;
+	width:90%;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+}
 #list li{
 	margin-top:0.2rem;
 	width: 3.45rem;
@@ -100,13 +121,22 @@ li{
 #list li i img{
 	width: 0.8rem;
 	height: 0.8rem;
+	border-bottom: 1px solid #000;
+}
+#list ul li .img{
+	border-bottom: 1px solid #000;
 	
 }
 #list .img img{
 	display: block;
-	width:3.45rem;
-	height:3.45rem;
+	width:3.4rem;
+	height:3.4rem;
 	border-radius:0.2rem 0.2rem 0 0;
+}
+
+#list ul li span{
+	display: block;
+	margin-left: 0.2rem;
 }
 #list li p{
 	font-size: 0.24rem;
@@ -121,4 +151,27 @@ li{
 #list li .yuanjia{
 	color: #999;
 	font-size: 0.24rem;
+}
+#list ul li .xian{
+	margin-bottom:0.01rem ;
+}
+#list ul .xian .pirce1{
+	font-size:0.3rem ;
+	
+}
+#wrap_logo{
+	background: #ffc75b;
+	height: 6rem;
+	overflow: hidden;
+}
+#wrap_logo #logo{
+	overflow: hidden;
+}
+.fix-toTop{
+	position: fixed;
+	right: 0.39rem;
+    bottom: 0.7rem;
+    z-index: 999;
+    width: 0.84rem;
+    height: 0.84rem;
 }

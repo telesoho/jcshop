@@ -13,7 +13,48 @@ class Market extends IController implements adminAuthorization
 	{
 
 	}
-
+	
+	/**
+	 * 限时购列表
+	 */
+	public function activity_speed_list(){
+		$this->redirect('activity_speed_list');
+	}
+	
+	/**
+	 * 限时购添加
+	 */
+	public function activity_speed_add(){
+		
+	}
+	
+	/**
+	 * 限时购编辑
+	 */
+	public function activity_speed_edit(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+		}
+		/* 限时购详情 */
+		$id         = IFilter::act(IReq::get('id'), 'int');//活动ID
+		$modelSpeed = new IModel('activity_speed');
+		$infoSpeed  = $modelSpeed->getObj('id='.$id);
+		if(!empty($infoSpeed)){
+			$queryAcc          = new IQuery('activity_speed_access AS m');
+			$queryAcc->join    = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
+			$queryAcc->where   = 'pid='.$id;
+			$queryAcc->fields  = 'm.*,g.name,g.img';
+			$infoSpeed['list'] = $queryAcc->find();
+			if(!empty($infoSpeed['list'])){
+				foreach($infoSpeed['list'] as $k => $v){
+					$infoSpeed['list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
+				}
+			}
+		}
+		
+		/* 视图 */
+		$this->setRenderData(array('data'=>$infoSpeed));
+		$this->redirect('activity_speed_edit');
+	}
 
 	/**
 	 * 活动列表
