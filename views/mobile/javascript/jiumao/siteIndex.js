@@ -95,9 +95,6 @@ var vm = new Vue({
         
     },
     methods: {
-        toArticle: function(item){
-            window.location.href='/site/article_detail?id='+item.id;
-        },
         toArticle_list: function(item){
             // 保存分类的名字和id
             setItem("artileName",item.name);
