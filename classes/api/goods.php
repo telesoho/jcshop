@@ -57,7 +57,7 @@ class APIGoods{
 			foreach($data as $k => $v){
 				//修改原价
 				if(isset($v['original_price']))
-					$data[$k]['original_price'] = round($v['original_price']*$goods_ratio_original, 2);
+					$data[$k]['original_price'] = round($v['sell_price']*$goods_ratio_original, 2);
 				//修改销售价格
 				if(!isset($v['sell_price'])) continue;
 				if(isset($aGoods[$v[$key]])){
@@ -70,6 +70,13 @@ class APIGoods{
 			}
 		}
 		return isset($is_array) && $is_array==1 ? $data[0] : $data;
+	}
+	
+	/**
+	 * 判断商品是否包邮
+	 */
+	public function goodsDelivery(){
+		
 	}
 
 	/**

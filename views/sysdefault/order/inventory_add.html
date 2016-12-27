@@ -1,0 +1,206 @@
+{js:my97date}
+
+<div class="headbar clearfix">
+	<div class="position"><span>物流</span><span>></span><span>入库记录</span><span>></span><span>发送入库预报</span></div>
+	<ul class="tab" name="menu1">
+		<li id="li_1" class="selected"><a href="javascript:void(0)" hidefocus="true" onclick="page.select_tab('1')">入库单</a></li>
+		<!-- <li id="li_2"><a href="javascript:void(0)" hidefocus="true" onclick="page.select_tab('2')">活动商品</a></li> -->
+	</ul>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/order/inventory_add}" name='inventory_add'  method="post">
+		<div id="table_box_1">
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>快递单号：</th>
+					<td>
+						<input type='text' name='oversea_express_no' class='normal' pattern='required' alt='' placeholder="供应商发货单号"/>
+					</td>
+				</tr>
+				<tr>
+					<th>物流仓库：</th>
+					<td>
+						<select class="auto" name="ware_house_id">
+							<option value="JPB">邮客东京</option>
+						</select>
+					</td>
+				</tr>
+				<tr class="ticket" style="background-color:#DBEAF9;">
+					<th style="background-color:#DBEAF9;">包含商品：</th>
+					
+					<td>
+						<button class='btn' type='button' onclick="page.searchGoods(this);"><span>选择商品</span></button>
+						<div id="goodsListBox" style="">
+
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+			<!-- <div id="table_box_2" cellpadding="0" cellspacing="0" style="display:none">
+				<table class="form_table">
+					<col width="150px" />
+					<col />
+					<tr>
+						<th></th>
+						<td>
+							
+						</td>
+					</tr>
+				</table>
+			</div> -->
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<td></td>
+					<td><button class="submit" type='button' onclick="page.inventoryAdd(this);"><span>发　送</span></button>
+					</td>
+				</tr>
+			</table>
+
+		</form>
+	</div>
+</div>
+
+
+<!--商品模板-->
+<script type="text/html" id="goodsItemTemplate">
+<div class="goodsInfo" style="width:90%;border:1px solid #E1E1E1;display:-webkit-flex;-webkit-justify-content:flex-start;-webkit-align-items: center;">
+	<input type='hidden' name='goods_no[]' value="<%=templateData['goods_no']%>" />
+	<div style="width:20%;">
+		<input value="{{<%=templateData['goods_no']%>}}">
+	</div>
+	<div style="width:10%;">
+		<img src="<?php echo IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'."<%=templateData['img']%>".'/w/500/h/500'); ?>" style="width:80px;" />
+	</div>
+	<div style="width:30%;">
+		<%=templateData['name']%>
+	</div>
+	<div style="width:20%;">
+		商品数量：<input type="text" name="goods_num[]" value="1" class="small"></input>
+	</div>
+	<div style="width:10%;">
+		    <%if(templateData['is_del'] =='0'){%>
+		        已上架
+			<%}%>
+            <%if(templateData['is_del'] =='1'){%>
+				已删除
+			<%}%>
+            <%if(templateData['is_del'] =='2'){%>
+				已下架
+			<%}%>
+            <%if(templateData['is_del'] =='3'){%>
+				申请上架中
+			<%}%>
+	</div>
+	<div style="text-align:center"><img src="<?php echo $this->getWebSkinPath().'images/admin/icon_del.gif';?>" alt="删除" title="删除" onclick="page.delGoods(this);" /></div>
+</div>
+</script>
+
+
+<script type='text/javascript'>
+window.onload = function(){
+	page.init();
+};
+
+var page = {
+	loading 			: false,
+	minlength 			: 1, //最少数据条数
+	maxlength 			: 5, //最多数据条数
+	//初始化
+	init 	 			: function(){
+	},
+	//发送入库单
+	inventoryAdd 		: function(obj){
+		// alert('ss');return false;
+		_confirm('无法修改，确定提交？',function(){
+			var thisObj = $(obj);
+			var thisForm = $('form[name="inventory_add"]');
+			if(page.loading == true) return false;
+			// page.loading = true;
+			$.post(thisForm.attr('action'),thisForm.serialize(),function(data,status){
+				if(status == 'success'){
+					if(data.code==0){
+						_inform('发送成功！',function(){
+							window.location.href="{url:/order/inventory_list}";
+						});
+					}else{
+						_confirm('错误：'+data.msg);
+					}
+					console.log(data);
+				}
+				// page.loading = false;
+			},'json');
+		});
+		
+	},
+	
+	//添加一条数据
+	datalistAdd 		: function(obj){
+		var thisObj 	= $(obj);
+		var thisList 	= thisObj.parents('.datalist');
+		if(thisList.find('.datainfo').length == page.maxlength){
+			_inform('最多填写'+page.maxlength+'条数据');
+			return false;
+		}
+		switch(thisObj.parents('fieldset').attr('id')){
+			case 'htmlTicket':
+				var html 	= page.htmlTicket;
+				break;
+			case 'htmlGrow':
+				var html 	= page.htmlGrow;
+				break;
+		}
+		thisObj.parents('.datalist').append( html );
+	},
+	//删除一条
+	datalistDel 		: function(obj){
+		var thisObj 	= $(obj);
+		if(thisObj.parents('.datalist').find('.datainfo').length == page.minlength){
+			_inform('至少填写'+page.minlength+'条数据');
+			return false;
+		}
+		thisObj.parents('.datainfo').remove();
+	},
+	
+	//开始搜索商品
+	searchGoods 			: function(obj){
+		page.goodsList 		= $(obj).next('#goodsListBox');
+		searchGoods('{url:/block/search_goods/type/checkbox}',page.searchGoodsCallback);
+	},
+	//输入筛选商品的条件
+	searchGoodsCallback 	: function(goodsList){
+		var result = [];
+		goodsList.each(function(k,v){
+			var temp = $.parseJSON($(this).attr('data'));
+			result.push(temp);
+		});
+		page.createGoodsList(result);
+	},
+	//创建商品数据
+	createGoodsList 		: function(goodsList){
+		for(var i in goodsList){
+			var templateHTML = template.render('goodsItemTemplate',{"templateData":goodsList[i]});
+			page.goodsList.append(templateHTML);
+		}
+	},
+	//tab标签切换
+	select_tab 				: function(curr_tab){
+		$("form[name='activity_add'] > div").hide();
+		$("#table_box_"+curr_tab).show();
+		$("ul[name=menu1] > li").removeClass('selected');
+		$('#li_'+curr_tab).addClass('selected');
+	},
+	//删除单条商品
+	delGoods 				:function(obj){
+		var thisGoods 		= $(obj).parents('.goodsInfo');
+		thisGoods.remove();
+	},
+}
+
+
+</script>
