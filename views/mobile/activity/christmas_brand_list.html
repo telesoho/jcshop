@@ -10,9 +10,9 @@
 	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/christmas_brand_list.css?v=<?php echo time(); ?>"/>
 </head>
 <body>
-	<div id="wrap" v-clack>
+	<div id="wrap" v-cloak>
 	<header>
-		<img src="/views/mobile/skin/default/image/jmj/new_active/banner/6.png" style="width: 100%;"/>
+		<img src="/views/mobile/skin/default/image/jmj/new_active/banner/6-ed.jpg" style="width: 100%;"/>
 	</header>
 	<section>
 		<ul>
@@ -47,12 +47,12 @@
 			</a></li>
 		</ul>
 	</div>
-	 <footer>
-        <div class="flexbox empty_product" style="background:#a5eced" v-if="infoState">
+	 <footer style="background: #ff5151;">
+        <div class="flexbox empty_product" v-if="infoState">
             <div class="img">
                 <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
             </div>
-            <div class="content">
+            <div class="content" >
                 <span style="color:#fff">~</span>
                 <span style="color:#fff">憋拉了，到底了</span>
                 <span style="color:#fff">~</span>

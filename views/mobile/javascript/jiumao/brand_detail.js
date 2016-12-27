@@ -47,8 +47,10 @@ var em = new Vue({
 	updated:function() {
 		document.title = this.info.name;
 		var heights = $("#article_top").height()
-		if(heights!=0 && heights<=39){
-			$("#article_footer").hide()
+		if(heights!=0){
+			if(heights<=30){
+				$("#article_footer").hide()	
+			}
 		}
 		
 	},
