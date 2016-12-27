@@ -24,16 +24,30 @@ class APIGoods{
 		foreach($data as $k => $v)
 			$ids[] = $v[$key];
 		if(empty($ids)) return $data; //不包含id时直接返回
+		
+		//获取配置
+		$jmj_config           = new Config('jmj_config');
+		$goods_ratio          = $jmj_config->goods_ratio; //全场折扣率
+		$goods_ratio_original = $jmj_config->goods_ratio_original; //原价显示扣率
+		$goods_ratio_delivery = $jmj_config->goods_ratio_delivery; //商品价格重量比率计算是否包邮
+		$goods_ratio          = $goods_ratio>1 || $goods_ratio<=0 ? 1 : $goods_ratio;
+		$aGoods               = array(); //参与活动的商品
+		$aids                 = array(); //需要结束的活动
+		$delivery             = array(); //包邮商品
+		
 		/* 获取活动详情 */
 		$query         = new IQuery('goods as m');
 		$query->join   = 'LEFT JOIN activity AS a ON a.id=m.activity';
 		$query->where  = 'm.id IN ('.implode(',', $ids).')';
-		$query->fields = 'm.id,m.sell_price,m.activity,a.start_time,a.end_time,a.ratio,a.status';
+		$query->fields = 'm.id,m.sell_price,m.activity,m.weight,a.start_time,a.end_time,a.ratio,a.status';
 		$list          = $query->find();
 		if(!empty($list)){
-			$aGoods = array(); //参与活动的商品
-			$aids   = array(); //需要结束的活动
+			//检索
 			foreach($list as $k => $v){
+				//是否包邮
+				if($v['weight']/$v['sell_price']>=$goods_ratio_delivery)
+					$delivery[] = $v['id'];
+				//是否参与活动
 				if($v['activity']>0){
 					if($v['start_time']<=time() && $v['end_time']>=time() && $v['status']==1 && $v['ratio']>0 && $v['ratio']<1){
 						$aGoods[$v['id']] = array('ratio' => $v['ratio'], 'sell_price' => $v['sell_price']);
@@ -49,17 +63,16 @@ class APIGoods{
 //				$model->setData(array('activity' => 0));
 //				$model->update('activity IN ('.implode(',', $aids).')');
 //			}
-			//更新价格
-			$jmj_config           = new Config('jmj_config');
-			$goods_ratio          = $jmj_config->goods_ratio; //全场折扣率
-			$goods_ratio_original = $jmj_config->goods_ratio_original; //原价显示扣率
-			$goods_ratio          = $goods_ratio>1 || $goods_ratio<=0 ? 1 : $goods_ratio;
-			foreach($data as $k => $v){
-				//修改原价
-				if(isset($v['original_price']))
-					$data[$k]['original_price'] = round($v['sell_price']*$goods_ratio_original, 2);
-				//修改销售价格
-				if(!isset($v['sell_price'])) continue;
+		}
+		/* 更新数据 */
+		foreach($data as $k => $v){
+			//是否包邮
+			$data[$k]['delivery'] = in_array($v['id'], $delivery) ? 1 : 0;
+			//修改原价
+			if(isset($v['original_price']))
+				$data[$k]['original_price'] = round($v['sell_price']*$goods_ratio_original, 2);
+			//修改销售价格
+			if(isset($v['sell_price'])){
 				if(isset($aGoods[$v[$key]])){
 					//活动打折商品
 					$data[$k]['sell_price'] = round($v['sell_price']*$aGoods[$v[$key]]['ratio'], 2);
@@ -73,20 +86,13 @@ class APIGoods{
 	}
 	
 	/**
-	 * 判断商品是否包邮
-	 */
-	public function goodsDelivery(){
-		
-	}
-
-	/**
 	 * 获取商品列表
 	 * @return array
 	 */
 	public function goodsList($param = array()){
 		/* 接收参数 */
 		$param = array(
-			'fields' => isset($param['fields']) ? $param['fields'] : 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity,m.jp_price,m.market_price,b.name AS brand_name,b.logo AS brand_logo',//查询字段，选填
+			'fields'   => isset($param['fields']) ? $param['fields'] : 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity,m.jp_price,m.market_price,b.name AS brand_name,b.logo AS brand_logo',//查询字段，选填
 			'pagesize' => isset($param['pagesize']) ? $param['pagesize'] : 20, //每页显示条数
 			'page'     => isset($param['page']) ? $param['page'] : 1,//分页，选填
 			'aid'      => isset($param['aid']) ? $param['aid'] : '', //活动ID，选填
@@ -95,7 +101,7 @@ class APIGoods{
 			'did'      => isset($param['did']) ? $param['did'] : '', //推荐ID，选填
 			'tag'      => isset($param['tag']) ? $param['tag'] : '', //标签，选填
 		);
-
+		
 		/* 获取下级分类 */
 		if(!empty($param['cid'])){
 			$queryCat         = new IQuery('category');
@@ -108,7 +114,7 @@ class APIGoods{
 				}
 			}
 		}
-
+		
 		/* 获取数据 */
 		$query           = new IQuery('goods as m');
 		$query->join     = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id '.
@@ -140,13 +146,13 @@ class APIGoods{
 		/* 返回数据 */
 		return $data;
 	}
-
+	
 	//获取全部商品特价活动
 	public function getSaleList(){
 		$promoDB   = new IModel('promotion');
 		$promoList = $promoDB->query("is_close = 0 and award_type = 7", "*", "sort asc");
 		$goodsDB   = new IModel('goods');
-
+		
 		foreach($promoList as $key => $val){
 			$intro                        = JSON::decode($val['intro']);
 			$intro                        = array_keys($intro);
@@ -155,7 +161,7 @@ class APIGoods{
 		}
 		return $promoList;
 	}
-
+	
 	//根据id获取单个商品特价活动
 	public function getSaleRow($id){
 		$promoDB  = new IModel('promotion');
