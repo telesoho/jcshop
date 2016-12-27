@@ -28,7 +28,7 @@ Vue.component('search-nav', {
     </section>',
     data:function(){
          return {
-             searth_pla:'圣诞神秘大礼等你来拿'
+             searth_pla:'元旦大礼等你来搜'
          }
     },
     props:['search','val'],

@@ -117,13 +117,10 @@ var vm = new Vue({
         },
         // 跳转活动页面
         toActive: function(){
-//          removeSessionItem("active_val");
-//          removeSessionItem("active_info");
             window.location.href="/activity/christmas_grow";
         }
     }
 })
-
 $(document).ready(function(){
 //	tanchaun(statusOrder);
     var ua = navigator.userAgent.toLowerCase();

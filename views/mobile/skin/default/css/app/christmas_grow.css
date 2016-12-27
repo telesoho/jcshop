@@ -7,8 +7,21 @@
 img{
     width:100%;
 }
+#info .text{
+    font-size:0.32rem;
+    position:absolute;
+    z-index:2;
+    width:0.8rem;
+    height:0.4rem;
+    top:10.15rem;
+    left:3.95rem;
+    color:#ff1313;
+}
 #info .button_bottom{
-    background:#aadcf3;
+    width:100%;
+    z-index:2;
+    position:absolute;
+    bottom:0;
     height:3.7rem;
     display: -webkit-flex;
     -webkit-justify-content: center;
@@ -16,13 +29,13 @@ img{
 #info .button_bottom a{
     display: block;
     margin-top:0.7rem;
-    background:#ffffff;
+    background:#ffaa00;
     border-radius:0.84rem;
     width:5.5rem;
     height:0.84rem;
     line-height:0.84rem;
     text-align:center;
-    color:#ff9c9c;
+    color:#000;
     font-size:0.32rem;
 }
 /*麋鹿页面样式调整*/
@@ -48,53 +61,51 @@ img{
 #info .activeImg .position1 .button{
     position:absolute;
     z-index:2;
-    top:0.92rem;
-    left:1.87rem;
+    top:23rem;
+    left:0;
 }
 #info .activeImg .position2 .button{
     position:absolute;
     z-index:2;
-    width:0.86rem;
-    height:0.86rem;
-    top:3.95rem;
-    left:5.22rem;
+    top:19rem;
+    right:0;
 }
 #info .activeImg .position3 .button{
     position:absolute;
     z-index:2;
-    top:4.01rem;
-    left:1.4rem;
+    top:14.9rem;
+    left:0;
 }
 #info .activeImg .position4 .button{
     position:absolute;
     z-index:2;
-    top:7.15rem;
-    left:1.43rem;
+    top:10.5rem;
+    right:0;
 }
 /*给四个按钮定位*/
 #info .activeImg .position1 .font{
     position:absolute;
     z-index:2;
-    top:1.8rem;
-    left:3.75rem;
+    top:25.43rem;
+    right:1.2rem;
 }
 #info .activeImg .position2 .font{
     position:absolute;
     z-index:2;
-    top:5.88rem;
-    left:4.1rem;
+    top:21.63rem;
+    left:1.2rem;
 }
 #info .activeImg .position3 .font{
     position:absolute;
     z-index:2;
-    top:3.6rem;
-    left:3.2rem;
+    top:17.4rem;
+    right:1.2rem;
 }
 #info .activeImg .position4 .font{
     position:absolute;
     z-index:2;
-    top:8.8rem;
-    left:3rem;
+    top:13.2rem;
+    left:1.2rem;
 }
 /*弹窗窗口*/
 #sheet .mui-table-view{
