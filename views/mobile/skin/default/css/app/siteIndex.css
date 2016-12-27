@@ -84,48 +84,44 @@ body{
 }
 /*活动页*/
 #indexInfo .activity{
+    margin-top:0.2rem;
+    position:relative;
     background:#fff;
+    width:100%;
+    height:4rem;
+}
+#indexInfo .activity .bg img{
+    position:absolute;
+}
+#indexInfo .activity .bg .topleft{
+    top:0;
+    left:0;
+}
+#indexInfo .activity .bg .topright{
+    top:0;
+    right:0;
+}
+#indexInfo .activity .bg .bottomleft{
+    bottom:0;
+    left:0;
+}
+#indexInfo .activity .bg .bottomright{
+    bottom:0;
+    right:0;
 }
 #indexInfo .activity .top{
     display: -webkit-flex;
     -webkit-justify-content: center;
-    -webkit-flex-wrap: wrap;
-}
-#indexInfo .activity .top .top1{
-    margin-top:0.23rem;
+    -webkit-align-items: center;
+    /*-webkit-flex-wrap: wrap;*/
     width:100%;
-    text-align:center;
-}
-#indexInfo .activity .top .top1 .text{
-	display: inline-block;
-    font-size:0.3rem;
-    /*color:#3d4245;*/
-    position:relative;
-    top:-0.1rem;
-    padding:0 0.22rem;
-    /*vertical-align: middle;*/
-	color:#ff44a0;
-}
-#indexInfo .activity .top .top1 .bg{
-    display:inline-block;
-    margin-top: 0.1rem;
-}
-#indexInfo .activity .top .top2{
-    margin-top:0.05rem;
-    font-size:0.2rem;
-    color:#bbbbbb;
-    margin-bottom:0.35rem;
+    height:1.42rem;
+    margin-bottom:0.3rem;
 }
 #indexInfo .activity  .img img{
-    width:3.46rem;
-    height:2.06rem;
+    width:3.2rem;
+    height:1.8rem;
     display: inline-block;
-}
-#indexInfo .activity  .img .img1{
-    width:3.46rem;
-    height:2.06rem;
-    display: inline-block;
-    margin-bottom:0.12rem;
 }
 #indexInfo .activity  .img .img1:nth-child(2){
     margin-left:0.15rem;

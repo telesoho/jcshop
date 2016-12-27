@@ -4,22 +4,22 @@ var em = new Vue({
 		cat:[{
 			src:''
 		}],
-		img:["/views/mobile/skin/default/image/jmj/new_active/yaozhuang.png","/views/mobile/skin/default/image/jmj/new_active/gehu.png",
-		"/views/mobile/skin/default/image/jmj/new_active/chongwu.png",
-		"/views/mobile/skin/default/image/jmj/new_active/jiankang.png",
-		"/views/mobile/skin/default/image/jmj/new_active/lingshi.png"],
+		img:["/views/mobile/skin/default/image/jmj/new_active/yaozhuang-ed.png","/views/mobile/skin/default/image/jmj/new_active/gehu-ed.png",
+		"/views/mobile/skin/default/image/jmj/new_active/chongwu-ed.png",
+		"/views/mobile/skin/default/image/jmj/new_active/jiankang-ed.png",
+		"/views/mobile/skin/default/image/jmj/new_active/lingshi-ed.png"],
 		list1:[],
 		list:[],
 		style2:"padding-bottom:0.1rem",
 		style1:"padding-bottom:0.1rem",
 		banner:[
-					"/views/mobile/skin/default/image/jmj/new_active/banner/6.png",
-					"/views/mobile/skin/default/image/jmj/new_active/banner/7.png",
-					"/views/mobile/skin/default/image/jmj/new_active/banner/8.png",
-					"/views/mobile/skin/default/image/jmj/new_active/banner/9.png",
-					"/views/mobile/skin/default/image/jmj/new_active/banner/10.png",
-					"/views/mobile/skin/default/image/jmj/new_active/banner/11.png",
-					"/views/mobile/skin/default/image/jmj/new_active/banner/12.png"
+					"/views/mobile/skin/default/image/jmj/new_active/banner/6-ed.jpg",
+					"/views/mobile/skin/default/image/jmj/new_active/banner/7-ed.jpg",
+					"/views/mobile/skin/default/image/jmj/new_active/banner/8-ed.jpg",
+					"/views/mobile/skin/default/image/jmj/new_active/banner/9-ed.jpg",
+					"/views/mobile/skin/default/image/jmj/new_active/banner/10-ed.jpg",
+					"/views/mobile/skin/default/image/jmj/new_active/banner/11-ed.jpg",
+					"/views/mobile/skin/default/image/jmj/new_active/banner/12-ed.jpg"
 				]
 //		banner图为专场
 	},
@@ -131,6 +131,7 @@ function youhuijian(tid){
 		type: 'get',
 		timeout: 10000,
 		success: function (data){
+			console.log(data)
 			if(data.code==0){
 				var btnArray = ['取消', '查看'];
                     mui.confirm('领取成功，查看优惠券？', '领取成功', btnArray, function(e) {
