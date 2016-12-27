@@ -27,7 +27,7 @@ html,body{
 }
 #nav-slider .mui-control-item img{
     z-index:2;
-    width:0.6rem;
+    width:0.65rem;
     display: block;
 }
 #nav-slider .mui-control-item .text{
