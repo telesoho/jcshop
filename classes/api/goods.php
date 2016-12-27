@@ -77,6 +77,7 @@ class APIGoods{
 					$data[$k]['original_price'] = round($v['sell_price']*$goods_ratio_original, 2);
 				//修改销售价格
 				if(!isset($v['sell_price'])) continue;
+			}
 		}
 		/* 更新数据 */
 		foreach($data as $k => $v){
@@ -113,7 +114,6 @@ class APIGoods{
 	public function goodsList($param = array()){
 		/* 接收参数 */
 		$param = array(
-			'fields' => isset($param['fields']) ? $param['fields'] : 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity,m.jp_price,m.market_price,b.name AS brand_name,b.logo AS brand_logo',//查询字段，选填
 			'fields'   => isset($param['fields']) ? $param['fields'] : 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity,m.jp_price,m.market_price,b.name AS brand_name,b.logo AS brand_logo',//查询字段，选填
 			'pagesize' => isset($param['pagesize']) ? $param['pagesize'] : 20, //每页显示条数
 			'page'     => isset($param['page']) ? $param['page'] : 1,//分页，选填
