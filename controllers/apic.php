@@ -1026,37 +1026,94 @@ class Apic extends IController{
 	 * @return String
 	 */
 	public function order_detail(){
+		/* 接收参数 */
 		$id = IFilter::act(IReq::get('id'), 'int');
 		
+		/* 订单详情 */
 		$orderObj   = new order_class();
 		$order_info = $orderObj->getOrderShow($id, $this->user['user_id']);
+		if(!$order_info) $this->json_echo(apiReturn::go('003002')); //订单不存在
 		
-		if(!$order_info){
-			IError::show(403, '订单信息不存在');
-		}
 		$orderStatus = Order_Class::getOrderStatus($order_info);
-		if($orderStatus==2){
-			$orderStatusT = 0;
-		}//待支付
-		if($orderStatus==4){
-			$orderStatusT = 1;
-		}//待发货
-		if($orderStatus==3 || $orderStatus==8 || $orderStatus==11){
-			$orderStatusT = 2;
-		}//待收货
-		if($orderStatus==6){
-			$orderStatusT = 3;
-		}//待发货
+		switch($orderStatus){
+			case 2: //待支付
+				$orderStatusT = 0;
+				break;
+			case 4: //待发货
+				$orderStatusT = 1;
+				break;
+			case 3 || 8 || 11: //待收货
+				$orderStatusT = 2;
+				break;
+			case 6: //已完成
+				$orderStatusT = 3;
+				break;
+		}
 		
+		/* 订单商品 */
 		$order_goods = Api::run('getOrderGoodsListByGoodsid', array('#order_id#', $order_info['id']));
-		foreach($order_goods as $key => $value){
-			$order_goods[$key]['goods_array'] = json_decode($value['goods_array'], true);
-			$order_goods[$key]['img']         = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$order_goods[$key]['img']."/w/160/h/160");
+		foreach($order_goods as $k => $v){
+			$order_goods[$k]['goods_array'] = json_decode($v['goods_array'], true);
+			$order_goods[$k]['img']         = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$order_goods[$k]['img']."/w/160/h/160");
 		}
 		$data = array('order_info' => $order_info, 'orderStatus' => $orderStatusT, "order_step" => Order_Class::orderStep($order_info), "order_goods" => $order_goods);
 		
 		$this->json_echo($data);
 	}
+	
+	/**
+	 * 订单商品列表
+	 */
+	public function order_goods_list(){
+		/* 接收参数 */
+		$order_id = IFilter::act(IReq::get('order_id'), 'int');
+		$user_id  = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : $this->json_echo(apiReturn::go('001001'));
+		if(empty($order_id)) $this->json_echo(apiReturn::go('001002')); //缺少参数
+		//订单详情
+		$modelOrder = new IModel('order');
+		$infoOrder  = $modelOrder->getObj('id='.$order_id.' AND user_id='.$user_id);
+		if(empty($order_id)) $this->json_echo(apiReturn::go('001002'));
+		/* 订单商品 */
+		$goodsList = Api::run('getOrderGoodsListByGoodsid', array('#order_id#', $infoOrder['id']));
+		$this->json_echo(apiReturn::go('0', $goodsList));
+	}
+	
+	/**
+	 * 申请退款
+	 */
+	public function order_refunds(){
+		/* 接受参数 */
+		$goods_id = IFilter::act(IReq::get('goods_id'), 'int'); //商品ID
+		$order_id = IFilter::act(IReq::get('order_id'), 'int'); //订单ID
+		$content  = IFilter::act(IReq::get('content'), 'text'); //退款理由
+		$user_id  = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : $this->json_echo(apiReturn::go('001001'));
+		if(empty(trim($content)) || empty($goods_id)) $this->json_echo(apiReturn::go('003003')); //请填写退款理由和选择要退款的商品
+		
+		/* 检测退款 */
+		$modelOrder = new IModel('order');
+		$infoOrder  = $modelOrder->getObj("id=".$order_id." AND user_id=".$user_id);
+		$rel        = Order_Class::isRefundmentApply($infoOrder, explode(',', $goods_id));
+		if($rel!==true) $this->json_echo(apiReturn::go('-1', '', $rel));
+		
+		/* 写入 */
+		$updateData   = array(
+			'order_no'       => $infoOrder['order_no'],
+			'order_id'       => $order_id,
+			'user_id'        => $user_id,
+			'time'           => ITime::getDateTime(),
+			'content'        => $content,
+			'seller_id'      => $infoOrder['seller_id'],
+			'order_goods_id' => $goods_id,
+		);
+		$modelRefunds = new IModel('refundment_doc');
+		$modelRefunds->setData($updateData);
+		$rel = $modelRefunds->add();
+		/* 结果 */
+		$this->json_echo(apiReturn::go($rel>0 ? '0' : '003004'));
+	}
+	
+	
+	
 	
 	/**
 	 * ---------------------------------------------------物流---------------------------------------------------*
@@ -1145,8 +1202,7 @@ class Apic extends IController{
 	public function goods_detail(){
 		/* 获取参数 */
 		$goods_id = IFilter::act(IReq::get('id'), 'int'); //商品ID
-		if(!isset($this->user['user_id']) || $this->user['user_id']==null) $this->json_echo(apiReturn::go('001001'));
-		$user_id = $this->user['user_id'];
+		$user_id  = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : 0;
 		
 		/* 商品详情 */
 		$modelGoods = new IModel('goods');
@@ -1233,7 +1289,7 @@ class Apic extends IController{
 		/* 记录用户操作 */
 		
 		/* 返回参数 */
-		$this->json_echo($dataGoods);
+		$this->json_echo(apiReturn::go('0', $dataGoods));
 	}
 	
 	/**
@@ -1783,9 +1839,7 @@ class Apic extends IController{
 		$cosme = IFilter::act(IReq::get('cosme'), 'int'); //是否排行榜页面
 		$page  = IFilter::act(IReq::get('page'), 'int'); //分页编号
 		$bid   = IFilter::act(IReq::get('bid'), 'int'); //品牌ID
-		if($catId==0){
-			$this->json_echo([]);
-		}
+		if($catId==0) $this->json_echo(array());
 		
 		/* 获取下级分类 */
 		$queryCat         = new IQuery('category');

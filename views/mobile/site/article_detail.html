@@ -92,61 +92,52 @@
         </div>
         <?php $favorite_article = new IQuery('favorite_article'); $favorite_article->where='user_id = ' . $this->user['user_id'] . ' and aid=' . $this->articleRow['id']; if(!empty($favorite_article->find())){ ?>
             <div onclick="growGrass({$this->articleRow['id']})" class="articleState active">
-                <img src="/views/mobile/skin/default/image/jmj/article/grass.png" alt="" />
+                <img src="/views/mobile/skin/default/image/jmj/article/grass1.png" alt="" />
                 <span class="articleStateContent">取消种草</span>
                 </div>
         <?php } else { ?>
             <div onclick="growGrass({$this->articleRow['id']})" class="articleState">
-                <img src="/views/mobile/skin/default/image/jmj/article/grass.png" alt="" />
+                <img src="/views/mobile/skin/default/image/jmj/article/grass1.png" alt="" />
                 <span class="articleStateContent">立即种草</span>
 
             </div>
         <?php } ?>
     </div>
 
-    <div class="articledetail_ware">
+    <div class="articledetail_ware" v-cloak>
         <div class="title"><span>~</span><span>推荐商品</span>~</div>
         <div class="content" id="getArticleWare">
-
-        </div>
-    </div>
-</section>
-<script id="articleItem" type="text/html">
-    <%if(data.length){%>
-    <% for(var i=0; i<data.length; i++){%>
-    <% var dat =data[i] %>
-        <div class="item">
-            <a href="index.php?controller=site&action=products&id=<%=dat.id %>">
-                <!--<div class="box1">-->
-                    <div class="img"><img class="imgWare" src="<%=dat.img %>" alt=""/></div>
+            <div class="item" v-for="item in new_info">
+                <a :href="item.url">
+                    <!--<div class="box1">-->
+                    <div class="img"><img class="imgWare" :src="item.img" alt=""/></div>
                     <div class="text">
-                        <div class="name"><%=dat.name %></div>
+                        <div class="name">{{item.name}}</div>
                         <div class="box">
                             <div class="price">
-                                <div class="sellprice price1">国内价: ￥<%=dat.market_price %></div>
-                                <div class="sellprice price2">九猫价: ￥<%=dat.sell_price %></div>
+                                <div class="sellprice price1">国内价: ￥{{item.market_price}}</div>
+                                <div class="sellprice price2">九猫价: ￥{{item.sell_price}}</div>
                             </div>
                             <div class="buy">立即购买</div>
                         </div>
                     </div>
-                <!--</div>-->
-            </a>
-        </div>
-    <%}%>
-    <%}else{%>
-       <div class="flexbox empty_product" style="width:100%;">
-            <div class="img">
-                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+                    <!--</div>-->
+                </a>
             </div>
-           <div class="content">
-               <span>~</span>
-               <span>憋拉了，到底了</span>
-               <span>~</span>
-           </div>
-       </div>
-    <%}%>
-</script>
-<script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
+            <div class="flexbox empty_product" style="width:100%;">
+                <div class="img">
+                    <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+                </div>
+                <div class="content">
+                    <span>~</span>
+                    <span>憋拉了，到底了</span>
+                    <span>~</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js"></script>
@@ -155,51 +146,62 @@
     var Request = new Object();
     Request = GetRequest();
     var getId=Request["id"];
+    var stop = true;
     //文章商品分类
-    var articlePageData ={
-        page:1,
-        id:getId
-    };
+    var vm=new Vue({
+        el:'.articledetail_ware',
+        data:{
+            articlePageData:{
+                page:1,
+                id:getId
+            },
+            info:[]
+        },
+        computed: {
+          new_info: function(){
+              this.info.map(function(item){
+                  item.url="/site/products?id="+item.id;
+              })
+              return this.info;
+          }
+        },
+        mounted:function(){
+            var self=this;
+            pullupRefresh(self);
+        },
+
+
+    })
     $(window).load(function(){
         $("#loading").fadeOut(300);
-        pullupRefresh();
         mui('body').on('tap','a',function(){document.location.href=this.href;});
     })
-    var articleItemStr="";
     //上拉加载
-    var stop = true;
     $(window).bind('scroll', function() {
         if ($(window).scrollTop() + $(window).height() + 600 >= $(document).height() && $(window).scrollTop() > 50) {
             if (stop == true) {
                 stop = false;
-                pullupRefresh()
+                pullupRefresh(vm)
             }
         }
     });
-    function pullupRefresh() {
+    function pullupRefresh(self) {
         mui.ajax('index.php?controller=apic&action=article_rel_goods',{
-            data:articlePageData,
+            data:self.articlePageData,
             dataType:'json',	// 服务器返回json格式数据
             type:'get',		// HTTP请求类型
             timeout:10000,		// 超时时间设置为10秒；
             success:function(data){
                 console.log(data);
-                articlePageData.page++;
-                var pageArticle={};
-                pageArticle.data=data;
-                var html=template('articleItem',pageArticle);
-                articleItemStr+=html;
-                document.getElementById("getArticleWare").innerHTML=articleItemStr;
-//                mui('#pullrefresh').pullRefresh().endPullupToRefresh(data==false);
+                self.articlePageData.page++;
+                data.map(function(item){
+                    self.info.push(item)
+                });
                 if(data==false){
                     stop = false;
                 }else{
                     stop = true;
                 }
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
             }
         });
     }
@@ -233,10 +235,6 @@
                     $(".articleState").removeClass("active")
                     $(".articleStateContent").html("立即种草");
                 }
-            },
-            error:function(xhr,type,errorThrown){
-                //异常处理；
-                console.log(type);
             }
         });
     }

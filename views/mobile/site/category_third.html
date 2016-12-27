@@ -36,9 +36,9 @@
 </div>
 <!--loading页结束-->
 <!--三级分类-->
-<section id="category" v-if="showmessage">
+<section id="category">
     <div id="category_third" v-cloak>
-        <div class="product_item" :id="item.eid" v-for="item in new_info">
+        <div class="product_item" :id="item.pid" v-for="item in new_info" v-cloak>
             <a :href="item.url">
                 <div class="img">
                     <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"  />
@@ -57,14 +57,14 @@
             </a>
         </div>
     </div>
-    <div class="flexbox empty_product">
+    <div class="flexbox empty_product" v-if="showmessage" v-cloak>
         <div class="img">
-            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+            <img :src="img" alt=""/>
         </div>
-        <div class="content">
-            <span>~</span>
-            <span>憋拉了，到底了</span>
-            <span>~</span>
+        <div class="content" v-cloak>
+            <span>{{span1}}</span>
+            <span>{{span}}</span>
+            <span>{{span1}}</span>
         </div>
     </div>
 </section>
@@ -79,7 +79,10 @@
         el:'#category',
         data:{
             showmessage:false,
-            info:[]
+            info:[],
+            img:'/views/mobile/skin/default/image/jmj/icon/nomore.png',
+            span:'憋拉了，到底了',
+            span1:'~'
         },
         computed:{
             new_info:function(){
@@ -95,16 +98,17 @@
                 anim:false,
                 selectorName:".samLazyImg"
             });
+            getScrollTop();
         },
         mounted:function(){
             var self=this;
             getcategory_thirdInfo(self,"{$_GET['id']}");
         }
-    })
+    });
     //页面加载动画的调用
     $(window).load(function(){
         $("#loading").fadeOut(300);
-        getScrollTop();
+
         // document.title = getinfo.name;
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','a',function(){document.location.href=this.href;});
@@ -117,8 +121,8 @@
             type:'get',
             timeout:10000,
             success:function(data){
-                self.showmessage=true;
                 self.info=data;
+                self.showmessage=true;
             }
         });
     }

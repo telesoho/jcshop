@@ -79,7 +79,8 @@ function toPageThird(obj){
 }
 //记录三级页面位置函数
 function getPosition(){
-    var pid=getItem('product');
+    var pid=getItem("product");
+    console.log(pid);
     var eid=document.getElementById("product_item"+pid);
     var scroll=eid?eid:"";
     console.log(scroll.offsetTop);

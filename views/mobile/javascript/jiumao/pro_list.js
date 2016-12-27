@@ -66,7 +66,6 @@ var vm= new Vue({
         article: function(){
             this.info.article_list.map(function(item){
                 item.url="/site/article_detail?id="+item.id;
-            
                 item.len=item.goods_list.length;
                 item.goods_list.map(function(item1){
                     item1.url="/site/products?id="+item1.id;
