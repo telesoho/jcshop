@@ -33,6 +33,7 @@ li{
 	top: -0.6rem;
 	left: 0.25rem;
 	border-radius:50% ;
+	border: 1px solid #eee;
 }
 #footer span{
 	display: block;
