@@ -67,7 +67,7 @@ class APIGoods{
 		/* 更新数据 */
 		foreach($data as $k => $v){
 			//是否包邮
-			$data[$k]['delivery'] = in_array($v['id'], $delivery) ? 1 : 0;
+			$data[$k]['delivery'] = in_array($v[$key], $delivery) ? 1 : 0;
 			//修改原价
 			if(isset($v['original_price']))
 				$data[$k]['original_price'] = round($v['sell_price']*$goods_ratio_original, 2);
