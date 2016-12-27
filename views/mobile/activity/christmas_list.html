@@ -43,11 +43,11 @@
         </div>
     </section>
     <footer>
-        <div class="flexbox empty_product" style="background:#ff5151">
+        <div class="flexbox empty_product" style="background:#ff5151" v-if="infoState">
             <div class="img">
                 <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
             </div>
-            <div class="content">
+            <div class="content" v-cloak>
                 <span style="color:#fff">~</span>
                 <span style="color:#fff">憋拉了，到底了</span>
                 <span style="color:#fff">~</span>
@@ -91,7 +91,6 @@
             page:1,
             info:[],
             infoState:false
-            
         },
         computed: {
             new_info: function(){
