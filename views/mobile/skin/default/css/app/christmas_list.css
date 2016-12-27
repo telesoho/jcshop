@@ -1,5 +1,5 @@
 body{
-    background:#a5eced;
+    background:#ff5151;
 }
 .banner img{
     width:100%;
@@ -8,7 +8,7 @@ body{
 }
 .goodsList {
     padding:0 0.15rem;
-    background:#a5eced;
+    background:#ff5151;
     min-height:100%;
     width:100%;
     display: -webkit-flex;

@@ -1,7 +1,7 @@
 body,html{
 	width: 100%;
 	height: 100%;
-	background: #a5eced;
+	background: #ff5151;
 }
 li{
 	list-style: none;
@@ -16,12 +16,24 @@ li{
 	display: block;
 	margin-top:-0.02rem ;
 }
-
+#top{
+	position: relative
+}
+#top p{
+	width: 2rem;
+	height: 1rem;
+	position: absolute;
+	bottom:2.6rem
+}
 /*				导航				*/
 nav{
 	width: 100%;
 	overflow: hidden;
 	background: #fff;
+	position: absolute;
+	left: 0;
+	top: 7.6rem;
+	background: url(../../image/jmj/new_active/index5-ed.png) no-repeat 8rem 0;
 }
 nav ul{
 	width: 100%;
@@ -39,7 +51,7 @@ nav ul li img{
 	
 	margin: 0 auto;
 	display: block;
-	width: 0.76rem;
+	width: 0.98rem;
 }
 nav ul li span{
 	font-size:0.26rem;
@@ -101,12 +113,13 @@ height: 0.65rem;
 #zhe ul li .p3 span{
 	font-size:0.3rem;
 	color:#ff82a0;
+	width: 0.44rem;
 	margin-left:0.08rem ;
 }
 #zhe ul li .p4{
 	position: absolute;
-	top: -0.15rem;
-	left: 0.05rem;
+	top: -0.10rem;
+	left: 0.1rem;
 }
 #zhe .btn{
 	width: 2.56rem;
@@ -131,6 +144,7 @@ height: 0.65rem;
 	width: 100%;
 	overflow: hidden;
 	margin-top: 0.3rem ;
+	
 }
 .t .top_img{
 	width: 100%;
@@ -140,7 +154,7 @@ height: 0.65rem;
 	display: -webkit-flex;
 	-webkit-flex-wrap: wrap;
 	-webkit-justify-content: space-around;
-	/*padding:0 0.2rem;*/
+	padding:0 0.13rem;
 }
 .t ul li{
 	width: 2.36rem;
