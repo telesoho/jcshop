@@ -1,5 +1,4 @@
 @charset "utf-8";
-
 /*.goodsTitle{padding:0.1rem 0.29rem 0.1rem 0.21rem;background:#fff;overflow:hidden;display: flex;flex-direction: row;justify-content: space-between;}*/
 /*.goodsTitle a:first-child{align-self: center;;}*/
 /*.goodsTitle span:first-child{display:inline-block;font-size:0.32rem;color:#3d4245;text-align:left;white-space: nowrap;width:5rem;;overflow: hidden;text-overflow: ellipsis;}*/
@@ -53,14 +52,13 @@ sit_products.css更改
 /**
 编辑地址样式
 **/
-.row_b_t{border-top:1px solid #eee;}
+.row_b_t{}
 #addressNew .title{height:0.6rem;line-height:0.7rem;font-size:0.28rem;padding:0.1rem 0.1rem;margin-bottom:0.1rem;}
 .row_margin{margin-top:0.13rem;}
 .mui-input-row input{
-    border-top:none;
     border-left:0;
     border-right:0;
-    border-bottom:1px solid #eee;
+    border-bottom:1px solid #bbb;
     border-radius:0;
     height:0.92rem;
     color:#040404;

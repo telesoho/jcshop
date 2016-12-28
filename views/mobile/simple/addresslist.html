@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css" />
-
 </head>
 <body>
 
@@ -57,12 +56,12 @@
                             <div class="mui-input-row row_b_t">
                                 <input type="text" class="mui-input-clear changeHH" v-model="item.name">
                             </div>
-                            <div class="mui-input-row row_margin row_b_t">
+                            <div class="mui-input-row row_margin row_b_t" style="border-bottom:1px solid #bbb">
                                 <input type="hidden" class="mui-input-clear"  v-model="item.id">
                                 <input type="number" class="mui-input-clear"  v-model="item.mob" :id="item.mobileId">
                                 <input type="text" class="mui-input-clear" :value="item.text" :id="item.userCityId" @focus="checkCity(item)" >
                                 <input type="text" class="mui-input-clear"  v-model="item.addr">
-                                <input type="number" class="mui-input-clear"  v-model="item.zi">
+                                <input type="number" class="mui-input-clear"  v-model="item.zi" >
                             </div>
                         </div>
                     </div>
