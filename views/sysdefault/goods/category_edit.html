@@ -97,6 +97,23 @@
 					<th>SEO描述：</th><td><textarea name="descript" cols="" rows=""></textarea></td>
 				</tr>
 				<tr>
+					<th>贝海分类：</th>
+					<td>
+						<select class="auto" onchange="a(this)">
+							<option value="0">无 </option>
+							{foreach:items=$this->xloboCategoryRow item=$item}
+							{if:$item->CategoryLevel == 1} <option value="{$item->CategoryID}">{$item->CategoryCnName}</option> {/if}
+							{/foreach}
+						</select>
+						<select class="auto" name="xlobo">
+							<option value="0">无 </option>
+							{foreach:items=$this->xloboCategoryRow item=$item}
+							{if:$item->CategoryLevel == 2} <option pids="pids" style="display: none" pid="{$item->CategoryParentId}" value="{$item->CategoryID}">{$item->CategoryCnName}</option> {/if}
+							{/foreach}
+						</select>
+					</td>
+				</tr>
+				<tr>
 					<td></td><td><button class="submit" type="submit" onclick="return checkForm()"><span>确 定</span></button></td>
 				</tr>
 			</table>
@@ -152,5 +169,10 @@ function checkForm()
 		$('input[name="img"]').val($('#thumbnails img[name="picThumb"][class="current"]').attr('alt'));
 	}
 	return true;
+}
+function a(obj) {
+	$('option[pids="pids"]').css({'display':'none'})
+	var pidv = $(obj).val();
+	$('option[pid="'+pidv+'"]').css({'display':''})
 }
 </script>

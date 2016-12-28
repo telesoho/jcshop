@@ -70,6 +70,7 @@ class Menu
 			'物流管理'=>array(
 				'/order/inventory_list' => '入库记录',
 				'/order/delivery_list' => '已配送记录',
+				'/order/xlobo' => '贝海面单',
 			),
         	'单据管理'=>array(
              	'/order/order_collection_list'  => '收款单',

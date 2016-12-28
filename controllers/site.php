@@ -1316,4 +1316,26 @@ class Site extends IController{
 		$qrcode_image_url = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.$ticket;
 		echo '<img src="'.$qrcode_image_url.'">';
 	}
+	function logistics(){
+	    $data = array(
+	        'BillCodes' => array(
+	            'DB493204617US',
+                '',
+                'DB493204616US'
+            )
+        );
+        xlobo::init();
+//	    $ret = xlobo::requests('xlobo.status.get', $data);
+//        $ret = xlobo::create_logistic_single(17); //做单
+        $ret = xlobo::get_logistic_single_a4(['DB263209851JP']); //获取面单PDF
+//        $ret = xlobo::get_logistic_info(['DB263209847JP']); //获取物流信息
+//        var_dump($ret[0]->BillStatusList);
+//        $ret = xlobo::add_idcard('陈波', '18142005882', '330727199206290417', __DIR__.'/../controllers/2.png', __DIR__.'/../controllers/3.png');
+
+//        $ret = xlobo::get_catalogue();
+//        $ret = xlobo::get_hub();
+        var_dump($ret);
+//        header("Content-Type: application/pdf");
+//        echo base64_decode($ret);
+    }
 }

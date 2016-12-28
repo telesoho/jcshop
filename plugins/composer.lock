@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cd463d62b2cf9d1f373e19b6d0fef188",
-    "content-hash": "611cd67d2a54bc4f71398a1f50afb4b2",
+    "hash": "6adb86c3db3d5789f489749345485c1b",
+    "content-hash": "0fc26c0ef7093b350f067605617a4cfd",
     "packages": [
         {
             "name": "endroid/qrcode",
@@ -135,6 +135,63 @@
                 "psr-3"
             ],
             "time": "2016-07-29 03:23:52"
+        },
+        {
+            "name": "php-curl-class/php-curl-class",
+            "version": "7.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-curl-class/php-curl-class.git",
+                "reference": "07dee3e18156ce9543fb86c4d327bbccc5f197c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://packagist.phpcomposer.com/files/php-curl-class/php-curl-class/07dee3e18156ce9543fb86c4d327bbccc5f197c1.zip",
+                "reference": "07dee3e18156ce9543fb86c4d327bbccc5f197c1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*",
+                "squizlabs/php_codesniffer": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Curl\\": "src/Curl/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Unlicense"
+            ],
+            "authors": [
+                {
+                    "name": "Zach Borboa"
+                }
+            ],
+            "description": "PHP Curl Class is an object-oriented wrapper of the PHP cURL extension.",
+            "homepage": "https://github.com/php-curl-class/php-curl-class",
+            "keywords": [
+                "api",
+                "class",
+                "client",
+                "curl",
+                "framework",
+                "http",
+                "http client",
+                "json",
+                "php",
+                "requests",
+                "rest",
+                "restful",
+                "web service",
+                "xml"
+            ],
+            "time": "2016-11-13 11:11:22"
         },
         {
             "name": "psr/log",
