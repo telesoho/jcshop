@@ -256,4 +256,41 @@ class IError
 		}
 		exit;
 	}
+
+    /**
+     * User: chenbo
+     * error_normal原共享的错误页面被污染
+     * @param string $errorData
+     * @param int $httpNum
+     */
+    public static function show_normal($errorData = "",$httpNum = 1)
+    {
+        //参数的次序颠倒
+        if(is_numeric($errorData))
+        {
+            list($httpNum,$errorData) = array($errorData,$httpNum);
+        }
+        $controller = self::getController();
+
+        //检查用户是否定义了error处理类
+        if(method_exists('Error','error'.$httpNum))
+        {
+            $errorObj = new Error(IWeb::$app,'error');
+            call_user_func(array($errorObj,'error'.$httpNum),$errorData);
+        }
+
+        //是系统内置的错误机制
+        else if(file_exists(IWEB_PATH.'web/view/'.'error'.$httpNum.$controller->extend))
+        {
+            $errorData = is_array($errorData) ? $errorData : array('message' => $errorData);
+            $controller->render(IWEB_PATH.'web/view/'.'error'.$httpNum,$errorData);
+        }
+
+        //输出错误信息
+        else
+        {
+            $controller->renderText($errorData);
+        }
+        exit;
+    }
 }

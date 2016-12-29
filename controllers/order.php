@@ -12,7 +12,7 @@ class Order extends IController implements adminAuthorization
 	public $layout='admin';
 	function init()
 	{
-
+	    xlobo::init();
 	}
 	
 	/**
@@ -552,6 +552,7 @@ class Order extends IController implements adminAuthorization
 		$this->redirect('order_deliver');
 	}
 	public function order_deliver_xlobo(){
+	    $user_model = new IModel('user');
         //去掉左侧菜单和上部导航
         $this->layout='';
         $order_id = IFilter::act(IReq::get('id'),'int');
@@ -560,6 +561,17 @@ class Order extends IController implements adminAuthorization
         {
             $order_show = new Order_Class();
             $data = $order_show->getOrderShow($order_id);
+            $user_data = $user_model->getObj('id = ' . $data['user_id']);
+            if (empty($user_data)) IError::show_normal('订单用户不存在');
+            if (empty($user_data['sfz_name'])) IError::show_normal('用户身份证姓名不存在');
+            if (empty($user_data['sfz_num'])) IError::show_normal('用户身份证号码不存在');
+            if (empty($user_data['phone'])) IError::show_normal('用户联系方式不存在');
+            $sfz_image1 = __DIR__ . '/../' . $user_data['sfz_image1'];
+            $sfz_image2 = __DIR__ . '/../' . $user_data['sfz_image2'];
+            if ( !file_exists($sfz_image1) ) IError::show_normal(__DIR__ . '/../' . $user_data['sfz_image1'].'用户身份证证件不存在');
+            if ( !file_exists($sfz_image2) ) IError::show_normal('用户身份证证件不存在');
+            $data['user_data'] = $user_data;
+            $ret = xlobo::add_idcard($user_data['sfz_name'], $user_data['phone'], $user_data['sfz_num'], $user_data['sfz_image1'], $user_data['sfz_image1']);
         }
         $this->setRenderData($data);
         $this->redirect('order_deliver_xlobo');
@@ -596,12 +608,15 @@ class Order extends IController implements adminAuthorization
         //发送的商品关联
         $sendgoods = IFilter::act(IReq::get('sendgoods'));
 
-        xlobo::init();
-        $ret = xlobo::create_logistic_single($order_id);
+        $ret = xlobo::create_logistic_single($order_id, $sendgoods);
+        $billcode = $ret->Result->BillCode;
         if (isset($ret->Succeed) && $ret->Succeed){
             $ret = $this->add_xlobo($ret->Result, $order_id);
             if (is_array($ret)) die('<script type="text/javascript">parent.actionCallback("'.$ret['msg'].'");</script>');
-            if ($ret) die('<script type="text/javascript">parent.actionCallback();</script>');
+            if ($ret) {
+                $ret = Order_Class::sendDeliveryGoods($order_id,$sendgoods,$this->admin['admin_id']);
+                if ($ret) die('<script type="text/javascript">parent.actionCallback();</script>');
+            }
         } else {
             die('<script type="text/javascript">parent.actionCallback("做单失败");</script>');
             common::log_write('做单失败' . print_r($ret,true));
@@ -609,7 +624,7 @@ class Order extends IController implements adminAuthorization
     }
     public function add_xlobo($ret, $order_id){
         $xlobo_single = new IModel('xlobo_single');
-        $data = $xlobo_single->getObj('billcode = "' . $ret->BillCode . '"');
+//        $data = $xlobo_single->getObj('billcode = "' . $ret->BillCode . '"');
         $xlobo_single->setData([
             'billcode' => $ret->BillCode,
             'businessno' => $ret->BusinessNo,
@@ -617,17 +632,14 @@ class Order extends IController implements adminAuthorization
             'taxfee' => $ret->TaxFee,
             'insurance' => $ret->Insurance,
             'ispostpay' => $ret->IsPostPay,
-            'order_id' => $order_id
+            'order_id' => $order_id,
+            'create_time' => date('Y-m-d H:i:s', time())
         ]);
-        if (empty($data)){
-            $ret = $xlobo_single->add();
-            if ($ret){
-                return true;
-            } else {
-                return ['msg' => '面单信息保存失败'];
-            }
+        $ret = $xlobo_single->add();
+        if ($ret){
+            return true;
         } else {
-            return ['msg' => '面单已经存在'];
+            return ['msg' => '面单信息保存失败'];
         }
     }
 	/**
@@ -2079,10 +2091,14 @@ class Order extends IController implements adminAuthorization
         $id = IFilter::act(IReq::get('id'),'int');
         $xlobo_single_query = new IQuery('xlobo_single');
         $xlobo_single_query->where = 'order_id = ' . $id;
+        $xlobo_single_query->fields = 'billcode';
         $data = $xlobo_single_query->find();
-        if (empty($data)) die('暂无该贝海面单');
-        xlobo::init();
-        $ret = xlobo::get_logistic_single_a4([$data[0]['billcode']]);
+        if (empty($data)) IError::show_normal('暂无该贝海面单');
+        $temp = [];
+        foreach ($data as $k=>$v){
+            $temp[] = $v['billcode'];
+        }
+        $ret = xlobo::get_logistic_single_a4($temp);
         if (is_array($ret)) die($ret['msg']);
         header("Content-Type: application/pdf");
         echo base64_decode($ret);

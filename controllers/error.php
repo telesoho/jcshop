@@ -31,4 +31,14 @@ class Error extends IController
 		$data = '您无权限操作此功能';
 		$this->redirect('/block/error/?msg='.urlencode($data));
 	}
+
+    public function error1($data)
+    {
+        $heading = '操作发生错误';
+        if(is_array($data))
+        {
+            $data = isset($data['message']) ? $data['message'] : '';
+        }
+        $this->redirect('/site/error_normal/?msg='.urlencode($data).'&heading='.urlencode($heading));
+    }
 }
