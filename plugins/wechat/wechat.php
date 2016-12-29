@@ -677,7 +677,14 @@ class wechat extends pluginBase
 			//自动回复
 			default:
 			{
-				$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
+				switch($postObj->Content){
+					case 1:
+						$this->textReplay('1111');
+						break;
+					default:
+						$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
+				}
+				
 			}
 		}
 	}
