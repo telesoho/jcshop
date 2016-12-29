@@ -10,7 +10,8 @@ var vm = new Vue({
         showMessage:false,
         order_detailInfo:{
             order_info:{},
-            order_goods:[]
+            order_goods:[],
+            is_refunds:true,
         },
         order_class:{
             hot_state:'state_item hot',
@@ -43,6 +44,8 @@ var vm = new Vue({
                 this.order_detailInfo.button1='查看物流';
                 this.order_detailInfo.button2='确认收货';
                 this.order_detailInfo.button2Url='/ucenter/order_status/order_id/'+this.order_detailInfo.order_info.id+'/op/confirm';
+//              this.order_detailInfo.button3='退款申请';
+//              this.order_detailInfo.button2Url='';
             };
             if(this.order_detailInfo.orderStatus==3){
                 this.order_detailInfo.button1='删除订单';
@@ -50,6 +53,7 @@ var vm = new Vue({
                 this.order_detailInfo.button2='评价';
                 this.order_detailInfo.button2Url='/site/error';
             }
+            
             return this.order_detailInfo;
         }
     },
@@ -65,8 +69,11 @@ var vm = new Vue({
             this.showContainer=true;
             mui("#logistics").popover('show');
             $('.mui-backdrop').hide();
+        },
+        tuikuan:function(){
+        	window.location.href="/ucenter/order_refunds?id="+statusOrder;
         }
-    }
+  }
 })
 vm.getData();
 
@@ -87,11 +94,15 @@ function getOrderDetail(self){
         type:'get',		// HTTP请求类型
         timeout:10000,		// 超时时间设置为10秒；
         success:function(data){
+        	console.log(data)
+        	if(data.is_refunds == "1"){
+            }
             self.order_detailInfo=data;
             self.showMessage=true;
         }
     });
 }
+
 //	获取url传递过来的参数
 function GetRequest() {
     var url = location.search; //获取url中"?"符后的字串

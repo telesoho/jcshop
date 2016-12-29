@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,7 +58,11 @@
                 </div>
             </a>
         </div>
+        <div id="londing" v-if="longing"  style=" display:none;width:100%;display: block;margin: 0 auto;">
+	    	<img src="/views/mobile/skin/default/image/jmj/icon/longing.gif" style="width:6rem;display: block;margin: 0 auto;"/>
+	    </div>
     </div>
+    
     <footer>
     <div class="flexbox empty_product" style="background:#f8f8f8" v-if="infoState">
         <div class="img">
@@ -79,6 +84,7 @@
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 
 <script type="text/javascript">
+
  $(window).load(function(){
         $("#loading").fadeOut(300);
         //解决tab选项卡a标签无法跳转的问题
@@ -98,7 +104,8 @@ var stop=true;
 				tre:"",
 				page:1,
 				stop:false,
-				infoState:false
+				infoState:false,
+				longing:false
 			},
 			computed:{
 				brand_list:function(){
@@ -125,7 +132,8 @@ var stop=true;
 				// 页面加载完成执行的函数;
 				lazyload.init({
 					anim:false,
-					selectorName:".samLazyImg"
+					selectorName:".samLazyImg",
+					
 				});
 			},
 			methods:{
@@ -152,9 +160,11 @@ var stop=true;
 					if(data.goods_list==''){
 						self.infoState=true;
 	                    stop=false;
+	                    self.longing = false
 	                }else{
 	                	 self.infoState=false;
-	                    stop=true; 
+	                    stop=true;
+	                   self. longing=true
 	                }
 	                console.log(self.page)
 	                self.page++;
@@ -171,8 +181,10 @@ $(window).bind('scroll', function() {
 	if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
             stop=false;
+            longing=true;
             getActiveInfo(em);
             
+        }else{
         }
    }
 });
