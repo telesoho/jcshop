@@ -679,7 +679,7 @@ class wechat extends pluginBase
 			{
 				switch($postObj->Content){
 					case 1:
-						$this->textReplay('1111');
+						$this->textReplay('<img href="http://m.jiumaojia.com/pic/thumb/img/391ac42112c6d34095MDE4NzgwMzAwNzFmZGYwYjU4YDpuOmU4ZzRpMTc5ZDd9dWxrZ2YsMDA1Pis3MCoxNicyMDM2MTA0ODM3NDAxMD43OSpteW8tdywwPDIvaiczPDA">');
 						break;
 					default:
 						$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
