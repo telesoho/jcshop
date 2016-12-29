@@ -4,6 +4,11 @@ return array(
 	'goodsActivity' => array(
 		'file' => 'goods.php','class' => 'APIGoods'
 	),
+	/* 运费计算 */
+	'goodsDelivery' => array(
+		'file' => 'goods.php','class' => 'APIGoods'
+	),
+	
 	/* 商品列表 */
 	'goodsList' => array(
 		'file' => 'goods.php','class' => 'APIGoods'

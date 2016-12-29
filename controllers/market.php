@@ -25,7 +25,63 @@ class Market extends IController implements adminAuthorization
 	 * 限时购添加
 	 */
 	public function activity_speed_add(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			/* 更新主表 */
+			switch($_POST['type']){
+				case 1: //限时够
+					switch($_POST['time_type']){
+						case 1:
+							$startTime = strtotime($_POST['time'].' 11:00:00');
+							$endTime   = strtotime($_POST['time'].' 15:59:59');
+							break;
+						case 2:
+							$startTime = strtotime($_POST['time'].' 16:00:00');
+							$endTime   = strtotime($_POST['time'].' 21:59:59');
+							break;
+						case 3:
+							$startTime = strtotime($_POST['time'].' 22:00:00');
+							$endTime   = strtotime(date('Y-m-d', 60*60*24+strtotime($_POST['time'])).' 10:59:59');
+							break;
+						default:
+							exit('类型不存在');
+					}
+					break;
+				case 2: //秒杀
+					$startTime = strtotime($_POST['start_time']);
+					$endTime   = strtotime($_POST['end_time']);
+					break;
+			}
+			$model = new IModel('activity_speed');
+			$model->setData(array(
+				'type' => $_POST['type'],
+				'start_time'  => $startTime,
+				'end_time'    => $endTime,
+				'status'      => $_POST['status'],
+				'update_time' => time(),
+				'create_time' => time(),
+			));
+			$rel = $model->add();
+			if(!$rel) exit('更新失败！');
+			/* 更新副表 */
+			$modelSpeed = new IModel('activity_speed_access');
+			foreach($_POST['goods_id'] as $k => $v){
+				$modelSpeed->setData(array(
+					'pid'        => $rel,
+					'goods_id'   => $_POST['goods_id'][$k],
+					'sell_price' => $_POST['goods_sell_price'][$k],
+					'nums'       => $_POST['goods_nums'][$k],
+					'quota'      => $_POST['goods_quota'][$k],
+					'delivery'   => isset($_POST['goods_delivery'][$k])&&$_POST['goods_delivery'][$k]==1 ? 1 : 0,
+				));
+				$modelSpeed->add();
+			}
+			
+			$this->redirect('activity_speed_list');
+		}
 		
+		
+		/* 视图 */
+		$this->redirect('activity_speed_add');
 	}
 	
 	/**
@@ -33,6 +89,57 @@ class Market extends IController implements adminAuthorization
 	 */
 	public function activity_speed_edit(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
+			/* 更新主表 */
+			switch($_POST['type']){
+				case 1: //限时够
+					switch($_POST['time_type']){
+						case 1:
+							$startTime = strtotime($_POST['time'].' 11:00:00');
+							$endTime   = strtotime($_POST['time'].' 15:59:59');
+							break;
+						case 2:
+							$startTime = strtotime($_POST['time'].' 16:00:00');
+							$endTime   = strtotime($_POST['time'].' 21:59:59');
+							break;
+						case 3:
+							$startTime = strtotime($_POST['time'].' 22:00:00');
+							$endTime   = strtotime(date('Y-m-d', 60*60*24+strtotime($_POST['time'])).' 10:59:59');
+							break;
+						default:
+							exit('类型不存在');
+					}
+					break;
+				case 2: //秒杀
+					$startTime = strtotime($_POST['start_time']);
+					$endTime   = strtotime($_POST['end_time']);
+					break;
+			}
+			$model = new IModel('activity_speed');
+			$model->setData(array(
+				'type' => $_POST['type'],
+				'start_time'  => $startTime,
+				'end_time'    => $endTime,
+				'status'      => $_POST['status'],
+				'update_time' => time(),
+			));
+			$rel = $model->update('id='.$_POST['id']);
+			if(!$rel) exit('更新失败！');
+			/* 更新副表 */
+			$modelSpeed = new IModel('activity_speed_access');
+			$modelSpeed->del('pid='.$_POST['id']);
+			foreach($_POST['goods_id'] as $k => $v){
+				$modelSpeed->setData(array(
+					'pid'        => $_POST['id'],
+					'goods_id'   => $_POST['goods_id'][$k],
+					'sell_price' => $_POST['goods_sell_price'][$k],
+					'nums'       => $_POST['goods_nums'][$k],
+					'quota'      => $_POST['goods_quota'][$k],
+					'delivery'   => isset($_POST['goods_delivery'][$k])&&$_POST['goods_delivery'][$k]==1 ? 1 : 0,
+				));
+				$modelSpeed->add();
+			}
+			
+			$this->redirect('activity_speed_list');
 		}
 		/* 限时购详情 */
 		$id         = IFilter::act(IReq::get('id'), 'int');//活动ID
@@ -42,17 +149,12 @@ class Market extends IController implements adminAuthorization
 			$queryAcc          = new IQuery('activity_speed_access AS m');
 			$queryAcc->join    = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
 			$queryAcc->where   = 'pid='.$id;
-			$queryAcc->fields  = 'm.*,g.name,g.img';
+			$queryAcc->fields  = 'm.*,g.name,g.img,g.sell_price AS now_sell_price,g.is_del,g.goods_no,g.store_nums';
 			$infoSpeed['list'] = $queryAcc->find();
-			if(!empty($infoSpeed['list'])){
-				foreach($infoSpeed['list'] as $k => $v){
-					$infoSpeed['list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
-				}
-			}
 		}
-		
+//		var_dump($infoSpeed);exit();
 		/* 视图 */
-		$this->setRenderData(array('data'=>$infoSpeed));
+		$this->setRenderData(array('data' => $infoSpeed));
 		$this->redirect('activity_speed_edit');
 	}
 

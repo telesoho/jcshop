@@ -310,22 +310,14 @@ class Apic extends IController{
 			$data = $rel['data'];
 		}else{
 			/* 计算邮费 */
-			if($data['sum']>=$data['condition_price']){
-				$data['delivery_money'] = 0; //满金额包邮
-			}else{
-				//首重价格
-				$data['delivery_money'] = $data['delivery'][0]['first_price'];
-				//续重价格
-				if($data['weight']>$data['delivery'][0]['first_weight']){
-					$data['delivery_money'] += ceil(($data['weight']-$data['delivery'][0]['first_weight'])/$data['delivery'][0]['second_weight'])*$data['delivery'][0]['second_price'];
-				}
-				$data['sum'] += $data['delivery_money'];
-			}
+			$data['delivery_money'] = Api::run('goodsDelivery',$data['goodsList'],'goods_id');
 			/* 优惠券 */
-			$data['ticket'] = array('ticket_did' => '',    //优惠券码ID
-									'ticket_aid' => '',    //优惠券ID
-									'name'       => '',    //优惠券名称
-									'msg'        => '',);
+			$data['ticket'] = array(
+				'ticket_did' => '',    //优惠券码ID
+				'ticket_aid' => '',    //优惠券ID
+				'name'       => '',    //优惠券名称
+				'msg'        => '',
+			);
 		}
 		
 		$this->json_echo(apiReturn::go('0', $data));
@@ -1956,6 +1948,7 @@ class Apic extends IController{
 		$queryArticle->fields = 'm.id,m.title,m.visit_num,m.image';
 		$queryArticle->limit  = 5;
 		$queryArticle->order  = 'm.top desc,m.sort desc';
+		$queryArticle->group = 'm.id';
 		$dataArticle          = $queryArticle->find();
 		if(!empty($dataArticle)){
 			foreach($dataArticle as $k => $v){

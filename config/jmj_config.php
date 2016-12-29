@@ -7,6 +7,7 @@ return array(
 	'goods_ratio'          => 0.88, //全场折扣率，不包含活动商品，注意：勿随便更改！！
 	'goods_ratio_original' => 1.2, //原价显示的折扣率
 	'goods_ratio_delivery' => 1.5, //商品价格重量比率计算是否包邮
+	'condition_price'      => 288, //包邮金额
 )
 
 ?>

@@ -472,20 +472,6 @@ class Simple extends IController
 			exit;
 		}
 		
-		//=======================================
-		/* 包邮金额、配送 */
-		//满包邮
-		$promotion_query 			= new IQuery("promotion");
-		$promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
-		$condition_price 			= $promotion_query->find()[0]['condition'];
-		//配送方式
-		$delivery 					= Api::run('getDeliveryList');
-		$postage 					= array(
-			'condition' 	=> $condition_price,
-			'delivery' 		=> $delivery[0],
-		);
-    	//=======================================
-    	
 		//根据商品所属商家不同批量生成订单
 		$orderIdArray  		= array();
 		$orderNumArray 		= array();
@@ -495,31 +481,17 @@ class Simple extends IController
 			//====================================
 			/* 使用优惠券 */
 			$goodsResult['final_sum'] = $goodsResult['sum']; //原价
-			$flag 						= 0;
 			if( !empty($ticket_did) ){
 				//使用优惠券码
-				$rel 					= ticket::finalCalculateCode($goodsResult,$ticket_did, $postage);
-				if($rel['code']==0) $flag=1;
+				$rel 					= ticket::finalCalculateCode($goodsResult,$ticket_did);
+				if($rel['code']==0) $goodsResult = $rel['data'];
 			}else if( !empty($ticket_aid) ){
 				//使用优惠券
-				$rel 					= ticket::finalCalculateActivity($goodsResult,$ticket_aid, $postage);
-				if($rel['code']==0) $flag=1;
+				$rel 					= ticket::finalCalculateActivity($goodsResult,$ticket_aid);
+				if($rel['code']==0) $goodsResult = $rel['data'];
 			}else{
 				/* 计算邮费 */
-				if ($goodsResult['sum'] >= $postage['condition']){
-					$goodsResult['deliveryPrice'] 			= 0;
-				} else {
-					//首重价格
-					$goodsResult['deliveryPrice'] 			= $postage['delivery']['first_price'];
-					//续重价格
-					if($goodsResult['weight'] > $postage['delivery']['first_weight']){
-						$goodsResult['deliveryPrice'] 		+= ceil(($goodsResult['weight']-$postage['delivery']['first_weight'])/$postage['delivery']['second_weight'])*$postage['delivery']['second_price'];
-					}
-				}
-			}
-			/* 优惠券使用成功 */
-			if($flag==1){
-				$goodsResult 			= $rel['data'];
+				$data['deliveryPrice'] = Api::run('goodsDelivery',$goodsResult['goodsResult']['goodsList'],'goods_id');
 			}
 			
 			//====================================
@@ -714,10 +686,10 @@ class Simple extends IController
 		}
 		else
 		{
-			if(!$gid){
-				//清空购物车
-				IInterceptor::reg("cart@onFinishAction");
-			}
+//			if(!$gid){
+//				//清空购物车
+//				IInterceptor::reg("cart@onFinishAction");
+//			}
 			$this->redirect('/block/doPay/order_id/'.$order_id);
 // 			$this->setRenderData($dataArray);
 // 			$this->redirect('cart3');
