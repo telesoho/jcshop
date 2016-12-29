@@ -124,6 +124,7 @@
 			<div style="height:1rem"></div>
 			<!--代发货状态不显示按钮-->
 			<div class="order_buttom" v-if="order_detailInfo.orderStatus!=1" v-cloak>
+				<span id="tksssss" class="tk" style="width: 1.5rem;height: 0.5rem;line-height: 0.5rem;text-align: center;" @click="tuikuan">退款申请</span>
 				<template v-if="buttonurl.button1=='查看物流'">
 					<a href="#" class="buttom_fixd buttom_fixd1" @click="getDelivery(order_detailInfo.order_goods[0].delivery_id)">{{buttonurl.button1}}</a>
 				</template>
@@ -131,6 +132,7 @@
 					<a :href="buttonurl.button1Url" class="locationA buttom_fixd buttom_fixd1">{{buttonurl.button1}}</a>
 				</template>
 				<a :href="buttonurl.button2Url" class="locationA buttom_fixd buttom_fixd2">{{buttonurl.button2}}</a>
+				
 			</div>
 		</template>
 		<section>
@@ -149,5 +151,8 @@
 	<script src="/views/mobile/javascript/jquery.min.js"></script>
 	<script src="/views/mobile/javascript/mui.js"></script>
 	<script src="/views/mobile/javascript/jiumao/order_detail.js"></script>
+	<script type="text/javascript">
+	
+	</script>
 </body>
 </html>
