@@ -1050,8 +1050,13 @@ class Apic extends IController{
 			$order_goods[$k]['goods_array'] = json_decode($v['goods_array'], true);
 			$order_goods[$k]['img']         = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$order_goods[$k]['img']."/w/160/h/160");
 		}
-		$data = array('order_info' => $order_info, 'orderStatus' => $orderStatusT, "order_step" => Order_Class::orderStep($order_info), "order_goods" => $order_goods);
-		
+		$data = array(
+			'order_info'  => $order_info, //订单详情
+			'orderStatus' => $orderStatusT, //订单状态
+			"order_step"  => Order_Class::orderStep($order_info), //订单流向
+			"order_goods" => $order_goods, //订单商品
+			'is_refunds'  => Order_Class::isRefundmentApply($order_info)==true ? 1 : 0, //是否允许退款
+		);
 		$this->json_echo($data);
 	}
 	
