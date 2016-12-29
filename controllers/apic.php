@@ -1074,6 +1074,11 @@ class Apic extends IController{
 		if(empty($infoOrder)) $this->json_echo(apiReturn::go('003002'));
 		/* 订单商品 */
 		$goodsList = Api::run('getOrderGoodsListByGoodsid', array('#order_id#', $infoOrder['id']));
+		if(!empty($goodsList)){
+			foreach($goodsList as $k => $v){
+				$goodsList[$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
+			}
+		}
 		$this->json_echo(apiReturn::go('0', $goodsList));
 	}
 	
@@ -2483,6 +2488,11 @@ class Apic extends IController{
 	private function json_echo($data){
 		echo json_encode($data);
 		exit();
+	}
+	
+	
+	public function test(){
+		common::dblog($_POST);
 	}
 	
 }
