@@ -58,6 +58,16 @@ var vm = new Vue({
             }else{
                 return "";
             }
+        },
+        sell: function(){
+            this.infoMessage.goodsList.map(function(item){
+                item.sell_pri=(item.sell_price-item.reduce).toFixed(2)
+            })
+            return this.infoMessage.goodsList;
+        },
+        lastPay: function(){
+            var tt=(parseFloat(this.infoMessage.sum)+parseFloat(this.infoMessage.delivery_money)).toFixed(2)
+            return tt;
         }
     },
     mounted: function(){

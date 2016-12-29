@@ -84,7 +84,7 @@
 				<span>东京直邮</span>
 			</div>
 		</div>
-		<div class="goodsList" v-for="item in infoMessage.goodsList">
+		<div class="goodsList" v-for="item in sell">
 			<div class="boxItem" style="width:100%">
 				<div class="leftImg">
 					<img :src="item.img" alt=""  style="width:1.23rem;height:1.23rem"/>
@@ -92,7 +92,7 @@
 				<div class="right">
 					<div class="name">{{item.name}}</div>
 					<div class="text">
-						<span class="sellprice">￥ {{item.sell_price}}</span>
+						<span class="sellprice">￥ {{item.sell_pri}}</span>
 						<span class="num">x {{item.count}}</span>
 					</div>
 				</div>
@@ -100,7 +100,7 @@
 		</div>
 		<div class="box totalItemCal" style="width:100%">
 			<div class="left">商品金额</div>
-			<div class="right">￥ {{infoMessage.final_sum}}</div>
+			<div class="right">￥ {{infoMessage.sum}}</div>
 		</div>
 		<div class="box totalItemCal" style="width:100%">
 			<div class="left">订单邮费</div>
@@ -127,7 +127,7 @@
 		</div>
 		<div class="box totalItemCal" style="width:100%">
 			<div class="left">实付额</div>
-			<div class="right">￥ {{infoMessage.sum}}</div>
+			<div class="right">￥ {{lastPay}}</div>
 		</div>
 		<div class="tips">
 			<span class="first">安全提醒：</span>
@@ -160,7 +160,7 @@
 		<!--提交项目结束-->
 		<div class="box totalItemCal" style="width:100%">
 			<div class="left" style="color: #bbb;font-size:0.24rem">共{{infoMessage.count}}件商品</div>
-			<div class="right"><span>合计: </span>￥{{infoMessage.sum}}</div>
+			<div class="right"><span>合计: </span>￥{{lastPay}}</div>
 		</div>
 		<div class="flexbox" style="height:1.63rem">
 			<div class="top">
