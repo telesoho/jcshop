@@ -38,8 +38,8 @@
 			<!--                  文章                                                    -->
 			<div v-if="showLastImg.description!=''">
 				<!-- 收起     -->
-				<div id="article">
-					<div id="article_top" v-html='showLastImg.description' style="overflow : hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;">
+				<div id="article" >
+					<div id="article_top"  v-html='showLastImg.description' style="overflow : hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;padding-top :0.2rem;">
 						<!--{{showLastImg.description}}-->
 					</div>
 					<div class="article_footer">
@@ -47,7 +47,7 @@
 					</div>
 				</div>
 					<!--- 展开  -->
-					<div id="article1">
+					<div id="article1" style="padding-top :0.2rem;">
 						<div id="article_top1" v-html='showLastImg.description'>
 							<!--{{showLastImg.description}}-->
 						</div>
