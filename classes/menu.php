@@ -97,7 +97,7 @@ class Menu
         	// ),
 			'活动' 	=> array(
 				'/market/activity_list' => '活动列表',
-				'/market/activity_speed_list' => '限时购',
+				'/market/activity_speed_list' => '限时活动',
 			),
 			'优惠券码' 	=> array(
         		'/market/ticket_discount_list'   => '优惠券码列表',

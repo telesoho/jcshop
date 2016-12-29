@@ -33,11 +33,12 @@ class APIGoods{
 		$goods_ratio_delivery = $jmj_config->goods_ratio_delivery; //商品价格重量比率计算是否包邮
 		$goods_ratio          = $goods_ratio>1 || $goods_ratio<=0 ? 1 : $goods_ratio;
 		
-		$listGoods = array(); //商品原数据
-		$sGoods    = array(); //参与限时活动的商品
-		$aGoods    = array(); //参与活动的商品
-		$aids      = array(); //需要结束的活动
-		$delivery  = array(); //包邮商品
+		$listGoods   = array(); //商品原数据
+		$sGoods      = array(); //参与限时活动的商品
+		$aGoods      = array(); //参与活动的商品
+		$aids        = array(); //需要结束的活动
+		$deliveryYes = array(); //包邮商品列表
+		$deliveryNo  = array(); //不包邮商品列表
 		
 		/* 限时活动 */
 		$querySpeed         = new IQuery('activity_speed as m');
@@ -78,7 +79,7 @@ class APIGoods{
 			}
 			//限时活动中的包邮商品
 			foreach($sGoods as $k => $v){
-				if($v['delivery']==1) $delivery[] = $v['goods_id'];
+				if($v['delivery']==1) $deliveryYes[] = $v['goods_id'];
 			}
 		}
 		
@@ -94,7 +95,7 @@ class APIGoods{
 				$listGoods[$v['id']] = $v; //存商品原数据
 				//是否包邮
 				if($v['weight']/$v['sell_price']>=$goods_ratio_delivery){
-//					$delivery[] = $v['id']; // TODO 暂不处理商品比重包邮
+//					$deliveryNo[] = $v['id']; // TODO 暂不处理商品比重包邮
 				}
 				//是否参与活动
 				if($v['activity']>0){
@@ -124,7 +125,7 @@ class APIGoods{
 		/* 更新数据 */
 		foreach($data as $k => $v){
 			//是否包邮
-			$data[$k]['delivery'] = in_array($v[$key], $delivery) ? 1 : 0;
+			$data[$k]['delivery'] = in_array($v[$key], $deliveryYes) ? 3 : (in_array($v[$key], $deliveryNo) ? 2 : 1);
 			//修改原价
 			if(isset($v['original_price']))
 				$data[$k]['original_price'] = round($listGoods[$v[$key]]['sell_price']*$goods_ratio_original, 2);
@@ -153,35 +154,59 @@ class APIGoods{
 	 * @return int
 	 */
 	public function goodsDelivery($data, $key = 'id', $is_delivery = 0){
-		$totalMoney  = 0; //总金额（非包邮商品）
-		$totalWeight = 0; //总重（非包邮商品）
+		$goods1 = array('money'=>0, 'weight'=>0,'count'=>0); //满减商品
+		$goods2 = array('money'=>0, 'weight'=>0,'count'=>0); //不包邮商品
+		
 		/* 判断商品是否包邮 */
 		$data = Api::run('goodsActivity', $data, $key);
 		foreach($data as $k => $v){
-			if($v['delivery']==0){
-				$totalMoney += ($v['sell_price']-$v['reduce'])*$v['count'];
-				$totalWeight += $v['weight']*$v['count'];
+			if($v['delivery']==1){
+				$goods1['money'] += ($v['sell_price']-$v['reduce'])*$v['count'];
+				$goods1['weight'] += $v['weight']*$v['count'];
+				$goods1['count']++;
+			}elseif($v['delivery']==2){
+				$goods2['money'] += ($v['sell_price']-$v['reduce'])*$v['count'];
+				$goods2['weight'] += $v['weight']*$v['count'];
+				$goods2['count']++;
 			}
 		}
 		
 		/* 包邮金额 */
-		$condition_price = (new Config('jmj_config'))->condition_price; //全场折扣率
+		$condition_price = (new Config('jmj_config'))->condition_price; //包邮金额，[0=全场无条件包邮,-1=关闭包邮]
 		
 		/* 物流运费规则 */
 		$delivery = Api::run('getDeliveryList');
 		$delivery = $delivery[0];
 		
 		/* 计算邮费 */
-		if($is_delivery==1 || ($totalMoney>=$condition_price && $is_delivery!=2)){
+		if($condition_price==0 || $is_delivery==1 || ($goods1['count']==0&&$goods2['count']==0)){ //全场包邮
+			$deliveryPrice = 0;
+		}elseif($condition_price==-1 || $is_delivery==2){ //没有开启满包邮
+			//首重价格
+			$deliveryPrice = $delivery['first_price'];
+			//续重价格
+			if($goods1['weight']+$goods2['weight']>$delivery['first_weight']){
+				$deliveryPrice += ceil(($goods1['weight']+$goods2['weight']-$delivery['first_weight'])/$delivery['second_weight'])*$delivery['second_price'];
+			}
+		}elseif($goods1['money']>=$condition_price){ //包邮商品满足包邮条件
 			$deliveryPrice = 0; //包邮
+			if($goods2['count']>0){
+				//首重价格
+				$deliveryPrice = $delivery['first_price'];
+				//续重价格
+				if($goods2['weight']>$delivery['first_weight']){
+					$deliveryPrice += ceil(($goods2['weight']-$delivery['first_weight'])/$delivery['second_weight'])*$delivery['second_price'];
+				}
+			}
 		}else{
 			//首重价格
 			$deliveryPrice = $delivery['first_price'];
 			//续重价格
-			if($totalWeight>$delivery['first_weight']){
-				$deliveryPrice += ceil(($totalWeight-$delivery['first_weight'])/$delivery['second_weight'])*$delivery['second_price'];
+			if($goods1['weight']+$goods2['weight']>$delivery['first_weight']){
+				$deliveryPrice += ceil(($goods1['weight']+$goods2['weight']-$delivery['first_weight'])/$delivery['second_weight'])*$delivery['second_price'];
 			}
 		}
+		
 		return $deliveryPrice;
 	}
 	

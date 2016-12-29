@@ -1082,7 +1082,7 @@ class Apic extends IController{
 	 */
 	public function order_refunds(){
 		/* 接受参数 */
-		$goods_id = IFilter::act(IReq::get('goods_id'), 'int'); //商品ID
+		$goods_id = IFilter::act(IReq::get('goods_id')); //商品ID
 		$order_id = IFilter::act(IReq::get('order_id'), 'int'); //订单ID
 		$content  = IFilter::act(IReq::get('content'), 'text'); //退款理由
 		$user_id  = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : $this->json_echo(apiReturn::go('001001'));
@@ -1092,9 +1092,20 @@ class Apic extends IController{
 		$modelOrder = new IModel('order');
 		$infoOrder  = $modelOrder->getObj("id=".$order_id." AND user_id=".$user_id);
 		if(empty($infoOrder)) $this->json_echo(apiReturn::go('003002'));
-		$rel        = Order_Class::isRefundmentApply($infoOrder, explode(',', $goods_id));
-		if($rel!==true)
-			$rel===false ? $this->json_echo(apiReturn::go('003005')) : $this->json_echo(apiReturn::go('-1', '', $rel));
+		//订单商品列表
+		$queryGoods         = new IQuery('order_goods');
+		$queryGoods->where  = 'order_id='.$order_id;
+		$queryGoods->fields = 'id,goods_id';
+		$listGoods          = $queryGoods->find();
+		$goodsIds           = array();
+		foreach($listGoods as $k => $v){
+			$goodsIds[] = $v['goods_id'];
+		}
+		$goodsIds = array_intersect($goodsIds, explode(',', $goods_id));
+		if(empty($goodsIds)) $this->json_echo(apiReturn::go('003005'));
+		//是否可退款
+		$rel = Order_Class::isRefundmentApply($infoOrder, $goodsIds);
+		if($rel!==true) $this->json_echo(apiReturn::go('-1', '', $rel));
 		
 		/* 写入 */
 		$updateData   = array(
@@ -1104,7 +1115,7 @@ class Apic extends IController{
 			'time'           => ITime::getDateTime(),
 			'content'        => $content,
 			'seller_id'      => $infoOrder['seller_id'],
-			'order_goods_id' => $goods_id,
+			'order_goods_id' => implode(',',$goodsIds),
 		);
 		$modelRefunds = new IModel('refundment_doc');
 		$modelRefunds->setData($updateData);
