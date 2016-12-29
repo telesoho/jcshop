@@ -152,7 +152,6 @@ class Market extends IController implements adminAuthorization
 			$queryAcc->fields  = 'm.*,g.name,g.img,g.sell_price AS now_sell_price,g.is_del,g.goods_no,g.store_nums';
 			$infoSpeed['list'] = $queryAcc->find();
 		}
-//		var_dump($infoSpeed);exit();
 		/* 视图 */
 		$this->setRenderData(array('data' => $infoSpeed));
 		$this->redirect('activity_speed_edit');

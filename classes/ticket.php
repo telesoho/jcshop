@@ -32,27 +32,8 @@ class ticket{
 				return apiReturn::go('002006');
 		}
 		
-//		/* 计算邮费 */
-//		//满包邮
-//		$promotion_query        = new IQuery("promotion");
-//		$promotion_query->where = "type = 0 and seller_id = 0 and award_type = 6";
-//		$condition_price        = $promotion_query->find()[0]['condition'];
-//		if($data['sum']>=$condition_price){
-//			$data['delivery_money'] = 0;
-//		}else{
-//			//首重价格
-//			$data['delivery_money'] = $data['delivery'][0]['first_price'];
-//			//续重价格
-//			if($data['weight']>$data['delivery'][0]['first_weight']){
-//				$data['delivery_money'] += ceil(($data['weight']-$data['delivery'][0]['first_weight'])/$data['delivery'][0]['second_weight'])*$data['delivery'][0]['second_price'];
-//			}
-//		}
-		
 		/* 计算商品优惠后价格 */
 		$data['goodsList'] = self::goodsPrice($data['goodsList'], $data['final_sum']-$data['sum'], $data['final_sum']);
-		
-		/* 计算邮费 */
-		$data['delivery_money'] = Api::run('goodsDelivery',$data['goodsList'],'goods_id');
 		
 		/* 优惠券 */
 		$data['ticket'] = array(
@@ -72,11 +53,7 @@ class ticket{
 		$rel = self::checkActivity($ticket_aid);
 		if($rel['code']>0) return $rel;
 		$ticket_data = $rel['data'];
-		
-		/* 包邮 */
-		$is_delivery = 0; //是否包邮[0正常计算-1包邮-2不包邮]
 		$msg         = '';
-		$data['final_sum'] = $data['sum'];
 		
 		/* 优惠券类型 */
 		switch($ticket_data['type']){
@@ -109,7 +86,7 @@ class ticket{
 				break;
 			//商务合作券
 			case 4:
-				$is_delivery = 2; //不包邮
+				$data['is_delivery'] = 2; //不包邮
 				//计算优惠
 				$money       = $data['sum']-$ticket_data['rule'];
 				$data['sum'] = $money<=0 ? 0 : $money;
@@ -117,7 +94,7 @@ class ticket{
 				break;
 			//包邮券
 			case 5:
-				$is_delivery = 1; //包邮
+				$data['is_delivery'] = 1; //包邮
 				break;
 			//税值券
 			case 6:
@@ -126,23 +103,8 @@ class ticket{
 				return apiReturn::go('002012');
 		}
 		
-		/* 计算邮费 */
-//		if($is_delivery==1 || ($data['sum']>=$data['condition_price'] && $is_delivery!=2)){
-//			$data['delivery_money'] = 0; //满金额包邮
-//		}else{
-//			//首重价格
-//			$data['delivery_money'] = $data['delivery'][0]['first_price'];
-//			//续重价格
-//			if($data['weight']>$data['delivery'][0]['first_weight']){
-//				$data['delivery_money'] += ceil(($data['weight']-$data['delivery'][0]['first_weight'])/$data['delivery'][0]['second_weight'])*$data['delivery'][0]['second_price'];
-//			}
-//		}
-		
 		/* 计算商品优惠后价格 */
 		$data['goodsList'] = self::goodsPrice($data['goodsList'], $data['final_sum']-$data['sum'], $data['final_sum']);
-		
-		/* 计算邮费 */
-		$data['delivery_money'] = Api::run('goodsDelivery',$data['goodsList'],'goods_id',$is_delivery);
 		
 		/* 优惠券 */
 		$data['ticket'] = array(
@@ -179,23 +141,8 @@ class ticket{
 				$data['sum'] = $data['sum']-$data_ticket['money'];
 				break;
 		}
-//		/* 计算邮费 */
-//		if($data['sum']>=$postage['condition']){
-//			$data['deliveryPrice'] = 0;
-//		}else{
-//			//首重价格
-//			$data['deliveryPrice'] = $postage['delivery']['first_price'];
-//			//续重价格
-//			if($data['weight']>$postage['delivery']['first_weight']){
-//				$data['deliveryPrice'] += ceil(($data['weight']-$postage['delivery']['first_weight'])/$postage['delivery']['second_weight'])*$postage['delivery']['second_price'];
-//			}
-//		}
-		
 		/* 计算商品优惠后价格 */
 		$data['goodsResult']['goodsList'] = self::goodsPrice($data['goodsResult']['goodsList'], $data['final_sum']-$data['sum'], $data['final_sum']);
-		
-		/* 计算邮费 */
-		$data['deliveryPrice'] = Api::run('goodsDelivery',$data['goodsResult']['goodsList'],'goods_id');
 		
 		return apiReturn::go('0', $data);
 	}
@@ -208,9 +155,6 @@ class ticket{
 		$rel = self::checkActivity($ticket_aid);
 		if($rel['code']>0) return $rel;
 		$ticket_data = $rel['data'];
-		
-		/* 是否包邮 */
-		$is_delivery = 0; //是否包邮[0正常计算-1包邮-2不包邮]
 		
 		/* 优惠券类型 */
 		switch($ticket_data['type']){
@@ -240,14 +184,14 @@ class ticket{
 				break;
 			//商务合作券
 			case 4:
-				$is_delivery = 2; //不包邮
+				$data['is_delivery'] = 2; //不包邮
 				//计算优惠
 				$money       = $data['sum']-$ticket_data['rule'];
 				$data['sum'] = $money<=0 ? 0 : $money;
 				break;
 			//包邮券
 			case 5:
-				$is_delivery = 1; //包邮
+				$data['is_delivery'] = 1; //包邮
 				break;
 			//税值券
 			case 6:
@@ -255,23 +199,8 @@ class ticket{
 			default:
 				return apiReturn::go('002012');
 		}
-		
-//		/* 计算邮费 */
-//		if($is_delivery==1 || ($data['sum']>=$postage['condition'] && $is_delivery!=2)){
-//			$data['deliveryPrice'] = 0;
-//		}else{
-//			//首重价格
-//			$data['deliveryPrice'] = $postage['delivery']['first_price'];
-//			//续重价格
-//			if($data['weight']>$postage['delivery']['first_weight']){
-//				$data['deliveryPrice'] += ceil(($data['weight']-$postage['delivery']['first_weight'])/$postage['delivery']['second_weight'])*$postage['delivery']['second_price'];
-//			}
-//		}
 		/* 计算商品优惠后价格 */
 		$data['goodsResult']['goodsList'] = self::goodsPrice($data['goodsResult']['goodsList'], $data['final_sum']-$data['sum'], $data['final_sum']);
-		
-		/* 计算邮费 */
-		$data['deliveryPrice'] = Api::run('goodsDelivery',$data['goodsResult']['goodsList'],'goods_id',$is_delivery);
 		
 		/* 优惠券改为已使用 */
 		$model_ticket = new IModel('activity_ticket_access');

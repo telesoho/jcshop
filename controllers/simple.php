@@ -481,6 +481,7 @@ class Simple extends IController
 			//====================================
 			/* 使用优惠券 */
 			$goodsResult['final_sum'] = $goodsResult['sum']; //原价
+			$goodsResult['is_delivery'] = 0; //是否包邮[0正常计算-1包邮-2不包邮]
 			if( !empty($ticket_did) ){
 				//使用优惠券码
 				$rel 					= ticket::finalCalculateCode($goodsResult,$ticket_did);
@@ -489,11 +490,9 @@ class Simple extends IController
 				//使用优惠券
 				$rel 					= ticket::finalCalculateActivity($goodsResult,$ticket_aid);
 				if($rel['code']==0) $goodsResult = $rel['data'];
-			}else{
-				/* 计算邮费 */
-				$data['deliveryPrice'] = Api::run('goodsDelivery',$goodsResult['goodsResult']['goodsList'],'goods_id');
 			}
-			
+			/* 计算邮费 */
+			$goodsResult['deliveryPrice'] = Api::run('goodsDelivery',$goodsResult['goodsResult']['goodsList'],'goods_id',$goodsResult['is_delivery']);
 			//====================================
 			
 			//生成的订单数据
@@ -637,8 +636,7 @@ class Simple extends IController
 		}
 
 		//记录用户默认习惯的数据
-		if(!isset($memberRow['custom']))
-		{
+		if(!isset($memberRow['custom'])){
 			$memberObj = new IModel('member');
 			$memberRow = $memberObj->getObj('user_id = '.$user_id,'custom');
 		}
@@ -655,11 +653,9 @@ class Simple extends IController
 		$memberObj->update('user_id = '.$user_id);
 
 		//收货地址的处理
-		if($user_id)
-		{
+		if($user_id){
 			$addressDefRow = $addressDB->getObj('user_id = '.$user_id.' and is_default = 1');
-			if(!$addressDefRow)
-			{
+			if(!$addressDefRow){
 				$addressDB->setData(array('is_default' => 1));
 				$addressDB->update('user_id = '.$user_id.' and id = '.$address_id);
 			}
@@ -680,16 +676,12 @@ class Simple extends IController
 		$this->deliveryType= $deliveryRow['type'];
 		plugin::trigger('setCallback','/ucenter/order');
 		//订单金额为0时，订单自动完成
-		if($this->final_sum <= 0)
-		{
+		if($this->final_sum <= 0){
 			$this->redirect('/site/success/message/'.urlencode("订单确认成功，等待发货"));
-		}
-		else
-		{
-//			if(!$gid){
-//				//清空购物车
-//				IInterceptor::reg("cart@onFinishAction");
-//			}
+		}else{
+			//清空购物车
+			if(!$gid) IInterceptor::reg("cart@onFinishAction");
+			//跳转支付
 			$this->redirect('/block/doPay/order_id/'.$order_id);
 // 			$this->setRenderData($dataArray);
 // 			$this->redirect('cart3');

@@ -266,7 +266,7 @@ class Apic extends IController{
 		$data['num']         = $buy_num;
 		$data['promo']       = $promo;
 		$data['active_id']   = $active_id;
-		$data['final_sum']   = $result['final_sum'];
+		$data['final_sum']   = $result['sum'];//原价//$result['final_sum'];
 		$data['promotion']   = $result['promotion'];
 		$data['proReduce']   = $result['proReduce'];
 		$data['sum']         = $result['sum'];
@@ -278,6 +278,7 @@ class Apic extends IController{
 		$data['seller']      = $result['seller'];
 		$data['addressList'] = $addressList;
 		$data['goodsTax']    = $result['tax'];
+		$data['is_delivery'] = 0; //是否包邮[0正常计算-1包邮-2不包邮]
 		
 		//配送方式
 		$data['delivery'] = Api::run('getDeliveryList');
@@ -309,8 +310,6 @@ class Apic extends IController{
 			if($rel['code']>0) $this->json_echo($rel);
 			$data = $rel['data'];
 		}else{
-			/* 计算邮费 */
-			$data['delivery_money'] = Api::run('goodsDelivery',$data['goodsList'],'goods_id');
 			/* 优惠券 */
 			$data['ticket'] = array(
 				'ticket_did' => '',    //优惠券码ID
@@ -319,6 +318,8 @@ class Apic extends IController{
 				'msg'        => '',
 			);
 		}
+		/* 计算邮费 */
+		$data['delivery_money'] = Api::run('goodsDelivery',$data['goodsList'],'goods_id',$data['is_delivery']);
 		
 		$this->json_echo(apiReturn::go('0', $data));
 	}
@@ -1065,7 +1066,7 @@ class Apic extends IController{
 		//订单详情
 		$modelOrder = new IModel('order');
 		$infoOrder  = $modelOrder->getObj('id='.$order_id.' AND user_id='.$user_id);
-		if(empty($order_id)) $this->json_echo(apiReturn::go('001002'));
+		if(empty($infoOrder)) $this->json_echo(apiReturn::go('003002'));
 		/* 订单商品 */
 		$goodsList = Api::run('getOrderGoodsListByGoodsid', array('#order_id#', $infoOrder['id']));
 		$this->json_echo(apiReturn::go('0', $goodsList));
@@ -1085,8 +1086,10 @@ class Apic extends IController{
 		/* 检测退款 */
 		$modelOrder = new IModel('order');
 		$infoOrder  = $modelOrder->getObj("id=".$order_id." AND user_id=".$user_id);
+		if(empty($infoOrder)) $this->json_echo(apiReturn::go('003002'));
 		$rel        = Order_Class::isRefundmentApply($infoOrder, explode(',', $goods_id));
-		if($rel!==true) $this->json_echo(apiReturn::go('-1', '', $rel));
+		if($rel!==true)
+			$rel===false ? $this->json_echo(apiReturn::go('003005')) : $this->json_echo(apiReturn::go('-1', '', $rel));
 		
 		/* 写入 */
 		$updateData   = array(
@@ -1104,9 +1107,6 @@ class Apic extends IController{
 		/* 结果 */
 		$this->json_echo(apiReturn::go($rel>0 ? '0' : '003004'));
 	}
-	
-	
-	
 	
 	/**
 	 * ---------------------------------------------------物流---------------------------------------------------*
