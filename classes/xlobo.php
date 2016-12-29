@@ -48,20 +48,34 @@ class xlobo
             'sign'         => $sign,
             'access_token' => self::$AccessToken
         );
-        $curl->setHeader('Content-Type', 'application/x-www-form-urlencoded; charset=GBK');
+        $curl->setHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         $ret = $curl->post($url, $params);
-        if (isset($ret->Succeed) && !$ret->Succeed) {
-            common::log_write(print_r($ret->ErrorInfoList[0]->ErrorDescription, true));
-            return ['msg' => $ret->ErrorInfoList[0]->ErrorDescription];
+        if ($ret === false) {
+            IError::show_normal('服务器未响应');
+            return ['msg' => '服务器未响应'];
         }
-        if ($ret === false) return ['msg' => '服务器未响应'];
-        return $ret;
+        if (isset($ret->Succeed) && $ret->Succeed) {
+            return $ret;
+        } else {
+            if (isset($ret->ErrorCode)) switch ($ret->ErrorCode){
+                case 'SystemError':
+                    IError::show_normal($method . ':' . $ret->resourceValue);
+                    break;
+                default:
+                    IError::show_normal($method . ':' . $ret->ErrorInfoList[0]->ErrorDescription);
+            }
+//            var_dump($ret);
+//            if (isset($ret->ErrorCount)) IError::show_normal($method . ':' . $ret->ErrorInfoList[0]->ErrorDescription);
+            if (isset($ret->TotalCount)) return $ret;
+            common::log_write(print_r($ret, true));
+            return;
+        }
     }
     public static function sign($data){
         $sign = md5(base64_encode(strtolower(self::$SecretKey . json_encode($data) . self::$SecretKey)));
         return $sign;
     }
-    public static function create_logistic_single($order_id){
+    public static function create_logistic_single($order_id, $sendgoods){
         $order_query = new IQuery('order as a');
         $order_query->join = ' LEFT JOIN user AS c ON a.user_id = c.id';
         $order_query->where = 'a.id = ' . $order_id;
@@ -70,21 +84,25 @@ class xlobo
         if (empty($data)) return ['msg'=>'无该订单数据'];
         $data = $data[0];
         if (empty($data['postcode'])) $data['postcode'] = '310000';
-        $order_goods_query = new IQuery('order_goods');
-        $order_goods_query->where = 'order_id = ' . $data['order_id'];
+        $order_goods_query = new IQuery('order_goods as a');
+        $order_goods_query->join = 'left join goods as b on a.goods_id = b.id';
+        $order_goods_query->where = 'a.order_id = ' . $data['order_id'] . ' and a.goods_id in (' . join(',',$sendgoods) . ')';
         $order_goods_data = $order_goods_query->find();
         if (empty($order_goods_data)) return ['msg' => '无该订单关联数据'];
         $goods_total_weight = 0;
         $goods_arrays = [];
+        $goods_ids = [];
         foreach ($order_goods_data as $k=>$v){
+            $goods_ids[] = $v['goods_id'];
+            if ($v['purchase_price'] == 0.00 || empty($v['purchase_price'])) IError::show_normal($v['goods_id'] . '无进货价');
             $temp = json_decode($v['goods_array']);
             $goods_total_weight += $v['goods_weight'];
             $goods_arrays[] = array(
-//                'CategoryId' => self::get_goods_xlobo($v['goods_id']),
-                'CategoryId' => 45,
+                'CategoryId' => self::get_goods_xlobo($v['goods_id']),
                 'CategoryVersion' => date('Y-m-d H:i:s', time()),
                 'Count' => $v['goods_nums'],
-                'UnitPrice' => $v['real_price'],
+                'UnitPrice' => $v['purchase_price'],
+//                'UnitPrice' => $v['real_price'],
                 'ProductName' => $temp->name,
                 'Brand' => self::get_brand($temp->goodsno),
                 'Model' => null,
@@ -94,9 +112,9 @@ class xlobo
         }
         if (count($goods_arrays) > 10) return ['msg' => '该订单商品数量超过10件'];
 
-
+        $goods_ids = join('',$goods_ids);
         $params = array(
-            'BusinessNo' => $data['order_no'],
+            'BusinessNo' => $data['order_no'].$goods_ids,
             'Weight' => $goods_total_weight,
             'Insure' => null,
 //            'IsRePacking' => 1,
@@ -116,16 +134,13 @@ class xlobo
             ),
             // 面单收件人信息
             'BillReceiverInfo' => array(
-                'Name' => '陈波',
-//                'Name' => $data['accept_name'],
+                'Name' => $data['accept_name'],
                 'Province' => self::get_area_name($data['province']),
                 'City' => self::get_area_name($data['city']),
                 'District' => self::get_area_name($data['area']),
                 'Address' => $data['address'],
-//                'Phone' => $data['mobile'],
-                'Phone' => '18142005882',
-//                'OtherPhone' => $data['mobile'],
-                'OtherPhone' => '18142005882',
+                'Phone' => $data['mobile'],
+                'OtherPhone' => $data['mobile'],
                 'Email' => null,
                 'PostCode' => $data['postcode'],
                 'IdCode' => $data['sfz_num'],
@@ -151,6 +166,7 @@ class xlobo
      * @return string
      */
     public static function get_logistic_single_a4($billcodes_array){
+        $billcodes_array = array_unique($billcodes_array);
         $params = array(
             'BillCodes' => $billcodes_array
         );
@@ -187,8 +203,8 @@ class xlobo
      * @return string
      */
     public static function add_idcard($sfz_name, $phone, $sfz_num, $sfz_image1_path, $sfz_image2_path, $billcode = null){
-        $sfz_image1 = base64_encode(file_get_contents($sfz_image1_path));
-        $sfz_image2 = base64_encode(file_get_contents($sfz_image2_path));
+        $sfz_image1 = base64_encode(file_get_contents(__DIR__ . '/../' .$sfz_image1_path));
+        $sfz_image2 = base64_encode(file_get_contents(__DIR__ . '/../' .$sfz_image2_path));
         $data = array(
             'RequestId'    => '951357',
             'Name'         => $sfz_name,
@@ -199,6 +215,7 @@ class xlobo
             'BillCode'     => $billcode,
         );
         $ret = self::requests('xlobo.idcard.add', $data);
+//        $ret = common::http_post_json(self::$ServerUrl . 'xlobo.idcard.add', json_encode($data));
         return $ret;
     }
 
@@ -248,7 +265,6 @@ class xlobo
         $category_extend->where = 'a.goods_id = ' . $goods_id;
         $data = $category_extend->find();
 //        echo $goods_id;
-//        var_dump($data);
         if ($data){
             return $data[0]['xlobo'];
         } else {

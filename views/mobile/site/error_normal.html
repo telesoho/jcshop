@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />-->
+    <title>{echo:IReq::get('heading')}</title>
+    <style>
+        .content .text{
+            /*margin-top:0.5rem;*/
+            /*font-size:0.36rem;*/
+            color:#3D4245;
+        }
+    </style>
+</head>
+<body>
+    <div class="img">
+        <!--<img src="/views/mobile/skin/default/image/xinzeng/error_default.png" alt="" style="width:5.68rem;height:auto"/>-->
+    </div>
+    <div class="content">
+        <div class="text">
+            {echo:IReq::get('msg')}
+        </div>
+        <!--<img src="/views/mobile/skin/default/image/xinzeng/error.png" alt="">-->
+        <!--<a href="{url:/site/index}">去逛逛</a>-->
+    </div>
+
+</body>
+</html>
