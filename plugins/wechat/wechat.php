@@ -670,6 +670,10 @@ class wechat extends pluginBase
 	{
 		switch($postObj->MsgType)
 		{
+			case 1:
+				$this->textReplay('2323');
+				break;
+			
 			//自动回复
 			default:
 			{
