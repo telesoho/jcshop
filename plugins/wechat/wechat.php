@@ -678,9 +678,29 @@ class wechat extends pluginBase
 			default:
 			{
 				switch($postObj->Content){
-					case 1:
-						$this->imageReplay('PVnzI3WXGfWhBMkJMil6JgV-wCxB4WAtupGlfbRnsGI');
-						break;
+					case 1:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JgV-wCxB4WAtupGlfbRnsGI');break;
+					case 2:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Josmld8fbURax0tsSHSTeS0');break;
+					case 3:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jp2NdwA4-RxjML-Rw6uEoX0');break;
+					case 4:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JgkwKXpATTCkZ18u1XzicxU');break;
+					case 5:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JmpayR0p1-ucCWYtWsM3czI');break;
+					case 6:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JqEIB4hSwn1SEOd0pd95Tvc');break;
+					case 7:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JgnZ5lMPItKywHzRpUY5-3A');break;
+					case 8:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jhr8dPTL1C3gK7hKK8VVMEU');break;
+					case 9:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JlyPvvtT7dHyJS18Wc4HVdI');break;
+					case 10:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JtZCxV4BtJmw6eDuerKNgHk');break;
+					case 11:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jnl9F9EKL-J76mHqUJv99UA');break;
+					case 12:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JqEglE-9-3JK4dpQcACjxCo');break;
+					case 13:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jp7WdrdQJTBMLhmZv_g9TfI');break;
+					case 14:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jo6ID3_KvdwUA98NhSwTh_4');break;
+					case 15:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JvQfBmcifSOrrKPG4asmuDI');break;
+					case 16:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JhCb8IRNuPak2ZR9M6Ibbbo');break;
+					case 17:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Js83r8tOdvGBwt73drlvszE');break;
+					case 18:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jntu40MVVWsCAXfA1iCKiAI');break;
+					case 19:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JscIOpObLSAA6vW1tX069GU');break;
+					case 20:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Juc5m4JE9KA3hhpxJ9a1jLQ');break;
+					case 21:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JlrVNm3ddkGB8vl5gjEqM8Y');break;
+					case 22:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JkC2ml9CWAsRyStohviNeI0');break;
+					case 23:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Js3WVCpMx7zNZM8lvpDjGLk');break;
 					default:
 						$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
 				}
