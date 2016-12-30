@@ -34,27 +34,22 @@ class wechat extends pluginBase
 	public $msgObject = null;
 
 	//获取配置参数
-	private  function initConfig()
-	{
+	private  function initConfig(){
 		//缺少SSL组件
-		if(!extension_loaded("OpenSSL"))
-		{
+		if(!extension_loaded("OpenSSL")){
 			$this->setError = "您的环境缺少OpenSSL组件，这是调用微信API所必须的";
 			return false;
 		}
 		//获取参数配置
 		$siteConfigObj = $this->config();
-		if(isset($siteConfigObj['wechat_Token']) && isset($siteConfigObj['wechat_AppID']) && isset($siteConfigObj['wechat_AppSecret']))
-		{
+		if(isset($siteConfigObj['wechat_Token']) && isset($siteConfigObj['wechat_AppID']) && isset($siteConfigObj['wechat_AppSecret'])){
 			$this->config['wechat_Token']     = $siteConfigObj['wechat_Token'];
 			$this->config['wechat_AppID']     = $siteConfigObj['wechat_AppID'];
 			$this->config['wechat_AppSecret'] = $siteConfigObj['wechat_AppSecret'];
 			$this->config['wechat_AutoLogin'] = $siteConfigObj['wechat_AutoLogin'];
 			$this->config['wechat_jsApiSDK']  = $siteConfigObj['wechat_jsApiSDK'];
 			return true;
-		}
-		else
-		{
+		}else{
 			$this->setError("微信配置信息不完全，参数【TOKEN】【AppID】【AppSecret】必须填写完整");
 			return false;
 		}
@@ -71,28 +66,21 @@ class wechat extends pluginBase
 	 * @brief 获取access_token令牌
 	 * @param boolean $fresh 是否刷新令牌
 	 */
-	public function getAccessToken($fresh = false)
-	{
+	public function getAccessToken($fresh = false){
 		$cacheObj = new ICache();
 		$accessTokenTime = $cacheObj->get('accessTokenTime');
 
 		//延续使用
-		if($accessTokenTime && time() - $accessTokenTime < self::$accessTokenTime && $fresh == false)
-		{
+		if($accessTokenTime && time() - $accessTokenTime < self::$accessTokenTime && $fresh == false){
 			$accessToken = $cacheObj->get('accessToken');
-			if($accessToken)
-			{
+			if($accessToken){
 				return $accessToken;
-			}
-			else
-			{
+			}else{
 				$cacheObj->del('accessTokenTime');
 				return $this->getAccessToken();
 			}
-		}
-		//重新获取令牌
-		else
-		{
+		}else{
+			//重新获取令牌
 			$urlparam = array(
 				'grant_type=client_credential',
 				'appid='.$this->config['wechat_AppID'],
@@ -101,43 +89,35 @@ class wechat extends pluginBase
 			$apiUrl = self::SERVER_URL."/token?".join("&",$urlparam);
 			$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
 			$result = JSON::decode($json);
-			if($result && isset($result['access_token']) && isset($result['expires_in']))
-			{
+			if($result && isset($result['access_token']) && isset($result['expires_in'])){
 				$cacheObj->set('accessTokenTime',time());
 				$cacheObj->set('accessToken',$result['access_token']);
 				return $result['access_token'];
-			}
-			else
-			{
+			}else{
 				die($json);
 			}
 		}
 	}
 
 	//获取openid
-	public static function getOpenId()
-	{
+	public static function getOpenId(){
 		return ISession::get('wechat_openid');
 	}
 
 	//设置openid
-	public static function setOpenId($openid)
-	{
+	public static function setOpenId($openid){
 		ISession::set('wechat_openid',$openid);
 	}
 
     //处理微信服务器的请求接口
-    public function response()
-    {
+    public function response(){
     	$code  = IReq::get('code');
     	$state = IReq::get('state');
 	
     	//oauth回调处理
-    	if($code && $state)
-    	{
+    	if($code && $state){
 			$result = $this->getOauthAccessToken($code);
-			if($result)
-			{
+			if($result){
 				//保存openid为其他wechat应用使用
 				$this->setOpenId($result['openid']);
 
@@ -149,43 +129,31 @@ class wechat extends pluginBase
 				}
 				header('location: http://'.$_SERVER['HTTP_HOST'].urldecode($state));
 			}
-    	}
-    	else
-    	{
+    	}else{
 			//微信推送处理
-	    	if($this->checkSignature())
-	    	{
+	    	if($this->checkSignature()){
 		    	//第一次验证
-		    	if($echostr = IReq::get('echostr'))
-		    	{
+		    	if($echostr = IReq::get('echostr')){
 					die($echostr);
-		    	}
-		    	//相应其他的请求
-		    	else
-		    	{
+		    	}else{
+					//相应其他的请求
 		    		$postXML = file_get_contents("php://input");
 		    		//微信推送的post数据信息
-		    		if($postXML)
-		    		{
+		    		if($postXML){
 		    			//保存消息对象
 						$this->msgObject = $postObj = simplexml_load_string($postXML, 'SimpleXMLElement', LIBXML_NOCDATA);
 
 						//事件推送相应
-						if(isset($postObj->Event))
-						{
+						if(isset($postObj->Event)){
 							$this->eventCatch($postObj);
-						}
-						//普通消息推送相应
-						else if(isset($postObj->MsgId))
-						{
+						}else if(isset($postObj->MsgId)){
+							//普通消息推送相应
 							$this->msgCatch($postObj);
 						}
 		    		}
 		    	}
 		    	die('success');
-	    	}
-	    	else
-	    	{
+	    	}else{
 	    		die('本次请求非微信客户端发起');
 	    	}
     	}
@@ -197,8 +165,7 @@ class wechat extends pluginBase
 	 * @param array $postData 提交数据
 	 * @return string 返回的结果字符串
 	 */
-    public function submit($submitUrl,$postData = null)
-    {
+    public function submit($submitUrl,$postData = null){
 		//提交菜单
 		$curl = curl_init($submitUrl);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);//SSL证书认证
@@ -215,8 +182,7 @@ class wechat extends pluginBase
 	 * 验证推送消息真实性
 	 * @return boolean true or false
 	 */
-	public function checkSignature()
-	{
+	public function checkSignature(){
         $signature = IReq::get('signature');
         $timestamp = IReq::get('timestamp');
         $nonce     = IReq::get('nonce');
@@ -225,12 +191,9 @@ class wechat extends pluginBase
 		sort($tmpArr,SORT_STRING);
 		$tmpStr = sha1(join($tmpArr));
 
-		if($tmpStr == $signature)
-		{
+		if($tmpStr == $signature){
 			return true;
-		}
-		else
-		{
+		}else{
 			return false;
 		}
 	}
@@ -239,10 +202,8 @@ class wechat extends pluginBase
 	 * @brief 根据code获取oauth登录令牌和openid
 	 * @param string $code
 	 */
-	private function getOauthAccessToken($code)
-	{
-		if(!IValidate::check("^[\w\-]+$",$code))
-		{
+	private function getOauthAccessToken($code){
+		if(!IValidate::check("^[\w\-]+$",$code)){
 			die("CODE码非法");
 		}
 
@@ -255,8 +216,7 @@ class wechat extends pluginBase
 		$apiUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?".join("&",$urlparam);
 		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
 		$result = JSON::decode($json);
-		if(!isset($result['openid']))
-		{
+		if(!isset($result['openid'])){
 			throw new IException("根据code【".$code."】值未获取到open_id码:{$json}");
 		}
 		return $result;
@@ -267,8 +227,7 @@ class wechat extends pluginBase
 	 * @param json $menuData 菜单数据 {"button":[{"name":"名称","sub_button":[{"type":"view","name":"子菜单名称","url":"http://www.aircheng.com"}]}]}
 	 * @return array("errcode" => 0,"errmsg" => "ok")
 	 */
-	public function setMenu()
-	{
+	public function setMenu(){
 		$this->initConfig();
 		$menuData = trim(IReq::get('menuData'));
 
@@ -283,16 +242,14 @@ class wechat extends pluginBase
 		$array  = JSON::decode($json);
 
 		$result = array('result' => 'success');
-		if($array['errcode'] != 0)
-		{
+		if($array['errcode'] != 0){
 			$result = array('result' => 'fail','msg' => $array['errmsg']);
 		}
 		die(JSON::encode($result));
 	}
 
 	//URL静默登录替换处理
-	private function urlCallback($menuData)
-	{
+	private function urlCallback($menuData){
 		return preg_replace_callback('|(?<="url":").*?(?=")|',array($this,"converUrl"),$menuData);
 	}
 
@@ -300,8 +257,7 @@ class wechat extends pluginBase
 	 * @brief 获取自定义菜单
 	 * @return array
 	 */
-	public function getMenu()
-	{
+	public function getMenu(){
 		$this->initConfig();
 		$accessToken = $this->getAccessToken();
 		$urlparam = array(
@@ -312,12 +268,9 @@ class wechat extends pluginBase
 		$result = JSON::decode($json);
 		$json   =  isset($result['menu']) ? $result['menu'] : null;
 
-		if($json)
-		{
+		if($json){
 			$result = array('result' => 'success','data' => JSON::encode($json));
-		}
-		else
-		{
+		}else{
 			$result = array('result' => 'fail','msg' => '获取菜单失败:'.$result['errmsg']);
 		}
 		die(JSON::encode($result));
@@ -335,8 +288,7 @@ class wechat extends pluginBase
 	 * }
 	 * @return array
 	 */
-	public function getUserInfo($oauthAccess)
-	{
+	public function getUserInfo($oauthAccess){
 		$openid      = $oauthAccess['openid'];
 		$accessToken = $oauthAccess['access_token'];
 		$scope       = $oauthAccess['scope'];
@@ -346,19 +298,15 @@ class wechat extends pluginBase
 		);
 
 		//根据不同的授权类型运行不同的接口
-		if($scope == 'snsapi_userinfo')
-		{
+		if($scope == 'snsapi_userinfo'){
 			$apiUrl = "https://api.weixin.qq.com/sns/userinfo?";
-		}
-		else
-		{
+		}else{
 			$apiUrl = self::SERVER_URL."/user/info?";
 		}
 
 		$apiUrl .= join("&",$urlparam);
 		$json    = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
-		if(strpos($json,"access_token is invalid"))
-		{
+		if(strpos($json,"access_token is invalid")){
 			$this->oauthLogin();
 			return;
 		}
@@ -369,21 +317,15 @@ class wechat extends pluginBase
 	 * @brief 转换URL
 	 * @param string $url 跳转的URL参数
 	 */
-	public function converUrl($url)
-	{
+	public function converUrl($url){
 		//preg_replace_callback 回调的是数组参数
-		if(is_array($url))
-		{
-			foreach($url as $key => $val)
-			{
+		if(is_array($url)){
+			foreach($url as $key => $val){
 				return $this->converUrl($val);
 			}
-		}
-		else
-		{
+		}else{
 			//伪静态路径
-			if(strpos($url,"/") === 0)
-			{
+			if(strpos($url,"/") === 0){
 				return IUrl::getHost().IUrl::creatUrl($url);
 			}
 			return $url;
@@ -391,8 +333,7 @@ class wechat extends pluginBase
 	}
 
 	//获取oauth登录的回调
-	public function getOauthCallback()
-	{
+	public function getOauthCallback(){
 		return IUrl::getHost().IUrl::creatUrl("/block/wechat");
 	}
 
@@ -407,17 +348,14 @@ class wechat extends pluginBase
 			"scope": "snsapi_userinfo"
 	 * }
 	 */
-	public function bindUser($oauthAccess)
-	{
-		if(!isset($oauthAccess['openid']))
-		{
+	public function bindUser($oauthAccess){
+		if(!isset($oauthAccess['openid'])){
 			throw new IException("未获取到用户的OPENID数据");
 		}
 
 		//获取微信用户信息
 		$wechatUser = $this->getUserInfo($oauthAccess);
-		if(isset($wechatUser['errmsg']))
-		{
+		if(isset($wechatUser['errmsg'])){
 			throw new IException("获取用户信息失败！".$wechatUser['errmsg']);
 		}
 
@@ -432,8 +370,7 @@ class wechat extends pluginBase
 		//$unId = isset($wechatUser['unionid']) ? $wechatUser['unionid'] : $unId;
 
 		$username = substr($oauthAccess['openid'],-8);
-		if(isset($wechatUser['nickname']))
-		{
+		if(isset($wechatUser['nickname'])){
 			//有个别微信用户头像是二进制图片，需要过滤掉
 			$wechatName= trim(preg_replace('/[\x{10000}-\x{10FFFF}]/u',"",$wechatUser['nickname']));
 			$username  = $wechatName ? IFilter::act($wechatName) : $username;
@@ -441,37 +378,27 @@ class wechat extends pluginBase
 		$sex        = isset($wechatUser['sex'])        ? $wechatUser['sex']                  : "";
 		$ico        = isset($wechatUser['headimgurl']) ? trim($wechatUser['headimgurl'],"0") : "";
 
-		if(isset($wechatUser['subscribe']) && $wechatUser['subscribe'] == 1)
-		{
+		if(isset($wechatUser['subscribe']) && $wechatUser['subscribe'] == 1){
 			//关注公众账号的处理写到这里...
-			
-		}
-		else
-		{
+		}else{
 			//未关注公众账号的处理写到这里...
-
 		}
 
 		//检查用户信息
 		$tempDB   = new IModel('oauth_user as ou,user as u');
 		$oauthRow = $tempDB->getObj("ou.oauth_user_id = '".$unId."' and ou.oauth_id = 5 and ou.user_id = u.id");
 
-		if($oauthRow)
-		{
+		if($oauthRow){
 			//已经关注,更新最新的用户数据
-			if(isset($wechatUser['subscribe']) && $wechatUser['subscribe'] == 1)
-			{
+			if(isset($wechatUser['subscribe']) && $wechatUser['subscribe'] == 1){
 				$user_id   = $oauthRow['user_id'];
 				$userDB    = new IModel('user');
 		    	$userCount = $userDB->getObj("username = '{$username}' and id != {$user_id}",'count(*) as num');
 
 		    	//没有重复的用户名
-		    	if($userCount['num'] == 0)
-		    	{
-
+		    	if($userCount['num'] == 0){
 		    	}
-		    	else
-		    	{
+		    	else{
 		    		//随即分配一个用户名
 		    		$username = $username.rand(1000,9999);
 		    	}
@@ -490,19 +417,14 @@ class wechat extends pluginBase
 				));
 				$memberDB->update('user_id = '.$user_id);
 			}
-		}
-		else
-		{
+		}else{
 			$userDB    = new IModel('user');
 	    	$userCount = $userDB->getObj("username = '{$username}' ",'count(*) as num');
 
 	    	//没有重复的用户名
-	    	if($userCount['num'] == 0)
-	    	{
+	    	if($userCount['num'] == 0){
 
-	    	}
-	    	else
-	    	{
+	    	}else{
 	    		//随即分配一个用户名
 	    		$username = $username.rand(1000,9999);
 	    	}
@@ -543,30 +465,24 @@ class wechat extends pluginBase
 	 * @brief 登录用户系统
 	 * @param string $unId 唯一ID标识
 	 */
-	public function login($unId)
-	{
+	public function login($unId){
 		$oauthUserDB = new IModel('oauth_user');
 		$oauthRow = $oauthUserDB->getObj("oauth_user_id = '".$unId."' and oauth_id = 5");
 		$userRow  = array();
-		if($oauthRow)
-		{
+		if($oauthRow){
 			$userDB = new IModel('user');
 			$userRow = $userDB->getObj('id = '.$oauthRow['user_id']);
 		}
 
-		if(!$userRow)
-		{
+		if(!$userRow){
 			$oauthUserDB->del("oauth_user_id = '".$unId."' and oauth_id = 5");
 			die('无法获取微信用户与商城的绑定信息，请重新关注公众账号');
 		}
 
 		$user = plugin::trigger("isValidUser",array($userRow['username'],$userRow['password']));
-		if($user)
-		{
+		if($user){
 			plugin::trigger("userLoginCallback",$user);
-		}
-		else
-		{
+		}else{
 			die('<h1>该用户'.$userRow['username'].'被移至回收站内无法进行登录</h1>');
 		}
 	}
@@ -577,8 +493,7 @@ class wechat extends pluginBase
 	 * @param string $snsType 登录授权方式：snsapi_base (不弹出授权页面，直接跳转，只能获取用户openid), snsapi_userinfo (弹出授权页面，可通过openid拿到昵称、性别、所在地。并且，即使在未关注的情况下，只要用户授权，也能获取其信息)
 	 * @return string 处理后oauth的URL
 	 */
-	public function oauthUrl($url,$snsType = "snsapi_userinfo")
-	{
+	public function oauthUrl($url,$snsType = "snsapi_userinfo"){
 //		$url = $this->converUrl($url);
 		$urlArr = parse_url($url);
 		$url = urlencode((isset($urlArr['path']) ? $urlArr['path'] : '').(isset($urlArr['query']) ? '?'.$urlArr['query'] : ''));
@@ -599,13 +514,10 @@ class wechat extends pluginBase
 	 * @brief 微信事件推送处理接口
 	 * @param $postObj 微信消息Array形式
 	 */
-	public function eventCatch($postObj)
-	{
-		switch($postObj->Event)
-		{
+	public function eventCatch($postObj){
+		switch($postObj->Event){
 			//开始订阅
-			case "subscribe":
-			{
+			case "subscribe":{
 			    $this->add_qrcode_follow($postObj->EventKey,$postObj->FromUserName);
 				$this->textReplay('亲爱的喵们！ 
  
@@ -623,29 +535,25 @@ class wechat extends pluginBase
 			break;
 
 			//取消订阅
-			case "unsubscribe":
-			{
+			case "unsubscribe":{
                 $this->add_qrcode_follow(null,$postObj->FromUserName);
             }
 			break;
 
 			//点击菜单跳转链接时的事件推送
-			case "VIEW":
-			{
+			case "VIEW":{
 
 			}
 			break;
 
 			//点击菜单拉取消息时的事件推送
-			case "CLICK":
-			{
+			case "CLICK":{
 
 			}
 			break;
 
             //点击菜单拉取消息时的事件推送
-            case "SCAN":
-            {
+            case "SCAN": {
                 $this->textReplay('亲爱的喵们！ 
 
 欢迎来到九猫家微信服务号～
@@ -668,10 +576,8 @@ class wechat extends pluginBase
 	 * @brief 微信普通消息处理接口
 	 * @param string $postObj 微信消息Array形式
 	 */
-	public function msgCatch($postObj)
-	{
-		switch($postObj->MsgType)
-		{
+	public function msgCatch($postObj){
+		switch($postObj->MsgType){
 			//自动回复
 			default:{
 				switch($postObj->Content){
@@ -715,8 +621,7 @@ class wechat extends pluginBase
 	 * @brief 微信文字类型回复
 	 * @param $content string 发送终端用户的文本消息
 	 */
-    public function textReplay($content)
-    {
+    public function textReplay($content){
     	$postObj = $this->msgObject;
 		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[{$content}]]></Content></xml>";
 		die($replyContent);
@@ -726,10 +631,10 @@ class wechat extends pluginBase
 	 * @brief 微信图片类型回复
 	 * @param $content string 发送终端用户的文本消息
 	 */
-	public function imageReplay($content)
-	{
+	public function imageReplay($content){
 		$postObj = $this->msgObject;
 		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[$content]]></MediaId></Image></xml>";
+		common::dblog($replyContent);
 		die($replyContent);
 	}
 
@@ -737,28 +642,21 @@ class wechat extends pluginBase
 	 * @brief 获取jsapi_ticket令牌
 	 * @param $fresh 是否刷新令牌
 	 */
-    public function jsapiTicket($fresh = false)
-    {
+    public function jsapiTicket($fresh = false){
 		$cacheObj = new ICache();
 		$jsapiTicketTime = $cacheObj->get('jsapiTicketTime');
 
 		//延续使用
-		if($jsapiTicketTime && time() - $jsapiTicketTime < self::$jsapiTicketTime && $fresh == false)
-		{
+		if($jsapiTicketTime && time() - $jsapiTicketTime < self::$jsapiTicketTime && $fresh == false){
 			$jsapiTicket = $cacheObj->get('jsapiTicket');
-			if($jsapiTicket)
-			{
+			if($jsapiTicket){
 				return $jsapiTicket;
-			}
-			else
-			{
+			}else{
 				$cacheObj->del('jsapiTicketTime');
 				return $this->jsapiTicket();
 			}
-		}
-		//重新获取令牌
-		else
-		{
+		}else{
+			//重新获取令牌
 			$accessToken = $this->getAccessToken();
 			$urlparam = array(
 				'type=jsapi',
@@ -767,14 +665,11 @@ class wechat extends pluginBase
 			$apiUrl = self::SERVER_URL."/ticket/getticket?".join("&",$urlparam);
 			$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
 			$result = JSON::decode($json);
-			if($result && isset($result['ticket']) && isset($result['expires_in']))
-			{
+			if($result && isset($result['ticket']) && isset($result['expires_in'])){
 				$cacheObj->set('jsapiTicketTime',time());
 				$cacheObj->set('jsapiTicket',$result['ticket']);
 				return $result['ticket'];
-			}
-			else
-			{
+			}else{
 				die($json);
 			}
 		}
@@ -786,8 +681,7 @@ class wechat extends pluginBase
 	 * @param $time 时间
 	 * @return 返回字符串签名
 	 */
-    public function jsApiSignature($noncestr,$time)
-    {
+    public function jsApiSignature($noncestr,$time){
     	$jsapi_ticket = $this->jsapiTicket();
     	$url          = IUrl::getHost().IUrl::getUri();
     	$tmpArr       = array(
