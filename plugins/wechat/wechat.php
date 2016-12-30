@@ -616,6 +616,13 @@ class wechat extends pluginBase
 			}
 		}
 	}
+	
+	/**
+	 * test
+	 */
+	public function test(){
+		$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
+	}
 
 	/**
 	 * @brief 微信文字类型回复
