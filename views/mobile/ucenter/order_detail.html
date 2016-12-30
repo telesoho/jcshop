@@ -124,7 +124,7 @@
 			<div style="height:1rem"></div>
 			<!--代发货状态不显示按钮-->
 			<div class="order_buttom" v-if="order_detailInfo.orderStatus!=1" v-cloak>
-				<span id="tksssss" class="tk" style="width: 1.5rem;height: 0.5rem;line-height: 0.5rem;text-align: center;" @click="tuikuan">退款申请</span>
+				<span v-if="tuikuans" id="tksssss" class="tk" style="border: 1px solid #3d4245;width: 1.5rem;height: 0.5rem;line-height: 0.5rem;text-align: center;margin-right:0.31rem ;" @click="tuikuan">退款申请</span>
 				<template v-if="buttonurl.button1=='查看物流'">
 					<a href="#" class="buttom_fixd buttom_fixd1" @click="getDelivery(order_detailInfo.order_goods[0].delivery_id)">{{buttonurl.button1}}</a>
 				</template>

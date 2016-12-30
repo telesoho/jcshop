@@ -1,0 +1,130 @@
+body,html{
+	background: #F8F8F8;
+	width: 100%;
+	height: 100%;
+	padding-top:0.32rem ;
+}
+header{
+	width: 100%;
+
+}
+header h1{
+	width: 100%;
+	height: 0.88rem;
+	border-bottom:1px solid #E6E6E6 ;
+	background: #fff;
+}
+header h1 p{
+	
+	height: 0.88rem;
+	line-height: 0.88rem;
+}
+header .p1{
+	float: left;
+	margin-left: 0.32rem;
+	font-size: 0.32rem;
+	color: #1a1a1a;
+	width: 70%;
+}
+header .p2{
+	height: 0.88rem;
+	float: right;
+	width: 0.76rem;
+}
+header .p2 img{
+	margin-top:0.22rem ;
+}
+header ul{
+	width: 100%;
+	
+}
+header ul li{
+	height: 2.14rem;
+	width: 100%;
+	margin-bottom:0.1rem ;
+	background: #fff;
+	display: -webkit-flex;
+	align-items: center;
+	padding-left:0.32rem ;
+}
+header ul li .guoxuan{
+	width: 1.1rem;
+	text-align: center;
+	border-left: 1px solid #eee;
+	height: 1.5rem;
+	line-height: 1.5rem;
+}
+header .imgshop{
+	margin-right:0.16rem ;
+}
+#right {
+	padding-right:0.16rem ;
+	
+}
+#right .listart{
+	font-size: 0.3rem;
+	color: #808080;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	display:-webkit-box; 
+	-webkit-box-orient:vertical;
+	-webkit-line-clamp:2;
+	height: 0.8rem;
+
+}
+#right .pnum{
+	margin-top:0.25rem ;
+	float: left;
+	font-size: 0.26rem;
+	color: b3b3b3;
+	text-align: left;
+}
+#right .ppeace{
+	margin-top:0.25rem ;
+	float: right;
+	font-size: 0.26rem;
+	color: b3b3b3;
+	text-align: right;
+}
+#right p span{
+	color: #ff5ead;
+}
+article{
+	margin-top:0.64rem ;
+	position: relative;
+}
+article h2{
+	font-size: 0.3rem;
+	margin-left:0.32rem ;
+	margin-bottom: 0.2rem;
+}
+article textarea{
+	display: block;
+	margin: 0 auto;
+	width: 6.86rem;
+	height:2.5rem;
+	background: #fff;
+	font-size: 0.28rem;
+}
+article .num{
+	position: absolute;
+	bottom: 0.3rem;
+	right: 0.62rem;
+	color: #808080;
+	font-size: 0.3rem;
+}
+article textarea::-webkit-input-placeholder{
+	color: #b3b3b3;
+	font-size: 0.3rem;
+	margin-top:0.3rem ;
+}
+footer{
+	background: #FF44A0;
+	color: #FFFFFF;
+	height: 0.98rem;
+	width: 100%;
+	text-align: center;
+	line-height: 0.98rem;
+	position: fixed;
+	bottom: 0;
+}
