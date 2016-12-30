@@ -36,10 +36,10 @@ class wechat extends pluginBase
 	//获取配置参数
 	private  function initConfig(){
 		//缺少SSL组件
-//		if(!extension_loaded("OpenSSL")){
-//			$this->setError = "您的环境缺少OpenSSL组件，这是调用微信API所必须的";
-//			return false;
-//		}
+		if(!extension_loaded("OpenSSL")){
+			$this->setError = "您的环境缺少OpenSSL组件，这是调用微信API所必须的";
+			return false;
+		}
 		//获取参数配置
 		$siteConfigObj = $this->config();
 		if(isset($siteConfigObj['wechat_Token']) && isset($siteConfigObj['wechat_AppID']) && isset($siteConfigObj['wechat_AppSecret'])){
