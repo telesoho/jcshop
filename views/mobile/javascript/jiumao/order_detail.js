@@ -1,6 +1,4 @@
-/**
- * Created by yb on 2016/11/29.
- */
+
 var Request = new Object();
 Request = GetRequest();
 var statusOrder=Request["id"];
@@ -21,7 +19,8 @@ var vm = new Vue({
         },
         showContainer:false,
         leftClass:'showWrapper1',
-        rightClass:'hideWrapper1'
+        rightClass:'hideWrapper1',
+        tuikuans:false
     },
     computed: {
         goods_new: function (){
@@ -80,7 +79,6 @@ vm.getData();
 
 
 
-
 $(window).load(function(){
     $("#loading").fadeOut(300);
     mui('body').on('tap','.locationA',function(){
@@ -96,6 +94,9 @@ function getOrderDetail(self){
         success:function(data){
         	console.log(data)
         	if(data.is_refunds == "1"){
+        		self.tuikuans = true
+            }else{
+            	self.tuikuans = false
             }
             self.order_detailInfo=data;
             self.showMessage=true;

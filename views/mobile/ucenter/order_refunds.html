@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+    	<meta name="x5-orientation" content="portrait">
+		<title>售后退款</title>
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/app/tuikuan.css" />
+	</head>
+	<body>
+		<div id="wrap">
+			<header>
+				<h1>
+					<p class="p1">订单编号: <span>{{bianhao}}</span></p>
+					<p class="p2"><img :src="urlimg?img1:img2" style="width: 0.44rem;" @click="all(urlimg)"/></p>
+					
+				</h1>
+				<ul id="">
+					<li v-for="items in aaa">
+						<div class="imgshop">
+							<img :src="items.img" style="width: 1.5rem;"/>
+						</div>
+						<div id="right" style="width: 4.5rem;">
+							<p class="listart">{{items.name}}</p>
+							<p class="pnum">数量: <span>{{items.goods_nums}}</span>件</p>
+							<p class="ppeace">合计: <span>{{items.goods_price}}</span></p>
+						</div>
+						<p class="guoxuan"  @click="guoxuan(items)"><t><img :src="items.dui?img1:img2" style="width: 0.44rem;"/></t></p>
+						
+					</li>
+					
+				</ul>
+			</header>
+			<article>
+				<h2>
+					<span>退款说明</span><span ><img src="/views/mobile/skin/default/image/jmj/tuikuan/mandatory.png" style="width: 0.16rem;height: 0.16rem;"/></span>
+				</h2>
+				<textarea id="status" name="status" rows="6" placeholder="输入退款说明" cols="40" maxlength="200" onkeydown='countChar("status","counter");' onkeyup='countChar("status","counter");'></textarea>
+				<span class="num" id="counter">{{Nums}}</span>
+			</article>
+			<footer style="position: relative;margin-top: 0.5rem;" @click="tijiao()">
+				提交申请
+			</footer>
+		</div>
+		<script src="/views/mobile/javascript/vue.js"></script>
+		<script src="/views/mobile/javascript/jquery.min.js"></script>
+		<script src="/views/mobile/javascript/mui.js"></script>
+		<script type="text/javascript">
+			var str = "";
+			var t = "";
+			var urlimgs = "";
+			var Request = new Object();
+			Request = GetRequest();
+			var statusOrder=Request["id"];
+			var vm = new Vue({
+			    el: '#wrap',
+			    data: {
+			       Nums:"200",
+			       info :[],
+			       bianhao:"",
+			       urlimg:false,
+			       img1:'/views/mobile/skin/default/image/jmj/tuikuan/selected.png',
+			       img2:'/views/mobile/skin/default/image/jmj/tuikuan/notSelected.png',
+			       ids:[],
+			       info2:""
+			    },
+			    computed: {
+			    	aaa:function(){
+			    		vm.info.map(function(item){
+			    			item.name = JSON.parse(item.goods_array).name
+			    		})
+			    		return vm.info
+			    	}
+//			    	
+			    },
+			    mounted:function() {
+			    	var self = this;
+			    	getOrderDetailtui(self);
+//			    	getOrderDetail2(self);
+			    	getOrderDetail3(self);
+			    },
+			    methods: {
+			    	guoxuan:function(item){
+//			    		console.log(item);
+						
+			    		if(item.dui==true){
+			    			item.dui=false;
+			    			
+			    		}else{
+			    			item.dui=true;
+			    			urlimgs = false;
+			    		}
+			    	},
+			    	all:function(urlimg){
+			    		urlimgs = urlimg
+			    		vm.ids=[];
+			    		t = "";
+			    		if(urlimg==false){
+			    			vm.info.map(function(item){
+			    				item.dui = true;
+			    				if(item.dui == true){
+				    				vm.ids.push(item.goods_id);
+				    			}
+			    			})
+			    			for(var i=0;i<vm.ids.length;i++){
+		    					if(i<vm.ids.length-1){
+		    						t+= vm.ids[i]+",";
+		    					}else{
+		    						t+= vm.ids[i];
+		    					}
+		    					
+		    				}
+	//	    				console.log(vm.bianhao);
+//	    				getOrderDetailtui2(self,t,vm.bianhao);
+			    		}else{
+			    			
+			    			vm.info.map(function(item){
+			    				item.dui = false;
+			    			})
+			    		}
+			    		if(urlimg){
+			    			vm.urlimg = false;
+			    		}else{
+			    			vm.urlimg = true;
+			    		}
+			    	},
+			    	tijiao:function(){
+			    		vm.ids=[];
+			    		t = "";
+			    		console.log(urlimgs)
+			    		if(urlimgs){
+			    			alert("请至少选择一件商品")
+			    		}else{
+			    		vm.info.map(function(item){
+			    			if(item.dui == true){
+			    				vm.ids.push(item.goods_id);
+			    				
+			    			}
+			    		})
+//			    		console.log(vm.ids)
+	    				for(var i=0;i<vm.ids.length;i++){
+	    					if(i<vm.ids.length-1){
+	    						t+= vm.ids[i]+",";
+	    					}else{
+	    						t+= vm.ids[i];
+	    					}
+	    					
+	    				}
+//	    				console.log(vm.bianhao);
+	    				getOrderDetailtui2(self,t,vm.bianhao);
+			    		}
+			    	}
+			  	}
+			})
+//			退款申请
+			function getOrderDetailtui(self){
+			    mui.ajax('/apic/order_goods_list',{
+			        data:{order_id:statusOrder},
+			        dataType:'json',	// 服务器返回json格式数据
+			        type:'get',		// HTTP请求类型
+			        timeout:10000,		// 超时时间设置为10秒；
+			        success:function(data){
+			            console.log(data)
+			            data.data.map(function(item){
+			            	if(item.is_send == 2){
+			    				item.dui = false;
+			    			}else{
+			    				item.dui = true;
+			    			}
+			    		
+			            })
+			           self.info=self.info.concat(data.data);
+			          
+			        }
+			    });
+			}
+			
+			function getOrderDetailtui2(self,goods_id,order_id){
+			    mui.ajax('/apic/order_refunds',{
+			        data:{
+			        	goods_id: goods_id,//商品ID，多个商品有英文,分割
+			        	order_id: order_id	//订单ID
+			        },
+			        dataType:'json',	// 服务器返回json格式数据
+			        type:'get',		// HTTP请求类型
+			        timeout:10000,		// 超时时间设置为10秒；
+			        success:function(data){
+			            console.log(data)
+			            self.info2 = data.msg
+			            if(urlimgs==true){
+			            	alert(data.msg);
+			            	window.location.href=""
+			            }
+			           else{
+			           	if($("#status").val()==""){
+				           		alert(data.msg);
+				           }
+				            else{
+				            	alert("申请成功")
+				            	window.location.href="/ucenter/order"
+				            }
+			           }
+			        }
+			    });
+			}
+			function getOrderDetail3(self){
+			    mui.ajax('/apic/order_detail',{
+			        data:{id:statusOrder},
+			        dataType:'json',	// 服务器返回json格式数据
+			        type:'get',		// HTTP请求类型
+			        timeout:10000,		// 超时时间设置为10秒；
+			        success:function(data){
+			        	console.log()
+			        	self.bianhao = data.order_info.order_no
+//			        	if(data.is_refunds == "1"){
+//			            }
+//			            self.order_detailInfo=data;
+//			            self.showMessage=true;
+			        }
+			    });
+			}
+			function countChar(textareaName,spanName){
+				document.getElementById(spanName).innerHTML = 200 - document.getElementById(textareaName).value.length;
+			}
+//	获取url传递过来的参数
+
+function GetRequest() {
+    var url = location.search; //获取url中"?"符后的字串
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        strs = str.split("&");
+        for(var i = 0; i < strs.length; i ++) {
+            theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+        }
+    }
+    return theRequest;
+}
+
+
+
+		</script>
+	</body>
+</html>
