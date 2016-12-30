@@ -610,8 +610,6 @@ class wechat extends pluginBase
 				$this->textReplay('亲爱的喵们！ 
  
 欢迎来到九猫家微信服务号～
-
-点击右边蓝字获取<a href="http://mp.weixin.qq.com/s/tq_fJ_u28Bt8m41vL0gwgQ">你的2017开年关键词</a>
  
 九猫家汇集药妆、个护、零食、健康、宠物用品等上万种商品。我们承诺官方直供、东京直邮，全场100%正品，同时努力实现日本同价！
  
@@ -648,12 +646,12 @@ class wechat extends pluginBase
             //点击菜单拉取消息时的事件推送
             case "SCAN":
             {
-                $this->textReplay('亲爱的喵们！
+                $this->textReplay('亲爱的喵们！ 
 
 欢迎来到九猫家微信服务号～
 
 点击右边蓝字获取<a href="http://mp.weixin.qq.com/s/tq_fJ_u28Bt8m41vL0gwgQ">你的2017开年关键词</a>
-
+ 
 九猫家汇集药妆、个护、零食、健康、宠物用品等上万种商品。我们承诺官方直供、东京直邮，全场100%正品，同时努力实现日本同价！
 
 人气护肤精华面霜、健康用品热门零食，还有喵汪主子们的食粮，想要的全都有   戳右边→<a href="http://m.jiumaojia.com/site/ticket_gain">领取58元红包</a>
@@ -677,29 +675,34 @@ class wechat extends pluginBase
 			//自动回复
 			default:{
 				switch($postObj->Content){
-					case 23:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JgV-wCxB4WAtupGlfbRnsGI');break;
-					case 22:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Josmld8fbURax0tsSHSTeS0');break;
-					case 21:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jp2NdwA4-RxjML-Rw6uEoX0');break;
-					case 20:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JgkwKXpATTCkZ18u1XzicxU');break;
-					case 19:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JmpayR0p1-ucCWYtWsM3czI');break;
-					case 18:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JqEIB4hSwn1SEOd0pd95Tvc');break;
-					case 17:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JgnZ5lMPItKywHzRpUY5-3A');break;
-					case 16:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jhr8dPTL1C3gK7hKK8VVMEU');break;
-					case 15:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JlyPvvtT7dHyJS18Wc4HVdI');break;
-					case 14:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JtZCxV4BtJmw6eDuerKNgHk');break;
-					case 13:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jnl9F9EKL-J76mHqUJv99UA');break;
-					case 12:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JqEglE-9-3JK4dpQcACjxCo');break;
-					case 11:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jp7WdrdQJTBMLhmZv_g9TfI');break;
-					case 10:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jo6ID3_KvdwUA98NhSwTh_4');break;
-					case 9:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JvQfBmcifSOrrKPG4asmuDI');break;
-					case 8:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JhCb8IRNuPak2ZR9M6Ibbbo');break;
-					case 7:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Js83r8tOdvGBwt73drlvszE');break;
-					case 6:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Jntu40MVVWsCAXfA1iCKiAI');break;
-					case 5:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JscIOpObLSAA6vW1tX069GU');break;
-					case 4:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Juc5m4JE9KA3hhpxJ9a1jLQ');break;
-					case 3:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JlrVNm3ddkGB8vl5gjEqM8Y');break;
-					case 2:$this->imageReplay('PVnzI3WXGfWhBMkJMil6JkC2ml9CWAsRyStohviNeI0');break;
-					case 1:$this->imageReplay('PVnzI3WXGfWhBMkJMil6Js3WVCpMx7zNZM8lvpDjGLk');break;
+					case '运势':
+						$fortune = array(
+							0  => 'PVnzI3WXGfWhBMkJMil6JgV-wCxB4WAtupGlfbRnsGI',
+							1  => 'PVnzI3WXGfWhBMkJMil6Josmld8fbURax0tsSHSTeS0',
+							2  => 'PVnzI3WXGfWhBMkJMil6Jp2NdwA4-RxjML-Rw6uEoX0',
+							3  => 'PVnzI3WXGfWhBMkJMil6JgkwKXpATTCkZ18u1XzicxU',
+							4  => 'PVnzI3WXGfWhBMkJMil6JmpayR0p1-ucCWYtWsM3czI',
+							5  => 'PVnzI3WXGfWhBMkJMil6JqEIB4hSwn1SEOd0pd95Tvc',
+							6  => 'PVnzI3WXGfWhBMkJMil6JgnZ5lMPItKywHzRpUY5-3A',
+							7  => 'PVnzI3WXGfWhBMkJMil6Jhr8dPTL1C3gK7hKK8VVMEU',
+							8  => 'PVnzI3WXGfWhBMkJMil6JlyPvvtT7dHyJS18Wc4HVdI',
+							9  => 'PVnzI3WXGfWhBMkJMil6JtZCxV4BtJmw6eDuerKNgHk',
+							10 => 'PVnzI3WXGfWhBMkJMil6Jnl9F9EKL-J76mHqUJv99UA',
+							11 => 'PVnzI3WXGfWhBMkJMil6JqEglE-9-3JK4dpQcACjxCo',
+							12 => 'PVnzI3WXGfWhBMkJMil6Jp7WdrdQJTBMLhmZv_g9TfI',
+							13 => 'PVnzI3WXGfWhBMkJMil6Jo6ID3_KvdwUA98NhSwTh_4',
+							14 => 'PVnzI3WXGfWhBMkJMil6JvQfBmcifSOrrKPG4asmuDI',
+							15 => 'PVnzI3WXGfWhBMkJMil6JhCb8IRNuPak2ZR9M6Ibbbo',
+							16 => 'PVnzI3WXGfWhBMkJMil6Js83r8tOdvGBwt73drlvszE',
+							17 => 'PVnzI3WXGfWhBMkJMil6Jntu40MVVWsCAXfA1iCKiAI',
+							18 => 'PVnzI3WXGfWhBMkJMil6JscIOpObLSAA6vW1tX069GU',
+							19 => 'PVnzI3WXGfWhBMkJMil6Juc5m4JE9KA3hhpxJ9a1jLQ',
+							20 => 'PVnzI3WXGfWhBMkJMil6JlrVNm3ddkGB8vl5gjEqM8Y',
+							21 => 'PVnzI3WXGfWhBMkJMil6JkC2ml9CWAsRyStohviNeI0',
+							22 => 'PVnzI3WXGfWhBMkJMil6Js3WVCpMx7zNZM8lvpDjGLk',
+						);
+						$this->imageReplay($fortune[rand(0,22)]);
+						break;
 					default:
 						$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
 				}
