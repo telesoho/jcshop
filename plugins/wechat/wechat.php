@@ -585,6 +585,7 @@ class wechat extends pluginBase
 		switch($postObj->MsgType){
 			//自动回复
 			default:{
+				common::dblog(array(5,$postObj->Content));
 				switch($postObj->Content){
 					case '运势':
 						$fortune = array(
@@ -614,6 +615,9 @@ class wechat extends pluginBase
 						);
 						$this->imageReplay($fortune[rand(0,22)]);
 						break;
+					case 111:
+						$this->imageReplay('qpl_KmDDWjgYvaKh5ED6luPCXsmY_F6KT0sAh6IA_p-UdEbakDaJydZfE2GeW05a');
+						break;
 					default:
 						$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
 				}
@@ -638,7 +642,7 @@ class wechat extends pluginBase
 	 */
 	public function imageReplay($content){
 		$postObj = $this->msgObject;
-		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[$content]]></MediaId></Image></xml>";
+		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[{$content}]]></MediaId></Image></xml>";
 		die($replyContent);
 	}
 
