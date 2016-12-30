@@ -679,7 +679,7 @@ class wechat extends pluginBase
 			{
 				switch($postObj->Content){
 					case 1:
-						$this->imgReplay('<img href="http://m.jiumaojia.com/pic/thumb/img/391ac42112c6d34095MDE4NzgwMzAwNzFmZGYwYjU4YDpuOmU4ZzRpMTc5ZDd9dWxrZ2YsMDA1Pis3MCoxNicyMDM2MTA0ODM3NDAxMD43OSpteW8tdywwPDIvaiczPDA">');
+						$this->imageReplay('PVnzI3WXGfWhBMkJMil6JgV-wCxB4WAtupGlfbRnsGI');
 						break;
 					default:
 						$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
@@ -704,7 +704,7 @@ class wechat extends pluginBase
 	 * @brief 微信图片类型回复
 	 * @param $content string 发送终端用户的文本消息
 	 */
-	public function imgReplay($content)
+	public function imageReplay($content)
 	{
 		$postObj = $this->msgObject;
 		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[$content]]></MediaId></Image></xml>";

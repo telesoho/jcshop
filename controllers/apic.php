@@ -2490,9 +2490,4 @@ class Apic extends IController{
 		exit();
 	}
 	
-	
-	public function test(){
-		common::dblog($_POST);
-	}
-	
 }
