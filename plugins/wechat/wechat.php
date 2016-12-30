@@ -610,6 +610,8 @@ class wechat extends pluginBase
 				$this->textReplay('亲爱的喵们！ 
  
 欢迎来到九猫家微信服务号～
+
+点击右边蓝字获取<a href="http://mp.weixin.qq.com/s/tq_fJ_u28Bt8m41vL0gwgQ">你的2017开年关键词</a>
  
 九猫家汇集药妆、个护、零食、健康、宠物用品等上万种商品。我们承诺官方直供、东京直邮，全场100%正品，同时努力实现日本同价！
  
