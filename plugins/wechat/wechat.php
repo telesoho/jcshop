@@ -141,12 +141,13 @@ class wechat extends pluginBase
 		    	}else{
 					//相应其他的请求
 		    		$postXML = file_get_contents("php://input");
-					common::dblog(array(2,$postXML));
+					common::dblog(array(3,$postXML));
 		    		//微信推送的post数据信息
 		    		if($postXML){
 		    			//保存消息对象
 						$this->msgObject = $postObj = simplexml_load_string($postXML, 'SimpleXMLElement', LIBXML_NOCDATA);
-
+					
+						common::dblog(array(4,$postObj));
 						//事件推送相应
 						if(isset($postObj->Event)){
 							$this->eventCatch($postObj);
