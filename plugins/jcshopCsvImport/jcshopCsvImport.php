@@ -171,11 +171,12 @@ class jcshopCsvImport extends pluginBase
 			'brand.name' 	 	=> '品牌名',
 			'goods_no'	 		=> '商品JAN编码',
 			'name'       		=> '商品名称',
-			'category.name'   	=> '商品类目',			
+			'category.name'   	=> '商品类目',
+			'sell_price' 		=> '销售价格',
 			'jp_market_price' 	=> '日本市场价格',
 			'store_nums' 		=> '库存数量',
 			'content'    		=> '商品详情',
-			'reset_img'        		=> '重设图片',
+			'reset_img'        	=> '重设图片',
 			'spec_array' 		=> '销售属性',
 			'weight'     		=> '物流重量',
 			'name_jp'	 		=> '商品名称日文',
@@ -253,6 +254,13 @@ class jcshopCsvImport extends pluginBase
 				} else {
 					$theData['market_price']  = $theData['sell_price']* 1.5 ;					
 				}
+			}
+			
+			//直接修改商品售价
+			$field = trim($val[$titleToCols['sell_price']]);
+			if('' !== $field) {
+				$sell_price = IFilter::act($field,'float');
+				$theData['sell_price']  = $sell_price;
 			}
 
 			// 处理库存数
