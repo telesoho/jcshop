@@ -36,10 +36,10 @@ class wechat extends pluginBase
 	//获取配置参数
 	private  function initConfig(){
 		//缺少SSL组件
-		if(!extension_loaded("OpenSSL")){
-			$this->setError = "您的环境缺少OpenSSL组件，这是调用微信API所必须的";
-			return false;
-		}
+//		if(!extension_loaded("OpenSSL")){
+//			$this->setError = "您的环境缺少OpenSSL组件，这是调用微信API所必须的";
+//			return false;
+//		}
 		//获取参数配置
 		$siteConfigObj = $this->config();
 		if(isset($siteConfigObj['wechat_Token']) && isset($siteConfigObj['wechat_AppID']) && isset($siteConfigObj['wechat_AppSecret'])){
@@ -130,14 +130,18 @@ class wechat extends pluginBase
 				header('location: http://'.$_SERVER['HTTP_HOST'].urldecode($state));
 			}
     	}else{
+    		common::dblog(array(1,$this->checkSignature()));
 			//微信推送处理
 	    	if($this->checkSignature()){
 		    	//第一次验证
+			
+				common::dblog(array(2,IReq::get('echostr')));
 		    	if($echostr = IReq::get('echostr')){
 					die($echostr);
 		    	}else{
 					//相应其他的请求
 		    		$postXML = file_get_contents("php://input");
+					common::dblog(array(2,$postXML));
 		    		//微信推送的post数据信息
 		    		if($postXML){
 		    			//保存消息对象
@@ -616,13 +620,6 @@ class wechat extends pluginBase
 			}
 		}
 	}
-	
-	/**
-	 * test
-	 */
-	public function test(){
-		$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
-	}
 
 	/**
 	 * @brief 微信文字类型回复
@@ -641,7 +638,6 @@ class wechat extends pluginBase
 	public function imageReplay($content){
 		$postObj = $this->msgObject;
 		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[$content]]></MediaId></Image></xml>";
-		common::dblog($replyContent);
 		die($replyContent);
 	}
 
