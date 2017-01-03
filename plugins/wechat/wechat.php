@@ -579,6 +579,10 @@ class wechat extends pluginBase
 		switch($postObj->MsgType){
 			//自动回复
 			default:{
+				//数据库内容
+				$info = (new IModel('activity_response'))->getObj('request='.$postObj->Content);
+				if(!empty($info)) $this->textReplay($info['response']);
+				
 				switch($postObj->Content){
 					case '运势':
 						$fortune = array(

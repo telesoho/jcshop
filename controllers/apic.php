@@ -329,11 +329,13 @@ class Apic extends IController{
 	 */
 	public function cart2_activity(){
 		$goods_list = IFilter::act(IReq::get('goods_list')); //商品{[{'goods_id':1,'nums':2},{'goods_id':3,'nums':1}]}
+		$colse      = IFilter::act(IReq::get('colse'), 'int'); //是否结算
 		$atype      = IFilter::act(IReq::get('atype'), 'int'); //活动类型[1秒杀]
 		$user_id    = !isset($this->user['user_id']) || empty($this->user['user_id']) ? $this->json_echo(apiReturn::go('001001')) : $this->user['user_id'];
 		$goods_list = json_decode($goods_list,true);
 		if(empty($goods_list) || empty($atype)) $this->json_echo(apiReturn::go('001002'));
 		$data['goods_list'] = array();
+		$data['totle_money'] = 0;
 		
 		//活动类型
 		switch($atype){
@@ -341,13 +343,14 @@ class Apic extends IController{
 				foreach($goods_list as $k => $v){
 					//商品详情
 					$modelGoods = new IModel('goods');
-					$infoGoods = $modelGoods->getObj('id='.$v['goods_id'],'name');
+					$infoGoods = $modelGoods->getObj('id='.$v['goods_id'],'id as goods_id,name,goods_no,img,sell_price,weight,store_nums');
 					//校验
+					if($infoGoods['store_nums']<$v['nums']) $this->json_echo(apiReturn::go('007002')); //商品库存不足
 					$query         = new IQuery('activity_speed AS m');
 					$query->join   = 'LEFT JOIN activity_speed_access AS a ON a.pid=m.id '.
-						'LEFT JOIN ';
-					$query->where  = 'm.type=2 AND m.status=1 AND m.start_time<='.time().' AND m.end_time>='.time().' AND a.goods_id='.$v['goods_id'];
-					$query->fields = 'a.id,a.goods_id,a.sell_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
+						'LEFT JOIN goods AS g ON g.id=a.goods_id';
+					$query->where  = 'g.is_del=0 AND m.type=2 AND m.status=1 AND m.start_time<='.time().' AND m.end_time>='.time().' AND a.goods_id='.$v['goods_id'];
+					$query->fields = 'g.name,g.img,a.id,a.goods_id,a.sell_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
 					$query->limit  = 1;
 					$info          = $query->find();
 					if(empty($info)) $this->json_echo(apiReturn::go('006002','','"'.$infoGoods['name'].'"未参与活动'));
@@ -366,89 +369,86 @@ class Apic extends IController{
 						$sum               = $queryOrder->find();
 						if($sum[0]['sum']>$info['quota']+$v['nums']) $this->json_echo(apiReturn::go('006003','','您已超出"'.$infoGoods['name'].'"限购数量'));
 					}
+					$info['img'] = empty($info['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$info['img']."/w/500/h/500");
+					$info['nums'] = $v['nums'];
 					$data['goods_list'][] = $info;
+					$data['totle_money'] += $info['shell_price']*$v['nums'];
 				}
 				break;
 			default:
+				$this->json_echo(apiReturn::go('007001'));
 		}
 		
-		
 		/* 收货地址 */
-		$addressObj  = new IModel('address');
-		$addressList = $addressObj->query('user_id='.$user_id, "*", "is_default desc");
-		foreach($addressList as $k => $v){
+		$modelAddress  = new IModel('address');
+		$data['address_list'] = $modelAddress->query('user_id='.$user_id, "*", "is_default desc");
+		foreach($data['address_list'] as $k => $v){
 			$temp   = area::name($v['province'], $v['city'], $v['area']);
 			$temp_k = array_keys($temp);
 			if(isset($temp[$v['province']]) && isset($temp[$v['city']]) && isset($temp[$v['area']])){
-				$addressList[$k]['province_val'] = in_array($v['province'], $temp_k) ? $temp[$v['province']] : '';
-				$addressList[$k]['city_val']     = in_array($v['city'], $temp_k) ? $temp[$v['city']] : '';
-				$addressList[$k]['area_val']     = in_array($v['area'], $temp_k) ? $temp[$v['area']] : '';
+				$data['address_list'][$k]['province_val'] = in_array($v['province'], $temp_k) ? $temp[$v['province']] : '';
+				$data['address_list'][$k]['city_val']     = in_array($v['city'], $temp_k) ? $temp[$v['city']] : '';
+				$data['address_list'][$k]['area_val']     = in_array($v['area'], $temp_k) ? $temp[$v['area']] : '';
 			}
 		}
+		/* 邮费 */
+		$data['delivery_money'] = 0;
+		if($colse != 1) $this->json_echo(apiReturn::go('0', $data));
 		
+		//商品信息
 		
-		//返回值
-		$data['gid']         = $id;
-		$data['type']        = $type;
-		$data['num']         = $buy_num;
-		$data['promo']       = $promo;
-		$data['active_id']   = $active_id;
-		$data['final_sum']   = $result['sum'];//原价//$result['final_sum'];
-		$data['promotion']   = $result['promotion'];
-		$data['proReduce']   = $result['proReduce'];
-		$data['sum']         = $result['sum'];
-		$data['goodsList']   = $result['goodsList'];
-		$data['count']       = $result['count'];
-		$data['reduce']      = $result['reduce'];
-		$data['weight']      = $result['weight'];
-		$data['freeFreight'] = $result['freeFreight'];
-		$data['seller']      = $result['seller'];
-		$data['addressList'] = $addressList;
-		$data['goodsTax']    = $result['tax'];
-		$data['is_delivery'] = 0; //是否包邮[0正常计算-1包邮-2不包邮]
+		$infoGoods['product_id'] = 0; //货号
+		$infoGoods['count']      = 1; //商品数量
+		$infoGoods['seller_id']  = 0; //卖家ID
+		$infoGoods['reduce']     = $infoGoods['sell_price'];
+		//查询收货地址
+		$modelAdr = new IModel('address');
+		$dataAdr  = $modelAdr->getObj('id='.$did.' AND user_id='.$user_id);
+		if(empty($dataAdr)) $this->json_echo(apiReturn::go('005001')); //收货地址不存在
 		
-		//配送方式
-		$data['delivery'] = Api::run('getDeliveryList');
-		//付款方式
-		$data['payment'] = Api::run('getPaymentList');
-		foreach($data['payment'] as $key => $value){
-			$data['payment'][$key]['paymentprice'] = CountSum::getGoodsPaymentPrice($value['id'], $data['sum']);
+		//生成的订单数据
+		$dataArray = array(
+			'order_no'        => Order_Class::createOrderNum(),
+			'user_id' => $user_id,
+			'pay_type' => 13, //微信支付
+			'distribution'    => 1, //配送方式
+			'payable_amount'  => 0, //商品价格
+			'real_amount'     => 0, //实付商品价格
+			'payable_freight' => 0, //运费价格
+			'real_freight'    => 0, //实付运费价格
+			'order_amount'    => 0, //订单总价
+			'accept_name'     => $dataAdr['accept_name'], //收货人姓名
+			'postcode'        => $dataAdr['zip'], //邮编
+			'province'        => $dataAdr['province'], //省ID
+			'city'            => $dataAdr['city'], //市ID
+			'area'            => $dataAdr['area'], //区ID
+			'address'         => $dataAdr['address'], //详细地址
+			'mobile'          => $dataAdr['mobile'], //手机
+			'pay_time'        => time(), //付款时间
+			'create_time'     => time(), 'note' => '活动商品赠送', 'type_source' => 1, //单个商品购买
+		);
+		//记录领取记录
+		$modelRec->setData(array('user_id' => $user_id, 'grow_id' => $gid, 'create_time' => time(),));
+		$rel = $modelRec->add();
+		if($rel>0){
+			//生成订单插入order表中
+			$orderObj = new IModel('order');
+			$orderObj->setData($dataArray);
+			$order_id = $orderObj->add();
+			if($order_id>0){
+				//将订单中的商品插入到order_goods表
+				$orderInstance = new Order_Class();
+				$orderInstance->insertOrderGoods($order_id, array('goodsList' => array($infoGoods)));
+				//直接免单
+				$rel = Order_Class::updateOrderStatus($dataArray['order_no']);
+				if($rel>0) $this->json_echo(apiReturn::go('0', '', '恭喜您已成功领取“'.$infoGoods['name'].'”')); //领取成功
+			}
 		}
-		//商品展示
-		foreach($data['goodsList'] as $key => $value){
-			if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
-			if($data['goodsList'][$key]['img']) $data['goodsList'][$key]['img'] = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$data['goodsList'][$key]['img']."/w/500/h/500");
-		}
+		$modelRec->rollback(); //事务回滚
+		$this->json_echo(apiReturn::go('002031')); //领取失败
 		
-		//满包邮规则
-		$query                   = new IQuery("promotion");
-		$query->where            = "type = 0 and seller_id = 0 and award_type = 6";
-		$data['condition_price'] = $query->find()[0]['condition'];
 		
-		/* 使用优惠券 */
-		if(!empty($code)){
-			/* 优惠券码 */
-			$rel = ticket::calculateCode($data, $code);
-			if($rel['code']>0) $this->json_echo($rel);
-			$data = $rel['data'];
-		}else if(!empty($ticket_aid)){
-			/* 活动优惠券 */
-			$rel = ticket::calculateActivity($data, $ticket_aid);
-			if($rel['code']>0) $this->json_echo($rel);
-			$data = $rel['data'];
-		}else{
-			/* 优惠券 */
-			$data['ticket'] = array(
-				'ticket_did' => '',    //优惠券码ID
-				'ticket_aid' => '',    //优惠券ID
-				'name'       => '',    //优惠券名称
-				'msg'        => '',
-			);
-		}
-		/* 计算邮费 */
-		$data['delivery_money'] = Api::run('goodsDelivery', $data['goodsList'], 'goods_id', $data['is_delivery']);
 		
-		$this->json_echo(apiReturn::go('0', $data));
 	}
 	
 	

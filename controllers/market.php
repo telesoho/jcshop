@@ -15,14 +15,14 @@ class Market extends IController implements adminAuthorization
 	}
 	
 	/**
-	 * 限时购列表
+	 * 限时活动列表
 	 */
 	public function activity_speed_list(){
 		$this->redirect('activity_speed_list');
 	}
 	
 	/**
-	 * 限时购添加
+	 * 限时活动添加
 	 */
 	public function activity_speed_add(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
@@ -75,17 +75,15 @@ class Market extends IController implements adminAuthorization
 				));
 				$modelSpeed->add();
 			}
-			
 			$this->redirect('activity_speed_list');
 		}
-		
 		
 		/* 视图 */
 		$this->redirect('activity_speed_add');
 	}
 	
 	/**
-	 * 限时购编辑
+	 * 限时活动编辑
 	 */
 	public function activity_speed_edit(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
@@ -155,6 +153,14 @@ class Market extends IController implements adminAuthorization
 		/* 视图 */
 		$this->setRenderData(array('data' => $infoSpeed));
 		$this->redirect('activity_speed_edit');
+	}
+	
+	/**
+	 * 砍价刀列表
+	 */
+	public function activity_bargain_list(){
+		/* 模板赋值 */
+		$this->redirect('activity_bargain_list');
 	}
 
 	/**
