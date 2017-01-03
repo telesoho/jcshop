@@ -580,8 +580,10 @@ class wechat extends pluginBase
 			//自动回复
 			default:{
 				//数据库内容
+				common::dblog(array($postObj->MsgType,$postObj->Content));
 				$info = (new IModel('activity_response'))->getObj('request='.$postObj->Content);
 				if(!empty($info)) $this->textReplay($info['response']);
+				common::dblog($info);
 				
 				switch($postObj->Content){
 					case '运势':
