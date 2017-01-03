@@ -40,10 +40,10 @@ class APIGoods{
 		$deliveryYes = array(); //包邮商品列表
 		$deliveryNo  = array(); //不包邮商品列表
 		
-		/* 限时活动 */
+		/* 限时活动（限时购） */
 		$querySpeed         = new IQuery('activity_speed as m');
 		$querySpeed->join   = 'LEFT JOIN activity_speed_access AS a ON a.pid=m.id';
-		$querySpeed->where  = 'a.goods_id IN ('.implode(',', $ids).') AND m.start_time<='.time().' AND m.end_time>='.time().' AND status=1';
+		$querySpeed->where  = 'm.type=1 AND a.goods_id IN ('.implode(',', $ids).') AND m.start_time<='.time().' AND m.end_time>='.time().' AND status=1';
 		$querySpeed->fields = 'a.id,a.goods_id,a.sell_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
 		$listSpeed          = $querySpeed->find();
 		if(!empty($listSpeed)){

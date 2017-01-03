@@ -36,27 +36,27 @@ class Apic extends IController{
 			case 1: //药妆
 				$cid         = 126; //个性美妆
 				$aid         = 15; //专辑分类
-				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/gou.png';
+				$data['pic'] = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/gou.png';
 				break;
 			case 2: //个护
 				$cid         = 134; //基础护肤
 				$aid         = 18; //专辑分类
-				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/nai.png';
+				$data['pic'] = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/nai.png';
 				break;
 			case 3: //宠物
 				$cid         = 6; //宠物用品
 				$aid         = 17; //专辑分类
-				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/tui.png';
+				$data['pic'] = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/tui.png';
 				break;
 			case 4: //健康
 				$cid         = 2; //居家药品
 				$aid         = 16; //专辑分类
-				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/xi.png';
+				$data['pic'] = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/xi.png';
 				break;
 			case 5: //零食
 				$cid         = 7; //日式美食
 				$aid         = 19; //专辑分类
-				$data['pic'] = '/views/mobile/skin/default/image/jmj/product/yi.png';
+				$data['pic'] = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/yi.png';
 				break;
 			default:
 				$this->json_echo(apiReturn::go('007001'));
@@ -323,6 +323,136 @@ class Apic extends IController{
 		
 		$this->json_echo(apiReturn::go('0', $data));
 	}
+	
+	/**
+	 * 活动商品订单结算
+	 */
+	public function cart2_activity(){
+		$goods_list = IFilter::act(IReq::get('goods_list')); //商品{[{'goods_id':1,'nums':2},{'goods_id':3,'nums':1}]}
+		$atype      = IFilter::act(IReq::get('atype'), 'int'); //活动类型[1秒杀]
+		$user_id    = !isset($this->user['user_id']) || empty($this->user['user_id']) ? $this->json_echo(apiReturn::go('001001')) : $this->user['user_id'];
+		$goods_list = json_decode($goods_list,true);
+		if(empty($goods_list) || empty($atype)) $this->json_echo(apiReturn::go('001002'));
+		$data['goods_list'] = array();
+		
+		//活动类型
+		switch($atype){
+			case 1: //秒杀
+				foreach($goods_list as $k => $v){
+					//商品详情
+					$modelGoods = new IModel('goods');
+					$infoGoods = $modelGoods->getObj('id='.$v['goods_id'],'name');
+					//校验
+					$query         = new IQuery('activity_speed AS m');
+					$query->join   = 'LEFT JOIN activity_speed_access AS a ON a.pid=m.id '.
+						'LEFT JOIN ';
+					$query->where  = 'm.type=2 AND m.status=1 AND m.start_time<='.time().' AND m.end_time>='.time().' AND a.goods_id='.$v['goods_id'];
+					$query->fields = 'a.id,a.goods_id,a.sell_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
+					$query->limit  = 1;
+					$info          = $query->find();
+					if(empty($info)) $this->json_echo(apiReturn::go('006002','','"'.$infoGoods['name'].'"未参与活动'));
+					$info = $info[0];
+					$queryOrder         = new IQuery('order AS m');
+					$queryOrder->join   = 'LEFT JOIN order_goods AS g ON g.order_id=m.id';
+					$queryOrder->fields = 'count(*) AS sum';
+					$where = 'm.pay_status=1 AND m.pay_time>="'.date('Y-m-d H:i:s', $info['start_time']).'" AND m.pay_time<="'.date('Y-m-d H:i:s', $info['end_time']).'" AND g.goods_id='.$info['goods_id'];
+					//限购数量已售完
+					$queryOrder->where = $where;
+					$sum               = $queryOrder->find();
+					if($sum[0]['sum']>$info['nums']+$v['nums']) $this->json_echo(apiReturn::go('006003','','"'.$infoGoods['name'].'"剩余数量不足'));
+					//当前用户已购完
+					if($info['quota']>0){
+						$queryOrder->where = $where.' AND m.user_id='.$user_id;
+						$sum               = $queryOrder->find();
+						if($sum[0]['sum']>$info['quota']+$v['nums']) $this->json_echo(apiReturn::go('006003','','您已超出"'.$infoGoods['name'].'"限购数量'));
+					}
+					$data['goods_list'][] = $info;
+				}
+				break;
+			default:
+		}
+		
+		
+		/* 收货地址 */
+		$addressObj  = new IModel('address');
+		$addressList = $addressObj->query('user_id='.$user_id, "*", "is_default desc");
+		foreach($addressList as $k => $v){
+			$temp   = area::name($v['province'], $v['city'], $v['area']);
+			$temp_k = array_keys($temp);
+			if(isset($temp[$v['province']]) && isset($temp[$v['city']]) && isset($temp[$v['area']])){
+				$addressList[$k]['province_val'] = in_array($v['province'], $temp_k) ? $temp[$v['province']] : '';
+				$addressList[$k]['city_val']     = in_array($v['city'], $temp_k) ? $temp[$v['city']] : '';
+				$addressList[$k]['area_val']     = in_array($v['area'], $temp_k) ? $temp[$v['area']] : '';
+			}
+		}
+		
+		
+		//返回值
+		$data['gid']         = $id;
+		$data['type']        = $type;
+		$data['num']         = $buy_num;
+		$data['promo']       = $promo;
+		$data['active_id']   = $active_id;
+		$data['final_sum']   = $result['sum'];//原价//$result['final_sum'];
+		$data['promotion']   = $result['promotion'];
+		$data['proReduce']   = $result['proReduce'];
+		$data['sum']         = $result['sum'];
+		$data['goodsList']   = $result['goodsList'];
+		$data['count']       = $result['count'];
+		$data['reduce']      = $result['reduce'];
+		$data['weight']      = $result['weight'];
+		$data['freeFreight'] = $result['freeFreight'];
+		$data['seller']      = $result['seller'];
+		$data['addressList'] = $addressList;
+		$data['goodsTax']    = $result['tax'];
+		$data['is_delivery'] = 0; //是否包邮[0正常计算-1包邮-2不包邮]
+		
+		//配送方式
+		$data['delivery'] = Api::run('getDeliveryList');
+		//付款方式
+		$data['payment'] = Api::run('getPaymentList');
+		foreach($data['payment'] as $key => $value){
+			$data['payment'][$key]['paymentprice'] = CountSum::getGoodsPaymentPrice($value['id'], $data['sum']);
+		}
+		//商品展示
+		foreach($data['goodsList'] as $key => $value){
+			if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
+			if($data['goodsList'][$key]['img']) $data['goodsList'][$key]['img'] = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$data['goodsList'][$key]['img']."/w/500/h/500");
+		}
+		
+		//满包邮规则
+		$query                   = new IQuery("promotion");
+		$query->where            = "type = 0 and seller_id = 0 and award_type = 6";
+		$data['condition_price'] = $query->find()[0]['condition'];
+		
+		/* 使用优惠券 */
+		if(!empty($code)){
+			/* 优惠券码 */
+			$rel = ticket::calculateCode($data, $code);
+			if($rel['code']>0) $this->json_echo($rel);
+			$data = $rel['data'];
+		}else if(!empty($ticket_aid)){
+			/* 活动优惠券 */
+			$rel = ticket::calculateActivity($data, $ticket_aid);
+			if($rel['code']>0) $this->json_echo($rel);
+			$data = $rel['data'];
+		}else{
+			/* 优惠券 */
+			$data['ticket'] = array(
+				'ticket_did' => '',    //优惠券码ID
+				'ticket_aid' => '',    //优惠券ID
+				'name'       => '',    //优惠券名称
+				'msg'        => '',
+			);
+		}
+		/* 计算邮费 */
+		$data['delivery_money'] = Api::run('goodsDelivery', $data['goodsList'], 'goods_id', $data['is_delivery']);
+		
+		$this->json_echo(apiReturn::go('0', $data));
+	}
+	
+	
+	
 	/**
 	 * ---------------------------------------------------优惠券---------------------------------------------------*
 	 */
