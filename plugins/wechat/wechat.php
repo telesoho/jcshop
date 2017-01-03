@@ -582,42 +582,45 @@ class wechat extends pluginBase
 				//数据库内容
 				common::dblog(array($postObj->MsgType,$postObj->Content));
 				$info = (new IModel('activity_response'))->getObj('request="'.$postObj->Content.'"');
-				if(!empty($info)) $this->textReplay($info['response']);
-				common::dblog($info);
-				
-				switch($postObj->Content){
-					case '运势':
-						$fortune = array(
-							0  => 'PVnzI3WXGfWhBMkJMil6JgV-wCxB4WAtupGlfbRnsGI',
-							1  => 'PVnzI3WXGfWhBMkJMil6Josmld8fbURax0tsSHSTeS0',
-							2  => 'PVnzI3WXGfWhBMkJMil6Jp2NdwA4-RxjML-Rw6uEoX0',
-							3  => 'PVnzI3WXGfWhBMkJMil6JgkwKXpATTCkZ18u1XzicxU',
-							4  => 'PVnzI3WXGfWhBMkJMil6JmpayR0p1-ucCWYtWsM3czI',
-							5  => 'PVnzI3WXGfWhBMkJMil6JqEIB4hSwn1SEOd0pd95Tvc',
-							6  => 'PVnzI3WXGfWhBMkJMil6JgnZ5lMPItKywHzRpUY5-3A',
-							7  => 'PVnzI3WXGfWhBMkJMil6Jhr8dPTL1C3gK7hKK8VVMEU',
-							8  => 'PVnzI3WXGfWhBMkJMil6JlyPvvtT7dHyJS18Wc4HVdI',
-							9  => 'PVnzI3WXGfWhBMkJMil6JtZCxV4BtJmw6eDuerKNgHk',
-							10 => 'PVnzI3WXGfWhBMkJMil6Jnl9F9EKL-J76mHqUJv99UA',
-							11 => 'PVnzI3WXGfWhBMkJMil6JqEglE-9-3JK4dpQcACjxCo',
-							12 => 'PVnzI3WXGfWhBMkJMil6Jp7WdrdQJTBMLhmZv_g9TfI',
-							13 => 'PVnzI3WXGfWhBMkJMil6Jo6ID3_KvdwUA98NhSwTh_4',
-							14 => 'PVnzI3WXGfWhBMkJMil6JvQfBmcifSOrrKPG4asmuDI',
-							15 => 'PVnzI3WXGfWhBMkJMil6JhCb8IRNuPak2ZR9M6Ibbbo',
-							16 => 'PVnzI3WXGfWhBMkJMil6Js83r8tOdvGBwt73drlvszE',
-							17 => 'PVnzI3WXGfWhBMkJMil6Jntu40MVVWsCAXfA1iCKiAI',
-							18 => 'PVnzI3WXGfWhBMkJMil6JscIOpObLSAA6vW1tX069GU',
-							19 => 'PVnzI3WXGfWhBMkJMil6Juc5m4JE9KA3hhpxJ9a1jLQ',
-							20 => 'PVnzI3WXGfWhBMkJMil6JlrVNm3ddkGB8vl5gjEqM8Y',
-							21 => 'PVnzI3WXGfWhBMkJMil6JkC2ml9CWAsRyStohviNeI0',
-							22 => 'PVnzI3WXGfWhBMkJMil6Js3WVCpMx7zNZM8lvpDjGLk',
-						);
-						$this->imageReplay($fortune[rand(0,22)]);
-						break;
-					default:
-						$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
+				if(empty($info)){
+					switch($postObj->Content){
+						case '运势':
+							$fortune = array(
+								0  => 'PVnzI3WXGfWhBMkJMil6JgV-wCxB4WAtupGlfbRnsGI',
+								1  => 'PVnzI3WXGfWhBMkJMil6Josmld8fbURax0tsSHSTeS0',
+								2  => 'PVnzI3WXGfWhBMkJMil6Jp2NdwA4-RxjML-Rw6uEoX0',
+								3  => 'PVnzI3WXGfWhBMkJMil6JgkwKXpATTCkZ18u1XzicxU',
+								4  => 'PVnzI3WXGfWhBMkJMil6JmpayR0p1-ucCWYtWsM3czI',
+								5  => 'PVnzI3WXGfWhBMkJMil6JqEIB4hSwn1SEOd0pd95Tvc',
+								6  => 'PVnzI3WXGfWhBMkJMil6JgnZ5lMPItKywHzRpUY5-3A',
+								7  => 'PVnzI3WXGfWhBMkJMil6Jhr8dPTL1C3gK7hKK8VVMEU',
+								8  => 'PVnzI3WXGfWhBMkJMil6JlyPvvtT7dHyJS18Wc4HVdI',
+								9  => 'PVnzI3WXGfWhBMkJMil6JtZCxV4BtJmw6eDuerKNgHk',
+								10 => 'PVnzI3WXGfWhBMkJMil6Jnl9F9EKL-J76mHqUJv99UA',
+								11 => 'PVnzI3WXGfWhBMkJMil6JqEglE-9-3JK4dpQcACjxCo',
+								12 => 'PVnzI3WXGfWhBMkJMil6Jp7WdrdQJTBMLhmZv_g9TfI',
+								13 => 'PVnzI3WXGfWhBMkJMil6Jo6ID3_KvdwUA98NhSwTh_4',
+								14 => 'PVnzI3WXGfWhBMkJMil6JvQfBmcifSOrrKPG4asmuDI',
+								15 => 'PVnzI3WXGfWhBMkJMil6JhCb8IRNuPak2ZR9M6Ibbbo',
+								16 => 'PVnzI3WXGfWhBMkJMil6Js83r8tOdvGBwt73drlvszE',
+								17 => 'PVnzI3WXGfWhBMkJMil6Jntu40MVVWsCAXfA1iCKiAI',
+								18 => 'PVnzI3WXGfWhBMkJMil6JscIOpObLSAA6vW1tX069GU',
+								19 => 'PVnzI3WXGfWhBMkJMil6Juc5m4JE9KA3hhpxJ9a1jLQ',
+								20 => 'PVnzI3WXGfWhBMkJMil6JlrVNm3ddkGB8vl5gjEqM8Y',
+								21 => 'PVnzI3WXGfWhBMkJMil6JkC2ml9CWAsRyStohviNeI0',
+								22 => 'PVnzI3WXGfWhBMkJMil6Js3WVCpMx7zNZM8lvpDjGLk',
+							);
+							$this->imageReplay($fortune[rand(0,22)]);
+							break;
+						default:
+							$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
+					}
 				}
-				
+				switch($info['type']){
+					case 3: //单图文
+						$this->newsReplay(array($info));
+						break;
+				}
 			}
 		}
 	}
@@ -633,12 +636,30 @@ class wechat extends pluginBase
     }
 	
 	/**
-	 * @brief 微信图片类型回复
-	 * @param $content string 发送终端用户的文本消息
+	 * 微信图片类型回复
+	 * @param $content string 发送终端用户的图片编号
 	 */
 	public function imageReplay($content){
-		$postObj = $this->msgObject;
+		$postObj      = $this->msgObject;
 		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[{$content}]]></MediaId></Image></xml>";
+		die($replyContent);
+	}
+	
+	/**
+	 * 微信单图文类型回复
+	 * @param $content string 发送终端用户的文本消息
+	 */
+	public function newsReplay($data){
+		$postObj      = $this->msgObject;
+		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime>
+		<MsgType><![CDATA[news]]></MsgType><Content><![CDATA[]]></Content><ArticleCount>".count($data)."</ArticleCount><Articles>";
+		foreach($data as $k => $v){
+			$replyContent .= '<item><Title><![CDATA[['.$v['title'].']]></Title>
+            <Description><![CDATA['.$v['content'].']]></Description>
+            <PicUrl><![CDATA['.$v['pic'].']]></PicUrl>
+            <Url><![CDATA['.$v['url'].']]></Url></item>';
+		}
+		$replyContent .= '</Articles><FuncFlag>0</FuncFlag></xml>';
 		die($replyContent);
 	}
 
