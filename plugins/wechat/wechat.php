@@ -119,7 +119,6 @@ class wechat extends pluginBase
     	if($code && $state){
 			$result = $this->getOauthAccessToken($code);
 			if($result){
-				echo '';
 				//保存openid为其他wechat应用使用
 				$this->setOpenId($result['openid']);
 
@@ -153,7 +152,6 @@ class wechat extends pluginBase
 						}
 		    		}
 		    	}
-				ob_clean();
 		    	die('success');
 	    	}else{
 	    		die('本次请求非微信客户端发起');
