@@ -111,7 +111,6 @@ class wechat extends pluginBase
 
     //处理微信服务器的请求接口
     public function response(){
-    	common::dblog(array($_GET,$_POST));
     	$code  = IReq::get('code');
     	$state = IReq::get('state');
 	
@@ -577,12 +576,12 @@ class wechat extends pluginBase
 	 * @param string $postObj 微信消息Array形式
 	 */
 	public function msgCatch($postObj){
+		common::dblog($postObj);
 		if (!isset($postObj->Content) || empty($postObj->Content)) exit('');
 		switch($postObj->MsgType){
 			//自动回复
 			default:{
 				//数据库内容
-				common::dblog(array($postObj->MsgType,$postObj->Content));
 				$info = (new IModel('activity_response'))->getObj('request="'.$postObj->Content.'"');
 				if(empty($info)){
 					switch($postObj->Content){
