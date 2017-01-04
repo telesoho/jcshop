@@ -1,0 +1,159 @@
+{js:my97date}
+
+<div class="headbar">
+    <div class="position"><span>营销</span><span>></span><span>活动</span><span>></span><span>砍价刀</span></div>
+</div>
+<div class="content_box">
+    <div class="content form_content">
+        <form action="{url:/market/activity_bargain_edit}" method="post" name='pro_edit'>
+            <input type='hidden' name='id' value="{echo:IReq::get('id')}"/>
+            <table class="form_table">
+                <col width="150px"/>
+                <col/>
+                <tr>
+                    <th>时间：</th>
+                    <td >
+                        <label></label>
+                        <label class='attr'>
+                            <input name='start_time' type='text' value="{echo:date('Y-m-d H:i:s',$data['start_time'])}" class='Wdate'
+                                   pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                                   alt='请填写一个日期'/>～
+                            <input name='end_time' type='text' value="{echo:date('Y-m-d H:i:s',$data['end_time'])}" class='Wdate'
+                                   pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                                   alt='请填写一个日期'/>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>状态：</th>
+                    <td>
+                        <label class='attr'><input type='radio' name='status' value='0' {if:$data['status']==0}checked{/if}
+                            />禁用</label>
+                        <label class='attr'><input type='radio' name='status' value='1' {if:$data['status']==1}checked{/if}
+                            />开启</label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>设置抢购商品：</th>
+                    <td>
+                        <table class='border_table' style='width:65%'>
+                            <button type='button'
+                                    onclick="searchGoods('{url:/block/search_goods/type/checkbox}',page.searchGoodsCallback);"
+                                    class='btn'><span>选择商品</span></button>
+                            <thead>
+                            <tr>
+                                <th>商品编号</th>
+                                <th>图片</th>
+                                <th>名称</th>
+                                <th>原价格</th>
+                                <th>最低价格</th>
+                                <th>库存</th>
+                                <th>活动商品数</th>
+                                <th>随机金额</th>
+                                <th>状态</th>
+                                <th>删除</th>
+                            </tr>
+                            </thead>
+                            <tbody id="goodsListBox">
+                                {foreach:items=$data['list'] key=$k item=$v}
+                                    <tr class="goodsInfo">
+                                        <td>{$v['goods_no']}<input name="goods_id[{$v['goods_id']}]" type="hidden" value="{$v['goods_id']}"></td>
+                                        <td> <img src="<?php echo IWeb::$app->config['image_host']; ?>/{$v['img']}"  style="max-height:100px;max-width:100px;" /></td>
+                                        <td>{$v['name']}</td>
+                                        <td>{$v['sell_price']}</td>
+                                        <td><input text="text" class="small" name="goods_min_price[{$v['goods_id']}]" pattern="float" value="{$v['min_price']}" alt="请填写一个数字" />元</td>
+                                        <td>{$v['store_nums']}</td>
+                                        <td><input text="text" class="small" name="goods_nums[{$v['goods_id']}]" pattern="int" value="{$v['nums']}" alt="请填写一个数字" /></td>
+                                        <td><input text="text" class="small" name="goods_rand[{$v['goods_id']}]" value="{$v['rand']}" /><br/>每次砍价随机金额，<br/>如：10到30元则填”10,30“</td>
+                                        <td>
+                                            <?php switch($v['is_del']){
+                                                case 0: echo '已上架'; break;
+                                                case 1: echo '已删除'; break;
+                                                case 2: echo '已下架'; break;
+                                                case 3: echo '申请上架中'; break;
+                                            } ?>
+                                        </td>
+                                        <td><img src="<?php echo $this->getWebSkinPath().'images/admin/icon_del.gif';?>" alt="删除" title="删除" onclick="page.delGoods(this);" /></td>
+                                    </tr>
+                                {/foreach}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button class="submit" type='submit'><span>确 定</span></button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<!--商品模板-->
+<script type="text/html" id="goodsItemTemplate">
+    <tr class="goodsInfo">
+        <td><%=templateData['goods_no']%><input name="goods_id[<%=templateData['goods_id']%>]" type="hidden" value="<%=templateData['goods_id']%>"></td>
+        <td> <img src="<?php echo IWeb::$app->config['image_host']; ?>/<%=templateData['img']%>"  style="max-height:100px;max-width:100px;" /></td>
+        <td><%=templateData['name']%></td>
+        <td><%=templateData['sell_price']%></td>
+        <td><input text="text" class="small" name="goods_min_price[<%=templateData['goods_id']%>]" pattern="float" value="" alt="请填写一个数字" />元</td>
+        <td><%=templateData['store_nums']%></td>
+        <td><input text="text" class="small" name="goods_nums[<%=templateData['goods_id']%>]" pattern="int" value="" alt="请填写一个数字" /></td>
+        <td><input text="text" class="small" name="goods_rand[<%=templateData['goods_id']%>]" value="" /><br/>每次砍价随机金额，<br/>如：10到30元则填”10,30“</td>
+        <td><%if(templateData['is_del'] =='0'){%>
+            已上架
+            <%}%>
+            <%if(templateData['is_del'] =='1'){%>
+            已删除
+            <%}%>
+            <%if(templateData['is_del'] =='2'){%>
+            已下架
+            <%}%>
+            <%if(templateData['is_del'] =='3'){%>
+            申请上架中
+            <%}%></td>
+        <td><img src="<?php echo $this->getWebSkinPath().'images/admin/icon_del.gif';?>" alt="删除" title="删除" onclick="page.delGoods(this);" /></td>
+    </tr>
+</script>
+
+<script type='text/javascript'>
+
+window.onload = function(){
+    page.init();
+};
+
+var page = {
+    loading     : false,
+    init        : function(){
+    },
+    //更改活动类型
+    changeType 			: function(obj){
+    },
+    //输入筛选商品的条件
+    searchGoodsCallback: function (goodsList) {
+        var result = [];
+        goodsList.each(function(k,v){
+            var temp = $.parseJSON($(this).attr('data'));
+            result.push(temp);
+        });
+        page.createGoodsList(result);
+    },
+    //创建商品数据
+    createGoodsList: function (goodsList) {
+        if (goodsList) {
+            for(var i in goodsList){
+                var templateHTML = template.render('goodsItemTemplate',{"templateData":goodsList[i]});
+                $('#goodsListBox').append(templateHTML);
+            }
+        }
+    },
+    //删除单条商品
+    delGoods 				:function(obj){
+        $(obj).parents('.goodsInfo').remove();
+    },
+};
+
+</script>
