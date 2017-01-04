@@ -632,7 +632,7 @@ class wechat extends pluginBase
 	 */
     public function textReplay($content){
     	$postObj = $this->msgObject;
-		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[{$content}]]></Content></xml>";
+		$replyContent = '<xml><ToUserName><![CDATA['.$postObj->FromUserName.']]></ToUserName><FromUserName><![CDATA['.$postObj->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA['.$content.']]></Content></xml>';
 		die($replyContent);
     }
 	
@@ -642,7 +642,7 @@ class wechat extends pluginBase
 	 */
 	public function imageReplay($content){
 		$postObj      = $this->msgObject;
-		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[{$content}]]></MediaId></Image></xml>";
+		$replyContent = '<xml><ToUserName><![CDATA['.$postObj->FromUserName.']]></ToUserName><FromUserName><![CDATA['.$postObj->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA['.$content.']]></MediaId></Image></xml>';
 		die($replyContent);
 	}
 	
@@ -652,8 +652,8 @@ class wechat extends pluginBase
 	 */
 	public function newsReplay($data){
 		$postObj      = $this->msgObject;
-		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime>
-		<MsgType><![CDATA[news]]></MsgType><Content><![CDATA[]]></Content><ArticleCount>".count($data)."</ArticleCount><Articles>";
+		$replyContent = '<xml><ToUserName><![CDATA['.$postObj->FromUserName.']]></ToUserName><FromUserName><![CDATA['.$postObj->ToUserName.']]></FromUserName><CreateTime>'.time().'</CreateTime>
+		<MsgType><![CDATA[news]]></MsgType><Content><![CDATA[]]></Content><ArticleCount>'.count($data).'</ArticleCount><Articles>';
 		foreach($data as $k => $v){
 			$replyContent .= '<item><Title><![CDATA['.$v['title'].']]></Title>
             <Description><![CDATA['.$v['content'].']]></Description>
