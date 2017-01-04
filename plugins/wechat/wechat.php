@@ -111,6 +111,7 @@ class wechat extends pluginBase
 
     //处理微信服务器的请求接口
     public function response(){
+    	common::dblog(array($_GET,$_POST));
     	$code  = IReq::get('code');
     	$state = IReq::get('state');
 	
@@ -623,9 +624,7 @@ class wechat extends pluginBase
 						break;
 				}
 			}
-				echo '';
 		}
-		echo '';
 	}
 
 	/**
