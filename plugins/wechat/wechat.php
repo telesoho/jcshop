@@ -111,7 +111,6 @@ class wechat extends pluginBase
 
     //处理微信服务器的请求接口
     public function response(){
-    	common::dblog(array($_GET,file_get_contents("php://input")));
     	$code  = IReq::get('code');
     	$state = IReq::get('state');
 	
@@ -152,7 +151,7 @@ class wechat extends pluginBase
 						}
 		    		}
 		    	}
-		    	die(' ');
+		    	die('success');
 	    	}else{
 	    		die('本次请求非微信客户端发起');
 	    	}
@@ -577,9 +576,7 @@ class wechat extends pluginBase
 	 * @param string $postObj 微信消息Array形式
 	 */
 	public function msgCatch($postObj){
-		$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
-//		common::dblog($postObj);
-		if (!isset($postObj->Content) || empty($postObj->Content)) exit('');
+		if (!isset($postObj->Content) || empty($postObj->Content)) exit(' ');
 		switch($postObj->MsgType){
 			//自动回复
 			default:{
