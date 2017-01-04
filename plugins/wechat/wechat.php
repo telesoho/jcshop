@@ -577,6 +577,7 @@ class wechat extends pluginBase
 	 * @param string $postObj 微信消息Array形式
 	 */
 	public function msgCatch($postObj){
+		$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
 //		common::dblog($postObj);
 		if (!isset($postObj->Content) || empty($postObj->Content)) exit('');
 		switch($postObj->MsgType){
