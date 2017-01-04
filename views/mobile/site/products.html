@@ -70,19 +70,24 @@
 					<img v-if="info.drug!=1" src="/views/mobile/skin/default/image/jmj/img/title_icon01.png" alt="" />
 				</div>
 			</div>
-			<div class="mark">{{info.goods_no}}</div>
-			<div class="rudice_price">
+			
+			<!--<div class="rudice_price">
 				<span >{{info.discount}}折</span><s>{{info.original_price}}</s>
 				
+			</div>-->
+			<div class="sell" style="display: -webkit-flex;">
+				<!--<img src="/views/mobile/skin/default/image/jmj/product/jiumaoprice.png" alt="" />-->
+				<span class="sellprice">&nbsp;&nbsp;&nbsp;￥ <span style="font-size: 0.8rem;color: #ff44a0;">{{info.sell_price}}</span></span>
+				<p style="margin-left:0.2rem ;">
+					<span style="height: 0.3rem;display: block;color: #ff44a0;margin-top:0.2rem ;font-size: 0.24rem;">立省<span style="font-weight: 600;color: rgb(255,68,168);">{{(info.market_price - info.sell_price).toFixed(2)}}</span>元</span>
+					<span style="height: 0.3rem;margin-top:0.1rem ;display: block;" v-if="baoyou==1"><img src="/views/mobile/skin/default/image/jmj/img/288.png" style="width: 1.2rem;"/></span>
+					<span style="height: 0.3rem;" v-if="baoyou==3">包邮</span>
+				</p>
 			</div>
 			<div class="price box">
-				<div class="sell">
-					<img src="/views/mobile/skin/default/image/jmj/product/jiumaoprice.png" alt="" />
-					<span class="sellprice">￥ {{info.sell_price}}</span>
-				</div>
-				<div class="other_price box">
-					<span class="china hidewrap">国内价:￥{{info.market_price}}</span>
-					<span class="japen hidewrap"><img src="/views/mobile/skin/default/image/jmj/product/riya-logo.png" alt=""style="width:1.08rem;height:0.34rem" />
+				<div class="other_price box" style="width: 6rem;">
+					<span class="china hidewrap" style="width: 3rem;color: #000;font-size: 0.24rem;">国内专柜价: <span style="width: auto;"><s>￥{{info.market_price}}</s></span></span>
+					<span class="japen hidewrap" style="width: 3rem;font-size: 0.24rem;"><img src="/views/mobile/skin/default/image/jmj/product/riya-logo.png" alt=""style="width:1.08rem;height:0.34rem" />
 					{{parseInt(info.jp_price)}}円</span>
 				</div>
 			</div>
@@ -92,13 +97,16 @@
 			<div class="postMethod">
 				<a href="#serviceDescription">
 					<ul>
-						<li><img src="/views/mobile/skin/default/image/jmj/img/plane_icon.png"/>日本直邮</li>
-						<li id="showUni" v-if="info.vendor==1">
+						<li style="font-size: 0.24rem;"><img src="/views/mobile/skin/default/image/jmj/img/plane_icon.png"/>日本直邮</li>
+						<li class="mark" style="margin-left:0.3rem ;font-size: 0.24rem;">商品编号: {{info.goods_no}}</li>
+						<!--<li id="showUni" v-if="info.vendor==1">
 							<img src="/views/mobile/skin/default/image/jmj/img/uni_icon.png" style="width:0.32rem;height:0.32rem;vertical-align: middle"/>
 							universal入驻</li>
 						<li><img src="/views/mobile/skin/default/image/jmj/img/man_icon.png"/>满
 							<img src="/views/mobile/skin/default/image/jmj/product/288.png" style="width:0.64rem;"/>包邮</li>
-						<li><span class="mui-icon mui-icon-arrowright"></span></li>
+						<li><span class="mui-icon mui-icon-arrowright"></span></li>-->
+						<li style="font-size: 0.24rem;">计重:{{weight}}g</li>
+						<li><span class="mui-icon mui-icon-arrowright" style="color:#bbb;font-size:0.3rem;"></span></li>
 					</ul>
 				</a>
 			</div>
@@ -310,6 +318,7 @@
 		var vm = new Vue({
 			el: '#productInfo',
 			data: {
+				baoyou:"",
 				showMessage:false,
 				info:{
 					photo:[{
@@ -317,6 +326,7 @@
 					}]
 				},
 				goodsnum:1,
+				weight:"",
 				relateArticle:[],
 				img1:'/views/mobile/skin/default/image/jmj/product/remove.png',
 				img2:'/views/mobile/skin/default/image/jmj/product/already.png',
@@ -369,6 +379,8 @@
 				},
 				aaa:function(){
 					console.log(this.info)
+					this.baoyou = this.info.delivery;
+					this.weight = parseInt(this.info.weight);
 					return this.info.photo;
 					
 				}
