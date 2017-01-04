@@ -654,7 +654,7 @@ class wechat extends pluginBase
 		$replyContent = "<xml><ToUserName><![CDATA[{$postObj->FromUserName}]]></ToUserName><FromUserName><![CDATA[{$postObj->ToUserName}]]></FromUserName><CreateTime>".time()."</CreateTime>
 		<MsgType><![CDATA[news]]></MsgType><Content><![CDATA[]]></Content><ArticleCount>".count($data)."</ArticleCount><Articles>";
 		foreach($data as $k => $v){
-			$replyContent .= '<item><Title><![CDATA[['.$v['title'].']]></Title>
+			$replyContent .= '<item><Title><![CDATA['.$v['title'].']]></Title>
             <Description><![CDATA['.$v['content'].']]></Description>
             <PicUrl><![CDATA['.$v['pic'].']]></PicUrl>
             <Url><![CDATA['.$v['url'].']]></Url></item>';

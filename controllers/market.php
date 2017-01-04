@@ -159,10 +159,92 @@ class Market extends IController implements adminAuthorization
 	 * 砍价刀列表
 	 */
 	public function activity_bargain_list(){
-		/* 模板赋值 */
+		/* 视图 */
 		$this->redirect('activity_bargain_list');
 	}
-
+	
+	/**
+	 * 砍价刀编辑
+	 */
+	public function activity_bargain_edit(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			/* 更新主表 */
+			$model = new IModel('activity_bargain');
+			$model->setData(array(
+				'start_time'  => strtotime($_POST['start_time']),
+				'end_time'    => strtotime($_POST['end_time']),
+				'status'      => $_POST['status'],
+				'update_time' => time(),
+			));
+			$rel = $model->update('id='.$_POST['id']);
+			if(!$rel) exit('更新失败！');
+			/* 更新副表 */
+			$modelSpeed = new IModel('activity_bargain_access');
+			$modelSpeed->del('pid='.$_POST['id']);
+			foreach($_POST['goods_id'] as $k => $v){
+				$modelSpeed->setData(array(
+					'pid'        => $_POST['id'],
+					'goods_id'   => $_POST['goods_id'][$k],
+					'min_price'  => $_POST['goods_min_price'][$k],
+					'rand'       => $_POST['goods_rand'][$k],
+					'nums'       => $_POST['goods_nums'][$k],
+				));
+				$modelSpeed->add();
+			}
+			
+			$this->redirect('activity_bargain_list');
+		}
+		/* 限时购详情 */
+		$id         = IFilter::act(IReq::get('id'), 'int');//活动ID
+		$modelBargain = new IModel('activity_bargain');
+		$infoBargain  = $modelBargain->getObj('id='.$id);
+		if(!empty($infoBargain)){
+			$queryAcc          = new IQuery('activity_bargain_access AS m');
+			$queryAcc->join    = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
+			$queryAcc->where   = 'pid='.$id;
+			$queryAcc->fields  = 'm.*,g.name,g.img,g.sell_price,g.is_del,g.goods_no,g.store_nums';
+			$infoBargain['list'] = $queryAcc->find();
+		}
+		/* 视图 */
+		$this->setRenderData(array('data' => $infoBargain));
+		$this->redirect('activity_bargain_edit');
+	}
+	
+	/**
+	 * 砍价刀新增
+	 */
+	public function activity_bargain_add(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			/* 更新主表 */
+			$model = new IModel('activity_bargain');
+			$model->setData(array(
+				'start_time'  => strtotime($_POST['start_time']),
+				'end_time'    => strtotime($_POST['end_time']),
+				'status'      => $_POST['status'],
+				'update_time' => time(),
+				'create_time' => time(),
+			));
+			$rel = $model->add();
+			if(!$rel) exit('添加失败！');
+			/* 更新副表 */
+			$modelSpeed = new IModel('activity_bargain_access');
+			foreach($_POST['goods_id'] as $k => $v){
+				$modelSpeed->setData(array(
+					'pid'        => $rel,
+					'goods_id'   => $_POST['goods_id'][$k],
+					'min_price'  => $_POST['goods_min_price'][$k],
+					'rand'       => $_POST['goods_rand'][$k],
+					'nums'       => $_POST['goods_nums'][$k],
+				));
+				$modelSpeed->add();
+			}
+			
+			$this->redirect('activity_bargain_list');
+		}
+		/* 视图 */
+		$this->redirect('activity_bargain_add');
+	}
+	
 	/**
 	 * 活动列表
 	 */

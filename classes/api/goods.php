@@ -33,12 +33,54 @@ class APIGoods{
 		$goods_ratio_delivery = $jmj_config->goods_ratio_delivery; //商品价格重量比率计算是否包邮
 		$goods_ratio          = $goods_ratio>1 || $goods_ratio<=0 ? 1 : $goods_ratio;
 		
+		$user_id     = IWeb::$app->getController()->user['user_id'];
 		$listGoods   = array(); //商品原数据
+		$bGoods      = array(); //参与砍价刀的商品
 		$sGoods      = array(); //参与限时活动的商品
 		$aGoods      = array(); //参与活动的商品
 		$aids        = array(); //需要结束的活动
 		$deliveryYes = array(); //包邮商品列表
 		$deliveryNo  = array(); //不包邮商品列表
+		
+		/* 砍价刀 */
+		$queryBargain         = new IQuery('activity_bargain AS m');
+		$queryBargain->join   = 'LEFT JOIN activity_bargain_access AS a ON a.pid=m.id '.
+			'LEFT JOIN goods AS g ON g.id=a.goods_id';
+		$queryBargain->where  = 'a.goods_id IN ('.implode(',', $ids).') AND m.start_time<='.time().' AND m.end_time>='.time().' AND status=1';
+		$queryBargain->fields = 'a.id,a.goods_id,a.nums,g.sell_price,m.start_time,m.end_time';
+		$listBargain          = $queryBargain->find();
+		if(!empty($listBargain)){
+			$queryOrder         = new IQuery('order AS m');
+			$queryOrder->join   = 'LEFT JOIN order_goods AS g ON g.order_id=m.id';
+			$queryOrder->fields = 'count(*) AS sum';
+			foreach($listBargain as $k => $v){
+				$where = 'm.pay_status=1 AND m.pay_time>="'.date('Y-m-d H:i:s', $v['start_time']).'" AND m.pay_time<="'.date('Y-m-d H:i:s', $v['end_time']).'" AND g.goods_id='.$v['goods_id'];
+				//限购数量已售完
+				$queryOrder->where = $where;
+				$sum               = $queryOrder->find();
+				if($sum[0]['sum']>=$v['nums']) continue;
+				
+				//当前用户已购买过
+				$queryOrder->where = $where.' AND m.user_id='.$user_id;
+				$sum               = $queryOrder->find();
+				if($sum[0]['sum']>=1) continue;
+				
+				if(isset($bGoods[$v['goods_id']]) && !empty($bGoods[$v['goods_id']])){
+					//同种活动对比结束时间早的先显示
+					if($bGoods[$v['goods_id']]['type']==$v['type']){
+						if($bGoods[$v['goods_id']]['end_time']<$v['end_time'])
+							continue;
+					}
+				}
+				$queryBuser             = new IQuery('activity_bargain_user');
+				$queryBuser->where      = 'byuser='.$user_id.' AND pid='.$v['id'];
+				$queryBuser->fields     = 'SUM(`money`) AS sum';
+				$sum                    = $queryBuser->find();
+				$v['sell_price']        = $v['sell_price']-(empty($sum[0]['sum']) ? 0 : $sum[0]['sum']);
+				$v['sell_price']        = $v['sell_price']<=0 ? 0 : $v['sell_price'];
+				$bGoods[$v['goods_id']] = $v;
+			}
+		}
 		
 		/* 限时活动（限时购） */
 		$querySpeed         = new IQuery('activity_speed as m');
@@ -59,7 +101,6 @@ class APIGoods{
 				
 				//当前用户已限购完
 				if($v['quota']>0){
-					$user_id           = IWeb::$app->getController()->user['user_id'];
 					$queryOrder->where = $where.' AND m.user_id='.$user_id;
 					$sum               = $queryOrder->find();
 					if($sum[0]['sum']>=$v['quota']) continue;
@@ -71,9 +112,6 @@ class APIGoods{
 						if($sGoods[$v['goods_id']]['end_time']<$v['end_time'])
 							continue;
 					}
-					//秒杀活动优先显示
-					if($sGoods[$v['goods_id']]['type']==2)
-						continue;
 				}
 				$sGoods[$v['goods_id']] = $v;
 			}
@@ -131,7 +169,10 @@ class APIGoods{
 				$data[$k]['original_price'] = round($listGoods[$v[$key]]['sell_price']*$goods_ratio_original, 2);
 			//修改销售价格
 			if(isset($v['sell_price'])){
-				if(isset($sGoods[$v[$key]])){
+				if(isset($bGoods[$v[$key]])){
+					//砍价刀
+					$data[$k]['sell_price'] = $bGoods[$v[$key]]['sell_price'];
+				}elseif(isset($sGoods[$v[$key]])){
 					//限时活动商品
 					$data[$k]['sell_price'] = $sGoods[$v[$key]]['sell_price'];
 				}elseif(isset($aGoods[$v[$key]])){

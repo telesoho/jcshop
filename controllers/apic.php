@@ -395,16 +395,18 @@ class Apic extends IController{
 		$data['delivery_money'] = 0;
 		if($colse != 1) $this->json_echo(apiReturn::go('0', $data));
 		
+		//查询收货地址
+		$modelAdr = new IModel('address');
+		$dataAdr  = $modelAdr->getObj('id='.$did.' AND user_id='.$user_id);
+		if(empty($dataAdr)) $this->json_echo(apiReturn::go('005001')); //收货地址不存在
+		
+		
 		//商品信息
 		
 		$infoGoods['product_id'] = 0; //货号
 		$infoGoods['count']      = 1; //商品数量
 		$infoGoods['seller_id']  = 0; //卖家ID
-		$infoGoods['reduce']     = $infoGoods['sell_price'];
-		//查询收货地址
-		$modelAdr = new IModel('address');
-		$dataAdr  = $modelAdr->getObj('id='.$did.' AND user_id='.$user_id);
-		if(empty($dataAdr)) $this->json_echo(apiReturn::go('005001')); //收货地址不存在
+		$infoGoods['reduce']     = 0;
 		
 		//生成的订单数据
 		$dataArray = array(
@@ -832,6 +834,68 @@ class Apic extends IController{
 		
 		/* 返回数据 */
 		$this->json_echo(apiReturn::go('0', array('money' => $dataOrder, 'list' => $dataGrow)));
+	}
+	
+	/**
+	 * 砍价刀商品列表
+	 */
+	public function activity_bargain_list(){
+		/* 获取参数 */
+		$param   = array(
+			'activity_id' => IFilter::act(IReq::get('activity_id'), 'int'), //砍价刀活动ID，必填
+			'page'        => IFilter::act(IReq::get('page'), 'int'), //砍价刀活动ID，必填
+		);
+		
+		/* 商品列表 */
+		$queryGoods           = new IQuery('activity_bargain AS m');
+		$queryGoods->join     = 'LEFT JOIN activity_bargain_access AS a ON a.pid=m.id '.
+			'LEFT JOIN goods AS g ON g.id=a.goods_id';
+		$queryGoods->where    = 'g.is_del=0 AND m.id='.$param['activity_id'];
+		$queryGoods->fields   = 'g.id,g.name,g.img';
+		$queryGoods->order    = 'g.sale DESC,g.visit DESC';
+		$queryGoods->page     = $param['page']<1 ? 1 : $param['page'];
+		$queryGoods->pagesize = 10;
+		$listGoods            = $queryGoods->find();
+		if($param['page']>$queryGoods->getTotalPage()) $listGoods = array();
+		if(!empty($listGoods)){
+			foreach($listGoods as $k => $v){
+				$listGoods[$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
+			}
+		}
+		
+		/* 数据返回 */
+		$this->json_echo(apiReturn::go('0', $listGoods));
+	}
+	
+	/**
+	 * 砍价刀商品详情
+	 */
+	public function activity_bargain_detail(){
+		/* 获取参数 */
+		$param   = array(
+			'activity_id' => IFilter::act(IReq::get('activity_id'), 'int'), //砍价刀活动ID，必填
+			'goods_id'    => IFilter::act(IReq::get('goods_id'), 'int'), //砍价刀活动ID，必填
+		);
+		$user_id = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : $this->json_echo(apiReturn::go('001001'));
+		
+		/* 商品详情 */
+		$queryGoods         = new IQuery('activity_bargain AS m');
+		$queryGoods->join   = 'LEFT JOIN activity_bargain_access AS a ON a.pid=m.id '.
+			'LEFT JOIN goods AS g ON g.id=a.goods_id';
+		$queryGoods->where  = 'g.is_del=0 AND m.id='.$param['activity_id'].' AND a.goods_id='.$param['goods_id'];
+		$queryGoods->fields = 'a.id AS aid,g.id,g.name,g.img,sell_price,m.start_time,m.end_time,m.status,';
+		$infoGoods          = $queryGoods->find();
+		if(!empty($infoGoods)){
+			$infoGoods['img'] = empty($infoGoods['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$infoGoods['img']."/w/500/h/500");
+			$queryPrice = new IQuery('activity_bargain_user');
+			$queryPrice->where = 'pid='.$infoGoods['aid'].' AND byuser='.$user_id;
+			$queryPrice->fields = 'SUM(`money`) AS sum,count(*) AS count';
+			$sum = $queryPrice->find();
+			$infoGoods['now_price'] = empty($sum[0]['sum']) ? 0 : $sum[0]['sum'];
+			$infoGoods['now_price'] = $infoGoods['now_price']<=0 ? 0 : $infoGoods['now_price'];
+		}
+		
+		
 	}
 	
 	/**
@@ -1350,7 +1414,7 @@ class Apic extends IController{
 		
 		/* 商品详情 */
 		$modelGoods = new IModel('goods');
-		$fields     = 'id,name,goods_no,brand_id,sell_price,original_price,jp_price,market_price,store_nums,img,content';
+		$fields     = 'id,name,goods_no,brand_id,sell_price,original_price,jp_price,market_price,store_nums,weight,img,content';
 		$dataGoods  = $modelGoods->getObj('is_del=0 AND id='.$goods_id, $fields);
 		if(empty($dataGoods)) $this->json_echo(apiReturn::go('006001')); //商品不存在
 		/* 计算活动商品价格 */
@@ -2003,16 +2067,13 @@ class Apic extends IController{
 			$join   = 'LEFT JOIN cosme AS c ON c.goods_id=m.id';
 			$where  = 'm.is_del=0 AND c.type in ('.$catId.')'.(empty($bid) ? '' : ' AND m.brand_id='.$bid);
 			$fields = 'm.id,m.name,m.sell_price,m.jp_price,m.market_price,m.img';
-			$order  = 'c.rank asc';
+			$order  = 'c.rank ASC';
 		}else{
 			//通常进入
 			$join   = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
 			$where  = 'm.is_del=0 AND c.category_id in ('.$catId.')'.(empty($bid) ? '' : ' AND m.brand_id='.$bid);
 			$fields = 'm.id,m.name,m.sell_price,m.jp_price,m.market_price,m.img';
-			//获取汇率
-			$siteConfig       = new Config('site_config');
-			$exchange_rate_jp = $siteConfig->exchange_rate_jp;
-			$order            = 'm.sell_price*'.$exchange_rate_jp.'/m.jp_price asc';
+			$order  = 'm.sale DESC,m.visit DESC';
 		}
 		$query->join     = $join;
 		$query->where    = $where;
