@@ -1,0 +1,163 @@
+body{
+    overflow:hidden;
+}
+header{
+    width:100%;
+    height:1.02rem;
+    background:#fff;
+}
+header .choName{
+    -webkit-flex:2 ;
+    text-align:center;
+    font-size:0.3rem;
+    color: #000;
+}
+header .brandList{
+    -webkit-flex:1;
+    margin-right:0.2rem;
+}
+header .brandList select{
+    font-size:0.3rem;
+    line-height:0.9rem;
+}
+.xuan{
+	font-size: 0.3rem;
+	color: #000;
+}
+header .brandList select option{
+    font-size:0.3rem !important;
+}
+/*模态框样式*/
+.modal{
+    border-top:1px solid #eee;
+    position:fixed;
+    width:100%;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background:#fff;
+    margin-top:0.9rem;
+}
+.modal .content{
+    display: -webkit-flex;
+    -webkit-justify-content: space-between;
+}
+.modal .content .left{
+    width:2rem;
+    text-align: center;
+}
+.modal .content .left .item{
+    height:0.7rem;
+    line-height:0.7rem;
+    font-size:0.28rem;
+    border-bottom:1px solid #eee;
+}
+.modal .content .right{
+    width:5.2rem;
+    margin-left:0.2rem;
+    overflow-scrolling: touch;
+}
+.modal .content .right .con{
+    width:5.2rem;
+    display: -webkit-flex;
+    -webkit-justify-content: space-between;
+    -webkit-flex-wrap:wrap;
+}
+.modal .content .right .con .itemLi{
+    font-size:0.28rem;
+    margin:0.05rem 0.1rem 0 0.1rem;
+    width:2.3rem;
+    height:0.7rem;
+    line-height:0.7rem;
+    text-align:center;
+    border:1px solid #eee;
+}
+article .pay{
+    border-top:1px solid #eee;
+    background:#fff;
+}
+article .pay .line1{
+    padding-left:0.3rem;
+    height:1.2rem;
+    line-height:1.2rem;
+    border-bottom:1px solid #eee;
+}
+article .pay .line2{
+    padding-left:0.3rem;
+    height:1.2rem;
+    line-height:1.28rem;
+    border-bottom:1px solid #eee;
+  }
+article .pay  .text1::-webkit-input-placeholder{
+    font-size:0.26rem;
+    line-height: 0.3rem;
+}
+article .pay  .text1{
+    margin-left:0.2rem;
+    width:3rem;
+    background:#eee;
+    padding-left:0.1rem;
+    font-size:0.26rem;
+    border:1px solid #bbb;
+    height:0.58rem;
+    color:#3d4225;
+    border-radius:0.1rem ;
+}
+input[type="radio"] {
+    padding:0.5rem;
+    /*visibility: hidden;*/
+    display: none;
+}
+.payR{
+    margin-left:0.3rem;
+    display: inline-block;
+    width:0.3rem;
+    height:0.3rem;
+    border-radius:0.3rem;
+    background:#bbb;
+    position:relative;
+    top:0.05rem;
+}
+.payR span{
+	border-radius: 50%;
+	display: block;
+	width: 0.14rem;
+	height: 0.14rem;
+	position: absolute;
+	left: 50%;
+	margin-left: -0.07rem;
+	top: 50%;
+	margin-top:-0.066rem ;
+}
+footer{
+    width:100%;
+    height:0.9rem;
+    margin-top:1.8rem;
+}
+footer .button1{
+    width:1.8rem;
+    background:#adbcc8;
+    height:0.76rem;
+    line-height:0.76rem;
+    text-align:center;
+    font-size:0.34rem;
+    color:#fff;
+    border-radius:0.08rem;
+    margin-right:0.2rem;
+}
+footer .button2 input{
+    display: block;
+    width:1.8rem;
+    background:#f68484;
+    height:0.76rem;
+    color:#fff;
+    border:none;
+    font-size:0.34rem;
+    border-radius:0.08rem;
+}
+.text{
+	color: #6E6E6E;
+	font-size: 0.22rem;
+	padding:0.15rem 0.1rem 0 0.39rem;
+}
