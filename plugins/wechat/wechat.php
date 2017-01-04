@@ -152,7 +152,7 @@ class wechat extends pluginBase
 						}
 		    		}
 		    	}
-		    	die('success');
+		    	die(' ');
 	    	}else{
 	    		die('本次请求非微信客户端发起');
 	    	}
