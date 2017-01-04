@@ -875,15 +875,16 @@ class Apic extends IController{
 		$param   = array(
 			'activity_id' => IFilter::act(IReq::get('activity_id'), 'int'), //砍价刀活动ID，必填
 			'goods_id'    => IFilter::act(IReq::get('goods_id'), 'int'), //砍价刀活动ID，必填
+			'user_id'     => IFilter::act(IReq::get('user_id'), 'int'), //邀请人ID，必填
 		);
-		$user_id = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : $this->json_echo(apiReturn::go('001001'));
+		$user_id = !empty($param['user']) ? $param['user'] : (isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : $this->json_echo(apiReturn::go('001001')));
 		
 		/* 商品详情 */
 		$queryGoods         = new IQuery('activity_bargain AS m');
 		$queryGoods->join   = 'LEFT JOIN activity_bargain_access AS a ON a.pid=m.id '.
 			'LEFT JOIN goods AS g ON g.id=a.goods_id';
 		$queryGoods->where  = 'g.is_del=0 AND m.id='.$param['activity_id'].' AND a.goods_id='.$param['goods_id'];
-		$queryGoods->fields = 'a.id,a.goods_id,g.name,g.img,g.sell_price,m.start_time,m.end_time,m.status';
+		$queryGoods->fields = 'a.id,a.goods_id,a.min_price,g.name,g.img,g.sell_price,m.start_time,m.end_time,m.status';
 		$infoGoods          = $queryGoods->find();
 		if(empty($infoGoods)) $this->json_echo(apiReturn::go('006001'));
 		$infoGoods        = $infoGoods[0];
@@ -895,11 +896,13 @@ class Apic extends IController{
 		$rel                       = $queryPrice->find();
 		$infoGoods['exempt_price'] = empty($rel[0]['exempt_price']) ? 0 : $rel[0]['exempt_price'];
 		$infoGoods['count']        = empty($rel[0]['count']) ? 0 : $rel[0]['count'];
-		$infoGoods['now_price']    = $infoGoods['sell_price']<=0 ? 0 : $infoGoods['sell_price'];
+		$now_price = $infoGoods['sell_price']- $infoGoods['exempt_price'];
+		$infoGoods['now_price']    = $now_price<=0 ? 0 : $now_price;
+		$infoGoods['ratio']        = $infoGoods['now_price']==0 ? 1 : ($infoGoods['min_price']/$infoGoods['now_price']-0.1>=1 ? 0.9 : $infoGoods['min_price']/$infoGoods['now_price']-0.1);
 		/* 砍价记录 */
 		$queryBargain         = new IQuery('activity_bargain_user AS m');
 		$queryBargain->join   = 'LEFT JOIN user AS u ON u.id=m.touser';
-		$queryBargain->where  = 'pid='.$infoGoods['aid'].' AND byuser='.$user_id;
+		$queryBargain->where  = 'pid='.$infoGoods['id'].' AND byuser='.$user_id;
 		$queryBargain->fields = 'm.id,u.username,m.money,m.create_time';
 		$infoGoods['list']    = $queryBargain->find();
 		
@@ -924,7 +927,7 @@ class Apic extends IController{
 		$queryGoods->join   = 'LEFT JOIN activity_bargain_access AS a ON a.pid=m.id '.
 			'LEFT JOIN goods AS g ON g.id=a.goods_id';
 		$queryGoods->where  = 'g.is_del=0 AND m.id='.$param['activity_id'].' AND a.goods_id='.$param['goods_id'];
-		$queryGoods->fields = 'a.id,a.goods_id,a.min_price,a.rand,g.name,g.img,g.sell_price,m.start_time,m.end_time,m.status,';
+		$queryGoods->fields = 'a.id,a.goods_id,a.min_price,a.rand,g.name,g.img,g.sell_price,m.start_time,m.end_time,m.status';
 		$infoGoods          = $queryGoods->find();
 		if(empty($infoGoods))
 			$this->json_echo(apiReturn::go('006001'));
@@ -947,7 +950,7 @@ class Apic extends IController{
 			$this->json_echo(apiReturn::go('002036')); //活动配置错误
 		//已砍价金额
 		$queryPrice         = new IQuery('activity_bargain_user');
-		$queryPrice->where  = 'pid='.$infoGoods['id'].' AND byuser='.$user_id;
+		$queryPrice->where  = 'pid='.$infoGoods['id'].' AND byuser='.$param['user_id'];
 		$queryPrice->fields = 'SUM(`money`) AS exempt_price';
 		$rel                = $queryPrice->find();
 		$exempt_price       = empty($rel[0]['exempt_price']) ? 0 : $rel[0]['exempt_price'];
