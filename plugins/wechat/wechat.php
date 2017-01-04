@@ -577,6 +577,7 @@ class wechat extends pluginBase
 	 * @param string $postObj 微信消息Array形式
 	 */
 	public function msgCatch($postObj){
+		if (!isset($postObj->Content) || empty($postObj->Content)) exit('');
 		switch($postObj->MsgType){
 			//自动回复
 			default:{
@@ -623,7 +624,9 @@ class wechat extends pluginBase
 						break;
 				}
 			}
+				echo '';
 		}
+		echo '';
 	}
 
 	/**
