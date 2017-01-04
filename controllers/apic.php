@@ -883,19 +883,89 @@ class Apic extends IController{
 		$queryGoods->join   = 'LEFT JOIN activity_bargain_access AS a ON a.pid=m.id '.
 			'LEFT JOIN goods AS g ON g.id=a.goods_id';
 		$queryGoods->where  = 'g.is_del=0 AND m.id='.$param['activity_id'].' AND a.goods_id='.$param['goods_id'];
-		$queryGoods->fields = 'a.id AS aid,g.id,g.name,g.img,sell_price,m.start_time,m.end_time,m.status,';
+		$queryGoods->fields = 'a.id,a.goods_id,g.name,g.img,g.sell_price,m.start_time,m.end_time,m.status';
 		$infoGoods          = $queryGoods->find();
-		if(!empty($infoGoods)){
-			$infoGoods['img'] = empty($infoGoods['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$infoGoods['img']."/w/500/h/500");
-			$queryPrice = new IQuery('activity_bargain_user');
-			$queryPrice->where = 'pid='.$infoGoods['aid'].' AND byuser='.$user_id;
-			$queryPrice->fields = 'SUM(`money`) AS sum,count(*) AS count';
-			$sum = $queryPrice->find();
-			$infoGoods['now_price'] = empty($sum[0]['sum']) ? 0 : $sum[0]['sum'];
-			$infoGoods['now_price'] = $infoGoods['now_price']<=0 ? 0 : $infoGoods['now_price'];
-		}
+		if(empty($infoGoods)) $this->json_echo(apiReturn::go('006001'));
+		$infoGoods        = $infoGoods[0];
+		$infoGoods['img'] = empty($infoGoods['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$infoGoods['img']."/w/500/h/500");
+		/* 砍价金额 */
+		$queryPrice                = new IQuery('activity_bargain_user');
+		$queryPrice->where         = 'pid='.$infoGoods['id'].' AND byuser='.$user_id;
+		$queryPrice->fields        = 'SUM(`money`) AS exempt_price,count(*) AS count';
+		$rel                       = $queryPrice->find();
+		$infoGoods['exempt_price'] = empty($rel[0]['exempt_price']) ? 0 : $rel[0]['exempt_price'];
+		$infoGoods['count']        = empty($rel[0]['count']) ? 0 : $rel[0]['count'];
+		$infoGoods['now_price']    = $infoGoods['sell_price']<=0 ? 0 : $infoGoods['sell_price'];
+		/* 砍价记录 */
+		$queryBargain         = new IQuery('activity_bargain_user AS m');
+		$queryBargain->join   = 'LEFT JOIN user AS u ON u.id=m.touser';
+		$queryBargain->where  = 'pid='.$infoGoods['aid'].' AND byuser='.$user_id;
+		$queryBargain->fields = 'm.id,u.username,m.money,m.create_time';
+		$infoGoods['list']    = $queryBargain->find();
 		
+		/* 数据返回 */
+		$this->json_echo(apiReturn::go('0', $infoGoods));
+	}
+	
+	/**
+	 * 砍价
+	 */
+	public function activity_bargain_start(){
+		/* 获取参数 */
+		$param   = array(
+			'activity_id' => IFilter::act(IReq::get('activity_id'), 'int'), //砍价刀活动ID，必填
+			'goods_id'    => IFilter::act(IReq::get('goods_id'), 'int'), //砍价刀活动ID，必填
+			'user_id'     => IFilter::act(IReq::get('user_id'), 'int'), //邀请人ID，必填
+		);
+		$user_id = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : $this->json_echo(apiReturn::go('001001'));
 		
+		/* 校验 */
+		$queryGoods         = new IQuery('activity_bargain AS m');
+		$queryGoods->join   = 'LEFT JOIN activity_bargain_access AS a ON a.pid=m.id '.
+			'LEFT JOIN goods AS g ON g.id=a.goods_id';
+		$queryGoods->where  = 'g.is_del=0 AND m.id='.$param['activity_id'].' AND a.goods_id='.$param['goods_id'];
+		$queryGoods->fields = 'a.id,a.goods_id,a.min_price,a.rand,g.name,g.img,g.sell_price,m.start_time,m.end_time,m.status,';
+		$infoGoods          = $queryGoods->find();
+		if(empty($infoGoods))
+			$this->json_echo(apiReturn::go('006001'));
+		$infoGoods = $infoGoods[0];
+		if($infoGoods['status']!=1)
+			$this->json_echo(apiReturn::go('002017')); //活动未开始
+		if($infoGoods['start_time']>time())
+			$this->json_echo(apiReturn::go('002018')); //活动未开始
+		if($infoGoods['end_time']<time())
+			$this->json_echo(apiReturn::go('002019')); //活动已结束
+		//是否已砍过价
+		$modelBargain = new IModel('activity_bargain_user');
+		$rel          = $modelBargain->getObj('pid='.$infoGoods['id'].' AND byuser='.$param['user_id'].' AND touser='.$user_id);
+		if(!empty($rel))
+			$this->json_echo(apiReturn::go('002035')); //已砍过价
+		
+		/* 进行砍价 */
+		$rand = explode(',', $infoGoods['rand']);
+		if(count($rand)!=2)
+			$this->json_echo(apiReturn::go('002036')); //活动配置错误
+		//已砍价金额
+		$queryPrice         = new IQuery('activity_bargain_user');
+		$queryPrice->where  = 'pid='.$infoGoods['id'].' AND byuser='.$user_id;
+		$queryPrice->fields = 'SUM(`money`) AS exempt_price';
+		$rel                = $queryPrice->find();
+		$exempt_price       = empty($rel[0]['exempt_price']) ? 0 : $rel[0]['exempt_price'];
+		$possible_price     = floor($infoGoods['sell_price']-$infoGoods['min_price']-$exempt_price);
+		$possible_price     = $possible_price<0 ? 0 : $possible_price;
+		$rand[0]            = $possible_price<$rand[0] ? $possible_price : $rand[0];
+		$rand[1]            = $possible_price<$rand[1] ? $possible_price : $rand[1];
+		$money              = $possible_price<=0 ? 0.1 : rand($rand[0], $rand[1]);
+		//写入
+		$modelBargain->setData(array(
+			'pid'         => $infoGoods['id'],
+			'byuser'      => $param['user_id'],
+			'touser'      => $user_id,
+			'money'       => $money,
+			'create_time' => time(),
+		));
+		$rel = $modelBargain->add();
+		$this->json_echo(apiReturn::go($rel>0 ? '0' : '002037'));
 	}
 	
 	/**
