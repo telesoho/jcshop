@@ -95,7 +95,7 @@ ul li{
     height:0.7rem;
     line-height:0.35rem;
     margin-top:0.1rem;
-    font-size:0.26rem;
+    font-size:0.24rem;
     color:#bbbbbb;
 }
 .brand_product .goodsbox {
@@ -111,6 +111,7 @@ ul li{
     position:absolute;
     overflow-x: scroll;
     overflow-y: hidden;
+    font-size: 0.24rem;
 }
 .brand_product .goodsbox .mark .goos{
     display: -webkit-box;
@@ -118,7 +119,7 @@ ul li{
     -webkit-justify-content: flex-start;
     overflow-x: scroll;
     overflow-y: hidden;
-
+	 font-size: 0.24rem;
     height:3rem;
 }
 .brand_product .goodsbox .mark .goos .item{
