@@ -969,6 +969,51 @@ class Apic extends IController{
 	}
 	
 	/**
+	 * 秒杀商品列表
+	 */
+	public function activity_speed_list(){
+		/* 接收参数 */
+		$param = array(
+			'type'    => IFilter::act(IReq::get('type'), 'int'), //活动类型[1限时购-2秒杀]，必填
+			'time_id' => IFilter::act(IReq::get('time_id'), 'int'), //活动类型[1限时购-2秒杀]，必填
+			'page'    => IFilter::act(IReq::get('page'), 'int'), //分页编号
+		);
+		/* 秒杀时间段列表 */
+		$time               = strtotime(date('Y-m-d', time()));
+		$querySpeed         = new IQuery('activity_speed');
+		$querySpeed->where  = 'type='.$param['type'].' AND status=1 AND start_time<='.$time.' AND end_time>='.($time+(60*60*24));
+		$querySpeed->fields = 'id,start_time,end_time';
+		$querySpeed->order  = 'start_time ASC';
+		$querySpeed->limit  = 3;
+		$listSpeed          = $querySpeed->find();
+		if(!empty($listSpeed)){
+			foreach($listSpeed as $k => $v){
+				if(($k==0 && time()<$v['start_time']) || time()>$v['start_time']){
+					$param['time_id'] = empty($param['time_id']) ? $v['id'] : $param['time_id'];
+					break;
+				}
+			}
+		}
+		/* 秒杀商品列表 */
+		$queryGoods           = new IQuery('activity_speed_access AS m');
+		$queryGoods->join     = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
+		$queryGoods->fields   = 'g.id,g.name,g.store_nums,m.nums,m.sell_price';
+		$queryGoods->where    = 'g.is_del=0 AND pid='.$param['time_id'];
+		$queryGoods->page     = $param['page']<1 ? 1 : $param['page'];
+		$queryGoods->pagesize = 10;
+		$listGoods            = $queryGoods->find();
+		if($param['page']>$queryGoods->getTotalPage()) $listGoods = array();
+		if(!empty($listGoods)){
+			foreach($listGoods as $k => $v){
+				$listGoods[$k]['img']        = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
+				$listGoods[$k]['store_nums'] = $v['nums']<$v['store_nums'] ? $v['nums'] : $v['store_nums'];
+			}
+		}
+		/* 数据返回 */
+		$this->json_echo(apiReturn::go('0', array('time_list' => $listSpeed, 'goods_list' => $listGoods)));
+	}
+	
+	/**
 	 * 圣诞节活动首页
 	 */
 	public function christmas_index(){
