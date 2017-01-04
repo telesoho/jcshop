@@ -111,6 +111,7 @@ class wechat extends pluginBase
 
     //处理微信服务器的请求接口
     public function response(){
+    	common::dblog(array($_GET,file_get_contents("php://input")));
     	$code  = IReq::get('code');
     	$state = IReq::get('state');
 	
@@ -118,6 +119,7 @@ class wechat extends pluginBase
     	if($code && $state){
 			$result = $this->getOauthAccessToken($code);
 			if($result){
+				echo '';
 				//保存openid为其他wechat应用使用
 				$this->setOpenId($result['openid']);
 
@@ -576,7 +578,7 @@ class wechat extends pluginBase
 	 * @param string $postObj 微信消息Array形式
 	 */
 	public function msgCatch($postObj){
-		common::dblog($postObj);
+//		common::dblog($postObj);
 		if (!isset($postObj->Content) || empty($postObj->Content)) exit('');
 		switch($postObj->MsgType){
 			//自动回复
@@ -623,9 +625,7 @@ class wechat extends pluginBase
 						break;
 				}
 			}
-				echo '';
 		}
-		echo '';
 	}
 
 	/**
