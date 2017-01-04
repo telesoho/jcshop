@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" type="text/css" href="/views/mobile/css/shop_shelves.css?v=<?php echo time(); ?>"/>
+    <title>商品上下架</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div id="Test_container">
+        <form action="" method="post" id="form" v-cloak>
+            <!--隐藏元素用户选择的-->
+            <input type="hidden" v-model="choId" name="choName">
+            <!--头部元素-->
+            <header class="flexbox">
+                <div class="choName" @click="showCate">{{choName}}</div>
+                <div class="brandList hidewrap">
+                    <select name="choBrand" id=""  @change="getSel" v-model="selected">
+                        <option  :value="orignId" >选择品牌</option>
+                        <option v-for="option in brand" :value="option.id">{{option.name}}</option>
+                    </select>
+                </div>
+            </header>
+            <article>
+                <div  class="pay">
+                    <div class="line1">
+                        <label class="payR payR2" for="pay1"><span :style="inputData==1?style1:style2"></span></label>
+                        <input type="radio" name="payWare" id="pay1" v-model="inputData" value="1"><span>上架</span>
+                        <!--<input type="text" name="agio" class="text1" placeholder="代购服务费（单件）" id="input1"><span style="padding-left:0.1rem;">元</span>-->
+                    </div>
+                    <div class="line2">
+                        <label class="payR payR2" for="pay2" ><span :style="inputData==2?style1:style2"></span></label>
+                        <input type="radio" name="payWare" id="pay2" v-model="inputData" value="2"><span>下架</span>
+                        <!--<input type="number" name="proportion" class="text1" placeholder="零售价比例" id="input2"><span style="padding-left:0.1rem;">%</span>-->
+                    </div>

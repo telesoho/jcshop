@@ -1,0 +1,180 @@
+#container_info .header{
+    width:100%;
+    height:0.9rem;
+    background:#ff4aa0;
+    line-height:0.9rem;
+    position:relative;
+}
+#container_info .header .back{
+    position:absolute;
+    left:0;
+    color:#fff;
+    font-size:0.26rem;
+    margin-left:0.2rem;
+}
+#container_info .header .title{
+    display: inline-block;
+    width:100%;
+    text-align:center;
+    color:#fff;
+    font-size:0.3rem;
+}
+#container_info .choMonth{
+    margin-top:0.2rem;
+    background:#eee;
+    font-size: 0.34rem;
+    height:0.8rem;
+    width:100%;
+    color: #4a4848;
+    display: -webkit-flex;
+    -webkit-justify-content: space-between;
+    -webkit-align-items: center;
+}
+#container_info .choMonth div{
+    font-size:0.28rem;
+    color:#3d4225;
+}
+#container_info .choMonth .left{
+    margin-left:0.2rem;
+    color:#bbb;
+}
+#container_info .choMonth .right{
+    margin-right:0.2rem;
+}
+/*#container_info>.top{
+    padding:0.2rem;
+    border:1px solid #eee;
+}*/
+#container_info .thead{
+    margin-top:0.1rem;
+    background:#eef;
+    padding:0 0.2rem 0 0.2rem;
+    width:100%;
+    height: 1.64rem;
+    display:-webkit-flex;
+    -webkit-flex-wrap:nowrap ;
+    -webkit-justify-content: space-between;
+    -webkit-align-items: center;
+    border-bottom:1px solid #eee;
+}
+#container_info .thead .name,#container_info .thead .pro{
+    position:relative;
+    text-align: center;
+    color:#3d4225;
+    fon-size:0.26rem;
+    /*top:-0.05rem;*/
+    width:97%;
+}
+#container_info .thead>div{
+    -webkit-flex:1;
+}
+.showmerchant .merchantImg img{
+    width:1.17rem;
+    height:1.17rem;
+    /*border:1px solid #fff;*/
+    border-radius: 50%;
+    -webkit-border-radius:50%rem;
+}
+#container_info .orderList .box{
+    padding:0 0.2rem 0 0.2rem;
+    height:0.8rem;
+    line-height:0.8rem;
+    border-bottom:1px solid #eee;
+}
+#container_info .orderList .box .left{
+    color:#bbb;
+}
+#container_info .orderList .box .right{
+    color:#3d4225;
+}
+#container_info .goodsList .content{
+    background:#fff;
+    display: -webkit-flex;
+    -webkit-justify-content: flex-start;
+    border-bottom:1px solid #eee;
+}
+#container_info .goodsList .content .left{
+    width:1.86rem;
+    height:1.86rem;
+
+}
+#container_info .goodsList .content .left img{
+    width:1.23rem;
+    height:1.23rem;
+}
+#container_info .goodsList .content .right{
+    position:relative;
+    height:1.76rem;
+}
+#container_info .goodsList .content .right .name{
+    margin-top:0.29rem;
+    width:5rem;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size:0.34rem;
+    color:#585858;
+    line-height:0.36rem;
+    text-align:left;
+}
+#container_info .goodsList .content .right .price{
+    position:absolute;
+    bottom:0.14rem;
+    left:0;
+}
+#container_info .goodsList .content .right .price .sellprice{
+    font-size:0.3rem !important;
+    color:#f3026a !important;
+}
+#container_info .goodsList .content .right .price .num{
+    font-size:0.28rem;
+    color:#bbbbbb;
+    padding-left:0.38rem;
+}
+#container_info .goods .total{
+    padding-left:0.2rem;
+    font-size:0.26rem;
+    background:#fff;
+    height:0.9rem;
+    line-height:0.9rem;
+}
+/*店铺详情页面*/
+#container_info .merchant1 .box{
+    padding:0 0.2rem 0 0.2rem;
+    height:0.9rem;
+    line-height:0.9rem;
+    background:#eef;
+    border-bottom:1px solid #ddd;
+ }
+ #jine{
+ 	width: 7rem;
+ 	height: 2.41rem;
+ 	/*margin: 0.1rem auto 0.5rem;*/
+ 	position: relative;
+ }
+#shouy{
+	margin-top:0.5rem ;
+	position: absolute;
+	display: -webkit-flex;
+	padding-left:0.24rem ;
+	color: #fff;
+	font-size:0.28rem ;
+}
+#shouy .zong{
+	width:3rem;
+	margin-left:0.5rem ;
+	border-right:1px solid #eee ;
+}
+#shouy .shou{
+	margin-left: 0.5rem;
+	width: 3rem;
+}
+.profit{
+	font-size:0.34rem;
+	color: #f45f5f;
+}
+#month_content{
+	margin-left:-1rem ;
+}
