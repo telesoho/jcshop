@@ -2785,7 +2785,8 @@ class Apic extends IController{
 //			'code' => IFilter::act(IReq::get('code')),
 //		);
 		$wechat = new wechat();
-		$wechat->login('orEYdw8EQOtnVFxqSyTRuNe_-dyc');
+		$wechat->login('orEYdw67mbwIn8_cvNS1i8gTGpNo');
+		$user  = $this->user['user_id'];
 	}
 	
 	/**
