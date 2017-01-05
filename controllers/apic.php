@@ -2782,7 +2782,7 @@ class Apic extends IController{
 	 */
 	public function wechat_cx_login(){
 		$param = array(
-			'code' => IFilter::act(IReq::get('code'), 'int'),
+			'code' => IFilter::act(IReq::get('code')),
 		);
 		common::dblog($param['code']);
 		$wechat = new wechat();
