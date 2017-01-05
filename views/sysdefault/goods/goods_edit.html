@@ -281,7 +281,9 @@
 								<option value="{$item['id']}">{$item['name']}</option>
 								{/query}
 							</select>
+							搜索：<input class="small" type="text" value="" onchange="page.searchBrand(this);"/>
 						</td>
+
 					</tr>
 					<tr>
 						<th>产品相册：</th>
@@ -892,6 +894,14 @@ var page = {
 		var thisObj 	= $(obj);
 		thisObj.val()=='2' ? $('#dataType').show() : $('#dataType').hide();
 	},
+	//品牌搜索
+	searchBrand 		: function (obj) {
+		console.log('11');
+		var thisObj 	= $(obj);
+		$.each(thisObj.prev('select').find('option'),function (k,v) {
+			if($(v).text() == thisObj.val()) $(v).prop('selected',true);
+		});
+	}
 
 }
 
