@@ -73,9 +73,7 @@ class wechat extends pluginBase
 	 */
 	public function loginCx($code){
 		$rel  = $this->getOauthAccessTokenCx($code);
-		common::dblog(array(11,$rel));
 		$unId = $this->bindUser($rel);
-		common::dblog(array(22,$unId));
 		$this->login($unId);
 	}
 
@@ -394,7 +392,9 @@ class wechat extends pluginBase
 		}
 
 		//获取微信用户信息
+		common::dblog(array(123,$oauthAccess));
 		$wechatUser = $this->getUserInfo($oauthAccess);
+		common::dblog(array(987,$wechatUser));
 		if(isset($wechatUser['errmsg'])){
 			throw new IException("获取用户信息失败！".$wechatUser['errmsg']);
 		}
