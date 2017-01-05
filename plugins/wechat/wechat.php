@@ -25,6 +25,12 @@ class wechat extends pluginBase
 		'wechat_AutoLogin' => '',
 		'wechat_jsApiSDK'  => '',
 	);
+	
+	//小程序配置
+	public $config_cx    = array(
+		'appId'     => 'wx1c0deb97f2677b84',
+		'appSecret' => 'abd4cce3ce6895da29144874e0ad92ca',
+	);
 
 	//令牌存活时间
 	private static $accessTokenTime = 5000;
@@ -60,6 +66,15 @@ class wechat extends pluginBase
 	 */
 	public function setConfig(){
 		return $this->initConfig();
+	}
+	
+	/**
+	 * 小程序登陆
+	 */
+	public function loginCx($code){
+		$rel  = $this->getOauthAccessTokenCx($code);
+		$unId = $this->bindUser($rel);
+		$this->login($unId);
 	}
 
 	/**
@@ -213,6 +228,30 @@ class wechat extends pluginBase
 			'grant_type=authorization_code',
 		);
 		$apiUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?".join("&",$urlparam);
+		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
+		$result = JSON::decode($json);
+		if(!isset($result['openid'])){
+			throw new IException("根据code【".$code."】值未获取到open_id码:{$json}");
+		}
+		return $result;
+	}
+	
+	/**
+	 * 小程序，根据code获取oauth登录令牌和openid
+	 * @param string $code
+	 */
+	private function getOauthAccessTokenCx($code){
+		if(!IValidate::check("^[\w\-]+$",$code)){
+			die("CODE码非法");
+		}
+		
+		$urlparam = array(
+			'appid='.$this->config_cx['appId'],
+			'secret='.$this->config_cx['appSecret'],
+			'js_code='.$code,
+			'grant_type=authorization_code',
+		);
+		$apiUrl = "https://api.weixin.qq.com/sns/jscode2session?".join("&",$urlparam);
 		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
 		$result = JSON::decode($json);
 		if(!isset($result['openid'])){
