@@ -73,7 +73,9 @@ class wechat extends pluginBase
 	 */
 	public function loginCx($code){
 		$rel  = $this->getOauthAccessTokenCx($code);
+		common::dblog(array(11,$rel));
 		$unId = $this->bindUser($rel);
+		common::dblog(array(22,$unId));
 		$this->login($unId);
 	}
 

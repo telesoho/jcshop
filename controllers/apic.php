@@ -2780,10 +2780,11 @@ class Apic extends IController{
 	/**
 	 *
 	 */
-	public function get_wechat_info(){
+	public function wechat_cx_login(){
 		$param = array(
 			'code' => IFilter::act(IReq::get('code'), 'int'),
 		);
+		common::dblog($param['code']);
 		$wechat = new wechat();
 		$wechat->loginCx($param['code']);
 	}
