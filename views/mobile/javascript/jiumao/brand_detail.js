@@ -42,7 +42,7 @@ var em = new Vue({
 		else{
 			getRelateArticle(statusOrder,self);
 		}
-		getRelateArticle(statusOrder,self)
+//		getRelateArticle(statusOrder,self)
 	},
 	updated:function() {
 		document.title = this.info.name;
