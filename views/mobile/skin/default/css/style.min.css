@@ -181,3 +181,55 @@ sit_products.css更改
     font-size:0.32rem;
     color:#ff4aa0;
 }
+#cart{
+	width: 100%;
+	margin-top:0.3rem ;
+	display: -webkit-flex;
+	justify-content: space-around;
+}
+#cart .left_cart{
+	border: 1px solid #999;
+	width: 45%;
+	height: 3rem;
+}
+#cart .left_cart div{
+	width: 80%;
+	height: 80%;
+	margin: 0.1rem auto 0;
+	display: -webkit-flex;
+	-webkit-justify-content: center;
+	-webkit-align-items: center;
+}
+#cart .left_cart p{
+	width: 100%;
+	text-align: center;
+	color: #6d6d3d;
+}
+#cart .right_cart{
+	border: 1px solid #999;
+	width: 45%;
+	height: 3rem;
+}
+#cart .right_cart div{
+	width: 80%;
+	height: 80%;
+	margin: 0.1rem auto 0;
+	display: -webkit-flex;
+	-webkit-justify-content: center;
+	-webkit-align-items: center;
+}
+#cart .right_cart p{
+	width: 100%;
+	text-align: center;
+	color: #6d6d3d;
+}
+.title span:nth-child(1){
+	font-weight: bold;
+    font-size: 0.26rem;
+    color: #3d4225;
+    margin-left: 0.28rem;
+}
+.title span:nth-child(2){
+	font-size: 0.2rem;
+    color: #f3026a;
+    margin-left: 0.17rem;}
