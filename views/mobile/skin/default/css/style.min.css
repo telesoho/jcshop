@@ -54,7 +54,7 @@ sit_products.css更改
 编辑地址样式
 **/
 .row_b_t{}
-#addressNew .title{height:0.6rem;line-height:0.7rem;font-size:0.28rem;padding:0.1rem 0.1rem;margin-bottom:0.1rem;}
+#addressNew .title{font-size:0.28rem;padding:0.1rem 0.1rem;margin-bottom:0.1rem;}
 .row_margin{margin-top:0.13rem;}
 .mui-input-row input{
     border-left:0;
@@ -222,6 +222,9 @@ sit_products.css更改
 	width: 100%;
 	text-align: center;
 	color: #6d6d3d;
+}
+.title{
+	height: auto;
 }
 .title span:nth-child(1){
 	font-weight: bold;
