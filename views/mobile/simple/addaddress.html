@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,41 +6,41 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>新增收货地址</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css?v=1483685603" />
 </head>
 <body>
-<div id="addAddress">
-    <div id="addressNew">
-        <div class="inputName">
-            <input type="text" class="mui-input-clear" v-model="info.accept_name" placeholder="输入收货人的姓名" id="username" >
-        </div>
-        <div class="inputContent">
-            <input type="number" class="mui-input-clear" v-model="info.mobile" placeholder="输入手机号"  id="userphone" >
-            <input type="text" class="mui-input-clear" v-model="info.text" placeholder="选择城市"  id="usercity" @focus="checkCity" >
-            <input type="text" class="mui-input-clear"v-model="info.address" placeholder="详细收货地址"  id="useraddr" >
-            <input type="text" class="mui-input-clear" v-model="info.zip" placeholder="邮编"  id="useryoubian">
-        </div>
-    </div>
-    <footer>
-        <div id="footer-fixed">
-            <div class="add_newAddrSub">
-                <button id="submitAdd" :disabled="new_dis" class="submitAdd"  @click="submitAdd">保存</button>
-            </div>
-        </div>
-    </footer>
-</div>
-<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/mui.picker.min.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/mui.poppicker.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/city.data-3.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
+   <div id="addAddress">
+       <div id="addressNew">
+           <div class="inputName">
+               <input type="text" class="mui-input-clear" v-model="info.accept_name" placeholder="输入收货人的姓名" id="username" >
+           </div>
+           <div class="inputContent">
+               <input type="number" class="mui-input-clear" v-model="info.mobile" placeholder="输入手机号"  id="userphone" >
+               <input type="text" class="mui-input-clear" v-model="info.text" placeholder="选择城市"  id="usercity" @focus="checkCity" >
+               <input type="text" class="mui-input-clear"v-model="info.address" placeholder="详细收货地址"  id="useraddr" >
+               <input type="text" class="mui-input-clear" v-model="info.zip" placeholder="邮编"  id="useryoubian">
+           </div>
+       </div>
+       <footer>
+           <div id="footer-fixed">
+               <div class="add_newAddrSub">
+                   <button id="submitAdd" :disabled="new_dis" class="submitAdd"  @click="submitAdd">保存</button>
+               </div>
+           </div>
+       </footer>
+   </div>
+<script src="/views/mobile/javascript/jquery.min.js?v=1483685603"></script>
+<script src="/views/mobile/javascript/vue.js?v=1483685603"></script>
+<script src="/views/mobile/javascript/mui.js?v=1483685603"></script>
+<script src="/views/mobile/javascript/mui.picker.min.js?v=1483685603"></script>
+<script src="/views/mobile/javascript/mui.poppicker.js?v=1483685603"></script>
+<script src="/views/mobile/javascript/city.data-3.js?v=1483685603" type="text/javascript" charset="utf-8"></script>
 <script>
 
     //初始化cityPicker
@@ -122,9 +118,9 @@
                     if(statusOrder=="cart2"){
                         document.location.href=getItem('cart2url');
                     }else if(statusOrder1=="cart_order"){
-                        document.location.href="{url:/simple/addresslist}?rev=cart_order1";
+                        document.location.href="/simple/addresslist?rev=cart_order1";
                     }else{
-                        document.location.href="{url:/simple/addresslist}";
+                        document.location.href="/simple/addresslist";
                     }
                 }
             });
@@ -153,4 +149,66 @@
     }
 </script>
 </body>
-</html>
+</html><script type="text/javascript">
+_webUrl = "/_controller_/_action_/_paramKey_/_paramVal_";_themePath = "/views/mobile/";_skinPath = "/views/mobile/skin/default/";
+//创建URL地址
+function creatUrl(param)
+{
+	var urlArray   = [];
+	var _tempArray = param.split("/");
+	for(var index in _tempArray)
+	{
+		if(_tempArray[index])
+		{
+			urlArray.push(_tempArray[index]);
+		}
+	}
+
+	if(urlArray.length >= 2)
+	{
+		var iwebshopUrl = _webUrl.replace("_controller_",urlArray[0]).replace("_action_",urlArray[1]);
+
+		//存在URL参数情况
+		if(urlArray.length >= 4)
+		{
+			iwebshopUrl = iwebshopUrl.replace("_paramKey_",urlArray[2]);
+
+			//卸载原数组中已经拼接的数据
+			urlArray.splice(0,3);
+
+			if(iwebshopUrl.indexOf("?") == -1)
+			{
+				iwebshopUrl = iwebshopUrl.replace("_paramVal_",urlArray.join("/"));
+			}
+			else
+			{
+				var _paramVal_ = "";
+				for(var i in urlArray)
+				{
+					if(i == 0)
+					{
+						_paramVal_ += urlArray[i];
+					}
+					else if(i%2 == 0)
+					{
+						_paramVal_ += "="+urlArray[i];
+					}
+					else
+					{
+						_paramVal_ += "&"+urlArray[i];
+					}
+				}
+				iwebshopUrl = iwebshopUrl.replace("_paramVal_",_paramVal_);
+			}
+		}
+		return iwebshopUrl;
+	}
+	return '';
+}
+
+//切换验证码
+function changeCaptcha()
+{
+	$('#captchaImg').prop('src',creatUrl("site/getCaptcha/random/"+Math.random()));
+}
+</script>
