@@ -31,6 +31,7 @@ class APIGoods{
 		$goods_ratio          = $jmj_config->goods_ratio; //全场折扣率
 		$goods_ratio_original = $jmj_config->goods_ratio_original; //原价显示扣率
 		$goods_ratio_delivery = $jmj_config->goods_ratio_delivery; //商品价格重量比率计算是否包邮
+		$goods_weight_delivery = $jmj_config->goods_weight_delivery; //商品重量大于此数值时不包邮，-1为关闭
 		$goods_ratio          = $goods_ratio>1 || $goods_ratio<=0 ? 1 : $goods_ratio;
 		
 		$user_id     = IWeb::$app->getController()->user['user_id'];
@@ -131,10 +132,17 @@ class APIGoods{
 			//检索
 			foreach($list as $k => $v){
 				$listGoods[$v['id']] = $v; //存商品原数据
-				//是否包邮
-				if($v['weight']/$v['sell_price']>=$goods_ratio_delivery){
-//					$deliveryNo[] = $v['id']; // TODO 暂不处理商品比重包邮
+				/* 是否包邮 */
+				//商品价格和重量比重 TODO 暂不处理商品比重包邮
+//				if($v['weight']/$v['sell_price']>=$goods_ratio_delivery){
+//					$deliveryNo[] = $v['id'];
+//				}
+				//超重不包邮
+				if($goods_weight_delivery!=-1){
+					if($v['weight']==0 || $v['weight']>$goods_weight_delivery)
+						$deliveryNo[] = $v['id'];
 				}
+				
 				//是否参与活动
 				if($v['activity']>0){
 					if($v['start_time']<=time() && $v['end_time']>=time() && $v['status']==1 && $v['ratio']>0 && $v['ratio']<1){

@@ -54,6 +54,12 @@ class IModel
 			$this->tableName = $this->tablePre.$tableName;
 		}
 	}
+	/**
+	 * 执行原生sql
+	 */
+	public function sql($sql){
+		return $this->db->query($sql);
+	}
 
 	/**
 	 * @brief 设置要更新的表数据

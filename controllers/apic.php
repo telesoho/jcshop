@@ -1439,6 +1439,63 @@ class Apic extends IController{
 		/* 结果 */
 		$this->json_echo(apiReturn::go($rel>0 ? '0' : '003004'));
 	}
+	/**
+	 * 订单评论
+	 */
+	public function comment_add(){
+		$id      = IFilter::act(IReq::get('id'), 'int');
+		$content = IFilter::act(IReq::get("contents"));
+		if(!$id || !$content){
+			IError::show(403, "填写完整的评论内容");
+		}
+		
+		if(!isset($this->user['user_id']) || !$this->user['user_id']){
+			IError::show(403, "未登录用户不能评论");
+		}
+		
+		$data = array(
+			'point'        => IFilter::act(IReq::get('point'), 'float'),
+			'contents'     => $content,
+			'status'       => 1,
+			'comment_time' => ITime::getNow("Y-m-d"),
+		);
+		
+		if($data['point']==0){
+			IError::show(403, "请选择分数");
+		}
+		
+		$result = Comment_Class::can_comment($id, $this->user['user_id']);
+		if(is_string($result)){
+			IError::show(403, $result);
+		}
+		
+		$tb_comment = new IModel("comment");
+		$tb_comment->setData($data);
+		$re = $tb_comment->update("id={$id}");
+		
+		if($re){
+			$commentRow = $tb_comment->getObj('id = '.$id);
+			
+			//同步更新goods表,comments,grade
+			$goodsDB = new IModel('goods');
+			$goodsDB->setData(array(
+				'comments' => 'comments + 1',
+				'grade'    => 'grade + '.$commentRow['point'],
+			));
+			$goodsDB->update('id = '.$commentRow['goods_id'], array('grade', 'comments'));
+			
+			//同步更新seller表,comments,grade
+			$sellerDB = new IModel('seller');
+			$sellerDB->setData(array(
+				'comments' => 'comments + 1',
+				'grade'    => 'grade + '.$commentRow['point'],
+			));
+			$sellerDB->update('id = '.$commentRow['seller_id'], array('grade', 'comments'));
+			$this->redirect("/site/comments_list/id/".$commentRow['goods_id']);
+		}else{
+			IError::show(403, "评论失败");
+		}
+	}
 	
 	/**
 	 * ---------------------------------------------------物流---------------------------------------------------*
@@ -2784,6 +2841,9 @@ class Apic extends IController{
 //		$param = array(
 //			'code' => IFilter::act(IReq::get('code')),
 //		);
+		@session_start();
+		$session = session_id();
+		common::dblog($session);
 		$wechat = new wechat();
 		$wechat->login('orEYdw67mbwIn8_cvNS1i8gTGpNo');
 		$user  = $this->user['user_id'];
