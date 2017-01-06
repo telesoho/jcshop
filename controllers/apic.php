@@ -10,6 +10,8 @@ class Apic extends IController{
 	private $securityLogger;
 	
 	function init(){
+		
+		
 		$dateFormat = "Y-m-d h:i:s";
 		$output     = "[%datetime% ".substr(explode(".", explode(" ", microtime())[0])[1], 0, 3)."] ".strtolower(__CLASS__).".php(".__LINE__.") [%level_name%]: %message%\n";
 		$formatter  = new LineFormatter($output, $dateFormat);
@@ -20,6 +22,8 @@ class Apic extends IController{
 		$this->log->pushHandler($stream);
 		//        header("Content-type: application/json");
 	}
+	
+	
 	/**
 	 * ---------------------------------------------------主要页面---------------------------------------------------*
 	 */
@@ -2863,6 +2867,13 @@ class Apic extends IController{
 		}else{
 			return false;
 		}
+	}
+	
+	/**
+	 * @param $data
+	 */
+	public function testa(){
+		var_dump($this->user);
 	}
 	
 	private function json_echo($data){
