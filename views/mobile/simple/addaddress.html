@@ -6,13 +6,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>新增收货地址</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css?v=1483685603" />
 </head>
 <body>
    <div id="addAddress">
@@ -25,7 +25,21 @@
                <input type="text" class="mui-input-clear" v-model="info.text" placeholder="选择城市"  id="usercity" @focus="checkCity" >
                <input type="text" class="mui-input-clear"v-model="info.address" placeholder="详细收货地址"  id="useraddr" >
                <input type="text" class="mui-input-clear" v-model="info.zip" placeholder="邮编"  id="useryoubian">
-           </div>
+               <input type="number" name="" id="" v-model="info.card" placeholder="收货人身份证号" />
+        </div>
+        <div class="title"><span>收货人身份证正反面照片</span><span>请务必保证收货人姓名与身份证姓名一致!</span></div>
+        <div id="cart">
+        	<div class="left_cart">
+        		<div><img src="/views/mobile/skin/default/image/jmj/icon/add.png"/></div>
+        		<p>上传收货人身份正面</p>
+        	</div>
+        	<div class="right_cart">
+        		<div><img src="/views/mobile/skin/default/image/jmj/icon/add.png"/></div>
+        		<p>上传收货人身份反面</p>
+        	</div>
+        </div>
+
+           
        </div>
        <footer>
            <div id="footer-fixed">
@@ -35,12 +49,12 @@
            </div>
        </footer>
    </div>
-<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/mui.picker.min.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/mui.poppicker.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/city.data-3.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
+<script src="/views/mobile/javascript/jquery.min.js?v=1483685603"></script>
+<script src="/views/mobile/javascript/vue.js?v=1483685603"></script>
+<script src="/views/mobile/javascript/mui.js?v=1483685603"></script>
+<script src="/views/mobile/javascript/mui.picker.min.js?v=1483685603"></script>
+<script src="/views/mobile/javascript/mui.poppicker.js?v=1483685603"></script>
+<script src="/views/mobile/javascript/city.data-3.js?v=1483685603" type="text/javascript" charset="utf-8"></script>
 <script>
 
     //初始化cityPicker
@@ -66,12 +80,13 @@
                 mobile:'',
                 text:'',
                 zip:'',
+                card:"",
                 dis:true
             }
         },
         computed:{
             new_dis:function(){
-                if(this.info.accept_name&&this.info.text&&this.info.address&&this.info.mobile){
+                if(this.info.accept_name&&this.info.text&&this.info.address&&this.info.mobile&&this.info.card){
                     this.dis=false;
                 }else{
                     this.dis=true;
@@ -108,22 +123,29 @@
             self.info.mobile='';
             return false;
         }else{
-            mui.ajax('/apic/address_add',{
-                data:self.info,
-                dataType:'json',	// 服务器返回json格式数据
-                type:'post',		// HTTP请求类型
-                timeout:10000,		// 超时时间设置为10秒；
-                success:function(data){
-                    console.log(data);
-                    if(statusOrder=="cart2"){
-                        document.location.href=getItem('cart2url');
-                    }else if(statusOrder1=="cart_order"){
-                        document.location.href="{url:/simple/addresslist}?rev=cart_order1";
-                    }else{
-                        document.location.href="{url:/simple/addresslist}";
-                    }
-                }
-            });
+        	if(!(/^[1-9]{1}[0-9]{14}$|^[1-9]{1}[0-9]{16}([0-9]|[xX])$/.test(self.info.card))){
+        		alert( '输入的身份证不正确');
+        		self.info.card='';
+        		return false;
+        	}else{
+        		 mui.ajax('/apic/address_add',{
+	                data:self.info,
+	                dataType:'json',	// 服务器返回json格式数据
+	                type:'post',		// HTTP请求类型
+	                timeout:10000,		// 超时时间设置为10秒；
+	                success:function(data){
+	                    console.log(data);
+	                    if(statusOrder=="cart2"){
+	                        document.location.href=getItem('cart2url');
+	                    }else if(statusOrder1=="cart_order"){
+	                        document.location.href="/simple/addresslist?rev=cart_order1";
+	                    }else{
+	                        document.location.href="/simple/addresslist";
+	                    }
+	                }
+	            });
+        	}
+           
         }
     }
     //	获取url传递过来的参数
@@ -149,4 +171,66 @@
     }
 </script>
 </body>
-</html>
+</html><script type="text/javascript">
+_webUrl = "/_controller_/_action_/_paramKey_/_paramVal_";_themePath = "/views/mobile/";_skinPath = "/views/mobile/skin/default/";
+//创建URL地址
+function creatUrl(param)
+{
+	var urlArray   = [];
+	var _tempArray = param.split("/");
+	for(var index in _tempArray)
+	{
+		if(_tempArray[index])
+		{
+			urlArray.push(_tempArray[index]);
+		}
+	}
+
+	if(urlArray.length >= 2)
+	{
+		var iwebshopUrl = _webUrl.replace("_controller_",urlArray[0]).replace("_action_",urlArray[1]);
+
+		//存在URL参数情况
+		if(urlArray.length >= 4)
+		{
+			iwebshopUrl = iwebshopUrl.replace("_paramKey_",urlArray[2]);
+
+			//卸载原数组中已经拼接的数据
+			urlArray.splice(0,3);
+
+			if(iwebshopUrl.indexOf("?") == -1)
+			{
+				iwebshopUrl = iwebshopUrl.replace("_paramVal_",urlArray.join("/"));
+			}
+			else
+			{
+				var _paramVal_ = "";
+				for(var i in urlArray)
+				{
+					if(i == 0)
+					{
+						_paramVal_ += urlArray[i];
+					}
+					else if(i%2 == 0)
+					{
+						_paramVal_ += "="+urlArray[i];
+					}
+					else
+					{
+						_paramVal_ += "&"+urlArray[i];
+					}
+				}
+				iwebshopUrl = iwebshopUrl.replace("_paramVal_",_paramVal_);
+			}
+		}
+		return iwebshopUrl;
+	}
+	return '';
+}
+
+//切换验证码
+function changeCaptcha()
+{
+	$('#captchaImg').prop('src',creatUrl("site/getCaptcha/random/"+Math.random()));
+}
+</script>
