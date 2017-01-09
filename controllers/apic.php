@@ -1135,78 +1135,102 @@ class Apic extends IController{
 		}
 		$this->json_echo($addressList);
 	}
-	
-	//添加和编辑地址
-	function address_add(){
-		$id          = IFilter::act(IReq::get('id'), 'int');
-		$accept_name = IFilter::act(IReq::get('accept_name'));
-		$province    = IFilter::act(IReq::get('province'), 'int');
-		$city        = IFilter::act(IReq::get('city'), 'int');
-		$area        = IFilter::act(IReq::get('area'), 'int');
-		$address     = IFilter::act(IReq::get('address'));
-		$zip         = IFilter::act(IReq::get('zip'));
-		//        $telphone    = IFilter::act(IReq::get('telphone'));
-		$mobile  = IFilter::act(IReq::get('mobile'));
-		$user_id = $this->user['user_id'];
-		
-		//编辑默认地址
-		$is_default = IFilter::act(IReq::get('is_default'), 'int');
-		if(isset($is_default) && !empty($is_default)){
-			if(empty($this->user['user_id'])){
-				header("Content-type: application/json");
-				echo json_encode(array('msg' => $this->user['user_id'].'用户未登录'));
-				exit();
-			}
-			
-			$model = new IModel('address');
-			$model->setData(array('is_default' => 0));
-			$model->update("user_id = ".$this->user['user_id']);
-			$model->setData(array('is_default' => '1'));
-			$model->update("id = ".$id." and user_id = ".$this->user['user_id']);
-			die(JSON::encode(array('ret' => true)));
-		}
-		
-		//整合的数据
-		$sqlData = array('user_id'  => $user_id, 'accept_name' => $accept_name, 'zip' => $zip, //			'telphone'    => $telphone,
-						 'province' => $province, 'city' => $city, 'area' => $area, 'address' => $address, 'mobile' => $mobile,);
-		
-		$checkArray = $sqlData;
-		unset($checkArray['zip'], $checkArray['user_id'], $checkArray['area']);
-		//        unset($checkArray['telphone'],$checkArray['zip'],$checkArray['user_id']);
-		foreach($checkArray as $key => $val){
-			if(!$val){
-				$result = array('result' => false, 'msg' => '请仔细填写收货地址');
-				die(JSON::encode($result));
-			}
-		}
-		
-		if($user_id){
-			$model = new IModel('address');
-			if($id){
-				$model->setData($sqlData);
-				$model->update("id = ".$id." and user_id = ".$user_id);
-			}else{
-				$model->setData(array('is_default' => 0));
-				$model->update("user_id = ".$this->user['user_id']);
-				$sqlData['is_default'] = 1;
-				$model->setData($sqlData);
-				$id = $model->add();
-			}
-			$sqlData['id'] = $id;
-		}//访客地址保存
-		else{
-			//            ISafe::set("address",$sqlData);
-		}
-		
-		$areaList                = area::name($province, $city, $area);
-		$areaList_k              = array_keys($areaList);
-		$sqlData['province_val'] = in_array($province, $areaList_k) ? $areaList[$province] : '';
-		$sqlData['city_val']     = in_array($city, $areaList_k) ? $areaList[$city] : '';
-		$sqlData['area_val']     = in_array($area, $areaList_k) ? $areaList[$area] : '';
-		$result                  = array('data' => $sqlData);
-		
-		$this->json_echo($result);
-	}
+
+    //添加和编辑地址
+    function address_add(){
+        $id          = IFilter::act(IReq::get('id'), 'int');
+        $accept_name = IFilter::act(IReq::get('accept_name'));
+        $province    = IFilter::act(IReq::get('province'), 'int');
+        $city        = IFilter::act(IReq::get('city'), 'int');
+        $area        = IFilter::act(IReq::get('area'), 'int');
+        $address     = IFilter::act(IReq::get('address'));
+        $zip         = IFilter::act(IReq::get('zip'));
+        $mobile      = IFilter::act(IReq::get('mobile'));
+        $card        = IFilter::act(IReq::get('card'));
+        $image1      = IFilter::act(IReq::get('aaa'), 'string');
+        $image2      = IFilter::act(IReq::get('bbb'), 'string');
+        $user_id     = $this->user['user_id'];
+
+        //编辑默认地址
+        $is_default = IFilter::act(IReq::get('is_default'), 'int');
+        if(isset($is_default) && !empty($is_default)){
+            if(empty($this->user['user_id'])){
+                header("Content-type: application/json");
+                echo json_encode(array('msg' => $this->user['user_id'].'用户未登录'));
+                exit();
+            }
+
+            $model = new IModel('address');
+            $model->setData(array('is_default' => 0));
+            $model->update("user_id = ".$this->user['user_id']);
+            $model->setData(array('is_default' => '1'));
+            $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
+            die(JSON::encode(array('ret' => true)));
+        }
+
+        //整合的数据
+        $sqlData = array('user_id'  => $user_id, 'accept_name' => $accept_name, 'zip' => $zip, //			'telphone'    => $telphone,
+                         'province' => $province, 'city' => $city, 'area' => $area, 'address' => $address, 'mobile' => $mobile,'sfz_num' => $card);
+
+        $checkArray = $sqlData;
+        unset($checkArray['zip'], $checkArray['user_id'], $checkArray['area']);
+        //        unset($checkArray['telphone'],$checkArray['zip'],$checkArray['user_id']);
+        foreach($checkArray as $key => $val){
+            if(!$val){
+                $result = array('result' => false, 'msg' => '请仔细填写收货地址');
+                die(JSON::encode($result));
+            }
+        }
+
+        if($user_id){
+
+            //            添加收货人的实名信息
+            $access_token = common::get_wechat_access_token();
+            $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
+            $dir .= '/sfz_image';
+            if (!empty($image1)){
+                $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
+                $image1 = common::save_url_image($url1,$dir,1);
+            } else {
+                $image1 = IFilter::act(IReq::get('image_saved1'),'string');
+            }
+            if (!empty($image2)){
+                $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
+                $image2 = common::save_url_image($url2,$dir,2);
+            } else {
+                $image2 = IFilter::act(IReq::get('image_saved2'),'string');
+            }
+
+            $sqlData['sfz_image1'] = $image1;
+            $sqlData['sfz_image2'] = $image2;
+
+
+            $model = new IModel('address');
+            if($id){
+                $model->setData($sqlData);
+                $model->update("id = ".$id." and user_id = ".$user_id);
+            }else{
+                $model->setData(array('is_default' => 0));
+                $model->update("user_id = ".$this->user['user_id']);
+                $sqlData['is_default'] = 1;
+                $model->setData($sqlData);
+                $id = $model->add();
+            }
+            $sqlData['id'] = $id;
+        }//访客地址保存
+        else{
+            //            ISafe::set("address",$sqlData);
+        }
+
+        $areaList                = area::name($province, $city, $area);
+        $areaList_k              = array_keys($areaList);
+        $sqlData['province_val'] = in_array($province, $areaList_k) ? $areaList[$province] : '';
+        $sqlData['city_val']     = in_array($city, $areaList_k) ? $areaList[$city] : '';
+        $sqlData['area_val']     = in_array($area, $areaList_k) ? $areaList[$area] : '';
+        $result                  = array('data' => $sqlData);
+
+        $this->json_echo($result);
+    }
 	
 	/**
 	 * @brief 收货地址删除处理
