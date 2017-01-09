@@ -40,7 +40,7 @@
 .inputName input{border:1px solid #eee;border-left:0;border-right:0;border-radius:0;height:0.92rem;font-size:0.3rem;color:#040404;padding-left:0.16rem;}
 .inputContent{margin-top:0.13rem;border-top:1px solid #eee;}
 .inputContent input{border:1px solid #eee;border-left:0;border-right:0;border-radius:0;border-top:0;height:0.92rem;font-size:0.3rem;color:#040404;padding-left:0.16rem;}
-.add_newAddrSub{width:100%;overflow:hidden;position:absolute; left:0;bottom:0;}
+.add_newAddrSub{width:100%;overflow:hidden;margin-top: 2.5rem}
 .add_newAddrSub .submitAdd{width:100%;background:#f3026a;opacity:1;color:#fff;border:0;border-radius:0;height:1rem;font-size:0.36rem;}
 .add_newAddrSub .submitAdd:disabled{background:#f3026a;opacity:0.5;}
 
