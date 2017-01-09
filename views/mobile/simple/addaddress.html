@@ -25,7 +25,7 @@
                <input type="text" class="mui-input-clear" v-model="info.text" placeholder="选择城市"  id="usercity" @focus="checkCity" >
                <input type="text" class="mui-input-clear"v-model="info.address" placeholder="详细收货地址"  id="useraddr" >
                <input type="text" class="mui-input-clear" v-model="info.zip" placeholder="邮编"  id="useryoubian">
-               <input type="number" name="" id="" v-model="info.card" placeholder="收货人身份证号" />
+               <input type="text" name="" id="" v-model="info.card" placeholder="收货人身份证号" />
         </div>
         <div class="title"><span>收货人身份证正反面照片</span><span>请务必保证收货人姓名与身份证姓名一致!</span></div>
         <div id="cart">
@@ -123,7 +123,9 @@
             self.info.mobile='';
             return false;
         }else{
-        	if(!(/^[1-9]{1}[0-9]{14}$|^[1-9]{1}[0-9]{16}([0-9]|[xX])$/.test(self.info.card))){
+        	  var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+//      	if(!(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(self.info.card))){
+        	if(reg.test(self.info.card) === false){
         		alert( '输入的身份证不正确');
         		self.info.card='';
         		return false;
