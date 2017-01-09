@@ -1383,7 +1383,7 @@ class Simple extends IController
         }
 	    $this->redirect('credit');
     }
-    function saveMedia($url,$dirname){
+    function saveMedia($url,$dirname, $type){
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_NOBODY, 0);    //对body进行输出。
@@ -1398,14 +1398,11 @@ class Simple extends IController
         preg_match('/\w\/(\w+)/i', $media["content_type"], $extmatches);
         $fileExt = $extmatches[1];
         $fileExt = 'jpg';
-        $filename = time().rand(100,999).".{$fileExt}";
-        var_dump(file_exists($dirname));
-        var_dump(file_exists(__DIR__ . '/../../' . $dirname));
+        $filename = time().rand(100,999).$type.".{$fileExt}";
         if(!file_exists($dirname)){
-            echo $dirname;
             mkdir($dirname,0777,true);
         }
-        file_put_contents($dirname.$filename,$media['mediaBody']);
+        file_put_contents($dirname.'/'.$filename,$media['mediaBody']);
         return $dirname.$filename;
     }
     function a(){
