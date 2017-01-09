@@ -6,55 +6,59 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>新增收货地址</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=1483685603" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=1483685603" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=1483685603" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=1483685603" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css?v=1483685603" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css?v=1483685603" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css?v=1483685603" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css?v=<?php echo time(); ?>" />
 </head>
 <body>
-   <div id="addAddress">
-       <div id="addressNew">
-           <div class="inputName">
-               <input type="text" class="mui-input-clear" v-model="info.accept_name" placeholder="输入收货人的姓名" id="username" >
-           </div>
-           <div class="inputContent">
-               <input type="number" class="mui-input-clear" v-model="info.mobile" placeholder="输入手机号"  id="userphone" >
-               <input type="text" class="mui-input-clear" v-model="info.text" placeholder="选择城市"  id="usercity" @focus="checkCity" >
-               <input type="text" class="mui-input-clear"v-model="info.address" placeholder="详细收货地址"  id="useraddr" >
-               <input type="text" class="mui-input-clear" v-model="info.zip" placeholder="邮编"  id="useryoubian">
-               <input type="text" name="" id="" v-model="info.card" placeholder="收货人身份证号" />
+<div id="addAddress">
+    <div id="addressNew">
+        <div class="inputName">
+            <input type="text" class="mui-input-clear" v-model="info.accept_name" placeholder="输入收货人的姓名" id="username" >
+        </div>
+        <div class="inputContent">
+            <input type="number" class="mui-input-clear" v-model="info.mobile" placeholder="输入手机号"  id="userphone" >
+            <input type="text" class="mui-input-clear" v-model="info.text" placeholder="选择城市"  id="usercity" @focus="checkCity" >
+            <input type="text" class="mui-input-clear"v-model="info.address" placeholder="详细收货地址"  id="useraddr" >
+            <input type="text" class="mui-input-clear" v-model="info.zip" placeholder="邮编"  id="useryoubian">
+            <input type="text" name="" id="card" v-model="info.card" placeholder="收货人身份证号" />
         </div>
         <div class="title"><span>收货人身份证正反面照片</span><span>请务必保证收货人姓名与身份证姓名一致!</span></div>
         <div id="cart">
-        	<div class="left_cart">
-        		<div><img src="/views/mobile/skin/default/image/jmj/icon/add.png"/></div>
-        		<p>上传收货人身份正面</p>
-        	</div>
-        	<div class="right_cart">
-        		<div><img src="/views/mobile/skin/default/image/jmj/icon/add.png"/></div>
-        		<p>上传收货人身份反面</p>
-        	</div>
+            <div class="left_cart" @click="upload_image(1)">
+                <div><img id="sfz_image1" src="/views/mobile/skin/default/image/jmj/icon/add.png" style="width: 100%;height: 100%"/></div>
+                <p style="margin-top: 0.1rem; ">上传收货人身份正面</p>
+            </div>
+            <input type="hidden" class="mui-input-clear" v-model="info.aaa" id="aaa">
+            <div class="right_cart" @click="upload_image(2)">
+                <div><img id="sfz_image2" src="/views/mobile/skin/default/image/jmj/icon/add.png" style="width: 100%;height: 100%"/></div>
+                <p style="margin-top: 0.1rem; ">上传收货人身份反面</p>
+            </div>
+            <input type="hidden" class="mui-input-clear" v-model="info.bbb" id="bbb">
         </div>
 
-           
-       </div>
-       <footer>
-           <div id="footer-fixed">
-               <div class="add_newAddrSub">
-                   <button id="submitAdd" :disabled="new_dis" class="submitAdd"  @click="submitAdd">保存</button>
-               </div>
-           </div>
-       </footer>
-   </div>
+
+    </div>
+    <footer>
+        <div id="footer-fixed">
+            <div class="add_newAddrSub">
+                <button id="submitAdd" :disabled="new_dis" class="submitAdd"  @click="submitAdd">保存</button>
+            </div>
+        </div>
+    </footer>
+</div>
 <script src="/views/mobile/javascript/jquery.min.js?v=1483685603"></script>
 <script src="/views/mobile/javascript/vue.js?v=1483685603"></script>
 <script src="/views/mobile/javascript/mui.js?v=1483685603"></script>
 <script src="/views/mobile/javascript/mui.picker.min.js?v=1483685603"></script>
 <script src="/views/mobile/javascript/mui.poppicker.js?v=1483685603"></script>
 <script src="/views/mobile/javascript/city.data-3.js?v=1483685603" type="text/javascript" charset="utf-8"></script>
+{if:common::jssdk()}
+{/if}
 <script>
 
     //初始化cityPicker
@@ -67,7 +71,7 @@
     Request = GetRequest();
     var statusOrder=Request["from"];
     var statusOrder1=Request["rev"];
-
+    wx.ready(function() {})
     var vm=new Vue({
         el:"#addAddress",
         data:{
@@ -81,6 +85,8 @@
                 text:'',
                 zip:'',
                 card:"",
+                aaa:"",
+                bbb:"",
                 dis:true
             }
         },
@@ -113,6 +119,35 @@
             submitAdd: function(){
                 var self=this;
                 subaddr(self);
+            },
+            upload_image:function (num) {
+                var self=this;
+                wx.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                        if(num==1){
+                            $('#sfz_image1').attr('src',localIds[0]);
+                        }else if(num == 2){
+                            $('#sfz_image2').attr('src',localIds[0]);
+                        }
+                        wx.uploadImage({
+                            localId: localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+                            isShowProgressTips: 1, // 默认为1，显示进度提示
+                            success: function (res) {
+                                var serverId = res.serverId; // 返回图片的服务器端ID
+//                        $(obj).next().attr('value',serverId)
+                                if(num==1){
+                                    self.info.aaa = serverId;
+                                }else if(num == 2){
+                                    self.info.bbb = serverId;
+                                }
+                            }
+                        });
+                    }
+                });
             }
         }
     });
@@ -123,31 +158,31 @@
             self.info.mobile='';
             return false;
         }else{
-        	  var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
 //      	if(!(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(self.info.card))){
-        	if(reg.test(self.info.card) === false){
-        		alert( '输入的身份证不正确');
-        		self.info.card='';
-        		return false;
-        	}else{
-        		 mui.ajax('/apic/address_add',{
-	                data:self.info,
-	                dataType:'json',	// 服务器返回json格式数据
-	                type:'post',		// HTTP请求类型
-	                timeout:10000,		// 超时时间设置为10秒；
-	                success:function(data){
-	                    console.log(data);
-	                    if(statusOrder=="cart2"){
-	                        document.location.href=getItem('cart2url');
-	                    }else if(statusOrder1=="cart_order"){
-	                        document.location.href="/simple/addresslist?rev=cart_order1";
-	                    }else{
-	                        document.location.href="/simple/addresslist";
-	                    }
-	                }
-	            });
-        	}
-           
+            if(reg.test(self.info.card) === false){
+                alert( '输入的身份证不正确');
+                self.info.card='';
+                return false;
+            }else{
+                mui.ajax('/apic/address_add',{
+                    data:self.info,
+                    dataType:'json',	// 服务器返回json格式数据
+                    type:'post',		// HTTP请求类型
+                    timeout:10000,		// 超时时间设置为10秒；
+                    success:function(data){
+                        console.log(data);
+                        if(statusOrder=="cart2"){
+                            document.location.href=getItem('cart2url');
+                        }else if(statusOrder1=="cart_order"){
+                            document.location.href="/simple/addresslist?rev=cart_order1";
+                        }else{
+                            document.location.href="/simple/addresslist";
+                        }
+                    }
+                });
+            }
+
         }
     }
     //	获取url传递过来的参数
@@ -172,67 +207,30 @@
         return JSON.parse(getter);
     }
 </script>
-</body>
-</html><script type="text/javascript">
-_webUrl = "/_controller_/_action_/_paramKey_/_paramVal_";_themePath = "/views/mobile/";_skinPath = "/views/mobile/skin/default/";
-//创建URL地址
-function creatUrl(param)
-{
-	var urlArray   = [];
-	var _tempArray = param.split("/");
-	for(var index in _tempArray)
-	{
-		if(_tempArray[index])
-		{
-			urlArray.push(_tempArray[index]);
-		}
-	}
+{if:common::jssdk()}
+<script>
+    wx.ready(function() {})
+    function upload_image(obj,vm) {
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                $(obj).children('div').children().attr('src',localIds[0]);
+                wx.uploadImage({
+                    localId: localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+//                        $(obj).next().attr('value',serverId)
 
-	if(urlArray.length >= 2)
-	{
-		var iwebshopUrl = _webUrl.replace("_controller_",urlArray[0]).replace("_action_",urlArray[1]);
-
-		//存在URL参数情况
-		if(urlArray.length >= 4)
-		{
-			iwebshopUrl = iwebshopUrl.replace("_paramKey_",urlArray[2]);
-
-			//卸载原数组中已经拼接的数据
-			urlArray.splice(0,3);
-
-			if(iwebshopUrl.indexOf("?") == -1)
-			{
-				iwebshopUrl = iwebshopUrl.replace("_paramVal_",urlArray.join("/"));
-			}
-			else
-			{
-				var _paramVal_ = "";
-				for(var i in urlArray)
-				{
-					if(i == 0)
-					{
-						_paramVal_ += urlArray[i];
-					}
-					else if(i%2 == 0)
-					{
-						_paramVal_ += "="+urlArray[i];
-					}
-					else
-					{
-						_paramVal_ += "&"+urlArray[i];
-					}
-				}
-				iwebshopUrl = iwebshopUrl.replace("_paramVal_",_paramVal_);
-			}
-		}
-		return iwebshopUrl;
-	}
-	return '';
-}
-
-//切换验证码
-function changeCaptcha()
-{
-	$('#captchaImg').prop('src',creatUrl("site/getCaptcha/random/"+Math.random()));
-}
+                    }
+                });
+            }
+        });
+    }
 </script>
+{/if}
+</body>
+</html>
