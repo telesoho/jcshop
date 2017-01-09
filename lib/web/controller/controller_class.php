@@ -99,6 +99,7 @@ class IController extends IControllerBase
 			$allow_time = (new Config('jmj_config'))->token_allow_time; //token过期时间
 			$modelToken = new IModel('user_token');
 			$info       = $modelToken->getObj('token="'.$param['token'].'"');
+			common::dblog(array($allow_time,$info));
 			
 			if(empty($info) || empty($info['play_time']) || $info['play_time']>time() || ($info['play_time']+$allow_time)<time()){
 				exit(json_encode(apiReturn::go('001001'))); //令牌已过期，需重新登陆
