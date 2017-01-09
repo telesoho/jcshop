@@ -11,6 +11,13 @@ class Block extends IController
 	{
 
 	}
+	
+	/**
+	 * 服务器定时任务
+	 */
+	public function autoRun(){
+		common::dblog(array(11,date('m-d H:i:s')));
+	}
 
  	/**
 	 * @brief Ajax获取规格值
