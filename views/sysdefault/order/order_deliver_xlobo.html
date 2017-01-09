@@ -38,13 +38,14 @@
 					<th>商品名称</th>
 					<th>商品价格</th>
 					<th>商品进货价格</th>
+					<th>商品编码</th>
 					<th>购买数量</th>
 					<th onclick="selectAll('sendgoods[]')">选择发货</th>
 				</tr>
 			</thead>
 
 			<tbody>
-				{query:name=order_goods as og join=left join goods as go on go.id eq og.goods_id fields=og.*,go.purchase_price,go.seller_id where=og.order_id eq $order_id}
+				{query:name=order_goods as og join=left join goods as go on go.id eq og.goods_id fields=og.*,go.goods_no,go.purchase_price,go.seller_id where=og.order_id eq $order_id}
 				<tr>
 					<td>
 						{if:$item['seller_id']}
@@ -55,6 +56,7 @@
 					</td>
 					<td>{$item['real_price']}</td>
 					<td>{$item['purchase_price']}</td>
+					<td>{$item['goods_no']}</td>
 					<td>{$item['goods_nums']}</td>
 					<td>
 						{if:$item['is_send'] == 0}
