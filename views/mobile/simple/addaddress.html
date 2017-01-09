@@ -165,22 +165,27 @@
                 self.info.card='';
                 return false;
             }else{
-                mui.ajax('/apic/address_add',{
-                    data:self.info,
-                    dataType:'json',	// 服务器返回json格式数据
-                    type:'post',		// HTTP请求类型
-                    timeout:10000,		// 超时时间设置为10秒；
-                    success:function(data){
-                        console.log(data);
-                        if(statusOrder=="cart2"){
-                            document.location.href=getItem('cart2url');
-                        }else if(statusOrder1=="cart_order"){
-                            document.location.href="/simple/addresslist?rev=cart_order1";
-                        }else{
-                            document.location.href="/simple/addresslist";
-                        }
-                    }
-                });
+            	if(self.info.aaa=="" || self.info.bbb==""){
+            		alert( '请上传身份证正反面照片');
+            		 return false;
+            	}else{
+            		mui.ajax('/apic/address_add',{
+	                    data:self.info,
+	                    dataType:'json',	// 服务器返回json格式数据
+	                    type:'post',		// HTTP请求类型
+	                    timeout:10000,		// 超时时间设置为10秒；
+	                    success:function(data){
+	                        console.log(data);
+	                        if(statusOrder=="cart2"){
+	                            document.location.href=getItem('cart2url');
+	                        }else if(statusOrder1=="cart_order"){
+	                            document.location.href="/simple/addresslist?rev=cart_order1";
+	                        }else{
+	                            document.location.href="/simple/addresslist";
+	                        }
+	                    }
+	                });
+            	}   
             }
 
         }
