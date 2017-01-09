@@ -86,20 +86,16 @@
 </section>
 
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.picker.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.poppicker.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/city.data-3.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 <script>
     var cityPicker3;
-    cityPicker3 = new mui.PopPicker({
-        layer: 3
-    });
     var Request = new Object();
     Request = GetRequest();
     var statusOrder=Request["rev"];
-    console.log(statusOrder);
     //	模拟高亮画面
     var submitaddr1,pro,cit,are;
     var vm= new Vue({
@@ -162,7 +158,9 @@
     $(window).load(function(){
         //    跳转到新增收货地址页面
         //    三级联动
-
+        cityPicker3 = new mui.PopPicker({
+            layer: 3
+        });
 //        设置如果订单页面进入回退到订单页面，个人中心就回退到个人中心页面
         pushHistory();
         window.addEventListener("popstate", function(e) {
@@ -180,6 +178,7 @@
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒；
             success:function(data){
+                console.log(data);
                 self.showmessage=true;
                 self.info=data;
             }
@@ -204,7 +203,7 @@
     function changeAddr(item){
         if(!(/^1[34578]\d{9}$/.test(item.mob))){
             alert( '请输出正确的电话号码');
-            let mobile=document.getElementById(item.mobileId);
+            var mobile=document.getElementById(item.mobileId);
             mobile.value=item.mobile;
             mobile.focus();
             return false;

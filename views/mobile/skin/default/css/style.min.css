@@ -59,8 +59,9 @@ sit_products.css更改
 .mui-input-row input{
     border-left:0;
     border-right:0;
-    border-bottom:1px solid #bbb;
-    border-radius:0;
+    /*border-bottom:1px solid #bbb;*/
+    margin-bottom: 0.1rem;
+    border-radius:0.2rem;
     height:0.92rem;
     color:#040404;
     font-size:0.3rem;
