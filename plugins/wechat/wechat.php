@@ -654,7 +654,8 @@ class wechat extends pluginBase
 							$this->imageReplay($fortune[rand(0,22)]);
 							break;
 						default:
-							$this->textReplay('喵～有什么问题添加九猫客服微信：jiumaojia001 告诉我吧');
+							$this->textReplay('喵～谈天说地找组织、进VIP群享优惠→请添加九猫微信：jiumaojia001 
+喵~订单问题及售后服务→请添加客服微信：jiumaojia006');
 					}
 				}
 				switch($info['type']){
