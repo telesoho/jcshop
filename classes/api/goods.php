@@ -132,17 +132,10 @@ class APIGoods{
 			//检索
 			foreach($list as $k => $v){
 				$listGoods[$v['id']] = $v; //存商品原数据
-				/* 是否包邮 */
-				//商品价格和重量比重 TODO 暂不处理商品比重包邮
-//				if($v['weight']/$v['sell_price']>=$goods_ratio_delivery){
-//					$deliveryNo[] = $v['id'];
-//				}
-				//超重不包邮
-				if($goods_weight_delivery!=-1){
-					if($v['weight']==0 || $v['weight']>$goods_weight_delivery)
-						$deliveryNo[] = $v['id'];
+				/* 是否包邮 */ //商品(重量/价格)比重、超过一定重量时包邮
+				if($v['weight']<=0 || ($v['sell_price']/$v['weight']>=$goods_ratio_delivery&&$goods_ratio_delivery!=-1) || ($v['weight']>$goods_weight_delivery&&$goods_weight_delivery!=-1)){
+					$deliveryNo[] = $v['id'];
 				}
-				
 				//是否参与活动
 				if($v['activity']>0){
 					if($v['start_time']<=time() && $v['end_time']>=time() && $v['status']==1 && $v['ratio']>0 && $v['ratio']<1){
