@@ -79,10 +79,43 @@ class IController extends IControllerBase
 	}
 
 	/**
-	 * @brief 初始化controller对象
-	 */
+ * @brief 初始化controller对象
+ */
 	public function init()
 	{
+	}
+	
+	/**
+	 * 运行前的初始化
+	 */
+	public function initRun(){
+		/* 接受参数 */
+		$param = array(
+			'token' => IFilter::act(IReq::get('token')),
+		);
+		
+		if(!empty($param['token'])){
+			//数据库验证
+			$allow_time = (new Config('jmj_config'))->token_allow_time; //token过期时间
+			$modelToken = new IModel('user_token');
+			$info       = $modelToken->getObj('token="'.$param['token'].'"');
+			
+			if(empty($info) || empty($info['play_time']) || $info['play_time']>time() || ($info['play_time']+$allow_time)<time()){
+				exit(json_encode(apiReturn::go('001001'))); //令牌已过期，需重新登陆
+			}
+			//更新操作时间
+			$modelToken->setData(array('play_time' => time(),));
+			$modelToken->update('user_id='.$info['user_id']);
+			
+			$modelUser  = new IModel('user');
+			$infoUser   = $modelUser->getObj('id='.$info['user_id'], 'id,username,password,head_ico');
+			$this->user = array(
+				'username' => $infoUser['username'],
+				'user_pwd' => $infoUser['password'],
+				'user_id'  => $infoUser['id'],
+				'head_ico' => $infoUser['head_ico'],
+			);
+		}
 	}
 
 	/**
@@ -112,9 +145,10 @@ class IController extends IControllerBase
 		IInterceptor::run("onBeforeCreateAction",$this,$actionId);
 		$actionObj = $this->createAction($actionId);
 		IInterceptor::run("onCreateAction",$this,$actionObj);
+		//运行前的初始化
+		$this->initRun();
 		$actionObj->run();
 		IInterceptor::run("onFinishAction",$this,$actionObj);
-
 		//处理缓冲区
 		ob_end_flush();
 	}
