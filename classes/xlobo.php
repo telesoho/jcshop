@@ -52,24 +52,11 @@ class xlobo
         $ret = $curl->post($url, $params);
         if ($ret === false) {
             IError::show_normal('服务器未响应');
-            return ['msg' => '服务器未响应'];
         }
-        if (isset($ret->Succeed) && $ret->Succeed) {
-            return $ret;
-        } else {
-            if (isset($ret->ErrorCode)) switch ($ret->ErrorCode){
-                case 'SystemError':
-                    IError::show_normal($method . ':' . $ret->resourceValue);
-                    break;
-                default:
-                    IError::show_normal($method . ':' . $ret->ErrorInfoList[0]->ErrorDescription);
-            }
-//            var_dump($ret);
-//            if (isset($ret->ErrorCount)) IError::show_normal($method . ':' . $ret->ErrorInfoList[0]->ErrorDescription);
-            if (isset($ret->TotalCount)) return $ret;
-            common::log_write(print_r($ret, true));
-            return;
+        if ($ret->ErrorCode){
+            IError::show_normal($ret->resourceValue);
         }
+        return $ret;
     }
     public static function sign($data){
         $sign = md5(base64_encode(strtolower(self::$SecretKey . json_encode($data) . self::$SecretKey)));
@@ -215,7 +202,11 @@ class xlobo
             'BillCode'     => $billcode,
         );
         $ret = self::requests('xlobo.idcard.add', $data);
-//        $ret = common::http_post_json(self::$ServerUrl . 'xlobo.idcard.add', json_encode($data));
+        var_dump($data);
+        if ($ret->ErrorCount > 0){
+            $info = print_r($ret->ErrorInfoList, true);
+            IError::show_normal($info);
+        }
         return $ret;
     }
 
@@ -281,5 +272,13 @@ class xlobo
         } else {
             return null;
         }
+    }
+    public static function get_goods_store($goods_no){
+        $ret = self::requests('xlobo.fbx.queryinventorybysku', ['SkuNos'=>$goods_no]);
+        if ($ret->ErrorCount > 0){
+            $info = print_r($ret->ErrorInfoList, true);
+            IError::show_normal($info);
+        }
+        return $ret;
     }
 }
