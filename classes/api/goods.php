@@ -133,7 +133,7 @@ class APIGoods{
 			foreach($list as $k => $v){
 				$listGoods[$v['id']] = $v; //存商品原数据
 				/* 是否包邮 */ //商品(重量/价格)比重、超过一定重量时包邮
-				if($v['weight']<=0 || ($v['sell_price']/$v['weight']>=$goods_ratio_delivery&&$goods_ratio_delivery!=-1) || ($v['weight']>$goods_weight_delivery&&$goods_weight_delivery!=-1)){
+				if($v['weight']<=0 || ($v['sell_price']/$v['weight']<=$goods_ratio_delivery&&$goods_ratio_delivery!=-1) || ($v['weight']>$goods_weight_delivery&&$goods_weight_delivery!=-1)){
 					$deliveryNo[] = $v['id'];
 				}
 				//是否参与活动
