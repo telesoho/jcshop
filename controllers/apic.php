@@ -2295,6 +2295,35 @@ class Apic extends IController{
 		}
 		$this->json_echo($resultData);
 	}
+	
+	/**
+	 * 分类列表
+	 */
+	public function category_list(){
+		/* 获取参数 */
+		$param = array(
+			'cat_id' => IFilter::act(IReq::get('cat_id'), 'int'), //分类id
+		);
+		/* 获取数据 */
+		$data = $this->get_cat($param['cat_id']);
+		/* 数据返回 */
+		$this->json_echo(apiReturn::go('0', $data));
+	}
+	function get_cat($pid){
+		$queryCat         = new IQuery('category');
+		$queryCat->where  = 'parent_id='.$pid;
+		$queryCat->fields = 'id,parent_id,name,image';
+		$queryCat->order  = 'sort DESC';
+		$listCat          = $queryCat->find();
+		if(!empty($listCat)){
+			foreach($listCat as $k => $v){
+				$listCat[$k]['list'] = $this->get_cat($v['id']);
+			}
+		}
+		return $listCat;
+	}
+	
+	
 	/**
 	 * ---------------------------------------------------品牌---------------------------------------------------*
 	 */
