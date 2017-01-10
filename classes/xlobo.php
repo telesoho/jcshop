@@ -53,7 +53,7 @@ class xlobo
         if ($ret === false) {
             IError::show_normal('服务器未响应');
         }
-        if ($ret->ErrorCode){
+        if (isset($ret->ErrorCode)){
             IError::show_normal($ret->resourceValue);
         }
         return $ret;
@@ -202,7 +202,6 @@ class xlobo
             'BillCode'     => $billcode,
         );
         $ret = self::requests('xlobo.idcard.add', $data);
-        var_dump($data);
         if ($ret->ErrorCount > 0){
             $info = print_r($ret->ErrorInfoList, true);
             IError::show_normal($info);
