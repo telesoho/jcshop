@@ -1,215 +1,292 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="x5-orientation" content="portrait">
-	<title>九猫大百货</title>
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css?v=<?php echo time(); ?>" />
-</head>
-<body>
-<!--loading页开始-->
-<div id="loading">
-	<div class="spinner">
-		<div class="spinner-container container1">
-			<div class="circle1"></div>
-			<div class="circle2"></div>
-			<div class="circle3"></div>
-			<div class="circle4"></div>
-		</div>
-		<div class="spinner-container container2">
-			<div class="circle1"></div>
-			<div class="circle2"></div>
-			<div class="circle3"></div>
-			<div class="circle4"></div>
-		</div>
-		<div class="spinner-container container3">
-			<div class="circle1"></div>
-			<div class="circle2"></div>
-			<div class="circle3"></div>
-			<div class="circle4"></div>
-		</div>
-	</div>
-</div>
-<!--loading页结束-->
-<!--头部-->
-<section id="siteMap">
-    <search-nav :search="hotWord" :val="null"></search-nav>
-	<!--分类页面-->
-	<section class="box" id="scroll_sitemap" v-if="showMessage">
-		<div class="mui-scroll-wrapper" id="left-scroll" v-cloak>
-			<div class="mui-scroll">
-				<ul id="controlTop">
-					<li :class="state==item1.id?item1.class1:item1.class2" @click="changeSite(item1,key)" v-for="(item1,key) in new_top_info">
-						<div class="content">
-							<div class="flexbox">
-								<img :src="state==item1.id?item1.red:item1.black" alt="" class="icon img-dark icon_first" id="icon_first_<%=Fsite.id%>">
-								<span class="name">{{item1.name}}</span>
-							</div>
-							<span class="bg"></span>
-						</div>
-					</li>
-				</ul>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="x5-orientation" content="portrait">
+		<title>全部分类</title>
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css?v=<?php echo time(); ?>" />
+	</head>
+	<body>
+		<!--loading页开始-->
+		<div id="loading">
+			<div class="spinner">
+				<div class="spinner-container container1">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container2">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container3">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
 			</div>
 		</div>
-		<div class="mui-scroll-wrapper" id="right-scroll" v-if='state==item2.id'  v-for="item2 in new_top_info" v-cloak>
-			<div class="mui-scroll" id="contentTop">
-				<div class="siteid" >
-						<div class="banner" v-if="item2.banner_image">
-							<img :src="item2.banner_image" alt="">
-						</div>
-						<div class="S_classification">
-							<div class="type" v-for="item3 in item2.child">
-								<a :href="item3.url" class="locationA">
-									<div class="img">
-										<img :dataimg="item3.image" alt="" width="1.54rem" height="1.54rem" style=""
-											 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" />
-									</div>
-									<div class="name">
-										{{item3.name}}
-									</div>
-								</a>
-							</div>
-						</div>
-					</div>
-			</div>
+		<!--loading页结束-->
+		<section id="siteMap">
+			
+		    <!--<header id="searchs">
+		    	<input type="text" name="" id="" placeholder="2万多件好货等你带回家" />
+		    	<img src="/views/mobile/skin/default/image/jmj/redesign/pic1.png" style="width: 0.24rem"/>
+		    </header>-->
+		    <div style="background: #b8b8b8;height: 1px;width: 100%;opacity: .3;"></div>
+		    <section id="main" v-cloak>
+		    	<search-nav :search="search" :val="null"></search-nav>
+		    	<footer-nav :state="1"></footer-nav>
+		    	<section id="main-nav">
+		    		<div class="main-nav_left">
+		    			<p @click="choose(0)" :style="chooses == 0?color2:color1">分类</p>
+		    			<img :src="chooses == 0?img1:img2" style="width:0.66rem"/>
+		    		</div>
+		    		<div class="main-nav_right">
+		    			<p @click="choose(1)" :style="chooses==1?color2:color1">品牌</p>
+		    			<img :src="chooses == 1?img1:img2" style="width:0.66rem"/>
+		    		</div>
+		    	</section>
+		    	
+		    	<!--						  分类									-->
+		    	
+		    	
+		    	<section id="main_content" v-if="chooses_show">
+		    		<div class="fl_list" v-for="(item,key) in info" :name = "item.move_states" :id="key+1">
+		    			<div @click="show_hide(item,key)" >
+		    				<!--<img :src="item.image" style="width: 100%;"/>-->
+		    				<img src="/views/mobile/skin/default/image/jmj/redesign/ 5.png" style="width: 100%;"/>
+		    			</div>
+		    			<div class="public_main active_show" v-if="item.state">
+		    				<div v-for="(item2,key) in item.list">
+		    					<h1 @click="two_title(item2)"><img :src="item2.image" style="width: 0.6rem;"/><!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyao2.png" style="width: 0.15rem;"/>-->{{item2.name}}</h1>
+		    					<ul v-if="item2.state2">
+			    					<li v-for="(item3,key) in item2.list"><span @click="poducos(item3.id)">
+			    						<!--<img :src="item3.image" width="1.4rem"/>-->
+			    						<img :src="item3.image" width="1.4rem"/>
+			    						<p>{{item3.name}}</p>
+			    					</span></li>
+			    				</ul>
+		    				</div>
+		    			</div>
+		    		</div>
+		    	</section>
+ 		
+		   		
+		   		<!--						  品牌									-->
+		   		
+		   		<div id="main_brand" style="color: #000;" v-if="chooses_show  == false">
+		   			<div class="brand1" v-for="item in info_brand">
+		    			<div @click="show_brand(1)">
+		    				<img src="/views/mobile/skin/default/image/jmj/redesign/brand_2.png" style="width: 100%;"/>
+		    			</div>
+		    			<div class="brand_list" >
+		    				<ul class="brand_list_ul">
+		    					<li @click="brand_shop(item2.id)" v-for="item2 in item.list" :name="item2.name">
+		    						<img src="/views/mobile/skin/default/image/jmj/redesign/tu1.png" style="width: 2.4rem;"/>
+		    					</li>
+		    				</ul>
+		    			</div>
+		    		</div>
+		    		<!--						全部品牌								-->
+		    		<div id="brand_line">
+		    			<div class="brand_top">全部品牌</div>
+		    			<div class="brand_bottom" v-for="item_brand in info_brand_all">
+		    				<h1>{{item_brand.name}}</h1>
+		    				<div class="brand_line_li">
+		    					<ul>
+		    						<li @click="brand_shop(item_brand2.id)" v-for="item_brand2 in item_brand.list" :name="item_brand2.name">
+		    							<!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyong.png" style="width: 1.6rem;"/>-->
+		    							<img :src="item_brand2.logo" style="width: 1.6rem;"/>
+		    						</li>
+		    					</ul>
+		    				</div>
+		    			</div>
+		    		</div>
+		   		</div>
+		    </section>
+			
+		</section>
+		<!--分类页面-->
+		<div class="fix-toTop hide" @click="fixToTop">
+	        <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt=""  />
+	    </div>
+	    
+		<div id="" style="height: 1.5rem;background: #f5f5f5;">
+			
 		</div>
-	</section>
-
-
-	<footer-nav :state="1"></footer-nav>
-</section>
-<!--模态框-->
-
-<!--<span class="mui-icon-extra mui-icon-extra-top" id="pagetop"></span>-->
-
-<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-<!--搜索组件引入-->
-<script src="/views/mobile/components/search_nav.js?v=<?php echo time(); ?>"></script>
-<!--//底部导航样式的引入-->
-<script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
-
-<script>
-		var vm=new Vue({
-			el:'#siteMap',
-			data:{
-				showMessage:false,
-				hotWord:[],
-				info:[],
-				state:''
-			},
-			computed:{
-				new_top_info: function(){
-					this.info.map(function(item){
-						item.red=item.image.split(",")[0];
-						item.black=item.image.split(",")[1];
-						item.class1="controlItem active";
-						item.class2="controlItem";
-						item.child.map(function(itemList){
-							itemList.url="/site/category_third/id/"+itemList.id+"/title/"+itemList.name;
-						})
-					});
-					return this.info;
-				}
-			},
-			mounted:function(){
-				var self=this;
-				hotSearth1(self);
-				getSitemapInfo(self);
-			},
-			updated: function(){
-				mui('.mui-scroll-wrapper').scroll();
-				lazyload.init({
-					anim:false,
-					selectorName:".samLazyImg"
-				});
-			},
-			methods:{
-				changeSite:function(item,num){
-					pushSession("siteMapState",item.id);
-					this.state=item.id;
-					mui('#right-scroll').scroll().scrollTo(0,0,100);
-					if(num<6){
-						mui('#left-scroll').scroll().scrollTo(0,0,100);
-					}
-					if(num>=6){
-						mui('#left-scroll').scroll().scrollToBottom();
-					}
-				}
-			}
-		})
-	//页面加载动画的调用
-	$(window).load(function(){
-		$("#loading").fadeOut(300);
-		var temp=getItem("placeHolder");
-//		document.getElementById("search").placeholder=temp+"件商品等你来搜"
-		document.getElementById("search").placeholder = "圣诞神秘大礼等你来拿"
-		mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
-
-	})
+	</body>
 	
-	//分类获取数据搜索
-	function hotSearth1(self){
-		mui.ajax('/apic/search_words',{
-			dataType:'json',//服务器返回json格式数据
-			type:'get',//HTTP请求类型
-			timeout:10000,//超时时间设置为10秒；
-			success:function(data){
-				self.hotWord=data;
-			}
-		});
-	}
-	 //分类页面接口
+	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+	<!--搜索组件引入-->
+	<script src="/views/mobile/components/search_nav.js?v=<?php echo time(); ?>"></script>
+	<!--//底部导航样式的引入-->
+	<script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
+	<!--<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>-->
+	
+	<script>
+			
+			var vm=new Vue({
+				el:'#main',
+				data:{
+					color1:"color:#949494 ;",
+					color2:"color:#ff5959 ;", // ed
+					img1:"/views/mobile/skin/default/image/jmj/redesign/img2.png",
+					img2:"",
+					chooses:0,   //分类和品牌切换
+					chooses_show:true,
+					search:[],
+					info:[],
+					info_brand:[],
+					info_brand_all:[]
+				},
+				computed:{
+					one_title:function(){
+						return this.info;
+					}
+				},
+				mounted:function(){
+					var self=this;
+					getSitemapInfo(self);
+					brand_lista(self);
+				},
+				updated: function(){
+					removeSessionItem("pinpai_infolist");
+    					removeSessionItem("pinpai_page");
+				},
+				methods:{
+					choose:function(num){
+						this.chooses = num;
+						if(num == 0){
+							this.chooses_show = true;
+						}else if(num == 1){
+							this.chooses_show = false;
+						}
+					},
+					two_title:function(ids){
+						ids.state2 = !ids.state2
+						console.log(ids)
+					},
+					show_hide:function(item,key){
+						item.state=!item.state;
+//						$('#'+(key+1)+'').scroll()
+						if(item.move_states == true){
+							
+						}
+						
+					},
+					show_brand:function(brand_num){
+
+					},
+					
+					poducos:function(id){
+						removeSessionItem("goodsinfo");
+						removeSessionItem("goodspage");
+						window.location.href="/site/goods_list?id="+id;
+					},
+					brand_shop:function(id_brand){
+						
+						removeSessionItem("pinpai_infolist");
+    					removeSessionItem("pinpai_page");
+						window.location.href = "/site/brand_detail?id="+id_brand;
+					}
+				}
+			})
+		//页面加载动画的调用
+		$(window).load(function(){
+			$("#loading").fadeOut(300);
+			var temp=getItem("placeHolder");
+	//		document.getElementById("search").placeholder=temp+"件商品等你来搜"
+//			document.getElementById("search").placeholder = "圣诞神秘大礼等你来拿"
+			mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
+	
+		})
+		
+		//分类获取数据搜索
+		function hotSearth1(self){
+			mui.ajax('/apic/search_words',{
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				success:function(data){
+					self.hotWord=data;
+				}
+			});
+		}
+		 //分类页面接口
 		function getSitemapInfo(self){
-			mui.ajax('/apic/category_top',{
+			mui.ajax('/apic/category_list',{
 				dataType:'json',
 				type:'get',
 				timeout:10000,
 				success:function(data){
-					self.showMessage=true;
-					self.info=data;
-					self.state=getSession("siteMapState")?getSession("siteMapState"):data[0].id;
-					console.log(data);
-
-//					var html = template('controlTopTemp',dat);
-//					document.getElementById("controlTop").innerHTML=html;
-//					var html2 = template('contentToptemp',dat);
-//					document.getElementById("contentTop").innerHTML=html2;
+						console.log(data.data);
+					
+					data.data.map(function(items){
+						items.state=false;
+						items.move_states = false;
+						items.list.map(function(items2){
+							items2.state2=false;
+						})
+						data.data[0].list[0].state2=true;
+						data.data[0].state=true;
+						data.data[0].move_states=true;
+						self.info.push(items);
+					})
+					
+					
+					
 				}
 			});
 		}
-</script>
+		// 品牌 页面 接口
+		function brand_lista(self){
+			mui.ajax('/apic/brand_list_index',{
+				dataType:'json',
+				type:'get',
+				timeout:10000,
+				success:function(data){
+					console.log(data.data.cat);
+					data.data.cat.map(function(items){
+						self.info_brand.push(items);	
+					})
+					data.data.all.map(function(items){
+						self.info_brand_all.push(items);	
+					})
+//					console.log(self.info_brand)
+				}
+			});
+		}
+		
+		//			缓存
 
-<!-- 微信分享 -->
-{if:IClient::isWechat() == true}
-<?php 
-	require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
-	$this->wechat = new wechat();
-	$this->wechat->setConfig();
-	$this->wechat->config['wechat_jsApiSDK']=1;
-	$this->wechat->jsApiSDK();
-?>
-<script>
-//微信分享
-var wechat_share = {
-    title       : '九猫大百货-日本同价-东京直邮', //标题
-    desc        : '欢迎来到九猫家', //描述
-    link        : "{echo:$_SERVER['SERVER_NAME'] .'/site/index'}",
-    imgUrl      : "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
+    function removeSessionItem(key){
+        window.sessionStorage.removeItem(key);
+    }
+    //  搜索 函数
+	function hotSearth(self){
+    mui.ajax('/apic/search_words',{
+        dataType:'json',//服务器返回json格式数据
+        type:'get',//HTTP请求类型
+        timeout:10000,//超时时间设置为10秒；
+        success:function(data){
+            self.search=data;
+        }
+    });
 }
-wechat.share();
-</script>
-{/if}
-
-</body>
+	</script>
 </html>
-

@@ -1,0 +1,81 @@
+li{
+	list-style: none;
+}
+#main{
+	width: 100%;
+	height: 100%;
+}
+#category_third{
+	width: 100%;
+	display: -webkit-flex;
+	-webkit-flex-wrap: wrap;
+	padding-left:0.2rem ;
+	padding-top:0.3rem ;
+}
+.product_item{
+	background: #ffffff;
+    border-radius: 0.2rem;
+    width: 3.5rem;
+    height: 5.92rem;
+    margin-right: 0.09rem;
+    margin-bottom: 0.2rem;
+}
+#category_third .product_item .img {
+    position: relative;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.2rem 0.2rem 0 0;
+    border-bottom: 0.01rem solid #eee;
+    display: -webkit-flex;
+    -webkit-align-items: center;
+    -webkit-justify-content: center;
+}
+#category_third .product_item .img .img-logo {
+    position: absolute;
+    width: 0.87rem;
+    height: 0.69rem;
+    top: 0.1rem;
+    left: 0.2rem;
+}
+#category_third .product_item .img .img-ware {
+    width: 2.9rem;
+    height: 2.9rem;
+}
+#category_third .product_item .name {
+    word-wrap: break-word;
+    margin-top: 0.1rem;
+    font-size: 0.28rem;
+    color: #3d4245;
+    line-height: 0.345rem;
+    width: 3.3rem;
+    display: inline-block;
+    padding: 0 0.1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+#category_third .product_item .sellprice {
+    margin-top: 0.1rem;
+    display: block;
+    padding-left: 0.1rem;
+}
+#category_third .product_item .japanprice {
+    display: block;
+    margin-top: 0.1rem;
+    font-family: 'HelveticaNeueLt';
+    font-size: 0.26rem;
+    color: #bbb;
+    letter-spacing: 0;
+    padding-left: 0.1rem;
+}
+#category_third .product_item .openprice {
+    display: block;
+    margin-top: 0.1rem;
+    font-family: 'HelveticaNeueLt';
+    font-size: 0.26rem;
+    color: #bbb;
+    letter-spacing: 0;
+    padding-left: 0.1rem;
+}
