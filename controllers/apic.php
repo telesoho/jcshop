@@ -11,7 +11,6 @@ class Apic extends IController{
 	
 	function init(){
 		
-		
 		$dateFormat = "Y-m-d h:i:s";
 		$output     = "[%datetime% ".substr(explode(".", explode(" ", microtime())[0])[1], 0, 3)."] ".strtolower(__CLASS__).".php(".__LINE__.") [%level_name%]: %message%\n";
 		$formatter  = new LineFormatter($output, $dateFormat);
@@ -227,6 +226,21 @@ class Apic extends IController{
 		$data['article_list']  = $listArt; //文章列表
 		$data['brand_list']    = $listBrand; //品牌列表
 		$this->json_echo(apiReturn::go('0', $data));
+	}
+	//---------------------------------------------------用户---------------------------------------------------
+	/**
+	 * 用户登陆
+	 */
+	public function login(){
+		$param = $this->checkData(array(
+			array('username', 'string', 0, '用户名'),
+			array('password', 'string', 0, '密码'),
+		));
+		/* 登陆 */
+		$model = new IModel('user');
+		$info = $model->getObj('username="'.$param['username'].'" AND password="'.$param['password'].'"','id');
+		if(empty($info)) $this->returnJson(array('code'=>'0','msg'=>$this->errorInfo['008001'])); //用户名或密码错误
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$this->tokenCreate($info['id'])));
 	}
 	
 	/**
@@ -1047,7 +1061,6 @@ class Apic extends IController{
 			}
 		}
 		
-		var_dump(array('time_list' => $listSpeed, 'goods_list' => $listGoods));exit();
 		/* 数据返回 */
 		$this->json_echo(apiReturn::go('0', array('time_list' => $listSpeed, 'goods_list' => $listGoods)));
 	}
@@ -1589,17 +1602,16 @@ class Apic extends IController{
 	 * 商品列表
 	 */
 	public function goods_list(){
-		$param = array(
-			'pagesize' => 20, //每页显示条数
-			'page'     => IFilter::act(IReq::get('page'), 'int'),//分页，选填
-			'aid'      => IFilter::act(IReq::get('aid'), 'int'), //活动ID，选填
-			'bid'      => IFilter::act(IReq::get('bid')), //品牌ID，选填
-			'cid'      => IFilter::act(IReq::get('cid')), //分类ID，选填
-			'did'      => IFilter::act(IReq::get('did'), 'int'), //推荐ID，选填
-			'tag'      => IFilter::act(IReq::get('tag')), //标签，选填
-		);
+		$param = $this->checkData(array(
+			array('page', 'int', 0, '分页编号'),
+			array('aid', 'int', 0, '活动ID'),
+			array('bid', 'string', 0, '品牌ID'),
+			array('cid', 'string', 0, '分类ID'),
+			array('did', 'int', 0, '推荐ID'),
+			array('tag', 'string', 0, '标签'),
+		));
 		$data  = Api::run('goodsList', $param);
-		$this->json_echo(apiReturn::go('0', $data));
+		$this->returnJson(array('code' => 0, 'msg' => 'ok', 'data' => $data));
 	}
 	
 	/**
@@ -2407,7 +2419,7 @@ class Apic extends IController{
 		$data['article_sum']  = $dataArticleSum[0]['sum'];
 		$data['goods_list']   = $dataGoods;
 		$data['article_list'] = $dataArticle;
-		var_dump($data);exit();
+		
 		$this->json_echo($data);
 	}
 	
@@ -2977,6 +2989,7 @@ class Apic extends IController{
 	 * @param $data
 	 */
 	public function testa(){
+		var_dump($_GET);exit();
 		var_dump($this->user);
 	}
 	
@@ -3054,5 +3067,6 @@ class Apic extends IController{
             wechats::send_message_template($v->oauth_user_id,'')
         }
     }
+	
 	
 }

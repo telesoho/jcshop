@@ -29,6 +29,7 @@ class IController extends IControllerBase
 	private $action;                                   //当前action对象
 	private $defaultAction       = 'index';            //默认执行的action动作
 	private $renderData          = array();            //渲染的数据
+	private $errorInfo = array(); //接口错误编码
 
 	/**
 	 * @brief 构造函数
@@ -89,6 +90,9 @@ class IController extends IControllerBase
 	 * 运行前的初始化
 	 */
 	public function initRun(){
+		//获取接口错误编码
+		$this->errorInfo = apiReturn::getErrorInfo();
+		
 		/* 接受参数 */
 		$param = array(
 			'token' => IFilter::act(IReq::get('token')),
@@ -453,4 +457,86 @@ class IController extends IControllerBase
 	{
 		return $this->error;
 	}
+	
+	
+	/**
+	 * 数据安全校验
+	 * @param array $PostData
+	 * @param array $Fields
+	 * @return array
+	 */
+	protected function checkData($param = array()){
+		if(empty($param)) $this->returnJson();
+		$postData = array_merge($_POST, $_GET);
+		//获取接口信息
+		if(isset($postData['getapiinfo']) && $postData['getapiinfo']==='1') $this->returnJson(array('code' => 0, 'msg' => 'ok', 'data' => array('param'=>$param,'error'=>$this->errorInfo)));
+		$backData = array(); //返回参数
+		foreach($param as $k => $v){
+			$backData[$v[0]] = IFilter::act(IReq::get($v[0]), $v[1]);
+			//不能为空
+			if($v[2]==1 && empty($backData[$v[0]]))
+				$this->returnJson(array('code' => '001003', 'msg' => $v[3].'不能为空'));
+		}
+		return $backData;
+	}
+	
+	/**
+	 * 返回json数据
+	 */
+	public function returnJson($data = array()){
+		/* 参数 */
+		$base     = array('code' => '-1', 'msg' => '系统错误', 'time' => date('Y-m-d H:i:s', time()), 'apiurl' => IUrl::getUrl(), 'explain' => '', 'data' => '');
+		$backData = array_merge($base, $data);
+		/* 生产环境 */
+		if((new Config('jmj_config'))->production==true){
+			//删除接口说明
+			unset($backData['explain']);
+			//记录接口调用日志 TODO
+		}
+		/* 返回参数 */
+		die(json_encode($backData));
+	}
+	
+	/**
+	 * 生成用户令牌
+	 * @param  int $uid 用户ID
+	 * @return string 用户令牌
+	 */
+	protected function tokenCreate($uid){
+		//用户是否存在
+		$modelUser = new IModel('user');
+		$infoUser = $modelUser->getObj('id='.$uid);
+		if(empty($infoUser)) $this->returnJson( array('code'=>'001003','msg'=>$this->errorInfo['001003']) );
+		
+		//令牌生成
+		/* 生成令牌 */
+		$data 						= array(
+			'token' 		=> md5($uid.time().(new Config('jmj_config'))->auth_key_data), //生成令牌
+			'play_time' 	=> time(), //操作时间
+			'update_time' => time(), //更新时间
+		);
+		/* 写入数据 */
+		$modelToken = new IModel('user_token');
+		$infoToken = $modelToken->getObj('user_id='.$uid);
+		if ( !empty($infoToken) ) {
+			//更新Token
+			$modelToken->setData(array_merge($data,array(
+				'nums'=>'nums+1', //登陆次数
+			)));
+			$rel = $modelToken->update('user_id='.$uid,array('user_id'));
+			if($rel>0) return $infoToken['token'];
+			
+		}else{
+			//更新Token
+			$modelToken->setData(array_merge($data,array(
+				'user_id' => $uid,
+				'nums'=>1, //登陆次数
+				'create_time' => time(),
+			)));
+			$rel = $modelToken->add();
+			if($rel>0) return $infoToken['token'];
+		}
+		$this->returnJson(array('code'=>'008002','msg'=>$this->errorInfo['008002']));
+	}
+	
 }

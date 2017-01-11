@@ -13,7 +13,166 @@ class Tools extends IController implements adminAuthorization
 	{
 
 	}
-
+	
+	/**
+	 * 接口列表
+	 */
+	public function api_list(){
+		/* 接收参数 */
+		$param = array(
+			'search' => IFilter::act(IReq::get('search')), //搜索
+		);
+		$data = array();
+		//搜索
+		if(!empty($param['search']['keywords'])){
+			$keywords = $param['search']['keywords'];
+			$data['where'] = '(`id`="'.$keywords.'" OR `url` LIKE "%'.$keywords.'%" OR `name` LIKE "%'.$keywords.'%" OR `author`="'.$keywords.'")';
+		}
+		/* 赋值 */
+		$this->setRenderData(array('data'=>$data));
+		$this->redirect('api_list');
+	}
+	
+	/**
+	 * 接口调试
+	 * @param int $id 数据ID
+	 */
+	public function api_debug(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			/* 接收参数 */
+			$param = array(
+				'id' => IFilter::act(IReq::get('api_id'), 'int'), //接口ID，必填
+			);
+			//获取接口信息
+			$model  = new IModel('api_manage');
+			$info   = $model->getObj('id='.$param['id']);
+			$apiurl = 'http://'.$_SERVER['HTTP_HOST'].IUrl::creatUrl($info['url']);
+			
+			//生成加密hash
+			$parame = array();
+			foreach(explode(',', $info['parames']) as $v){
+				switch($v){
+					case 'updata':
+						$param  = array();
+						$params = $_POST[$v];
+						if(!empty($params)){
+							$params = explode(',', $params);
+							foreach($params as $k1 => $v1){
+								$pas            = explode(':', $v1);
+								$param[$pas[0]] = $pas[1];
+							}
+						}
+						$parame[$v] = json_encode($param);
+						break;
+					default:
+						$parame[$v] = $_POST[$v];
+				}
+			}
+			$api_token = ISession::get('api_token');
+			if(!empty($api_token)) $parame['token'] = $api_token;
+			//发送请求
+			$backdata = common::curl_http($apiurl, $parame, 'POST');
+			//登录接口，保存token
+			if($info['url']=='apic/login'){
+				$logininfo = json_decode($backdata);
+				if($logininfo->code==0) session('api_token', $logininfo->data->token);
+			}
+			exit($backdata);
+		}
+		/* 接收参数 */
+		$param = array(
+			'id' => IFilter::act(IReq::get('id'), 'int'), //接口ID，必填
+		);
+		/* 详情 */
+		$model                = new IModel('api_manage');
+		$info                 = $model->getObj('id='.$param['id']);
+		$info['url']          = 'http://'.$_SERVER['HTTP_HOST'].IUrl::creatUrl($info['url']);
+		$info['parames']      = !empty($info['parames']) ? explode(',', $info['parames']) : array();
+		$info['parames_desc'] = !empty($info['parames_desc']) ? explode(',', $info['parames_desc']) : array();
+		$info['token']        = ISession::get('api_token'); //读取token
+		
+		/* 赋值 */
+		$this->setRenderData(array('data' => $info));
+		$this->redirect('api_debug');
+	}
+	
+	/**
+	 * 接口编辑
+	 */
+	public function api_edit(){
+		if($_SERVER['REQUEST_METHOD']=='POST') $this->api_update();
+		/* 详情 */
+		$param = array(
+			'id' => IFilter::act(IReq::get('id'), 'int'), //接口ID，必填
+		);
+		$model = new IModel('api_manage');
+		$info  = $model->getObj('id='.$param['id']);
+		/* 赋值 */
+		$this->setRenderData(array('data' => $info));
+		$this->redirect('api_edit');
+	}
+	
+	/**
+	 * 接口新增
+	 */
+	public function api_add(){
+		if($_SERVER['REQUEST_METHOD']=='POST') $this->api_update();
+		/* 赋值 */
+		$this->redirect('api_add');
+	}
+	
+	/**
+	 * 接口更新
+	 */
+	private function api_update(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			$apiname = IFilter::act(IReq::get('url'));
+			$isinit  = IFilter::act(IReq::get('isinit'), 'int');
+			$saveData = array();
+			/* 初始化 */
+			if($isinit==1){
+				//获取接口参数
+				$apiurl   = 'http://'.$_SERVER['HTTP_HOST'].IUrl::creatUrl($apiname).'/getapiinfo/1';//U($apiname,'getapiinfo=1',true,true);
+				$backdata = common::curl_http($apiurl, '', 'POST');
+				$backdata = json_decode($backdata, true);
+				if($backdata['code']==0){
+					//更新接口参数、参数说明
+					if(!empty($backdata['data']['param'])){
+						$param        = array();
+						$parames_desc = array();
+						foreach($backdata['data']['param'] as $k => $v){
+							$param[]        = $v[0];
+							$parames_desc[] = $v[3].' '.$v[1].'类型  '.($v[2]==1 ? '必填' : '选填');
+						}
+						$saveData['parames']      = implode(',', $param);
+						$saveData['parames_desc'] = implode(',', $parames_desc);
+					}
+					//更新错误说明
+					if(!empty($backdata['data']['error'])){
+						$errorinfo = '';
+						foreach($backdata['data']['error'] as $k => $v){
+							$errorinfo .= $k.'：'.$v.'
+';
+						}
+						$saveData['error_desc'] = $errorinfo;
+					}
+				}
+			}
+			/* 添加或更新数据 */
+			$model                    = new IModel('api_manage');
+			$saveData['url']          = $_POST['url'];
+			$saveData['name']         = $_POST['name'];
+			$saveData['author']       = $_POST['author'];
+			$saveData['uid']          = $this->user['user_id'];
+			$saveData['parames_back'] = $_POST['parames_back'];
+			$saveData['update_time']  = time();
+			$model->setData($saveData);
+			$rel = isset($_POST['id']) && !empty($_POST['id']) ? $model->update('id='.$_POST['id']) : $model->add();
+			
+			exit(json_encode(array('code' => $rel>0 ? 0 : 1)));
+		}
+	}
+	
 	public function seo_sitemaps()
 	{
 		$siteMaps =  new SiteMaps();

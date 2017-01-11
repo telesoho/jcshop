@@ -20,7 +20,7 @@ var FOOTERINFOR={
         },
         {class:'icon showGrass',
             name:'草原',
-            img1:'/views/mobile/skin/default/image/jmj/new_active/index/grass.png',
+            img1:'/views/mobile/skin/default/image/jmj/new_active/index/grassed.png',
             img2:'/views/mobile/skin/default/image/jmj/new_active/index/grass.png',
             url:'/site/favorite'
         },

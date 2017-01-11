@@ -5,7 +5,7 @@
 var Request = new Object();
 Request = GetRequest();
 var getId=Request["cat"];
-$(".mui-control-item"+getId).addClass("mui-active");
+var sta=parseInt(getId)+2;
 var sub_data={
     tid:getId
 };
@@ -15,6 +15,7 @@ var pageData = {
 var vm= new Vue({
     el:"#prolistInfo",
     data:{
+        sta:sta,
         placeHolder:'圣诞神秘好礼等你来拿',
         info:{
             category_list:[],
@@ -24,10 +25,7 @@ var vm= new Vue({
             article_list:[{url:'', len:'', goods_list:[]},
                 {url:'', goods_list:[]}],
             brand_list:[]
-        },
-        searchWord:[],
-      
-
+        }
     },
     computed:{
 //  	
@@ -77,7 +75,6 @@ var vm= new Vue({
     mounted: function(){
         var self=this;
         getPro_list(self,sub_data);
-        hotSearth1(self);
     },
     updated:function(){
         lazyload.init({
@@ -149,11 +146,6 @@ function pullupRefresh() {
                 stop = false;
             }
             pageData.page++;
-        },
-        error:function(xhr,type,errorThrown){
-            //异常处理；
-            console.log(type);
-
         }
     });
 }
@@ -165,16 +157,6 @@ function getPro_list(self,sub_data){
         timeout:10000,//超时时间设置为10秒
         success:function(data){
             self.info=data.data;
-        }
-    });
-}
-function hotSearth1(self){
-    mui.ajax('/apic/search_words',{
-        dataType:'json',//服务器返回json格式数据
-        type:'get',//HTTP请求类型
-        timeout:10000,//超时时间设置为10秒；
-        success:function(data){
-            self.searchWord=data;
         }
     });
 }

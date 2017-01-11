@@ -8,11 +8,11 @@ Vue.component('search-nav', {
     <div class="inputContent">\
     <form onsubmit="searthSubmit()" action="/site/search_list">\
     <input type="search" :placeholder="searth_pla" id="search" @focus="showSearth" v-model="val"/>\
-    <img class="search_ico" src="/views/mobile/skin/default/image/jmj/new_active/index/search.png" alt="" />\
+    <img class="search_ico" src="/views/mobile/skin/default/image/jmj/redesign/pic1.png" style="width: 0.24rem" />\
     </form>\
-    <img src="/views/mobile/skin/default/image/jmj/new_active/index/leftear.png" alt="" class="left-icon" />\
-    <img src="/views/mobile/skin/default/image/jmj/new_active/index/rightear.png" alt="" class="right-icon" />\
-    <img src="/views/mobile/skin/default/image/jmj/new_active/index/flower.png" alt="" class="img-flower" />\
+    <img src="" alt="" class="left-icon hide_img" />\
+    <img src="" alt="" class="right-icon hide_img" />\
+    <img src="" alt="" class="img-flower hide_img" />\
     <div class="cancel hide" id="cancle" onclick="searthCancel();">取消</div>\
     </div>\
     <div id="modalid-search" class="hide">\

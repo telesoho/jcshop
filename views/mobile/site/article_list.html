@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
-    <title></title>
+    <title>爱逛街</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/articleList.css?v=<?php echo time(); ?>" />
@@ -14,6 +14,17 @@
 <body>
 <!--vue容器-->
 <div id="articleList">
+    <head-nav :state="2"></head-nav>
+    <!--头部静态页面-->
+    <section class="head">
+        <div class="bannner">
+            <img src="/views/mobile/skin/default/image/article/banner.png" alt="" style="width:100%" />
+        </div>
+        <div class="title flexbox">
+            <div class="top">专辑合集特别推荐</div>
+            <div class="bg">----</div>
+        </div>
+    </section>
     <template >
         <section class="recommended line albumn_index" v-for="(item,key) in new_data" :style="key==0?style.firstArticle:style.ortherArticle">
             <article-list :item="item" :img1="img1" :img2="img2" @col="collect" :state="0"></article-list>
@@ -25,6 +36,8 @@
     </div>
 </div>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<!--加载顶部导航-->
+<script src="/views/mobile/components/head_nav.js?v=<?php echo time(); ?>"></script>
 <!--article-list组件引入-->
 <script src="/views/mobile/components/article_list.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
