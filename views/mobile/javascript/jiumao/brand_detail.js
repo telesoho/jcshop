@@ -38,9 +38,11 @@ var em = new Vue({
 		if(getSession("pinpai_infolist")||getSession("pinpai_page")){
 			self.page = getSession("pinpai_page");
 			self.infolist = getSession("pinpai_infolist");
+			alert(1)
 		}
 		else{
 			getRelateArticle(statusOrder,self);
+			console.log(statusOrder,self.page)
 		}
 //		getRelateArticle(statusOrder,self)
 	},
@@ -69,6 +71,7 @@ function getRelateArticle(statusOrder,self){
 		type:'get',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
 		success:function(data){
+			alert(1)
 			console.log(data.article_list);
 			self.info = data;
 			self.infoac=data.article_list;

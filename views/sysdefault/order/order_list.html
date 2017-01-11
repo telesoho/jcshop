@@ -111,10 +111,10 @@
 					<th>操作</th>
 				</tr>
 			</thead>
-
 			<tbody>
 				{foreach:items = $this->orderHandle->find()}
-				<tr>
+				<?php $color=['0'=>'','1'=>'#99CCFF','2'=>'#FF6666']?>
+				<tr style="background-color: <?php if(!empty($item['color_status'])) echo $color[$item['color_status']];?>;">
 					<td><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
 					<td title="{$item['order_no']}" name="orderStatusColor{$item['status']}">{$item['order_no']}</td>
 					<td title="{$item['accept_name']}">{$item['accept_name']}</td>
@@ -151,10 +151,15 @@
 						{/if}
 						{if:Order_class::getOrderStatus($item) == 6}
 							{if:$item['is_shop_checkout']==='0'}
-							<a href="{url:/order/order_settlement/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_check.gif}" title="结算" />结算</a>
+							<!--<a href="{url:/order/order_settlement/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_check.gif}" title="结算" />结算</a>-->
 							{/if}
 						{/if}
 
+						<select name="color_status" id="{$item['id']}" class="auto" onchange="color_status_action(this)">
+							<option value="0" <?php if($item['color_status']==0) echo "selected"; ?> >无</option>
+							<option value="1" <?php if($item['color_status']==1) echo "selected"; ?> >蓝色</option>
+							<option value="2" <?php if($item['color_status']==2) echo "selected"; ?> >红色</option>
+						</select>
 					</td>
 				</tr>
 				{/foreach}
@@ -189,6 +194,25 @@ $(function(){
 	$('[name="orderStatusColor4"]').addClass('red');
 	$('[name="orderStatusColor5"]').addClass('green');
 });
+function color_status_action(obj) {
+    var select_value = obj.selectedIndex;
+    var order_id = $(obj).attr('id');
+    switch (select_value){
+		case 1:
+		    $(obj).parent().parent().css({'background-color':'#99CCFF'});
+		    break;
+		case 2:
+		    $(obj).parent().parent().css({'background-color':'#FF6666'});
+			break;
+		default:
+            $(obj).parent().parent().css({'background-color':''});
+            break;
+	}
+	$.post('{url:apic/color_status}',{'id':order_id,'color_status':select_value},function (data) {
+		data = JSON.parse(data);
+		alert(data.msg);
+    });
+}
 function changeAction(url)
 {
 	setDatetimeVal('send_time');

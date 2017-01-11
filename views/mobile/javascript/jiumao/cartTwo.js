@@ -48,7 +48,6 @@ var vm = new Vue({
         },
         codeMessage:[],
         showCodeMessage:true
-
     },
     computed: {
         // 读取和设置
@@ -65,7 +64,7 @@ var vm = new Vue({
             })
             return this.infoMessage.goodsList;
         },
-        lastPay: function(){
+            lastPay: function(){
             var tt=(parseFloat(this.infoMessage.sum)+parseFloat(this.infoMessage.delivery_money)).toFixed(2)
             return tt;
         }
@@ -91,7 +90,6 @@ var vm = new Vue({
                 self.state=false;
                 checkSubmit(obj);
                 console.log(self.state);
-
             }
         },
         promoCho: function(){

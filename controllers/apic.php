@@ -2985,6 +2985,20 @@ class Apic extends IController{
 		echo json_encode($data);
 		exit();
 	}
+
+	function color_status(){
+        $order_id = IFilter::act(IReq::get('id'), 'int');
+        $color_status = IFilter::act(IReq::get('color_status'), 'int');
+        $order_model = new IModel('order');
+        $order_model->setData(['color_status'=>$color_status]);
+        $ret = $order_model->update('id = ' . $order_id);
+        if ($ret){
+            $this->json_echo(['ret'=>true,'msg'=>'标注成功']);
+        } else {
+            $this->json_echo(['ret'=>false,'msg'=>$order_id.'-'.$color_status]);
+        }
+
+    }
 	
 	/**
 	 * 数据安全校验
