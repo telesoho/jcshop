@@ -68,10 +68,12 @@ class Tools extends IController implements adminAuthorization
 						$parame[$v] = $_POST[$v];
 				}
 			}
+			$api_token = ISession::get('api_token');
+			if(!empty($api_token)) $parame['token'] = $api_token;
 			//发送请求
 			$backdata = common::curl_http($apiurl, $parame, 'POST');
 			//登录接口，保存token
-			if($info['url']=='Api/User/login'){
+			if($info['url']=='apic/login'){
 				$logininfo = json_decode($backdata);
 				if($logininfo->code==0) session('api_token', $logininfo->data->token);
 			}

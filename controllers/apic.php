@@ -8,11 +8,8 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $errorInfo; //接口错误编码
 	
 	function init(){
-		//获取接口错误编码
-		$this->errorInfo = apiReturn::getErrorInfo();
 		
 		$dateFormat = "Y-m-d h:i:s";
 		$output     = "[%datetime% ".substr(explode(".", explode(" ", microtime())[0])[1], 0, 3)."] ".strtolower(__CLASS__).".php(".__LINE__.") [%level_name%]: %message%\n";
@@ -229,6 +226,21 @@ class Apic extends IController{
 		$data['article_list']  = $listArt; //文章列表
 		$data['brand_list']    = $listBrand; //品牌列表
 		$this->json_echo(apiReturn::go('0', $data));
+	}
+	//---------------------------------------------------用户---------------------------------------------------
+	/**
+	 * 用户登陆
+	 */
+	public function login(){
+		$param = $this->checkData(array(
+			array('username', 'string', 0, '用户名'),
+			array('password', 'string', 0, '密码'),
+		));
+		/* 登陆 */
+		$model = new IModel('user');
+		$info = $model->getObj('username="'.$param['username'].'" AND password="'.$param['password'].'"','id');
+		if(empty($info)) $this->returnJson(array('code'=>'0','msg'=>$this->errorInfo['008001'])); //用户名或密码错误
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$this->tokenCreate($info['id'])));
 	}
 	
 	/**
@@ -3000,42 +3012,5 @@ class Apic extends IController{
 
     }
 	
-	/**
-	 * 数据安全校验
-	 * @param array $PostData
-	 * @param array $Fields
-	 * @return array
-	 */
-	protected function checkData($param = array()){
-		if(empty($param)) $this->returnJson();
-		$postData = array_merge($_POST, $_GET);
-		//获取接口信息
-		if(isset($postData['getapiinfo']) && $postData['getapiinfo']==='1') $this->returnJson(array('code' => 0, 'msg' => 'ok', 'data' => array('param'=>$param,'error'=>$this->errorInfo)));
-		$backData = array(); //返回参数
-		foreach($param as $k => $v){
-			$backData[$v[0]] = IFilter::act(IReq::get($v[0]), $v[1]);
-			//不能为空
-			if($v[2]==1 && empty($backData[$v[0]]))
-				$this->returnJson(array('code' => '001003', 'msg' => $v[3].'不能为空'));
-		}
-		return $backData;
-	}
-	
-	/**
-	 * 返回json数据
-	 */
-	public function returnJson($data = array()){
-		/* 参数 */
-		$base     = array('code' => '-1', 'msg' => '系统错误', 'time' => date('Y-m-d H:i:s', time()), 'apiurl' => IUrl::getUrl(), 'explain' => '', 'data' => '');
-		$backData = array_merge($base, $data);
-		/* 生产环境 */
-		if((new Config('jmj_config'))->production==true){
-			//删除接口说明
-			unset($backData['explain']);
-			//记录接口调用日志 TODO
-		}
-		/* 返回参数 */
-		die(json_encode($backData));
-	}
 	
 }
