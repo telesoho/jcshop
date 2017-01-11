@@ -27,12 +27,12 @@ class APIGoods{
 		if(empty($ids)) return $data; //不包含id时直接返回
 		
 		//获取配置
-		$jmj_config           = new Config('jmj_config');
-		$goods_ratio          = $jmj_config->goods_ratio; //全场折扣率
-		$goods_ratio_original = $jmj_config->goods_ratio_original; //原价显示扣率
-		$goods_ratio_delivery = $jmj_config->goods_ratio_delivery; //商品价格重量比率计算是否包邮
+		$jmj_config            = new Config('jmj_config');
+		$goods_ratio           = $jmj_config->goods_ratio; //全场折扣率
+		$goods_ratio_original  = $jmj_config->goods_ratio_original; //原价显示扣率
+		$goods_ratio_delivery  = $jmj_config->goods_ratio_delivery; //商品价格重量比率计算是否包邮
 		$goods_weight_delivery = $jmj_config->goods_weight_delivery; //商品重量大于此数值时不包邮，-1为关闭
-		$goods_ratio          = $goods_ratio>1 || $goods_ratio<=0 ? 1 : $goods_ratio;
+		$goods_ratio           = $goods_ratio>1 || $goods_ratio<=0 ? 1 : $goods_ratio;
 		
 		$user_id     = IWeb::$app->getController()->user['user_id'];
 		$listGoods   = array(); //商品原数据
@@ -133,7 +133,7 @@ class APIGoods{
 			foreach($list as $k => $v){
 				$listGoods[$v['id']] = $v; //存商品原数据
 				/* 是否包邮 */ //商品(重量/价格)比重、超过一定重量时包邮
-				if($v['weight']<=0 || ($v['sell_price']/$v['weight']<=$goods_ratio_delivery&&$goods_ratio_delivery!=-1) || ($v['weight']>$goods_weight_delivery&&$goods_weight_delivery!=-1)){
+				if($v['weight']<=0 || ($v['sell_price']/$v['weight']<=$goods_ratio_delivery && $goods_ratio_delivery!=-1) || ($v['weight']>$goods_weight_delivery && $goods_weight_delivery!=-1)){
 					$deliveryNo[] = $v['id'];
 				}
 				//是否参与活动
@@ -196,8 +196,8 @@ class APIGoods{
 	 * @return int
 	 */
 	public function goodsDelivery($data, $key = 'id', $is_delivery = 0){
-		$goods1 = array('money'=>0, 'weight'=>0,'count'=>0); //满减商品
-		$goods2 = array('money'=>0, 'weight'=>0,'count'=>0); //不包邮商品
+		$goods1 = array('money' => 0, 'weight' => 0, 'count' => 0); //满减商品
+		$goods2 = array('money' => 0, 'weight' => 0, 'count' => 0); //不包邮商品
 		
 		/* 判断商品是否包邮 */
 		$data = Api::run('goodsActivity', $data, $key);
@@ -221,7 +221,7 @@ class APIGoods{
 		$delivery = $delivery[0];
 		
 		/* 计算邮费 */
-		if($condition_price==0 || $is_delivery==1 || ($goods1['count']==0&&$goods2['count']==0)){ //全场包邮
+		if($condition_price==0 || $is_delivery==1 || ($goods1['count']==0 && $goods2['count']==0)){ //全场包邮
 			$deliveryPrice = 0;
 		}elseif($condition_price==-1 || $is_delivery==2){ //没有开启满包邮
 			//首重价格
@@ -258,29 +258,26 @@ class APIGoods{
 	 */
 	public function goodsList($param = array()){
 		/* 接收参数 */
-		$param = array(
-			'fields'   => isset($param['fields']) ? $param['fields'] : 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity,m.jp_price,m.market_price,b.name AS brand_name,b.logo AS brand_logo',//查询字段，选填
-			'pagesize' => isset($param['pagesize']) ? $param['pagesize'] : 20, //每页显示条数
+		$param             = array(
+			'fields'   => isset($param['fields']) ? $param['fields'] : '',
+			'pagesize' => isset($param['pagesize']) ? $param['pagesize'] : '', //每页显示条数
 			'page'     => isset($param['page']) ? $param['page'] : 1,//分页，选填
 			'aid'      => isset($param['aid']) ? $param['aid'] : '', //活动ID，选填
-			'cid'      => isset($param['cid']) ? $param['cid'] : '', //分类ID，选填
 			'bid'      => isset($param['bid']) ? $param['bid'] : '', //品牌ID，选填
+			'cid'      => isset($param['cid']) ? $param['cid'] : '', //分类ID，选填
 			'did'      => isset($param['did']) ? $param['did'] : '', //推荐ID，选填
 			'tag'      => isset($param['tag']) ? $param['tag'] : '', //标签，选填
 		);
+		$param['fields']   = !empty($param['firlds']) ? $param['firlds'] : 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity,m.jp_price,m.market_price,b.name AS brand_name,b.logo AS brand_logo';//查询字段，选填
+		$param['pagesize'] = !empty($param['pagesize']) ? $param['pagesize'] : 20;
 		
 		/* 获取下级分类 */
-		if(!empty($param['cid'])){
-			$queryCat         = new IQuery('category');
-			$queryCat->where  = 'visibility=1 AND parent_id IN ('.$param['cid'].')';
-			$queryCat->fields = 'id';
-			$dataCat          = $queryCat->find();
-			if(!empty($dataCat)){
-				foreach($dataCat as $k => $v){
-					$param['cid'] .= ','.$v['id'];
-				}
-			}
+		$cid = '';
+		foreach(explode(',', $param['cid']) as $k => $v){
+			$cid .= goods_class::catChild($v);
+			if(count(explode(',', $param['cid']))!=$k+1) $cid .= ',';
 		}
+		$param['cid'] = implode(',', array_unique(explode(',', $cid)));
 		
 		/* 获取数据 */
 		$query           = new IQuery('goods as m');
@@ -299,8 +296,7 @@ class APIGoods{
 		$query->page     = $param['page']<1 ? 1 : $param['page'];
 		$query->pagesize = $param['pagesize'];
 		$data            = $query->find();
-		$totalPage       = $query->getTotalPage();
-		if($param['page']>$totalPage) $data = array();
+		if($param['page']>$query->getTotalPage()) $data = array();
 		if(!empty($data)){
 			/* 计算活动商品价格 */
 			$data = api::run('goodsActivity', $data);
