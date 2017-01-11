@@ -3012,72 +3012,54 @@ class Apic extends IController{
 
     }
     function send_wechat_message(){
-        $data = '{
-"RECORDS":[
-{
-"order_no":"20170105153826768194",
-"accept_name":"方子琦",
-"address":"学林雅苑2幢206室",
-"mobile":"18158008151",
-"user_id":4430,
-"sfz_name":"方子琦",
-"oauth_user_id":"orEYdwzxm-ybHRmAtXyS7U5JoY0M"
-},
-{
-"order_no":"20170105163459673094",
-"accept_name":"周松枫",
-"address":"昌国街道环城北路238号舟山市妇幼保健院外科大楼一楼供应室",
-"mobile":"13857228373",
-"user_id":5784,
-"sfz_name":"叶周幸",
-"oauth_user_id":"orEYdwyih4TVnLlPGbqV4njBR9Os"
-},
-{
-"order_no":"20170105163716383697",
-"accept_name":"廖雪君",
-"address":"金狮花园北一巷32-1号",
-"mobile":"13517702108",
-"user_id":5603,
-"sfz_name":"廖雪君",
-"oauth_user_id":"orEYdw3w7eeUI3GWCVMn3mel653Q"
-},
-{
-"order_no":"20170105211832143307",
-"accept_name":"HT",
-"address":"农行新区宏伟平价超市代收（记得打电话）",
-"mobile":"18343355955",
-"user_id":5812,
-"sfz_name":"赵梓名",
-"oauth_user_id":"orEYdw8W1YgXdFZkqIUIHCKDNBEY"
-},
-{
-"order_no":"20170105214953255447",
-"accept_name":"HT",
-"address":"农行新区宏伟超市代收（打电话）",
-"mobile":"18343355955",
-"user_id":6328,
-"sfz_name":"赵梓名",
-"oauth_user_id":"orEYdwxO3RoLnOFo-tnhGpLj_-tw"
-}
-]
-}';
-        $data = '{
-"RECORDS":[
-{
-"order_no":"20170105153826768194",
-"accept_name":"方子琦",
-"address":"学林雅苑2幢206室",
-"mobile":"18158008151",
-"user_id":4430,
-"sfz_name":"方子琦",
-"oauth_user_id":"orEYdw98ZZpmvDrD6lJyR5YAhPnY"
-}
-]
-}';
+//        $data = '{
+//"RECORDS":[
+//{
+//"order_no":"20170105163459673094",
+//"accept_name":"周松枫",
+//"address":"昌国街道环城北路238号舟山市妇幼保健院外科大楼一楼供应室",
+//"mobile":"13857228373",
+//"user_id":5784,
+//"sfz_name":"叶周幸",
+//"oauth_user_id":"orEYdwyih4TVnLlPGbqV4njBR9Os"
+//},
+//{
+//"order_no":"20170105211832143307",
+//"accept_name":"HT",
+//"address":"农行新区宏伟平价超市代收（记得打电话）",
+//"mobile":"18343355955",
+//"user_id":5812,
+//"sfz_name":"赵梓名",
+//"oauth_user_id":"orEYdw8W1YgXdFZkqIUIHCKDNBEY"
+//},
+//{
+//"order_no":"20170105214953255447",
+//"accept_name":"HT",
+//"address":"农行新区宏伟超市代收（打电话）",
+//"mobile":"18343355955",
+//"user_id":6328,
+//"sfz_name":"赵梓名",
+//"oauth_user_id":"orEYdwxO3RoLnOFo-tnhGpLj_-tw"
+//}
+//]
+//}';
+//        $data = '{
+//"RECORDS":[
+//{
+//"order_no":"20170105153826768194",
+//"accept_name":"方子琦",
+//"address":"学林雅苑2幢206室",
+//"mobile":"18158008151",
+//"user_id":4430,
+//"sfz_name":"方子琦",
+//"oauth_user_id":"orEYdw98ZZpmvDrD6lJyR5YAhPnY"
+//}
+//]
+//}';
         $data = json_decode($data);
         var_dump($data);
         foreach ($data->RECORDS as $k=>$v){
-            wechats::send_message_template($v->oauth_user_id,'sfz',['accept_name'=>$v->accept_name,'address'=>$v->address,'sfz_name'=>$v->sfz_name,'mobile'=>$v->mobile]);
+            wechats::send_message_template($v->oauth_user_id,'sfz',['order_no'=>$v->order_no,'accept_name'=>$v->accept_name,'address'=>$v->address,'sfz_name'=>$v->sfz_name,'mobile'=>$v->mobile]);
         }
     }
 	

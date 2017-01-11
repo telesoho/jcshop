@@ -119,7 +119,7 @@ class wechats
                    "url":"%s",            
                    "data":{
                            "first": {
-                               "value":"订单收货人变动通知",
+                               "value":"订单%s收货人变动通知",
                                "color":"#173177"
                            },
                            "keyword1":{
@@ -135,7 +135,7 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,IUrl::getHost(),$send_info['accept_name'] . '___' . $send_info['mobile'] . '-->' . $send_info['sfz_name'] . '___' . $send_info['mobile'], $send_info['address']);
+               }',$open_id,IUrl::getHost(),$send_info['order_no'],$send_info['accept_name'] . '___' . $send_info['mobile'] . '-->' . $send_info['sfz_name'] . '___' . $send_info['mobile'], $send_info['address']);
                 break;
         }
         $ret = common::http_post_json($url,$params);
