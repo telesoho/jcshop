@@ -111,11 +111,10 @@
 					<th>操作</th>
 				</tr>
 			</thead>
-
 			<tbody>
 				{foreach:items = $this->orderHandle->find()}
-				<?php $color=['0'=>'','1'=>'#36c','2'=>'#a40000']?>
-				<tr style="background-color: <?php if(!empty($item['color_status'])) echo $color[$item['color_status']];?> !important;">
+				<?php $color=['0'=>'','1'=>'#99CCFF','2'=>'#FF6666']?>
+				<tr style="background-color: <?php if(!empty($item['color_status'])) echo $color[$item['color_status']];?>;">
 					<td><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
 					<td title="{$item['order_no']}" name="orderStatusColor{$item['status']}">{$item['order_no']}</td>
 					<td title="{$item['accept_name']}">{$item['accept_name']}</td>
