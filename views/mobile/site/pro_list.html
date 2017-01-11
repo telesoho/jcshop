@@ -39,44 +39,7 @@
 <!--pro_list页面的开始-->
 <div id="prolistInfo">
 	<search-nav :search="searchWord" :val="null"></search-nav>
-	<section id="nav-slider">
-		<div  class="mui-slider">
-			<div id="Control" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-				<div class="mui-scroll">
-					<a class="mui-control-item locationA" href="{url:/site/index}">
-						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg1.png" alt=""  />
-						<span class="text">推荐</span>
-						<span class="bg"></span>
-					</a>
-					<a class="mui-control-item mui-control-item1 locationA" href="{url:/site/pro_list}?cat=1">
-						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg2.png" alt=""/>
-						<span class="text">药妆</span>
-						<span class="bg"></span>
-					</a>
-					<a class="mui-control-item mui-control-item2 locationA" href="{url:/site/pro_list}?cat=2">
-						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg3.png" alt=""  />
-						<span class="text">个护</span>
-						<span class="bg"></span>
-					</a>
-					<a class="mui-control-item mui-control-item3 locationA" href="{url:/site/pro_list}?cat=3">
-						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg4.png" alt="" />
-						<span class="text">宠物</span>
-						<span class="bg"></span>
-					</a>
-					<a class="mui-control-item mui-control-item4 locationA" href="{url:/site/pro_list}?cat=4">
-						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg5.png" alt="" />
-						<span class="text">健康</span>
-						<span class="bg"></span>
-					</a>
-					<a class="mui-control-item mui-control-item5 locationA" href="{url:/site/pro_list}?cat=5">
-						<img src="/views/mobile/skin/default/image/jmj/icon/page1_bg6.png" alt="" />
-						<span class="text">零食</span>
-						<span class="bg"></span>
-					</a>
-				</div>
-			</div>
-		</div>
-	</section>
+	<head-nav :state="sta"></head-nav>
 	<!--热门分类-->
 	<section id="pro_list" v-cloak>
 		<!--热门分类-->
@@ -280,6 +243,8 @@
 <!--头信息结束-->
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<!--加载顶部导航-->
+<script src="/views/mobile/components/head_nav.js?v=<?php echo time(); ?>"></script>
 <!--搜索组件引入-->
 <script src="/views/mobile/components/search_nav.js?v=<?php echo time(); ?>"></script>
 <!--//底部导航样式的引入-->

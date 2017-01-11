@@ -54,7 +54,6 @@ var HEADERINFOR={
             url:'/site/pro_list?cat=5'
         },
     ],
-    state:0
 }
 Vue.component('head-nav', {
     data:function(){

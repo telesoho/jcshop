@@ -5,7 +5,7 @@
 var Request = new Object();
 Request = GetRequest();
 var getId=Request["cat"];
-$(".mui-control-item"+getId).addClass("mui-active");
+var sta=parseInt(getId)+2;
 var sub_data={
     tid:getId
 };
@@ -15,6 +15,7 @@ var pageData = {
 var vm= new Vue({
     el:"#prolistInfo",
     data:{
+        sta:sta,
         placeHolder:'圣诞神秘好礼等你来拿',
         info:{
             category_list:[],
