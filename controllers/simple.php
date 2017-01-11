@@ -1363,16 +1363,18 @@ class Simple extends IController
         if (!empty($sfz_name)){
             $access_token = $this->wechat->getAccessToken();
             $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
-            $dir .= '/'.date('Y/m/d');
+            $dir .= '/sfz_image';
             if (!empty($image1)){
                 $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
-                $image1 = $this->saveMedia($url1,$dir);
+//                $image1 = $this->saveMedia($url1,$dir,1);
+                $image1 = common::save_url_image($url1,$dir,1);
             } else {
                 $image1 = IFilter::act(IReq::get('image_saved1'),'string');
             }
             if (!empty($image2)){
                 $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
-                $image2 = $this->saveMedia($url2,$dir);
+//                $image2 = $this->saveMedia($url2,$dir,2);
+                $image2 = common::save_url_image($url2,$dir,2);
             } else {
                 $image2 = IFilter::act(IReq::get('image_saved2'),'string');
             }
@@ -1403,27 +1405,6 @@ class Simple extends IController
             mkdir($dirname,0777,true);
         }
         file_put_contents($dirname.'/'.$filename,$media['mediaBody']);
-        return $dirname.$filename;
+        return $dirname.'/'.$filename;
     }
-    function a(){
-        $this->redirect('a');
-    }
-    function b(){
-        $this->redirect('b');
-    }
-    function c(){
-        $this->redirect('c');
-
-    }
-    function d(){
-        $this->redirect('d');
-
-    }
-    function e(){
-        $this->redirect('e');
-    }
-    function f(){
-        $this->redirect('f');
-    }
-
 }

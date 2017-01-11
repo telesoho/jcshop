@@ -579,6 +579,8 @@ class Order extends IController implements adminAuthorization
             if ( !file_exists($sfz_image2) ) IError::show_normal('用户身份证证件不存在');
 //            $data['user_data'] = $user_data;
             $ret = xlobo::add_idcard($address_data['accept_name'], $address_data['mobile'], $address_data['sfz_num'], $address_data['sfz_image1'], $address_data['sfz_image2']);
+            var_dump($ret);
+//            var_dump(xlobo::get_hub());
         }
         $this->setRenderData($data);
         $this->redirect('order_deliver_xlobo');
