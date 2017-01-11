@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="x5-orientation" content="portrait">
+		<title>品牌</title>
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/articleList.css?v=<?php echo time(); ?>" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/app/brandlist.css?v=<?php echo time(); ?>" />
+	</head>
+	<body>
+		<div id="articleList" style="color: #000;">
+			<head-nav :state="1"></head-nav>
+			<div class="brand1" v-for="item in one_title">
+				<div>
+					<img src="/views/mobile/skin/default/image/jmj/redesign/brand_2.png" style="width: 100%;"/>
+				</div>
+				<div class="brand_list" >
+					<ul class="brand_list_ul">
+						<li @click="brand_shop(items.id)" v-for="items in item.list">
+							<img src="/views/mobile/skin/default/image/jmj/redesign/tu1.png" style="width: 2.4rem;"/>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<footer-nav :state="0"></footer-nav>
+			<div style="height: 1.5rem;">
+				
+			</div>
+		</div>	
+		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/components/head_nav.js?v=<?php echo time(); ?>"></script>
+		<script type="text/javascript">
+		var Request = new Object();
+		Request = GetRequest();
+		var getId=Request["cat"];
+		var sta=parseInt(getId)+2;
+			var vm = new Vue({
+				el:"#articleList",
+				data:{
+					sta:sta,
+					info:[]
+				},
+				computed:{
+					one_title:function(){
+						console.log(this.info)
+						return this.info;
+					}
+				},
+				mounted:function(){
+					var self = this;
+					brand_lista(self)
+				},
+				updated: function(){
+				},
+				methods:{
+					brand_shop:function(id){
+						console.log(id)
+						removeSessionItem("pinpai_infolist");
+    					removeSessionItem("pinpai_page");
+						window.location.href = "/site/brand_detail?id="+id;
+					}
+				}
+			})
+			function brand_lista(self){
+			mui.ajax('/apic/brand_list_index',{
+				dataType:'json',
+				type:'get',
+				timeout:10000,
+				success:function(data){
+//					console.log(data.data.cat);
+					data.data.cat.map(function(item){
+						self.info.push(item);
+					})
+					
+				}
+			});
+		}
+		</script>
+	</body>
+</html>
