@@ -30,7 +30,7 @@ var HEADERINFOR={
             url:'/site/pro_list?cat=1'
         },
         {
-            name:'各护',
+            name:'个护',
             img1:'/views/mobile/skin/default/image/jmj/new_active/index/41.png',
             img2:'/views/mobile/skin/default/image/jmj/new_active/index/40.png',
             url:'/site/pro_list?cat=2'
