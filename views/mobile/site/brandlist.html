@@ -85,6 +85,9 @@
 				}
 			});
 		}
+		$(window).load(function(){
+			mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
+		})
 		</script>
 	</body>
 </html>
