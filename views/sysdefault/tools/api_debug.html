@@ -1,0 +1,104 @@
+{js:my97date}
+
+<div class="headbar clearfix">
+	<div class="position"><span>接口管理</span><span>></span><span>接口列表</span><span>></span><span>接口调试</span></div>
+	<div style="text-align:left;">
+		<button type="button" onclick="page.debugStart(this);">调试</button>
+		<button type="button" class="close" onclick="window.history.back();">返回</button>
+	</div>
+</div>
+
+<div class="content_box">
+	<div class="content" >
+	<form action="{url:/tools/api_debug}" name='api_debug'  method="post">
+		<input name="api_id" type="hidden" value="{echo:IReq::get('id')}" />
+		<div style="margin-left:10px;float:left;width:30%;text-align:left;">
+			<div >
+				<label>接口URL：</label>
+				<span style="color:#999;">{$data['url']}</span>
+			</div>
+			<hr/>
+			<div >
+				<label>接口作者：</label>
+				<span style="color:#999;">{$data['author']}</span>
+			</div>
+			<hr/>
+			<div >
+				<label>接口说明：</label>
+				<span style="color:#999;">{$data['apidesc']}</span>
+			</div>
+			<hr/>
+			<div>
+				<label style="margin-bottom:10px;">接口参数：</label>
+				<div class="unit">
+					{foreach:items=$data['parames'] key=$k item=$v}
+						<span style="width:90%;display:block;text-align:left;font-weight: bold;">
+							<font color="#30A9E1">{$v}</font>
+							<font color="#999">({$data['parames_desc'][$k]})</font>
+						</span>
+						<span style="display:block;">
+							<?php switch($v){
+								case 'token':
+									echo '<input class="normal" name="'.$v.'" type="text" class="text" style="margin-bottom:10px; margin-top:2px; width:90%; background-color:#F6F6F6; " value="'.$data['token'].'" >';
+									break;
+								case 'updata':
+									echo '<textarea name="'.$v.'" placeholder="输入格式=参数:值,参数:值"  rows="5" style="width:90%; margin-top:2px; resize:none; background-color:#F6F6F6;"></textarea>';
+									break;
+								default:
+									echo '<input class="normal" name="'.$v.'" type="text" class="text" style="margin-bottom:10px; margin-top:2px; width:90%; background-color:#F6F6F6;" >';
+							} ?>
+						</span>
+					{/foreach}
+				</div>
+			</div>
+		</div>
+		<div style="float:left; width:30%; height:400px; margin:3px;">
+			<div>接口调试结果</div>
+			<textarea readonly="readonly" style="font-family:sans-serif; width:100%; height:80%; resize:none;" id="json_input" spellcheck="false"></textarea>
+		</div>
+		<div style="float:left; width:18%; height:400px; margin:3px;">
+			<div>返回字段说明</div>
+			<textarea readonly="readonly" style="font-family:sans-serif; width:100%; height:80%; resize:none;" spellcheck="false">{$data['parames_back']}</textarea>
+		</div>
+		<div style="float:left; width:18%; height:400px; margin:3px;">
+			<div>错误信息说明</div>
+			<textarea readonly="readonly" style="font-family:sans-serif; width:100%; height:80%; resize:none;" spellcheck="false">{$data['error_desc']}</textarea>
+		</div>
+	</form>
+		</div>
+</div>
+
+
+<script type='text/javascript'>
+window.onload = function(){
+	page.init();
+};
+
+var page = {
+	loading 			: false,
+	//初始化
+	init 	 			: function(){
+	},
+	//调试接口
+	debugStart 			: function(obj){
+		if(page.loading == true){ return false; } page.loading = true;
+		var thisForm 	= $('form[name="api_debug"]');
+		$.post(thisForm.attr("action"),thisForm.serialize(),function(data){
+			console.log(data);
+			try {
+				if(typeof JSON == 'object'){
+					thisForm.find('#json_input').val(JSON.stringify(JSON.parse(data), null, "    "));
+				}else{
+					thisForm.find('#json_input').val( jsl.format.formatJson(data) );
+				}
+			} catch(e) {
+				thisForm.find('#json_input').val( data );
+				_inform('接口出错：<br/>'+e);
+			}
+			page.loading = false;
+		});
+	},
+}
+
+
+</script>

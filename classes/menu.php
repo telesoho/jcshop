@@ -162,6 +162,9 @@ class Menu
 		),
 
        '工具'=>array(
+       		'接口管理' => array(
+       			'/tools/api_list' => '接口列表',
+			),
 			'数据库管理'=>array(
 				'/tools/db_bak' => '数据库备份',
 				'/tools/db_res' => '数据库还原',

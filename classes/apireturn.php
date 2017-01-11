@@ -14,6 +14,7 @@ class apiReturn{
 		'0'      => 'ok',
 		'001001' => '当前用户未登录',
 		'001002' => '参数错误',
+		'001003' => '参数不能为空',
 		//活动、优惠券
 		'002001' => '请输入正确的优惠券码',
 		'002002' => '优惠券码不存在',
@@ -90,6 +91,13 @@ class apiReturn{
 			'msg'  => empty($msg) ? self::info($code) : $msg,
 			'data' => $data,
 		);
+	}
+	
+	/**
+	 * 获取错误信息
+	 */
+	public static function getErrorInfo(){
+		return self::$Msg;
 	}
 
 }

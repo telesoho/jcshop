@@ -10,6 +10,7 @@ return array(
 	'goods_weight_delivery' => -1, //商品重量大于此数值时不包邮，-1为关闭
 	'condition_price'       => 288, //包邮金额，[0=全场无条件包邮,-1=关闭包邮]
 	'token_allow_time'      => 7*24*60*60, //token过期时间，单位：秒
+	'production'            => false, //false开发环境，true生产环境
 )
 
 ?>
