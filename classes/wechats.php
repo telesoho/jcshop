@@ -123,11 +123,11 @@ class wechats
                                "color":"#173177"
                            },
                            "keyword1":{
-                               "value":"*****",
+                               "value":"%s",
                                "color":"#173177"
                            },
                            "keyword2":{
-                               "value":"*****",
+                               "value":"%s",
                                "color":"#173177"
                            },
                            "remark": {
@@ -135,7 +135,7 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,IUrl::getHost(),);
+               }',$open_id,IUrl::getHost(),$send_info['accept_name'] . '___' . $send_info['mobile'] . '-->' . $send_info['sfz_name'] . '___' . $send_info['mobile'], $send_info['address']);
                 break;
         }
         $ret = common::http_post_json($url,$params);

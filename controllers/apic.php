@@ -3061,10 +3061,23 @@ class Apic extends IController{
 }
 ]
 }';
+        $data = '{
+"RECORDS":[
+{
+"order_no":"20170105153826768194",
+"accept_name":"方子琦",
+"address":"学林雅苑2幢206室",
+"mobile":"18158008151",
+"user_id":4430,
+"sfz_name":"方子琦",
+"oauth_user_id":"orEYdw98ZZpmvDrD6lJyR5YAhPnY"
+}
+]
+}';
         $data = json_decode($data);
         var_dump($data);
         foreach ($data->RECORDS as $k=>$v){
-            wechats::send_message_template($v->oauth_user_id,'')
+            wechats::send_message_template($v->oauth_user_id,'sfz',['accept_name'=>$v->accept_name,'address'=>$v->address,'sfz_name'=>$v->sfz_name,'mobile'=>$v->mobile]);
         }
     }
 	
