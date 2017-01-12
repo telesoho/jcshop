@@ -2028,14 +2028,14 @@ class Apic extends IController{
 	//显示专辑列表（首页）
 	public function article_list(){
 		/* 获取参数 */
-		$param = array(
-			'cid'  => IFilter::act(IReq::get('cid'), 'int'), //专辑分类ID，选填[3视频特辑-20场景馆]
-			'page' => IFilter::act(IReq::get('page'), 'int'), //当前页码，选填
-		);
+		$param = $this->checkData(array(
+			array('cid', 'int', 0, '专辑分类ID[3视频特辑]'),
+			array('page', 'int', 0, '分页编号'),
+		));
 		/* 获取数据 */
 		$query           = new IQuery('article as m');
 		$query->join     = 'left join article_category as c on c.id=m.category_id';
-		$query->where    = 'm.top=0 and m.visibility=1 '.(empty($param['cid']) ? ' AND m.category_id NOT IN (3,20)' : ' AND m.category_id='.$param['cid']);
+		$query->where    = 'm.top=0 and m.visibility=1 '.(empty($param['cid']) ? ' AND m.category_id NOT IN (3)' : ' AND m.category_id='.$param['cid']);
 		$query->fields   = 'm.id,m.title,m.image,m.visit_num,m.category_id,c.icon,c.name as category_name';
 		$query->order    = 'm.sort desc,m.id desc';
 		$query->page     = $param['page']>1 ? $param['page'] : 1;
@@ -2089,7 +2089,7 @@ class Apic extends IController{
 				}
 			}
 		}
-		$this->json_echo($list);
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$list));
 	}
 	
 	/**
