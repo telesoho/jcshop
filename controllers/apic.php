@@ -1313,14 +1313,16 @@ class Apic extends IController{
 	 */
 	public function order_list(){
 		/* 获取数据 */
-		$type  = IFilter::act(IReq::get('type'), 'string'); //类型为u时，店铺主
-		$class = IFilter::act(IReq::get('class'), 'int'); //分类ID[0全部订单-1待付款-2待发货-3待收货-4已完成]
-		$page  = IFilter::act(IReq::get('page'), 'int'); //分页编号
-		if($this->user['user_id']==null) $this->json_echo(apiReturn::go('001001'));
-		$user = array($this->user['user_id']);
+		$param = $this->checkData(array(
+			array('type','string',0,'类型=u店铺主'),
+			array('class','int',0,'分类ID[不传参全部订单-1待付款-2待发货-3待收货-4已完成]'),
+			array('page','int',0,'分页编号'),
+		));
+		$user_id  = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : $this->returnJson(array('code'=>'001001','msg'=>$this->errorInfo['001001']));
+		$user = array($user_id);
 		
 		/* 分类 */
-		switch($class){
+		switch($param['class']){
 			//全部订单
 			case 0:
 				$where = 'pay_type!=0 AND status!=3 AND status!=4';
@@ -1342,11 +1344,11 @@ class Apic extends IController{
 				$where = 'pay_type!=0 AND status=5';
 				break;
 			default:
-				$this->json_echo(apiReturn::go('003001'));
+				$this->returnJson(array('code'=>'003001','msg'=>$this->errorInfo['003001']));
 		}
 		
 		/* 店铺主 */
-		if($type=='u'){
+		if($param['type']=='u'){
 			$queryUser         = new IQuery('user as m');
 			$queryUser->join   = 'LEFT JOIN shop AS a ON a.identify_id=m.shop_identify_id';
 			$queryUser->where  = 'own_id='.$this->user['user_id'];
@@ -1364,11 +1366,10 @@ class Apic extends IController{
 		$query->where    = 'if_del=0 AND '.$where.' AND user_id IN ('.implode(',', array_unique($user)).')';
 		$query->fields   = 'id,order_no,order_amount,status,pay_type,distribution_status';
 		$query->order    = 'id desc';
-		$query->page     = $page<1 ? 1 : $page;
+		$query->page     = $param['page']<1 ? 1 : $param['page'];
 		$query->pagesize = 10;
 		$data            = $query->find();
-		$totalPage       = $query->getTotalPage();
-		if($page>$totalPage) $data = array();
+		if($param['page']>$query->getTotalPage()) $data = array();
 		if(!empty($data)){
 			$relation   = array('已完成' => '删除订单', '等待发货' => '取消订单', '等待付款' => '去支付', '已发货' => '查看物流', '已取消' => '已取消', '部分发货' => '查看物流');
 			$relation_k = array_keys($relation);
@@ -1389,8 +1390,7 @@ class Apic extends IController{
 				//     			$data[$k]['order_info'] 			= (new order_class())->getOrderShow($data[$k]['id'],$this->user['user_id']);
 			}
 		}
-		
-		$this->json_echo(apiReturn::go('0', $data));
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$data));
 	}
 	
 	/**
@@ -1443,13 +1443,14 @@ class Apic extends IController{
 	 */
 	public function order_goods_list(){
 		/* 接收参数 */
-		$order_id = IFilter::act(IReq::get('order_id'), 'int');
-		$user_id  = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : $this->json_echo(apiReturn::go('001001'));
-		if(empty($order_id)) $this->json_echo(apiReturn::go('001002')); //缺少参数
+		$param = $this->checkData(array(
+			array('order_id','int',1,'订单ID'),
+		));
+		$user_id  = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : $this->returnJson(array('code'=>'001001','msg'=>$this->errorInfo['001001']));
 		//订单详情
 		$modelOrder = new IModel('order');
-		$infoOrder  = $modelOrder->getObj('id='.$order_id.' AND user_id='.$user_id);
-		if(empty($infoOrder)) $this->json_echo(apiReturn::go('003002'));
+		$infoOrder  = $modelOrder->getObj('id='.$param['oarder_id'].' AND user_id='.$user_id);
+		if(empty($infoOrder)) $this->returnJson(array('code'=>'003002','msg'=>$this->errorInfo['003002']));
 		/* 订单商品 */
 		$goodsList = Api::run('getOrderGoodsListByGoodsid', array('#order_id#', $infoOrder['id']));
 		if(!empty($goodsList)){
@@ -1457,7 +1458,7 @@ class Apic extends IController{
 				$goodsList[$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
 			}
 		}
-		$this->json_echo(apiReturn::go('0', $goodsList));
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$goodsList));
 	}
 	
 	/**
