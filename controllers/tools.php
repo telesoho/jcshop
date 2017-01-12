@@ -75,7 +75,7 @@ class Tools extends IController implements adminAuthorization
 			//登录接口，保存token
 			if($info['url']=='apic/login'){
 				$logininfo = json_decode($backdata);
-				if($logininfo->code==0) session('api_token', $logininfo->data->token);
+				if($logininfo->code==0) ISession::set('api_token', $logininfo->data->token);
 			}
 			exit($backdata);
 		}
