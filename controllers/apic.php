@@ -43,7 +43,7 @@ class Apic extends IController{
 			$querySpeedGoods         = new IQuery('speed_access AS m');
 			$querySpeedGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
 			$querySpeedGoods->where  = 'pid='.$infoSpeed['id'];
-			$querySpeedGoods->fields = 'm.sell_price,g.id,g.name,g.img,g.sell_price AS old_price';
+			$querySpeedGoods->fields = 'm.sell_price,g.id,g.name,g.img,g.sell_price AS old_price,go.purchase_price';
 			$infoSpeed['list']       = $querySpeedGoods->find();
 			if(!empty($infoSpeed['list'])){
 				foreach($infoSpeed['list'] as $k => $v){
@@ -113,7 +113,7 @@ class Apic extends IController{
 		/* 商品列表 */
 		$queryGoods         = new IQuery('goods AS m');
 		$queryGoods->join   = 'LEFT JOIN commend_goods AS d ON d.goods_id=m.id LEFT JOIN category_extend AS c ON c.goods_id=m.id';
-		$queryGoods->fields = 'm.id,m.name,m.sell_price,m.img';
+		$queryGoods->fields = 'm.id,m.name,m.sell_price,m.purchase_price,m.img';
 		$queryGoods->limit  = 6;
 		$queryGoods->group  = 'm.id';
 		for($i = 1; $i<=3; $i++){
@@ -154,7 +154,7 @@ class Apic extends IController{
 			//商品模型
 			$queryGoods         = new IQuery('goods as m');
 			$queryGoods->join   = 'left join relation as r on r.goods_id=m.id';
-			$queryGoods->fields = 'm.id,m.name,m.sell_price,m.img';
+			$queryGoods->fields = 'm.id,m.name,m.sell_price,m.purchase_price,m.img';
 			$queryGoods->order  = 'm.sale desc,m.visit desc';
 			$queryGoods->limit  = 5;
 			//收藏模型
@@ -345,9 +345,6 @@ class Apic extends IController{
 		}
 		
 		//满包邮规则
-		$query                   = new IQuery("promotion");
-		$query->where            = "type = 0 and seller_id = 0 and award_type = 6";
-		$data['condition_price'] = $query->find()[0]['condition'];
 		
 		/* 使用优惠券 */
 		if(!empty($code)){
@@ -400,14 +397,14 @@ class Apic extends IController{
 				foreach($pargam['goods_list'] as $k => $v){
 					//商品详情
 					$modelGoods = new IModel('goods');
-					$infoGoods  = $modelGoods->getObj('id='.$v['goods_id'], 'id as goods_id,name,goods_no,img,sell_price,weight,store_nums');
+					$infoGoods  = $modelGoods->getObj('id='.$v['goods_id'], 'id as goods_id,name,goods_no,img,sell_price,purchase_price,weight,store_nums');
 					//校验
 					if($infoGoods['store_nums']<$v['nums']) $this->json_echo(apiReturn::go('007002')); //商品库存不足
 					$query         = new IQuery('activity_speed AS m');
 					$query->join   = 'LEFT JOIN activity_speed_access AS a ON a.pid=m.id '.
 						'LEFT JOIN goods AS g ON g.id=a.goods_id';
 					$query->where  = 'g.is_del=0 AND m.type=2 AND m.status=1 AND a.goods_id='.$v['goods_id'];
-					$query->fields = 'g.name,g.img,a.id,a.goods_id,g.sell_price,a.sell_price AS now_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
+					$query->fields = 'g.name,g.img,a.id,a.goods_id,g.sell_price,g.purchase_price,a.sell_price AS now_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
 					$query->limit  = 1;
 					$info          = $query->find();
 					if(empty($info)) $this->json_echo(apiReturn::go('006002', '', '"'.$infoGoods['name'].'"未参与活动'));
@@ -783,7 +780,7 @@ class Apic extends IController{
 			case 2:
 				//商品信息
 				$modelGoods = new IModel('goods');
-				$dataGoods  = $modelGoods->getObj('is_del!=1 AND id='.$dataGrow['did'], 'id as goods_id,name,goods_no,img,sell_price,weight,store_nums');
+				$dataGoods  = $modelGoods->getObj('is_del!=1 AND id='.$dataGrow['did'], 'id as goods_id,name,goods_no,img,sell_price,purchase_price,weight,store_nums');
 				if(empty($dataGoods)) $this->json_echo(apiReturn::go('005001')); //商品不存在
 				if($dataGoods['store_nums']<1) $this->json_echo(apiReturn::go('002033')); //商品库存不足已领完
 				$dataGoods['product_id'] = 0; //货号
@@ -929,7 +926,7 @@ class Apic extends IController{
 		$queryGoods->join   = 'LEFT JOIN activity_bargain_access AS a ON a.pid=m.id '.
 			'LEFT JOIN goods AS g ON g.id=a.goods_id';
 		$queryGoods->where  = 'g.is_del=0 AND m.id='.$param['activity_id'].' AND a.goods_id='.$param['goods_id'];
-		$queryGoods->fields = 'a.id,a.goods_id,a.min_price,g.name,g.img,g.sell_price,m.start_time,m.end_time,m.status';
+		$queryGoods->fields = 'a.id,a.goods_id,a.min_price,g.name,g.img,g.sell_price,go.purchase_price,m.start_time,m.end_time,m.status';
 		$infoGoods          = $queryGoods->find();
 		if(empty($infoGoods)) $this->json_echo(apiReturn::go('006001'));
 		$infoGoods        = $infoGoods[0];
@@ -972,7 +969,7 @@ class Apic extends IController{
 		$queryGoods->join   = 'LEFT JOIN activity_bargain_access AS a ON a.pid=m.id '.
 			'LEFT JOIN goods AS g ON g.id=a.goods_id';
 		$queryGoods->where  = 'g.is_del=0 AND m.id='.$param['activity_id'].' AND a.goods_id='.$param['goods_id'];
-		$queryGoods->fields = 'a.id,a.goods_id,a.min_price,a.rand,g.name,g.img,g.sell_price,m.start_time,m.end_time,m.status';
+		$queryGoods->fields = 'a.id,a.goods_id,a.min_price,a.rand,g.name,g.img,g.sell_price,g.purchase_price,m.start_time,m.end_time,m.status';
 		$infoGoods          = $queryGoods->find();
 		if(empty($infoGoods))
 			$this->json_echo(apiReturn::go('006001'));
@@ -1048,7 +1045,7 @@ class Apic extends IController{
 		/* 秒杀商品列表 */
 		$queryGoods           = new IQuery('activity_speed_access AS m');
 		$queryGoods->join     = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
-		$queryGoods->fields   = 'g.id,g.name,g.store_nums,m.nums,m.sell_price,g.img';
+		$queryGoods->fields   = 'g.id,g.name,g.store_nums,m.nums,m.sell_price,m.purchase_price,g.img';
 		$queryGoods->where    = 'g.is_del=0 AND pid='.$param['time_id'];
 		$queryGoods->page     = $param['page']<1 ? 1 : $param['page'];
 		$queryGoods->pagesize = 10;
@@ -1072,7 +1069,7 @@ class Apic extends IController{
 		/* 获取活动热销商品 */
 		$query         = new IQuery('goods as m');
 		$query->join   = 'LEFT JOIN brand AS b ON b.id=m.brand_id LEFT JOIN commend_goods AS d ON d.goods_id=m.id LEFT JOIN category_extend AS c ON c.goods_id=m.id ';
-		$query->fields = 'm.id,m.name,m.sell_price,m.original_price,m.img,b.name as brand_name,b.logo as brand_logo';
+		$query->fields = 'm.id,m.name,m.sell_price,m.purchase_price,m.original_price,m.img,b.name as brand_name,b.logo as brand_logo';
 		$query->order  = 'm.sale desc,m.visit desc';
 		$query->group  = 'm.id';
 		$data          = array();
@@ -1143,7 +1140,7 @@ class Apic extends IController{
 		/* 品牌下的最热商品3个 */
 		$queryGoods         = new IQuery('goods');
 		$queryGoods->where  = 'is_del=0 AND brand_id IN ('.$brand_ids.')';
-		$queryGoods->fields = 'id,name,sell_price,img';
+		$queryGoods->fields = 'id,name,sell_price,purchase_price,img';
 		$queryGoods->order  = 'sale DESC,visit DESC';
 		$queryGoods->limit  = 3;
 		$listGoods          = $queryGoods->find();
@@ -1587,7 +1584,7 @@ class Apic extends IController{
 		$items          = $query->find();
 		$query2         = new IQuery("promotion as p");
 		$query2->join   = "left join goods as go on p.condition = go.id";
-		$query2->fields = "go.id as goods_id,go.is_del,p.name as pname,p.award_value, go.name,go.sell_price,go.img";
+		$query2->fields = "go.id as goods_id,go.is_del,p.name as pname,p.award_value, go.name,go.sell_price,go.purchase_price,go.img";
 		$query2->where  = sprintf("p.type = 1 and p.seller_id = 0 and p.name = '%s'", $items[0]['name']);
 		$query2->limit  = 6;
 		$items2         = $query2->find();
@@ -1624,7 +1621,7 @@ class Apic extends IController{
 		
 		/* 商品详情 */
 		$modelGoods = new IModel('goods');
-		$fields     = 'id,name,goods_no,brand_id,sell_price,original_price,jp_price,market_price,store_nums,weight,img,content';
+		$fields     = 'id,name,goods_no,brand_id,sell_price,purchase_price,original_price,jp_price,market_price,store_nums,weight,img,content';
 		$dataGoods  = $modelGoods->getObj('is_del=0 AND id='.$goods_id, $fields);
 		if(empty($dataGoods)) $this->json_echo(apiReturn::go('006001')); //商品不存在
 		/* 计算活动商品价格 */
@@ -1670,7 +1667,7 @@ class Apic extends IController{
 			//商品列表
 			$queryGoods->order          = 'sale DESC,visit DESC';
 			$queryGoods->limit          = 10;
-			$queryGoods->fields         = 'id,name,sell_price,img';
+			$queryGoods->fields         = 'id,name,sell_price,purchase_price,img';
 			$dataGoods['brand']['list'] = $queryGoods->find();
 			foreach($dataGoods['brand']['list'] as $k => $v){
 				$dataGoods['brand']['list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
@@ -1772,7 +1769,7 @@ class Apic extends IController{
 		/* 商品列表 */
 		$queryGoods           = new IQuery('goods AS m');
 		$queryGoods->join     = 'LEFT JOIN commend_goods AS d ON d.goods_id=m.id LEFT JOIN category_extend AS c ON c.goods_id=m.id';
-		$queryGoods->fields   = 'm.id,m.name,m.sell_price,m.img,m.market_price,m.jp_price';
+		$queryGoods->fields   = 'm.id,m.name,m.sell_price,m.purchase_price,m.img,m.market_price,m.jp_price';
 		$queryGoods->where    = $where;
 		$queryGoods->order    = $order;
 		$queryGoods->page     = $page<1 ? 1 : $page;
@@ -1978,7 +1975,7 @@ class Apic extends IController{
 		//品牌下的商品
 		$brands_query         = new IQuery('brand as a');
 		$brands_query->join   = "right join goods as b on a.id = b.brand_id";
-		$brands_query->fields = "b.id,b.name,b.img,b.sell_price,b.brand_id";
+		$brands_query->fields = "b.id,b.name,b.img,b.sell_price,b.purchase_price,b.brand_id";
 		$brands_query->where  = "b.brand_id = ".$goods_data['brand_id'];
 		$brands_query->limit  = 6;
 		$brand_good_data      = $brands_query->find();
@@ -2014,7 +2011,7 @@ class Apic extends IController{
 		$commend_goods         = new IQuery('commend_goods as co');
 		$commend_goods->join   = 'left join goods as go on co.goods_id = go.id';
 		$commend_goods->where  = 'co.commend_id = 3 and go.is_del = 0 AND go.id is not null'.' and go.search_words like '.'"%,'.$word.',%"';
-		$commend_goods->fields = 'go.img,go.sell_price,go.name,go.id,go.market_price';
+		$commend_goods->fields = 'go.img,go.sell_price,go.purchase_price,go.name,go.id,go.market_price';
 		$commend_goods->limit  = 3;
 		$commend_goods->order  = 'sort asc';
 		$data['hot']           = $commend_goods->find();
@@ -2046,7 +2043,7 @@ class Apic extends IController{
 			//商品列表模型
 			$query_goods         = new IQuery('goods as m');
 			$query_goods->join   = 'left join relation as r on r.goods_id=m.id';
-			$query_goods->fields = 'm.id,m.name,m.sell_price,m.img';
+			$query_goods->fields = 'm.id,m.name,m.sell_price,m.purchase_price,m.img';
 			$query_goods->order  = 'm.sort asc';
 			$query_goods->limit  = 5;
 			//商品统计模型
@@ -2158,7 +2155,7 @@ class Apic extends IController{
 		$article           = new IQuery('relation as r');
 		$article->join     = 'left join goods as go on r.goods_id = go.id';
 		$article->where    = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $article_id);
-		$article->filds    = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price';
+		$article->filds    = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price,go.purchase_price';
 		$article->page     = IReq::get('page') ? IFilter::act(IReq::get('page'), 'int') : 1;
 		$article->pagesize = 1000;
 		$relationList      = $article->find();
@@ -2276,13 +2273,13 @@ class Apic extends IController{
 			//cosme排行榜进入
 			$join   = 'LEFT JOIN cosme AS c ON c.goods_id=m.id';
 			$where  = 'm.is_del=0 AND c.type in ('.$catId.')'.(empty($bid) ? '' : ' AND m.brand_id='.$bid);
-			$fields = 'm.id,m.name,m.sell_price,m.jp_price,m.market_price,m.img';
+			$fields = 'm.id,m.name,m.sell_price,m.purchase_price,m.jp_price,m.market_price,m.img';
 			$order  = 'c.rank ASC';
 		}else{
 			//通常进入
 			$join   = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
 			$where  = 'm.is_del=0 AND c.category_id in ('.$catId.')'.(empty($bid) ? '' : ' AND m.brand_id='.$bid);
-			$fields = 'm.id,m.name,m.sell_price,m.jp_price,m.market_price,m.img';
+			$fields = 'm.id,m.name,m.sell_price,m.purchase_price,m.jp_price,m.market_price,m.img';
 			$order  = 'm.sale DESC,m.visit DESC';
 		}
 		$query->join     = $join;
@@ -2371,7 +2368,7 @@ class Apic extends IController{
 		/* 相关商品 */
 		$queryGoods           = new IQuery('goods');
 		$queryGoods->where    = 'is_del=0 AND brand_id='.$brand_id;
-		$queryGoods->fields   = 'id,name,img,content,sell_price,jp_price';
+		$queryGoods->fields   = 'id,name,img,content,sell_price,purchase_price,jp_price';
 		$queryGoods->page     = $page<1 ? 1 : $page;
 		$queryGoods->pagesize = 10;
 		$queryGoods->order    = 'sort asc';
@@ -2510,7 +2507,7 @@ class Apic extends IController{
 		}
 		//搜索商品
 		$query_goods = new IQuery('goods');
-		$field       = 'id,name,sell_price,jp_price,market_price,img';
+		$field       = 'id,name,sell_price,purchase_price,jp_price,market_price,img';
 		$where       = 'is_del=0 AND (';
 		$order       = '';
 		foreach($word_arr as $k => $v){
@@ -2589,7 +2586,7 @@ class Apic extends IController{
 		/* 排行榜模型 */
 		$query         = new IQuery('cosme as m');
 		$query->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
-		$query->fields = 'g.id,g.name,g.sell_price,g.img';
+		$query->fields = 'g.id,g.name,g.sell_price,g.purchase_price,g.img';
 		$query->order  = 'm.rank asc';
 		$query->limit  = 3;
 		$name          = array(1 => '上周热销榜', 2 => '美容热销榜', 3 => '美容护理榜');
@@ -2639,7 +2636,7 @@ class Apic extends IController{
 		/* 商品收藏 */
 		$favorite_query         = new IQuery('favorite as a');
 		$favorite_query->join   = 'left join goods as go on go.id = a.rid';
-		$favorite_query->fields = 'a.*,go.id,go.name,go.sell_price,go.market_price,go.img,go.jp_price';
+		$favorite_query->fields = 'a.*,go.id,go.name,go.sell_price,go.purchase_price,go.market_price,go.img,go.jp_price';
 		
 		$favorite_query->where = 'user_id = '.$this->user['user_id'];
 		$data1                 = $favorite_query->find();
