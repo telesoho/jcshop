@@ -23,25 +23,6 @@ var vm = new Vue({
                 item.eid=item.id;
                 item.url="/site/article_detail?id="+item.id;
                 item.product_id="product_item"+item.id;
-                if(item.visit_num>=1000000){
-                    item.visit_num=parseInt(item.visit_num/1000000)+"万";
-                }
-                if(item.visit_num>=100000){
-                    item.visit_num=(item.visit_num/100000).toFixed(1)+"万";
-                }
-                if(item.visit_num>=10000){
-                    item.visit_num=(item.visit_num/10000).toFixed(2)+"万";
-                }
-                if(item.favorite_num>=1000000){
-                    item.favorite_num=parseInt(item.favorite_num/1000000)+"万";
-                }
-                if(item.favorite_num>=100000){
-                    item.favorite_num=(item.favorite_num/100000).toFixed(1)+"万";
-                }
-                if(item.favorite_num>=10000){
-                    item.favorite_num=(item.favorite_num/10000).toFixed(2)+"万";
-                }
-                // item.cls="item box favoriteArticle"+item.id;
                 item.list.map(function(itemList){
                     itemList.eid=item.id;
                     itemList.page=item.page;
@@ -57,16 +38,16 @@ var vm = new Vue({
         console.log(nowPage);
         //如果数据来自首页重新请求
         //如果数据来自详情，从storePage开始加载
-        if(nowPage!=1){
-            self.page=nowPage;
-            self.articleDetail=getItem("articleData");
-            console.log(self.articleDetail.length);
-        }else{
+        // if(nowPage!=1){
+        //     self.page=nowPage;
+        //     self.articleDetail=getItem("articleData");
+        //     console.log(self.articleDetail.length);
+        // }else{
             setItem("articleData",[]);
             setItem("articlePage",nowPage);
             pullupArticleRefresh(self);
             console.log(self.articleDetail.length);
-        }
+        // }
     },
     updated:function() {
         // getScrollTop1();
@@ -96,7 +77,6 @@ var vm = new Vue({
 //页面加载动画的调用
 $(window).load(function(){
     $("#loading").fadeOut(300);
-    document.title=getItem("artileName");
     mui('body').on('tap','.locationA',function(){
         document.location.href=this.href;
     })
@@ -120,19 +100,17 @@ $(window).bind('scroll', function() {
 function pullupArticleRefresh(self){
     mui.ajax('/apic/article_list', {
         data:{
-            cid:getItem("articleId"),
             page:self.page
         },
         dataType: 'json',
         type: 'get',
         timeout: 10000,
         success: function (data) {
-            data.map(function(item){
-                item.page=self.page;
+            data.data.map(function(item){
                 self.articleDetail.push(item);
             });
             self.showMessage=true;
-           if(data.length==0){
+           if(data.data.length==0){
                stop=false;
            }else{
                stop=true;

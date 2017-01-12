@@ -20,15 +20,9 @@ Vue.component('article-list', {
     </div>\
     <a href="#" @click="store(item)" :id="item.product_id">\
     <div class="content">\
-    <div class="img">\
-    <img :dataimg="item.image" alt=""  style="height:3.79rem;" src="/views/mobile/skin/default/image/jmj/icon/big_lazy.png"  class="samLazyImg"  />\
+    <div class="img flexbox" style="background:#fff">\
+    <img :dataimg="item.image"   style="width:7.1rem;height:3.6rem;border-radius:0.1rem" src="/views/mobile/skin/default/image/jmj/icon/big_lazy.png"  class="samLazyImg"  />\
     </div>\
-    <div class="mark1">{{item.goods_num}}件商品\
-</div>\
-<div class="mark2">\
-    <img src="/views/mobile/skin/default/image/jmj/icon/read.png" alt="">\
-    {{item.visit_num}}</div>\
-</div>\
 </a>\
 <div class="single"></div>\
     <div class="mark">\
