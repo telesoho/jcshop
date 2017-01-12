@@ -1616,14 +1616,16 @@ class Apic extends IController{
 	 */
 	public function goods_detail(){
 		/* 获取参数 */
-		$goods_id = IFilter::act(IReq::get('id'), 'int'); //商品ID
+		$param = $this->checkData(array(
+			array('id','int',1,'商品ID'),
+		));
 		$user_id  = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : 0;
 		
 		/* 商品详情 */
 		$modelGoods = new IModel('goods');
 		$fields     = 'id,name,goods_no,brand_id,sell_price,purchase_price,original_price,jp_price,market_price,store_nums,weight,img,content';
-		$dataGoods  = $modelGoods->getObj('is_del=0 AND id='.$goods_id, $fields);
-		if(empty($dataGoods)) $this->json_echo(apiReturn::go('006001')); //商品不存在
+		$dataGoods  = $modelGoods->getObj('is_del=0 AND id='.$param['id'], $fields);
+		if(empty($dataGoods)) $this->returnJson(array('code'=>'006001','msg'=>$this->errorInfo['006001'])); //商品不存在
 		/* 计算活动商品价格 */
 		$dataGoods             = Api::run('goodsActivity', $dataGoods);
 		$dataGoods['discount'] = empty($dataGoods['original_price']) ? '' : round($dataGoods['sell_price']/$dataGoods['original_price'], 2)*10; //计算折扣率
@@ -1632,7 +1634,7 @@ class Apic extends IController{
 		/* 商品图 */
 		$queryPhoto         = new IQuery('goods_photo_relation as g');
 		$queryPhoto->join   = 'left join goods_photo as p on p.id=g.photo_id ';
-		$queryPhoto->where  = ' g.goods_id='.$goods_id;
+		$queryPhoto->where  = ' g.goods_id='.$param['id'];
 		$queryPhoto->fields = 'p.id AS photo_id,p.img ';
 		$listPhoto          = $queryPhoto->find();
 		foreach($listPhoto as $k => $v){
@@ -1642,7 +1644,7 @@ class Apic extends IController{
 		/* 相关专辑 */
 		$queryArt                  = new IQuery('article as m');
 		$queryArt->join            = 'left join relation as r on r.article_id = m.id';
-		$queryArt->where           = 'm.top=0 and m.visibility=1 and r.goods_id='.$goods_id;
+		$queryArt->where           = 'm.top=0 and m.visibility=1 and r.goods_id='.$param['id'];
 		$queryArt->order           = 'm.sort desc';
 		$queryArt->fields          = 'm.id,m.title,m.image';
 		$queryArt->limit           = 10;
@@ -1690,13 +1692,23 @@ class Apic extends IController{
 		$infoFav                  = $queryFor->find();
 		$dataGoods['is_favorite'] = !empty($infoFav) ? 1 : 0;
 		
+		/* 购物车中商品数量 */
+		$modelCar = new IModel('goods_car');
+		$infoCar = $modelCar->getObj('user_id='.$user_id);
+		if(!empty($infoCar)){
+			$car_list = JSON::decode(str_replace(array('&','$'),array('"',','),$infoCar['content']));
+			$dataGoods['car_count'] = count($car_list['goods']);
+		}else{
+			$dataGoods['car_count'] = 0;
+		}
+		
 		/* 增加浏览次数 */
 		$visit    = ISafe::get('visit');
-		$checkStr = "#".$goods_id."#";
+		$checkStr = "#".$param['id']."#";
 		if($visit && strpos($visit, $checkStr)!==false){
 		}else{
 			$modelGoods->setData(array('visit' => 'visit + 1'));
-			$modelGoods->update('id = '.$goods_id, 'visit');
+			$modelGoods->update('id = '.$param['id'], 'visit');
 			$visit = $visit===null ? $checkStr : $visit.$checkStr;
 			ISafe::set('visit', $visit);
 		}
@@ -1704,7 +1716,7 @@ class Apic extends IController{
 		/* 记录用户操作 */
 		
 		/* 返回参数 */
-		$this->json_echo(apiReturn::go('0', $dataGoods));
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$dataGoods));
 	}
 	
 	/**
