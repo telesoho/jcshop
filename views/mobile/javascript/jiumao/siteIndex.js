@@ -150,13 +150,13 @@ function pullupInfoRefresh(self){
         type: 'get',
         timeout: 10000,
         success: function (data) {
-            data.map(function(item){
+            data.data.map(function(item){
                 item.page=self.page;
                 self.indexInfo.articleDetail.push(item);
             });
             console.log(self.indexInfo.articleDetail);
             pushSession("articleDetail",self.indexInfo.articleDetail);
-            if(data.length==0){
+            if(data.data.length==0){
                 stop=false;
             }else{
                 stop=true;
