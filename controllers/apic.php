@@ -2246,7 +2246,7 @@ class Apic extends IController{
 	}
 	
 	/**
-	 * 获取其子类数据信息
+	 * 获取其子类数据信息 //TODO 待废弃
 	 */
 	public function category_child(){
 		/* 获取参数 */
@@ -2306,13 +2306,13 @@ class Apic extends IController{
 	 */
 	public function category_list(){
 		/* 获取参数 */
-		$param = array(
-			'cat_id' => IFilter::act(IReq::get('cat_id'), 'int'), //分类id
-		);
+		$param = $this->checkData(array(
+			array('cat_id','int',0,'分类ID'),
+		));
 		/* 获取数据 */
 		$data = $this->get_cat($param['cat_id']);
 		/* 数据返回 */
-		$this->json_echo(apiReturn::go('0', $data));
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$data));
 	}
 	function get_cat($pid){
 		$queryCat         = new IQuery('category');
@@ -2352,32 +2352,30 @@ class Apic extends IController{
 	public function brand(){
 		/* 接收参数 */
 		$param = $this->checkData(array(
-			
+			array('id','int',1,'品牌ID'),
+			array('page','int',0,'分页编号'),
 		));
-		$brand_id = IFilter::act(IReq::get('id'), 'int');
-		$page     = IFilter::act(IReq::get('page'), 'int');
 		
 		/* 品牌详情 */
 		$queryBrand         = new IQuery('brand');
-		$queryBrand->where  = 'id='.$brand_id;
+		$queryBrand->where  = 'id='.$param['id'];
 		$queryBrand->fields = 'id,name,logo,description,banner';
 		$queryBrand->limit  = 1;
 		$data               = $queryBrand->find();
-		if(empty($data)) $this->json_echo(array('error' => '品牌不存在'));
+		if(empty($data)) $this->returnJson(array('code' => '009001','msg'=>$this->errorInfo['009001']));
 		$data           = $data[0];
 		$data['logo']   = empty($data['logo']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$data['logo'].'/w/160/h/102');
 		$data['banner'] = empty($data['banner']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$data['banner'].'/w/750/h/376');
 		
 		/* 相关商品 */
 		$queryGoods           = new IQuery('goods');
-		$queryGoods->where    = 'is_del=0 AND brand_id='.$brand_id;
+		$queryGoods->where    = 'is_del=0 AND brand_id='.$param['id'];
 		$queryGoods->fields   = 'id,name,img,content,sell_price,purchase_price,jp_price';
-		$queryGoods->page     = $page<1 ? 1 : $page;
+		$queryGoods->page     = $param['page']<1 ? 1 : $param['page'];
 		$queryGoods->pagesize = 10;
 		$queryGoods->order    = 'sort asc';
 		$dataGoods            = $queryGoods->find();
-		$total_page           = $queryGoods->getTotalPage();
-		if($page>$total_page) $dataGoods = array();
+		if($param['page']>$queryGoods->getTotalPage()) $dataGoods = array();
 		if(!empty($dataGoods)){
 			/* 计算活动商品价格 */
 			$dataGoods = api::run('goodsActivity', $dataGoods);
@@ -2390,13 +2388,13 @@ class Apic extends IController{
 		//相关商品数量
 		$queryGoodsSum         = new IQuery('goods');
 		$queryGoodsSum->fields = 'count(`id`) as sum';
-		$queryGoodsSum->where  = 'is_del=0 AND brand_id='.$brand_id;
+		$queryGoodsSum->where  = 'is_del=0 AND brand_id='.$param['id'];
 		$dataGoodsSum          = $queryGoodsSum->find();
 		
 		/* 相关专辑 */
 		$queryArticle         = new IQuery('article AS m');
 		$queryArticle->join   = 'LEFT JOIN relation AS r ON r.article_id=m.id LEFT JOIN goods AS g ON g.id=r.goods_id';
-		$queryArticle->where  = 'g.is_del=0 AND m.visibility=1 AND g.brand_id='.$brand_id;
+		$queryArticle->where  = 'g.is_del=0 AND m.visibility=1 AND g.brand_id='.$param['id'];
 		$queryArticle->fields = 'm.id,m.title,m.visit_num,m.image';
 		$queryArticle->limit  = 5;
 		$queryArticle->order  = 'm.top desc,m.sort desc';
@@ -2410,7 +2408,7 @@ class Apic extends IController{
 		//相关专辑数量
 		$queryArticleSum         = new IQuery('article AS m');
 		$queryArticleSum->join   = 'LEFT JOIN relation AS r ON r.article_id=m.id LEFT JOIN goods AS g ON g.id=r.goods_id';
-		$queryArticleSum->where  = 'g.is_del=0 AND m.visibility=1 AND g.brand_id='.$brand_id;
+		$queryArticleSum->where  = 'g.is_del=0 AND m.visibility=1 AND g.brand_id='.$param['id'];
 		$queryArticleSum->fields = 'count(*) as sum';
 		$dataArticleSum          = $queryArticleSum->find();
 		
@@ -2419,8 +2417,7 @@ class Apic extends IController{
 		$data['article_sum']  = $dataArticleSum[0]['sum'];
 		$data['goods_list']   = $dataGoods;
 		$data['article_list'] = $dataArticle;
-		
-		$this->json_echo($data);
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$data));
 	}
 	
 	/**
