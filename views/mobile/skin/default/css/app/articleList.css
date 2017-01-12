@@ -9,3 +9,22 @@
 .fix-toTop img{
     width:0.84rem;
 }
+.head .title{
+    height:1.62rem;
+    background:#fff;
+    border-bottom:1px solid #b8b8b8;
+}
+.head .title .top{
+    margin-top:0.2rem;
+    width:100%;
+    font-size:0.5rem;
+    color:#b8b8b8;
+    text-align:center;
+}
+.head .title .bg{
+    position:relative;
+    top:-0.15rem;
+    background:#d8d8d8;
+    width:1.06rem;
+    height:0.1rem;
+}

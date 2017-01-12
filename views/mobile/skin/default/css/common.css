@@ -559,7 +559,7 @@ input[type='search']{
   margin-right:0.06rem !important;
   font-family:'HelveticaNeueLt';
   font-size:0.24rem;
-  color:#979797;
+  color:#171717;
 }
 .albumn_index .content{
   position:relative;
@@ -690,7 +690,7 @@ input[type='search']{
   top:0.1rem;
   left:1.95rem;
   width:1px;
-  border-left:1px solid #eee;
+  border-left:1px solid #b8b8b8;
   height:2.2rem;
 }
 /*弹出样式*/
@@ -769,20 +769,6 @@ input[type='search']{
   width:0.52rem;
   height:0.52rem;
 }
-/*.footerNav .tabelitem .showGrass{
-  position:absolute;
-  z-index:23;
-  padding-top:0.1rem ;
-  width:1.31rem;
-  height:1.31rem;
-  border-radius: 50%;
-  border-top:1px solid #eee;
-  display: block;
-  background:#fff;
-  overflow-y: hidden;
-  bottom:0;
-  left:0.08rem;
-}*/
 .footerNav .tabelitem .mui-tab-label{
   position: absolute;
   width:100%;
@@ -791,10 +777,6 @@ input[type='search']{
   bottom:0.05rem;
   font-size:0.20rem;
   color:#929292;
-}
-/*.footerNav .tabelitem .showGrass img{
-      width:0.7rem !important;
-     height:0.7rem !important;
 }
 /*头部导航样式*/
 #nav-slider{

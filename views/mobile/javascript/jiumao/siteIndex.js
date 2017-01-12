@@ -38,25 +38,6 @@ var vm = new Vue({
                 item.eid=item.id;
                 item.url="/site/article_detail?id="+item.id;
                 item.product_id="product_item"+item.id;
-                if(item.visit_num>=1000000){
-                    item.visit_num=parseInt(item.visit_num/1000000)+"万";
-                }
-                if(item.visit_num>=100000){
-                    item.visit_num=(item.visit_num/100000).toFixed(1)+"万";
-                }
-                if(item.visit_num>=10000){
-                    item.visit_num=(item.visit_num/10000).toFixed(2)+"万";
-                }
-                if(item.favorite_num>=1000000){
-                    item.favorite_num=parseInt(item.favorite_num/1000000)+"万";
-                }
-                if(item.favorite_num>=100000){
-                    item.favorite_num=(item.favorite_num/100000).toFixed(1)+"万";
-                }
-                if(item.favorite_num>=10000){
-                    item.favorite_num=(item.favorite_num/10000).toFixed(2)+"万";
-                }
-                // item.cls="item box favoriteArticle"+item.id;
                 item.list.map(function(itemList){
                     itemList.eid=item.id;
                     itemList.page=item.page;
