@@ -30,6 +30,7 @@ class Apic extends IController{
 	 * 商城主页
 	 */
 	public function index(){
+		$param = $this->checkData(array());
 		/* 首页轮播图 */
 		$banner = Api::run('getBannerList');
 		foreach($banner as $k => $v){
@@ -40,7 +41,7 @@ class Apic extends IController{
 		$modelSpeed = new IModel('activity_speed');
 		$infoSpeed  = $modelSpeed->getObj('type=1 AND status=1 AND start_time<='.time().' AND end_time>='.time(), 'id,start_time,end_time');
 		if(!empty($infoSpeed)){
-			$querySpeedGoods         = new IQuery('speed_access AS m');
+			$querySpeedGoods         = new IQuery('activity_speed_access AS m');
 			$querySpeedGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
 			$querySpeedGoods->where  = 'pid='.$infoSpeed['id'];
 			$querySpeedGoods->fields = 'm.sell_price,g.id,g.name,g.img,g.sell_price AS old_price';
@@ -52,8 +53,7 @@ class Apic extends IController{
 			}
 		}
 		
-		/* 专辑推荐 */
-		$this->json_echo(apiReturn::go('0',array(
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>array(
 			'banner' => $banner, //轮播图
 			'speed' => $infoSpeed, //限时购
 		)));
@@ -2354,6 +2354,9 @@ class Apic extends IController{
 	 */
 	public function brand(){
 		/* 接收参数 */
+		$param = $this->checkData(array(
+			
+		));
 		$brand_id = IFilter::act(IReq::get('id'), 'int');
 		$page     = IFilter::act(IReq::get('page'), 'int');
 		
@@ -2427,6 +2430,8 @@ class Apic extends IController{
 	 * 品牌列表首页
 	 */
 	public function brand_list_index(){
+		/* 接收参数 */
+		$param = $this->checkData(array());
 		/* 品牌榜 */
 		$ids              = array(1, 5, 3, 7, 6); //1药妆-5零食-3宠物-7母婴-6生活
 		$queryCat         = new IQuery('brand_category');
@@ -2465,7 +2470,7 @@ class Apic extends IController{
 			}
 		}
 		/* 返回参数 */
-		$this->json_echo(apiReturn::go('0',array(
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>array(
 			'cat' => $listCat,
 			'all' => $listAll,
 		)));

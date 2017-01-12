@@ -47,7 +47,6 @@ class Tools extends IController implements adminAuthorization
 			$model  = new IModel('api_manage');
 			$info   = $model->getObj('id='.$param['id']);
 			$apiurl = 'http://'.$_SERVER['HTTP_HOST'].IUrl::creatUrl($info['url']);
-			
 			//生成加密hash
 			$parame = array();
 			foreach(explode(',', $info['parames']) as $v){
@@ -65,9 +64,11 @@ class Tools extends IController implements adminAuthorization
 						$parame[$v] = json_encode($param);
 						break;
 					default:
-						$parame[$v] = $_POST[$v];
+						if(isset($_POST[$v]))
+							$parame[$v] = $_POST[$v];
 				}
 			}
+			
 			$api_token = ISession::get('api_token');
 			if(!empty($api_token)) $parame['token'] = $api_token;
 			//发送请求
@@ -134,6 +135,7 @@ class Tools extends IController implements adminAuthorization
 				//获取接口参数
 				$apiurl   = 'http://'.$_SERVER['HTTP_HOST'].IUrl::creatUrl($apiname).'/getapiinfo/1';//U($apiname,'getapiinfo=1',true,true);
 				$backdata = common::curl_http($apiurl, '', 'POST');
+				
 				$backdata = json_decode($backdata, true);
 				if($backdata['code']==0){
 					//更新接口参数、参数说明

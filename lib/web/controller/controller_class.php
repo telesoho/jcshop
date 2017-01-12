@@ -466,10 +466,9 @@ class IController extends IControllerBase
 	 * @return array
 	 */
 	protected function checkData($param = array()){
-		if(empty($param)) $this->returnJson();
 		$postData = array_merge($_POST, $_GET);
-		//获取接口信息
 		if(isset($postData['getapiinfo']) && $postData['getapiinfo']==='1') $this->returnJson(array('code' => 0, 'msg' => 'ok', 'data' => array('param'=>$param,'error'=>$this->errorInfo)));
+		//获取接口信息
 		$backData = array(); //返回参数
 		foreach($param as $k => $v){
 			$backData[$v[0]] = IFilter::act(IReq::get($v[0]), $v[1]);
