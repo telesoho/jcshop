@@ -48,7 +48,7 @@ class xlobo
             'sign'         => $sign,
             'access_token' => self::$AccessToken
         );
-        $curl->setHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        $curl->setHeader('Content-Type', 'application/x-www-form-urlencoded; charset=GBK');
         $ret = $curl->post($url, $params);
         if ($ret === false) {
             IError::show_normal('服务器未响应');
@@ -202,7 +202,7 @@ class xlobo
             'BillCode'     => $billcode,
         );
         $ret = self::requests('xlobo.idcard.add', $data);
-        if ($ret->ErrorCount > 0){
+        if (isset($ret->ErrorCount) && $ret->ErrorCount > 0){
             $info = print_r($ret->ErrorInfoList, true);
             IError::show_normal($info);
         }
