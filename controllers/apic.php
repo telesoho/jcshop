@@ -233,14 +233,14 @@ class Apic extends IController{
 	 */
 	public function login(){
 		$param = $this->checkData(array(
-			array('username', 'string', 0, '用户名'),
-			array('password', 'string', 0, '密码'),
+			array('username', 'string', 1, '用户名'),
+			array('password', 'string', 1, '密码'),
 		));
 		/* 登陆 */
 		$model = new IModel('user');
 		$info = $model->getObj('username="'.$param['username'].'" AND password="'.$param['password'].'"','id');
-		if(empty($info)) $this->returnJson(array('code'=>'0','msg'=>$this->errorInfo['008001'])); //用户名或密码错误
-		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$this->tokenCreate($info['id'])));
+		if(empty($info)) $this->returnJson(array('code'=>'008001','msg'=>$this->errorInfo['008001'])); //用户名或密码错误
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>array('token'=>$this->tokenCreate($info['id']))));
 	}
 	
 	/**

@@ -29,7 +29,7 @@ class IController extends IControllerBase
 	private $action;                                   //当前action对象
 	private $defaultAction       = 'index';            //默认执行的action动作
 	private $renderData          = array();            //渲染的数据
-	private $errorInfo = array(); //接口错误编码
+	protected $errorInfo = array(); //接口错误编码
 
 	/**
 	 * @brief 构造函数
@@ -103,14 +103,14 @@ class IController extends IControllerBase
 			$allow_time = (new Config('jmj_config'))->token_allow_time; //token过期时间
 			$modelToken = new IModel('user_token');
 			$info       = $modelToken->getObj('token="'.$param['token'].'"');
-			
+
 			if(empty($info) || empty($info['play_time']) || $info['play_time']>time() || ($info['play_time']+$allow_time)<time()){
 				exit(json_encode(apiReturn::go('001001'))); //令牌已过期，需重新登陆
 			}
 			//更新操作时间
 			$modelToken->setData(array('play_time' => time(),));
 			$modelToken->update('user_id='.$info['user_id']);
-			
+
 			$modelUser  = new IModel('user');
 			$infoUser   = $modelUser->getObj('id='.$info['user_id'], 'id,username,password,head_ico');
 			$this->user = array(
@@ -505,38 +505,37 @@ class IController extends IControllerBase
 	protected function tokenCreate($uid){
 		//用户是否存在
 		$modelUser = new IModel('user');
-		$infoUser = $modelUser->getObj('id='.$uid);
-		if(empty($infoUser)) $this->returnJson( array('code'=>'001003','msg'=>$this->errorInfo['001003']) );
+		$infoUser  = $modelUser->getObj('id='.$uid);
+		if(empty($infoUser)) $this->returnJson(array('code' => '001003', 'msg' => $this->errorInfo['001003']));
 		
 		//令牌生成
 		/* 生成令牌 */
-		$data 						= array(
-			'token' 		=> md5($uid.time().(new Config('jmj_config'))->auth_key_data), //生成令牌
-			'play_time' 	=> time(), //操作时间
+		$data = array(
+			'token'       => md5($uid.time().(new Config('jmj_config'))->auth_key_data), //生成令牌
+			'play_time'   => time(), //操作时间
 			'update_time' => time(), //更新时间
 		);
 		/* 写入数据 */
 		$modelToken = new IModel('user_token');
-		$infoToken = $modelToken->getObj('user_id='.$uid);
-		if ( !empty($infoToken) ) {
+		$infoToken  = $modelToken->getObj('user_id='.$uid);
+		if(!empty($infoToken)){
 			//更新Token
-			$modelToken->setData(array_merge($data,array(
-				'nums'=>'nums+1', //登陆次数
+			$modelToken->setData(array_merge($data, array(
+				'nums' => 'nums+1', //登陆次数
 			)));
-			$rel = $modelToken->update('user_id='.$uid,array('user_id'));
-			if($rel>0) return $infoToken['token'];
-			
+			$rel = $modelToken->update('user_id='.$uid, array('user_id'));
+			if($rel>0) return $data['token'];
 		}else{
-			//更新Token
-			$modelToken->setData(array_merge($data,array(
-				'user_id' => $uid,
-				'nums'=>1, //登陆次数
+			//创建Token
+			$modelToken->setData(array_merge($data, array(
+				'user_id'     => $uid,
+				'nums'        => 1, //登陆次数
 				'create_time' => time(),
 			)));
 			$rel = $modelToken->add();
-			if($rel>0) return $infoToken['token'];
+			if($rel>0) return $data['token'];
 		}
-		$this->returnJson(array('code'=>'008002','msg'=>$this->errorInfo['008002']));
+		$this->returnJson(array('code' => '008002', 'msg' => $this->errorInfo['008002']));
 	}
 	
 }
