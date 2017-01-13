@@ -3054,23 +3054,22 @@ class Apic extends IController{
 //}
 //]
 //}';
-//        $data = '{
-//"RECORDS":[
-//{
-//"order_no":"20170105153826768194",
-//"accept_name":"方子琦",
-//"address":"学林雅苑2幢206室",
-//"mobile":"18158008151",
-//"user_id":4430,
-//"sfz_name":"方子琦",
-//"oauth_user_id":"orEYdw98ZZpmvDrD6lJyR5YAhPnY"
-//}
-//]
-//}';
+        $data = '{
+"RECORDS":[
+{
+"order_no":"20170106133946114179",
+"oauth_user_id":"oRWgut87jf_9_oWl7hXwmUomZ_rk"
+},
+{
+"order_no":"20170106133946114179",
+"oauth_user_id":"oRWgut_Xpm7QnbIYv3z9FbdcS9gY"
+}
+]
+}';
         $data = json_decode($data);
         var_dump($data);
         foreach ($data->RECORDS as $k=>$v){
-            wechats::send_message_template($v->oauth_user_id,'sfz',['order_no'=>$v->order_no,'accept_name'=>$v->accept_name,'address'=>$v->address,'sfz_name'=>$v->sfz_name,'mobile'=>$v->mobile]);
+            wechats::send_message_template($v->oauth_user_id,'shiming',['order_no'=>$v->order_no]);
         }
     }
 	
