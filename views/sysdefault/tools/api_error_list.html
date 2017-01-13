@@ -1,0 +1,52 @@
+{js:my97date}
+
+<div class="headbar clearfix">
+	<div class="position"><span>接口管理</span><span>></span><span>错误码列表</span><span>></span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/market/activity_add}" name='activity_add'  method="post">
+		<div id="table_box_1">
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				{foreach:items=$error_list key=$k item=$v}
+
+					<tr>
+						<th>{$k}</th>
+						<td>
+							{$v}
+						</td>
+					</tr>
+
+				{/foreach}
+			</table>
+		</div>
+			<!--<table class="form_table">-->
+				<!--<col width="150px" />-->
+				<!--<col />-->
+				<!--<tr>-->
+					<!--<td></td>-->
+					<!--<td><button class="submit" type='submit'><span>确 定</span></button>-->
+					<!--</td>-->
+				<!--</tr>-->
+			<!--</table>-->
+		</form>
+	</div>
+</div>
+
+
+
+
+<script type='text/javascript'>
+window.onload = function(){
+	page.init();
+};
+
+var page = {
+	loading 			: false,
+	init 				: function () {
+		
+	},
+}
+</script>

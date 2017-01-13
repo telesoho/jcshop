@@ -175,6 +175,18 @@ class Tools extends IController implements adminAuthorization
 		}
 	}
 	
+	/**
+	 * 错误码列表
+	 */
+	public function api_error_list(){
+		$error_list = apiReturn::getErrorInfo();
+		/* 赋值 */
+		$this->setRenderData(array(
+			'error_list' => $error_list,
+		));
+		$this->redirect('api_error_list');
+	}
+	
 	public function seo_sitemaps()
 	{
 		$siteMaps =  new SiteMaps();

@@ -9,6 +9,7 @@
 <div class="content">
 	<table id="list_table" class="list_table">
 		<colgroup>
+			<col width="60px" />
 			<col width="100px" />
 			<col width="300px" />
 			<col width="100px" />
@@ -18,6 +19,7 @@
 
 		<thead>
 			<tr>
+				<th>分类ID</th>
 				<th>排序</th>
 				<th>分类名称</th>
 				<th>首页显示</th>
@@ -29,6 +31,7 @@
 		<tbody>
 			{foreach:items=$category item=$item}
 			<tr id="{$item['id']}" parent={$item['parent_id']}>
+				<td>{$item['id']}</td>
 				<td><input class="tiny" id="s{$item['id']}" size="2" type="text" onblur="toSort({$item['id']});" value="{$item['sort']}" /></td>
 				<td><img style='margin-left:{echo:$item['floor']*20}px' class="operator" src="{skin:images/admin/close.gif}" onclick="displayData(this);" alt="关闭" />{$item['name']}</td>
 				<td>{if:$item['visibility']=='1'}<span class="green">是</span>{else:}<span class="brown">否</span>{/if}</td>
