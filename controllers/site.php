@@ -18,6 +18,7 @@ class Site extends IController{
 	public $layout = 'site';
 
 	function init(){
+	    xlobo::init();
 	}
 
 	function index(){
@@ -1337,5 +1338,13 @@ class Site extends IController{
         var_dump($ret);
 //        header("Content-Type: application/pdf");
 //        echo base64_decode($ret);
+    }
+    function get_store(){
+	    $ret = xlobo::get_goods_store(['test0717011']);
+	    var_dump($ret);
+    }
+    function get_hub(){
+        $ret = xlobo::get_hub();
+        var_dump($ret);
     }
 }

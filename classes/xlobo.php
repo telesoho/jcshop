@@ -14,16 +14,9 @@ class xlobo
     private static $AccessToken;
     private static $ServerUrl;
 
-    function __construct()
-    {
-        self::$APPKEY      = '68993573-E38D-4A8A-A263-055C401F9369';
-        self::$SecretKey   = 'APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==';
-        self::$AccessToken = 'ACiYUZ6aKC48faYFD6MpvbOf73BdE9OV5g15q1A6Ghs+i/XIawq/9RHJCzc6Y3UNxA==';
-        self::$ServerUrl   = 'http://116.228.41.2:8082/api/router/rest';
-    }
-
-    public static function init($param = false){
-        if ($param){
+    public static function init(){
+        $jmj_config = new Config('jmj_config');
+        if ($jmj_config->xlobo){
             self::$APPKEY = '16cc3c0e-76b5-4085-83a1-0c2bc3478ee3';
             self::$SecretKey = 'APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==';
             self::$AccessToken = 'AD30N4p75N4UKcG0lGwiXXAUGTD60PSbFGoaw9R84s7QoXuv8XhBTad3yO3yiUS+rw==';
@@ -51,10 +44,10 @@ class xlobo
         $curl->setHeader('Content-Type', 'application/x-www-form-urlencoded; charset=GBK');
         $ret = $curl->post($url, $params);
         if ($ret === false) {
-            IError::show_normal('服务器未响应');
+            IError::show_normal('服务器未响应'.self::$ServerUrl);
         }
         if (isset($ret->ErrorCode)){
-            IError::show_normal($ret->resourceValue);
+            IError::show_normal($ret->resourceValue.self::$ServerUrl);
         }
         return $ret;
     }
@@ -273,7 +266,8 @@ class xlobo
         }
     }
     public static function get_goods_store($goods_no){
-        $ret = self::requests('xlobo.fbx.queryinventorybysku', ['SkuNos'=>$goods_no]);
+        $ret = self::requests('xlobo.fbx.queryinventorybysku', ['SkuNos'=>join(',',$goods_no)]);
+        var_dump($ret);
         if ($ret->ErrorCount > 0){
             $info = print_r($ret->ErrorInfoList, true);
             IError::show_normal($info);

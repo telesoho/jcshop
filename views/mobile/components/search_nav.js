@@ -4,7 +4,7 @@
 
 // 创建一个搜索的组件
 Vue.component('search-nav', {
-    template:'<section class="search-header" id="homeHeader">\
+    template:'<section class="search-header" id="homeHeader" style="position:fixed;z-index:1000">\
     <div class="inputContent">\
     <form onsubmit="searthSubmit()" action="/site/search_list">\
     <input type="search" :placeholder="searth_pla" id="search" @focus="showSearth" v-model="val"/>\
