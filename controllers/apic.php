@@ -1459,6 +1459,8 @@ class Apic extends IController{
 			$relation   = array('已完成' => '删除订单', '等待发货' => '取消订单', '等待付款' => '去支付', '已发货' => '查看物流', '已取消' => '已取消', '部分发货' => '查看物流');
 			$relation_k = array_keys($relation);
 			foreach($data as $k => $v){
+				//评论ID
+				$data[$k]['comment_id'] = Comment_Class::get_comment_id($v['order_no']);
 				//订单状态
 				$data[$k]['orderStatusVal']  = Order_Class::getOrderStatus($v);
 				$data[$k]['orderStatusText'] = Order_Class::orderStatusText($data[$k]['orderStatusVal']);
@@ -1484,12 +1486,14 @@ class Apic extends IController{
 	 */
 	public function order_detail(){
 		/* 接收参数 */
-		$id = IFilter::act(IReq::get('id'), 'int');
-		
+		$param = $this->checkData(array(
+			array('id','int',1,'订单ID'),
+		));
+		$user_id = $this->tokenCheck();
 		/* 订单详情 */
 		$orderObj   = new order_class();
-		$order_info = $orderObj->getOrderShow($id, $this->user['user_id']);
-		if(!$order_info) $this->json_echo(apiReturn::go('003002')); //订单不存在
+		$order_info = $orderObj->getOrderShow($param['id'], $user_id);
+		if(!$order_info) $this->returnJson(array('code'=>'003002','msg'=>$this->errorInfo['003002'])); //订单不存在
 		
 		$orderStatus = Order_Class::getOrderStatus($order_info);
 		switch($orderStatus){
@@ -1513,14 +1517,16 @@ class Apic extends IController{
 			$order_goods[$k]['goods_array'] = json_decode($v['goods_array'], true);
 			$order_goods[$k]['img']         = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$order_goods[$k]['img']."/w/160/h/160");
 		}
+		
 		$data = array(
 			'order_info'  => $order_info, //订单详情
 			'orderStatus' => $orderStatusT, //订单状态
 			"order_step"  => Order_Class::orderStep($order_info), //订单流向
 			"order_goods" => $order_goods, //订单商品
 			'is_refunds'  => Order_Class::isRefundmentApply($order_info)==true ? 1 : 0, //是否允许退款
+			'comment_id'  => Comment_Class::get_comment_id($order_info['order_no']),
 		);
-		$this->json_echo($data);
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$data));
 	}
 	
 	/**

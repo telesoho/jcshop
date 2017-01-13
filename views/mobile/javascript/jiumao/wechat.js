@@ -17,12 +17,10 @@ var wechat = {
                 imgUrl      : wechat_share.imgUrl, // 分享图标
                 type        : 'link', // 分享类型,music、video或link，不填默认为link
                 dataUrl     : '', // 如果type是music或video，则要提供数据链接，默认为空
-                success     : function () {
+                success     : wechat_share.success ? wechat_share.success : function(){
                     // 用户确认分享后执行的回调函数
-                    console.log('fdf');
                 },
-                cancel      : function () {
-                    console.log('fdf');
+                cancel      : wechat_share.cancel ? wechat_share.cancel : function(){
                     // 用户取消分享后执行的回调函数
                 }
             });
@@ -31,10 +29,10 @@ var wechat = {
                 title       : wechat_share.title, // 分享标题
                 link        : wechat_share.link, // 分享链接
                 imgUrl      : wechat_share.imgUrl, // 分享图标
-                success     : function () {
+                success     : wechat_share.success ? wechat_share.success : function(){
                     // 用户确认分享后执行的回调函数
                 },
-                cancel      : function () {
+                cancel      : wechat_share.cancel ? wechat_share.cancel : function(){
                     // 用户取消分享后执行的回调函数
                 }
             });

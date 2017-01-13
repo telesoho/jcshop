@@ -77,4 +77,16 @@ class Comment_Class
 		}
 		return $data;
 	}
+	
+	/**
+	 * 获取评论ID
+	 * @param int $id 商品ID
+	 * @return int 评论ID
+	 */
+	public static function get_comment_id($order_no){
+		$model = new IModel('comment');
+		$info = $model->getObj('order_no='.$order_no,'id');
+		return empty($info) ? 0 : $info['id'];
+	}
+	
 }

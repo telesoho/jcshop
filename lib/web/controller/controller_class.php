@@ -537,4 +537,42 @@ class IController extends IControllerBase
 		$this->returnJson(array('code' => '008002', 'msg' => $this->errorInfo['008002']));
 	}
 	
+	/**
+	 * 令牌合法性验证，并返回uid
+	 * @param  string $token 用户令牌
+	 * @return int
+	 */
+	protected function tokenCheck(){
+		/* 接受参数 */
+		$param = array(
+			'token' => IFilter::act(IReq::get('token')),
+		);
+		
+		if(!empty($param['token'])){
+			//数据库验证
+			$allow_time = (new Config('jmj_config'))->token_allow_time; //token过期时间
+			$modelToken = new IModel('user_token');
+			$info       = $modelToken->getObj('token="'.$param['token'].'"');
+			
+			if(empty($info) || empty($info['play_time']) || $info['play_time']>time() || ($info['play_time']+$allow_time)<time()){
+				$this->returnJson(array('code'=>'001001','msg'=>$this->errorInfo['001001'])); //令牌已过期，需重新登陆
+			}
+			//更新操作时间
+			$modelToken->setData(array('play_time' => time(),));
+			$modelToken->update('user_id='.$info['user_id']);
+			
+			$modelUser  = new IModel('user');
+			$infoUser   = $modelUser->getObj('id='.$info['user_id'], 'id,username,password,head_ico');
+			$this->user = array(
+				'username' => $infoUser['username'],
+				'user_pwd' => $infoUser['password'],
+				'user_id'  => $infoUser['id'],
+				'head_ico' => $infoUser['head_ico'],
+			);
+			return $this->user['user_id'];
+		}else{
+			return isset($this->user['user_id'])&&!empty($this->user['user_id']) ? $this->user['user_id'] : $this->returnJson(array('code' => '001001', 'msg' => $this->errorInfo['001001']));
+		}
+	}
+	
 }
