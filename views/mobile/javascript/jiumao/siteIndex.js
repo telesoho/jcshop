@@ -5,12 +5,21 @@ var Request = new Object();
 	Request = GetRequest();
 	var statusOrder=Request["id"];
 	tanchaun(statusOrder);
+//时间  倒计时	
+var hours = 0;
+var minutes = 0;
+var seconds = 0;
+var _time = 0;
+var data = 0;
 var vm = new Vue({
     el: '#indexInfo',
     data: {
         // components:{"Nav": Nav},
         showMessage:false,
         page:1,
+        speed:[],
+        search_top:false,
+        search_top_small:true,
         search:[],
         indexInfo:{
             banner: [
@@ -26,7 +35,15 @@ var vm = new Vue({
         changeState:true,
         img1:"/views/mobile/skin/default/image/jmj/icon/like.png",
         img2:"/views/mobile/skin/default/image/jmj/icon/like-ed.png",
-        showCat:false
+        showCat:false,
+        //限时购
+        seconds:seconds,
+        minutes:minutes,
+        hours:hours,
+        info_time:[],
+        // 榜单
+        cid:"",
+        did:""
     },
     computed: {
         searth_pla: function (){
@@ -45,11 +62,18 @@ var vm = new Vue({
                 })
             });
             return this.indexInfo.articleDetail;
+        },
+        shop_info_time:function(){
+        	this.info_time.map(function(item){
+        		
+        	})
+        	return this.info_time
         }
     },
     mounted: function(){
         var self=this;
         hotSearth(self);
+         index_home(self);
         if(getSession('banner')&&getSession("articleDetail")&&getSession("article_category_list")){
             self.placeHolder=getItem('placeHolder');
             self.showMessage=true;
@@ -61,6 +85,7 @@ var vm = new Vue({
             getBanner(self);
             getArticle_category_list(self);
             pullupInfoRefresh(self);
+           
         }
     },
     updated:function() {
@@ -76,6 +101,7 @@ var vm = new Vue({
         
     },
     methods: {
+    	
         toArticle_list: function(item){
             // 保存分类的名字和id
             setItem("artileName",item.name);
@@ -99,7 +125,18 @@ var vm = new Vue({
         // 跳转活动页面
         toActive: function(){
             window.location.href="/activity/christmas_grow";
-        }
+        },
+        list_index:function(switch_list){
+        	
+        	window.location.href = "/redesign/list?id="+switch_list;
+        },
+        search_tops:function(){
+    		this.search_top = true;
+    		this.search_top_small = false;
+    	},
+    	time_shop:function(id){
+    		window.location.href="/site/products?id="+id;
+    	}
     }
 })
 $(document).ready(function(){
@@ -141,41 +178,129 @@ function getArticle_category_list(self){
         }
     });
 }
-function pullupInfoRefresh(self){
-    mui.ajax('/apic/article_list', {
-        data:{
-            page:self.page
-        },
+
+function index_home(self){
+	mui.ajax('/apic/index', {
         dataType: 'json',
         type: 'get',
         timeout: 10000,
         success: function (data) {
-            data.data.map(function(item){
-                item.page=self.page;
-                self.indexInfo.articleDetail.push(item);
-            });
-            console.log(self.indexInfo.articleDetail);
-            pushSession("articleDetail",self.indexInfo.articleDetail);
-            if(data.data.length==0){
-                stop=false;
-            }else{
-                stop=true;
-            }
-            self.showCat=false;
-            self.page++;
-            pushSession("indexPage",self.page);
-
-        }
+        	console.log(data.data);
+        	//商品
+        	self.info_time = data.data.speed.list
+        	
+        	
+        	//时间
+        	var myDate = new Date();
+        	var data_time = myDate.getTime();
+            
+			self.speed = data.data.speed;
+			_time = self.speed.end_time
+			all_time = self.speed.end_time-parseInt(data_time/1000);
+			// alert(theTime); 
+			if(all_time > 60) { 
+				minutes = parseInt(all_time/60); 
+				seconds = parseInt(all_time%60); 
+				// alert(theTime1+"-"+theTime); 
+				if(minutes > 60) { 
+				hours = parseInt(minutes/60); 
+				minutes = parseInt(minutes%60); 
+				} 
+				if(hours > 24) {
+					data = parseInt(hours/24);
+					hours = parseInt(hours%24)
+				}
+				self.hours = hours;
+				self.minutes = minutes;
+				self.seconds = seconds;
+       		}
+        },
     });
-};
+}
+
+var times = setInterval(function(){
+	if( all_time1<0 ){
+		clearInterval(times);
+	}
+	var myDate = new Date();
+	var data_time = myDate.getTime();
+	var all_time1 = _time-parseInt(data_time/1000);
+	if(all_time1 > 60) { 
+		minutes = parseInt(all_time1/60); 
+		seconds = parseInt(all_time1%60); 
+		// alert(theTime1+"-"+theTime); 
+		if(minutes > 60) { 
+		hours = parseInt(minutes/60); 
+		minutes = parseInt(minutes%60); 
+		if(hours>24) {
+			data = parseInt(hours/24);
+			hours = parseInt(hours%24);
+		}
+		
+		if(seconds<10){
+			seconds = "0"+seconds;
+		}if(minutes<10){
+			minutes = "0"+minutes;
+		}if(hours<10){
+			hours = "0"+hours;
+		}
+		vm.hours = hours;
+		vm.minutes = minutes;
+		vm.seconds = seconds;
+		} 
+		
+	}
+},1000)
+
+//function pullupInfoRefresh(self){
+//  mui.ajax('/apic/article_list', {
+//      data:{
+//          page:self.page
+//      },
+//      dataType: 'json',
+//      type: 'get',
+//      timeout: 10000,
+//      success: function (data) {
+//          data.data.map(function(item){
+//              item.page=self.page;
+//              self.indexInfo.articleDetail.push(item);
+//          });
+//          console.log(self.indexInfo.articleDetail);
+//          pushSession("articleDetail",self.indexInfo.articleDetail);
+//          if(data.data.length==0){
+//              stop=false;
+//          }else{
+//              stop=true;
+//          }
+//          self.showCat=false;
+//          self.page++;
+//          pushSession("indexPage",self.page);
+//
+//      }
+//  });
+//};
+//
+var t = ""
+document.addEventListener("touchstart",function(ev){
+	t = ev.touches[0].pageY;
+
+})
+document.addEventListener("touchmove",function(ev){
+	var scroll_s = ev.touches[0].pageY - t;
+	if(scroll_s>=10||scroll_s<=-10){
+		vm.search_top = false;
+    	vm.search_top_small = true;
+	}
+})
 //上拉加载
 var stop=true;
 $(window).bind('scroll', function() {
+	
     if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
             stop=false;
             vm.showCat=true;
-            pullupInfoRefresh(vm);
+//          pullupInfoRefresh(vm);
         }
     }
     if($(window).scrollTop()>100){
@@ -279,3 +404,6 @@ var _hmt = _hmt || [];
 			window.location.href = "/site/ticket_list";
 		})
 	}
+    function removeSessionItem(key){
+        window.sessionStorage.removeItem(key);
+    }
