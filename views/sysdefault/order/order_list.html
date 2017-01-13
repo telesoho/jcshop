@@ -19,7 +19,7 @@
 				<option value="seller">商家订单</option>
 			</select> -->
 
-			<button class="btn" type="submit"  onclick='changeAction()'><span class="sel">筛 选</span></button>
+			<button class="btn" type="submit"  onclick='changeAction();'><span class="sel">筛 选</span></button>
 			关键词：<input class="small" name="search[keywords]" type="text" value="" placeholder="单号|收货人|用户名" style="width:120px;" />
 			<select name="search[pay_status]" class="auto">
 				<option value="">支付状态</option>
@@ -53,7 +53,7 @@
 			</select> -->
 			<button class="btn" type="button" onclick='initSearchbar(1)'><span class="add">更 多</span></button>
 			<button class="btn" onclick='changeAction("order_report");'><span class="sel">导出Excel</span></button>
-			<button class="btn" onclick='changeAction("order_report_easy")'><span class="sel">导出未发货商品Excel</span></button>
+			<button class="btn" onclick='changeAction("order_report_easy");'><span class="sel">导出未发货商品Excel</span></button>
 			<input type="hidden" name="search[adv_search]" value="" />
 			<input type="hidden" name="search[send_time]" value="" />
 			<input type="hidden" name="search[create_time]" value="" />
@@ -170,6 +170,7 @@
 </form>
 
 <script type='text/javascript'>
+
 //DOM加载结束
 $(function(){
 	{if:$this->search}
@@ -213,6 +214,7 @@ function color_status_action(obj) {
 		alert(data.msg);
     });
 }
+
 function changeAction(url)
 {
 	setDatetimeVal('send_time');
@@ -220,7 +222,7 @@ function changeAction(url)
 	setDatetimeVal('completion_time');
 	$("input[name=\"action\"]").val((url==undefined ? 'order_list' : url));
 	$("form[name=\"order_list\"]").attr("target", (url==undefined ? '_self' : '_blank'));
-	
+
 	// if (excel){
 	// 	$("input[name=\"action\"]").val("order_report");
 	// 	$("form[name=\"order_list\"]").attr("target", "_blank");

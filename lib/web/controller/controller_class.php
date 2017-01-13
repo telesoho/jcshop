@@ -522,7 +522,7 @@ class IController extends IControllerBase
 			$modelToken->setData(array_merge($data, array(
 				'nums' => 'nums+1', //登陆次数
 			)));
-			$rel = $modelToken->update('user_id='.$uid, array('user_id'));
+			$rel = $modelToken->update('user_id='.$uid, array('nums'));
 			if($rel>0) return $data['token'];
 		}else{
 			//创建Token
@@ -532,7 +532,7 @@ class IController extends IControllerBase
 				'create_time' => time(),
 			)));
 			$rel = $modelToken->add();
-			if($rel>0) return $data['token'];
+			return $data['token'];
 		}
 		$this->returnJson(array('code' => '008002', 'msg' => $this->errorInfo['008002']));
 	}
