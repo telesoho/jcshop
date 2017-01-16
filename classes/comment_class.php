@@ -79,13 +79,13 @@ class Comment_Class
 	}
 	
 	/**
-	 * 获取评论ID
+	 * 是否可以评论
 	 * @param int $id 商品ID
-	 * @return int 评论ID
+	 * @return int 评论ID，不能评论返回0
 	 */
-	public static function get_comment_id($order_no){
+	public static function is_comment($order_no){
 		$model = new IModel('comment');
-		$info = $model->getObj('order_no='.$order_no,'id');
+		$info = $model->getObj('status=0 AND order_no='.$order_no,'id');
 		return empty($info) ? 0 : $info['id'];
 	}
 	

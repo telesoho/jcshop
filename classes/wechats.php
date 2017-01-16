@@ -137,6 +137,31 @@ class wechats
                    }
                }',$open_id,IUrl::getHost(),$send_info['order_no'],$send_info['accept_name'] . '___' . $send_info['mobile'] . '-->' . $send_info['sfz_name'] . '___' . $send_info['mobile'], $send_info['address']);
                 break;
+            case 'shiming':
+                $params = sprintf('{
+                   "touser":"%s",
+                   "template_id":"BQNT5tJdLIh9HtDeNxhj3WO8viH2rQaW_I_lewW5u_A",
+                   "url":"%s",            
+                   "data":{
+                           "first": {
+                               "value":"点击进入个人中心进行实名认证",
+                               "color":"#173177"
+                           },
+                           "keyword1":{
+                               "value":"未填写实名认证",
+                               "color":"#173177"
+                           },
+                           "keyword2":{
+                               "value":"2017-01-13",
+                               "color":"#173177"
+                           },
+                           "remark": {
+                               "value":"(订单:%s)由于您的收货人无实名认证信息，因此尽快填写实名认证的信息，订单收货人也将变更为该身份证用户的姓名，谢谢您的配合",
+                               "color":"#173177"
+                           }
+                   }
+               }',$open_id,IUrl::getHost().'/simple/credit',$send_info['order_no']);
+                break;
         }
         $ret = common::http_post_json($url,$params);
         common::log_write(print_r($ret,true));

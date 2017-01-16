@@ -1460,7 +1460,7 @@ class Apic extends IController{
 			$relation_k = array_keys($relation);
 			foreach($data as $k => $v){
 				//评论ID
-				$data[$k]['comment_id'] = Comment_Class::get_comment_id($v['order_no']);
+				$data[$k]['comment_id'] = Comment_Class::is_comment($v['order_no']);
 				//订单状态
 				$data[$k]['orderStatusVal']  = Order_Class::getOrderStatus($v);
 				$data[$k]['orderStatusText'] = Order_Class::orderStatusText($data[$k]['orderStatusVal']);
@@ -1524,7 +1524,7 @@ class Apic extends IController{
 			"order_step"  => Order_Class::orderStep($order_info), //订单流向
 			"order_goods" => $order_goods, //订单商品
 			'is_refunds'  => Order_Class::isRefundmentApply($order_info)==true ? 1 : 0, //是否允许退款
-			'comment_id'  => Comment_Class::get_comment_id($order_info['order_no']),
+			'comment_id'  => Comment_Class::is_comment($order_info['order_no']),
 		);
 		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$data));
 	}
@@ -1604,11 +1604,11 @@ class Apic extends IController{
 	public function comment_add(){
 		$param = $this->checkData(array(
 			array('id','int',1,'评论ID'),
-			array('point','int',1,'评分[1-5之间的值]'),
-			array('content','string',0,'评论内容'),
+			array('tag_id','int',0,'标签ID'),
+			array('image_media_id','string',0,'微信图片ID'),
+			array('voice_media_id','string',0,'微信语音ID'),
 		));
-		$user_id = isset($this->user['user_id'])&&!empty($this->user['user_id']) ? $this->user['user_id'] : $this->returnJson(array('code'=>'001001','msg'=>$this->errorInfo['001001']));
-		if($param['point']>5 || $param['point']<1) $this->returnJson(array('code'=>'003007','msg'=>$this->errorInfo['003007']));
+		$user_id = $this->tokenCheck();
 		
 		//检测
 		$result = Comment_Class::can_comment($param['id'], $user_id);
@@ -1616,8 +1616,8 @@ class Apic extends IController{
 		/* 开始评论 */
 		$modelComment = new IModel("comment");
 		$modelComment->setData(array(
-			'point'        => $param['point'],
-			'contents'     => $param['content'],
+			'point'        => 5,
+			'contents'     => '',
 			'status'       => 1,
 			'comment_time' => ITime::getNow("Y-m-d"),
 		));
@@ -3149,23 +3149,22 @@ class Apic extends IController{
 //}
 //]
 //}';
-//        $data = '{
-//"RECORDS":[
-//{
-//"order_no":"20170105153826768194",
-//"accept_name":"方子琦",
-//"address":"学林雅苑2幢206室",
-//"mobile":"18158008151",
-//"user_id":4430,
-//"sfz_name":"方子琦",
-//"oauth_user_id":"orEYdw98ZZpmvDrD6lJyR5YAhPnY"
-//}
-//]
-//}';
+        $data = '{
+"RECORDS":[
+{
+"order_no":"20170106133946114179",
+"oauth_user_id":"oRWgut87jf_9_oWl7hXwmUomZ_rk"
+},
+{
+"order_no":"20170106133946114179",
+"oauth_user_id":"oRWgut_Xpm7QnbIYv3z9FbdcS9gY"
+}
+]
+}';
         $data = json_decode($data);
         var_dump($data);
         foreach ($data->RECORDS as $k=>$v){
-            wechats::send_message_template($v->oauth_user_id,'sfz',['order_no'=>$v->order_no,'accept_name'=>$v->accept_name,'address'=>$v->address,'sfz_name'=>$v->sfz_name,'mobile'=>$v->mobile]);
+            wechats::send_message_template($v->oauth_user_id,'shiming',['order_no'=>$v->order_no]);
         }
     }
 	
