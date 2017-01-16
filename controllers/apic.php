@@ -109,8 +109,9 @@ class Apic extends IController{
 		
 		/* 推荐专区 */
 		$pro_array = array(
-			array('cid' => 134, 'title' => '个护', 'banner' => ''),
-			array('cid' => 7, 'title' => '美食', 'banner' => ''),
+			array('cid' => 126, 'title' => '美妆', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/126.png'),
+			array('cid' => 134, 'title' => '个护', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/134.png'),
+			array('cid' => 2, 'title' => '健康', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/2.png'),
 		);
 		$pro_list  = array();
 		foreach($pro_array as $v){
