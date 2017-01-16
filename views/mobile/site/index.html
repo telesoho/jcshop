@@ -54,22 +54,22 @@
 				</div>
 			</div>
 			<!--		限时抢				-->
-			<div id="Timed_to_rob">
+			<div id="Timed_to_rob" v-if="shop_time">
 				<div class="albumn_index" style="height: auto;">
 					<h1>
-		   				<img src="/views/mobile/skin/default/image/jmj/home_redesign/time.png" style="width: 0.42rem;height: 0.42rem;"/>
-		   				<p class="p1">限时抢</p>
+		   				<img src="/views/mobile/skin/default/image/jmj/home_redesign/time.png" style="width: 0.42rem;"/>
+		   				<p class="p1" style="font-weight: 600;">限时抢</p>
 		   				<span class="span1">离结束还剩</span>
 		   				<p class="p2"><span>{{hours}}</span> : <span>{{minutes}}</span> : <span>{{seconds}}</span></p>
-		   				<p class="p3">更多 <span>></span></p>
+		   				<p class="p3">更多 <span><img src="/views/mobile/skin/default/image/jmj/home_redesign/more.png" style="width: 0.14rem;"/></span></p>
 		   			</h1>
 					<div class="line_time" style="margin: 0.03rem 0;"></div>
-					<div class="mark">
+					<div class="mark" style="background: #fff;">
 						<div class="product">
 							<div class="slider">
 								<div class="item" v-for="item in shop_info_time">
 									<a href="#" @click="time_shop(item.id)">
-										<div class="img"><img :dataimg="item.img" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg" lazyimgloaded="true" style="width: 1.56rem; height: 1.56rem;"></div>
+										<div class="img"><img :dataimg="item.img" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg" style="width: 1.56rem; height: 1.56rem;"></div>
 										<div class="name hidewrap">{{item.name}}</div>
 										<div id="xian" class="sellprice" style="font-size: 0.3rem;"><span style="font-size: 0.2rem; color: rgb(255, 74, 160); margin-right: -0.08rem;">￥</span> {{item.sell_price}} </div>
 										<div class="yuanjia">原价：<s>{{item.old_price}}</s></div>
@@ -82,8 +82,8 @@
 				</div>
 			</div>
 			<!--						视频特辑								-->
-			<div id="Video_special">
-				<img class="img_video" src="/views/mobile/skin/default/image/jmj/home_redesign/video.png" style="width: 7rem;display: block;margin: 0.26rem auto 0;" />
+			<div id="Video_special" style="padding-top:0.2rem;">
+				<img class="img_video" src="/views/mobile/skin/default/image/jmj/home_redesign/video.png" style="width: 7rem;display: block;margin: auto;" />
 				<ul>
 					<li>
 						<img src="/views/mobile/skin/default/image/jmj/home_redesign/Brand_pavilion.png" style="width: 0.7rem;" />
@@ -137,9 +137,9 @@
 				<div class="hot_category">
 					<div class="head flexbox">
 						<span class="darkline"></span>
-						<span>热门榜单</span>
+						<span style="font-size: 0.36rem;">热门榜单</span>
 						<span class="darkline"></span>
-						<span class="line_f">ホットアイテム</span>
+						<span class="line_f" style="font-size: 0.22rem;color: #b8b8b8;">ホットアイテム</span>
 					</div>
 					<ul>
 						<li><img @click="list_index(1)" src="/views/mobile/skin/default/image/jmj/home_redesign/1.png" style="width: 3.5rem;" /></li>
@@ -165,33 +165,32 @@
 				</div>
 			</div>
 			<!--							图文专辑											-->
-			<section class="recommended line albumn_index">
+			<section class="recommended line albumn_index" v-for="item in article_list">
 				<div>
 					<div class="title" style="display: -webkit-flex;-webkit-align-items: center;">
 						<span class="logo">
-							<img src="http://m.jiumaojia.com/upload/category/article_icon/20161202153642216.png" alt="" class="img-hot">
+							<img :src="item.icon" alt="" class="img-hot">
 						</span>
-						<span class="name" style="width: 3rem;">        图文专辑        </span>
+						<span class="name" style="width: 3rem;">{{item.category_name}}</span>
 						<img src="/views/mobile/skin/default/image/jmj/home_redesign/tuwen.png" style="width: 2rem;margin-left: 0.19rem;" />
-
-						<span class="like mui-pull-right" style="margin-left: 2.22rem;">
-							<img src="/views/mobile/skin/default/image/jmj/home_redesign/collection.png" style="width: 0.42rem;" alt="" class="img-like">
+						<span class="like mui-pull-right" style="margin-left: 2.22rem;" v-if="">
+							<img @click="collect(item.id,item)" :src="item.is_favorite ==0 ? img1:img2" style="width: 0.42rem;" alt="" class="img-like">
 						</span>
-						<span class="num mui-pull-right favorite" style="margin-left: 0.12rem;">            5        </span>
+						<span class="num mui-pull-right favorite" style="margin-left: 0.12rem;">{{item.favorite_num}}</span>
 					</div>
 					<a href="#" id="product_item286">
 						<div class="content">
-							<div class="img flexbox" style="background: rgb(255, 255, 255);"><img dataimg="http://m.jiumaojia.com/pic/thumb/img/8980e372b285a0322bMTAwMDgwMDg4MTBkNDk4az80NTBjYjlgMjYwZm02ZjV1cWxoaWQpNTYxNi8xNCw4Ny82ODEyNzs2MjExMTM2Mj8@_@Mi5qcGcpcSg0NTcpaCo6PDA" src="http://m.jiumaojia.com/pic/thumb/img/8980e372b285a0322bMTAwMDgwMDg4MTBkNDk4az80NTBjYjlgMjYwZm02ZjV1cWxoaWQpNTYxNi8xNCw4Ny82ODEyNzs2MjExMTM2Mj8@_@Mi5qcGcpcSg0NTcpaCo6PDA" class="samLazyImg" lazyimgloaded="true" style="width: 7.1rem; height: 3.6rem; border-radius: 0.1rem;"></div>
+							<div class="img flexbox" style="background: #fff;"><img @click="zhuan_pro(item)" :dataimg="item.image" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg" style="width: 7.1rem; height: 3.6rem; border-radius: 0.1rem;"></div>
 						</div>
 					</a>
 					<div class="single"></div>
 					<div class="mark">
 						<div class="product">
 							<div class="slider">
-								<div class="item">
-									<a href="#">
-										<div class="img"><img dataimg="http://m.jiumaojia.com/pic/thumb/img/ed9bc7ef6781a1e54dMDQyMDk5MDc4NmFjNDE3YmZkMz1kMTFjNDcyMzE1YjR1cGxoZGcnZm9vYntZdG5jKm1jaG5QaGMuNDgyOjY0Mzc5NDI3OiswX2t9dXJzX1dca2lnZ2VzLW5jJnN7bCptbWJgZXspYWxoem9uLmFpbl1uZGdkZXtfSVo8Nzh5QGxKVXdWTCZfU1g1NTtfLmJ0YilyLzE7Ny1oLzE5OQ" alt="" src="http://m.jiumaojia.com/pic/thumb/img/ed9bc7ef6781a1e54dMDQyMDk5MDc4NmFjNDE3YmZkMz1kMTFjNDcyMzE1YjR1cGxoZGcnZm9vYntZdG5jKm1jaG5QaGMuNDgyOjY0Mzc5NDI3OiswX2t9dXJzX1dca2lnZ2VzLW5jJnN7bCptbWJgZXspYWxoem9uLmFpbl1uZGdkZXtfSVo8Nzh5QGxKVXdWTCZfU1g1NTtfLmJ0YilyLzE7Ny1oLzE5OQ" class="samLazyImg" lazyimgloaded="true" style="width: 1.8rem; height: 1.8rem;"></div>
-										<div class="name hidewrap">【箱起10份】明治 杏仁巧克力 88g</div>
+								<div class="item" v-for="items in item.list">
+									<a href="#" @click="tuwen(items.id)">
+										<div class="img"><img :dataimg="items.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style="width: 1.56rem; height: 1.56rem;"/></div>
+										<div class="name hidewrap">{{items.name}}</div>
 										<div class="sellprice" style="font-size: 0.26rem;"><span style="font-size: 0.2rem; color: rgb(255, 74, 160); margin-right: -0.08rem;">￥</span> 180 </div>
 									</a>
 
@@ -205,20 +204,22 @@
 				<div class="hot_category product">
 					<div class="head flexbox">
 						<span class="darkline"></span> 
-						<span>专区推荐</span> 
+						<span style="font-size: 0.36rem;">专区推荐</span> 
 						<span class="darkline"></span>
-						<span class="line_f">ホットアイテム</span>
+						<span class="line_f" style="font-size: 0.22rem;color: #b8b8b8;">ホットアイテム</span>
 					</div>
-					<div class="banner"><img src="/views/mobile/skin/default/image/jmj/home_redesign/eye_drops.png" style="width: 7.1rem;"/></div>
-					<div class="scrll">
-						<ul class="slider">
-							<li class="item">
-								<img src="/views/mobile/skin/default/image/jmj/home_redesign/buyong1.png" style="width: 1.56rem;"/>
-								<p>剁手清单好物</p>
-							</li>
-						</ul>
+					<div id="post_shop" v-for="item in zhuan_index">
+						<div class="banner" @click="zhuan_pro(item)"><img src="/views/mobile/skin/default/image/jmj/home_redesign/eye_drops.png" style="width: 7.1rem;"/></div>
+						<div class="scrll">
+							<ul class="slider">
+								<li class="item" @click="zhuan_shop(item2.id)" v-for="item2 in item.goods_list">
+									<img :dataimg="item2.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style="width: 1.56rem;"/>
+									<p>{{item2.name}}</p>
+								</li>
+							</ul>
+						</div>
+						<div style="background:#f5f5f5 ;width:100%;height:0.2rem;margin: 0.2rem auto 0"></div>
 					</div>
-					<div style="background:#e2e2e2 ;width:6.99rem;height:0.02rem;margin: 0.2rem auto 0.1rem;"></div>
 					<!--<div class="link_zhuan">
 						<div class="left_link">
 							<img src="/views/mobile/skin/default/image/jmj/home_redesign/see.png" style="width: 0.42rem;"/>
@@ -251,7 +252,7 @@
 			</div>
 			<footer-nav :state="0"></footer-nav>
 		</section>
-		<div style="padding-bottom:2.42rem;background:#f8f8f8 ;z-index: 10;"></div>
+		<!--<div style="padding-bottom:2.42rem;background:#f8f8f8 ;z-index: 10;"></div>-->
 		<div class="fix-nav">
 			<div class="img"><img src="/views/mobile/skin/default/image/jmj/icon/rmb.png" alt="" class="img-rmb" />
 				<div class="content">
