@@ -182,9 +182,9 @@ function getCartInfo(self){
 		timeout:10000,//超时时间设置为10秒；
 		success:function(data){
 			console.log(data);
-			self.infoMessage=data;
+			self.infoMessage=data.data;
 			self.showMessage=true;
-			setItem("condition_price",data.condition_price);
+			setItem("condition_price",data.data.condition_price);
 		}
 	});
 }

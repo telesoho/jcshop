@@ -276,6 +276,22 @@ iframe{
   -webkit-align-items: center;
   -webkit-justify-content: center;
 }
+.flexstart{
+  display:-webkit-flex;
+  -webkit-flex-wrap: wrap;
+  -webkit-align-items:baseline;
+  -webkit-justify-content:flex-start;
+}
+.flexs{
+  display:-webkit-flex;
+  -webkit-justify-content:flex-start;
+}
+.boxcenter{
+  display:-webkit-flex;
+  -webkit-flex-wrap: nowrap;
+  -webkit-align-items:center;
+  -webkit-justify-content:space-between;
+}
 /*底部导航样式*/
 .mui-tab-item.mui-active .grow{
   color:#ff4aa0;
