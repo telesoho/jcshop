@@ -47,7 +47,7 @@ class xlobo
             IError::show_normal('服务器未响应'.self::$ServerUrl);
         }
         if (isset($ret->ErrorCode)){
-            IError::show_normal($ret->resourceValue.self::$ServerUrl);
+            IError::show_normal($ret->resourceValue.self::$ServerUrl.'<br>'.print_r($params,true));
         }
         return $ret;
     }
@@ -266,12 +266,11 @@ class xlobo
         }
     }
     public static function get_goods_store($goods_no){
-        $ret = self::requests('xlobo.fbx.queryinventorybysku', ['SkuNos'=>join(',',$goods_no)]);
-        var_dump($ret);
+        $ret = self::requests('xlobo.fbx.queryinventorybysku', ['BusinessNo'=>'','SkuNos'=>$goods_no]);
         if ($ret->ErrorCount > 0){
             $info = print_r($ret->ErrorInfoList, true);
             IError::show_normal($info);
         }
-        return $ret;
+        return $ret->Result->InventoryInfos;
     }
 }
