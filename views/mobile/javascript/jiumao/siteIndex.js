@@ -155,15 +155,13 @@ var vm = new Vue({
     		window.location.href="/site/products?id="+ids;
     	},
     	zhuan_pro:function(item){
-    		console.log(item.category_name)
+    		console.log(item.title)
     		if(item.title == "个护"){
     			window.location.href = "/site/pro_list?cat=2"
-    		}else if(item.title == "美食"){
-    			window.location.href = "/site/pro_list?cat=5"
-    		}else if(item.category_name == "健康推荐"){
-    			window.location.href = "/site/pro_list?cat=4"
-    		}else if(item.category_name == "药妆特供"){
+    		}else if(item.title == "美妆"){
     			window.location.href = "/site/pro_list?cat=1"
+    		}else if(item.title == "健康"){
+    			window.location.href = "/site/pro_list?cat=4"
     		}
     	},
     	Video_pro:function(){
