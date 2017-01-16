@@ -67,7 +67,7 @@
 		    				<!--<img :src="item.image" style="width: 100%;"/>-->
 		    				<img src="/views/mobile/skin/default/image/jmj/redesign/ 5.png" style="width: 100%;"/>
 		    			</div>
-		    			<div class="public_main " id="active_show" v-if="item.state"  v-transition="expand">
+		    			<div class="public_main " id="active_show" v-if="item.state">
 		    				<div v-for="(item2,key) in item.list">
 		    					<h1 @click="two_title(item2)"><img :src="item2.image" style="width: 0.6rem;"/><!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyao2.png" style="width: 0.15rem;"/>-->{{item2.name}}</h1>
 		    					<ul v-if="item2.state2">
