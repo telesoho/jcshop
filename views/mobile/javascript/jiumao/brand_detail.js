@@ -72,6 +72,7 @@ function getRelateArticle(statusOrder,self){
 		success:function(data){
 			
 			
+			
 			console.log(data.article_list);
 			self.info = data.data;
 			self.infoac=data.data.article_list;
