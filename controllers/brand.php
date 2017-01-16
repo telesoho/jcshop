@@ -174,6 +174,15 @@ class Brand extends IController implements adminAuthorization
 			}
 		}
 		
+		//上传banner
+		if(isset($_FILES['img']['name']) && $_FILES['img']['name']!=''){
+			$uploadObj 			= new PhotoUpload();
+			$photoInfo 			= $uploadObj->run();
+			if(isset($photoInfo['img']['img']) && file_exists($photoInfo['img']['img'])){
+				$brand['img'] = $photoInfo['img']['img'];
+			}
+		}
+		
 		$tb_brand->setData($brand);
 		if($brand_id){
 			//保存修改分类信息
