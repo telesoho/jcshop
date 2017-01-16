@@ -176,7 +176,7 @@ var vm = new Vue({
     		window.location.href = "/redesign/week_new"
     	},
     	scene_pavilion:function(){
-    		window.location.href = "/redesign/scenepavilion"
+//  		window.location.href = "/redesign/scenepavilion"
     	},
     	guan:function(){
     		window.location.href = "/site/article_list"
