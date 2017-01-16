@@ -244,7 +244,7 @@ function index_home(self){
             
 			self.speed = data.data.speed;
 			if(self.speed == ""){
-				shop_time = false;
+				self.shop_time = false;
 			}
 			_time = self.speed.end_time
 			all_time = self.speed.end_time-parseInt(data_time/1000);

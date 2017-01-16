@@ -17,12 +17,12 @@
 			<head-nav :state="1"></head-nav>
 			<div class="brand1" v-for="item in one_title">
 				<div>
-					<img src="/views/mobile/skin/default/image/jmj/redesign/brand_2.png" style="width: 100%;"/>
+					<img :dataimg="item.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style="width: 100%;"/>
 				</div>
 				<div class="brand_list" >
 					<ul class="brand_list_ul">
 						<li @click="brand_shop(items.id)" v-for="items in item.list">
-							<img src="/views/mobile/skin/default/image/jmj/redesign/tu1.png" style="width: 2.4rem;"/>
+							<img :dataimg="items.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style="width: 2.4rem;"/>
 						</li>
 					</ul>
 				</div>
@@ -35,6 +35,7 @@
 		</div>	
 		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
@@ -60,8 +61,14 @@
 					var self = this;
 					brand_lista(self)
 				},
-				updated: function(){
+				updated:function() {
+					// 页面加载完成执行的函数;
+					lazyload.init({
+						anim:false,
+						selectorName:".samLazyImg"
+					});
 				},
+
 				methods:{
 					brand_shop:function(id){
 						console.log(id)
