@@ -42,6 +42,7 @@ var vm = new Vue({
         hours:hours,
         info_time:[],
         shop_time:true,
+//      shop_,
         // 榜单
         cid:"",
         did:"",
@@ -172,12 +173,15 @@ var vm = new Vue({
     		window.location.href = "/site/sitemap?id=3"
     	},
     	newproduct:function(){
-    		removeSessionItem("goodsinfo");
-			removeSessionItem("goodspage")
-    		window.location.href = "/site/goods_list?did=1"
+    		removeSessionItem("week_new_page");
+			removeSessionItem("week_new_info");
+    		window.location.href = "/redesign/week_new"
     	},
     	scene_pavilion:function(){
     		window.location.href = "/redesign/scenepavilion"
+    	},
+    	guan:function(){
+    		window.location.href = "/site/article_list"
     	}
     	
     }
@@ -239,14 +243,17 @@ function index_home(self){
         	var data_time = myDate.getTime();
             
 			self.speed = data.data.speed;
+			if(self.speed == ""){
+				shop_time = false;
+			}
 			_time = self.speed.end_time
 			all_time = self.speed.end_time-parseInt(data_time/1000);
-			if(all_time<=0){
-				shop_time = false;
-			}else{
-				shop_time = true;
-			}
-			// alert(theTime); 
+//			if(all_time<=0){
+//				shop_time = false;
+//			}else{
+//				shop_time = true;
+//			}
+			// alert(theTime);
 			if(all_time > 60) { 
 				minutes = parseInt(all_time/60); 
 				seconds = parseInt(all_time%60); 
