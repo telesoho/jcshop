@@ -67,7 +67,7 @@
 		    				<!--<img :src="item.image" style="width: 100%;"/>-->
 		    				<img src="/views/mobile/skin/default/image/jmj/redesign/ 5.png" style="width: 100%;"/>
 		    			</div>
-		    			<div class="public_main " id="active_show" v-if="item.state" v-animation>
+		    			<div class="public_main " id="active_show" v-if="item.state">
 		    				<div v-for="(item2,key) in item.list">
 		    					<h1 @click="two_title(item2)"><img :src="item2.image" style="width: 0.6rem;"/><!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyao2.png" style="width: 0.15rem;"/>-->{{item2.name}}</h1>
 		    					<ul v-if="item2.state2">
@@ -139,7 +139,10 @@
 	<!--<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>-->
 	
 	<script>
-			
+			var Request = new Object();
+			Request = GetRequest();
+			var statusOrder=Request["id"];
+			console.log(statusOrder)
 			var vm=new Vue({
 				el:'#main',
 				data:{
@@ -161,6 +164,7 @@
 				},
 				mounted:function(){
 					var self=this;
+					
 					getSitemapInfo(self);
 					brand_lista(self);
 				},
@@ -191,12 +195,7 @@
 						console.log(ids)
 					},
 					show_hide:function(item,key){
-						item.state=!item.state;
-//						$('#'+(key+1)+'').scroll()
-						if(item.move_states == true){
-							
-						}
-						
+						item.state=!item.state;							
 					},
 					show_brand:function(brand_num){
 
@@ -244,7 +243,14 @@
 				timeout:10000,
 				success:function(data){
 						console.log(data.data);
-					
+					if(statusOrder=="3"){
+						self.chooses_show = false;
+						self.chooses = 1;
+					}else{
+						self.chooses_show = true;
+						self.chooses = 0;
+					}
+					console.log(statusOrder,self.chooses_show)
 					data.data.map(function(items){
 						items.state=false;
 						items.move_states = false;
@@ -297,5 +303,18 @@
         }
     });
 }
+	function GetRequest() {
+      var url = location.search; //获取url中"?"符后的字串
+      var theRequest = new Object();
+      if (url.indexOf("?") != -1) {
+          var str = url.substr(1);
+          strs = str.split("&");
+          for(var i = 0; i < strs.length; i ++) {
+              theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+          }
+      }
+      return theRequest;
+}
+
 	</script>
 </html>

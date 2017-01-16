@@ -92,13 +92,14 @@ function getOrderDetail(self){
         type:'get',		// HTTP请求类型
         timeout:10000,		// 超时时间设置为10秒；
         success:function(data){
-        	console.log(data)
-        	if(data.is_refunds == "1"){
-        		self.tuikuans = true
+        	console.log(data.data);
+        	if(data.data.is_refunds == "1"){
+        		self.tuikuans = true;
+        		
             }else{
             	self.tuikuans = false
             }
-            self.order_detailInfo=data;
+            self.order_detailInfo=data.data;
             self.showMessage=true;
         }
     });

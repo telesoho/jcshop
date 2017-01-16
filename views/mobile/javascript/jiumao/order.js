@@ -22,7 +22,8 @@ var vm = new Vue({
         //物流效果
         showContainer:false,
         leftClass:'showWrapper',
-        rightClass:'hideWrapper'
+        rightClass:'hideWrapper',
+        show_ping:false
     },
     computed: {
         // 读取和设置
@@ -55,9 +56,16 @@ var vm = new Vue({
                     item.button2='确认收货';
                     item.button2Url='/ucenter/order_status/order_id/'+item.id+'/op/confirm';
                 };
-                if(item.orderStatusVal==6){
-                    item.button1='去评价';
-                    item.button1Url='/site/error';
+                if(item.orderStatusVal==6){	 
+                	 var t = parseInt(item.comment_id);
+                	if(t > 0){
+                		item.button1='去评价';
+                    	item.button1Url='/ucenter/comment?id=';
+                    	vm.show_ping;false;
+                	}else{
+                    	item.button1='已评价';
+                    	vm.show_ping=true;
+                   } 
                 };
             });
             return  this.orderInfo;
@@ -98,6 +106,10 @@ var vm = new Vue({
 
                 }
             })
+        },
+        comment_ed:function(item,id){
+        	console.log(id+item.id);
+        	window.location.href = id+item.id;
         }
     }
 })
