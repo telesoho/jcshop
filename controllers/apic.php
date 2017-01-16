@@ -1503,14 +1503,13 @@ class Apic extends IController{
 			case 4: //待发货
 				$orderStatusT = 1;
 				break;
-			case 3 || 8 || 11: //待收货
+			case 3:case 8:case 11: //待收货
 				$orderStatusT = 2;
 				break;
 			case 6: //已完成
 				$orderStatusT = 3;
 				break;
 		}
-		
 		/* 订单商品 */
 		$order_goods = Api::run('getOrderGoodsListByGoodsid', array('#order_id#', $order_info['id']));
 		foreach($order_goods as $k => $v){
