@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>评论</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
+    <link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/comment/comment1.css?v=<?php echo time(); ?>"/>
+</head>
+<body>
+<div id="commentInfo" v-cloak>
+    <!--加载动画-->
+    <div v-if="showLoad" id="loading">
+        <div class="spinner">
+            <div class="spinner-container container1">
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+                <div class="circle3"></div>
+                <div class="circle4"></div>
+            </div>
+            <div class="spinner-container container2">
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+                <div class="circle3"></div>
+                <div class="circle4"></div>
+            </div>
+            <div class="spinner-container container3">
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+                <div class="circle3"></div>
+                <div class="circle4"></div>
+            </div>
+        </div>
+    </div>
+      <div class="loadImg">
+          <div class="top">选择图片</div>
+          <div class="imgArea">
+              <div class="img" v-for="(item,key) in choImg">
+                  <img :src="item" alt="" @click="perview(item)"/>
+                  <img src="/views/mobile/skin/default/image/jmj/comment/del.png" alt="" class="del" v-if="key==imgLength-1" @click="delImg(key)"/>
+              </div>
+              <div class="addimg" v-if="imgLength<maxLength" @click="choImgFun">
+                  <img src="/views/mobile/skin/default/image/jmj/comment/car.png" alt="" />
+              </div>
+          </div>
+      </div>
+    <div class="voiceInfo">
+        <h3 class="top">说点什么吧</h3>
+        <div class="content content1 flexbox" v-if="voice==''" @touchstart="startV" @touchend="endV">
+            <img src="/views/mobile/skin/default/image/jmj/comment/voice1.png" alt="" style="width:1.2rem;margin-top:0.3rem"/>
+            <div class="con con1">按住说话</div>
+        </div>
+        <div class="content content2 flexbox" v-else @touchstart="startV2" @touchend="endV2">
+            <div>
+                <img src="/views/mobile/skin/default/image/jmj/comment/voice2.png" alt="" style="width:0.94rem;margin-top:0.49rem;" />
+                <span class="time">{{voice_time}}’</span>
+            </div>
+            <div class="con con1">长按删除语音</div>
+        </div>
+    </div>
+    <div class="markInfo">
+        <div class="top">
+            选择标签
+        </div>
+        <div class="info flexstart">
+            <div :class="item.cho?class2:class1" v-for="item in mark" @click="changeState(item)">
+                    {{item.text}}
+            </div>
+        </div>
+    </div>
+    <div class="bottom flexbox">
+        <span class="bg"></span>
+        <span style="font-size:0.2rem;color:#b8b8b8;display:inline-block;margin:0 0.24rem">喵，您的评价帮助我们做得更好</span>
+        <span class="bg"></span>
+    </div>
+    <div class="fixedBot flexbox">
+        <div class="submit" :style="checkSubmit?style2:style1" @click="submit">提交评价</div>
+    </div>
+</div>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script>
+    var vm=new Vue({
+        el:"#commentInfo",
+        data:{
+            showLoad:false,//是否显示加载页
+            maxLength:5,//最大可以上传图片的数量
+            imgLength:0,//当前已上传图片数量
+            maxMark:3,//最大可以选择标签数
+            markLen:0,
+            checkSub:false,
+            style1:"opacity:0.5",
+            style2:"opacity:1",
+            //我们的文件
+            choImg:[],
+            voice:"",
+            voice_time:0,
+            //按键开始,以及结束时间
+            startTime1:0,
+            endTime1:0,
+            startTime2:0,
+            endTime2:0,
+//            用户选择标签选项
+            class1:"item",
+            class2:"item active",
+            mark:[
+                {
+                    id:1,
+                    text:"物流快",
+                    cho:false
+                },
+                {
+                    id:2,
+                    text:"正品可靠",
+                    cho:false
+                },
+                {
+                    id:3,
+                    text:"东京直邮",
+                    cho:false
+                },
+                {
+                    id:4,
+                    text:"包装好",
+                    cho:false
+                },
+                {
+                    id:5,
+                    text:"便宜",
+                    cho:false
+                },
+                {
+                    id:6,
+                    text:"服务一般",
+                    cho:false
+                },
+                {
+                    id:7,
+                    text:"相当好",
+                    cho:false
+                }
+            ]
+        },
+        computed:{
+            checkSubmit:function(){
+                //判断用户选择内容是否可以提交
+                if(this.markLen||this.choImg.length||this.voice!="")
+                {
+                    this.checkSub=true;
+                }
+                else{
+                    this.checkSub=false;
+                }
+                return this.checkSub;
+            }
+        },
+        methods:{
+//            从本地选择图片或者拍照
+            choImgFun:function(){
+                chooseImage(this);
+            },
+            //删除最后一张已选择的图片
+            delImg:function(key){
+                this.choImg.splice(key,1);
+                this.imgLength--;
+            },
+            //图片预览功能
+            perview:function(item){
+                perviewImg(item,this);
+            },
+            //开始录音
+            startV:function(e){
+                console.log(e)
+                startRecord();
+                this.startTime1=e.timeStamp;
+            },
+            //停止录音
+            endV:function(e){
+                stopRecord(this);
+                this.endTime1=e.timeStamp;
+                this.voice_time=((this.endTime1-this.startTime1)/1000).toFixed(1);
+            },
+            //判断是播放还是删除录音
+            startV2:function(e){
+                this.startTime2=e.timeStamp;
+            },
+            endV2:function(e){
+                this.endTime2=e.timeStamp;
+                var time_check=((this.endTime2-this.startTime2)/1000).toFixed(1);
+                if(time_check>4){
+                    this.voice="";
+                }
+                if(time_check<3){
+                    playVoice(this);
+                }
+            },
+//            选择标签,最多只能选择三个标签
+            changeState:function(item){
+                if(this.maxMark>this.markLen){
+                    if(!item.cho){
+                        item.cho=true;
+                        this.markLen++
+                    }else{
+                        item.cho=false;
+                        this.markLen--
+                    }
+                }else{
+                   if(item.cho){
+                       item.cho=false;
+                       this.markLen--
+                   }
+                }
+
+            },
+            //提交并上传文件到微信服务器
+            submit:function(){
+                if(!this.checkSub){
+                    return false;
+                }
+                this.showLoad=true;
+                upload(this);
+            }
+        }
+    })
+</script>
+
+<!-- 微信分享 -->
+{if:IClient::isWechat() == true}
+<?php
+    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+    $this->wechat = new wechat();
+$this->wechat->setConfig();
+$this->wechat->config['wechat_jsApiSDK']=1;
+$this->wechat->jsApiSDK();
+?>
+<script type="text/javascript">
+    wx.ready(function() {});
+//    从本地选择图片
+    function chooseImage(self){
+        console.log(self.imgLength);
+        var lenth=self.maxLength-self.imgLength;
+        wx.chooseImage({
+            count:length , // 最大能上传数量-已传商品数量
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+//                将本地的localIds展示出来
+                self.choImg.concat(res.localIds);
+                self.imgLength=res.localIds.length;
+            }
+        });
+    }
+    //图片预览功能
+    function perviewImg(item,self){
+        wx.previewImage({
+            current: item, // 当前显示图片的http链接
+            urls: self // 需要预览的图片http链接列表
+        });
+    }
+    //开始录音
+    function startRecord(){
+        wx.startRecord();
+    }
+    //结束录音，获取语音信息
+    function stopRecord(self){
+        wx.stopRecord({
+            success: function (res) {
+                var localId = res.localId;
+                self.voice=localId;
+            }
+        });
+        wx.onVoiceRecordEnd({
+            // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+            complete: function (res) {
+                var localId = res.localId;
+                self.voice=localId;
+            }
+        });
+    }
+    //播放录音的函数
+    function playVoice(self){
+        wx.playVoice({
+            localId: self.voice // 需要播放的音频的本地ID，由stopRecord接口获得
+        });
+    }
+    //提交图片 语音
+    function upload(self){
+        //提交图片
+        var severImg=[];
+        var severVoice;
+        if(self.choImg.length){
+            self.choImg.map(function(item){
+                wx.uploadImage({
+                    localId: item, // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        severImg.push(serverId);
+                    }
+                });
+            })
+        }
+        if(self.voice){
+            wx.uploadVoice({
+                localId: self.voice, // 需要上传的音频的本地ID，由stopRecord接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                    severVoice= res.serverId; // 返回音频的服务器端ID
+                }
+            });
+        }
+
+
+    }
+</script>
+{/if}
+
+
+</body>
+</html>
