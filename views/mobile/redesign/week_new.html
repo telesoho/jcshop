@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="x5-orientation" content="portrait">
+		<title>每周上新</title>
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/app/redesign/week_new.css?v=<?php echo time(); ?>" />
+	</head>
+	<body>
+		<!--					头部大图							-->
+		<header>
+			<img src="/views/mobile/skin/default/image/jmj/redesign/week_new.png" style="width: 100%;"/>
+		</header>
+		<header id="week_title">
+			<span></span>
+			<div>
+				<img src="/views/mobile/skin/default/image/jmj/redesign/week_rl.png" style="width: 0.43rem;"/>
+				<p>本周上新</p>
+			</div>
+			<span></span>
+		</header>
+		<section id="week_list">
+			<ul>
+				<li v-for="item in info" @click="week_shop(item.id)">
+					<div><img :dataimg="item.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg"  style="width: 2.64rem;"/></div>
+					<p>{{item.name}}</p>
+					<span>¥<span>{{item.sell_price}}</span></span>
+				</li>
+			</ul>
+			<div class="flexbox empty_product" style="" v-if="infoState">
+	        <div class="img">
+	                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+	            </div>
+	            <div class="content">
+	                <span style="color:#fff">~</span>
+	                <span style="color:#fff">憋拉了，到底了</span>
+	                <span style="color:#fff">~</span>
+	            </div>
+	        </div>
+
+		</section>
+		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+		<script type="text/javascript">
+		var Request = new Object();
+	    Request = GetRequest();
+	    var statusOrder=Request["id"];
+		var stop = true;
+	    var vm = new Vue({
+        el: '#week_list',
+        data: {
+	    	info:[],
+	    	page:1,
+	    	infoState:false
+        },
+        computed: {
+        	
+        },
+        mounted: function(){  
+        	var self = this;
+        	if(getSession("week_new_page") || getSession("week_new_info")){
+        		self.page = getSession("week_new_page");
+        		self.info = getSession("week_new_info");
+        	}
+        	getChristmasList(self)
+        },
+      methods:{
+      	week_shop:function(id){
+      		window.location.href = "/site/products?id="+id;
+      	}
+      },
+      updated:function() {
+			// 页面加载完成执行的函数;
+			lazyload.init({
+				anim:false,
+				selectorName:".samLazyImg"
+			});
+		}
+
+    });
+    function getChristmasList(self){
+    	mui.ajax('/apic/goods_list',{
+            data:{
+            	did:"1",
+            	page:self.page
+            },
+            dataType:'json',
+            type:'get',
+            success:function(data){
+            	data.data.map(function(item){
+            		self.info.push(item);
+            	})
+            	pushSession("week_new_info",self.info)
+            	if(data.data == ""){
+            		self.infoState=true;
+            		stop = false;
+            	}else{
+            		self.infoState=false;
+            		stop = true;
+            		
+            	}
+            	self.page++;
+            	pushSession("week_new_page",self.page)
+            }
+        });
+    }
+    
+
+			
+		$(window).bind('scroll', function() {
+	        if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+	            if(stop==true){
+	                stop=false;
+	                getChristmasList(vm);
+	            }
+	        }
+	    });
+			//	获	取 URL中 传过来的参数id
+			function GetRequest() {
+		      var url = location.search; //获取url中"?"符后的字串
+		      var theRequest = new Object();
+		      if (url.indexOf("?") != -1) {
+		          var str = url.substr(1);
+		          strs = str.split("&");
+		          for(var i = 0; i < strs.length; i ++) {
+		              theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+		          }
+		      }
+		      return theRequest;
+			}
+	//			缓存
+    function pushSession(key,value){
+        var val=JSON.stringify(value)?JSON.stringify(value):[];
+        if(window.sessionStorage){
+            sessionStorage.setItem(key,val);
+        }else{
+            console.log("无法使用缓存");
+            return "";
+        }
+    }
+    function getSession(key){
+        if(window.sessionStorage){
+            var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+            return JSON.parse(state);
+        }else{
+            console.log("无法使用缓存");
+            return "";
+        }
+    }
+
+
+
+	</script>
+	</body>
+</html>

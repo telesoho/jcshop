@@ -73,9 +73,9 @@ function getRelateArticle(statusOrder,self){
 			
 			
 			console.log(data.article_list);
-			self.info = data;
-			self.infoac=data.article_list;
-			data.goods_list.map(function(item){
+			self.info = data.data;
+			self.infoac=data.data.article_list;
+			data.data.goods_list.map(function(item){
 				self.infolist.push(item);
 			})
 			pushSession("pinpai_infolist", self.infolist)
