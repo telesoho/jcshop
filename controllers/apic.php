@@ -2551,7 +2551,7 @@ class Apic extends IController{
 		/* 接收参数 */
 		$param = $this->checkData(array());
 		/* 品牌榜 */
-		$ids              = array(1,2,3, 4,5,6); //1药妆-5零食-3宠物-7母婴-6生活
+		$ids              = array(1, 2, 3, 4, 5, 6); //1药妆-5零食-3宠物-7母婴-6生活
 		$queryCat         = new IQuery('brand_category');
 		$queryCat->where  = 'id IN ('.implode(',', $ids).')';
 		$queryCat->fields = 'id,name,img';
@@ -2562,8 +2562,8 @@ class Apic extends IController{
 			$queryBrand->order  = 'sort DESC';
 			$queryBrand->limit  = 9;
 			foreach($listCat as $k => $v){
-				$queryBrand->where = 'category_ids LIKE "%,'.$v['id'].',%"';
-				$listCat[$k]['list']         = $queryBrand->find();
+				$queryBrand->where   = 'category_ids LIKE "%,'.$v['id'].',%"';
+				$listCat[$k]['list'] = $queryBrand->find();
 				$listCat[$k]['img']  = empty($v['img']) ? '' : IWeb::$app->config['image_host'].'/'.$v['img'];
 			}
 		}
@@ -2578,10 +2578,11 @@ class Apic extends IController{
 			$queryBrand->order  = 'sort DESC';
 			$queryBrand->limit  = 1000;
 			foreach($listAll as $k => $v){
-				$queryBrand->where = 'logo IS NOT NULL AND category_ids LIKE "%,'.$v['id'].',%"';
-				$listAll[$k]['list']         = $queryBrand->find();
+				$queryBrand->where   = 'logo IS NOT NULL AND category_ids LIKE "%,'.$v['id'].',%"';
+				$listAll[$k]['list'] = $queryBrand->find();
 				if(empty($listAll[$k]['list'])){
-					unset($listAll[$k]);continue;
+					unset($listAll[$k]);
+					continue;
 				}
 				foreach($listAll[$k]['list'] as $k1 => $v1){
 					$listAll[$k]['list'][$k1]['logo'] = IWeb::$app->config['image_host'].'/'.$v1['logo'];
@@ -2589,7 +2590,7 @@ class Apic extends IController{
 			}
 		}
 		/* 返回参数 */
-		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>array(
+		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => array(
 			'cat' => $listCat,
 			'all' => $listAll,
 		)));
