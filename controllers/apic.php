@@ -1604,8 +1604,8 @@ class Apic extends IController{
 	public function comment_add(){
 		$param = $this->checkData(array(
 			array('id','int',1,'评论ID'),
-			array('tag_id','int',0,'标签ID'),
-			array('image_media_id','string',0,'微信图片ID'),
+			array('tag_id','string',0,'标签ID[多个使用"英文逗号"分割]'),
+			array('image_media_id','string',0,'微信图片ID[多个使用"英文逗号"分割]'),
 			array('voice_media_id','string',0,'微信语音ID'),
 		));
 		$user_id = $this->tokenCheck();
@@ -1613,6 +1613,9 @@ class Apic extends IController{
 		//检测
 		$result = Comment_Class::can_comment($param['id'], $user_id);
 		if(is_string($result)) $this->returnJson(array('code'=>'-1','msg'=>$result));
+		
+		
+		
 		/* 开始评论 */
 		$modelComment = new IModel("comment");
 		$modelComment->setData(array(
@@ -1634,6 +1637,20 @@ class Apic extends IController{
 		$modelGoods->update('id = '.$infoComment['goods_id'], array('grade', 'comments'));
 		
 		$this->returnJson(array('code'=>'0','msg'=>'ok'));
+	}
+	
+	/**
+	 * 评价标签列表
+	 */
+	public function comment_tag_list(){
+		$param = $this->checkData(array());
+		$query         = new IQuery('comment_tag');
+		$query->where  = 'status=1';
+		$query->fields = 'id,name';
+		$query->order  = 'sort DESC';
+		$query->limit  = 20;
+		$list          = $query->find();
+		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $list));
 	}
 	
 	/**
@@ -1672,7 +1689,7 @@ class Apic extends IController{
 			array('aid', 'int', 0, '活动ID'),
 			array('bid', 'string', 0, '品牌ID'),
 			array('cid', 'string', 0, '分类ID'),
-			array('did', 'int', 0, '推荐ID'),
+			array('did', 'int', 0, '推荐ID[1最新-2特价-3热卖-4推荐]'),
 			array('tag', 'string', 0, '标签'),
 		));
 		$data  = Api::run('goodsList', $param);
@@ -1687,7 +1704,7 @@ class Apic extends IController{
 		$param   = $this->checkData(array(
 			array('id', 'int', 1, '商品ID'),
 		));
-		$user_id = isset($this->user['user_id']) && !empty($this->user['user_id']) ? $this->user['user_id'] : 0;
+		$user_id = $this->tokenCheck();
 		
 		/* 商品详情 */
 		$modelGoods = new IModel('goods');
@@ -1763,11 +1780,11 @@ class Apic extends IController{
 		/* 购物车中商品数量 */
 		$modelCar = new IModel('goods_car');
 		$infoCar  = $modelCar->getObj('user_id='.$user_id);
+		$dataGoods['car_count'] = 0;
 		if(!empty($infoCar)){
 			$car_list               = JSON::decode(str_replace(array('&', '$'), array('"', ','), $infoCar['content']));
-			$dataGoods['car_count'] = count($car_list['goods']);
-		}else{
-			$dataGoods['car_count'] = 0;
+			foreach($car_list['goods'] as $k => $v)
+				$dataGoods['car_count'] += $v;
 		}
 		
 		/* 增加浏览次数 */
