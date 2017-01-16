@@ -1,6 +1,8 @@
-/**
- * Created by yb on 2016/11/30.
- */
+
+var Request = new Object();
+Request = GetRequest();
+var statusOrder=Request["id"];
+console.log(statusOrder)
 var stop=true;
 var vm = new Vue({
     el: '#articleList',
@@ -15,7 +17,8 @@ var vm = new Vue({
         },
         changeState:true,
         img1:"/views/mobile/skin/default/image/jmj/icon/like.png",
-        img2:"/views/mobile/skin/default/image/jmj/icon/like-ed.png"
+        img2:"/views/mobile/skin/default/image/jmj/icon/like-ed.png",
+        cid:""
     },
     computed: {
         new_data: function(){
@@ -45,7 +48,11 @@ var vm = new Vue({
         // }else{
             setItem("articleData",[]);
             setItem("articlePage",nowPage);
-            pullupArticleRefresh(self);
+            if(statusOrder){
+            	 pullupArticleRefresh(self,statusOrder);
+            }else{
+            	 pullupArticleRefresh(self);
+            }
             console.log(self.articleDetail.length);
         // }
     },
@@ -86,7 +93,11 @@ $(window).bind('scroll', function() {
     if ($(window).scrollTop() + $(window).height() +2000 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
             stop=false;
-            pullupArticleRefresh(vm);
+           if(statusOrder){
+            	 pullupArticleRefresh(vm,statusOrder);
+            }else{
+            	 pullupArticleRefresh(vm);
+            }
         }
     }
     if($(window).scrollTop()>100){
@@ -97,10 +108,11 @@ $(window).bind('scroll', function() {
         $(".fix-toTop").css("position","fixed");
     }
 });
-function pullupArticleRefresh(self){
+function pullupArticleRefresh(self,cid){
     mui.ajax('/apic/article_list', {
         data:{
-            page:self.page
+            page:self.page,
+            cid:cid ? cid:''
         },
         dataType: 'json',
         type: 'get',
@@ -150,3 +162,15 @@ function collection(item,self){
     });
 }
 
+function GetRequest() {
+      var url = location.search; //获取url中"?"符后的字串
+      var theRequest = new Object();
+      if (url.indexOf("?") != -1) {
+          var str = url.substr(1);
+          strs = str.split("&");
+          for(var i = 0; i < strs.length; i ++) {
+              theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+          }
+      }
+      return theRequest;
+}

@@ -164,7 +164,22 @@ var vm = new Vue({
     		}else if(item.category_name == "药妆特供"){
     			window.location.href = "/site/pro_list?cat=1"
     		}
+    	},
+    	Video_pro:function(){
+    		window.location.href = "/site/article_list?id=3"
+    	},
+    	Brand_pavilion:function(){
+    		window.location.href = "/site/sitemap?id=3"
+    	},
+    	newproduct:function(){
+    		removeSessionItem("goodsinfo");
+			removeSessionItem("goodspage")
+    		window.location.href = "/site/goods_list?did=1"
+    	},
+    	scene_pavilion:function(){
+    		window.location.href = "/redesign/scenepavilion"
     	}
+    	
     }
 })
 $(document).ready(function(){
