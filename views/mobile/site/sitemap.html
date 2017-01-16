@@ -67,13 +67,13 @@
 		    				<!--<img :src="item.image" style="width: 100%;"/>-->
 		    				<img src="/views/mobile/skin/default/image/jmj/redesign/ 5.png" style="width: 100%;"/>
 		    			</div>
-		    			<div class="public_main active_show" v-if="item.state">
+		    			<div class="public_main " id="active_show" v-if="item.state" v-animation>
 		    				<div v-for="(item2,key) in item.list">
 		    					<h1 @click="two_title(item2)"><img :src="item2.image" style="width: 0.6rem;"/><!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyao2.png" style="width: 0.15rem;"/>-->{{item2.name}}</h1>
 		    					<ul v-if="item2.state2">
 			    					<li v-for="(item3,key) in item2.list"><span @click="poducos(item3.id)">
 			    						<!--<img :src="item3.image" width="1.4rem"/>-->
-			    						<img :src="item3.image" width="1.4rem"/>
+			    						<img :dataimg="item3.image" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" width="1.4rem"/>
 			    						<p>{{item3.name}}</p>
 			    					</span></li>
 			    				</ul>
@@ -107,7 +107,7 @@
 		    					<ul>
 		    						<li @click="brand_shop(item_brand2.id)" v-for="item_brand2 in item_brand.list" :name="item_brand2.name">
 		    							<!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyong.png" style="width: 1.6rem;"/>-->
-		    							<img :src="item_brand2.logo" style="width: 1.6rem;"/>
+		    							<img :dataimg="item_brand2.logo" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style="width: 1.6rem;"/>
 		    						</li>
 		    					</ul>
 		    				</div>
@@ -165,6 +165,15 @@
 					brand_lista(self);
 				},
 				updated: function(){
+					     // 页面加载完成执行的函数;
+				        lazyload.init({
+				            anim:false,
+				            selectorName:".samLazyImg"
+				        });
+				        var gallery = mui('#slider1');
+				        gallery.slider({
+				            interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
+				        });
 					removeSessionItem("pinpai_infolist");
     					removeSessionItem("pinpai_page");
 				},

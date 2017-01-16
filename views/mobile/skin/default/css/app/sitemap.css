@@ -190,9 +190,46 @@ li{
 
 
 /*							动画							*/
-.active_show{
-	transition:height 2s;
-	-moz-transition:height 2s; /* Firefox 4 */
-	-webkit-transition:height 2s; /* Safari and Chrome */
-	-o-transition:height 2s; /* Opera */
+/*.active_show {
+    transition: all 1s ease;
+	opacity: ;
+}
+.active_show.v-enter, .active_show.v-leave {
+    height: auto;
+   background-color: red;
+}*/
+#active_show {
+    display: inline-block;
+}
+
+#active_show.v-enter {
+    animation: fadein 1s;
+}
+
+#active_show.v-leave {
+    animation: fadeout 1s;
+}
+
+@keyframes fadein {
+    0% {
+        transform: rotateZ(0);
+    }
+    50% {
+        transform: rotateZ(270deg);
+    }
+    100% {
+        transform: rotateZ(360deg);
+    }
+}
+
+@keyframes fadeout {
+    0% {
+        transform: rotateZ(360deg);
+    }
+    50% {
+       transform: rotateZ(270deg);
+    }
+    100% {
+        transform: rotateZ(0);
+    }
 }
