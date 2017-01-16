@@ -2558,11 +2558,11 @@ class Apic extends IController{
 		$listCat          = $queryCat->find();
 		if(!empty($listCat)){
 			$queryBrand         = new IQuery('brand');
-			$queryBrand->fields = 'id,name';
+			$queryBrand->fields = 'id,name,img';
 			$queryBrand->order  = 'sort DESC';
 			$queryBrand->limit  = 9;
 			foreach($listCat as $k => $v){
-				$queryBrand->where   = 'category_ids LIKE "%,'.$v['id'].',%"';
+				$queryBrand->where   = 'img IS NOT NULL AND category_ids LIKE "%,'.$v['id'].',%"';
 				$listCat[$k]['list'] = $queryBrand->find();
 				$listCat[$k]['img']  = empty($v['img']) ? '' : IWeb::$app->config['image_host'].'/'.$v['img'];
 			}
