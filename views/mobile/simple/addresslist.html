@@ -95,9 +95,6 @@
 <script>
 
     var cityPicker3;
-    cityPicker3 = new mui.PopPicker({
-        layer: 3
-    });
     var Request = new Object();
     Request = GetRequest();
     var statusOrder=Request["rev"];
@@ -165,7 +162,9 @@
     $(window).load(function(){
         //    跳转到新增收货地址页面
         //    三级联动
-
+        cityPicker3 = new mui.PopPicker({
+            layer: 3
+        });
 //        设置如果订单页面进入回退到订单页面，个人中心就回退到个人中心页面
         pushHistory();
         window.addEventListener("popstate", function(e) {

@@ -91,13 +91,13 @@
 						<img src="/views/mobile/skin/default/image/jmj/product/tip1.png" alt="" />
 						<span>东京直邮</span>
 					</li>
-					<li class="tip tip2">
+					<li class="tip tip2"  v-if="info.delivery==2">
 						<img src="/views/mobile/skin/default/image/jmj/product/tip2.png" alt="" />
-						<span>东京直邮</span>
+						<span>满288包邮</span>
 					</li>
-					<li class="tip tip3">
+					<li class="tip tip3" v-if="info.vendor==1">
 						<img src="/views/mobile/skin/default/image/jmj/product/tip3.png" alt="" />
-						<span>东京直邮</span>
+						<span>universal入驻</span>
 					</li>
 					<li class="right"><span class="mui-icon mui-icon-arrowright" style="color:#bbb;font-size:0.3rem;margin-right:0.25rem;"></span></li>
 				</ul>
