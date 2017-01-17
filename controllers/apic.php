@@ -54,10 +54,10 @@ class Apic extends IController{
 		/* 专辑列表 */
 		$queryArt         = new IQuery('article as m');
 		$queryArt->join   = 'left join article_category as c on c.id=m.category_id';
-		$queryArt->where  = 'm.visibility=1 AND m.category_id NOT IN (3)';
+		$queryArt->where  = 'm.top=1 AND m.visibility=1 AND m.category_id NOT IN (3)';
 		$queryArt->fields = 'm.id,m.title,m.image,m.visit_num,m.category_id,c.icon,c.name as category_name';
-		$queryArt->order  = 'm.top DESC,m.sort DESC,m.id DESC';
-		$queryArt->limit  = 2;
+		$queryArt->order  = 'm.sort DESC,m.id DESC';
+		$queryArt->limit  = 5;
 		$listArt          = $queryArt->find();
 		if(!empty($listArt)){
 			//商品列表模型
