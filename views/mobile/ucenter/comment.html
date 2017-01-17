@@ -336,6 +336,7 @@ $this->wechat->jsApiSDK();
                     success: function (res) {
                         var serverId = res.serverId; // 返回图片的服务器端ID
                         severImg.push(serverId);
+                        console.log("图片"+res.serverId);
                     }
                 });
             })
@@ -346,6 +347,7 @@ $this->wechat->jsApiSDK();
                 isShowProgressTips: 1, // 默认为1，显示进度提示
                 success: function (res) {
                     severVoice= res.serverId; // 返回音频的服务器端ID
+                    console.log("语音"+res.serverId);
                 }
             });
         }
