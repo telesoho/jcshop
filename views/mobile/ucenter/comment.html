@@ -38,7 +38,7 @@
       <div class="loadImg">
           <div class="top">选择图片</div>
           <div class="imgArea">
-              <div class="img" v-for="(item,key) in choImg">
+              <div class="img" v-for="(item,key) in img">
                   <img :src="item" alt="" @click="perview(item)"/>
                   <img src="/views/mobile/skin/default/image/jmj/comment/del.png" alt="" class="del" v-if="key==(imgLength-1)" @click="delImg(key)"/>
               </div>
@@ -117,7 +117,9 @@
             pause:false, //播放开始与暂停
             //我们的文件
             choImg:[],
+            img:[], //本地图片
             voice:"",
+            localVoice:"",//本地语音 用于播放
 //            用户选择标签选项
             class1:"item",
             class2:"item active",
@@ -155,6 +157,7 @@
             },
             //删除最后一张已选择的图片
             delImg:function(key){
+                this.img.splice(key,1);
                 this.choImg.splice(key,1);
                 this.imgLength--;
             },
@@ -178,14 +181,17 @@
             },
             beginStart:function(){
                 this.voice="";
-                startRecord(this);
+                this.localVoice="";
                 this.voiceState=2;
+                startRecord(this);
                 this.pause=false;
             },
             //删除录音功能
             delVoice:function(){
                 var self=this;
                 this.voice="";
+                clearInterval(self.f);
+                clearInterval(self.v);
                 self.voiceState=1;
                 self.pause=false;
             },
@@ -257,8 +263,9 @@ $this->wechat->jsApiSDK();
                         localId: item, // 需要上传的图片的本地ID，由chooseImage接口获得
                         isShowProgressTips: 1, // 默认为1，显示进度提示
                         success: function (res1) {
+                            self.img.push(item);
+                            self.imgLength++;
                             self.choImg.push(res1.serverId);
-                            self.imgLength++
                         }
                     });
                 })
@@ -271,7 +278,7 @@ $this->wechat->jsApiSDK();
         console.log(item);
         wx.previewImage({
             current: item, // 当前显示图片的http链接
-            urls: self.choImg // 需要预览的图片http链接列表
+            urls: self.img // 需要预览的图片http链接列表
         });
     }
     //开始录音
@@ -291,6 +298,7 @@ $this->wechat->jsApiSDK();
                     isShowProgressTips: 1, // 默认为1，显示进度提示
                     success: function (res1) {
                         clearInterval(self.f);
+                        self.localVoice=res.localId;
                         self.voice=res1.serverId;
                         self.voiceState=3;
                     }
@@ -305,6 +313,7 @@ $this->wechat->jsApiSDK();
                     isShowProgressTips: 1, // 默认为1，显示进度提示
                     success: function (res1) {
                         clearInterval(self.f);
+                        self.localVoice=res.localId;
                         self.voice=res1.serverId;
                         self.voiceState=3;
                     }
@@ -316,14 +325,14 @@ $this->wechat->jsApiSDK();
     function playVoice(self){
         if(self.pause){
             wx.pauseVoice({
-                localId: self.voice // 需要暂停的音频的本地ID，由stopRecord接口获得
+                localId: self.localVoice // 需要暂停的音频的本地ID，由stopRecord接口获得
             });
             clearInterval(self.v);
             self.startSrc1="/views/mobile/skin/default/image/jmj/comment/003.png";
             self.pause=false;
         }else{
             wx.playVoice({
-                localId: self.voice // 需要播放的音频的本地ID，由stopRecord接口获得
+                localId: self.localVoice // 需要播放的音频的本地ID，由stopRecord接口获得
             });
             self.v=setInterval(function(){
                 self.startNum=(self.startNum+1)%4;
