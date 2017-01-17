@@ -128,55 +128,11 @@ class wechat extends pluginBase
 		);
 		$apiUrl = "http://api.weixin.qq.com/cgi-bin/media/get?".join("&",$urlparam);
 //		common::dblog($this->config);
-		$rel = $this->curl_http($apiUrl);
+		return common::downFile($apiUrl);
+//		$rel = $this->curl_http($apiUrl);
+//		$filename = preg_split('//',$rel);
 //		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
-		return $rel;
-	}
-	
-	/**
-	 * 请求url
-	 * @param string $url 请求地址
-	 * @param array $body 传输内容
-	 * @param string $method 传输方式
-	 * @param array $headers http头信息
-	 * @return bool 失败返回false
-	 */
-	public static function curl_http($url,$body='',$method='DELETE',$headers=array()){
-		//初始化curl会话
-		$ch 			= curl_init();
-		/* Curl 设置参数 */
-		curl_setopt_array($ch,array(
-			CURLOPT_HTTP_VERSION 	=> CURL_HTTP_VERSION_1_0, 	//强制使用 HTTP/1.0
-			CURLOPT_USERAGENT 		=> 'toqi.net', 		//伪装浏览器
-			CURLOPT_CONNECTTIMEOUT 	=> 30, 		//最长等待时间
-			CURLOPT_TIMEOUT 		=> 30, 		//执行的最长秒数
-			CURLOPT_RETURNTRANSFER 	=> true, 	//文件流的形式返回，而不是直接输出
-			CURLOPT_ENCODING 		=> '', 		//发送所有支持的编码类型
-			CURLOPT_SSL_VERIFYPEER 	=> false, 	//不返回SSL证书验证请求的结果
-			CURLOPT_HEADER 			=> true, 	//不把头文件的信息作为数据流输出
-			CURLOPT_URL 			=> $url, 	//请求的url地址
-			CURLOPT_HTTPHEADER 		=> $headers,//设置http头信息
-			CURLINFO_HEADER_OUT 	=> true, 	//发送请求的字符串
-		));
-		//设置传输方式
-		switch($method){
-			case 'POST':
-				curl_setopt($ch,CURLOPT_POST,TRUE);
-				if(!empty($body))
-					curl_setopt($ch,CURLOPT_POSTFIELDS,$body);
-				break;
-			case 'DELETE':
-				curl_setopt($ch,CURLOPT_CUSTOMREQUEST,'DELETE');
-				if(!empty($body))
-					$url=$url.'?'.str_replace('amp;', '', http_build_query($body));
-		}
-		//执行会话
-		$response 		= curl_exec($ch);
-		//获取curl会话信息
-		$httpinfo 		= curl_getinfo($ch);
-		//关闭curl会话
-		curl_close($ch);
-		return $response;
+//		return $rel;
 	}
 	
 	/**
