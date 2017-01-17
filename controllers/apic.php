@@ -1615,7 +1615,6 @@ class Apic extends IController{
 		if(is_string($result)) $this->returnJson(array('code'=>'-1','msg'=>$result));
 		
 		
-		
 		/* 开始评论 */
 		$modelComment = new IModel("comment");
 		$modelComment->setData(array(
@@ -3192,5 +3191,14 @@ class Apic extends IController{
         }
     }
 	
+	
+	public function media(){
+//		require_once __DIR__ . '/../plugins/wechat/wechat.php';
+		$wechat = new wechat();
+		$wechat->setConfig();
+		$rel = $wechat->getMedia('a51zJsLhkBAWZN7Dg59kKlOKjsD72RqFSP7wMxW7exDfViWXK0rVnDWrTTtjdrRJ');
+		var_dump($rel);exit();
+	}
+    
 	
 }

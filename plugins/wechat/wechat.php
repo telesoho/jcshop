@@ -42,10 +42,10 @@ class wechat extends pluginBase
 	//获取配置参数
 	private  function initConfig(){
 		//缺少SSL组件
-		if(!extension_loaded("OpenSSL")){
-			$this->setError = "您的环境缺少OpenSSL组件，这是调用微信API所必须的";
-			return false;
-		}
+//		if(!extension_loaded("OpenSSL")){
+//			$this->setError = "您的环境缺少OpenSSL组件，这是调用微信API所必须的";
+//			return false;
+//		}
 		//获取参数配置
 		$siteConfigObj = $this->config();
 		if(isset($siteConfigObj['wechat_Token']) && isset($siteConfigObj['wechat_AppID']) && isset($siteConfigObj['wechat_AppSecret'])){
@@ -112,6 +112,20 @@ class wechat extends pluginBase
 				die($json);
 			}
 		}
+	}
+	
+	/**
+	 * 下载临时素材
+	 * @return
+	 */
+	public function getMedia($media_id){
+		$urlparam = array(
+			'access_token='.$this->getAccessToken(),
+			'media_id='.$media_id,
+		);
+		$apiUrl = "http://api.weixin.qq.com/cgi-bin/media/get?".join("&",$urlparam);
+		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
+		return $json;
 	}
 
 	//获取openid
