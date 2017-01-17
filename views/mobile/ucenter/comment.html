@@ -167,9 +167,7 @@
                 console.log(e)
                 var self=this;
                 startRecord(self);
-                this.playVoice();
                 this.voiceState=2;
-//                this.startTime1=e.timeStamp;
             },
             voicePlay:function(){
                 playVoice(this);
@@ -177,9 +175,6 @@
             //停止录音
             endV:function(e){
                 stopRecord(this);
-                clearInterval(self.f);
-//                this.endTime1=e.timeStamp;
-//                this.voice_time=((this.endTime1-this.startTime1)/1000).toFixed(1);
             },
             beginStart:function(){
                 this.voice="";
@@ -193,15 +188,6 @@
                 this.voice="";
                 self.voiceState=1;
                 self.pause=false;
-                console.log(self.voiceState);
-            },
-//            播放或者录制语音动画
-            playVoice:function(){
-                var self=this;
-                self.f=setInterval(function(){
-                    self.startNum=(self.startNum+1)%4;
-                    self.startSrc=self.img_arr[self.startNum];
-                },300)
             },
 //            选择标签,最多只能选择三个标签
             changeState:function(item){
@@ -264,14 +250,19 @@ $this->wechat->jsApiSDK();
             sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
             sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
             success: function (res) {
-                localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
 //                将本地的localIds展示出来
-                console.log(res.localIds);
                 res.localIds.map(function(item){
-                    self.choImg.push(item)
+                     //直接上传图片
+                    wx.uploadImage({
+                        localId: item, // 需要上传的图片的本地ID，由chooseImage接口获得
+                        isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res1) {
+                            self.choImg.push(res1.serverId);
+                            self.imgLength++
+                        }
+                    });
                 })
-                console.log(self.choImg);
-                self.imgLength+=res.localIds.length;
+
             }
         });
     }
@@ -284,23 +275,40 @@ $this->wechat->jsApiSDK();
         });
     }
     //开始录音
-    function startRecord(){
+    function startRecord(self){
         wx.startRecord();
+        self.f=setInterval(function(){
+            self.startNum=(self.startNum+1)%4;
+            self.startSrc=self.img_arr[self.startNum];
+        },300)
     }
     //结束录音，获取语音信息
     function stopRecord(self){
         wx.stopRecord({
             success: function (res) {
-                var localId = res.localId;
-                self.voice=localId;
-                self.voiceState=3;
+                wx.uploadVoice({
+                    localId: res.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res1) {
+                        clearInterval(self.f);
+                        self.voice=res1.serverId;
+                        self.voiceState=3;
+                    }
+                });
             }
         });
         wx.onVoiceRecordEnd({
             // 录音时间超过一分钟没有停止的时候会执行 complete 回调
             complete: function (res) {
-                var localId = res.localId;
-                self.voice=localId;
+                wx.uploadVoice({
+                    localId: res.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res1) {
+                        clearInterval(self.f);
+                        self.voice=res1.serverId;
+                        self.voiceState=3;
+                    }
+                });
             }
         });
     }
@@ -326,41 +334,14 @@ $this->wechat->jsApiSDK();
     }
     //提交图片 语音
     function upload(self){
-        //提交图片
-        var severImg=[];
-        var severVoice;
-        if(self.choImg.length){
-            self.choImg.map(function(item){
-                wx.uploadImage({
-                    localId: item, // 需要上传的图片的本地ID，由chooseImage接口获得
-                    isShowProgressTips: 1, // 默认为1，显示进度提示
-                    success: function (res) {
-                        var serverId = res.serverId; // 返回图片的服务器端ID
-                        severImg.push(serverId);
-                        console.log("图片"+res.serverId);
-                    }
-                });
-            })
-        }
-        if(self.voice){
-            wx.uploadVoice({
-                localId: self.voice, // 需要上传的音频的本地ID，由stopRecord接口获得
-                isShowProgressTips: 1, // 默认为1，显示进度提示
-                success: function (res) {
-                    severVoice= res.serverId; // 返回音频的服务器端ID
-                    console.log("语音"+res.serverId);
-                }
-            });
-        }
 //        处理获得的数据
         var sub_data={
             id:self.id,
             tag_id:self.tag_id,
-            image_media_id:severImg.join(","),
-            voice_media_id:severVoice
-        }
-        console.log(sub_data);
-        console.log(sub_data.image_media_id);
+            image_media_id:self.choImg.join(","),
+            voice_media_id:self.voice
+        };
+        console.log("图片"+sub_data.image_media_id);
         console.log("语音"+sub_data.voice_media_id)
         //发送ajax提交后台
         mui.ajax('/apic/comment_add',{
