@@ -67,7 +67,7 @@
         </div>
         <div class="info flexstart">
             <div :class="item.cho?class2:class1" v-for="item in mark" @click="changeState(item)">
-                    {{item.text}}
+                    {{item.name}}
             </div>
         </div>
     </div>
@@ -84,11 +84,13 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script>
+    var getId="{echo:IReq::get('id')}";
     var vm=new Vue({
         el:"#commentInfo",
         data:{
+            id:getId,//获取页面传过来的id
             showLoad:false,//是否显示加载页
-            maxLength:5,//最大可以上传图片的数量
+            maxLength:7,//最大可以上传图片的数量
             imgLength:0,//当前已上传图片数量
             maxMark:3,//最大可以选择标签数
             markLen:0,
@@ -107,43 +109,7 @@
 //            用户选择标签选项
             class1:"item",
             class2:"item active",
-            mark:[
-                {
-                    id:1,
-                    text:"物流快",
-                    cho:false
-                },
-                {
-                    id:2,
-                    text:"正品可靠",
-                    cho:false
-                },
-                {
-                    id:3,
-                    text:"东京直邮",
-                    cho:false
-                },
-                {
-                    id:4,
-                    text:"包装好",
-                    cho:false
-                },
-                {
-                    id:5,
-                    text:"便宜",
-                    cho:false
-                },
-                {
-                    id:6,
-                    text:"服务一般",
-                    cho:false
-                },
-                {
-                    id:7,
-                    text:"相当好",
-                    cho:false
-                }
-            ]
+            mark:[]
         },
         computed:{
             checkSubmit:function(){
@@ -156,7 +122,19 @@
                     this.checkSub=false;
                 }
                 return this.checkSub;
+            },
+            tag_id:function(){
+                var tag_id=[];
+                this.mark.map(function(item){
+                    if(item.cho){
+                        tag_id.push(item.id)
+                    }
+                })
+                return tag_id.join(",");
             }
+        },
+        mounted:function(){
+           getTagList(this);
         },
         methods:{
 //            从本地选择图片或者拍照
@@ -214,7 +192,6 @@
                        this.markLen--
                    }
                 }
-
             },
             //提交并上传文件到微信服务器
             submit:function(){
@@ -226,6 +203,19 @@
             }
         }
     })
+    function getTagList(self){
+        mui.ajax('/apic/comment_tag_list',{
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒
+            success:function(data){
+                data.data.map(function(item){
+                    item.cho=false;
+                })
+                self.mark=data.data;
+            }
+        });
+    }
 </script>
 
 <!-- 微信分享 -->
@@ -241,16 +231,22 @@ $this->wechat->jsApiSDK();
     wx.ready(function() {});
 //    从本地选择图片
     function chooseImage(self){
-        console.log(self.imgLength);
+        console.log("执行函数");
         var lenth=self.maxLength-self.imgLength;
         wx.chooseImage({
-            count:length , // 最大能上传数量-已传商品数量
+            count:lenth , // 最大能上传数量-已传商品数量
             sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
             sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
             success: function (res) {
+                console.log("执行选择");
                 localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
 //                将本地的localIds展示出来
-                self.choImg.concat(res.localIds);
+                console.log(res.localIds);
+                res.localIds.map(function(item){
+                    self.choImg.push(item)
+                })
+                console.log(self.choImg);
+                alert(self.choImg);
                 self.imgLength=res.localIds.length;
             }
         });
@@ -314,8 +310,24 @@ $this->wechat->jsApiSDK();
                 }
             });
         }
-
-
+//        处理获得的数据
+        var sub_data={
+            id:self.id,
+            tag_id:self.tag_id,
+            image_media_id:severImg.join(","),
+            voice_media_id:severVoice
+        }
+        //发送ajax提交后台
+        mui.ajax('/apic/comment_add',{
+            data:sub_data,
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒
+            success:function(data){
+                self.showLoad=false; //停止加载
+                window.location.href="/ucenter/order"
+            }
+        });
     }
 </script>
 {/if}
