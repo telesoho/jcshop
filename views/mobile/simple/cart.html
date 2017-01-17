@@ -80,7 +80,7 @@
 				</div>
 				<a  href="{url:/simple/cart2}"  class="toPay classA">结算({{infoMessage.count}})</a>
 			</div>
-			<a href="#" class="condition_price">
+			<a href="#" class="condition_price" @click="freeShipp">
 				{{freeShipping}}
 			</a>
 		</div>
@@ -122,7 +122,7 @@
 //                    this.free_ok=false;
 //					return "我们帮你免邮费了,去逛逛";
 //				}else{
-					return "满288就可以包邮哟";
+					return "去凑单";
 //				}
 			},
 			totalPrice:function(){
@@ -163,6 +163,9 @@
 			removeCart: function(item){
 				var self=this;
 				removeCartByJSON(self,item)
+			},
+			freeShipp:function(){
+				window.location.href = "/site/index"
 			}
 		}
 	})
@@ -243,4 +246,9 @@ function removeCartByJSON(self,item) {
 		var getter= window.localStorage.getItem(key);
 		return JSON.parse(getter);
 	}
+	$(window).load(function(){
+		mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
+
+	})
+	mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
 </script>

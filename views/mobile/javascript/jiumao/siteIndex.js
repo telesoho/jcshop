@@ -378,10 +378,8 @@ function collection(item,self,id_this){
         timeout:10000,//超时时间设置为10秒；
         success:function(data){
             console.log(data);
-			if(id_this.is_favorite == 0){
-				id_this
-			}
-
+			console.log()
+			
             if(data.message=="请先登录"){
                 alert("请先登录");
                 return false;
@@ -389,23 +387,11 @@ function collection(item,self,id_this){
             if(data.message=="收藏成功"){
                 id_this.is_favorite=1;
 //              self.changeState=false;
-				if(item==283){
-					 id_this.favorite_num=parseInt( id_this.favorite_num)+1;
-				}
-               else if(item == 284){
-               	id_this.favorite_num=parseInt(id_this.favorite_num)+1;
-               }
-                
+				id_this.favorite_num = parseInt(id_this.favorite_num)+1;
             }else{
                 id_this.is_favorite=0;
 //              self.changeState=true;
-				if(item==283){
-					id_this.favorite_num=parseInt(id_this.favorite_num)-1;
-				}
-               else if(item == 284){
-               		id_this.favorite_num=parseInt(id_this.favorite_num)-1;
-               }
-
+				id_this.favorite_num = parseInt(id_this.favorite_num)-1;
             }
             //处理完还要保存在本地
             pushSession("articleDetail",self.indexInfo.articleDetail)

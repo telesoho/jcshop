@@ -30,7 +30,11 @@ body{
     line-height:0.9rem;
     margin-top:2.57rem;
 }
+.searth_container_content{
+	overflow: hidden;
+}
 .searth_container_content .head{
+	margin-top: 0.9rem;
     background:#fff;
     width:100%;
     height:1.16rem;

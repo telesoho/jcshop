@@ -180,7 +180,9 @@
 				            interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
 				        });
 					removeSessionItem("pinpai_infolist");
-    					removeSessionItem("pinpai_page");
+    				removeSessionItem("pinpai_page");
+    				//手指滑动时候
+					
 				},
 				methods:{
 					choose:function(num){
@@ -197,7 +199,6 @@
 					},
 					show_hide:function(item,key){
 						item.state=!item.state;
-						console.log(item.list[0].state2)
 						item.list[0].state2 = !item.list[0].state2;
 					},
 					show_brand:function(brand_num){
@@ -253,15 +254,14 @@
 						self.chooses_show = true;
 						self.chooses = 0;
 					}
-					console.log(statusOrder,self.chooses_show)
 					data.data.map(function(items){
 						items.state=false;
 						items.move_states = false;
 						items.list.map(function(items2){
 							items2.state2=false;
 						})
-						data.data[0].list[0].state2=true;
-						data.data[0].state=true;
+//						data.data[0].list[0].state2=true;
+//						data.data[0].state=true;
 						data.data[0].move_states=true;
 						self.info.push(items);
 					})
