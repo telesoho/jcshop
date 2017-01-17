@@ -360,6 +360,8 @@ $this->wechat->jsApiSDK();
             voice_media_id:severVoice
         }
         console.log(sub_data);
+        console.log(sub_data.image_media_id);
+        console.log("语音"+sub_data.voice_media_id)
         //发送ajax提交后台
         mui.ajax('/apic/comment_add',{
             data:sub_data,
