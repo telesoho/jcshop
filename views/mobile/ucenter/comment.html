@@ -49,16 +49,22 @@
       </div>
     <div class="voiceInfo">
         <h3 class="top">说点什么吧</h3>
-        <div class="content content1 flexbox" v-if="voice==''" @touchstart="startV" @touchend="endV">
-            <img src="/views/mobile/skin/default/image/jmj/comment/voice1.png" alt="" style="width:1.2rem;margin-top:0.3rem"/>
-            <div class="con con1">按住说话</div>
+        <div class="content content1 flexbox" v-if="voiceState==1">
+            <img src="/views/mobile/skin/default/image/jmj/comment/voice1.png" alt="" style="width:1.2rem;margin-top:0.3rem" @click="startV"/>
+            <div class="con con1">点击录制</div>
         </div>
-        <div class="content content2 flexbox" v-else @touchstart="startV2" @touchend="endV2">
+        <div class="content content1 flexbox" v-if="voiceState==2">
+            <img :src="startSrc" alt="" style="height:0.7rem;margin-top:0.3rem" @click="endV"/>
+            <div class="con con1" style="margin-top:0.5rem;">正在录音,点击停止</div>
+        </div>
+        <div class="content content2 flexbox" v-if="voiceState==3">
             <div>
-                <img src="/views/mobile/skin/default/image/jmj/comment/voice2.png" alt="" style="width:0.94rem;margin-top:0.49rem;" />
-                <span class="time">{{voice_time}}’</span>
+                <img src="/views/mobile/skin/default/image/jmj/comment/voice2.png" alt="" style="width:0.94rem;margin-top:0.18rem;"  @click="voicePlay"/>
             </div>
-            <div class="con con1">长按删除语音</div>
+            <div class="con con1">
+                 <span class="beginStart" @click="beginStart">重录</span>
+                <span class="del" @click="delVoice">删除</span>
+            </div>
         </div>
     </div>
     <div class="markInfo">
@@ -93,19 +99,24 @@
             maxLength:5,//最大可以上传图片的数量
             imgLength:0,//当前已上传图片数量
             maxMark:3,//最大可以选择标签数
-            markLen:0,
+            voiceState:1, //录制状态 1代表没有录制  2代表录正在录制  3 代表录制完成
+            markLen:0, //当前所选标签的长度
             checkSub:false,
             style1:"opacity:0.5",
             style2:"opacity:1",
+            //播放语音的动画
+            img_arr:[
+                   "/views/mobile/skin/default/image/jmj/comment/003.png" ,
+                    "/views/mobile/skin/default/image/jmj/comment/002.png",
+                    "/views/mobile/skin/default/image/jmj/comment/001.png",
+                    "/views/mobile/skin/default/image/jmj/comment/002.png"
+            ],
+            startNum:1,//开始播放语音的num
+            startSrc:"/views/mobile/skin/default/image/jmj/comment/003.png",
+            pause:false, //播放开始与暂停
             //我们的文件
             choImg:[],
             voice:"",
-            voice_time:0,
-            //按键开始,以及结束时间
-            startTime1:0,
-            endTime1:0,
-            startTime2:0,
-            endTime2:0,
 //            用户选择标签选项
             class1:"item",
             class2:"item active",
@@ -153,28 +164,43 @@
             //开始录音
             startV:function(e){
                 console.log(e)
-                startRecord();
-                this.startTime1=e.timeStamp;
+                var self=this;
+                startRecord(self);
+                this.playVoice();
+                this.voiceState=2;
+//                this.startTime1=e.timeStamp;
+            },
+            voicePlay:function(){
+                playVoice(this);
             },
             //停止录音
             endV:function(e){
                 stopRecord(this);
-                this.endTime1=e.timeStamp;
-                this.voice_time=((this.endTime1-this.startTime1)/1000).toFixed(1);
+//                this.endTime1=e.timeStamp;
+//                this.voice_time=((this.endTime1-this.startTime1)/1000).toFixed(1);
             },
-            //判断是播放还是删除录音
-            startV2:function(e){
-                this.startTime2=e.timeStamp;
+            beginStart:function(){
+                this.voice="";
+                startRecord(this);
+                this.voiceState=2;
+                this.pause=false;
             },
-            endV2:function(e){
-                this.endTime2=e.timeStamp;
-                var time_check=((this.endTime2-this.startTime2)/1000).toFixed(1);
-                if(time_check>4){
-                    this.voice="";
-                }
-                if(time_check<3){
-                    playVoice(this);
-                }
+            //删除录音功能
+            delVoice:function(){
+                var self=this;
+                this.voice="";
+                clearInterval(self.f);
+                self.voiceState=1;
+                self.pause=false;
+                console.log(self.voiceState);
+            },
+//            播放或者录制语音动画
+            playVoice:function(){
+                var self=this;
+                self.f=setInterval(function(){
+                    self.startNum=(self.startNum+1)%4;
+                    self.startSrc=self.img_arr[self.startNum];
+                },300)
             },
 //            选择标签,最多只能选择三个标签
             changeState:function(item){
@@ -244,7 +270,7 @@ $this->wechat->jsApiSDK();
                     self.choImg.push(item)
                 })
                 console.log(self.choImg);
-                self.imgLength=res.localIds.length;
+                self.imgLength+=res.localIds.length;
             }
         });
     }
@@ -266,6 +292,7 @@ $this->wechat->jsApiSDK();
             success: function (res) {
                 var localId = res.localId;
                 self.voice=localId;
+                self.voiceState=3;
             }
         });
         wx.onVoiceRecordEnd({
@@ -278,9 +305,22 @@ $this->wechat->jsApiSDK();
     }
     //播放录音的函数
     function playVoice(self){
-        wx.playVoice({
-            localId: self.voice // 需要播放的音频的本地ID，由stopRecord接口获得
-        });
+        if(self.pause){
+            wx.pauseVoice({
+                localId: self.voice // 需要暂停的音频的本地ID，由stopRecord接口获得
+            });
+            clearInterval(self.f);
+            self.pause=false;
+        }else{
+            wx.playVoice({
+                localId: self.voice // 需要播放的音频的本地ID，由stopRecord接口获得
+            });
+            self.f=setInterval(function(){
+                self.startNum=(self.startNum+1)%4;
+                self.startSrc=self.img_arr[self.startNum];
+            },300);
+            self.pause=true;
+        }
     }
     //提交图片 语音
     function upload(self){
