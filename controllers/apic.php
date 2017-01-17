@@ -1385,10 +1385,12 @@ class Apic extends IController{
 			$model->update("user_id = ".$this->user['user_id']);
 		}
 		$model->setData(array('is_default' => $default));
-		$model->update("id = ".$id." and user_id = ".$this->user['user_id']);
-		$model->update("id = ".$id." and user_id = ".$this->user['user_id']);
-		
-		$this->json_echo(array('ret' => true));
+		$ret = $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
+		if ($ret){
+		    $this->json_echo(array('ret' => $ret));
+        } else {
+		    $this->json_echo(array('ret' => false));
+        }
 	}
 	
 	/**
@@ -3197,7 +3199,7 @@ class Apic extends IController{
 		if(empty($param)) $param = false;
 		$wechat = new wechat();
 		$wechat->setConfig();
-		$rel = $wechat->getMedia('a51zJsLhkBAWZN7Dg59kKlOKjsD72RqFSP7wMxW7exDfViWXK0rVnDWrTTtjdrRJ',$param);
+		$rel = $wechat->getMedia('3L4hHjlTL0cdy-4Qko3Cq-xJ1webqQ2xeYnWA2ts9PsXqyZevWtHuxDXNb44Rlo9',$param);
 		var_dump($rel);exit();
 	}
     
