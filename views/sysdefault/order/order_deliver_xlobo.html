@@ -31,6 +31,7 @@
 				<col width="80px" />
 				<col width="130px" />
 				<col width="30px" />
+				<col width="30px" />
 			</colgroup>
 
 			<thead>
@@ -40,6 +41,7 @@
 					<th>商品进货价格</th>
 					<th>商品编码</th>
 					<th>购买数量</th>
+					<th>库存</th>
 					<th onclick="selectAll('sendgoods[]')">选择发货</th>
 				</tr>
 			</thead>
@@ -57,10 +59,19 @@
 					<td>{$item['real_price']}</td>
 					<td>{$item['purchase_price']}</td>
 					<td>{$item['goods_no']}</td>
-					<td>{$item['goods_nums']}</td>
-					<td>
+					<td id="a">{$item['goods_nums']}</td>
+					<td id="b"><?php
+					        xlobo::init();
+						    $ret = xlobo::get_goods_store(['test0717011']);
+						    echo $ret[0]->LeftStock;
+                    ?></td>
+					<td id="c">
 						{if:$item['is_send'] == 0}
-						<input type="checkbox" name="sendgoods[]" value="{$item['goods_id']}" />
+                            {if:$ret[0]->LeftStock>=$item['goods_nums']}
+						        <input type="checkbox" name="sendgoods[]" value="{$item['goods_id']}" />
+                            {else:}
+                                贝海无库存
+                            {/if}
 						{else:}
 						{echo:Order_class::goodsSendStatus($item['is_send'])}
 						{/if}
