@@ -42,10 +42,10 @@ class wechat extends pluginBase
 	//获取配置参数
 	private  function initConfig(){
 		//缺少SSL组件
-//		if(!extension_loaded("OpenSSL")){
-//			$this->setError = "您的环境缺少OpenSSL组件，这是调用微信API所必须的";
-//			return false;
-//		}
+		if(!extension_loaded("OpenSSL")){
+			$this->setError = "您的环境缺少OpenSSL组件，这是调用微信API所必须的";
+			return false;
+		}
 		//获取参数配置
 		$siteConfigObj = $this->config();
 		if(isset($siteConfigObj['wechat_Token']) && isset($siteConfigObj['wechat_AppID']) && isset($siteConfigObj['wechat_AppSecret'])){
@@ -65,7 +65,10 @@ class wechat extends pluginBase
 	 * 设置配置
 	 */
 	public function setConfig(){
-		return $this->initConfig();
+		$rel = $this->initConfig();
+		common::dblog($rel);
+		common::dblog($this->config);
+		return $rel;
 	}
 	
 	/**
@@ -124,6 +127,8 @@ class wechat extends pluginBase
 			'media_id='.$media_id,
 		);
 		$apiUrl = "http://api.weixin.qq.com/cgi-bin/media/get?".join("&",$urlparam);
+		
+		common::dblog($apiUrl);
 		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
 		return $json;
 	}
@@ -406,9 +411,7 @@ class wechat extends pluginBase
 		}
 
 		//获取微信用户信息
-		common::dblog(array(123,$oauthAccess));
 		$wechatUser = $this->getUserInfo($oauthAccess);
-		common::dblog(array(987,$wechatUser));
 		if(isset($wechatUser['errmsg'])){
 			throw new IException("获取用户信息失败！".$wechatUser['errmsg']);
 		}
