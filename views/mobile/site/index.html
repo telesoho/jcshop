@@ -171,7 +171,7 @@
 						<span class="logo">
 							<img :src="item.icon" alt="" class="img-hot">
 						</span>
-						<span class="name" style="height: 0.9rem;width: 1.5rem;">{{item.category_name}}</span>
+						<span class="name" style="height: 0.9rem;width: 2.8rem;">{{item.category_name}}</span>
 						<img src="/views/mobile/skin/default/image/jmj/home_redesign/tuwen.png" style="width: 2rem;" />
 						<span class="like mui-pull-right" style="margin-left: 2.22rem;" v-if="">
 							<img @click="collect(item.id,item)" :src="item.is_favorite ==0 ? img1:img2" style="width: 0.42rem;" alt="" class="img-like">
@@ -180,7 +180,7 @@
 					</div>
 					<a href="#" id="product_item286">
 						<div class="content">
-							<div class="img flexbox" style="background: #fff;"><img @click="zhuan_pro(item)" :dataimg="item.image" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg" style="width: 7.1rem; height: 3.6rem; border-radius: 0.1rem;"></div>
+							<div class="img flexbox" style="background: #fff;"><img @click="zhuan_pro(item)" :dataimg="item.image" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg" style="width: 7.1rem; border-radius: 0.1rem;"></div>
 						</div>
 					</a>
 					<div class="single"></div>
@@ -248,19 +248,19 @@
 				<article-list :item="item" :img1="img1" :img2="img2" @col="collect" :state="0"></article-list>
 			</section>-->
 			<!--<cat-refresh v-show="showCat"></cat-refresh>-->
-			<div class="fix-toTop hide" @click="fixToTop">
+			<!--<div class="fix-toTop hide" @click="fixToTop">
 				<img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" />
-			</div>
+			</div>-->
 			<footer-nav :state="0"></footer-nav>
 		</section>
 		<!--<div style="padding-bottom:2.42rem;background:#f8f8f8 ;z-index: 10;"></div>-->
-		<div class="fix-nav">
+		<!--<div class="fix-nav">
 			<div class="img"><img src="/views/mobile/skin/default/image/jmj/icon/rmb.png" alt="" class="img-rmb" />
 				<div class="content">
 					<span>{echo:(new Config('site_config'))->exchange_rate_jp}</span>
 				</div>
 			</div>
-		</div>
+		</div>-->
 
 		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
