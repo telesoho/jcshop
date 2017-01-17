@@ -231,15 +231,17 @@ $this->wechat->jsApiSDK();
     wx.ready(function() {});
 //    从本地选择图片
     function chooseImage(self){
-        console.log(self.imgLength);
+        console.log("执行函数");
         var lenth=self.maxLength-self.imgLength;
         wx.chooseImage({
             count:lenth , // 最大能上传数量-已传商品数量
             sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
             sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
             success: function (res) {
+                console.log("执行选择");
                 localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
 //                将本地的localIds展示出来
+                console.log(res.localIds);
                 self.choImg.concat(res.localIds);
                 console.log(self.choImg);
                 alert(self.choImg);
