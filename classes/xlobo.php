@@ -107,10 +107,10 @@ class xlobo
 //            'IsContainTax' => null,
             // 发件人信息
             'BillSenderInfo' => array(
-                'Name' => '九猫家',
-                'Address' => '地址',
-                'Phone' => '18152002558',
-                'OtherPhone' =>'18152002559'
+                'Name' => 'txcs',
+                'Address' => '',
+                'Phone' => '18658186871',
+                'OtherPhone' =>'18658186871'
             ),
             // 面单收件人信息
             'BillReceiverInfo' => array(
