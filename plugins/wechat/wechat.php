@@ -65,7 +65,8 @@ class wechat extends pluginBase
 	 * 设置配置
 	 */
 	public function setConfig(){
-		return $this->initConfig();
+		$rel = $this->initConfig();
+		return $rel;
 	}
 	
 	/**
@@ -89,6 +90,7 @@ class wechat extends pluginBase
 		if($accessTokenTime && time() - $accessTokenTime < self::$accessTokenTime && $fresh == false){
 			$accessToken = $cacheObj->get('accessToken');
 			if($accessToken){
+				common::dblog($accessToken);
 				return $accessToken;
 			}else{
 				$cacheObj->del('accessTokenTime');
@@ -105,6 +107,7 @@ class wechat extends pluginBase
 			$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
 			$result = JSON::decode($json);
 			if($result && isset($result['access_token']) && isset($result['expires_in'])){
+				common::dblog($result['access_token']);
 				$cacheObj->set('accessTokenTime',time());
 				$cacheObj->set('accessToken',$result['access_token']);
 				return $result['access_token'];
@@ -112,6 +115,68 @@ class wechat extends pluginBase
 				die($json);
 			}
 		}
+	}
+	
+	/**
+	 * 下载临时素材
+	 * @return
+	 */
+	public function getMedia($media_id){
+		$urlparam = array(
+			'access_token='.$this->getAccessToken(true),
+			'media_id='.$media_id,
+		);
+		$apiUrl = "http://api.weixin.qq.com/cgi-bin/media/get?".join("&",$urlparam);
+		common::dblog($this->config);
+		$rel = $this->curl_http($apiUrl);
+//		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
+		return $rel;
+	}
+	
+	/**
+	 * 请求url
+	 * @param string $url 请求地址
+	 * @param array $body 传输内容
+	 * @param string $method 传输方式
+	 * @param array $headers http头信息
+	 * @return bool 失败返回false
+	 */
+	public static function curl_http($url,$body='',$method='DELETE',$headers=array()){
+		//初始化curl会话
+		$ch 			= curl_init();
+		/* Curl 设置参数 */
+		curl_setopt_array($ch,array(
+			CURLOPT_HTTP_VERSION 	=> CURL_HTTP_VERSION_1_0, 	//强制使用 HTTP/1.0
+			CURLOPT_USERAGENT 		=> 'toqi.net', 		//伪装浏览器
+			CURLOPT_CONNECTTIMEOUT 	=> 30, 		//最长等待时间
+			CURLOPT_TIMEOUT 		=> 30, 		//执行的最长秒数
+			CURLOPT_RETURNTRANSFER 	=> true, 	//文件流的形式返回，而不是直接输出
+			CURLOPT_ENCODING 		=> '', 		//发送所有支持的编码类型
+			CURLOPT_SSL_VERIFYPEER 	=> false, 	//不返回SSL证书验证请求的结果
+			CURLOPT_HEADER 			=> true, 	//不把头文件的信息作为数据流输出
+			CURLOPT_URL 			=> $url, 	//请求的url地址
+			CURLOPT_HTTPHEADER 		=> $headers,//设置http头信息
+			CURLINFO_HEADER_OUT 	=> true, 	//发送请求的字符串
+		));
+		//设置传输方式
+		switch($method){
+			case 'POST':
+				curl_setopt($ch,CURLOPT_POST,TRUE);
+				if(!empty($body))
+					curl_setopt($ch,CURLOPT_POSTFIELDS,$body);
+				break;
+			case 'DELETE':
+				curl_setopt($ch,CURLOPT_CUSTOMREQUEST,'DELETE');
+				if(!empty($body))
+					$url=$url.'?'.str_replace('amp;', '', http_build_query($body));
+		}
+		//执行会话
+		$response 		= curl_exec($ch);
+		//获取curl会话信息
+		$httpinfo 		= curl_getinfo($ch);
+		//关闭curl会话
+		curl_close($ch);
+		return $response;
 	}
 
 	//获取openid
@@ -392,9 +457,7 @@ class wechat extends pluginBase
 		}
 
 		//获取微信用户信息
-		common::dblog(array(123,$oauthAccess));
 		$wechatUser = $this->getUserInfo($oauthAccess);
-		common::dblog(array(987,$wechatUser));
 		if(isset($wechatUser['errmsg'])){
 			throw new IException("获取用户信息失败！".$wechatUser['errmsg']);
 		}

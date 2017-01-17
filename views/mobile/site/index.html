@@ -167,7 +167,7 @@
 			<!--							图文专辑											-->
 			<section class="recommended line albumn_index" v-for="item in article_list">
 				<div>
-					<div class="title" style="display: -webkit-flex;-webkit-align-items: center;justify-content: flex-start;">
+					<div class="title" style="display: -webkit-flex;-webkit-align-items: center;justify-content: flex-start;padding-right:0.1rem ;">
 						<span class="logo">
 							<img :src="item.icon" alt="" class="img-hot">
 						</span>
@@ -176,7 +176,7 @@
 						<span class="like mui-pull-right" style="margin-left: 2.22rem;" v-if="">
 							<img @click="collect(item.id,item)" :src="item.is_favorite ==0 ? img1:img2" style="width: 0.42rem;" alt="" class="img-like">
 						</span>
-						<span class="num mui-pull-right favorite" style="margin-left: 0.12rem;">{{item.favorite_num}}</span>
+						<span class="num mui-pull-right favorite" style="margin-top: -0.1rem;">{{item.favorite_num}}</span>
 					</div>
 					<a href="#" id="product_item286">
 						<div class="content">
@@ -191,7 +191,7 @@
 									<a href="#" @click="tuwen(items.id)">
 										<div class="img"><img :dataimg="items.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style="width: 1.56rem; height: 1.56rem;"/></div>
 										<div class="name hidewrap">{{items.name}}</div>
-										<div class="sellprice"><span style="font-size: 0.2rem; color: rgb(255, 74, 160); margin-right: -0.08rem;">￥</span style="font-size: 0.28rem;"> 180 </div>
+										<div class="sellprice"><span style="font-size: 0.2rem; color: rgb(255, 74, 160); margin-right: -0.08rem;">￥</span style="font-size: 0.28rem;"> {{items.sell_price}} </div>
 									</a>
 
 								</div>

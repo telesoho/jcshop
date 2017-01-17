@@ -293,7 +293,7 @@
 .articlelist .mui-scroll-wrapper{
     height:1.88rem;
     margin:0 0.14rem;
-    background:#fff;
+    background:#fff !important;
 }
 #relateArticle .mui-control-item{
     background:#fff;
@@ -430,7 +430,7 @@
 .relateGoods .content .item .con .relate_price{
     margin-top:0.1rem;
     font-family:WenQuanYiMicroHeiMono;
-    font-size:0.26rem;
+    font-size:0.24rem;
     color:#b8b8b8;
 }
 .rotate{
