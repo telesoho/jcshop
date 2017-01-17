@@ -123,10 +123,11 @@ class wechat extends pluginBase
 	 */
 	public function getMedia($media_id){
 		$urlparam = array(
-			'access_token='.$this->getAccessToken(),
+			'access_token='.$this->getAccessToken(true),
 			'media_id='.$media_id,
 		);
 		$apiUrl = "http://api.weixin.qq.com/cgi-bin/media/get?".join("&",$urlparam);
+		common::dblog($this->config);
 		$rel = $this->curl_http($apiUrl);
 //		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
 		return $rel;
