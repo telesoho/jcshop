@@ -40,7 +40,7 @@
           <div class="imgArea">
               <div class="img" v-for="(item,key) in img">
                   <img :src="item" alt="" @click="perview(item)"/>
-                  <img src="/views/mobile/skin/default/image/jmj/comment/del.png" alt="" class="del" v-if="key==(imgLength-1)" @click="delImg(key)"/>
+                  <img src="/views/mobile/skin/default/image/jmj/comment/del.png" alt="" class="del" @click="delImg(key)"/>
               </div>
               <div class="addimg" v-if="imgLength<maxLength" @click="choImgFun">
                   <img src="/views/mobile/skin/default/image/jmj/comment/car.png" alt="" />
@@ -61,7 +61,7 @@
             <div>
                 <img :src="startSrc1" alt="" style="height:0.7rem;margin-top:0.18rem;"  @click="voicePlay"/>
             </div>
-            <div class="con con1">
+            <div class="con con1" style="margin-top:0.2rem">
                  <span class="beginStart" @click="beginStart">重录</span>
                 <span class="del" @click="delVoice">删除</span>
             </div>
@@ -170,9 +170,13 @@
                 console.log(e)
                 var self=this;
                 startRecord(self);
+                //开始录音得清除播放的动画
+                clearInterval(self.v);
                 this.voiceState=2;
             },
             voicePlay:function(){
+                //开始录音得清除录音的动画
+                clearInterval(self.f);
                 playVoice(this);
             },
             //停止录音
@@ -184,6 +188,8 @@
                 this.localVoice="";
                 this.voiceState=2;
                 startRecord(this);
+                //开始录音得清除播放的动画
+                clearInterval(self.v);
                 this.pause=false;
             },
             //删除录音功能
