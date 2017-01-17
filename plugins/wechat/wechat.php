@@ -129,8 +129,7 @@ class wechat extends pluginBase
 		$apiUrl = "http://api.weixin.qq.com/cgi-bin/media/get?".join("&",$urlparam);
 //		common::dblog($this->config);
 		$rel = $this->curl_http($apiUrl);
-		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
-		file_put_contents($fielname, $json);
+//		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
 		return $rel;
 	}
 	
