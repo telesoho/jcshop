@@ -121,15 +121,16 @@ class wechat extends pluginBase
 	 * 下载临时素材
 	 * @return
 	 */
-	public function getMedia($media_id){
+	public function getMedia($media_id,$is=false){
 		$urlparam = array(
-			'access_token='.$this->getAccessToken(true),
+			'access_token='.$this->getAccessToken($is),
 			'media_id='.$media_id,
 		);
 		$apiUrl = "http://api.weixin.qq.com/cgi-bin/media/get?".join("&",$urlparam);
-		common::dblog($this->config);
+//		common::dblog($this->config);
 		$rel = $this->curl_http($apiUrl);
-//		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
+		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
+		file_put_contents($fielname, $json);
 		return $rel;
 	}
 	
@@ -177,6 +178,24 @@ class wechat extends pluginBase
 		//关闭curl会话
 		curl_close($ch);
 		return $response;
+	}
+	
+	/**
+	 * 判断远程文件是否存在
+	 * @param string $url 远程文件路径
+	 * @return boolean 存在返回true
+	 */
+	function _curl_file_exist($url){
+		$ch 					= curl_init();
+		curl_setopt_array($ch,array(
+			CURLOPT_URL 			=> $url,	//请求的url地址
+			CURLOPT_RETURNTRANSFER 	=> true, 	//文件流的形式返回，而不是直接输出
+			CURLOPT_NOBODY 			=> true, 	//不取回数据
+			CURLOPT_CONNECTTIMEOUT 	=> 5, 		//最长等待时间
+		));
+		curl_exec($ch);
+		$httpcode 				= curl_getinfo($ch,CURLINFO_HTTP_CODE);
+		return $httpcode==200 ? true : false;
 	}
 
 	//获取openid
