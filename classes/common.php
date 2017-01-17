@@ -85,7 +85,69 @@ class Common{
 		curl_close($ch);
 		return $response;
 	}
-    
+	
+	/**
+	 * CURL下载文件 成功返回文件名，失败返回false
+	 * @param $url
+	 * @param string $savePath
+	 * @return bool|string
+	 * @author Zou Yiliang
+	 */
+	public static function downFile($url, $savePath = './upload')
+	{
+		//$url = 'http://www.baidu.com/img/bdlogo.png';
+		/*
+		HTTP/1.1 200 OK
+		Connection: close
+		Content-Type: image/jpeg
+		Content-disposition: attachment; filename="cK4q4fLsp7YOlaqxluDOafB.jpg"
+		Date: Sun, 18 Jan 2015 16:56:32 GMT
+		Cache-Control: no-cache, must-revalidate
+		Content-Length: 963704
+		*/
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		
+		curl_setopt($ch, CURLOPT_HEADER, TRUE);    //需要response header
+		curl_setopt($ch, CURLOPT_NOBODY, FALSE);    //需要response body
+		
+		$response = curl_exec($ch);
+		
+		//分离header与body
+		$header = '';
+		$body = '';
+		if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == '200') {
+			$headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE); //头信息size
+			$header = substr($response, 0, $headerSize);
+			$body = substr($response, $headerSize);
+		}
+		
+		curl_close($ch);
+		
+		//文件名
+		$arr = array();
+		if (preg_match('/filename="(.*?)"/', $header, $arr)) {
+			
+			$file = date('Ym') . '/' . $arr[1];
+			$fullName = rtrim($savePath, '/') . '/' . $file;
+			
+			//创建目录并设置权限
+			$basePath = dirname($fullName);
+			if (!file_exists($basePath)) {
+				@mkdir($basePath, 0777, true);
+				@chmod($basePath, 0777);
+			}
+			
+			if (file_put_contents($fullName, $body)) {
+				return ltrim($fullName,'.');
+			}
+		}
+		
+		return false;
+	}
+	
 
     /**
      * @brief 获取评价分数
