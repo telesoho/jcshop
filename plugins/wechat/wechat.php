@@ -65,8 +65,7 @@ class wechat extends pluginBase
 	 * 设置配置
 	 */
 	public function setConfig(){
-		$rel = $this->initConfig();
-		return $rel;
+		return $this->initConfig();
 	}
 	
 	/**
@@ -90,7 +89,6 @@ class wechat extends pluginBase
 		if($accessTokenTime && time() - $accessTokenTime < self::$accessTokenTime && $fresh == false){
 			$accessToken = $cacheObj->get('accessToken');
 			if($accessToken){
-				common::dblog($accessToken);
 				return $accessToken;
 			}else{
 				$cacheObj->del('accessTokenTime');
@@ -107,7 +105,6 @@ class wechat extends pluginBase
 			$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
 			$result = JSON::decode($json);
 			if($result && isset($result['access_token']) && isset($result['expires_in'])){
-				common::dblog($result['access_token']);
 				$cacheObj->set('accessTokenTime',time());
 				$cacheObj->set('accessToken',$result['access_token']);
 				return $result['access_token'];
@@ -128,24 +125,6 @@ class wechat extends pluginBase
 		);
 		$apiUrl = "http://api.weixin.qq.com/cgi-bin/media/get?".join("&",$urlparam);
 		return common::downFile($apiUrl);
-	}
-	
-	/**
-	 * 判断远程文件是否存在
-	 * @param string $url 远程文件路径
-	 * @return boolean 存在返回true
-	 */
-	function _curl_file_exist($url){
-		$ch 					= curl_init();
-		curl_setopt_array($ch,array(
-			CURLOPT_URL 			=> $url,	//请求的url地址
-			CURLOPT_RETURNTRANSFER 	=> true, 	//文件流的形式返回，而不是直接输出
-			CURLOPT_NOBODY 			=> true, 	//不取回数据
-			CURLOPT_CONNECTTIMEOUT 	=> 5, 		//最长等待时间
-		));
-		curl_exec($ch);
-		$httpcode 				= curl_getinfo($ch,CURLINFO_HTTP_CODE);
-		return $httpcode==200 ? true : false;
 	}
 
 	//获取openid

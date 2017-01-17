@@ -1598,22 +1598,37 @@ class Apic extends IController{
 		/* 结果 */
 		$this->json_echo(apiReturn::go($rel>0 ? '0' : '003004'));
 	}
+	
 	/**
 	 * 订单评论
 	 */
 	public function comment_add(){
-		$param = $this->checkData(array(
-			array('id','int',1,'评论ID'),
-			array('tag_id','string',0,'标签ID[多个使用"英文逗号"分割]'),
-			array('image_media_id','string',0,'微信图片ID[多个使用"英文逗号"分割]'),
-			array('voice_media_id','string',0,'微信语音ID'),
+		$param   = $this->checkData(array(
+			array('id', 'int', 1, '评论ID'),
+			array('tag_id', 'string', 0, '标签ID[多个使用"英文逗号"分割]'),
+			array('image_media_id', 'string', 0, '微信图片ID[多个使用"英文逗号"分割]'),
+			array('voice_media_id', 'string', 0, '微信语音ID'),
 		));
 		$user_id = $this->tokenCheck();
 		
 		//检测
 		$result = Comment_Class::can_comment($param['id'], $user_id);
-		if(is_string($result)) $this->returnJson(array('code'=>'-1','msg'=>$result));
+		if(is_string($result)) $this->returnJson(array('code' => '-1', 'msg' => $result));
 		
+		/* 通过微信下载图片和语音 */
+		$wechat = new wechat();
+		$wechat->setConfig();
+		$data = array('image' => array(), 'voice' => '');
+		if(!empty($param['image_media_id'])){
+			foreach(explode(',', $param['image_media_id']) as $k => $v){
+				$rel = $wechat->getMedia($v);
+				$rel!=false ? $data['image'][] = $rel : $this->returnJson(array('code' => '003010', 'msg' => $this->errorInfo['003010']));
+			}
+		}
+		if(!empty($param['voice_media_id'])){
+			$data['voice'] = $wechat->getMedia($param['voice_media_id']);
+			if(!$data['voice']) $this->returnJson(array('code' => '003009', 'msg' => $this->errorInfo['003009']));
+		}
 		
 		/* 开始评论 */
 		$modelComment = new IModel("comment");
@@ -1622,20 +1637,23 @@ class Apic extends IController{
 			'contents'     => '',
 			'status'       => 1,
 			'comment_time' => ITime::getNow("Y-m-d"),
+			'tag'          => $param['tag_id'],
+			'image'        => implode(',', $data['image']),
+			'voice'        => $data['voice'],
 		));
 		$rel = $modelComment->update('id='.$param['id']);
-		if(!$rel) $this->returnJson(array('code'=>'003008','msg'=>$this->errorInfo['003008']));
+		if(!$rel) $this->returnJson(array('code' => '003008', 'msg' => $this->errorInfo['003008']));
 		
 		/* 更新商品信息 */
 		$infoComment = $modelComment->getObj('id = '.$param['id']);
-		$modelGoods = new IModel('goods');
+		$modelGoods  = new IModel('goods');
 		$modelGoods->setData(array(
 			'comments' => 'comments + 1',
 			'grade'    => 'grade + '.$infoComment['point'],
 		));
 		$modelGoods->update('id = '.$infoComment['goods_id'], array('grade', 'comments'));
 		
-		$this->returnJson(array('code'=>'0','msg'=>'ok'));
+		$this->returnJson(array('code' => '0', 'msg' => 'ok'));
 	}
 	
 	/**
@@ -3191,15 +3209,6 @@ class Apic extends IController{
         }
     }
 	
-	
-	public function media(){
-		$param = IFilter::act(IReq::get('id'), 'int');
-		if(empty($param)) $param = false;
-		$wechat = new wechat();
-		$wechat->setConfig();
-		$rel = $wechat->getMedia('3L4hHjlTL0cdy-4Qko3Cq-xJ1webqQ2xeYnWA2ts9PsXqyZevWtHuxDXNb44Rlo9',$param);
-		var_dump($rel);exit();
-	}
     
 	
 }

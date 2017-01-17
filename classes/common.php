@@ -141,7 +141,7 @@ class Common{
 			}
 			
 			if (file_put_contents($fullName, $body)) {
-				return ltrim($fullName,'.');
+				return ltrim($fullName,'./');
 			}
 		}
 		
