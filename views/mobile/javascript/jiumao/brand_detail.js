@@ -39,10 +39,11 @@ var em = new Vue({
 			self.page = getSession("pinpai_page");
 			self.infolist = getSession("pinpai_infolist");
 		}
-		else{
-			getRelateArticle(statusOrder,self);
-			console.log(statusOrder,self.page)
-		}
+//		else{
+//			getRelateArticle(statusOrder,self);
+//			console.log(statusOrder,self.page)
+//		}
+		getRelateArticle(statusOrder,self);
 //		getRelateArticle(statusOrder,self)
 	},
 	updated:function() {
