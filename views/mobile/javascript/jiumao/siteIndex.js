@@ -5,6 +5,7 @@ var Request = new Object();
 	Request = GetRequest();
 	var statusOrder=Request["id"];
 	tanchaun(statusOrder);
+	var times
 //时间  倒计时	
 var hours = 0;
 var minutes = 0;
@@ -99,6 +100,7 @@ var vm = new Vue({
 //          pullupInfoRefresh(self);
            index_home(self);
         }
+        time_xian();
     },
     updated:function() {
         // 页面加载完成执行的函数;
@@ -110,7 +112,10 @@ var vm = new Vue({
         gallery.slider({
             interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
         });
-        
+        $("#search_").click(function(){
+        	clearInterval(times);
+        	$("#modalid-search").attr("class", "show"); 
+        })
     },
     methods: {
     	zhuan_shop:function(item){
@@ -133,6 +138,7 @@ var vm = new Vue({
            collection(item,self,id_this);
         },
         showSearth: function(){
+        	alert(1)
             getSearth();
         },
         // 跳转活动页面
@@ -146,7 +152,8 @@ var vm = new Vue({
         },
         search_tops:function(){
     		this.search_top = true;
-    		this.search_top_small = false;
+    		this.search_top_small = false;	
+    		clearInterval(times);
     	},
     	time_shop:function(id){
     		window.location.href="/site/products?id="+id;
@@ -183,7 +190,7 @@ var vm = new Vue({
     	},
     	wenzhang_pro:function(id){
     		console.log(id)
-    		window.location.href = "/site/article_detail?id="+id
+    		window.location.href = "/site/article_detail?id="+id;
     	}
     	
     }
@@ -275,45 +282,47 @@ function index_home(self){
         },
     });
 }
-
-var times = setInterval(function(){
-	if( all_time1<0 ){
-		clearInterval(times);
-	}
-	var myDate = new Date();
-	var data_time = myDate.getTime();
-	var all_time1 = _time-parseInt(data_time/1000);
-	if(all_time1<=0){
-		shop_time = false;
-	}else{
-		shop_time = true;
-	}
-	if(all_time1 > 60) { 
-		minutes = parseInt(all_time1/60); 
-		seconds = parseInt(all_time1%60); 
-		// alert(theTime1+"-"+theTime); 
-		if(minutes > 60) { 
-		hours = parseInt(minutes/60); 
-		minutes = parseInt(minutes%60); 
-		if(hours>24) {
-			data = parseInt(hours/24);
-			hours = parseInt(hours%24);
+//定时器  限时购
+function time_xian(){
+	times = setInterval(function(){
+		if( all_time1<0 ){
+			clearInterval(times);
 		}
-		
-		if(seconds<10){
-			seconds = "0"+seconds;
-		}if(minutes<10){
-			minutes = "0"+minutes;
-		}if(hours<10){
-			hours = "0"+hours;
+		var myDate = new Date();
+		var data_time = myDate.getTime();
+		var all_time1 = _time-parseInt(data_time/1000);
+		if(all_time1<=0){
+			shop_time = false;
+		}else{
+			shop_time = true;
 		}
-		vm.hours = hours;
-		vm.minutes = minutes;
-		vm.seconds = seconds;
-		} 
-		
-	}
-},1000)
+		if(all_time1 > 60) { 
+			minutes = parseInt(all_time1/60); 
+			seconds = parseInt(all_time1%60); 
+			// alert(theTime1+"-"+theTime); 
+			if(minutes > 60) { 
+			hours = parseInt(minutes/60); 
+			minutes = parseInt(minutes%60); 
+			if(hours>24) {
+				data = parseInt(hours/24);
+				hours = parseInt(hours%24);
+			}
+			
+			if(seconds<10){
+				seconds = "0"+seconds;
+			}if(minutes<10){
+				minutes = "0"+minutes;
+			}if(hours<10){
+				hours = "0"+hours;
+			}
+			vm.hours = hours;
+			vm.minutes = minutes;
+			vm.seconds = seconds;
+			} 
+			
+		}
+	},1000)
+}
 
 var t = ""
 document.addEventListener("touchstart",function(ev){
@@ -325,6 +334,10 @@ document.addEventListener("touchmove",function(ev){
 	if(scroll_s>=10||scroll_s<=-10){
 		vm.search_top = false;
     	vm.search_top_small = true;
+	}
+	if(scroll_s <= -10){
+		vm.search_top = true;
+		vm.search_top_small = false;
 	}
 })
 //上拉加载
