@@ -59,7 +59,7 @@
         </div>
         <div class="content content2 flexbox" v-if="voiceState==3">
             <div>
-                <img src="/views/mobile/skin/default/image/jmj/comment/voice2.png" alt="" style="width:0.94rem;margin-top:0.18rem;"  @click="voicePlay"/>
+                <img :src="startSrc" alt="" style="height:0.7rem;margin-top:0.18rem;"  @click="voicePlay"/>
             </div>
             <div class="con con1">
                  <span class="beginStart" @click="beginStart">重录</span>
@@ -176,6 +176,7 @@
             //停止录音
             endV:function(e){
                 stopRecord(this);
+                clearInterval(self.f);
 //                this.endTime1=e.timeStamp;
 //                this.voice_time=((this.endTime1-this.startTime1)/1000).toFixed(1);
             },
@@ -189,7 +190,6 @@
             delVoice:function(){
                 var self=this;
                 this.voice="";
-                clearInterval(self.f);
                 self.voiceState=1;
                 self.pause=false;
                 console.log(self.voiceState);
@@ -310,6 +310,7 @@ $this->wechat->jsApiSDK();
                 localId: self.voice // 需要暂停的音频的本地ID，由stopRecord接口获得
             });
             clearInterval(self.f);
+            self.startSrc="/views/mobile/skin/default/image/jmj/comment/003.png";
             self.pause=false;
         }else{
             wx.playVoice({
@@ -355,6 +356,7 @@ $this->wechat->jsApiSDK();
             image_media_id:severImg.join(","),
             voice_media_id:severVoice
         }
+        console.log(sub_data);
         //发送ajax提交后台
         mui.ajax('/apic/comment_add',{
             data:sub_data,
