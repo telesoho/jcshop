@@ -30,21 +30,21 @@
 			<!--		底部导航					-->
 			<head-nav :state="0"></head-nav>
 			<!--		轮播图				-->
-			<div id="slider1" class="mui-slider">
+			<div id="slider1" class="mui-slider" style="height: 3.4rem;">
 				<div class="mui-slider-group mui-slider-loop">
 					<div class="mui-slider-item mui-slider-item-duplicate">
 						<a :href="indexInfo.banner[indexInfo.banner.length-1].url" class="locationA">
-							<img :src="indexInfo.banner[indexInfo.banner.length-1].img">
+							<img :src="indexInfo.banner[indexInfo.banner.length-1].img" style="height: 3.4rem;">
 						</a>
 					</div>
 					<div class="mui-slider-item" v-for="item in indexInfo.banner">
 						<a :href="item.url" class="locationA">
-							<img :src="item.img" class="samLazyImg">
+							<img :src="item.img" class="samLazyImg" style="height: 3.4rem;">
 						</a>
 					</div>
 					<div class="mui-slider-item mui-slider-item-duplicate">
 						<a :href="indexInfo.banner[0].url" class="locationA">
-							<img :src="indexInfo.banner[0].img">
+							<img :src="indexInfo.banner[0].img" style="height: 3.4rem;">
 						</a>
 					</div>
 				</div>
@@ -63,7 +63,7 @@
 		   				<p class="p2"><span>{{hours}}</span> : <span>{{minutes}}</span> : <span>{{seconds}}</span></p>
 		   				<p class="p3">更多 <span><img src="/views/mobile/skin/default/image/jmj/home_redesign/more.png" style="width: 0.14rem;"/></span></p>
 		   			</h1>
-					<div class="line_time" style="margin: 0.03rem 0;"></div>
+					<div class="line_time" style="margin: 0.03rem auto 0;"></div>
 					<div class="mark" style="background: #fff;">
 						<div class="product">
 							<div class="slider">
