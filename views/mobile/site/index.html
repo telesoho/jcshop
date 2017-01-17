@@ -54,7 +54,7 @@
 				</div>
 			</div>
 			<!--		限时抢				-->
-			<div id="Timed_to_rob" v-if="shop_time">
+			<div id="Timed_to_rob" v-if="shop_time" v-cloak>
 				<div class="albumn_index" style="height: auto;">
 					<h1>
 		   				<img src="/views/mobile/skin/default/image/jmj/home_redesign/time.png" style="width: 0.42rem;"/>
@@ -72,7 +72,7 @@
 										<div class="img"><img :dataimg="item.img" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg" style="width: 1.56rem; height: 1.56rem;"></div>
 										<div class="name hidewrap">{{item.name}}</div>
 										<div id="xian" class="sellprice" style="font-size: 0.3rem;"><span style="font-size: 0.2rem; color: rgb(255, 74, 160); margin-right: -0.08rem;">￥</span> {{item.sell_price}} </div>
-										<div class="yuanjia">原价：<s>{{item.old_price}}</s></div>
+										<div class="yuanjia">原价：<s style="font-size: 0.26rem;">{{item.old_price}}</s></div>
 									</a>
 									<div class="singleline"></div>
 								</div>
@@ -137,7 +137,7 @@
 				<div class="hot_category">
 					<div class="head flexbox">
 						<span class="darkline"></span>
-						<span style="font-size: 0.36rem;">热门榜单</span>
+						<span>热门榜单</span>
 						<span class="darkline"></span>
 						<span class="line_f" style="font-size: 0.22rem;color: #b8b8b8;">ホットアイテム</span>
 					</div>
@@ -171,8 +171,8 @@
 						<span class="logo">
 							<img :src="item.icon" alt="" class="img-hot">
 						</span>
-						<span class="name" style="width: 2.6rem;">{{item.category_name}}</span>
-						<img src="/views/mobile/skin/default/image/jmj/home_redesign/tuwen.png" style="width: 2rem;text-align: left;" />
+						<span class="name" style="height: 0.9rem;width: 1.5rem;">{{item.category_name}}</span>
+						<img src="/views/mobile/skin/default/image/jmj/home_redesign/tuwen.png" style="width: 2rem;" />
 						<span class="like mui-pull-right" style="margin-left: 2.22rem;" v-if="">
 							<img @click="collect(item.id,item)" :src="item.is_favorite ==0 ? img1:img2" style="width: 0.42rem;" alt="" class="img-like">
 						</span>
@@ -204,12 +204,13 @@
 				<div class="hot_category product">
 					<div class="head flexbox">
 						<span class="darkline"></span> 
-						<span style="font-size: 0.36rem;">专区推荐</span> 
+						<span>专区推荐</span> 
 						<span class="darkline"></span>
-						<span class="line_f" style="font-size: 0.22rem;color: #b8b8b8;">ホットアイテム</span>
+						
+						<span class="line_f" style="font-size: 0.22rem;color: #b8b8b8;">カテゴリのおすすめ</span>
 					</div>
 					<div id="post_shop" v-for="item in zhuan_index">
-						<div class="banner" @click="zhuan_pro(item)"><img src="/views/mobile/skin/default/image/jmj/home_redesign/eye_drops.png" style="width: 7.1rem;"/></div>
+						<div class="banner" @click="zhuan_pro(item)"><img :src="item.banner" style="width: 7.1rem;"/></div>
 						<div class="scrll">
 							<ul class="slider">
 								<li class="item" @click="zhuan_shop(item2.id)" v-for="item2 in item.goods_list">
@@ -237,7 +238,7 @@
 				
 			</div>
 			<div id="footer_index">
-				<div class="index_top">
+				<div class="index_top" @click="guan()">
 					<span></span>
 					<p>看累了，去逛逛吧</p>
 					<span></span>

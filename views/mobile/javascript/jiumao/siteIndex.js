@@ -42,6 +42,7 @@ var vm = new Vue({
         hours:hours,
         info_time:[],
         shop_time:true,
+//      shop_,
         // 榜单
         cid:"",
         did:"",
@@ -154,15 +155,13 @@ var vm = new Vue({
     		window.location.href="/site/products?id="+ids;
     	},
     	zhuan_pro:function(item){
-    		console.log(item.category_name)
+    		console.log(item.title)
     		if(item.title == "个护"){
     			window.location.href = "/site/pro_list?cat=2"
-    		}else if(item.title == "美食"){
-    			window.location.href = "/site/pro_list?cat=5"
-    		}else if(item.category_name == "健康推荐"){
-    			window.location.href = "/site/pro_list?cat=4"
-    		}else if(item.category_name == "药妆特供"){
+    		}else if(item.title == "美妆"){
     			window.location.href = "/site/pro_list?cat=1"
+    		}else if(item.title == "健康"){
+    			window.location.href = "/site/pro_list?cat=4"
     		}
     	},
     	Video_pro:function(){
@@ -172,12 +171,15 @@ var vm = new Vue({
     		window.location.href = "/site/sitemap?id=3"
     	},
     	newproduct:function(){
-    		removeSessionItem("goodsinfo");
-			removeSessionItem("goodspage")
-    		window.location.href = "/site/goods_list?did=1"
+    		removeSessionItem("week_new_page");
+			removeSessionItem("week_new_info");
+    		window.location.href = "/redesign/week_new"
     	},
     	scene_pavilion:function(){
-    		window.location.href = "/redesign/scenepavilion"
+//  		window.location.href = "/redesign/scenepavilion"
+    	},
+    	guan:function(){
+    		window.location.href = "/site/article_list"
     	}
     	
     }
@@ -239,14 +241,17 @@ function index_home(self){
         	var data_time = myDate.getTime();
             
 			self.speed = data.data.speed;
+			if(self.speed == ""){
+				self.shop_time = false;
+			}
 			_time = self.speed.end_time
 			all_time = self.speed.end_time-parseInt(data_time/1000);
-			if(all_time<=0){
-				shop_time = false;
-			}else{
-				shop_time = true;
-			}
-			// alert(theTime); 
+//			if(all_time<=0){
+//				shop_time = false;
+//			}else{
+//				shop_time = true;
+//			}
+			// alert(theTime);
 			if(all_time > 60) { 
 				minutes = parseInt(all_time/60); 
 				seconds = parseInt(all_time%60); 

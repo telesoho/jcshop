@@ -109,8 +109,9 @@ class Apic extends IController{
 		
 		/* 推荐专区 */
 		$pro_array = array(
-			array('cid' => 134, 'title' => '个护', 'banner' => ''),
-			array('cid' => 7, 'title' => '美食', 'banner' => ''),
+			array('cid' => 126, 'title' => '美妆', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/126.png'),
+			array('cid' => 134, 'title' => '个护', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/134.png'),
+			array('cid' => 2, 'title' => '健康', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/2.png'),
 		);
 		$pro_list  = array();
 		foreach($pro_array as $v){
@@ -1456,7 +1457,7 @@ class Apic extends IController{
 		$data            = $query->find();
 		if($param['page']>$query->getTotalPage()) $data = array();
 		if(!empty($data)){
-			$relation   = array('已完成' => '删除订单', '等待发货' => '取消订单', '等待付款' => '去支付', '已发货' => '查看物流', '已取消' => '已取消', '部分发货' => '查看物流');
+			$relation   = array('已完成' => '删除订单', '正在配货' => '取消订单', '等待付款' => '去支付', '已发货' => '查看物流', '已取消' => '已取消', '部分发货' => '查看物流');
 			$relation_k = array_keys($relation);
 			foreach($data as $k => $v){
 				//评论ID
@@ -2525,7 +2526,7 @@ class Apic extends IController{
 		$dataArticle          = $queryArticle->find();
 		if(!empty($dataArticle)){
 			foreach($dataArticle as $k => $v){
-				$dataArticle[$k]['image'] = empty($v['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$v['image'].'/w/750/h/380');;
+				$dataArticle[$k]['image'] = empty($v['image']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$v['image'].'/w/750/h/380');
 			}
 		}
 		//相关专辑数量
@@ -2550,19 +2551,25 @@ class Apic extends IController{
 		/* 接收参数 */
 		$param = $this->checkData(array());
 		/* 品牌榜 */
-		$ids              = array(1, 5, 3, 7, 6); //1药妆-5零食-3宠物-7母婴-6生活
+		$ids              = array(1, 2, 3, 4, 5, 6); //1药妆-5零食-3宠物-7母婴-6生活
 		$queryCat         = new IQuery('brand_category');
 		$queryCat->where  = 'id IN ('.implode(',', $ids).')';
-		$queryCat->fields = 'id,name';
+		$queryCat->fields = 'id,name,img';
 		$listCat          = $queryCat->find();
 		if(!empty($listCat)){
 			$queryBrand         = new IQuery('brand');
-			$queryBrand->fields = 'id,name';
+			$queryBrand->fields = 'id,name,img';
 			$queryBrand->order  = 'sort DESC';
 			$queryBrand->limit  = 9;
 			foreach($listCat as $k => $v){
-				$queryBrand->where = 'category_ids LIKE "%,'.$v['id'].',%"';
-				$listCat[$k]['list']         = $queryBrand->find();
+				$queryBrand->where   = 'img IS NOT NULL AND category_ids LIKE "%,'.$v['id'].',%"';
+				$listCat[$k]['list'] = $queryBrand->find();
+				if(!empty($listCat[$k]['list'])){
+					foreach($listCat[$k]['list'] as $k1 => $v1){
+						$listCat[$k]['list'][$k1]['img']  = empty($v1['img']) ? '' : IWeb::$app->config['image_host'].'/'.$v1['img'];
+					}
+				}
+				$listCat[$k]['img']  = empty($v['img']) ? '' : IWeb::$app->config['image_host'].'/'.$v['img'];
 			}
 		}
 		/* 全部品牌 */
@@ -2576,10 +2583,11 @@ class Apic extends IController{
 			$queryBrand->order  = 'sort DESC';
 			$queryBrand->limit  = 1000;
 			foreach($listAll as $k => $v){
-				$queryBrand->where = 'logo IS NOT NULL AND category_ids LIKE "%,'.$v['id'].',%"';
-				$listAll[$k]['list']         = $queryBrand->find();
+				$queryBrand->where   = 'logo IS NOT NULL AND category_ids LIKE "%,'.$v['id'].',%"';
+				$listAll[$k]['list'] = $queryBrand->find();
 				if(empty($listAll[$k]['list'])){
-					unset($listAll[$k]);continue;
+					unset($listAll[$k]);
+					continue;
 				}
 				foreach($listAll[$k]['list'] as $k1 => $v1){
 					$listAll[$k]['list'][$k1]['logo'] = IWeb::$app->config['image_host'].'/'.$v1['logo'];
@@ -2587,7 +2595,7 @@ class Apic extends IController{
 			}
 		}
 		/* 返回参数 */
-		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>array(
+		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => array(
 			'cat' => $listCat,
 			'all' => $listAll,
 		)));

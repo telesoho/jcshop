@@ -65,7 +65,7 @@
 		    		<div class="fl_list" v-for="(item,key) in info" :name = "item.move_states" :id="key+1">
 		    			<div @click="show_hide(item,key)" >
 		    				<!--<img :src="item.image" style="width: 100%;"/>-->
-		    				<img src="/views/mobile/skin/default/image/jmj/redesign/ 5.png" style="width: 100%;"/>
+		    				<img :dataimg="item.image" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg" style="width: 100%;"/>
 		    			</div>
 		    			<div class="public_main " id="active_show" v-if="item.state">
 		    				<div v-for="(item2,key) in item.list">
@@ -88,12 +88,12 @@
 		   		<div id="main_brand" style="color: #000;" v-if="chooses_show  == false">
 		   			<div class="brand1" v-for="item in info_brand">
 		    			<div @click="show_brand(1)">
-		    				<img src="/views/mobile/skin/default/image/jmj/redesign/brand_2.png" style="width: 100%;"/>
+		    				<img :dataimg="item.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg"  style="width: 100%;"/>
 		    			</div>
 		    			<div class="brand_list" >
 		    				<ul class="brand_list_ul">
 		    					<li @click="brand_shop(item2.id)" v-for="item2 in item.list" :name="item2.name">
-		    						<img src="/views/mobile/skin/default/image/jmj/redesign/tu1.png" style="width: 2.4rem;"/>
+		    						<img :dataimg="item2.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg" style="width: 2.4rem;"/>
 		    					</li>
 		    				</ul>
 		    			</div>
@@ -167,6 +167,7 @@
 					
 					getSitemapInfo(self);
 					brand_lista(self);
+					hotSearth(self);
 				},
 				updated: function(){
 					     // 页面加载完成执行的函数;
@@ -195,7 +196,9 @@
 						console.log(ids)
 					},
 					show_hide:function(item,key){
-						item.state=!item.state;							
+						item.state=!item.state;
+						console.log(item.list[0].state2)
+						item.list[0].state2 = !item.list[0].state2;
 					},
 					show_brand:function(brand_num){
 
@@ -293,6 +296,16 @@
         window.sessionStorage.removeItem(key);
     }
     //  搜索 函数
+	function hotSearth(self){
+    mui.ajax('/apic/search_words',{
+        dataType:'json',//服务器返回json格式数据
+        type:'get',//HTTP请求类型
+        timeout:10000,//超时时间设置为10秒；
+        success:function(data){
+            self.search=data;
+        }
+    });
+}
 	function hotSearth(self){
     mui.ajax('/apic/search_words',{
         dataType:'json',//服务器返回json格式数据
