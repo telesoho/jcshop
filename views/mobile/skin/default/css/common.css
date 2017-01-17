@@ -348,7 +348,7 @@ iframe{
 }
 /*搜索框样式*/
 .search-header{
-  height:1.2rem;
+  height:0.9rem;
   width:100%;
   /*background:url(../../../skin/default/image/jmj/new_active/index/logo1.png) ;*/
   /*background:#ff0000;*/
@@ -361,7 +361,7 @@ iframe{
   font-size:0.28rem;
   position:absolute;
   border:none;
-  top:0.3rem;
+  top:0.19rem;
   left:0.98rem;
   line-height:0.6rem;
   z-index:4;
@@ -394,7 +394,7 @@ iframe{
   width:0.24rem;
   height:0.28rem;
   position:absolute;
-  top:0.45rem;
+  top:0.32rem;
   left:2.0rem;
   z-index:5;
 }
@@ -637,7 +637,7 @@ input[type='search']{
   margin-right:0.15rem;
 }
 .albumn_index .mark{
-  margin-top:-0.06rem;
+  /*margin-top:-0.06rem;*/
   z-index:12;
   height:3.07rem;
   overflow-y: hidden;

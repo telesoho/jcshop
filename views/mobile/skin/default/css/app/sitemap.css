@@ -107,12 +107,24 @@ li{
 	width: 100%;
 	text-align: center;
 	margin-bottom: 0.1rem;
+	font-size: 0.26rem;
+	color: #1f1f1f;
 }
 #main_content .public_main ul img{
 	width: 1.4rem;
-
 }
-
+#main_content .fl_list{
+	border-bottom:1px solid #eee;
+}
+#main_content .fl_list:last-of-type{
+	border: 0;
+}
+#active_show div{
+	border-bottom:1px solid #fff ;
+}
+#active_show div:last-of-type{
+	border: 0;
+}
 /*							品牌							*/
 #main_brand {
 	width: 100%;
