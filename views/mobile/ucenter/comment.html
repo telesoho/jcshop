@@ -59,7 +59,7 @@
         </div>
         <div class="content content2 flexbox" v-if="voiceState==3">
             <div>
-                <img :src="startSrc" alt="" style="height:0.7rem;margin-top:0.18rem;"  @click="voicePlay"/>
+                <img :src="startSrc1" alt="" style="height:0.7rem;margin-top:0.18rem;"  @click="voicePlay"/>
             </div>
             <div class="con con1">
                  <span class="beginStart" @click="beginStart">重录</span>
@@ -113,6 +113,7 @@
             ],
             startNum:1,//开始播放语音的num
             startSrc:"/views/mobile/skin/default/image/jmj/comment/003.png",
+            startSrc1:"/views/mobile/skin/default/image/jmj/comment/003.png",
             pause:false, //播放开始与暂停
             //我们的文件
             choImg:[],
@@ -309,16 +310,16 @@ $this->wechat->jsApiSDK();
             wx.pauseVoice({
                 localId: self.voice // 需要暂停的音频的本地ID，由stopRecord接口获得
             });
-            clearInterval(self.f);
-            self.startSrc="/views/mobile/skin/default/image/jmj/comment/003.png";
+            clearInterval(self.v);
+            self.startSrc1="/views/mobile/skin/default/image/jmj/comment/003.png";
             self.pause=false;
         }else{
             wx.playVoice({
                 localId: self.voice // 需要播放的音频的本地ID，由stopRecord接口获得
             });
-            self.f=setInterval(function(){
+            self.v=setInterval(function(){
                 self.startNum=(self.startNum+1)%4;
-                self.startSrc=self.img_arr[self.startNum];
+                self.startSrc1=self.img_arr[self.startNum];
             },300);
             self.pause=true;
         }
