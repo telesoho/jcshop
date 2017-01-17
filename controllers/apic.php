@@ -1385,10 +1385,12 @@ class Apic extends IController{
 			$model->update("user_id = ".$this->user['user_id']);
 		}
 		$model->setData(array('is_default' => $default));
-		$model->update("id = ".$id." and user_id = ".$this->user['user_id']);
-		$model->update("id = ".$id." and user_id = ".$this->user['user_id']);
-		
-		$this->json_echo(array('ret' => true));
+		$ret = $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
+		if ($ret){
+		    $this->json_echo(array('ret' => $ret));
+        } else {
+		    $this->json_echo(array('ret' => false));
+        }
 	}
 	
 	/**

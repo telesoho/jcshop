@@ -62,7 +62,20 @@
                                 <input type="text" class="mui-input-clear" :value="item.text" :id="item.userCityId" @focus="checkCity(item)" >
                                 <input type="text" class="mui-input-clear"  v-model="item.addr">
                                 <input type="number" class="mui-input-clear"  v-model="item.zi" >
-                                <!--<input type="number" class="mui-input-clear"  v-model="item.sfz" >-->
+                                <input type="text" name="" id="card" v-model="item.card" placeholder="收货人身份证号" />
+                                <div class="title"><span>收货人身份证正反面照片</span><span>请务必保证收货人姓名与身份证姓名一致!</span></div>
+                                <div id="cart">
+                                    <div class="left_cart" @click="upload_image(1)">
+                                        <div><img id="sfz_image1" src="/views/mobile/skin/default/image/jmj/icon/add.png" style="width: 100%;height: 100%"/></div>
+                                        <p style="margin-top: 0.1rem; ">上传收货人身份正面</p>
+                                    </div>
+                                    <input type="hidden" class="mui-input-clear" v-model="item.aaa" id="aaa">
+                                    <div class="right_cart" @click="upload_image(2)">
+                                        <div><img id="sfz_image2" src="/views/mobile/skin/default/image/jmj/icon/add.png" style="width: 100%;height: 100%"/></div>
+                                        <p style="margin-top: 0.1rem; ">上传收货人身份反面</p>
+                                    </div>
+                                    <input type="hidden" class="mui-input-clear" v-model="item.bbb" id="bbb">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -92,6 +105,8 @@
 <script src="/views/mobile/javascript/mui.picker.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.poppicker.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/city.data-3.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
+{if:common::jssdk()}
+{/if}
 <script>
     var cityPicker3;
     cityPicker3 = new mui.PopPicker({
@@ -122,7 +137,9 @@
                     item.mob=item.mobile;
                     item.addr=item.address;
                     item.zi=item.zip;
-//                    item.sfz=item.sfz;
+                    item.card=item.card;
+                    item.aaa=item.aaa;
+                    item.bbb=item.bbb;
                 })
                 return this.info;
             }
@@ -158,6 +175,35 @@
             editSubmit: function(item){
                 console.log(item);
                 changeAddr(item);
+            },
+            upload_image:function (num) {
+                var self=this;
+                wx.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                        if(num==1){
+                            $('#sfz_image1').attr('src',localIds[0]);
+                        }else if(num == 2){
+                            $('#sfz_image2').attr('src',localIds[0]);
+                        }
+                        wx.uploadImage({
+                            localId: localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+                            isShowProgressTips: 1, // 默认为1，显示进度提示
+                            success: function (res) {
+                                var serverId = res.serverId; // 返回图片的服务器端ID
+//                        $(obj).next().attr('value',serverId)
+                                if(num==1){
+                                    self.item.aaa = serverId;
+                                }else if(num == 2){
+                                    self.item.bbb = serverId;
+                                }
+                            }
+                        });
+                    }
+                });
             }
         }
     })
@@ -220,7 +266,10 @@
                     area:item.are?item.are:item.area,
                     address:item.addr,
                     mobile:item.mob,
-                    zip:item.zi
+                    zip:item.zi,
+                    card:item.card,
+                    aaa:item.aaa,
+                    bbb:item.bbb
                 },
                 dataType:'json',	// 服务器返回json格式数据
                 type:'post',		// HTTP请求类型
