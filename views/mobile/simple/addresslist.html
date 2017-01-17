@@ -62,6 +62,7 @@
                                 <input type="text" class="mui-input-clear" :value="item.text" :id="item.userCityId" @focus="checkCity(item)" >
                                 <input type="text" class="mui-input-clear"  v-model="item.addr">
                                 <input type="number" class="mui-input-clear"  v-model="item.zi" >
+                                <!--<input type="number" class="mui-input-clear"  v-model="item.sfz" >-->
                             </div>
                         </div>
                     </div>
@@ -121,6 +122,7 @@
                     item.mob=item.mobile;
                     item.addr=item.address;
                     item.zi=item.zip;
+//                    item.sfz=item.sfz;
                 })
                 return this.info;
             }
