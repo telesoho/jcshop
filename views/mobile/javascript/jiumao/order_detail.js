@@ -51,7 +51,7 @@ var vm = new Vue({
                 this.order_detailInfo.button1='删除订单';
                 this.order_detailInfo.button1Url='/site/error';
                 this.order_detailInfo.button2='评价';
-                this.order_detailInfo.button2Url='/site/error';
+                this.order_detailInfo.button2Url='/ucenter/comment?id='+statusOrder;
             }
             
             return this.order_detailInfo;
