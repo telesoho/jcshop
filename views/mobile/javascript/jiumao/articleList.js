@@ -16,8 +16,8 @@ var vm = new Vue({
             ortherArticle:'margin-top:0.22rem'
         },
         changeState:true,
-        img1:"/views/mobile/skin/default/image/jmj/icon/like.png",
-        img2:"/views/mobile/skin/default/image/jmj/icon/like-ed.png",
+        img1:"/views/mobile/skin/default/image/jmj/home_redesign/collection.png",
+        img2:"/views/mobile/skin/default/image/jmj/home_redesign/collection_ed.png",
         cid:""
     },
     computed: {
