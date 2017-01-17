@@ -84,7 +84,7 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script>
-    var getId={echo:IReq::get('id')};
+    var getId="{echo:IReq::get('id')}";
     var vm=new Vue({
         el:"#commentInfo",
         data:{
@@ -192,7 +192,6 @@
                        this.markLen--
                    }
                 }
-
             },
             //提交并上传文件到微信服务器
             submit:function(){
@@ -235,13 +234,15 @@ $this->wechat->jsApiSDK();
         console.log(self.imgLength);
         var lenth=self.maxLength-self.imgLength;
         wx.chooseImage({
-            count:length , // 最大能上传数量-已传商品数量
+            count:lenth , // 最大能上传数量-已传商品数量
             sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
             sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
             success: function (res) {
                 localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
 //                将本地的localIds展示出来
                 self.choImg.concat(res.localIds);
+                console.log(self.choImg);
+                alert(self.choImg);
                 self.imgLength=res.localIds.length;
             }
         });
