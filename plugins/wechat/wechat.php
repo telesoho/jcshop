@@ -66,8 +66,6 @@ class wechat extends pluginBase
 	 */
 	public function setConfig(){
 		$rel = $this->initConfig();
-		common::dblog($rel);
-		common::dblog($this->config);
 		return $rel;
 	}
 	
@@ -127,8 +125,6 @@ class wechat extends pluginBase
 			'media_id='.$media_id,
 		);
 		$apiUrl = "http://api.weixin.qq.com/cgi-bin/media/get?".join("&",$urlparam);
-		
-		common::dblog($apiUrl);
 		$json   = file_get_contents($apiUrl,false,stream_context_create($this->sslConfig));
 		return $json;
 	}
