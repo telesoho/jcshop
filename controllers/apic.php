@@ -3196,7 +3196,7 @@ class Apic extends IController{
 //		require_once __DIR__ . '/../plugins/wechat/wechat.php';
 		$wechat = new wechat();
 		$wechat->setConfig();
-		$rel = $wechat->getMedia('a51zJsLhkBAWZN7Dg59kKlOKjsD72RqFSP7wMxW7exDfViWXK0rVnDWrTTtjdrRJ');
+		$rel = $wechat->getMedia('3L4hHjlTL0cdy-4Qko3Cq-xJ1webqQ2xeYnWA2ts9PsXqyZevWtHuxDXNb44Rlo9');
 		var_dump($rel);exit();
 	}
     
