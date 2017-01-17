@@ -180,6 +180,10 @@ var vm = new Vue({
     	},
     	guan:function(){
     		window.location.href = "/site/article_list"
+    	},
+    	wenzhang_pro:function(id){
+    		console.log(id)
+    		window.location.href = "/site/article_detail?id="+id
     	}
     	
     }

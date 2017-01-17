@@ -161,6 +161,8 @@ body{
 	}
 	#product_item286 .img img{
 		width: 100%;
+		border-radius:0.1rem ;
+		
 	}
 #product_item286 .img{
 	width: 100%;
@@ -363,9 +365,10 @@ li{
 }
 #footer_index .index_top span{
 	display: block;
-	background:#b8b8b8;
+	background:#ddd;
 	width:0.91rem;
-	height:0.03rem;
+	height:0.02rem;
+	opacity: 0.5;
 }
 #footer_index .index_top p{
 	margin:-0.2rem 0.4rem 0;
@@ -392,4 +395,13 @@ li{
 font-size:0.2;
 color:#ff2f5c;
 
+}
+.albumn_index .title .num{
+	width: 0.55rem;
+    margin-right: 0.06rem !important;
+    font-size: 0.30rem;
+    color: #171717;
+}
+.albumn_index .title .name{
+	margin-right: 0.19rem;
 }

@@ -62,9 +62,9 @@
 				<div class="name hideCamp">{{info.name}}</div>
 				<div class="price">
 					<div class="sell_price flexstart">
-						<span style="font-size:0.26rem;color:#ff2f5c">¥</span>
+						<span style="font-size:0.26rem;color:#ff2f5c">¥&nbsp;</span>
 						<span style="font-size:0.46rem;color:#ff2f5c"> {{info.sell_price}}</span>
-						<div class="act">
+						<div class="act" style="line-height: 0.3rem;">
 							立省{{(info.market_price - info.sell_price).toFixed(2)}}元
 						</div>
 					</div>
@@ -166,7 +166,7 @@
 			</section>
 			<!--喵粉心得，待添加-->
 			<!--上拉进入商品详情-->
-			<section class="pull flexbox">
+			<section class="pull flexbox" style="height: 2rem;position: relative;">
 				<img src="/views/mobile/skin/default/image/jmj/product/pull.png" alt="" />
 				<div class="content">上拉加载商品详情</div>
 			</section>
@@ -229,6 +229,9 @@
 					</a>
 				</div>
 			</section>
+			<div id=""style="height: 0.9rem;">
+				
+			</div>
 		</div>
 		<div class="fix-toTop" @click="fixToTop">
 			<img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" />

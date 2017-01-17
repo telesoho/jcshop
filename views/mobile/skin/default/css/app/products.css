@@ -313,11 +313,11 @@
     width:0.42rem;
     height:0.42rem;
     position:relative;
-    top:0.1rem;
+    top:-0.3rem;
 }
 .pull .content{
     position:relative;
-    top:-0.2rem;
+    top:-0.9rem;
     font-size:0.26rem;
     color:#1f1f1f;
     width:100%;

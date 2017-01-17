@@ -65,7 +65,7 @@
 		    		<div class="fl_list" v-for="(item,key) in info" :name = "item.move_states" :id="key+1">
 		    			<div @click="show_hide(item,key)" >
 		    				<!--<img :src="item.image" style="width: 100%;"/>-->
-		    				<img :dataimg="item.image" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg" style="width: 100%;"/>
+		    				<img :src="item.image" style="width: 100%;"/>
 		    			</div>
 		    			<div class="public_main " id="active_show" v-if="item.state">
 		    				<div v-for="(item2,key) in item.list">
@@ -92,7 +92,7 @@
 		    			</div>
 		    			<div class="brand_list" >
 		    				<ul class="brand_list_ul">
-		    					<li @click="brand_shop(item2.id)" v-for="item2 in item.list" :name="item2.name">
+		    					<li @click="brand_shop(item2.id)" v-for="item2 in item.list" style="margin-right:0.06rem ;">
 		    						<img :dataimg="item2.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg" style="width: 2.4rem;"/>
 		    					</li>
 		    				</ul>
@@ -105,9 +105,9 @@
 		    				<h1>{{item_brand.name}}</h1>
 		    				<div class="brand_line_li">
 		    					<ul>
-		    						<li @click="brand_shop(item_brand2.id)" v-for="item_brand2 in item_brand.list" :name="item_brand2.name">
+		    						<li @click="brand_shop(item_brand2.id)" v-for="item_brand2 in item_brand.list" style="">
 		    							<!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyong.png" style="width: 1.6rem;"/>-->
-		    							<img :dataimg="item_brand2.logo" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style="width: 1.6rem;"/>
+		    							<img :dataimg="item_brand2.logo" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" width="100%"/>
 		    						</li>
 		    					</ul>
 		    				</div>
@@ -118,7 +118,7 @@
 			
 		</section>
 		<!--分类页面-->
-		<div class="fix-toTop hide" @click="fixToTop">
+		<div class="fix-toTop hide" @click="fixToTop" style="height: 1rem;">
 	        <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt=""  />
 	    </div>
 	    
@@ -149,7 +149,7 @@
 					color1:"color:#949494 ;",
 					color2:"color:#ff5959 ;", // ed
 					img1:"/views/mobile/skin/default/image/jmj/redesign/img2.png",
-					img2:"",
+					img2:"/views/mobile/skin/default/image/jmj/redesign/sitemap.png",
 					chooses:0,   //分类和品牌切换
 					chooses_show:true,
 					search:[],

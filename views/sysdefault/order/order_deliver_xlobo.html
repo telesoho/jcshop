@@ -62,7 +62,7 @@
 					<td id="a">{$item['goods_nums']}</td>
 					<td id="b"><?php
 					        xlobo::init();
-						    $ret = xlobo::get_goods_store(['test0717011']);
+						    $ret = xlobo::get_goods_store([$item['goods_no']]);
 						    echo $ret[0]->LeftStock;
                     ?></td>
 					<td id="c">

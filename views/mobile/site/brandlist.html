@@ -13,7 +13,7 @@
 		<link rel="stylesheet" href="/views/mobile/skin/default/css/app/brandlist.css?v=<?php echo time(); ?>" />
 	</head>
 	<body>
-		<div id="articleList" style="color: #000;">
+		<div id="articleList" style="color: #000;" v-cloak>
 			<head-nav :state="1"></head-nav>
 			<div class="brand1" v-for="item in one_title" style="background: #fff;">
 				<div>
@@ -28,7 +28,23 @@
 				</div>
 			</div>
 			<footer-nav :state="0"></footer-nav>
-			<div style="height: 1.5rem;">
+			
+			<!--						全部品牌								-->
+		    		<div id="brand_line">
+		    			<div class="brand_top">全部品牌</div>
+		    			<div class="brand_bottom" v-for="item_brand in info_brand_all">
+		    				<h1>{{item_brand.name}}</h1>
+		    				<div class="brand_line_li">
+		    					<ul>
+		    						<li @click="brand_shop(item_brand2.id)" v-for="item_brand2 in item_brand.list" :name="item_brand2.name">
+		    							<!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyong.png" style="width: 1.6rem;"/>-->
+		    							<img :dataimg="item_brand2.logo" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" width="100%"/>
+		    						</li>
+		    					</ul>
+		    				</div>
+		    			</div>
+		    		</div>
+		    		<div style="height: 1.5rem;">
 				
 				
 			</div>
@@ -49,7 +65,8 @@
 				el:"#articleList",
 				data:{
 					sta:sta,
-					info:[]
+					info:[],
+					info_brand_all:[]
 				},
 				computed:{
 					one_title:function(){
@@ -87,6 +104,9 @@
 //					console.log(data.data.cat);
 					data.data.cat.map(function(item){
 						self.info.push(item);
+					})
+					data.data.all.map(function(items){
+						self.info_brand_all.push(items);	
 					})
 					
 				}
