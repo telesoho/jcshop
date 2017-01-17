@@ -1746,29 +1746,36 @@ class Order extends IController implements adminAuthorization
 		//搜索条件
 		$search = IFilter::act(IReq::get('search'));
 		//条件筛选处理
-		list($join,$where) = order_class::getSearchCondition($search);
+		list($join, $where) = order_class::getSearchCondition($search);
 		//拼接sql
-		$orderHandle = new IQuery('order as o');
+		$orderHandle         = new IQuery('order as o');
 		$orderHandle->order  = "o.id desc";
-		$orderHandle->fields = "o.id AS order_id,o.status,o.pay_status,o.distribution_status,g.id AS goods_id,g.goods_no,g.name,g.name_jp,c.goods_nums,c.is_send";
+		$orderHandle->fields = "o.id AS order_id,o.status,o.pay_status,o.distribution_status,g.id AS goods_id,g.goods_no,g.name,g.name_jp,c.goods_nums,c.is_send,g.type";
 		$orderHandle->join   = $join.' LEFT JOIN order_goods AS c ON c.order_id=o.id LEFT JOIN goods AS g ON g.id=c.goods_id';
 		$orderHandle->where  = $where;
-		$orderList = $orderHandle->find();
+		$orderList           = $orderHandle->find();
 		
 		$goodsData = array();
 		foreach($orderList as $k => $v){
-			if($v['status']==2 && $v['pay_status']==1 && $v['distribution_status']!=1 && $v['is_send']==0 ){
-				if(isset($goodsData[$v['goods_id']])){
-					//更新数量
-					$goodsData[$v['goods_id']]['goods_nums'] += $v['goods_nums'];
-				}else{
-					//添加商品
-					$goodsData[$v['goods_id']] = array(
-						'goods_name' => $v['name'],
-						'goods_name_jp' => $v['name_jp'],
-						'goods_no' => $v['goods_no'],
-						'goods_nums' => $v['goods_nums'],
-					);
+			//支付订单、已付款、不是已发货、商品未发货
+			if($v['status']==2 && $v['pay_status']==1 && $v['distribution_status']!=1 && $v['is_send']==0){
+				$modelBag = new IModel('goods_bag');
+				if($v['type'] == 2){ //礼包商品
+					$infoBag = $modelBag->getObj('goods_id='.$v['id']);
+					$goodsData[$v['goods_id']]['goods_nums'] += $v['goods_nums']*$infoBag['num'];
+				}else{ //通常商品
+					if(isset($goodsData[$v['goods_id']])){
+						//更新数量
+						$goodsData[$v['goods_id']]['goods_nums'] += $v['goods_nums'];
+					}else{
+						//添加商品
+						$goodsData[$v['goods_id']] = array(
+							'goods_name'    => $v['name'],
+							'goods_name_jp' => $v['name_jp'],
+							'goods_no'      => $v['goods_no'],
+							'goods_nums'    => $v['goods_nums'],
+						);
+					}
 				}
 			}
 		}

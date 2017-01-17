@@ -190,9 +190,15 @@ li{
 
 
 /*							动画							*/
-.active_show{
-	transition:height 2s;
-	-moz-transition:height 2s; /* Firefox 4 */
-	-webkit-transition:height 2s; /* Safari and Chrome */
-	-o-transition:height 2s; /* Opera */
+.expand-transition {
+  transition: all .3s ease;
+  height: 30px;
+  padding: 10px;
+  background-color: #eee;
+  overflow: hidden;
+}
+.expand-enter, .expand-leave {
+  height: 0;
+  padding: 0 10px;
+  opacity: 0;
 }

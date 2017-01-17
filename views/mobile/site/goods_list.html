@@ -80,6 +80,8 @@
 	var Request = new Object();
     Request = GetRequest();
     var statusOrder=Request["id"];
+    var index_Order = Request["did"];
+    console.log(index_Order)
     var stop=true;
 		var vm=new Vue({
 			el:'#main',
@@ -126,7 +128,8 @@
 				url:"/apic/goods_list",
 				data:{
 					cid:self.cid,
-					page:self.page
+					page:self.page,
+					did:index_Order?index_Order:""
 				},
 				success:function(data){
 					JSON.parse(data).data.map(function(items){

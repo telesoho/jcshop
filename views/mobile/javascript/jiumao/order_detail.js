@@ -47,10 +47,11 @@ var vm = new Vue({
 //              this.order_detailInfo.button2Url='';
             };
             if(this.order_detailInfo.orderStatus==3){
+            	
                 this.order_detailInfo.button1='删除订单';
                 this.order_detailInfo.button1Url='/site/error';
                 this.order_detailInfo.button2='评价';
-                this.order_detailInfo.button2Url='/site/error';
+                this.order_detailInfo.button2Url='/ucenter/comment?id='+statusOrder;
             }
             
             return this.order_detailInfo;
@@ -75,10 +76,6 @@ var vm = new Vue({
   }
 })
 vm.getData();
-
-
-
-
 $(window).load(function(){
     $("#loading").fadeOut(300);
     mui('body').on('tap','.locationA',function(){
@@ -92,13 +89,14 @@ function getOrderDetail(self){
         type:'get',		// HTTP请求类型
         timeout:10000,		// 超时时间设置为10秒；
         success:function(data){
-        	console.log(data)
-        	if(data.is_refunds == "1"){
-        		self.tuikuans = true
+        	console.log(data.data.orderStatus);
+        	if(data.data.is_refunds == "1"){
+        		self.tuikuans = true;
+        		
             }else{
             	self.tuikuans = false
             }
-            self.order_detailInfo=data;
+            self.order_detailInfo=data.data;
             self.showMessage=true;
         }
     });

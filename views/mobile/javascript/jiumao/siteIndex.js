@@ -32,18 +32,24 @@ var vm = new Vue({
             articleDetail:[]
         },
         placeHolder:getItem('placeHolder'),
-        changeState:true,
-        img1:"/views/mobile/skin/default/image/jmj/icon/like.png",
-        img2:"/views/mobile/skin/default/image/jmj/icon/like-ed.png",
+        changeState:false,
+        img1:"/views/mobile/skin/default/image/jmj/home_redesign/collection.png",
+        img2:"/views/mobile/skin/default/image/jmj/home_redesign/collection_ed.png",
         showCat:false,
         //限时购
         seconds:seconds,
         minutes:minutes,
         hours:hours,
         info_time:[],
+        shop_time:true,
+//      shop_,
         // 榜单
         cid:"",
-        did:""
+        did:"",
+        //图文专辑
+        article_:[],
+        //专区
+        zhuan_index:[]
     },
     computed: {
         searth_pla: function (){
@@ -68,6 +74,12 @@ var vm = new Vue({
         		
         	})
         	return this.info_time
+        },
+        article_list:function(){
+        	this.article_.map(function(item){
+        		
+        	})
+        	return this.article_
         }
     },
     mounted: function(){
@@ -84,8 +96,8 @@ var vm = new Vue({
         }else{
             getBanner(self);
             getArticle_category_list(self);
-            pullupInfoRefresh(self);
-           
+//          pullupInfoRefresh(self);
+           index_home(self);
         }
     },
     updated:function() {
@@ -101,7 +113,10 @@ var vm = new Vue({
         
     },
     methods: {
-    	
+    	zhuan_shop:function(item){
+    		console.log(item);
+    		window.location.href = "/site/products?id="+item;
+    	},
         toArticle_list: function(item){
             // 保存分类的名字和id
             setItem("artileName",item.name);
@@ -113,11 +128,9 @@ var vm = new Vue({
             $("html,body").animate({scrollTop:0},0);
             return false;
         },
-        collect:function(item){
+        collect:function(item,id_this){
             var self=this;
-            if(this.changeState){this.changeState=false;
-                collection(item,self);
-            }
+           collection(item,self,id_this);
         },
         showSearth: function(){
             getSearth();
@@ -127,7 +140,8 @@ var vm = new Vue({
             window.location.href="/activity/christmas_grow";
         },
         list_index:function(switch_list){
-        	
+        	removeSessionItem("list_info");
+        	removeSessionItem("list_page");
         	window.location.href = "/redesign/list?id="+switch_list;
         },
         search_tops:function(){
@@ -136,7 +150,38 @@ var vm = new Vue({
     	},
     	time_shop:function(id){
     		window.location.href="/site/products?id="+id;
+    	},
+    	tuwen:function(ids){
+    		window.location.href="/site/products?id="+ids;
+    	},
+    	zhuan_pro:function(item){
+    		console.log(item.title)
+    		if(item.title == "个护"){
+    			window.location.href = "/site/pro_list?cat=2"
+    		}else if(item.title == "美妆"){
+    			window.location.href = "/site/pro_list?cat=1"
+    		}else if(item.title == "健康"){
+    			window.location.href = "/site/pro_list?cat=4"
+    		}
+    	},
+    	Video_pro:function(){
+    		window.location.href = "/site/article_list?id=3"
+    	},
+    	Brand_pavilion:function(){
+    		window.location.href = "/site/sitemap?id=3"
+    	},
+    	newproduct:function(){
+    		removeSessionItem("week_new_page");
+			removeSessionItem("week_new_info");
+    		window.location.href = "/redesign/week_new"
+    	},
+    	scene_pavilion:function(){
+//  		window.location.href = "/redesign/scenepavilion"
+    	},
+    	guan:function(){
+    		window.location.href = "/site/article_list"
     	}
+    	
     }
 })
 $(document).ready(function(){
@@ -150,6 +195,7 @@ $(document).ready(function(){
     //解决tab选项卡a标签无法跳转的问题
     mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
 })
+ mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
 function getBanner(self){
     mui.ajax('/apic/banner_list',{
         dataType:'json',//服务器返回json格式数据
@@ -186,18 +232,26 @@ function index_home(self){
         timeout: 10000,
         success: function (data) {
         	console.log(data.data);
+        	self.zhuan_index = data.data.pro_list;
         	//商品
-        	self.info_time = data.data.speed.list
-        	
-        	
+        	self.info_time = data.data.speed.list;
+        	self.article_ = data.data.article_list;
         	//时间
         	var myDate = new Date();
         	var data_time = myDate.getTime();
             
 			self.speed = data.data.speed;
+			if(self.speed == ""){
+				self.shop_time = false;
+			}
 			_time = self.speed.end_time
 			all_time = self.speed.end_time-parseInt(data_time/1000);
-			// alert(theTime); 
+//			if(all_time<=0){
+//				shop_time = false;
+//			}else{
+//				shop_time = true;
+//			}
+			// alert(theTime);
 			if(all_time > 60) { 
 				minutes = parseInt(all_time/60); 
 				seconds = parseInt(all_time%60); 
@@ -225,6 +279,11 @@ var times = setInterval(function(){
 	var myDate = new Date();
 	var data_time = myDate.getTime();
 	var all_time1 = _time-parseInt(data_time/1000);
+	if(all_time1<=0){
+		shop_time = false;
+	}else{
+		shop_time = true;
+	}
 	if(all_time1 > 60) { 
 		minutes = parseInt(all_time1/60); 
 		seconds = parseInt(all_time1%60); 
@@ -252,34 +311,6 @@ var times = setInterval(function(){
 	}
 },1000)
 
-//function pullupInfoRefresh(self){
-//  mui.ajax('/apic/article_list', {
-//      data:{
-//          page:self.page
-//      },
-//      dataType: 'json',
-//      type: 'get',
-//      timeout: 10000,
-//      success: function (data) {
-//          data.data.map(function(item){
-//              item.page=self.page;
-//              self.indexInfo.articleDetail.push(item);
-//          });
-//          console.log(self.indexInfo.articleDetail);
-//          pushSession("articleDetail",self.indexInfo.articleDetail);
-//          if(data.data.length==0){
-//              stop=false;
-//          }else{
-//              stop=true;
-//          }
-//          self.showCat=false;
-//          self.page++;
-//          pushSession("indexPage",self.page);
-//
-//      }
-//  });
-//};
-//
 var t = ""
 document.addEventListener("touchstart",function(ev){
 	t = ev.touches[0].pageY;
@@ -320,27 +351,44 @@ function checkPlay(obj){
     $(self).next().next().addClass("hide");
 }
 // 收藏接口
-function collection(item,self){
+function collection(item,self,id_this){
     mui.ajax('/apic/favorite_article_add',{
         data:{
-            id:item.id
+            id:item
         },
         dataType:'json',//服务器返回json格式数据
         type:'get',//HTTP请求类型
         timeout:10000,//超时时间设置为10秒；
         success:function(data){
             console.log(data);
-            self.changeState=true;
+			if(id_this.is_favorite == 0){
+				id_this
+			}
+
             if(data.message=="请先登录"){
                 alert("请先登录");
                 return false;
             }
             if(data.message=="收藏成功"){
-                item.is_favorite=1;
-                item.favorite_num=parseInt(item.favorite_num)+1;
+                id_this.is_favorite=1;
+//              self.changeState=false;
+				if(item==283){
+					 id_this.favorite_num=parseInt( id_this.favorite_num)+1;
+				}
+               else if(item == 284){
+               	id_this.favorite_num=parseInt(id_this.favorite_num)+1;
+               }
+                
             }else{
-                item.is_favorite=0;
-                item.favorite_num=parseInt(item.favorite_num)-1
+                id_this.is_favorite=0;
+//              self.changeState=true;
+				if(item==283){
+					id_this.favorite_num=parseInt(id_this.favorite_num)-1;
+				}
+               else if(item == 284){
+               		id_this.favorite_num=parseInt(id_this.favorite_num)-1;
+               }
+
             }
             //处理完还要保存在本地
             pushSession("articleDetail",self.indexInfo.articleDetail)
@@ -405,5 +453,8 @@ var _hmt = _hmt || [];
 		})
 	}
     function removeSessionItem(key){
+        window.sessionStorage.removeItem(key);
+    }
+     function removeSessionItem(key){
         window.sessionStorage.removeItem(key);
     }
