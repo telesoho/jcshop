@@ -419,6 +419,7 @@
 				this.py0=touch.pageY;
 			},
 			firstContainerMove:function(e){
+//                e.preventDefault=false;
 				var touch = e.targetTouches[0];
 				this.py1=touch.pageY;
                 this.pm1=this.py1-this.py0;
@@ -426,12 +427,12 @@
                 var windowHeight=$(window).height(); //窗口的高度
                 var docHeight=$(document).height(); //文档的真实高度
                 if((windowHeight+scrollTop-this.pm1)>(docHeight+50)&&this.pm1<0){
-                    e.preventDefault();
+                    e.preventDefault(); //阻止缺省事件
                      this.rotateState=true;
 //                    pushSession("ProductsScrollTop",docHeight-windowHeight);
                 }else{
                     //回复默认事件
-                    e.preventDefault=false;
+
                 }
 
 			},
@@ -451,13 +452,6 @@
                     this.pm1=0;
                     $(window).scrollTop(0)
                 }
-
-
-//                if((windowHeight+scrollTop-y)>(docHeight+50)){
-//                    that.showContainer1=false;
-//                    that.showContainer2=true;
-//                    that.checkScroll=false;
-//                }
 			},
 			secondContainerMoveStart:function(e){
 				var touch = e.targetTouches[0];
