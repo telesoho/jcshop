@@ -236,11 +236,7 @@
 				</div>
 			</section>
 			<div id=""style="height: 0.9rem;">
-				
 			</div>
-		</div>
-		<div class="fix-toTop" @click="fixToTop">
-			<img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" />
 		</div>
 	</div>
 	<section>
@@ -408,18 +404,14 @@
 				deceleration: 0.0005,
 				indicators:false
 			});
-			//判断是否需要滚动到底部
-//			if(this.checkScroll){
-//				var bott=getSession("ProductsScrollTop")-100;
-//				console.log(bott);
-//				$(window).scrollTop(bott);
-//			}else{
-//				$(window).scrollTop(0);
-//			}
 		},
 		methods: {
 			back:function(){
-				window.history.back()
+			    if(this.showContainer1) window.history.back();
+                if(this.showContainer2){
+                    this.showContainer1=true;
+                    this.showContainer2=false;
+                }
 			},
 			//第一个容器移动事件
 			firstContainerMoveStart:function(e){
@@ -552,12 +544,6 @@
 				var self=this;
 				buyNowFun(self);
 			},
-			fixToTop:function(){
-				var that=this;
-				that.showContainer1=true;
-				that.showContainer2=false;
-				that.checkScroll=false;
-			}
 		}
 	});
 	$(window).load(function(){
