@@ -72,8 +72,8 @@ li{
 }
 #main_content .public_main{
 	width: 100%;
-	/*height: 0;*/
 	overflow: hidden;
+	
 }
 #main_content .public_main h1{
 	width: 100%;
@@ -206,19 +206,39 @@ li{
 	justify-content: center;
 }
 
-
-
-
-/*							动画							*/
-.expand-transition {
-  transition: all .3s ease;
-  height: 30px;
-  padding: 10px;
-  background-color: #eee;
-  overflow: hidden;
+/*						动画							*/
+#main #main_content .active{
+	/*height: auto;*/
+	animation: name1 1s;
 }
-.expand-enter, .expand-leave {
-  height: 0;
-  padding: 0 10px;
-  opacity: 0;
+@-webkit-keyframes name1{
+	from{
+		transform: rotateX(0);
+		height: 0;
+	}
+	to{
+		transform: rotateX(360deg);
+		height: auto;
+		display: block;
+	}
+}
+#main #main_content .jingzhi{
+	animation:name2 1s;
+}
+@-webkit-keyframes name2{
+	from{
+		transform: rotateX(360deg);
+		height: 0;
+	}
+	to{
+		transform: rotateX(0);
+		height: auto;
+		display: none;
+	}
+}
+/*						滑动							*/
+#wrap_list_{
+	position: absolute;
+	left: 0;
+	top: 0;
 }
