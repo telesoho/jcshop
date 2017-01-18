@@ -1327,17 +1327,21 @@ class Apic extends IController{
             $access_token = common::get_wechat_access_token();
             $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
             $dir .= '/sfz_image';
-            if (empty($image11)){
-                $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
-                $image1 = common::save_url_image($url1,$dir,1);
-            } else {
-                $image1 = $image11;
+            if (!empty($image1)){
+                if (file_exists(__DIR__.'/../'.$image1)){
+                    $image1 = explode('/',$image1,2)[1];
+                } else {
+                    $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
+                    $image1 = common::save_url_image($url1,$dir,1);
+                }
             }
-            if (empty($image22)){
-                $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
-                $image2 = common::save_url_image($url2,$dir,2);
-            } else {
-                $image2 = $image22;
+            if (!empty($image2)){
+                if (file_exists(__DIR__.'/../'.$image2)){
+                    $image2 = explode('/',$image2,2)[1];
+                } else {
+                    $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
+                    $image2 = common::save_url_image($url2,$dir,2);
+                }
             }
 
             $sqlData['sfz_image1'] = $image1;

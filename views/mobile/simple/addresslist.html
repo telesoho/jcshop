@@ -61,7 +61,7 @@
                                 <input type="text" class="mui-input-clear" :value="item.text" :id="item.userCityId" @focus="checkCity(item)" >
                                 <input type="text" class="mui-input-clear"  v-model="item.addr">
                                 <input type="number" class="mui-input-clear"  v-model="item.zi" >
-                                <input type="text" name="" id="card" v-model="item.card" placeholder="收货人身份证号" />
+                                <input type="text" name="" :id="item.card" v-model="item.card" placeholder="收货人身份证号" />
                                 <div class="title"><span>收货人身份证正反面照片</span><span>请务必保证收货人姓名与身份证姓名一致!</span></div>
                                 <div id="cart">
                                     <div class="left_cart" @click="upload_image(1,item)">
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                     </div>
-                    <footer>
+                    <footer class="que_">
                         <div id="footer-fixed1">
                             <div class="newAddrSub newAddrSub_position" style="text-align:center">
                                 <button   class="submit_suc" @click="editSubmit(item)">完成</button>
@@ -149,7 +149,6 @@
         mounted:function(){
             var self=this;
             getAddressInfo(self);
-            test();
         },
         methods: {
             //设置默认地址功能
@@ -270,35 +269,50 @@
             mobile.value=item.mobile;
             mobile.focus();
             return false;
-        }else{
-            mui.ajax('/apic/address_add',{
-                data:{
-                    id:item.id,
-                    accept_name:item.name,
-                    province:item.pro?item.pro:item.province,
-                    city:item.cit?item.cit:item.city,
-                    area:item.are?item.are:item.area,
-                    address:item.addr,
-                    mobile:item.mob,
-                    zip:item.zi,
-                    card:item.card,
-                    aaa:item.aaa,
-                    bbb:item.bbb
-                },
-                dataType:'json',	// 服务器返回json格式数据
-                type:'post',		// HTTP请求类型
-                timeout:10000,		// 超时时间设置为10秒；
-                success:function(data){
-                    console.log(data);
 
-                    if(statusOrder=="cart_order"){
-                        document.location.href="/simple/addresslist?rev=cart_order"
-                    }
-                    else{
-                        document.location.href="/simple/addresslist";
-                    }
+        }else{
+            if(!(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(item.card))){
+                alert( '请输出正确的身份证号');
+                var card = $("#item.card");
+                card.value=item.card;
+                card.focus();
+                return false;
+            }else{
+                if((item.aaaa&&item.bbbb)||(item.aaa&&item.bbb)){
+                    mui.ajax('/apic/address_add',{
+                        data:{
+                            id:item.id,
+                            accept_name:item.name,
+                            province:item.pro?item.pro:item.province,
+                            city:item.cit?item.cit:item.city,
+                            area:item.are?item.are:item.area,
+                            address:item.addr,
+                            mobile:item.mob,
+                            zip:item.zi,
+                            card:item.card,
+                            aaa:item.aaa,
+                            bbb:item.bbb
+                        },
+                        dataType:'json',	// 服务器返回json格式数据
+                        type:'post',		// HTTP请求类型
+                        timeout:10000,		// 超时时间设置为10秒；
+                        success:function(data){
+                            console.log(data);
+
+                            if(statusOrder=="cart_order"){
+                                document.location.href="/simple/addresslist?rev=cart_order"
+                            }
+                            else{
+                                document.location.href="/simple/addresslist";
+                            }
+                        }
+                    });
+                }else {
+                    alert("请上传身份证！");
+
                 }
-            });
+
+            }
         }
     }
     function changeDefault1(item){
