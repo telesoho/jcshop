@@ -17,6 +17,9 @@
 				</tr>
 				<tr>
 					<th>排序：</th><td><input class="normal" name="sort" type="text" value="{$brand['sort']}" pattern='int' empty alt='必需为整形数值'/></td>
+				</tr>>
+				<tr>
+					<th>首页显示：</th><td><input name="top" type="checkbox" value="1" {if:isset($brand)&&$brand['top']==1}checked{/if}/></td>
 				</tr>
 				<tr>
 					<th>网址：</th><td><input class="normal" name="url" type="text" value="{$brand['url']}" pattern='url' empty alt='网址格式不正确，比如：http://www.aircheng.com' /><label>完整的URL链接地址，如：http://www.aircheng.com</label></td>
