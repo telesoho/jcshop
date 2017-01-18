@@ -3104,21 +3104,6 @@ class Apic extends IController{
 	}
 	
 	/**
-	 *
-	 */
-	public function wechat_cx_login(){
-//		$param = array(
-//			'code' => IFilter::act(IReq::get('code')),
-//		);
-		@session_start();
-		$session = session_id();
-		common::dblog($session);
-		$wechat = new wechat();
-		$wechat->login('orEYdw67mbwIn8_cvNS1i8gTGpNo');
-		$user  = $this->user['user_id'];
-	}
-	
-	/**
 	 * @brief 获取用户头像
 	 * @param $user_id
 	 * @return bool
@@ -3132,14 +3117,6 @@ class Apic extends IController{
 		}else{
 			return false;
 		}
-	}
-	
-	/**
-	 * @param $data
-	 */
-	public function testa(){
-		var_dump($_GET);exit();
-		var_dump($this->user);
 	}
 	
 	private function json_echo($data){

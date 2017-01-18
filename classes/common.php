@@ -87,11 +87,10 @@ class Common{
 	}
 	
 	/**
-	 * CURL下载文件 成功返回文件名，失败返回false
+	 * CURL下载文件
 	 * @param $url
 	 * @param string $savePath
-	 * @return bool|string
-	 * @author Zou Yiliang
+	 * @return bool|string 成功返回文件名，失败返回false
 	 */
 	public static function downFile($url, $savePath = './upload')
 	{
