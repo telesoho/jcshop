@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <title>{echo:IReq::get('heading')}</title>
+    <style>
+        .content{
+            width:100%;
+            height:100%;
+            background:#fff;
+            display: -webkit-flex;
+            -webkit-justify-content: center;
+            -webkit-flex-wrap: wrap;
+        }
+        .img{
+            max-width:100%;
+            padding:0 12.5%;
+        }
+        .img img{
+            /*display: inline-block;*/
+            margin-top:1rem;
+        }
+        .content cite{
+            display: block;
+            width:5.5rem;
+            height:0.98rem;
+            font-size:0.36rem;
+            color:#3d4245;
+            letter-spacing:0.0067rem;
+            text-align:center;
+            line-height: 0.98rem;
+        }
+    </style>
+</head>
+<body>
+<div class="img">
+    <img src="/views/mobile/skin/default/image/xinzeng/erweima.jpg" alt="" style="width:5.68rem;height:auto"/>
+</div>
+<div class="content">
+    <!--<div class="text">-->
+    <!--页面正在筹划中。。。-->
+    <!--</div>-->
+    <!--<img src="/views/mobile/skin/default/image/xinzeng/error.png" alt="">-->
+    <cite>长按关注二维码</cite>
+</div>
+
+</body>
+</html>
