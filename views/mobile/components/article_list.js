@@ -11,11 +11,11 @@ Vue.component('article-list', {
         <span class="name">\
         {{item.category_name}}\
         </span>\
-        <span class="num mui-pull-right favorite">\
-            {{item.favorite_num}}\
-        </span>\
-        <span class="like mui-pull-right">\
+        <span class="like mui-pull-right" style="margin-left:4.4rem">\
         <img :src="item.is_favorite==0?img1:img2"  alt="" class="img-like" @click="collection(item)" />\
+        </span>\
+        <span class="num mui-pull-right favorite" >\
+            {{item.favorite_num}}\
         </span>\
     </div>\
     <a href="#" @click="store(item)" :id="item.product_id">\
