@@ -47,7 +47,10 @@ var vm = new Vue({
             style2:'-webkit-transform:rotate(0deg)'
         },
         codeMessage:[],
-        showCodeMessage:true
+        showCodeMessage:true,
+        styleFixed:"position:fixed",
+        styleStatic:"position:static",
+        showFixed:true, //判断软键盘是否抬起
     },
     computed: {
         // 读取和设置
@@ -74,6 +77,7 @@ var vm = new Vue({
         getTicketInfo1(self,1)
     },
     updated:function() {
+
     },
     methods: {
         getData: function () {
@@ -91,6 +95,12 @@ var vm = new Vue({
                 checkSubmit(obj);
                 console.log(self.state);
             }
+        },
+        showKeyBoad:function(){
+            this.showFixed=false;
+        },
+        hideKeyBoad:function(){
+            this.showFixed=true;
         },
         promoCho: function(){
             mui("#sheet1").popover('show');
