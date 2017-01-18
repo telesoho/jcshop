@@ -1274,6 +1274,8 @@ class Apic extends IController{
         $card        = IFilter::act(IReq::get('card'));
         $image1      = IFilter::act(IReq::get('aaa'), 'string');
         $image2      = IFilter::act(IReq::get('bbb'), 'string');
+        $image11     = IFilter::act(IReq::get('aaaa'), 'string');
+        $image22     = IFilter::act(IReq::get('bbbb'), 'string');
         $user_id     = $this->user['user_id'];
 
         //编辑默认地址
@@ -1313,17 +1315,17 @@ class Apic extends IController{
             $access_token = common::get_wechat_access_token();
             $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
             $dir .= '/sfz_image';
-            if (!empty($image1)){
+            if (empty($image11)){
                 $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
                 $image1 = common::save_url_image($url1,$dir,1);
             } else {
-                $image1 = IFilter::act(IReq::get('image_saved1'),'string');
+                $image1 = $image11;
             }
-            if (!empty($image2)){
+            if (empty($image22)){
                 $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
                 $image2 = common::save_url_image($url2,$dir,2);
             } else {
-                $image2 = IFilter::act(IReq::get('image_saved2'),'string');
+                $image2 = $image22;
             }
 
             $sqlData['sfz_image1'] = $image1;
