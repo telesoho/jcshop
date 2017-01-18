@@ -82,7 +82,7 @@
 				</div>
 				<div class="text2">
 					<span>商品编号：</span>
-					<span>{{info.goods_no}}</span>
+					<span style="color:#b8b8b8">{{info.goods_no}}</span>
 				</div>
 			</section>
 			<a href="#serviceDescription">
@@ -91,7 +91,8 @@
 						<img src="/views/mobile/skin/default/image/jmj/product/tip1.png" alt="" />
 						<span>东京直邮</span>
 					</li>
-					<li class="tip tip2"  v-if="info.delivery==2">
+					<li class="tip tip2"  v-if="info.delivery==1">
+                        <!--"delivery":   //是否包邮[1满288包邮-2不包邮-3必包邮]-->
 						<img src="/views/mobile/skin/default/image/jmj/product/tip2.png" alt="" />
 						<span>满288包邮</span>
 					</li>
@@ -125,6 +126,7 @@
 					</div>
 				</div>
 				<div class="dis hideCamp" v-html="info.brand.description" v-if="info.brand.description">
+                    <!--{{info.brand.description}}-->
 				</div>
 				<div class="brandlist">
 					<div class="mark">
@@ -167,7 +169,7 @@
 			<!--喵粉心得，待添加-->
 			<!--上拉进入商品详情-->
 			<section class="pull flexbox" style="height: 2rem;position: relative;">
-				<img src="/views/mobile/skin/default/image/jmj/product/pull.png" alt="" />
+				<img src="/views/mobile/skin/default/image/jmj/product/pull.png" :style="rotateState?styleTop2:styleTop1" alt="" />
 				<div class="content">上拉加载商品详情</div>
 			</section>
 		</div>
@@ -345,6 +347,7 @@
 			xy0:0,
 			xy1:0,
 			pmy:0,
+            pm1:0,
 			checkScroll:false,
 			showTop:false,//第二页顶部状态  初始为false
 			topHeight:"height:"+0+"px", //下拉的高度 与手指移动的位置差不多
@@ -406,13 +409,13 @@
 				indicators:false
 			});
 			//判断是否需要滚动到底部
-			if(this.checkScroll){
-				var bott=getSession("ProductsScrollTop")-100;
-				console.log(bott);
-				$(window).scrollTop(bott);
-			}else{
-				$(window).scrollTop(0);
-			}
+//			if(this.checkScroll){
+//				var bott=getSession("ProductsScrollTop")-100;
+//				console.log(bott);
+//				$(window).scrollTop(bott);
+//			}else{
+//				$(window).scrollTop(0);
+//			}
 		},
 		methods: {
 			back:function(){
@@ -420,18 +423,49 @@
 			},
 			//第一个容器移动事件
 			firstContainerMoveStart:function(e){
-				console.log(e);
 				var touch = e.targetTouches[0];
 				this.py0=touch.pageY;
 			},
 			firstContainerMove:function(e){
 				var touch = e.targetTouches[0];
 				this.py1=touch.pageY;
+                this.pm1=this.py1-this.py0;
+                var scrollTop=$(window).scrollTop();//窗口的滚动高度
+                var windowHeight=$(window).height(); //窗口的高度
+                var docHeight=$(document).height(); //文档的真实高度
+                if((windowHeight+scrollTop-this.pm1)>(docHeight+50)&&this.pm1<0){
+                    e.preventDefault();
+                     this.rotateState=true;
+//                    pushSession("ProductsScrollTop",docHeight-windowHeight);
+                }else{
+                    //回复默认事件
+                    e.preventDefault=false;
+                }
+
 			},
 			endtouch1:function(e){
-				console.log("结束滑动");
-				var Pm=this.py1-this.py0;
-				checkGoPage2(Pm,this);
+                if(this.rotateState) {
+                    //如果滑动成立 跳入容器1 并且初始化容器
+                    this.showContainer2=true;
+                    this.showContainer1=false;
+                    this.showTop=false;
+                    this.rotateState=false;
+                    this.topHeight="height:"+0+"px";
+                    this.py0=0;
+                    this.py1=0;
+                    this.xy0=0;
+                    this.xy1=0;
+                    this.pmy=0;
+                    this.pm1=0;
+                    $(window).scrollTop(0)
+                }
+
+
+//                if((windowHeight+scrollTop-y)>(docHeight+50)){
+//                    that.showContainer1=false;
+//                    that.showContainer2=true;
+//                    that.checkScroll=false;
+//                }
 			},
 			secondContainerMoveStart:function(e){
 				var touch = e.targetTouches[0];
@@ -460,14 +494,22 @@
 				};
 				//如果滑动
 				if(this.rotateState) {
+				    //如果滑动成立 跳入容器1 并且初始化容器
+                    this.showContainer2=false;
 					this.showContainer1=true;
-					this.showContainer2=false;
 					this.checkScroll=true;
 					this.showTop=false;
 					this.rotateState=false;
 					this.topHeight="height:"+0+"px";
+                    this.py0=0;
+                    this.py1=0;
+                    this.xy0=0;
+                    this.xy1=0;
+                    this.pmy=0;
+                    this.pm1=0;
+                    var bott=getSession("ProductsScrollTop")-50;
+                    $(window).scrollTop(bott)
 				}
-//				checkGoPage1(Pm,this);
 			},
 			Collection: function(){
 				var self=this;
@@ -518,13 +560,6 @@
 			}
 		}
 	});
-	//    $("#pullrefresh1").scroll(function(){
-	//        let scrollTop=$("#pullrefresh1").scrollTop();
-	//        let height=$("#pullrefresh1").height();
-	//        let documentHeight=$("#pullrefresh1").height();
-	//        console.log(scrollTop+":"+height+":"+documentHeight)
-	//    })
-
 	$(window).load(function(){
 		mui('body').on("tap",".locationA",function(){
 			window.location.href=this.href;
@@ -621,26 +656,6 @@
 
 		//页面跳转
 		window.location.href = url;
-	}
-	function checkGoPage2(y,that){
-		var scrollTop=$(window).scrollTop();
-		var windowHeight=$(window).height();
-		var docHeight=$(document).height();
-		pushSession("ProductsScrollTop",docHeight-windowHeight);
-		if((windowHeight+scrollTop-y)>(docHeight+50)){
-			that.showContainer1=false;
-			that.showContainer2=true;
-			that.checkScroll=false;
-		}
-	}
-	function checkGoPage1(y,that){
-		var scrollTop=$(window).scrollTop()?$(window).scrollTop():0;
-		console.log(y);
-		if(scrollTop==0&&y>10){
-			that.showContainer1=true;
-			that.showContainer2=false;
-			that.checkScroll=true;
-		}
 	}
 	//    实现商品飞入购物车函数
 	function flyCart(){
