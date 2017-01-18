@@ -66,7 +66,8 @@ sit_products.css更改
     color:#040404;
     font-size:0.3rem;
     padding-left:0.16rem;}
-.newAddrSub_position{width:100%;overflow:hidden;position:fixed; left:0;bottom:0;}
+footer{margin-top: -0.5rem}
+.newAddrSub_position{width:100%;overflow:hidden;}
 .newAddrSub_position .submit_suc{width:100%;background:#f3026a;color:#fff;border:0;border-radius:0;height:1rem;font-size:0.36rem;}
 
 /**

@@ -78,7 +78,7 @@ body{
     position:relative;
     top:-0.4rem;
     font-size:0.28rem;
-    color:#f3026a;
+    color:#ff2f5c;
 }
 .goodsInfo .ware .right{
     width:1.93rem;
@@ -154,14 +154,14 @@ body{
 a.condition_price{
     position:relative;
     display:inline-block;
-    background:#fff7b6;
-    border-radius:0.08rem;
-    width:4.56rem;
-    height:0.75rem;
+    background:rgba(255,89,89,0.1);
+    border-radius:0.04rem;
+    width:1.54rem;
+    height:0.50rem;
     text-align:center;
-    line-height:0.75rem;
-    color:#ff4949;
-    font-size:0.26rem;
+    line-height:0.50rem;
+    color:#ff2f5c;
+    font-size:0.22rem;
     top:-0.08rem;
     left:0.8rem;
     margin-bottom:0.3rem;
@@ -170,14 +170,14 @@ a.condition_price:after{
     background:transparent;
     position:absolute;
     content:'';
-    left:0.53rem;
-    top:-0.12rem;
+    left:0.33rem;
+    top:-0.09rem;
     z-index:24;
     width: 0;
     height: 0;
-    border-left: 0.2rem solid transparent;
-    border-right: 0.2rem solid transparent;
-    border-bottom: 0.15rem solid #fff7b6;
+    border-left: 0.1rem solid transparent;
+    border-right: 0.1rem solid transparent;
+    border-bottom: 0.1rem solid rgba(255,89,89,0.1);
 }
 .cal{
     width:100%;
@@ -202,14 +202,29 @@ a.condition_price:after{
     color:#ff44a0;
 }
 .calPrice .toPay{
-    background:#ff44a0;
+    display: inline-block;
     border-radius:0.65rem;
-    width:1.51rem;
     height:0.65rem;
     line-height:0.65rem;
     text-align:center;
     color:#fff;
     font-size:0.28rem;
     margin-top:0.195rem;
+    background:#ff2f5c;
+    width:1.53rem;
+
+}
+.delAll{
+    margin-top:0.195rem;
+    margin-right:0.26rem;
+    display: inline-block;
+    border:1px solid #646464;
+    border-radius:0.65rem;
+    width:1.85rem;
+    height:0.65rem;
+    line-height:0.65rem;
+    text-align: center;
+    color:#646464;
+    font-size:0.28rem;
 }
 
