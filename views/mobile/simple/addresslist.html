@@ -6,16 +6,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>收货地址</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/style.min.css?v=<?php echo time(); ?>" />
 </head>
 <body>
-
 <section id="addrList" v-cloak v-if="showmessage">
     <div id="addressList">
         <div class="addressListMenu">
@@ -98,9 +97,8 @@
         </div>
     </footer>
 </section>
-
-<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.picker.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.poppicker.js?v=<?php echo time(); ?>"></script>
@@ -108,7 +106,6 @@
 {if:common::jssdk()}
 {/if}
 <script>
-
     var cityPicker3;
     var Request = new Object();
     Request = GetRequest();

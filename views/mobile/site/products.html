@@ -30,7 +30,7 @@
 			</div>
 		</a>
 	</div>
-	<div id="pullrefresh1" class="v-container" v-if="showContainer1" @touchstart="firstContainerMoveStart" @touchmove="firstContainerMove">
+	<div id="pullrefresh1" class="v-container" v-if="showContainer1" @touchstart="firstContainerMoveStart" @touchmove="firstContainerMove" @touchend="endtouch1">
 		<div class="scro scro1" style="background:#fff">
 			<section style="" class="carousel flexbox">
 				<!--轮播开始-->
@@ -154,7 +154,7 @@
 					<span class="text">相关专辑</span>
 					<span class="bg"></span>
 				</div>
-				<div class="articlelist">
+				<div class="articlelist" >
 					<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 						<div class="mui-scroll" id="relateArticle">
 							<div class="mui-control-item" v-for="item in article">
@@ -172,8 +172,12 @@
 			</section>
 		</div>
 	</div>
-	<div id="pullrefresh2" class="v-container v-container2" v-if="showContainer2" @touchstart="secondContainerMoveStart" @touchmove="secondContainerMove">
+	<div id="pullrefresh2" class="v-container v-container2" v-if="showContainer2" @touchstart="secondContainerMoveStart" @touchmove="secondContainerMove" @touchend="endtouch2">
 		<div class="scro scro1" style="background:#f5f5f5;">
+			<div class="topTips" v-if="showTop" :style="topHeight">
+				<img src="/views/mobile/skin/default/image/jmj/product/pull.png" :style="rotateState?styleTop1:styleTop2" alt="" />
+				<span>下拉进入上一页</span>
+			</div>
 			<!--商品的图文详情-->
 			<section class="goodDet">
 				<div class="top">
@@ -223,7 +227,7 @@
 								<span style="font-size:0.22rem;color:#ff2f5c">¥ </span>{{item.sell_price}}
 							</div>
 							<div class="relate_price">
-								国内价：{{item.market_price}}
+								国内价：<span style="font-family:HelveticaNeue;font-size:0.26rem;color:#b8b8b8;">{{item.market_price}}</span>
 							</div>
 						</div>
 					</a>
@@ -340,7 +344,13 @@
 			py1:0,
 			xy0:0,
 			xy1:0,
-			checkScroll:false
+			pmy:0,
+			checkScroll:false,
+			showTop:false,//第二页顶部状态  初始为false
+			topHeight:"height:"+0+"px", //下拉的高度 与手指移动的位置差不多
+			styleTop1:"-webkit-transform:rotate(0deg)",
+			styleTop2:"-webkit-transform:rotate(180deg)",
+			rotateState:false
 		},
 		computed: {
 			showLastImg:function(){
@@ -397,7 +407,8 @@
 			});
 			//判断是否需要滚动到底部
 			if(this.checkScroll){
-				var bott=getSession("ProductsScrollTop");
+				var bott=getSession("ProductsScrollTop")-100;
+				console.log(bott);
 				$(window).scrollTop(bott);
 			}else{
 				$(window).scrollTop(0);
@@ -409,12 +420,16 @@
 			},
 			//第一个容器移动事件
 			firstContainerMoveStart:function(e){
+				console.log(e);
 				var touch = e.targetTouches[0];
 				this.py0=touch.pageY;
 			},
 			firstContainerMove:function(e){
 				var touch = e.targetTouches[0];
 				this.py1=touch.pageY;
+			},
+			endtouch1:function(e){
+				console.log("结束滑动");
 				var Pm=this.py1-this.py0;
 				checkGoPage2(Pm,this);
 			},
@@ -423,10 +438,36 @@
 				this.xy0=touch.pageY;
 			},
 			secondContainerMove:function(e){
+				var scrollTop=$(window).scrollTop();
 				var touch = e.targetTouches[0];
 				this.xy1=touch.pageY;
-				var Pm=this.xy1-this.xy0;
-				checkGoPage1(Pm,this);
+				this.pmy=this.xy1-this.xy0;
+				if(this.pmy>0&&scrollTop==0){
+					e.preventDefault();
+					this.showTop=true;
+					this.topHeight="height:"+this.pmy+"px";
+					if(this.pmy>=45) this.rotateState=true;
+				}else{
+					//回复默认事件
+					e.preventDefault=false;
+				}
+			},
+			endtouch2: function(){
+				//触摸结束 如果触摸的高度<50则初始化 如果大于50则进入上一页
+				if(this.pmy<45){
+					this.showTop=false;
+					this.topHeight="height:"+0+"px"
+				};
+				//如果滑动
+				if(this.rotateState) {
+					this.showContainer1=true;
+					this.showContainer2=false;
+					this.checkScroll=true;
+					this.showTop=false;
+					this.rotateState=false;
+					this.topHeight="height:"+0+"px";
+				}
+//				checkGoPage1(Pm,this);
 			},
 			Collection: function(){
 				var self=this;
