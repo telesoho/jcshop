@@ -115,7 +115,10 @@ var vm = new Vue({
         $("#search_").click(function(){
         	clearInterval(times);
         	$("#modalid-search").attr("class", "show"); 
-        })
+        });
+        $("#search").blur(function(){
+			time_xian();
+		})
     },
     methods: {
     	zhuan_shop:function(item){
@@ -129,18 +132,18 @@ var vm = new Vue({
             setItem("articlePage",1);
             window.location.href='/site/article_list'
         },
-        fixToTop: function(){
-            $("html,body").animate({scrollTop:0},0);
-            return false;
-        },
+//      fixToTop: function(){
+//          $("html,body").animate({scrollTop:0},0);
+//          return false;
+//      },
         collect:function(item,id_this){
             var self=this;
            collection(item,self,id_this);
         },
-        showSearth: function(){
-        	alert(1)
-            getSearth();
-        },
+//      showSearth: function(){
+//      	alert(1)
+//          getSearth();
+//      },
         // 跳转活动页面
         toActive: function(){
             window.location.href="/activity/christmas_grow";
@@ -191,8 +194,10 @@ var vm = new Vue({
     	wenzhang_pro:function(id){
     		console.log(id)
     		window.location.href = "/site/article_detail?id="+id;
+    	},
+    	zheng:function(){
+    		window.location.href = "http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=100000241&idx=1&sn=f41ecf07dadbc93a1a10d917eb06f2e9&chksm=6b23f0325c5479242b6b80d338dba45d9bf59def5eed366848e9cc3a9d7b4e7429f5e3d9f022&scene=0#rd"
     	}
-    	
     }
 })
 $(document).ready(function(){
@@ -282,6 +287,9 @@ function index_home(self){
         },
     });
 }
+//
+
+
 //定时器  限时购
 function time_xian(){
 	times = setInterval(function(){

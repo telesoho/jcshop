@@ -86,6 +86,7 @@ li{
 	line-height: 0.7rem;
 }
 #main_content .public_main h1 img{
+	width: 0.6rem;
 	position: absolute;
 	left: 0.15rem;
 	top: 0.05rem;
@@ -109,6 +110,9 @@ li{
 	margin-bottom: 0.1rem;
 	font-size: 0.26rem;
 	color: #1f1f1f;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 #main_content .public_main ul img{
 	width: 1.4rem;
