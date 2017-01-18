@@ -135,6 +135,7 @@ class Brand extends IController implements adminAuthorization
 		$name = IFilter::act(IReq::get('name'));
 		$sort = IFilter::act(IReq::get('sort'),'int');
 		$url = IFilter::act(IReq::get('url'));
+		$top = IFilter::act(IReq::get('top'),'int');
 		$category = IFilter::act(IReq::get('category'),'int');
 		$description = IFilter::act(IReq::get('description'),'text');
 
@@ -147,6 +148,7 @@ class Brand extends IController implements adminAuthorization
 			'name'=>$name,
 			'sort'=>$sort,
 			'url'=>$url,
+			'top'=>$top,
 			'description' => $description,
 		);
 

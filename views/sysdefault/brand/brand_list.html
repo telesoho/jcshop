@@ -12,6 +12,7 @@
 			<col width="150px" />
 			<col width="200px" />
 			<col width="200px" />
+			<col width="100px" />
 			<col width="150px" />
 		</colgroup>
 
@@ -21,6 +22,7 @@
 				<th>品牌名称</th>
 				<th>网址</th>
 				<th>品牌分类</th>
+				<th>首页显示</th>
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -41,6 +43,7 @@
 				{$catAll[$val]} &nbsp;
 				{/foreach}
 				</td>
+				<td>{set:echo $item['top']==1 ?  '是' : '否';}</td>
 				<td><a href="{url:/brand/brand_edit/bid/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a><a href="javascript:void(0)" onclick="delModel({link:'{url:/brand/brand_del/bid/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a></td>
 			</tr>
 			{/query}

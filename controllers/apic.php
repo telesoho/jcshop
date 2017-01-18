@@ -2581,7 +2581,7 @@ class Apic extends IController{
 			$queryBrand->order  = 'sort DESC';
 			$queryBrand->limit  = 9;
 			foreach($listCat as $k => $v){
-				$queryBrand->where   = 'img IS NOT NULL AND category_ids LIKE "%,'.$v['id'].',%"';
+				$queryBrand->where   = 'top=1 AND img IS NOT NULL AND category_ids LIKE "%,'.$v['id'].',%"';
 				$listCat[$k]['list'] = $queryBrand->find();
 				if(!empty($listCat[$k]['list'])){
 					foreach($listCat[$k]['list'] as $k1 => $v1){

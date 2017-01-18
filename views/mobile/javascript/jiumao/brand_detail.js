@@ -48,6 +48,8 @@ var em = new Vue({
 	},
 	updated:function() {
 		document.title = this.info.name;
+		$("title").html(this.info.name); 
+		
 		var heights = $("#article_top").height()
 		if(heights!=0){
 			if(heights<=30){
