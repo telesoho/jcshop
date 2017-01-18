@@ -33,7 +33,7 @@
 				{set:$catAll[$item['id']] = $item['name']}
 			{/query}
 
-			{query: name=brand order=sort asc}
+			{query: name=brand order=sort desc}
 			<tr>
 				<td><input class="tiny" id="sort{$item['id']}" type="text" onblur="toSort({$item['id']});" value="{$item['sort']}" pattern='int' /></td>
 				<td>{$item['name']}</td>

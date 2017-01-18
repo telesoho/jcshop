@@ -353,6 +353,18 @@ class Apic extends IController{
 	}
 	
 	/**
+	 * 清空购物车
+	 */
+	public function cart_clear(){
+		$param = $this->checkData(array());
+		/* 清空购物车 */
+		$user_id = $this->tokenCheck();
+		$cartObj = new Cart();
+		$cartObj->clear();
+		$this->returnJson(array('code'=>'0','msg'=>'ok'));
+	}
+	
+	/**
 	 * 购物车结算页面
 	 */
 	public function cart2(){
