@@ -142,7 +142,7 @@
 </div>
 	<div style="height:3rem;"  id="deliveryTest"></div>
 	<!--底部fixed定位-->
-	<form action='{url:/simple/cart3}' class="form" method='post' name='order_form'  id="testForm" v-cloak>
+	<form action='{url:/simple/cart3}' class="form" method='post' name='order_form'  id="testForm" :style="showFixed?styleFixed:styleStatic" v-cloak>
 		<!--输入框要提交项目-->
 		<input type='hidden' name='ticket_aid'  v-model="infoMessage.ticket.ticket_aid" />
 		<input type='hidden' name='ticket_did'  v-model="infoMessage.ticket.ticket_did" />
@@ -182,7 +182,7 @@
 			</div>
 			<a href="#sheet1" class="cancle_action"><img src="/views/mobile/skin/default/image/jmj/cart/action.png" alt="" class="delaction"/></a>
 			<div class="text">
-				<input type="number" v-model="promo.val"  id="promoInput" placeholder="请输入6位数字">
+				<input type="number" v-model="promo.val"  id="promoInput" placeholder="请输入6位数字" @blur="hideKeyBoad" @focus="showKeyBoad">
 			</div>
 			<div class="button_s" :style="promo.val?promo.buttonBg:promo.buttonBg1" @click="proSub">
 				确认

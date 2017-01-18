@@ -446,7 +446,7 @@ input[type='search']{
 }
 #modalid-search .title{
   background:#f8f8f8;
-  border:1px solid #eeeeee;
+  /*border:1px solid #eeeeee;*/
   width:100%;
   height:0.5rem;
   font-size:0.28rem;
@@ -537,46 +537,53 @@ input[type='search']{
   margin-top:0.22rem;
   background:#f8f8f8;
 }
+
+
 .albumn_index .title{
+	display: -webkit-flex;
+	-webkit-align-items: center;
+	-webkit-justify-content: flex-start;
+	padding:0 0.2rem ;
   height:0.9rem;
+  width: 100%;
   font-size:0.3rem;
-  position:relative;
-  line-height:0.9rem;
+/*  line-height:0.9rem;*/
   background:#fff;
 }
 .albumn_index .title .logo{
   display: inline-block;
-  margin-left:0.24rem;
-  position:relative;
-  top:0.05rem;
 }
 .albumn_index .title .paper{
   margin-left:0.24rem;
-  position:relative;
   top:0.07rem;
 }
 .albumn_index .title .name{
-  margin-left:0.23rem;
+  margin-left:0.10rem;
   color:#3d4245;
   font-size:0.3rem;
+  /*width: 1.8rem;*/
+}
+.mui-pull-right{
+	float: none;
+}
+.albumn_index .title  .images{
+	margin-left: 0.19rem;
 }
 .albumn_index .title .share{
-  margin-right:0.43rem !important;
-  position:relative;
-  top:0.05rem;
+  
 }
 .albumn_index .title .like{
-  margin-right:0.07rem !important;
-  position:relative;
-  top:0.07rem;
+ margin-left: 2.22rem;
 }
 .albumn_index .title .num{
-  width:0.55rem;
-  margin-right:0.06rem !important;
-  font-family:'HelveticaNeueLt';
-  font-size:0.24rem;
+  width:0.34rem;
+  font-size:0.3rem;
   color:#171717;
+  margin-left: 0.13rem;
+  /*margin-top: -0.55rem;*/
 }
+
+
 .albumn_index .content{
   position:relative;
   width:7.5rem;
