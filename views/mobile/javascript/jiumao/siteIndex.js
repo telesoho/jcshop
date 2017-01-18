@@ -5,7 +5,10 @@ var Request = new Object();
 	Request = GetRequest();
 	var statusOrder=Request["id"];
 	tanchaun(statusOrder);
-	var times
+	var times;
+	if($("#modalid-search").attr("class") == "false"){
+			time_xian();
+		}
 //时间  倒计时	
 var hours = 0;
 var minutes = 0;
@@ -116,9 +119,30 @@ var vm = new Vue({
         	clearInterval(times);
         	$("#modalid-search").attr("class", "show"); 
         });
+        $("#search").focus(function(){
+          		$("#nav-slider").hide();
+				$("#slider1").hide();
+				$("#Timed_to_rob").hide();
+				$("#Video_special").hide();
+				$("#article_list").hide();
+				$("#the_zone").hide();
+				$("#footer_index").hide();
+				$(".footer").hide();
+				$(".recommended ").hide();
+				clearInterval(times)
+        })
         $("#search").blur(function(){
-			time_xian();
-		})
+			$("#nav-slider").show();
+			$("#slider1").show();
+			$("#Timed_to_rob").show();
+			$("#Video_special").show();
+			$("#article_list").show();
+			$("#the_zone").show();
+			$("#footer_index").show();
+			$(".footer").show();
+			$(".recommended ").show();
+		});
+		
     },
     methods: {
     	zhuan_shop:function(item){
