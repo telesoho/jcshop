@@ -58,7 +58,7 @@
 					</div>
 					<div class="right">
 						<img :src="item.count==1?imgReduce:imgReduceA" alt="" style="width:0.5rem;height:0.5rem;" class="reduce" @click="reduceCount(item)" />
-						<input type="text" readonly="readonly" v-model="item.count" />
+						<input type="number"  v-model="item.newCount" @change="cartCountF(item)"/>
 						<img :src="imgAdd" alt="" style="width:0.5rem;height:0.5rem;" class="add" @click="addCount(item)"/>
 					</div>
 				</div>
@@ -78,7 +78,11 @@
 					<span class="txt">合计: </span>
 					<span class="pri">￥ {{infoMessage.final_sum}}</span>
 				</div>
-				<a  href="{url:/simple/cart2}"  class="toPay classA">结算({{infoMessage.count}})</a>
+				<div>
+					<span class="delAll" @click="delAll">全部删除</span>
+					<a  href="{url:/simple/cart2}"  class="toPay classA">结算({{infoMessage.count}})</a>
+				</div>
+
 			</div>
 			<a href="#" class="condition_price" @click="freeShipp">
 				{{freeShipping}}
@@ -114,6 +118,7 @@
 				this.infoMessage.goodsList.map(function(item){
 					item.totalPrice=(item.sell_price*item.count).toFixed(2);
                     item.url="/site/products?id="+item.goods_id;
+					item.newCount=item.count;
 				});
 				return  this.infoMessage.goodsList;
 			},
@@ -138,6 +143,24 @@
 			getData: function () {
 				var self = this;
 				getCartInfo(self);
+			},
+			cartCountF:function(item){
+				var newCount=item.newCount;
+				var self=this;
+				var diff;
+				if(newCount>item.store_nums){
+					item.newCount=item.store_nums;
+					alert("商品库存不足")
+				}
+				if(newCount<1){
+					item.newCount=1;
+					alert("商品数量必须大于1件")
+				}
+				diff=item.newCount-item.count;
+				if(this.state){
+					self.state=false;
+					cartCount(item,diff,self);
+				}
 			},
 			reduceCount:function(item){
                 var self=this;
@@ -166,6 +189,18 @@
 			},
 			freeShipp:function(){
 				window.location.href = "/site/index"
+			},
+			delAll:function(){
+				var self=this;
+				var btnArray = ['取消', '移除'];
+				mui.confirm('您确定要清空购物车吗？', '清空购物车', btnArray, function (e) {
+					if (e.index == 1) {
+						$.getJSON("{url:/apic/cart_clear}", function (res) {
+							console.log(res);
+							self.infoMessage.goodsList=[];
+						});
+					}
+				})
 			}
 		}
 	})
