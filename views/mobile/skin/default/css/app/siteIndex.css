@@ -179,6 +179,9 @@ body{
 	z-index: 10000;
 }
 /*限时抢*/
+#Timed_to_rob .albumn_index{
+	margin: 0;
+}
 #Timed_to_rob{
 	height: 4.1rem;
 	width: 100%;
@@ -262,10 +265,12 @@ body{
 	color:#b8b8b8;
 }
 .line_time{
-	width: 7.09rem;
-	height: 0.03rem;
-	background: #e2e2e2;
+	height: 1px;
+	width: 7.11rem;
+	margin:0 auto;
+	background: #eee;
 	margin: 0 auto;
+	
 }
 /*								视频专辑								*/
 li{
@@ -395,13 +400,4 @@ li{
 font-size:0.2;
 color:#ff2f5c;
 
-}
-.albumn_index .title .num{
-	width: 0.55rem;
-    margin-right: 0.06rem !important;
-    font-size: 0.30rem;
-    color: #171717;
-}
-.albumn_index .title .name{
-	margin-right: 0.19rem;
 }
