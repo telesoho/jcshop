@@ -159,11 +159,11 @@ function pullupArticleRefresh(self){
         type: 'get',
         timeout: 10000,
         success: function (data) {
-            data.map(function(item){
+            data.data.map(function(item){
                 self.articleDetail.push(item);
             });
             self.showMessage=true;
-           if(data.length==0){
+           if(data.data.length==0){
                stop=false;
            }else{
                stop=true;
