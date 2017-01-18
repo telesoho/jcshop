@@ -37,6 +37,7 @@
 			</div>
 		</div>
 		<!--loading页结束-->
+		<div id="wrap_list_" >
 		<section id="siteMap">
 			
 		    <!--<header id="searchs">
@@ -65,15 +66,15 @@
 		    		<div class="fl_list" v-for="(item,key) in info" :name = "item.move_states" :id="key+1">
 		    			<div @click="show_hide(item,key)" >
 		    				<!--<img :src="item.image" style="width: 100%;"/>-->
-		    				<img :src="item.image" style="width: 100%;"/>
+		    				<img :src="item.image" style="width: 100%;" :class=""/>
 		    			</div>
-		    			<div class="public_main " id="active_show" v-if="item.state">
+		    			<div :class="class_fe ? class2 : class1" id="active_show" v-if="item.state">
 		    				<div v-for="(item2,key) in item.list">
-		    					<h1 @click="two_title(item2)"><img :src="item2.image" style="width: 0.6rem;"/><!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyao2.png" style="width: 0.15rem;"/>-->{{item2.name}}</h1>
+		    					<h1 @click="two_title(item2)"><img :src="item2.image"/><!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyao2.png" style="width: 0.15rem;"/>-->{{item2.name}}</h1>
 		    					<ul v-if="item2.state2">
 			    					<li v-for="(item3,key) in item2.list"><span @click="poducos(item3.id)">
 			    						<!--<img :src="item3.image" width="1.4rem"/>-->
-			    						<img :dataimg="item3.image" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" width="1.4rem"/>
+			    						<img :dataimg="item3.image" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style="width:1.4rem;height: 1.4rem;"/>
 			    						<p>{{item3.name}}</p>
 			    					</span></li>
 			    				</ul>
@@ -88,7 +89,7 @@
 		   		<div id="main_brand" style="color: #000;" v-if="chooses_show  == false">
 		   			<div class="brand1" v-for="item in info_brand">
 		    			<div @click="show_brand(1)">
-		    				<img :dataimg="item.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" class="samLazyImg"  style="width: 100%;"/>
+		    				<img :src="item.img" style="width: 100%;"/>
 		    			</div>
 		    			<div class="brand_list" >
 		    				<ul class="brand_list_ul">
@@ -124,6 +125,7 @@
 	    
 		<div id="" style="height: 1rem;background: #f5f5f5;">
 			
+		</div>		
 		</div>
 	</body>
 	
@@ -155,7 +157,10 @@
 					search:[],
 					info:[],
 					info_brand:[],
-					info_brand_all:[]
+					info_brand_all:[],
+					class1:"public_main jingzhi",
+					class2:"public_main active",
+					class_fe:false
 				},
 				computed:{
 					one_title:function(){
@@ -198,7 +203,7 @@
 						console.log(ids)
 					},
 					show_hide:function(item,key){
-						item.state=!item.state;
+						item.state = !item.state;
 						item.list[0].state2 = !item.list[0].state2;
 					},
 					show_brand:function(brand_num){
@@ -264,9 +269,12 @@
 //						data.data[0].state=true;
 						data.data[0].move_states=true;
 						self.info.push(items);
+						if(items.state){
+							self.class_fe = true;
+						}else{
+							self.class_fe = false;
+						}
 					})
-					
-					
 					
 				}
 			});
