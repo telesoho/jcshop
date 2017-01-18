@@ -1,5 +1,5 @@
 .v-container{
-    margin:0.72rem 0 1rem;
+    margin:0.72rem 0 0;
 }
 .head{
     background:#fafafa;
@@ -292,7 +292,7 @@
 }
 .articlelist .mui-scroll-wrapper{
     height:1.88rem;
-    margin:0 0.14rem;
+    padding:0 0.14rem;
     background:#fff !important;
 }
 #relateArticle .mui-control-item{
@@ -340,7 +340,8 @@
     padding:0.13rem 0;
 }
 #goodsContent img{
-    width:100%;
+    max-width:100%;
+    margin:0 auto;
     height:auto;
 }
 #goodsContent .img_logo{
@@ -555,3 +556,17 @@
 .select_center span{display:inline-block;float:left;width:0.56rem;height:0.56rem;text-align:center;line-height:0.56rem;background:#eee;}
 .select_center input{width:0.94rem;height:0.56rem;float:left;text-align:center;border:1px solid #eee;border-left:0;border-right:0;}
 .select_btn{width:100%;overflow:hidden;height:1rem;background:#f3026a;font-size:0.36rem;color:#fff;border:0;}
+/*上拉返回上一页*/
+.topTips{
+    padding:0.2rem;
+    font-size:0.26rem;
+    color:#1f1f1f;
+    display: -webkit-flex;
+    -webkit-justify-content: center;
+    -webkit-align-items: flex-end;
+}
+.topTips img{
+    width: 0.42rem;
+    height: 0.42rem;
+
+}
