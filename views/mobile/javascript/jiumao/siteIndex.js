@@ -358,16 +358,22 @@ function time_xian(){
 
 var t = ""
 document.addEventListener("touchstart",function(ev){
+	var ev = ev || event;
 	t = ev.touches[0].pageY;
 
 })
 document.addEventListener("touchmove",function(ev){
-	var scroll_s = ev.touches[0].pageY - t;
-	if(scroll_s>-20){
+	
+})
+document.addEventListener("touchend",function(ev){
+	var ev = ev || event;
+	var end_ = ev.changedTouches[0].pageY;
+	var scroll_s = end_- t;
+	if(scroll_s>25){
 		vm.search_top = false;
     	vm.search_top_small = true;
 	}
-	if(scroll_s <= -20){
+	if(scroll_s <= -25){
 		vm.search_top = true;
 		vm.search_top_small = false;
 	}
