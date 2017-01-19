@@ -64,6 +64,12 @@ color:#ef4145 !important;}
   -webkit-justify-content: flex-start;
 }
 *{margin:0;padding:0;}
+/*水波纹样式*/
+.wave{
+  display: block;
+  position: relative;
+  /*filter:wave(Freq=6,Strength=4,Phase=1);*/
+}
 /*页面加载动画*/
 #loading {
   position:fixed;
