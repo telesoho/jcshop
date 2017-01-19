@@ -12,24 +12,24 @@
 	<div class="content" >
 	<form action="{url:/tools/api_debug}" name='api_debug'  method="post">
 		<input name="api_id" type="hidden" value="{echo:IReq::get('id')}" />
-		<div style="margin-left:10px;float:left;width:30%;text-align:left;">
+		<div style="margin-left:10px;margin-top:10px;float:left;width:30%;text-align:left;">
 			<div >
-				<label>接口URL：</label>
-				<span style="color:#999;">{$data['url']}</span>
+				<label style="color:darkgrey;">接口URL：</label>
+				{$data['url']}
 			</div>
-			<hr/>
+			<hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
 			<div >
-				<label>接口作者：</label>
-				<span style="color:#999;">{$data['author']}</span>
+				<label style="color:darkgrey;">接口名称：</label>
+				{$data['name']}
 			</div>
-			<hr/>
+			<hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
 			<div >
-				<label>接口说明：</label>
-				<span style="color:#999;">{$data['apidesc']}</span>
+				<label style="color:darkgrey;">接口作者：</label>
+				{$data['author']}
 			</div>
-			<hr/>
+			<hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
 			<div>
-				<label style="margin-bottom:10px;">接口参数：</label>
+				<label style="color:darkgrey;margin-bottom:10px;">接口参数：</label>
 				<div class="unit">
 					{foreach:items=$data['parames'] key=$k item=$v}
 						<span style="width:90%;display:block;text-align:left;font-weight: bold;">
