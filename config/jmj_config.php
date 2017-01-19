@@ -14,6 +14,7 @@ return array(
 	'auth_key_data'         => 'k+_b}yC2Hx~:uZ/O=a9g-0{6^B|LhfwFlG@I?1MY', //默认数据加密KEY
 	'auth_key_user'         => '&17@:iY$0?(twB]kru)46J^!9l;.,Z5oE[bI_QmA', //默认密码加密KEY
 	'xlobo'                 => false, //false开发环境，true生产环境
+	'order_clear_time'      => 30*24*60*60, //订单自动确认时间
 )
 
 ?>
