@@ -362,9 +362,7 @@ document.addEventListener("touchstart",function(ev){
 	t = ev.touches[0].pageY;
 
 })
-document.addEventListener("touchmove",function(ev){
-	
-})
+
 document.addEventListener("touchend",function(ev){
 	var ev = ev || event;
 	var end_ = ev.changedTouches[0].pageY;
