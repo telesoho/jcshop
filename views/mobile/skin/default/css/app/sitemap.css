@@ -226,7 +226,7 @@ li{
 		height: auto;
 	}
 }*/
-#main #main_content .jingzhi{
+/*#main #main_content .jingzhi{
 	-webkit-animation:name2 2s;
 }
 @-webkit-keyframes name2{
@@ -236,7 +236,7 @@ li{
 	100%{
 		-webkit-transform: scaleY(1);
 	}
-}
+}*/
 /*						滑动							*/
 #wrap_list_{
 	position: absolute;
