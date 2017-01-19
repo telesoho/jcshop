@@ -58,7 +58,7 @@
 					</div>
 					<div class="right">
 						<img :src="item.count==1?imgReduce:imgReduceA" alt="" style="width:0.5rem;height:0.5rem;" class="reduce" @click="reduceCount(item)" />
-						<input type="number"  v-model="item.newCount" @change="cartCountF(item)"/>
+						<input type="number"  v-model="item.newCount"  @change="cartCountF(item)"/>
 						<img :src="imgAdd" alt="" style="width:0.5rem;height:0.5rem;" class="add" @click="addCount(item)"/>
 					</div>
 				</div>
