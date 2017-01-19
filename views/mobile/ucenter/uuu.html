@@ -38,8 +38,49 @@
     </style>
 </head>
 <body>
-<video controls width="1000" height="1000" autoplay src="http://www.bilibilijj.com/Files/DownLoad/13207279.mp4/www.bilibilijj.com.mp4?mp3=true"></video>
-<iframe style="display:block;" frameborder="0" src="http://www.bilibilijj.com/Files/DownLoad/13207279.mp4/www.bilibilijj.com.mp4?mp3=true" allowfullscreen></iframe>
+<video id="my-video" class="video-js" controls preload="auto" width="" height="" poster="" data-setup="{}">
+
+    <!-- <source src="MY_VIDEO.mp4" type='video/mp4'> -->
+    <!-- <source src="MY_VIDEO.webm" type='video/webm'> -->
+    <source src="rtmp://live.hkstv.hk.lxdns.com/live/hks" type='rtmp/flv'>
+    <source src="http://pili-live-hls.tuchewang.com/xinmiao/e283009b4f920b0e9247724452ac7f52.m3u8" type='application/x-mpegURL'>
+
+    <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a web browser that
+        <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+    </p>
+</video>
+
+<script src="http://vjs.zencdn.net/5.8.8/video.js"></script>
+<script type="text/javascript">
+    var player = videojs('my-video',{
+        autoplay 	: true, 	//自动播放
+        preload 	: 'auto', 	//预加载资源
+        poster 		: '/Uploads/Picture/2016-10-25/580eb5434e2dd.jpg', 	//视频封面图片
+        loop 		: false, 	//自动循环
+        width 		: 'auto', 	//播放器宽度
+        height 		: 'auto',	//播放器高度
+    },function(){});
+    // player.play();				//播放
+    // player.pause();				//暂停
+    // player.currentTime();		//返回播放进度
+    // player.currentTime(120);		//设置播放进度
+    // player.duration(); 			//视频持续时间，加载完成视频才可以知道视频时长，且在flash情况下无效
+    // player.buffered(); 			//返回缓冲（下载数量）
+    // player.bufferedPercent(); 	//返回百分比缓冲
+    // player.volume(); 			//返回音量值（0~1之间）
+    // player.volume(0.5); 			//设置音量值（0~1之间）
+    // player.width(); 				//返回宽度
+    // player.width(640); 			//设置宽度
+    // player.height(); 			//返回高度
+    // player.height(480); 			//设置高度
+    // player.size(640,480); 		//设置宽度、高度
+    // player.enterFullScreen(); 	//全屏
+    // player.enterFullScreen(); 	//退出全屏
+</script>
+
+<!--<video controls width="1000" height="1000" autoplay src="http://www.bilibilijj.com/Files/DownLoad/13207279.mp4/www.bilibilijj.com.mp4?mp3=true"></video>-->
+<!--<iframe style="display:block;" frameborder="0" src="http://www.bilibilijj.com/Files/DownLoad/13207279.mp4/www.bilibilijj.com.mp4?mp3=true" allowfullscreen></iframe>-->
 <div class="img">
     <img src="/views/mobile/skin/default/image/xinzeng/erweima.jpg" alt="" style="width:5.68rem;height:auto"/>
 </div>
