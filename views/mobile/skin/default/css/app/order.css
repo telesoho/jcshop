@@ -104,7 +104,7 @@
 }
 .order_menu_list .top .status{
     font-size:0.26rem;
-    color:#ff4aa0;
+    color:#ff2f5c;
     margin-right:0.25rem;
 }
 .order_menu_list .goodsList .content{
@@ -176,7 +176,7 @@
 .order_menu_list .orderToDo .right .button:nth-last-child(1){
     display: inline-block;
     border:none;
-    background: #ff4aa0;
+    background: #ff2f5c;
     border-radius:0.6rem;
     color: white;
     width:1.6rem;

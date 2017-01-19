@@ -6,7 +6,7 @@ var vm = new Vue({
         orderClass:getItem("status"),
         headData:['全部','待支付','待发货','待收货','已完成'],
         divC:'color:#bbb',
-        divA:'color:#ff4aa0',
+        divA:'color:#ff2f5c',
         spanC:'display:none',
         spanA:'display:block',
         showMessage:false,
