@@ -353,6 +353,24 @@ class Apic extends IController{
 	}
 	
 	/**
+	 * 购物车商品数量
+	 */
+	public function cart_count(){
+		$param = $this->checkData(array());
+		$user_id = $this->tokenCheck();
+		/* 购物车中商品数量 */
+		$modelCar = new IModel('goods_car');
+		$infoCar  = $modelCar->getObj('user_id='.$user_id);
+		$car_count = 0;
+		if(!empty($infoCar)){
+			$car_list               = JSON::decode(str_replace(array('&', '$'), array('"', ','), $infoCar['content']));
+			foreach($car_list['goods'] as $k => $v)
+				$car_count += $v;
+		}
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>array('car_count'=>$car_count)));
+	}
+	
+	/**
 	 * 清空购物车
 	 */
 	public function cart_clear(){
@@ -1813,16 +1831,6 @@ class Apic extends IController{
 		$queryFor->where          = 'user_id='.$user_id.' AND rid='.$dataGoods['id'];
 		$infoFav                  = $queryFor->find();
 		$dataGoods['is_favorite'] = !empty($infoFav) ? 1 : 0;
-		
-		/* 购物车中商品数量 */
-		$modelCar = new IModel('goods_car');
-		$infoCar  = $modelCar->getObj('user_id='.$user_id);
-		$dataGoods['car_count'] = 0;
-		if(!empty($infoCar)){
-			$car_list               = JSON::decode(str_replace(array('&', '$'), array('"', ','), $infoCar['content']));
-			foreach($car_list['goods'] as $k => $v)
-				$dataGoods['car_count'] += $v;
-		}
 		
 		/* 增加浏览次数 */
 		$visit    = ISafe::get('visit');
