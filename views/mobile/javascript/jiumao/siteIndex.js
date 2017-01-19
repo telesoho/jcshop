@@ -324,7 +324,7 @@ function time_xian(){
 		var data_time = myDate.getTime();
 		var all_time1 = _time-parseInt(data_time/1000);
 		if(all_time1<=0){
-			shop_time = false;
+			clearInterval(times)
 		}else{
 			shop_time = true;
 		}
