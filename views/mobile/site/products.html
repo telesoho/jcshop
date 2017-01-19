@@ -25,7 +25,7 @@
 		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
 		<a href="/simple/cart" id="cart" class="locationA">
 			<div class="img">
-				<div class="mark flexbox">{{info.car_count}}</div>
+				<div class="mark flexbox">{{car_count}}</div>
 				<img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
 			</div>
 		</a>
@@ -378,7 +378,8 @@
 			topHeight:"height:"+0+"px", //下拉的高度 与手指移动的位置差不多
 			styleTop1:"-webkit-transform:rotate(0deg)",
 			styleTop2:"-webkit-transform:rotate(180deg)",
-			rotateState:false
+			rotateState:false,
+			car_count:0,
 		},
 		computed: {
 			showLastImg:function(){
@@ -423,6 +424,7 @@
 		mounted: function(){
 			var self=this;
 			getProductDetail(statusOrder,self);
+			car_shop_num(self);
 		},
 		updated:function() {
 			var gallery = mui('#controllor');
@@ -613,6 +615,22 @@
 			}
 		}
 	});
+	
+	
+	    //获取购物车数量
+	function car_shop_num(self){
+		$.ajax({
+			url:"/apic/cart_count",
+			 dataType:'json',//服务器返回json格式数据
+	        type:'get',//HTTP请求类型
+	        timeout:10000,//超时时间设置为10秒；
+			success:function(data){
+				console.log(data);
+				self.car_count = data.data.car_count
+			}
+		})
+	}
+	
 	$(window).load(function(){
 		mui('body').on("tap",".locationA",function(){
 			window.location.href=this.href;

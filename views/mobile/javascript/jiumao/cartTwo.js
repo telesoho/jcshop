@@ -51,6 +51,7 @@ var vm = new Vue({
         styleFixed:"position:fixed",
         styleStatic:"position:static",
         showFixed:true, //判断软键盘是否抬起
+        car_count:0,
     },
     computed: {
         // 读取和设置
@@ -75,6 +76,7 @@ var vm = new Vue({
     mounted: function(){
         var self=this;
         getTicketInfo1(self,1);
+        car_shop_num(self);
     },
     updated:function() {
 
@@ -309,3 +311,16 @@ $('#promoInput').bind('focus',function(){
     $('#deliveryTest').css('display','block');
     $('#testForm').css({'position':'fixed','bottom':'0','left':0,'display':'block'});
 });
+    //获取购物车数量
+	function car_shop_num(self){
+		$.ajax({
+			url:"/apic/cart_count",
+			 dataType:'json',//服务器返回json格式数据
+	        type:'get',//HTTP请求类型
+	        timeout:10000,//超时时间设置为10秒；
+			success:function(data){
+				console.log(data);
+				self.car_count = data.data.car_count
+			}
+		})
+	}
