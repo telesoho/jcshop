@@ -358,15 +358,12 @@ function time_xian(){
 
 var t = ""
 document.addEventListener("touchstart",function(ev){
-	var ev = ev || event;
 	t = ev.touches[0].pageY;
+	console.log(t)
 
 })
-
-document.addEventListener("touchend",function(ev){
-	var ev = ev || event;
-	var end_ = ev.changedTouches[0].pageY;
-	var scroll_s = end_- t;
+document.addEventListener("touchmove",function(ev){
+	var scroll_s = ev.touches[0].pageY - t;
 	if(scroll_s>-20){
 		vm.search_top = false;
     	vm.search_top_small = true;
@@ -376,6 +373,18 @@ document.addEventListener("touchend",function(ev){
 		vm.search_top_small = false;
 	}
 })
+//document.addEventListener("touchend",function(ev){
+//	var scroll_s = ev.changedTouches[0].pageY;
+//	
+//	if(scroll_s -t>-20){
+//		vm.search_top = false;
+//  	vm.search_top_small = true;
+//	}
+//	if(scroll_s-t <= -20){
+//		vm.search_top = true;
+//		vm.search_top_small = false;
+//	}
+//})
 //上拉加载
 var stop=true;
 $(window).bind('scroll', function() {
