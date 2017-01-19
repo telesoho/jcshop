@@ -64,11 +64,11 @@
 		    	
 		    	<section id="main_content" v-if="chooses_show">
 		    		<div class="fl_list" v-for="(item,key) in info" :name = "item.move_states" :id="key+1">
-		    			<div @click="show_hide(item,key)" >
+		    			<div @click="show_hide(item,key)" class="boximg" >
 		    				<!--<img :src="item.image" style="width: 100%;"/>-->
-		    				<img :src="item.image" style="width: 100%;" :class=""/>
+		    				<img :src="item.image" style="width: 100%;" class="wave"/>
 		    			</div>
-		    			<div :class="class_fe ? class2 : class1" id="active_show" v-if="item.state">
+		    			<div :class="class_fe ? class2 : class1"  v-if="item.state">
 		    				<div v-for="(item2,key) in item.list">
 		    					<h1 @click="two_title(item2)"><img :src="item2.image"/><!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyao2.png" style="width: 0.15rem;"/>-->{{item2.name}}</h1>
 		    					<ul v-if="item2.state2">
@@ -88,7 +88,7 @@
 		   		
 		   		<div id="main_brand" style="color: #000;" v-if="chooses_show  == false">
 		   			<div class="brand1" v-for="item in info_brand">
-		    			<div @click="show_brand(1)">
+		    			<div @click="show_brand(1)" class="boximg">
 		    				<img :src="item.img" style="width: 100%;"/>
 		    			</div>
 		    			<div class="brand_list" >
