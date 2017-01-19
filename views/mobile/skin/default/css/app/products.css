@@ -124,6 +124,7 @@
     text-align:center;
     position:relative;
     top:-0.05rem;
+    font-weight:normal;
 }
 .cPrice{
     font-size:0.26rem;
@@ -243,7 +244,7 @@
 .relateBrand .brandlist {
     width:100%;
     margin-top:0.36rem;
-    height:2.83rem;
+    height:2.93rem;
     background:#fff;
     overflow: hidden;
     position: relative;
@@ -252,7 +253,7 @@
     position:absolute;
     overflow: hidden;
     width:100%;
-    height:2.78rem;
+    height:2.68rem;
     z-index:2;
 }
 #relatebrand{
@@ -261,7 +262,7 @@
     width:100%;
     overflow-x: scroll;
     overflow-y: hidden;
-    height:2.93rem;
+    height:3.03rem;
     background:#fff;
     display: -webkit-flex;
     display: -webkit-box;
