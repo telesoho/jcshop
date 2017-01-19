@@ -168,7 +168,7 @@ function getCart2Info(self){
             console.log(data);
             self.infoMessage=data.data;
             self.showMessage=true;
-            if(data.payment==''){
+            if(data.data.payment==''){
                 self.infoMessage.payment[0].id=1;
             }
             document.body.style.overflow = 'auto';
@@ -234,6 +234,9 @@ function getCouponInfo(obj,val) {
 
             }else{
                 this_.infoMessage=data.data;
+                if(data.data.payment==''){
+                self.infoMessage.payment[0].id=1;
+            	}
                 //这里面让用户输入的选取的优惠券无效
                 this_.codeMessage.map(function(item){
                     item.cho=false;
