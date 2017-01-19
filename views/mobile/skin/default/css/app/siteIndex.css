@@ -277,25 +277,30 @@ li{
 	list-style: none;
 }
 #Video_special{
-	height: 4.75rem;
+	background: #fff;
 	width: 100%;
 	margin-top: 0.2rem;
-	background: #fff;
+	padding-bottom:0.3rem ;
 }
-#Video_special ul{
+#z_special{
+	background: #fff;
+	padding-top:0.4rem ;
+	padding-bottom: 0.27rem;
+}
+#z_special ul{
 	display: -webkit-flex;
-	margin-top:0.5rem ;
+	/*margin-top:0.5rem ;*/
 	
 }
-#Video_special ul li{
+#z_special ul li{
 	width: 25%;
 	text-align: center;
 }
-#Video_special ul li img{
+#z_special ul li img{
 	display: block;
 	margin: 0 auto;
 }
-#Video_special ul li p{
+#z_special ul li p{
 	margin-top:0.25rem ;
 	font-size:0.26rem;
 	color:#484848;

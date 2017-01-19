@@ -12,7 +12,7 @@ var vm = new Vue({
             right_red:'/views/mobile/skin/default/image/jmj/favorite/cate_red.png',
             right_black:'/views/mobile/skin/default/image/jmj/favorite/cate_black.png',
             bg1:'color:#3d4225',
-            bg2:'color:#ff44a0',
+            bg2:'color:#ff2f5c',
             img:'width:0.31rem;height:0.31rem;margin-right:0.22rem;'
         }
     },
