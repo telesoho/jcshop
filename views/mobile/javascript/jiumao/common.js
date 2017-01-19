@@ -44,30 +44,23 @@ function getSearth(){
     document.getElementById("search").placeholder="";
     document.getElementById("modalid-search").className="show";
 //  document.getElementById("cancle").className="show cancel";
-	clearInterval(times);
-	console.log(1)
-//	$("#nav-slider").hide();
-//	$("#slider1").hide();
-//	$("#Timed_to_rob").hide();
-//	$("#Video_special").hide();
-//	$("#article_list").hide();
-//	$("#the_zone").hide();
-//	$("#footer_index").hide();
-//	$(".footer").hide();
-//	$(".recommended ").hide();
+//	clearInterval(times);
+
 	var h = document.body.scrollTop;
 	console.log(h)
     document.getElementById("homeHeader").style.cssText="position:absolate;width:100%;z-index:1111;top:0px;left:0";
     document.body.style.overflow = 'hidden';
-    document.body.addEventListener('touchmove', handler, false)
+    document.body.addEventListener('touchmove', handler, false);
+    
 }
 function searthCancel(){
     document.getElementById("search").placeholder=getItem("placeHolder")+"件商品等你来搜";
     document.getElementById("modalid-search").className="hide";
     document.getElementById("cancle").className="hide cancel";
     document.body.style.overflow = 'auto';
-    document.getElementById("homeHeader").style.position="static";
-    document.body.removeEventListener('touchmove', handler, false)
+    document.getElementById("homeHeader").style.position="fixed";
+//  document.body.removeEventListener('touchmove', handler, false);
+    time_xian();
 }
 function ToSearthPage(item){
     setItem("searth_word",item);
