@@ -44,27 +44,27 @@ body{
     -webkit-flex-wrap: nowrap;
 }
 .searth_container_content .head .left{
-    border:1px solid #ff44a0;
+    border:1px solid #ff2525;
     border-radius:5px 0 0 5px;
     width:2.86rem;
     height:0.64rem;
     text-align: center;
     line-height:0.6rem;
-    color:#ff4aa0;
+    color:#ff2525;
     font-size:0.3rem;
 }
 .searth_container_content .head .right{
-    border:1px solid #ff44a0;
+    border:1px solid #ff2525;
     border-radius: 0 5px 5px 0;
     width:2.86rem;
     height:0.64rem;
     text-align: center;
     line-height:0.6rem;
-    color:#ff4aa0;
+    color:#ff2525;
     font-size:0.3rem;
 }
 .searth_container_content .head div.active{
-    background:#ff4aa0;
+    background:#ff2525;
     color:#fff;
 }
 .searth_container_content .bg{

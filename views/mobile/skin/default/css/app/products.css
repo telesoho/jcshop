@@ -47,6 +47,12 @@
     background:#fff;
     z-index:1;
 }
+.carousel .logoImg{
+    position:absolute;
+    z-index:4;
+    left:0.5rem;
+    top:0.5rem;
+}
 .inimg{
     display: inline-block;
     width:6.9rem;
@@ -101,6 +107,7 @@
     padding-left:2.95rem;
     position:relative;
     width:100%;
+    font-weight: bold;
 }
 .sell_price .act{
     margin-left:0.21rem;
@@ -109,13 +116,14 @@
     border-radius:0.28rem;
     padding:0 .1rem;
     width:auto;
-    top:0;
     left:0;
     height:0.28rem;
     line-height:0.28rem;
     font-size:0.2rem;
     color:#ffffff;
     text-align:center;
+    position:relative;
+    top:-0.05rem;
 }
 .cPrice{
     font-size:0.26rem;
@@ -328,13 +336,19 @@
     padding:0 0.13rem;
     background:#fff;
 }
-.goodDet .top{
+.goodDet .top1{
     border-bottom:1px solid #e2e2e2;
     height:0.89rem;
     font-size:0.3rem;
     color:#1f1f1f;
     line-height:0.89rem;
     padding-left:0.09rem;
+    position:relative;
+}
+.goodDet .top1 img{
+    position:absolute;
+    right:0.2rem;
+    top:0.3rem;
 }
 #goodsContent{
     padding:0.13rem 0;
@@ -573,4 +587,40 @@
     width: 0.42rem;
     height: 0.42rem;
 
+}
+/*翻译弹出的样式*/
+#sheet .mui-table-view{
+    border-radius:0.3rem;
+    margin-left:10%;
+    width:80%;
+    height:10rem;
+    background:#fff;
+}
+#sheet .mui-table-view .title{
+    height:1rem;
+    line-height:1rem;
+    border-radius:0.3rem 0.3rem 0 0;
+    background:#ff4aa0;
+    color:#fff;
+    font-size:0.3rem;
+}#sheet .mui-table-view .parent{
+     position: relative;
+     height:6rem;
+     overflow-y: hidden;
+ }
+#sheet .mui-table-view .text{
+    text-align:left !important;
+    position:absolute;
+    top:0;
+    left:0;
+    display: inline-block;
+    font-size:0.26rem;
+    padding:0.2rem;
+    color:#3d4245;
+    height:6rem;
+    overflow-y: scroll;
+
+}
+#sheet.mui-popover {
+    bottom:20% !important;
 }
