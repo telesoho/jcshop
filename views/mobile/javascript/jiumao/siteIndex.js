@@ -367,11 +367,11 @@ document.addEventListener("touchend",function(ev){
 	var ev = ev || event;
 	var end_ = ev.changedTouches[0].pageY;
 	var scroll_s = end_- t;
-	if(scroll_s>25){
+	if(scroll_s>-20){
 		vm.search_top = false;
     	vm.search_top_small = true;
 	}
-	if(scroll_s <= -25){
+	if(scroll_s <= -20){
 		vm.search_top = true;
 		vm.search_top_small = false;
 	}
