@@ -14,9 +14,20 @@
 </head>
 <style>video{width: 100%;height: auto;}</style>
 <body>
+	<div id="wrap_article">
+
 <section>
     <div class="top_fixd">
-        <a href="/site/index"><img src="/views/mobile/skin/default/image/jmj/product/home.png" style="width:0.55rem;margin-left: 0.3rem;"/></a> <span>文章详情</span>
+        <div class="backImg">
+			<img src="/views/mobile/skin/default/image/jmj/product/back.png" alt="" style="width:0.43rem" @click="back"/>
+		</div>
+		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
+		<a href="/simple/cart" id="cart" class="locationA">
+			<div class="img">
+				<div class="mark flexbox">0</div>
+				<img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
+			</div>
+		</a>
     </div>
     <div class="article_title">
         <img src="<?php echo IWeb::$app->config['image_host'] . '/' ?>{$this->articleRow['image']}" alt="" width="100%" />
@@ -137,6 +148,7 @@
         </div>
     </div>
 </section>
+</div>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
@@ -149,7 +161,7 @@
     var stop = true;
     //文章商品分类
     var vm=new Vue({
-        el:'.articledetail_ware',
+        el:'#wrap_article',
         data:{
             articlePageData:{
                 page:1,
@@ -169,7 +181,11 @@
             var self=this;
             pullupRefresh(self);
         },
-
+		methods:{
+			back:function(){
+			   	 window.history.go(-1);
+			},
+		}
 
     })
     $(window).load(function(){

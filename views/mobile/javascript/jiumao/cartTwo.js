@@ -80,6 +80,9 @@ var vm = new Vue({
 
     },
     methods: {
+    	back:function(){
+    		window.history.go(-1);
+    	},
         getData: function () {
             var self = this;
             getCart2Info(self);

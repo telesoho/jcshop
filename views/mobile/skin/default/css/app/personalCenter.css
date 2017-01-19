@@ -25,7 +25,6 @@ ul,li{margin:0;padding:0;list-style: none;}
 	border-radius: 50%;
 }
 #nameLogn{
-	width: 100px;
 	height: 100px;
 	position: absolute;
 	width: 1.09rem;
@@ -40,7 +39,6 @@ ul,li{margin:0;padding:0;list-style: none;}
 	-webkit-flex-direction: row;
 	-webkit-justify-content:center;*/
 	text-shadow: 1px 1px 1px black;
-	font-size:0.3rem;
 	color: white;
 	font-size: 0.32rem;
 	position: absolute;
@@ -66,12 +64,11 @@ ul,li{margin:0;padding:0;list-style: none;}
     top: 0;
     right: 0;
     left: 0;
-    height: 0
+    height: 0;
     content: '';
     -webkit-transform: scaleY(0);
     transform: scaleY(0);
     background-color: #fff;
-}
 }
 .myOrders li{
 	width: 100%;
@@ -81,7 +78,10 @@ ul,li{margin:0;padding:0;list-style: none;}
 }
 
 .ico-pull{
+	width:5.8rem;
+	display: inline-block;
 	color:#bbb;
+	text-align: right;
 }
 .ico-pull span{
 	color:#bbb;
@@ -133,8 +133,8 @@ ul,li{margin:0;padding:0;list-style: none;}
 .showMore{display: -webkit-flex;-webkit-flex-direction: row;-webkit-justify-content: center;width:100%;padding:0.1rem 0;}
 .showMore span{background:#fff;padding:0.2rem;font-size:0.26rem;color:#3d4245;}
 .priceBox{padding:0 0.2rem;clear: both;background:#fff;}
-.priceBox p{background:transparent;padding:0;text-align: left;padding:0.2rem;}
-.priceBox p:first-child{text-align:left;padding:0;padding:0.2rem;margin:0;border-bottom:1px solid #eee;}
+.priceBox p{background:transparent;text-align: left;padding:0.2rem;}
+.priceBox p:first-child{text-align:left;padding:0.2rem;margin:0;border-bottom:1px solid #eee;}
 .priceBox p span{color:#bbb;}
 .priceBox p span:last-child{float:right;color:#f3026a;}
 .priceBox p:first-child span:last-child{float:right;color:#3d4245;}
@@ -149,8 +149,6 @@ padding:0.1rem 0.2rem;}
 
 
 .mui-navigate-right:after{
-	display: none;
-	font-family: Muiicons;
     font-size: inherit;
     line-height: 1;
     position: absolute;

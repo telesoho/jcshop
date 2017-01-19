@@ -5,86 +5,14 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>评论</title>
+    <title>评论详情</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
     <link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/comment/comment1.css?v=<?php echo time(); ?>"/>
 </head>
 <body>
-<div id="commentInfo" v-cloak>
-    <!--加载动画-->
-    <div v-if="showLoad" id="loading">
-        <div class="spinner">
-            <div class="spinner-container container1">
-                <div class="circle1"></div>
-                <div class="circle2"></div>
-                <div class="circle3"></div>
-                <div class="circle4"></div>
-            </div>
-            <div class="spinner-container container2">
-                <div class="circle1"></div>
-                <div class="circle2"></div>
-                <div class="circle3"></div>
-                <div class="circle4"></div>
-            </div>
-            <div class="spinner-container container3">
-                <div class="circle1"></div>
-                <div class="circle2"></div>
-                <div class="circle3"></div>
-                <div class="circle4"></div>
-            </div>
-        </div>
-    </div>
-      <div class="loadImg">
-          <div class="top">选择图片</div>
-          <div class="imgArea">
-              <div class="img" v-for="(item,key) in img">
-                  <img :src="item" alt="" @click="perview(item)"/>
-                  <img src="/views/mobile/skin/default/image/jmj/comment/del.png" alt="" class="del" @click="delImg(key)"/>
-              </div>
-              <div class="addimg" v-if="imgLength<maxLength" @click="choImgFun">
-                  <img src="/views/mobile/skin/default/image/jmj/comment/car.png" alt="" />
-              </div>
-          </div>
-      </div>
-    <div class="voiceInfo">
-        <h3 class="top">说点什么吧</h3>
-        <div class="content content1 flexbox" v-if="voiceState==1">
-            <img src="/views/mobile/skin/default/image/jmj/comment/voice1.png" alt="" style="width:1.2rem;margin-top:0.3rem" @click="startV"/>
-            <div class="con con1">点击录制</div>
-        </div>
-        <div class="content content1 flexbox" v-if="voiceState==2">
-            <img :src="startSrc" alt="" style="height:0.7rem;margin-top:0.3rem" @click="endV"/>
-            <div class="con con1" style="margin-top:0.5rem;">正在录音,点击停止</div>
-        </div>
-        <div class="content content2 flexbox" v-if="voiceState==3">
-            <div>
-                <img :src="startSrc1" alt="" style="height:0.7rem;margin-top:0.18rem;"  @click="voicePlay"/>
-            </div>
-            <div class="con con1" style="margin-top:0.2rem">
-                 <span class="beginStart" @click="beginStart">重录</span>
-                <span class="del" @click="delVoice">删除</span>
-            </div>
-        </div>
-    </div>
-    <div class="markInfo">
-        <div class="top">
-            选择标签
-        </div>
-        <div class="info flexstart">
-            <div :class="item.cho?class2:class1" v-for="item in mark" @click="changeState(item)">
-                    {{item.name}}
-            </div>
-        </div>
-    </div>
-    <div class="bottom flexbox">
-        <span class="bg"></span>
-        <span style="font-size:0.2rem;color:#b8b8b8;display:inline-block;margin:0 0.24rem">喵，您的评价帮助我们做得更好</span>
-        <span class="bg"></span>
-    </div>
-    <div class="fixedBot flexbox">
-        <div class="submit" :style="checkSubmit?style2:style1" @click="submit">提交评价</div>
-    </div>
+<div id="comment_detail_Info" v-cloak>
+     
 </div>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
@@ -95,60 +23,13 @@
         el:"#commentInfo",
         data:{
             id:getId,//获取页面传过来的id
-            showLoad:false,//是否显示加载页
-            maxLength:5,//最大可以上传图片的数量
-            imgLength:0,//当前已上传图片数量
-            maxMark:3,//最大可以选择标签数
-            voiceState:1, //录制状态 1代表没有录制  2代表录正在录制  3 代表录制完成
-            markLen:0, //当前所选标签的长度
-            checkSub:false,
-            style1:"opacity:0.5",
-            style2:"opacity:1",
-            //播放语音的动画
-            img_arr:[
-                   "/views/mobile/skin/default/image/jmj/comment/003.png" ,
-                    "/views/mobile/skin/default/image/jmj/comment/002.png",
-                    "/views/mobile/skin/default/image/jmj/comment/001.png",
-                    "/views/mobile/skin/default/image/jmj/comment/002.png"
-            ],
-            startNum:1,//开始播放语音的num
-            startSrc:"/views/mobile/skin/default/image/jmj/comment/003.png",
-            startSrc1:"/views/mobile/skin/default/image/jmj/comment/003.png",
-            pause:false, //播放开始与暂停
-            //我们的文件
-            choImg:[],
-            img:[], //本地图片
-            voice:"",
-            localVoice:"",//本地语音 用于播放
-//            用户选择标签选项
-            class1:"item",
-            class2:"item active",
-            mark:[]
+
         },
         computed:{
-            checkSubmit:function(){
-                //判断用户选择内容是否可以提交
-                if(this.markLen||this.choImg.length||this.voice!="")
-                {
-                    this.checkSub=true;
-                }
-                else{
-                    this.checkSub=false;
-                }
-                return this.checkSub;
-            },
-            tag_id:function(){
-                var tag_id=[];
-                this.mark.map(function(item){
-                    if(item.cho){
-                        tag_id.push(item.id)
-                    }
-                })
-                return tag_id.join(",");
-            }
+
         },
         mounted:function(){
-           getTagList(this);
+            getCommentDetail(this);
         },
         methods:{
 //            从本地选择图片或者拍照
@@ -212,10 +93,10 @@
                         this.markLen--
                     }
                 }else{
-                   if(item.cho){
-                       item.cho=false;
-                       this.markLen--
-                   }
+                    if(item.cho){
+                        item.cho=false;
+                        this.markLen--
+                    }
                 }
             },
             //提交并上传文件到微信服务器
@@ -254,7 +135,7 @@ $this->wechat->jsApiSDK();
 ?>
 <script type="text/javascript">
     wx.ready(function() {});
-//    从本地选择图片
+    //    从本地选择图片
     function chooseImage(self){
         var lenth=self.maxLength-self.imgLength;
         wx.chooseImage({
@@ -264,7 +145,7 @@ $this->wechat->jsApiSDK();
             success: function (res) {
 //                将本地的localIds展示出来
                 res.localIds.map(function(item){
-                     //直接上传图片
+                    //直接上传图片
                     self.img.push(item);
                     wx.uploadImage({
                         localId: item, // 需要上传的图片的本地ID，由chooseImage接口获得

@@ -145,7 +145,7 @@
 }
 .order_menu_list .goodsList .content .right .price .sellprice{
     font-size:0.34rem !important;
-    color:#f3026a !important;
+    color:#ff2f5c !important;
 }
 .order_menu_list .goodsList .content .right .price .num{
     font-size:0.28rem;
@@ -268,7 +268,7 @@
     text-align: center;
 }
 .orderState_head .state .state_item.hot .state_text{
-    color:#f3026a;
+    color:#ff2f5c;
 }
 /*订单里面的地址页面*/
 .order_addAddr{
@@ -366,7 +366,7 @@
 .goods_bottom .payreal span:nth-child(2){
     padding-right:0.2rem;
     font-size:0.26rem;
-    color:#f3026a;
+    color:#ff2f5c;
 }
 .goodsList .order_menu_list{
     border-bottom: 1px solid #eee;
@@ -374,7 +374,7 @@
 }
 .goodsList .order_menu_list .sellpri{
     font-size: 0.28rem !important;
-    color: #f3026a !important;
+    color: #ff2f5c !important;
 }
 .order_time{
     background:#fff;
@@ -425,8 +425,8 @@
     color: #3d4245;
 }
 .order_buttom .buttom_fixd2{
-    border:1px solid #f3026a;
-    color:#f3026a;
+    border:1px solid #ff2f5c;
+    color:#ff2f5c;
 }
 #slider.mui-fullscreen{
     z-index: 1;
