@@ -74,7 +74,7 @@ var vm = new Vue({
     },
     mounted: function(){
         var self=this;
-        getTicketInfo1(self,1)
+        getTicketInfo1(self,1);
     },
     updated:function() {
 
@@ -251,6 +251,7 @@ function getCouponInfo(obj,val) {
         }
     });
 }
+
 //	获取用户选择优惠券的信息
 function choCouponInfo(self,item) {
     mui.ajax('/apic/cart2',{

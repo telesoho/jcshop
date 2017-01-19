@@ -14,7 +14,7 @@
 </head>
 <style>video{width: 100%;height: auto;}</style>
 <body>
-	<div id="wrap_article">
+	<div id="wrap_article" v-cloak>
 
 <section>
     <div class="top_fixd">
@@ -24,7 +24,7 @@
 		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
 		<a href="/simple/cart" id="cart" class="locationA">
 			<div class="img">
-				<div class="mark flexbox">0</div>
+				<div class="mark flexbox">{{car_count}}</div>
 				<img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
 			</div>
 		</a>
@@ -167,7 +167,8 @@
                 page:1,
                 id:getId
             },
-            info:[]
+            info:[],
+            car_count:0,
         },
         computed: {
           new_info: function(){
@@ -180,6 +181,7 @@
         mounted:function(){
             var self=this;
             pullupRefresh(self);
+            car_shop_num(self);
         },
 		methods:{
 			back:function(){
@@ -201,6 +203,23 @@
             }
         }
     });
+    
+    
+    //获取购物车数量
+	function car_shop_num(self){
+		$.ajax({
+			url:"/apic/cart_count",
+			 dataType:'json',//服务器返回json格式数据
+	        type:'get',//HTTP请求类型
+	        timeout:10000,//超时时间设置为10秒；
+			success:function(data){
+				console.log(data);
+				self.car_count = data.data.car_count
+			}
+		})
+	}
+	
+	
     function pullupRefresh(self) {
         mui.ajax('index.php?controller=apic&action=article_rel_goods',{
             data:self.articlePageData,
