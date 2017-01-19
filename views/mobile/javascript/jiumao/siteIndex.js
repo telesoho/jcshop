@@ -324,7 +324,7 @@ function time_xian(){
 		var data_time = myDate.getTime();
 		var all_time1 = _time-parseInt(data_time/1000);
 		if(all_time1<=0){
-			clearInterval(times)
+			shop_time = false;
 		}else{
 			shop_time = true;
 		}
@@ -504,3 +504,4 @@ var _hmt = _hmt || [];
      function removeSessionItem(key){
         window.sessionStorage.removeItem(key);
     }
+
