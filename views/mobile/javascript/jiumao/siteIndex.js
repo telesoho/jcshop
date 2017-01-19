@@ -363,11 +363,11 @@ document.addEventListener("touchstart",function(ev){
 })
 document.addEventListener("touchmove",function(ev){
 	var scroll_s = ev.touches[0].pageY - t;
-	if(scroll_s>=10||scroll_s<=-10){
+	if(scroll_s>-20){
 		vm.search_top = false;
     	vm.search_top_small = true;
 	}
-	if(scroll_s <= -10){
+	if(scroll_s <= -20){
 		vm.search_top = true;
 		vm.search_top_small = false;
 	}
@@ -383,13 +383,13 @@ $(window).bind('scroll', function() {
 //          pullupInfoRefresh(vm);
         }
     }
-    if($(window).scrollTop()>100){
-        $(".fix-toTop").show();
-        $(".fix-toTop").css("position","fixed");
-    }else{
-        $(".fix-toTop").hide();
-        $(".fix-toTop").css("position","fixed");
-    }
+//  if($(window).scrollTop()>100){
+//      $(".fix-toTop").show();
+//      $(".fix-toTop").css("position","fixed");
+//  }else{
+//      $(".fix-toTop").hide();
+//      $(".fix-toTop").css("position","fixed");
+//  }
 });
 function checkPause(obj){
     var self=obj;

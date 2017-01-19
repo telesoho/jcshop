@@ -1,29 +1,40 @@
 /*订单确认样式*/
 .top_fixd{
-	background: #fafafa;
+    background: #fafafa;
     border-bottom: 1px solid #b8b8b8;
     width: 100%;
     height: 0.72rem;
     display: -webkit-flex;
     -webkit-align-items: center;
-    -webkit-justify-content: flex-start;
+    -webkit-justify-content: flex-end;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 999;
 }
-.top_fixd span:nth-child(1){
-	font-size:0.26rem;
-	color:#000;
-	display: inline-block;
-	margin-left:0.2rem;
+.top_fixd .backImg{
+	width: 5rem;
+    text-align: left;
 }
-.top_fixd span:nth-child(2){
-	font-size:0.34rem;
-	color:#000;
-	width:50%;
-	display: inline-block;
-	text-align: right;
+.top_fixd .home {
+    display: inline-block;
+    margin-right: 0.37rem;
+}
+.top_fixd #cart {
+    display: inline-block;
+    margin-right: 0.66rem;
+    position: relative;
+}
+.top_fixd #cart .mark {
+    background: #ff2f5c;
+    border-radius: 100%;
+    width: 0.35rem;
+    height: 0.35rem;
+    color: #fff;
+    position: absolute;
+    font-size: 0.2rem;
+    right: -0.175rem;
+    top: 0;
 }
 /*#wareListShop{*/
 

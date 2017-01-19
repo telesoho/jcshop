@@ -212,33 +212,31 @@ li{
 }
 
 /*						动画							*/
-#main #main_content .active{
-	/*height: auto;*/
+/*#main #main_content .active{
 	animation: name1 1s;
+	overflow: hidden;
 }
 @-webkit-keyframes name1{
 	from{
-		transform: rotateX(0);
+		transform: scaleX(0);
 		height: 0;
 	}
 	to{
-		transform: rotateX(360deg);
+		transform: scaleX(1);
 		height: auto;
-		display: block;
 	}
-}
+}*/
 #main #main_content .jingzhi{
-	animation:name2 1s;
+	-webkit-animation:name2 5s 1S;
 }
 @-webkit-keyframes name2{
-	from{
-		transform: rotateX(360deg);
+	0%{
 		height: 0;
+		-webkit-transform: scaleY(0);
 	}
-	to{
-		transform: rotateX(0);
+	100%{
 		height: auto;
-		display: none;
+		-webkit-transform: scaleY(1);
 	}
 }
 /*						滑动							*/
