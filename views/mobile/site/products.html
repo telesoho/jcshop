@@ -33,12 +33,13 @@
 	<div id="pullrefresh1" class="v-container" v-if="showContainer1" @touchstart="firstContainerMoveStart" @touchmove="firstContainerMove" @touchend="endtouch1">
 		<div class="scro scro1" style="background:#fff">
 			<section style="" class="carousel flexbox">
+				<img v-if="info.delivery==1" src="/views/mobile/skin/default/image/jmj/product/de.png" alt="" style="width:1.77rem;height:1.48rem;"  class="logoImg"/>
 				<!--轮播开始-->
 				<div id="controllor" class="mui-slider">
 					<div class="mui-slider-group mui-slider-loop">
 						<div class="mui-slider-item mui-slider-item-duplicate flexbox">
 							<a href="#" class="inimg flexbox">
-								<img :src="showLastImg" >
+								<img :src="showLastImg" />
 							</a>
 						</div>
 						<div class="mui-slider-item " v-for="item in info.photo">
@@ -64,7 +65,7 @@
 					<div class="sell_price flexstart">
 						<span style="font-size:0.26rem;color:#ff2f5c">¥&nbsp;</span>
 						<span style="font-size:0.46rem;color:#ff2f5c"> {{info.sell_price}}</span>
-						<div class="act" style="line-height: 0.3rem;">
+						<div class="act">
 							立省{{(info.market_price - info.sell_price).toFixed(2)}}元
 						</div>
 					</div>
@@ -82,7 +83,7 @@
 				</div>
 				<div class="text2">
 					<span>商品编号：</span>
-					<span style="color:#b8b8b8">{{info.goods_no}}</span>
+					<span style="color:#b8b8b8;">{{info.goods_no}}</span>
 				</div>
 			</section>
 			<a href="#serviceDescription">
@@ -91,11 +92,11 @@
 						<img src="/views/mobile/skin/default/image/jmj/product/tip1.png" alt="" />
 						<span>东京直邮</span>
 					</li>
-					<li class="tip tip2"  v-if="info.delivery==1">
-                        <!--"delivery":   //是否包邮[1满288包邮-2不包邮-3必包邮]-->
-						<img src="/views/mobile/skin/default/image/jmj/product/tip2.png" alt="" />
-						<span>满288包邮</span>
-					</li>
+					<!--<li class="tip tip2"  v-if="info.delivery==1">-->
+                        <!--&lt;!&ndash;"delivery":   //是否包邮[1满288包邮-2不包邮-3必包邮]&ndash;&gt;-->
+						<!--<img src="/views/mobile/skin/default/image/jmj/product/tip2.png" alt="" />-->
+						<!--<span>满288包邮</span>-->
+					<!--</li>-->
 					<li class="tip tip3" v-if="info.vendor==1">
 						<img src="/views/mobile/skin/default/image/jmj/product/tip3.png" alt="" />
 						<span>universal入驻</span>
@@ -182,8 +183,10 @@
 			</div>
 			<!--商品的图文详情-->
 			<section class="goodDet">
-				<div class="top">
-					商品图文详情
+				<!--无用的div,只是为了防止报错-->
+				<div class="top"></div>
+				<div class="top1">
+					商品图文详情 <img src="/views/mobile/skin/default/image/jmj/product/fanyi.png" alt="" style="width:1.44rem;" @click="getActsheet"/>
 				</div>
 				<div id="goodsContent" v-html="info.content">
 				</div>
@@ -277,6 +280,24 @@
 	</section>
 </section>
 <section>
+	<!--翻译弹出-->
+	<div id="sheet" class="mui-popover mui-popover-action mui-popover-bottom">
+		<ul class="mui-table-view">
+			<div class="title">
+				翻译结果
+			</div>
+			<div class="parent" @touchstart="moveStart" @touchmove="move">
+				<div class="text" :style="nowStyle">
+					正在翻译，请稍等...
+				</div>
+			</div>
+		</ul>
+		<div id="close" style="text-align:center">
+
+			<a href="#sheet" ><img src="/views/mobile/skin/default/image/jmj/icon/close.png"  style="width:0.62rem;margin-top:0.2rem;" ></a>
+		</div>
+
+	</div>
 	<!--服务说明弹出框-->
 	<div id="serviceDescription" class="mui-popover mui-popover-action mui-popover-bottom">
 		<div>服务说明<a href="#serviceDescription"><span class="mui-icon mui-icon-closeempty"></span></a></div>
@@ -351,7 +372,8 @@
 			xy1:0,
 			pmy:0,
             pm1:0,
-			checkScroll:false,
+			checkScroll:false,//判定是否通过第二页进入第一页的
+			ckeckScroll1:false,//判定第一页进入第二页的状态
 			showTop:false,//第二页顶部状态  初始为false
 			topHeight:"height:"+0+"px", //下拉的高度 与手指移动的位置差不多
 			styleTop1:"-webkit-transform:rotate(0deg)",
@@ -411,6 +433,14 @@
 				deceleration: 0.0005,
 				indicators:false
 			});
+//			状态判定代码
+			if(this.checkScroll){
+				var bott=getSession("ProductsScrollTop")-55;
+				$(window).scrollTop(bott)
+			}
+			if(this.checkScroll1){
+				$(window).scrollTop(0)
+			}
 		},
 		methods: {
 			back:function(){
@@ -418,12 +448,17 @@
                 if(this.showContainer2){
                     this.showContainer1=true;
                     this.showContainer2=false;
+					this.checkScroll=false;
                 }
 			},
 			//第一个容器移动事件
 			firstContainerMoveStart:function(e){
 				var touch = e.targetTouches[0];
 				this.py0=touch.pageY;
+//				初始化代码
+				this.checkScroll=false;
+				this.checkScroll1=false;
+				console.log(this.checkScroll)
 			},
 			firstContainerMove:function(e){
 //                e.preventDefault=false;
@@ -436,7 +471,7 @@
                 if((windowHeight+scrollTop-this.pm1)>(docHeight+50)&&this.pm1<0){
                     e.preventDefault(); //阻止缺省事件
                      this.rotateState=true;
-//                    pushSession("ProductsScrollTop",docHeight-windowHeight);
+                    pushSession("ProductsScrollTop",docHeight-windowHeight);
                 }else{
                     //回复默认事件
 
@@ -457,10 +492,15 @@
                     this.xy1=0;
                     this.pmy=0;
                     this.pm1=0;
-                    $(window).scrollTop(0)
+					//只有进入之后状态码才为true
+					this.checkScroll1=true;
                 }
 			},
 			secondContainerMoveStart:function(e){
+//				touch开始要重置状态
+				this.checkScroll1=false;
+				this.checkScroll=false;
+				console.log(this.checkScroll)
 				var touch = e.targetTouches[0];
 				this.xy0=touch.pageY;
 			},
@@ -473,7 +513,10 @@
 					e.preventDefault();
 					this.showTop=true;
 					this.topHeight="height:"+this.pmy+"px";
-					if(this.pmy>=45) this.rotateState=true;
+					if(this.pmy>=45){
+						this.rotateState=true;
+						this.topHeight="height:45px";
+					}
 				}else{
 					//回复默认事件
 					e.preventDefault=false;
@@ -500,8 +543,6 @@
                     this.xy1=0;
                     this.pmy=0;
                     this.pm1=0;
-                    var bott=getSession("ProductsScrollTop")-50;
-                    $(window).scrollTop(bott)
 				}
 			},
 			Collection: function(){
@@ -545,6 +586,31 @@
 				var self=this;
 				buyNowFun(self);
 			},
+			//获取翻译的弹窗
+			getActsheet:function(){
+				mui("#sheet").popover('toggle');
+				translate.start()
+			},
+//			翻译弹窗事件
+			moveStart: function(ev){
+				this.y01=ev.touches[0].pageY;
+				this.y0=this.scroll;
+			},
+			move: function(ev){
+				var textTop=$('.text').height();
+				var par=$('.parent').height();
+				if(textTop>par){
+					this.y1=ev.touches[0].pageY;
+					this.scroll=this.y1-this.y01;
+					this.nowTop=this.y0+this.scroll;
+					if(this.nowTop>0){
+						this.nowTop=0;
+					};
+					if((-par+textTop)<-this.nowTop&&(-par+textTop)>0){
+						this.nowTop=-textTop+par;
+					}
+				}
+			}
 		}
 	});
 	$(window).load(function(){
@@ -555,7 +621,29 @@
 			this.click();
 		});
 	});
-
+	//在线翻译
+	var translate 	= {
+		loading 	 		: false,
+		start 				: function(){
+			var thisContentObj 		= $('#goodsContent');
+			var text 				= thisContentObj.text(); //原内容
+			translate.getTranslateApi(text);
+		},
+		getTranslateApi 	: function(text){
+			var url 			= '{url:site/translate}';
+			if(translate.loading == true) return false;
+			translate.loading = true;
+			$.post(url,{text:text},function(data,status){
+				if(status == 'success'){
+					translate.end(data);
+				}
+				translate.loading = false;
+			},'json');
+		},
+		end 				: function(data){
+			$('#sheet').find('.text').text(data);
+		}
+	}
 	function getProductDetail(obj,self){
 		var product_detail=obj;
 		mui.ajax('/apic/goods_detail',{
@@ -666,6 +754,9 @@
 			cloneDiv.remove();
             mui("#select_product").popover('hide');
 		});
+	}
+	function getActionSheet(){
+
 	}
 </script>
 <!-- 微信分享 -->
