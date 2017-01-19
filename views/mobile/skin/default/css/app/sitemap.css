@@ -227,15 +227,13 @@ li{
 	}
 }*/
 #main #main_content .jingzhi{
-	-webkit-animation:name2 5s 1S;
+	-webkit-animation:name2 2s;
 }
 @-webkit-keyframes name2{
 	0%{
-		height: 0;
 		-webkit-transform: scaleY(0);
 	}
 	100%{
-		height: auto;
 		-webkit-transform: scaleY(1);
 	}
 }
