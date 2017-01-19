@@ -214,16 +214,15 @@ body{
 }
 #Timed_to_rob h1 .p2 span{
 	display: block;
-	background:#f5f5f5;
-	border:1px solid #b8b8b8;
-	border-radius:0.08rem;
+	background:#1f1f1f;
 	width:0.4rem;
 	height:0.4rem;
 	font-size: 0.24rem;
 	text-align: center;
-	line-height: 0.36rem;
+	line-height: 0.4rem;
 	margin-right: 0.09rem;
 	margin-left: 0.09rem;
+	color: #fff;
 }
 #Timed_to_rob h1 .p3{
 	font-size:0.3rem;
@@ -280,7 +279,7 @@ li{
 	background: #fff;
 	width: 100%;
 	margin-top: 0.2rem;
-	padding-bottom:0.3rem ;
+	padding-bottom:0.2rem ;
 }
 #z_special{
 	background: #fff;

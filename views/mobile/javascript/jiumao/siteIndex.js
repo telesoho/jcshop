@@ -359,8 +359,6 @@ function time_xian(){
 var t = ""
 document.addEventListener("touchstart",function(ev){
 	t = ev.touches[0].pageY;
-	console.log(t)
-
 })
 document.addEventListener("touchmove",function(ev){
 	var scroll_s = ev.touches[0].pageY - t;
@@ -506,3 +504,4 @@ var _hmt = _hmt || [];
      function removeSessionItem(key){
         window.sessionStorage.removeItem(key);
     }
+

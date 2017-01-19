@@ -44,17 +44,6 @@ function getSearth(){
     document.getElementById("search").placeholder="";
     document.getElementById("modalid-search").className="show";
 //  document.getElementById("cancle").className="show cancel";
-	clearInterval(times);
-	console.log(1)
-//	$("#nav-slider").hide();
-//	$("#slider1").hide();
-//	$("#Timed_to_rob").hide();
-//	$("#Video_special").hide();
-//	$("#article_list").hide();
-//	$("#the_zone").hide();
-//	$("#footer_index").hide();
-//	$(".footer").hide();
-//	$(".recommended ").hide();
 	var h = document.body.scrollTop;
 	console.log(h)
     document.getElementById("homeHeader").style.cssText="position:absolate;width:100%;z-index:1111;top:0px;left:0";
