@@ -64,10 +64,10 @@
 		    	
 		    	<section id="main_content" v-if="chooses_show">
 		    		<div class="fl_list" v-for="(item,key) in info" :name = "item.move_states" :id="key+1">
-		    			<div @click="show_hide(item,key)" class="boximg" >
+		    			<div @click="show_hide(item,key)" class="boximg" :id="'href_'+key"><a :href="'#href_'+key" style="display: block;">
 		    				<!--<img :src="item.image" style="width: 100%;"/>-->
 		    				<img :src="item.image" style="width: 100%;" class="wave"/>
-		    			</div>
+		    			</a></div>
 		    			<div :class="class_fe ? class2 : class1"  v-if="item.state">
 		    				<div v-for="(item2,key) in item.list">
 		    					<h1 @click="two_title(item2)"><img :src="item2.image"/><!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyao2.png" style="width: 0.15rem;"/>-->{{item2.name}}</h1>
@@ -141,6 +141,7 @@
 	<!--<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>-->
 	
 	<script>
+			var ssss;
 			var Request = new Object();
 			Request = GetRequest();
 			var statusOrder=Request["id"];
@@ -187,7 +188,10 @@
 					removeSessionItem("pinpai_infolist");
     				removeSessionItem("pinpai_page");
     				//手指滑动时候
-					
+//					document.body.scrollTop = ;
+					$("body,html").animate({
+						"scrollTop":ssss
+					})
 				},
 				methods:{
 					choose:function(num){
@@ -205,6 +209,16 @@
 					show_hide:function(item,key){
 						item.state = !item.state;
 						item.list[0].state2 = !item.list[0].state2;
+						var items = 'href_'+key;
+//						$("#items").offsetTop();
+						var scroll_item =  $("#"+items).offset().top;
+						console.log(scroll_item);
+						ssss = scroll_item;
+//						var pos = offset().top;  
+//						var poshigh = mao.height();  
+//						$("html,body").({" scrollTop": scroll_item }, 1000); 
+						
+						console.log(document.body.scrollTop)
 					},
 					show_brand:function(brand_num){
 

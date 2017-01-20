@@ -37,8 +37,11 @@ var vm = new Vue({
         },
         placeHolder:getItem('placeHolder'),
         changeState:false,
-        img1:"/views/mobile/skin/default/image/jmj/home_redesign/collection.png",
-        img2:"/views/mobile/skin/default/image/jmj/home_redesign/collection_ed.png",
+        img1:"/views/mobile/skin/default/image/jmj/home_redesign/collection2.png",
+        img2:"/views/mobile/skin/default/image/jmj/home_redesign/collection2_ed.png",
+        color1:"color:#171717",
+        color2:"color:#ff5959",
+        color_pan:"",
         showCat:false,
         //限时购
         seconds:seconds,
@@ -129,7 +132,9 @@ var vm = new Vue({
 				$("#footer_index").hide();
 				$(".footer").hide();
 				$(".recommended ").hide();
-				clearInterval(times)
+				$("#z_special").hide();
+				$("#aaaa").hide();
+				clearInterval(times);
         })
         $("#search").blur(function(){
 			$("#nav-slider").show();
@@ -141,6 +146,8 @@ var vm = new Vue({
 			$("#footer_index").show();
 			$(".footer").show();
 			$(".recommended ").show();
+			$("#z_special").show();
+			$("#aaaa").show();
 		});
 		
     },
@@ -180,6 +187,8 @@ var vm = new Vue({
         search_tops:function(){
     		this.search_top = true;
     		this.search_top_small = false;	
+    		document.body.scrollTop =0;
+    		$('window').scroll().Top = 0;
     		clearInterval(times);
     	},
     	time_shop:function(id){
@@ -272,6 +281,14 @@ function index_home(self){
         timeout: 10000,
         success: function (data) {
         	console.log(data.data);
+        	data.data.article_list.map(function(item){
+        		if(item.is_favorite == 1){
+        			item.num_color = true;
+        		}if(item.is_favorite == 0){
+        			item.num_color = false;
+        		}
+        		
+        	})
         	self.zhuan_index = data.data.pro_list;
         	//商品
         	self.info_time = data.data.speed.list;
@@ -353,23 +370,24 @@ function time_xian(){
 			} 
 			
 		}
-	},1000)
+		},1000)
 }
 
-var t = ""
 document.addEventListener("touchstart",function(ev){
 	t = ev.touches[0].pageY;
 })
 document.addEventListener("touchmove",function(ev){
-	var scroll_s = ev.touches[0].pageY - t;
-	if(scroll_s>-20){
+	var s = document.body.scrollTop;
+	console.log(s)
+	if(s < 50){
 		vm.search_top = false;
-    	vm.search_top_small = true;
+		vm.search_top_small = true;
 	}
-	if(scroll_s <= -20){
+	else{
 		vm.search_top = true;
 		vm.search_top_small = false;
 	}
+	
 })
 //document.addEventListener("touchend",function(ev){
 //	var scroll_s = ev.changedTouches[0].pageY;
@@ -386,7 +404,9 @@ document.addEventListener("touchmove",function(ev){
 //上拉加载
 var stop=true;
 $(window).bind('scroll', function() {
-	
+	if($(window).scrollTop()<30){
+		
+	}
     if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
             stop=false;
@@ -429,11 +449,13 @@ function collection(item,self,id_this){
             }
             if(data.message=="收藏成功"){
                 id_this.is_favorite=1;
+                id_this.num_color = true;
 //              self.changeState=false;
 				id_this.favorite_num = parseInt(id_this.favorite_num)+1;
             }else{
                 id_this.is_favorite=0;
 //              self.changeState=true;
+				id_this.num_color = false;
 				id_this.favorite_num = parseInt(id_this.favorite_num)-1;
             }
             //处理完还要保存在本地

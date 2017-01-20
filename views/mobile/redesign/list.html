@@ -28,7 +28,7 @@
 			<ul>
 				<li @click="list_produce(item.id)" v-for="item in info">
 					<div><img :dataimg="item.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style=""/></div>
-					<p style="height: 0.75rem;overflow: hidden;display: -webkit-box;text-overflow: ellipsis;-webkit-line-clamp: 2;-webkit-box-orient: vertical;">{{item.name}}</p>
+					<p style="height: 0.65rem;overflow: hidden;display: -webkit-box;text-overflow: ellipsis;-webkit-line-clamp: 2;-webkit-box-orient: vertical;">{{item.name}}</p>
 					<span class="span2">¥ <span>{{item.sell_price}}</span></span>
 				</li>
 			</ul>
@@ -59,7 +59,6 @@
 		var stop = true;
 	    
 	   var list_data = {
-	    	cid:"",
 	    	did:"",
 	    	title:"",
 	    	article1:"",
@@ -70,8 +69,7 @@
 	   }
 	   switch(statusOrder){
 			case "1":
-            	list_data.cid='134,136,128';
-	    		list_data.did='5';
+	    		list_data.did='11';
 	    		list_data.title="基础护肤";
 		    	list_data.article1="每日必用の基础护肤";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/jichuhufu.png";
@@ -79,8 +77,7 @@
 	    		list_data.article2="到了二十五岁你的肌肤逐渐开始走下坡路了，因为二十五岁的时候你的肌肤状态是最好的时候，如果你能够使用护肤品能够做一个很好的保养的话，那么你就会把你二十五岁的状态延续的久一点。假如你三十岁开始做保养的话，那么你的皮肤就只能在你三十岁的起点上延续下去， 假如说有些人等到三十岁四十岁脸上皱纹很深了才想起来去做保养的话，其实这个时候你用再好的护肤品，也不会回到你肌肤二十五岁的这样一个状态，这就是说为什么肌肤保养要趁早的一个原因。";	
 			  	break;
 			case "2":
-				list_data.cid="134,128,136";
-				list_data.did="5";
+				list_data.did="12";
 				list_data.title="深层保养";
 		    	list_data.article1="素颜出街也自信";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/shenceng.png";
@@ -88,8 +85,7 @@
 				list_data.article2="光鲜亮丽高髙在上引人妒忌的女艺人，一旦洗完脸……哇！跟我一样有暗沉有痘痘呢！还好站在那里的不是我，否则我这张脸的引来的收视率一定会破纪录。问问身边的人，“你敢卸妆，素面见人吗？ ”貌似也没有几个敢的一一不敢素颜的真实原因无非是对皮肤保养的状态没自信。那么现在起，大家一起做好深层皮肤保养，显著提升肌肤的表面状态，相信就算真的让你去电视台卸妆也不会怕。";
 			 	break;
 			case "3":
-				list_data.cid="126,128";
-				list_data.did="5";
+				list_data.did="13";
 				list_data.title="人气彩妆";
 		    	list_data.article1="大牌彩妆的平价替代品！";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/renqicai.png";
@@ -97,8 +93,7 @@
 				list_data.article2="日本化妆品可谓数不胜数，有高大上的专柜系列，也有平价的专柜系列，资生堂旗下最高端的THE GINZA，CPB，POLA，都让人望眼欲穿。可是这些也太贵了，作为学生妹子，朴实上班族，一个月除掉吃的喝的玩的简直想都不用想。小编想说，其实手法好，用什么化妆品都一样，今天就给大家推荐一些实惠的。";
 			 	break;
 			case "4":
-				list_data.cid="134,126,128,136,3,2";
-				list_data.did="5";
+				list_data.did="14";
 				list_data.title="旅行必备";
 		    	list_data.article1="出门旅行带什么";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/lxbb.png";
@@ -106,8 +101,7 @@
 				list_data.article2="外出旅行不像在家那么方便，如果漏带了一些物品，有可能会带来一些不好的出行体验，所以出行之前，我们要核对一下必备物品是否准备齐全。女孩子家家,出门旅游要带的东西可真不少!哪样都缺不了下面这张清单快MARK住,给丢三落四的自己or闺蜜们提个醒!哇塞;做贴心暖男的机会来了。 ";
 			 	break;
 			case "5":
-				list_data.cid="3,2,128";
-				list_data.did="5";
+				list_data.did="15";
 				list_data.title="排毒养颜";
 		    	list_data.article1="元气少女养成记";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/paiduyangyan.png";
@@ -115,8 +109,7 @@
 				list_data.article2="女人，化妆品是一部分，内部调理又是一部分，多吃水果蔬菜，多喝水，多多补充VC，但有时你发现于事无补，因为你的身体不吸收，人的身体是个奇妙的组织，你晚睡，饮食乱，重辣。。多吃水果蔬菜，被你糟蹋的身体会吸收吗？在日本的女孩子皮肤都那么好，日本，拥有两个世界之最，其一是生活节奏最快压力最大，其二是世界人均寿命最长。这两个神奇的组合与日本人长期服用保健食品不无关系。那么，日本人在喝什么呢？内在怎么调理呢？";
 			 	break;
 			case "6":
-				list_data.cid="4";
-				list_data.did="5";
+				list_data.did="16";
 				list_data.title="母婴用品榜";
 		    	list_data.article1="孩子最喜欢的好物榜单~！";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/muyinyongp.png";
@@ -124,8 +117,7 @@
 				list_data.article2="为了宝宝的健康成长，妈咪们肯定会选择很好的婴童用品给宝宝用。日本的婴童用品质量好、口碑好，加上现在人民币坚挺，去日本购物的人是越来越多啦，在这里推荐几款不错的婴儿用品。";
 			 	break;
 			case "7":
-				list_data.cid="135";
-				list_data.did="5";
+				list_data.did="17";
 				list_data.title="男性呵护榜";
 		    	list_data.article1="男友专用物";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/nanxin.png";
@@ -133,8 +125,7 @@
 				list_data.article2="随着时代的进步发展，人们每日的生活节奏也变得越来越快。男性身上的压力也越来越大。长期被压力困扰就会导致男性的皮肤出现不同程度的问题。要知道护理皮肤可不仅仅只是女性的专利。男性护理皮肤也是很重要的事情。";
 			 	break;
 			case "8":
-				list_data.cid="3,7";
-				list_data.did="5";
+				list_data.did="18";
 				list_data.title="吃货聚集区";
 		    	list_data.article1="优酱和十元最爱の零食！";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/chihuo.png";
@@ -142,8 +133,7 @@
 				list_data.article2="小编去日本之前，曾经是一个饮食习惯非常好的人，从来不碰零食只吃水果。到了日本之后，第一次尝试就立刻爱上了各种零食，怎么可以做的这么好吃！把我觉得不错的零食都贴上来吧！";
 			 	break;
 			case "9":
-				list_data.cid="134,126,128,136,3,2";
-				list_data.did="5";
+				list_data.did="19";
 				list_data.title="日本旅行必败榜单";
 		    	list_data.article1="日本民间の神奇药品";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/bibai.png";
@@ -151,8 +141,7 @@
 				list_data.article2="人人都常有遇到小病小恙的时刻，每次都要往医院跑绝对是劳民伤财的事，如果家中存些划算又有效的常备药是不是省力很多呢？想必小伙伴们早就听闻日本有许多便宜又实用的家中常备药~今天为大家精选了许多去日本必囤的好药，让小伙伴们在家就解决小毛病！";
 			 	break;
 			case "10":
-				list_data.cid="134,136,128,126";
-				list_data.did="5";
+				list_data.did="20";
 				list_data.title="贵妇级保养品";
 		    	list_data.article1="今天我也想变得更美";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/guizuji.png";
@@ -160,8 +149,7 @@
 				list_data.article2="说到日本贵妇品牌，我相信大家第一个想到的就是CPB，这也是大家最熟悉的贵妇品牌，CPB家无论基础线、富裕层还有彩妆都是很多妹子的心头爱，真心吃土也要买买买。可是价格也是实实在在摆在那边。其实日本许多品牌都有很好的护肤效果，有些没有被代购炒热，在日本本土却是贵妇级别的产品，小编今天挖掘了一些，快来看看咯。";
 			 	break;
 			case "11":
-				list_data.cid="128,136";
-				list_data.did="5";
+				list_data.did="21";
 				list_data.title="美体塑形榜";
 		    	list_data.article1="睡觉也会瘦の好物";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/meitisuxing.png";
@@ -169,8 +157,7 @@
 				list_data.article2="冬天来了，春天夏天还会遥远吗？露腿露手臂的季节，别只顾着脸啊。脸蛋漂亮得飞起，背上胸前全身痘吧，长长的腿毛简直女汉子气满满。最近网络上不少不老魔头，而日本美女外婆都43岁还如少女一般，穿着过膝的丝袜演绎少女的纯情，而日本美女外婆的保养秘诀有哪些？女魔头都用什么在护理呢？";
 			 	break;
 			case "12":
-				list_data.cid="6";
-				list_data.did="5";
+				list_data.did="22";
 				list_data.title="喵汪福利社";
 		    	list_data.article1="喵汪福利社";
 		    	list_data.img="/views/mobile/skin/default/image/jmj/home_redesign/miaowangfuli.png";
@@ -233,7 +220,7 @@
             		self.info.push(item)
             	});
             	pushSession("list_info",self.info)
-            	if(data.data == ""){
+            	if(data.data == []){
             		 stop=false;
             		 self.infoState=true;
             	}else{
