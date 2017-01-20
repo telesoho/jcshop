@@ -12,7 +12,7 @@
     position:fixed;
     top:0;
     left:0;
-    z-index:999;
+    z-index:99;
 }
 .head #cart{
     display: inline-block;
@@ -595,18 +595,19 @@
     margin-left:10%;
     width:80%;
     height:10rem;
+    overflow-y: hidden;
     background:#fff;
 }
 #sheet .mui-table-view .title{
     height:1rem;
     line-height:1rem;
     border-radius:0.3rem 0.3rem 0 0;
-    background:#ff4aa0;
+    background:#ff2525;
     color:#fff;
     font-size:0.3rem;
 }#sheet .mui-table-view .parent{
      position: relative;
-     height:6rem;
+     height:5rem;
      overflow-y: hidden;
  }
 #sheet .mui-table-view .text{
@@ -614,14 +615,14 @@
     position:absolute;
     top:0;
     left:0;
-    display: inline-block;
+    display:block;
     font-size:0.26rem;
     padding:0.2rem;
     color:#3d4245;
-    height:6rem;
+    min-height:6rem;
     overflow-y: scroll;
 
 }
 #sheet.mui-popover {
-    bottom:20% !important;
+    bottom:15% !important;
 }

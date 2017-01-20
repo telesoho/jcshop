@@ -278,8 +278,6 @@
 			<button class="select_btn"  id="buyNowButton"  v-if="showCar==2" @click="buyNow">去付款</button>
 		</div>
 	</section>
-</section>
-<section>
 	<!--翻译弹出-->
 	<div id="sheet" class="mui-popover mui-popover-action mui-popover-bottom">
 		<ul class="mui-table-view">
@@ -298,6 +296,8 @@
 		</div>
 
 	</div>
+</section>
+<section>
 	<!--服务说明弹出框-->
 	<div id="serviceDescription" class="mui-popover mui-popover-action mui-popover-bottom">
 		<div>服务说明<a href="#serviceDescription"><span class="mui-icon mui-icon-closeempty"></span></a></div>
@@ -380,6 +380,11 @@
 			styleTop2:"-webkit-transform:rotate(180deg)",
 			rotateState:false,
 			car_count:0,
+			newTop:0,
+//			弹窗
+			y01:0,
+			y0:0,
+			y1:0
 		},
 		computed: {
 			showLastImg:function(){
@@ -388,7 +393,7 @@
 			},
 //				滚动位置的样式
 			nowStyle:function(){
-				return "top:"+this.nowTop+"px";
+				return "top:"+this.newTop+"px";
 			},
 			article: function(){
 				this.relateArticle.map(function(item){
@@ -601,15 +606,16 @@
 			move: function(ev){
 				var textTop=$('.text').height();
 				var par=$('.parent').height();
+				console.log(par+".."+textTop)
 				if(textTop>par){
 					this.y1=ev.touches[0].pageY;
 					this.scroll=this.y1-this.y01;
-					this.nowTop=this.y0+this.scroll;
-					if(this.nowTop>0){
-						this.nowTop=0;
+					this.newTop=this.y0+this.scroll;
+					if(this.newTop>0){
+						this.newTop=0;
 					};
-					if((-par+textTop)<-this.nowTop&&(-par+textTop)>0){
-						this.nowTop=-textTop+par;
+					if((-par+textTop)<-this.newTop&&(-par+textTop)>0){
+						this.newTop=-textTop+par;
 					}
 				}
 			}
