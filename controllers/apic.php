@@ -2203,7 +2203,7 @@ class Apic extends IController{
 		/* 获取数据 */
 		$query           = new IQuery('article as m');
 		$query->join     = 'left join article_category as c on c.id=m.category_id';
-		$query->where    = 'm.top=0 and m.visibility=1 '.(empty($param['cid']) ? ' AND m.category_id NOT IN (3)' : ' AND m.category_id='.$param['cid']);
+		$query->where    = 'm.visibility=1 '.(empty($param['cid']) ? ' AND m.category_id NOT IN (3)' : ' AND m.category_id='.$param['cid']);
 		$query->fields   = 'm.id,m.title,m.image,m.visit_num,m.category_id,c.icon,c.name as category_name';
 		$query->order    = 'm.sort desc,m.id desc';
 		$query->group    = 'm.id';
