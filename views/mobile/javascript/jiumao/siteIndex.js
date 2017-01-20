@@ -129,7 +129,9 @@ var vm = new Vue({
 				$("#footer_index").hide();
 				$(".footer").hide();
 				$(".recommended ").hide();
-				clearInterval(times)
+				$("#z_special").hide();
+				$("#aaaa").hide();
+				clearInterval(times);
         })
         $("#search").blur(function(){
 			$("#nav-slider").show();
@@ -141,6 +143,8 @@ var vm = new Vue({
 			$("#footer_index").show();
 			$(".footer").show();
 			$(".recommended ").show();
+			$("#z_special").show();
+			$("#aaaa").show();
 		});
 		
     },
