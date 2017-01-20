@@ -28,7 +28,7 @@
 			<ul>
 				<li @click="list_produce(item.id)" v-for="item in info">
 					<div><img :dataimg="item.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style=""/></div>
-					<p style="height: 0.75rem;overflow: hidden;display: -webkit-box;text-overflow: ellipsis;-webkit-line-clamp: 2;-webkit-box-orient: vertical;">{{item.name}}</p>
+					<p style="height: 0.65rem;overflow: hidden;display: -webkit-box;text-overflow: ellipsis;-webkit-line-clamp: 2;-webkit-box-orient: vertical;">{{item.name}}</p>
 					<span class="span2">¥ <span>{{item.sell_price}}</span></span>
 				</li>
 			</ul>
@@ -220,7 +220,7 @@
             		self.info.push(item)
             	});
             	pushSession("list_info",self.info)
-            	if(data.data == ""){
+            	if(data.data == []){
             		 stop=false;
             		 self.infoState=true;
             	}else{
