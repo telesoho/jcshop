@@ -188,9 +188,11 @@ class Common{
             case 'DEBUG':
                 $log->pushHandler(new StreamHandler($log_path . '/'.date('Y-m-d').'-DEBUG.log', Logger::DEBUG));
                 $log->addInfo($info);
+                break;
             case 'INFO':
                 $log->pushHandler(new StreamHandler($log_path . '/'.date('Y-m-d').'-INFO.log', Logger::INFO));
                 $log->addInfo($info);
+                break;
             default:
                 $log->pushHandler(new StreamHandler($log_path . '/'.date('Y-m-d').'-WARNING.log', Logger::WARNING));
                 $log->addInfo($info);
