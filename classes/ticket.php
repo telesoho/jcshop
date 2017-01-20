@@ -5,7 +5,7 @@
  */
 class ticket{
 	/**
-	 * 优惠券码code计算价格
+	 * 订单确认-优惠券码code计算价格
 	 */
 	public static function calculateCode($data, $code){
 		/* 校验优惠券码 */
@@ -28,6 +28,13 @@ class ticket{
 				$data['sum'] = $money<=0 ? 0 : $money;
 				$msg         = '抵'.$ticket_data['money'].'元优惠券';
 				break;
+			//包邮抵扣券
+			case 3 :
+				$money       = $data['sum']-$ticket_data['money'];
+				$data['sum'] = $money<=0 ? 0 : $money;
+				$msg         = '抵'.$ticket_data['money'].'元优惠券（包邮）';
+				$data['is_delivery'] = 1; //包邮
+				break;
 			default:
 				return apiReturn::go('002006');
 		}
@@ -46,7 +53,7 @@ class ticket{
 	}
 	
 	/**
-	 * 活动优惠券计算价格
+	 * 订单确认-优惠券计算价格
 	 */
 	public static function calculateActivity($data, $ticket_aid){
 		/* 校验优惠券 */
@@ -117,7 +124,7 @@ class ticket{
 	}
 	
 	/**
-	 * 最终优惠券码code计算价格
+	 * 下订单-优惠券码code计算价格
 	 */
 	public static function finalCalculateCode($data, $ticket_did){
 		/* 校验优惠券 */
@@ -140,6 +147,11 @@ class ticket{
 			case 2 :
 				$data['sum'] = $data['sum']-$data_ticket['money'];
 				break;
+			//包邮抵扣券
+			case 3 :
+				$data['sum'] = $data['sum']-$data_ticket['money'];
+				$data['is_delivery'] = 1; //包邮
+				break;
 		}
 		/* 计算商品优惠后价格 */
 		$data['goodsResult']['goodsList'] = self::goodsPrice($data['goodsResult']['goodsList'], $data['final_sum']-$data['sum'], $data['final_sum']);
@@ -148,7 +160,7 @@ class ticket{
 	}
 	
 	/**
-	 * 最终活动优惠券计算价格
+	 * 下订单-优惠券计算价格
 	 */
 	public static function finalCalculateActivity($data, $ticket_aid){
 		/* 校验优惠券 */
