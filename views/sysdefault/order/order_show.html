@@ -21,6 +21,7 @@
 				<col width="90px" />
 				<col width="90px" />
 				<col width="90px" />
+				<col width="90px" />
 				<col width="120px" />
 			</colgroup>
 
@@ -30,6 +31,7 @@
 					<th>商品原价</th>
 					<th>实际价格</th>
 					<th>商品数量</th>
+					<th>贝海库存</th>
 					<th>小计</th>
 					<th>配送方式</th>
 				</tr>
@@ -51,6 +53,18 @@
 					<td>￥{$item['goods_price']}</td>
 					<td>￥{$item['real_price']}</td>
 					<td>{$item['goods_nums']}</td>
+					<td><?php
+					        xlobo::init();
+						    $ret = xlobo::get_goods_store([$goodsRow['goodsno']]);
+						    if(!empty($ret)){
+						    $LeftStock = $ret[0]->LeftStock;
+                        echo $LeftStock;
+                        } else {
+                        $LeftStock=0;
+                        echo '未录入';
+                        }
+
+                        ?></td>
 					<td>￥{echo:$item['real_price'] * $item['goods_nums']}</td>
 					<td>
 						{echo:Order_Class::goodsSendStatus($item['is_send'])}
@@ -133,6 +147,18 @@
 				<tr>
 					<th>送货时间:</th><td>{$accept_time}</td>
 				</tr>
+                <tr>
+                    <th>身份证正面:</th><td><img src="{$this->sfz_image1}" alt="身份证正面" width="200"></td>
+                </tr>
+                <tr>
+                    <th>身份证背面:</th><td><img src="{$this->sfz_image2}" alt="身份证背面" width="200"></td>
+                </tr>
+                <tr>
+                    <th>实名身份证正面:</th><td><img src="{$this->sfz_image11}" alt="身份证正面" width="200"></td>
+                </tr>
+                <tr>
+                    <th>实名身份证背面:</th><td><img src="{$this->sfz_image22}" alt="身份证背面" width="200"></td>
+                </tr>
 			</tbody>
 		</table>
 
