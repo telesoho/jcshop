@@ -397,6 +397,7 @@ class Market extends IController implements adminAuthorization
 					if($_POST['ratio']<=0 || $_POST['ratio']>=1) exit( '折扣比例必须为0~1之间的数值' );
 					break;
 				case 2:
+				case 3:
 					if($_POST['money']<=0 || $_POST['money']>3000) exit( '请输入合理的抵扣金额' );
 					break;
 				default:

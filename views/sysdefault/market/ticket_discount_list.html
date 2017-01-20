@@ -14,9 +14,9 @@
 				<col width="40px" />
 				<col width="40px" />
 				<col width="70px" />
-				<col width="40px" />
-				<col width="40px" />
-				<col width="40px" />
+				<col width="50px" />
+				<col width="50px" />
+				<col width="50px" />
 				<col width="180px" />
 				<col width="140px" />
 			</colgroup>
@@ -41,11 +41,19 @@
 					<td><input type='checkbox' name='id[]' value="{$item['id']}" /></td>
 					<td>{$item['code']}</td>
 					<td>{$item['name']}</td>
-					<td>{set:$text_type=array('','折扣券','抵扣用')}{$text_type[$item['type']]}</td>
-					<td><?php switch($item['type']){
+					<td>
+						<?php switch($item['type']){
+							case 1: echo '折扣券';break;
+							case 2: echo '抵扣用';break;
+							case 3: echo '包邮抵扣券';break;
+						} ?>
+					</td>
+					<td>
+						<?php switch($item['type']){
 							case 1: echo '打'.($item['ratio']*10).'折';break;
-							case 2: echo '抵'.$item['money'].'元';break;
-						} ?></td>
+							case 2:case 3: echo '抵'.$item['money'].'元';break;
+						} ?>
+					</td>
 					<td>{set:$text_status=array('','未使用','已使用')}{$text_status[$item['status']]}</td>
 					<td>{echo:date('Y-m-d H:i',$item['start_time'])} ～ {echo:date('Y-m-d H:i',$item['end_time'])}</td>
 					<td>

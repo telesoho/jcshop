@@ -1787,6 +1787,7 @@ class Apic extends IController{
 		$queryArt->where           = 'm.top=0 and m.visibility=1 and r.goods_id='.$param['id'];
 		$queryArt->order           = 'm.sort desc';
 		$queryArt->fields          = 'm.id,m.title,m.image';
+		$queryArt->group           = 'm.id';
 		$queryArt->limit           = 10;
 		$dataGoods['article_list'] = $queryArt->find();
 		if(!empty($dataGoods['article_list'])){
@@ -1860,6 +1861,7 @@ class Apic extends IController{
 			$queryGoods->where         = 'm.is_del=0 AND c.category_id IN ('.implode(',', $cids).')';
 			$queryGoods->fields        = 'm.id,m.name,m.sell_price,m.market_price,m.img';
 			$queryGoods->order         = 'm.sale DESC,m.visit DESC';
+			$queryGoods->group         = 'm.id';
 			$queryGoods->limit         = 10;
 			$dataGoods['related_list'] = $queryGoods->find();
 			if(!empty($dataGoods['related_list'])){
@@ -2204,6 +2206,7 @@ class Apic extends IController{
 		$query->where    = 'm.top=0 and m.visibility=1 '.(empty($param['cid']) ? ' AND m.category_id NOT IN (3)' : ' AND m.category_id='.$param['cid']);
 		$query->fields   = 'm.id,m.title,m.image,m.visit_num,m.category_id,c.icon,c.name as category_name';
 		$query->order    = 'm.sort desc,m.id desc';
+		$query->group    = 'm.id';
 		$query->page     = $param['page']>1 ? $param['page'] : 1;
 		$query->pagesize = 5;
 		$list            = $query->find();
