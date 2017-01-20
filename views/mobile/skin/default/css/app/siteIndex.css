@@ -33,18 +33,19 @@ body{
 }
 .hot_category .head{
     height:0.96rem;
-    line-height:0.96rem;
+    /*line-height:0.2rem;*/
     width: auto;
     margin:  0 auto;
-    padding-left:0.18rem ;
+    /*padding-left:0.18rem ;*/
     position: relative;
 }
 .hot_category .head span{
-    display: inline-block;
+    display: block;
     font-size: 0.26rem;
     color: #1F1F1F;
-     margin-left: 0.5rem ;
-    margin-right: 0.5rem ;
+    position: absolute;
+   top: 0.25rem;
+   
 }
 .hot_category .item_img {
     width:100%;
@@ -70,6 +71,9 @@ body{
     color:#3d4225;
     margin-bottom:0.22rem;
 }
+#article_list .flexbox .zhuan{
+	left: 3rem;
+}
 .hot_article .head{
     height:0.96rem;
     line-height:0.96rem;
@@ -78,19 +82,30 @@ body{
     display: inline-block;
 }
 .darkline{
-    margin:0 0.17rem;
+   	left: 1.95rem;
     opacity:0.21;
     background:#979797;
     width:0.61rem;
     height:0.03rem;
 }
+.darkline2{
+	right: 1.89rem;
+	opacity:0.21;
+    background:#979797;
+    width:0.61rem;
+    height:0.03rem;
+}
+.zhuan{
+	position: absolute;
+	top: 0.05rem;
+	left: 3.2rem;
+}
 .line_f{
 	font-size: 0.23rem;
 	color:#b8b8b8;
-	/*position: absolute;*/
-	/*top: 0.36rem;
-	left: 2.3rem;*/
-	margin-top:-0.6rem ;
+	position: absolute;
+	top: 0.65rem;
+	left: 2.7rem;
 }
 .hot_article .item_img{
     width:100%;
@@ -404,4 +419,11 @@ li{
 font-size:0.2;
 color:#ff2f5c;
 
+}
+/*点赞数字*/
+.albumn_index .title .num{
+	margin-top: -0.1rem;
+}
+.post_shop:last-child .xian_list{
+	display: none;
 }

@@ -44,7 +44,8 @@ function getSearth(){
     document.getElementById("search").placeholder="";
     document.getElementById("modalid-search").className="show";
     document.getElementById("cancle").className="show cancel";
-//	var h = document.body.scrollTop;
+	document.body.scrollTop =0;
+	$('window').scroll().Top = 0;
 //	console.log(h)
     document.getElementById("homeHeader").style.cssText="position:fixed;width:100%;z-index:1111;top:0px;left:0";
     document.body.style.overflow = 'hidden';
