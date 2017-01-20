@@ -104,20 +104,17 @@
 				</ul>
 			</div>
 			<!--						视频特辑								-->
-			<div id="Video_special" >
-				<h1>
-					<img src="/views/mobile/skin/default/image/jmj/home_redesign/video_left.png" style=""/>
-					<p>视频特辑</p>
-					
-				</h1>
+			<div id="Video_special" style="padding-top:0.2rem ;">
 				<div class="img_play">
 					<img @click="Video_pro" class="img_video" src="/views/mobile/skin/default/image/jmj/home_redesign/video.png" style="width: 7rem;display: block;margin: auto;" />
-					<img src="/views/mobile/skin/default/image/jmj/home_redesign/play_index.png" class="index_play"/>
+					<!--<img src="/views/mobile/skin/default/image/jmj/home_redesign/play_index.png" class="index_play"/>-->
 				</div>
 			</div>
-			<div id="aaaa" style="width: 100%;background: #fff;padding:0.2rem 0;">
+			
+			<div id="aaaa" style="width: 100%;background: #fff;padding:0.2rem 0;margin-top: 0.2rem;">
 				<img src="/views/mobile/skin/default/image/jmj/home_redesign/chunjie.png" style="width: 7.24rem;display: block;margin: 0 auto;"/>
 			</div>
+			
 			<!--							元旦							-->
 			<!--<div class="tips" style="margin-top:0.2rem;background:#fff ;padding:0 0.1rem;">
         <img src="/views/mobile/skin/default/image/jmj/new_active/index/tip.png" alt=""  style="width:100%" />
@@ -151,7 +148,7 @@
 			<div id="article_list">
 				<div class="hot_category">
 					<div class="head flexbox">
-						<div style="height: 0.7rem;width: 100%;position: relative;">
+						<div style="height: 0.4rem;width: 100%;position: relative;">
 							<span class="darkline"></span>
 							<p class="zhuan">热门榜单</p>
 							<span class="darkline2"></span>
@@ -221,9 +218,9 @@
 				<div class="hot_category product">
 					<div class="head flexbox">
 						<div style="height: 0.7rem;width: 100%;position: relative;">
-							<span class="darkline"></span> 
-							<p class="zhuan">专区推荐</p> 
-							<span class="darkline2"></span>
+							<span class="darkline" style="top: 0.28rem;"></span> 
+							<p class="zhuan" style="margin-top: 0.1rem;">专区推荐</p> 
+							<span class="darkline2" style="top: 0.28rem;"></span>
 						</div>
 						<p class="line_f" style="font-size: 0.22rem;color: #b8b8b8;">カテゴリのおすすめ</p>
 					</div>
@@ -258,9 +255,10 @@
 			<div id="footer_index">
 				<div class="index_top" @click="guan()">
 					<span></span>
-					<p>看累了，去逛逛吧</p>
+					<p><img src="/views/mobile/skin/default/image/jmj/home_redesign/index_bottom.png" style="width: 1.81rem;"/></p>
 					<span></span>
 				</div>
+				<p class="index_kan">看 累 了 , &nbsp; &nbsp;去 逛 逛 吧 </p>
 			</div>
 			<!--<section class="recommended line albumn_index" v-for="(item,key) in new_data" v-if="item.goods_num>2">
 				<article-list :item="item" :img1="img1" :img2="img2" @col="collect" :state="0"></article-list>
