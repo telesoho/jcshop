@@ -22,6 +22,7 @@
 					<td>
 						<label class='attr'><input type='radio' name='type' value='1' checked=checked onchange="changeType(this);"/>折扣券</label>
 						<label class='attr'><input type='radio' name='type' value='2' onchange="changeType(this);"/>抵扣券</label>
+						<label class='attr'><input type='radio' name='type' value='3' onchange="changeType(this);"/>包邮抵扣券</label>
 					</td>
 				</tr>
 				<tr id="ratio">
@@ -80,6 +81,7 @@
 				$('#money').hide();
 				break;
 			case '2':
+			case '3':
 				$('#ratio').hide();
 				$('#money').show();
 				break;

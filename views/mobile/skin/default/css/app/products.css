@@ -47,19 +47,24 @@
     background:#fff;
     z-index:1;
 }
-.carousel .logoImg{
+.mui-slider-item{
+    position:relative;
+    z-index:2;
+}
+.mui-slider-item .logoImg{
     position:absolute;
-    z-index:4;
     left:0.5rem;
     top:0.5rem;
+    z-index:4;
 }
+
 .inimg{
     display: inline-block;
     width:6.9rem;
     height:6.68rem;
     padding:0.34rem 0.45rem;
 }
-.carousel .mui-slider-group img{
+.carousel .mui-slider-group .indeximg{
     margin-top:-0.2rem;
     display: inline-block;
     width:6rem;
@@ -95,7 +100,7 @@
 .name-price .name{
     margin:0.27rem 0.81rem 0.27rem;
     font-size:0.4rem;
-    max-height: 1rem;
+    max-height: 2rem;
     color:#000;
     text-align:center;
     line-height:0.5rem;
@@ -155,6 +160,9 @@
 .dis .text2{
     padding:0 0.13rem 0.16rem;
     border-bottom:1px solid #e2e2e2;
+}
+.dis .text2 a{
+    color:#b8b8b8 !important;
 }
 .dis .text2 span:nth-child(2){
     padding-left:0.25rem;
@@ -296,41 +304,45 @@
 }
 /*专辑的滚动样式*/
 .articlelist{
-    height:1.88rem;
+    height:2.2rem;
     background:#fff;
+    /*padding:0 0.08rem;*/
 }
-.articlelist .mui-scroll-wrapper{
-    height:1.88rem;
-    padding:0 0.14rem;
-    background:#fff !important;
+.articlelist .mark{
+    position: absolute;
+    width:100%;
+    overflow-y: hidden;
+    height:2rem;
 }
-#relateArticle .mui-control-item{
-    background:#fff;
-    padding:0;
+.articlelist .con{
+    display: -webkit-flex;
+    display: -webkit-box;
+    -webkit-justify-content: flex-start;
+    width:100%;
+    overflow-x: scroll;
 }
-.articlelist .mui-scroll-wrapper img{
-    width:2.9rem;
-    height:1.47rem;
-    margin:0.2rem 0.06rem;
+.articlelist  img{
+    width:3.4rem;
+    height:auto;
+    margin:0.2rem 0.1rem 0.25rem;
 }
 /*上拉进入商品详情页面*/
 .pull{
+    text-align: center;
     background:#f5f5f5;
-    height:1.6rem;
+    padding-top:0.2rem;
+    height:1rem;
 }
 .pull img{
     width:0.42rem;
     height:0.42rem;
     position:relative;
-    top:-0.3rem;
+    top:0.1rem;
 }
 .pull .content{
-    position:relative;
-    top:-0.9rem;
+    display: inline-block;
     font-size:0.26rem;
     color:#1f1f1f;
-    width:100%;
-    text-align:center;
 }
 /*商品的图文详情*/
 .goodDet{

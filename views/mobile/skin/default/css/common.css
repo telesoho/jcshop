@@ -276,6 +276,13 @@ iframe{
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+.hideCamp4{
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
 .flexbox{
   display:-webkit-flex;
   -webkit-flex-wrap: wrap;
@@ -579,10 +586,10 @@ input[type='search']{
   
 }
 .albumn_index .title .like{
- margin-left: 2.03rem;
+ margin-left: 2.13rem;
 }
 .albumn_index .title .num{
-  width:0.34rem;
+  width:0.22rem;
   font-size:0.3rem;
   color:#171717;
   margin-left: 0.13rem;
