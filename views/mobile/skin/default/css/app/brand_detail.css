@@ -8,7 +8,7 @@ li{
 	width: 100%;
 	height: 4.86rem;
 	padding-bottom:0.18rem ;
-	border-bottom: 1px solid #eee;
+	/*border-bottom: 1px solid #eee;*/
 	background: #fff;
 }
 
@@ -27,8 +27,8 @@ li{
 	position: relative;
 }
 #footer div img{
-	width: 1.24rem;
-	height: 1.24rem;
+	width: 1.6rem;
+	height: 1.6rem;
 	position: absolute;
 	top: -0.6rem;
 	left: 0.25rem;
@@ -37,14 +37,14 @@ li{
 }
 #footer span{
 	display: block;
-	margin-left:1.65rem ;
+	margin-left:1.95rem ;
 	margin-top:0.17rem ;
 	font-size:0.32rem;
 	color:#3d4245;
 	text-align:left;
 }
 #footer dl{
-	margin-left: 1.72rem;
+	margin-left: 1.98rem;
 	float: left;
 	margin-top: 0.15rem;
 }
@@ -67,7 +67,7 @@ li{
 	color:#bbbbbb;
 }
 #footer dl dd strong{
-	color:magenta;
+	color:#ff2f5c;
 }
 
 .line{
@@ -81,7 +81,7 @@ li{
 }
 #article{
 	background: #fff;
-	margin-top: 0.12rem;
+	margin-top: 0.19rem;
 	position: relative;
 	/*overflow: hidden;
 	text-overflow:ellipsis;
@@ -178,10 +178,10 @@ li{
 	-webkit-overflow-scrolling: touch;
 }
 .slider li img{
-	width: 3.4rem;
+	width: 3.5rem;
 }
 .mark .product .slider {
-    height: 2rem;
+    height: 2.3rem;
     width: 100%;
     display: block;
     display: -webkit-flex;
@@ -199,7 +199,7 @@ li{
 }
 .product .slider li{
 
-	margin:0 0.2rem;
+	margin:0 0.1rem;
 	background: #fff;
 }
 
