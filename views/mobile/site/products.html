@@ -477,17 +477,21 @@
                 var scrollTop=$(window).scrollTop();//窗口的滚动高度
                 var windowHeight=$(window).height(); //窗口的高度
                 var docHeight=$(document).height(); //文档的真实高度
-                var check=windowHeight+scrollTop-docHeight;
-                if(this.pm1<0&&check>=0){
-                    this.toBottom="height:"+50+"px;max-height:90px";
-                    this.showTop1=true;
-                    this.rotateState=true;
-                    pushSession("ProductsScrollTop",docHeight-windowHeight);
+				var check=scrollTop+windowHeight-docHeight
+				if(check==0){
+					this.showTop1=true;
+					this.toBottom="height:"+50+"px;max-height:90px";
+				}
+				if((windowHeight+scrollTop-this.pm1)>(docHeight+50)&&this.pm1<0){
+					e.preventDefault(); //阻止缺省事件
+					this.showTop1=true;
+					this.rotateState=true;
+					this.toBottom="height:"+50+"px;max-height:90px;-webkit-transition:transform 0.2s linear";
+					pushSession("ProductsScrollTop",docHeight-windowHeight);
+				}else{
+					//回复默认事件
 
-                }else{
-                    //回复默认事件
-
-                }
+				}
 
 			},
 			endtouch1:function(e){
