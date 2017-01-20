@@ -78,16 +78,9 @@ class xlobo
             $temp = json_decode($v['goods_array']);
             $goods_total_weight += $v['goods_weight'];
             $goods_arrays[] = array(
-                'CategoryId' => self::get_goods_xlobo($v['goods_id']),
-                'CategoryVersion' => date('Y-m-d H:i:s', time()),
+                'ProductNo' => $temp->goodsno,
                 'Count' => $v['goods_nums'],
-                'UnitPrice' => $v['purchase_price'],
-//                'UnitPrice' => $v['real_price'],
-                'ProductName' => $temp->name,
-                'Brand' => self::get_brand($temp->goodsno),
-                'Model' => null,
-                'Specification' => null,
-                'Size' => null
+                'Price' => $v['real_price']
             );
         }
         if (count($goods_arrays) > 10) return ['msg' => '该订单商品数量超过10件'];
@@ -95,16 +88,18 @@ class xlobo
         $goods_ids = join('',$goods_ids);
         $params = array(
             'BusinessNo' => $data['order_no'].$goods_ids,
-            'Weight' => $goods_total_weight,
-            'Insure' => null,
+//            'Weight' => $goods_total_weight,
+            'Insure' => '0',
 //            'IsRePacking' => 1,
 //            'IsPreTax' => 0,
-            'IsRecTax' => 0,
+            'IsReceiveTax' => '0',
             'Comment' => $data['note'],
-            'LogisticId' => 32,
-            'LogisticVersion' => date('Y-m-d H:i:s', time()),
-            'LineTypeId' => 1,
-//            'IsContainTax' => null,
+            'BuyersMessage' => null,
+            'PackingType' => '1',
+            'LogisticId' => '32',
+//            'LogisticVersion' => date('Y-m-d H:i:s', time()),
+            'LineTypeId' => '1',
+            'IsContainTax' => '0',
             // 发件人信息
             'BillSenderInfo' => array(
                 'Name' => 'txcs',
@@ -118,6 +113,7 @@ class xlobo
                 'Province' => self::get_area_name($data['province']),
                 'City' => self::get_area_name($data['city']),
                 'District' => self::get_area_name($data['area']),
+                'Street' => '',
                 'Address' => $data['address'],
                 'Phone' => $data['mobile'],
                 'OtherPhone' => $data['mobile'],
@@ -129,14 +125,18 @@ class xlobo
             'BillSupplyInfo' => array(
                 'OrderCode' => $data['order_no'],
                 'TradingNo' => $data['order_no'],
-                'ChannelName' => null,
+                'BillThirdPartType' => '7',
+                'Name' => '九猫家',
+                'OrderPrice' => $data['order_amount']
             ),
             // 货物信息
             // 型号、规格、材质不能同时为空，
             // 最多只能有10个货物，包含10个
-            'BillCategoryList' => $goods_arrays
+            'GoodsSkuInfos' => $goods_arrays
         );
-        $ret = self::requests('xlobo.labels.createNoVerification',$params);
+        common::log_write(json_encode($params));
+//        $ret = self::requests('xlobo.labels.createNoVerification',$params);
+        $ret = self::requests('xlobo.fbx.createfbxbill',$params);
         return $ret;
     }
     /**
@@ -196,8 +196,10 @@ class xlobo
         );
         $ret = self::requests('xlobo.idcard.add', $data);
         if (isset($ret->ErrorCount) && $ret->ErrorCount > 0){
+            common::log_write('身份证上传失败' . json_encode($data));
+            common::log_write('身份证上传失败' . $sfz_image1_path . '--' . $sfz_image2_path);
             $info = print_r($ret->ErrorInfoList, true);
-            IError::show_normal($info);
+            IError::show_normal($ret->ErrorInfoList[0]->ErrorDescription);
         }
         return $ret;
     }
@@ -271,6 +273,7 @@ class xlobo
             $info = print_r($ret->ErrorInfoList, true);
             IError::show_normal($info);
         }
+        common::log_write(json_encode(['ret'=>$ret]));
         return $ret->Result->InventoryInfos;
     }
 }

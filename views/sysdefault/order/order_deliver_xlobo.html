@@ -15,7 +15,7 @@
 <script type='text/javascript' src="{theme:javascript/admin.js}"></script>
 </head>
 
-<body style="width:750px;min-height:400px;">
+<body style="width:950px;min-height:400px;">
 <div class="pop_win">
 	<form action="{url:/order/order_delivery_doc_xlobo}" method="post" id="deliver_form">
 		<input type="hidden" name="order_no" value="{$order_no}"/>
@@ -63,12 +63,20 @@
 					<td id="b"><?php
 					        xlobo::init();
 						    $ret = xlobo::get_goods_store([$item['goods_no']]);
-						    echo $ret[0]->LeftStock;
+						    if(!empty($ret)){
+						    $LeftStock = $ret[0]->LeftStock;
+                                echo $LeftStock;
+						    } else {
+                                $LeftStock=0;
+                                echo '未录入';
+                            }
+
                     ?></td>
 					<td id="c">
 						{if:$item['is_send'] == 0}
-                            {if:$ret[0]->LeftStock>=$item['goods_nums']}
-						        <input type="checkbox" name="sendgoods[]" value="{$item['goods_id']}" />
+                            {if:$LeftStock>=$item['goods_nums']}
+						        <input type="checkbox" name="sendgoods[]" value="{$item['id']}" />
+						        <input type="checkbox" name="sendgoodsXlobo[]" value="{$item['goods_id']}" />
                             {else:}
                                 贝海无库存
                             {/if}

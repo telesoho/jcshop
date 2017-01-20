@@ -41,10 +41,11 @@ body{
 }
 .hot_category .head span{
     display: block;
-    font-size: 0.26rem;
+    /*font-size: 0.26rem;*/
+   height: 0.02rem;
     color: #1F1F1F;
     position: absolute;
-   top: 0.25rem;
+   top: 0.19rem;
    
 }
 .hot_category .item_img {
@@ -96,16 +97,16 @@ body{
     height:0.03rem;
 }
 .zhuan{
-	position: absolute;
-	top: 0.05rem;
-	left: 3.2rem;
+	width: 100%;
+	text-align: center;
+	margin-top: 0.02rem;
 }
 .line_f{
 	font-size: 0.23rem;
 	color:#b8b8b8;
-	position: absolute;
-	top: 0.65rem;
-	left: 2.7rem;
+	width: 100%;
+	text-align: center;
+	margin-top:-0.2rem ;
 }
 .hot_article .item_img{
     width:100%;
@@ -404,7 +405,7 @@ li{
 #the_zone .link_zhuan{
 	width: 100%;
 	height: 1.5rem;
-	display: ;
+	margin-top:0.1rem ;
 }
 #footer_index{
 	height: 2rem;
@@ -413,12 +414,12 @@ li{
 #footer_index .index_top{
 	margin:0.76rem auto 0;
 	display: -webkit-flex;
-	width: 4.87rem;
+	width: 3.37rem;
 }
 #footer_index .index_top span{
 	display: block;
-	background:#ddd;
-	width:0.91rem;
+	background:#b8b8b8;
+	width:0.41rem;
 	height:0.02rem;
 	opacity: 0.5;
 }
@@ -427,7 +428,13 @@ li{
 	font-size: 0.24rem;
 	color:#b8b8b8;
 }
-
+#footer_index .index_kan{
+	width: 2.63rem;
+	height: 0.28rem;
+	font-size:0.24rem;
+	color:#b8b8b8;
+	margin: 0.2rem auto;
+}
 /*搜索*/
 #homeHeader{
 	position: fixed !important;

@@ -124,6 +124,22 @@ class Order extends IController implements adminAuthorization
 		 		$data['area_addr'] = join('&nbsp;',area::name($data['province'],$data['city'],$data['area']));
 
 			 	$this->setRenderData($data);
+			 	$user_id = $data['user_id'];
+			 	$address_query = new IQuery('address');
+			 	$address_query->where = 'user_id = ' . $user_id . ' and accept_name = "' . $data['accept_name'] . '"';
+			 	$address_data = $address_query->find();
+			 	if (!empty($address_data)){
+			 	    $this->sfz_image1 = IWeb::$app->config['image_host1'] . '/' . $address_data[0]['sfz_image1'];
+			 	    $this->sfz_image2 = IWeb::$app->config['image_host1'] . '/' . $address_data[0]['sfz_image2'];
+                }
+                $user_query = new IQuery('user');
+                $user_query->where = 'id = ' . $user_id . ' and sfz_name = "' . $data['accept_name'] . '"';
+                $user_data = $user_query->find();
+                if (!empty($user_data)){
+                    $this->sfz_image11 = IWeb::$app->config['image_host1'] . '/' . $user_data[0]['sfz_image1'];
+                    $this->sfz_image22 = IWeb::$app->config['image_host1'] . '/' . $user_data[0]['sfz_image2'];
+                }
+
 				$this->redirect('order_show',false);
 			}
 		}
@@ -617,19 +633,27 @@ class Order extends IController implements adminAuthorization
 
         //发送的商品关联
         $sendgoods = IFilter::act(IReq::get('sendgoods'));
+        $sendgoodsXlobo = IFilter::act(IReq::get('sendgoodsXlobo'));
 
-        $ret = xlobo::create_logistic_single($order_id, $sendgoods);
-        $billcode = $ret->Result->BillCode;
+        $ret = xlobo::create_logistic_single($order_id, $sendgoodsXlobo);
         if (isset($ret->Succeed) && $ret->Succeed){
+            $billcode = $ret->Result->BillCode;
+            $_POST['delivery_code'] = $billcode;
             $ret = $this->add_xlobo($ret->Result, $order_id);
             if (is_array($ret)) die('<script type="text/javascript">parent.actionCallback("'.$ret['msg'].'");</script>');
             if ($ret) {
+                common::log_write('发货清单' . print_r($sendgoods,true));
+
                 $ret = Order_Class::sendDeliveryGoods($order_id,$sendgoods,$this->admin['admin_id']);
-                if ($ret) die('<script type="text/javascript">parent.actionCallback();</script>');
+                if($ret === true)
+                {
+                    die('<script type="text/javascript">parent.actionCallback();</script>');
+                }
+                die('<script type="text/javascript">parent.actionCallback("'.$result.'");</script>');
             }
         } else {
-            die('<script type="text/javascript">parent.actionCallback("做单失败");</script>');
             common::log_write('做单失败' . print_r($ret,true));
+            die('<script type="text/javascript">parent.actionCallback("做单失败");</script>');
         }
     }
     public function add_xlobo($ret, $order_id){
@@ -637,9 +661,11 @@ class Order extends IController implements adminAuthorization
 //        $data = $xlobo_single->getObj('billcode = "' . $ret->BillCode . '"');
         $xlobo_single->setData([
             'billcode' => $ret->BillCode,
-            'businessno' => $ret->BusinessNo,
+            'businessno' => '1',
+//            'businessno' => $ret->BusinessNo,
             'deliveryfee' => $ret->DeliveryFee,
-            'taxfee' => $ret->TaxFee,
+            'taxfee' => '1',
+//            'taxfee' => $ret->TaxFee,
             'insurance' => $ret->Insurance,
             'ispostpay' => $ret->IsPostPay,
             'order_id' => $order_id,

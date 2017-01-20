@@ -40,16 +40,20 @@ function handler() {
     event.preventDefault();
 }
 function getSearth(){
-    document.getElementById("search").value="";
-    document.getElementById("search").placeholder="";
-    document.getElementById("modalid-search").className="show";
-    document.getElementById("cancle").className="show cancel";
 	document.body.scrollTop =0;
 	$('window').scroll().Top = 0;
-//	console.log(h)
-    document.getElementById("homeHeader").style.cssText="position:fixed;width:100%;z-index:1111;top:0px;left:0";
-    document.body.style.overflow = 'hidden';
-    document.body.addEventListener('touchmove', handler, false)
+	setTimeout(function(){
+	    document.getElementById("search").value="";
+	    document.getElementById("search").placeholder="";
+	    document.getElementById("modalid-search").className="show";
+	    document.getElementById("cancle").className="show cancel";
+		
+	//	console.log(h)
+	    document.getElementById("homeHeader").style.cssText="position:fixed;width:100%;z-index:1111;top:0px;left:0";
+	    document.body.style.overflow = 'hidden';
+	    
+	    document.body.addEventListener('touchmove', handler, false);
+    },1000)
 }
 function searthCancel(){
     document.getElementById("search").placeholder=getItem("placeHolder")+"件商品等你来搜";
