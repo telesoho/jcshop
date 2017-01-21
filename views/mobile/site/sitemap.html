@@ -72,7 +72,7 @@
 		    				<div v-for="(item2,key) in item.list">
 		    					<h1 @click="two_title(item2)"><img :src="item2.image"/><!--<img src="/views/mobile/skin/default/image/jmj/redesign/buyao2.png" style="width: 0.15rem;"/>-->{{item2.name}}</h1>
 		    					<ul v-if="item2.state2">
-			    					<li v-for="(item3,key) in item2.list"><span @click="poducos(item3.id)">
+			    					<li v-for="(item3,key) in item2.list"><span @click.stop="poducos(item3.id)">
 			    						<!--<img :src="item3.image" width="1.4rem"/>-->
 			    						<img :dataimg="item3.image" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" style="width:1.4rem;height: 1.4rem;"/>
 			    						<p>{{item3.name}}</p>
@@ -189,9 +189,6 @@
     				removeSessionItem("pinpai_page");
     				//手指滑动时候
 //					document.body.scrollTop = ;
-					$("body,html").animate({
-						"scrollTop":ssss
-					})
 				},
 				methods:{
 					choose:function(num){
@@ -214,6 +211,9 @@
 						var scroll_item =  $("#"+items).offset().top;
 						console.log(scroll_item);
 						ssss = scroll_item;
+						$("body,html").animate({
+							"scrollTop":ssss
+						})
 //						var pos = offset().top;  
 //						var poshigh = mao.height();  
 //						$("html,body").({" scrollTop": scroll_item }, 1000); 
