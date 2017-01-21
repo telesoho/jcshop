@@ -140,7 +140,7 @@ class wechats
             case 'shiming':
                 $params = sprintf('{
                    "touser":"%s",
-                   "template_id":"BQNT5tJdLIh9HtDeNxhj3WO8viH2rQaW_I_lewW5u_A",
+                   "template_id":"e4FVRqsTUHdGYCfPe4H8N81c7CLIds_PDOhzGpB3I2U",
                    "url":"%s",            
                    "data":{
                            "first": {
