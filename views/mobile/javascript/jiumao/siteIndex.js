@@ -90,6 +90,7 @@ var vm = new Vue({
         }
     },
     mounted: function(){
+    	clear_pull();
         var self=this;
         hotSearth(self);
          index_home(self);
@@ -233,6 +234,13 @@ var vm = new Vue({
     	}
     }
 })
+function clear_pull(){
+	removeSessionItem("state");
+	removeSessionItem("state2");
+	removeSessionItem("keys");
+	removeSessionItem("self_info");
+	removeSessionItem("key2");
+}
 $(document).ready(function(){
 //	tanchaun(statusOrder);
     var ua = navigator.userAgent.toLowerCase();
@@ -522,7 +530,3 @@ var _hmt = _hmt || [];
     function removeSessionItem(key){
         window.sessionStorage.removeItem(key);
     }
-     function removeSessionItem(key){
-        window.sessionStorage.removeItem(key);
-    }
-

@@ -209,6 +209,7 @@
 		},
 
 		mounted: function(){
+			clear_pull();
 			var self = this;
 			getInfo(self);
 		}
@@ -231,6 +232,17 @@
     function setState(sta){
         setItem('status',sta);
         document.location.href='/ucenter/order';
+    }
+    
+function clear_pull(){
+	removeSessionItem("state");
+	removeSessionItem("state2");
+	removeSessionItem("keys");
+	removeSessionItem("self_info");
+	removeSessionItem("key2");
+}
+	function removeSessionItem(key){
+        window.sessionStorage.removeItem(key);
     }
 </script>
 </body>

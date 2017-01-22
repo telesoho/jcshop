@@ -22,6 +22,7 @@ Vue.component('article-list', {
     <div class="content">\
     <div class="img flexbox" style="background:#fff">\
     <img :dataimg="item.image"   style="width:7.1rem;height:3.6rem;border-radius:0.1rem" src="/views/mobile/skin/default/image/jmj/icon/big_lazy.png"  class="samLazyImg"  />\
+    <img id="vedio_show" src="/views/mobile/skin/default/image/jmj/home_redesign/play_index.png"/>\
     </div>\
 </a>\
 <div class="single"></div>\

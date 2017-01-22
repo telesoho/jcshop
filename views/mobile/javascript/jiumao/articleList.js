@@ -18,7 +18,7 @@ var vm = new Vue({
         changeState:true,
         img1:"/views/mobile/skin/default/image/jmj/home_redesign/collection.png",
         img2:"/views/mobile/skin/default/image/jmj/home_redesign/collection_ed.png",
-        cid:""
+        cid:"",
     },
     computed: {
         new_data: function(){
@@ -53,7 +53,6 @@ var vm = new Vue({
             }else{
             	 pullupArticleRefresh(self);
             }
-            console.log(self.articleDetail.length);
         // }
     },
     updated:function() {
@@ -62,6 +61,15 @@ var vm = new Vue({
             anim:false,
             selectorName:".samLazyImg"
         });
+        if(statusOrder){
+        	$("#vedio_show").css({
+        		"display":"block"
+        	})
+        }else{
+        	$("#vedio_show").css({
+        		"display":"none"
+        	})
+        }
     },
     methods: {
         store: function(item){

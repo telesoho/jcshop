@@ -317,14 +317,14 @@ li{
 	display: block;
 	position: relative;
 }
-#Video_special .img_play .index_play{
+/*#Video_special .img_play .index_play{
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	margin-left:-0.5rem;
 	margin-top: -0.5rem;
 	width: 1rem;
-}
+}*/
 #z_special{
 	background: #fff;
 	padding-top:0.4rem ;

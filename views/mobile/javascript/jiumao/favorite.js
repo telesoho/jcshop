@@ -49,6 +49,9 @@ var vm = new Vue({
             return  this.infoMessage.article_data;
         }
     },
+    mounted: function(){
+    	clear_pull()
+    },
     methods: {
         getData: function () {
             var self = this;
@@ -98,6 +101,7 @@ var vm = new Vue({
             })
         },
         delFavoriteArticle: function (item) {
+        	clear_pull();
             var self=this;
             var btnArray = ['取消', '确认'];
             mui.confirm('您确定要删除本专辑吗？', '删除专辑', btnArray, function(e) {
@@ -145,6 +149,13 @@ function pushSession(key,value){
         return "";
     }
 }
+function clear_pull(){
+	removeSessionItem("state");
+	removeSessionItem("state2");
+	removeSessionItem("keys");
+	removeSessionItem("self_info");
+	removeSessionItem("key2");
+}
 function getSession(key){
     if(window.sessionStorage){
         var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
@@ -154,3 +165,6 @@ function getSession(key){
         return "";
     }
 }
+function removeSessionItem(key){
+        window.sessionStorage.removeItem(key);
+    }

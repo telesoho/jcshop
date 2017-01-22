@@ -137,6 +137,9 @@
 
 			}
 		},
+		mounted: function(){
+			clear_pull();
+		},
 		updated:function() {
 		},
 		methods: {
@@ -184,6 +187,7 @@
 				}
 			},
 			removeCart: function(item){
+				clear_pull()
 				var self=this;
 				removeCartByJSON(self,item)
 			},
@@ -286,4 +290,14 @@ function removeCartByJSON(self,item) {
 
 	})
 	mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
+function clear_pull(){
+	removeSessionItem("state");
+	removeSessionItem("state2");
+	removeSessionItem("keys");
+	removeSessionItem("self_info");
+	removeSessionItem("key2");
+}
+	function removeSessionItem(key){
+        window.sessionStorage.removeItem(key);
+    }
 </script>
