@@ -142,6 +142,7 @@
 	
 	<script>
 			var ssss;
+			var s_pull = false;
 			var Request = new Object();
 			Request = GetRequest();
 			var statusOrder=Request["id"];
@@ -162,7 +163,6 @@
 					class1:"public_main jingzhi",
 					class2:"public_main active",
 					class_fe:false,
-					s_pull:false
 				},
 				computed:{
 					one_title:function(){
@@ -178,13 +178,14 @@
 //						var keys2 = getSession("keys");
 						self.info[keys].state = getSession("state");
 						var key2_ = getSession("key2");
-						console.log(getSession("state2"));
-						if(self.s_pull){
+						if(getSession("s_pull")){
 							self.info[keys].list[key2_].state2 = getSession("state2");			
 						}else{
 							self.info[keys].list[0].state2 = true;
-						}	
-						self.s_pull = false;
+						}
+						
+						s_pull = false;
+						pushSession("s_pull",s_pull);
 					}
 					else{
 						getSitemapInfo(self);
@@ -219,9 +220,10 @@
 					},
 					two_title:function(ids,key2){
 						ids.state2 = !ids.state2
-						this.s_pull = true;
+						s_pull = true;
 						pushSession("key2",key2);
 						pushSession("state2",ids.state2);
+						pushSession("s_pull",s_pull);
 					},
 					show_hide:function(item,key){
 						item.state = !item.state;
