@@ -220,15 +220,16 @@
             		self.info.push(item)
             	});
             	pushSession("list_info",self.info)
-            	if(data.data == []){
+            	if(data.data == ""){
             		 stop=false;
             		 self.infoState=true;
             	}else{
             		 stop=true;
             		 self.infoState=false;
+            		 self.list_data.page++;
             	}
             	console.log(self.list_data.page)
-            	self.list_data.page++;
+            	
             	pushSession("list_page",self.list_data.page)
             }
         });

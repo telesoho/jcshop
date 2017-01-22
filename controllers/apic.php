@@ -3211,15 +3211,51 @@ class Apic extends IController{
         $data = '{
 "RECORDS":[
 {
-"order_no":"20170106133946114179",
-"oauth_user_id":"oRWgut87jf_9_oWl7hXwmUomZ_rk"
+"order_no":"20170113195310302921",
+"accept_name":"王婷",
+"address":"万新村，17区冠云中里，4号楼，1门，405",
+"mobile":"13030037326",
+"user_id":6541,
+"sfz_name":"王婷",
+"oauth_user_id":"orEYdw--dEIojNATz1MSebLP3KbQ"
 },
 {
-"order_no":"20170106133946114179",
-"oauth_user_id":"oRWgut_Xpm7QnbIYv3z9FbdcS9gY"
+"order_no":"20170114012113446265",
+"accept_name":"程林",
+"address":"乐居雅花园2期48栋406",
+"mobile":"13951762851",
+"user_id":7504,
+"sfz_name":"程林",
+"oauth_user_id":"orEYdw8S769CTzbijgDm-wVc7eVE"
+},
+{
+"order_no":"20170116233009697028",
+"accept_name":"张甲元",
+"address":"吉回族自治州昌吉市乌伊东路126号 嘉和小区 14号楼1单元1401",
+"mobile":"15999085628",
+"user_id":4280,
+"sfz_name":null,
+"oauth_user_id":"orEYdw3vfmGjdfrQ5f6uDyQQ_EDg"
+},
+{
+"order_no":"20170116233009697028",
+"accept_name":"余-张甲元",
+"address":"吉回族自治州昌吉市乌伊东路126号 嘉和小区 14号楼1单元1401",
+"mobile":"15999085628",
+"user_id":4280,
+"sfz_name":null,
+"oauth_user_id":"orEYdw98ZZpmvDrD6lJyR5YAhPnY"
+},
+{
+"order_no":"20170116233009697028",
+"accept_name":"陈-张甲元",
+"address":"吉回族自治州昌吉市乌伊东路126号 嘉和小区 14号楼1单元1401",
+"mobile":"15999085628",
+"user_id":4280,
+"sfz_name":null,
+"oauth_user_id":"orEYdw0X44crd6F3MOdXES6Hfpig"
 }
-]
-}';
+]}';
         $data = json_decode($data);
         var_dump($data);
         foreach ($data->RECORDS as $k=>$v){
