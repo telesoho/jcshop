@@ -394,11 +394,11 @@ class Simple extends IController
 			if( !empty($ticket_did) ){
 				//使用优惠券码
 				$rel 					= ticket::finalCalculateCode($goodsResult,$ticket_did);
-				if($rel['code']==0) $goodsResult = $rel['data'];
+				if($rel['code']=='0') $goodsResult = $rel['data'];
 			}else if( !empty($ticket_aid) ){
 				//使用优惠券
 				$rel 					= ticket::finalCalculateActivity($goodsResult,$ticket_aid);
-				if($rel['code']==0) $goodsResult = $rel['data'];
+				if($rel['code']=='0') $goodsResult = $rel['data'];
 			}
 			/* 计算邮费 */
 			$goodsResult['deliveryPrice'] = Api::run('goodsDelivery',$goodsResult['goodsResult']['goodsList'],'goods_id',$goodsResult['is_delivery']);

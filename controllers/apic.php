@@ -460,12 +460,12 @@ class Apic extends IController{
 		if(!empty($param['code'])){
 			/* 优惠券码 */
 			$rel = ticket::calculateCode($data, $param['code']);
-			if($rel['code']>0) $this->json_echo($rel);
+			if($rel['code']!='0') $this->returnJson($rel);
 			$data = $rel['data'];
 		}else if(!empty($param['ticket_aid'])){
 			/* 活动优惠券 */
 			$rel = ticket::calculateActivity($data, $param['ticket_aid']);
-			if($rel['code']>0) $this->json_echo($rel);
+			if($rel['code']!='0') $this->returnJson($rel);
 			$data = $rel['data'];
 		}else{
 			/* 优惠券 */

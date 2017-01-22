@@ -4,13 +4,14 @@
  * 优惠券类库
  */
 class ticket{
+	
 	/**
 	 * 订单确认-优惠券码code计算价格
 	 */
 	public static function calculateCode($data, $code){
 		/* 校验优惠券码 */
 		$rel = self::checkCode($code);
-		if($rel['code']>0) return $rel;
+		if($rel['code']!='0') return $rel;
 		$ticket_data = $rel['data'];
 		$data['final_sum'] = $data['sum'];
 		
@@ -36,7 +37,7 @@ class ticket{
 				$data['is_delivery'] = 1; //包邮
 				break;
 			default:
-				return apiReturn::go('002006');
+				return array('code'=>'002006','msg'=>'优惠券码类型不存在');
 		}
 		
 		/* 计算商品优惠后价格 */
@@ -49,7 +50,7 @@ class ticket{
 			'name'       => $ticket_data['name'],    //优惠券名称
 			'msg'        => $msg,
 		);
-		return apiReturn::go('0', $data);
+		return array('code'=>'0','msg'=>'ok','data'=>$data);
 	}
 	
 	/**
@@ -58,7 +59,7 @@ class ticket{
 	public static function calculateActivity($data, $ticket_aid){
 		/* 校验优惠券 */
 		$rel = self::checkActivity($ticket_aid);
-		if($rel['code']>0) return $rel;
+		if($rel['code']!='0') return $rel;
 		$ticket_data = $rel['data'];
 		$msg         = '';
 		
@@ -69,9 +70,9 @@ class ticket{
 				//优惠券规则
 				$rule = explode(',', $ticket_data['rule']);
 				if(count($rule)!=2 || $rule[0]<=0 || $rule[1]<=0)
-					return apiReturn::go('002013');
+					return array('code'=>'002013','msg'=>'优惠券不合法');
 				if($data['sum']<$rule[0])
-					return apiReturn::go('002014');
+					return array('code'=>'002014','msg'=>'不满足满减条件');
 				//计算优惠
 				$money       = $data['sum']-$rule[1];
 				$data['sum'] = $money<=0 ? 0 : $money;
@@ -107,7 +108,7 @@ class ticket{
 			case 6:
 //     			break;
 			default:
-				return apiReturn::go('002012');
+				return array('code'=>'002012','msg'=>'优惠券类型不存在');
 		}
 		
 		/* 计算商品优惠后价格 */
@@ -120,7 +121,7 @@ class ticket{
 			'name'       => $ticket_data['name'],    //优惠券名称
 			'msg'        => $msg,
 		);
-		return apiReturn::go('0', $data);
+		return array('code'=>'0','msg'=>'ok','data'=>$data);
 	}
 	
 	/**
@@ -131,7 +132,7 @@ class ticket{
 		$model_ticket = new IModel('ticket_discount');
 		$data_ticket  = $model_ticket->getObj('`start_time`<'.time().' AND `end_time`>'.time().' AND `status`=1 AND `id`='.$ticket_did, 'type,ratio,money');
 		if(empty($data_ticket))
-			return apiReturn::go('002002');
+			return array('code'=>'001004','msg'=>'优惠券码不存在');
 		//折扣券已使用状态
 		$user_id = IWeb::$app->getController()->user['user_id'];
 		$model_ticket->setData(array('status' => 2, 'user_id' => $user_id));
@@ -152,11 +153,13 @@ class ticket{
 				$data['sum'] = $data['sum']-$data_ticket['money'];
 				$data['is_delivery'] = 1; //包邮
 				break;
+			default:
+				return array('code'=>'002006','msg'=>'优惠券码类型不存在');
 		}
 		/* 计算商品优惠后价格 */
 		$data['goodsResult']['goodsList'] = self::goodsPrice($data['goodsResult']['goodsList'], $data['final_sum']-$data['sum'], $data['final_sum']);
 		
-		return apiReturn::go('0', $data);
+		return array('code'=>'0','msg'=>'ok','data'=>$data);
 	}
 	
 	/**
@@ -165,7 +168,7 @@ class ticket{
 	public static function finalCalculateActivity($data, $ticket_aid){
 		/* 校验优惠券 */
 		$rel = self::checkActivity($ticket_aid);
-		if($rel['code']>0) return $rel;
+		if($rel['code']!='0') return $rel;
 		$ticket_data = $rel['data'];
 		
 		/* 优惠券类型 */
@@ -175,9 +178,9 @@ class ticket{
 				//优惠券规则
 				$rule = explode(',', $ticket_data['rule']);
 				if(count($rule)!=2 || $rule[0]<=0 || $rule[1]<=0)
-					return apiReturn::go('002013');
+					return array('code'=>'002013','msg'=>'优惠券不合法');
 				if($data['sum']<$rule[0])
-					return apiReturn::go('002014');
+					return array('code'=>'002014','msg'=>'不满足满减条件');
 				//计算优惠
 				$money       = $data['sum']-$rule[1];
 				$data['sum'] = $money<=0 ? 0 : $money;
@@ -209,7 +212,7 @@ class ticket{
 			case 6:
 //     			break;
 			default:
-				return apiReturn::go('002012');
+				return array('code'=>'002012','msg'=>'优惠券类型不存在');
 		}
 		/* 计算商品优惠后价格 */
 		$data['goodsResult']['goodsList'] = self::goodsPrice($data['goodsResult']['goodsList'], $data['final_sum']-$data['sum'], $data['final_sum']);
@@ -219,7 +222,7 @@ class ticket{
 		$model_ticket->setData(array('status' => 2));
 		$model_ticket->update('`id`='.$ticket_aid);
 		
-		return apiReturn::go('0', $data);
+		return array('code'=>'0','msg'=>'ok','data'=>$data);
 	}
 	
 	/**
@@ -241,23 +244,21 @@ class ticket{
 	 */
 	public static function checkCode($code = 0){
 		/* 优惠券 */
-		if(empty($code) || $code<=0 || $code>999999) return apiReturn::go('002001');
+		if(empty($code) || $code<=0 || $code>999999) return array('code' => '001004', 'msg' => '请输入正确的优惠券码');
 		/* 获取折扣券数据 */
 		$query         = new IQuery('ticket_discount');
 		$query->where  = 'code='.$code;
 		$query->fields = 'id,name,type,ratio,money,start_time,end_time,status';
 		$query->limit  = 1;
-		$ticket_data   = $query->find();
-		if(empty($ticket_data))
-			return apiReturn::go('002002');
-		$ticket_data = $ticket_data[0];
-		if($ticket_data['start_time']>time() || $ticket_data['end_time']<time())
-			return apiReturn::go('002003');
-		if($ticket_data['status']==2)
-			return apiReturn::go('002004');
-		if($ticket_data['status']!=1)
-			return apiReturn::go('002005');
-		return apiReturn::go('0', $ticket_data);
+		$data          = $query->find();
+		if(empty($data))
+			return array('code'=>'001004','msg'=>'优惠券码不存在');
+		$data = $data[0];
+		if($data['start_time']>time())
+			return array('code'=>'001004','msg'=>'优惠券码还不能使用');
+		if($data['end_time']<time() || $data['status']==2 || $data['status']!=1)
+			return array('code'=>'001004','msg'=>'优惠券码已失效');
+		return array('code'=>'0','msg'=>'ok','data'=>$data);
 	}
 	
 	/**
@@ -269,20 +270,29 @@ class ticket{
 		$query         = new IQuery('activity_ticket as m');
 		$query->join   = 'LEFT JOIN activity_ticket_access AS a ON a.ticket_id=m.id';
 		$query->where  = 'a.id='.$ticket_aid.' AND a.user_id='.$user_id;
-		$query->fields = 'm.start_time,m.end_time,m.name,m.type,m.rule,a.status';
+		$query->fields = 'm.start_time,m.end_time,m.name,m.type,m.rule,a.status,m.time_type,m.day,a.create_time';
 		$query->limit  = 1;
 		$data          = $query->find();
 		//判断优惠券是否存在
 		if(empty($data))
-			return apiReturn::go('002007');
+			return array('code'=>'001004','msg'=>'优惠券不存在');
 		$data = $data[0];
-		if($data['start_time']>time())
-			return apiReturn::go('002008');
-		if($data['end_time']<time())
-			return apiReturn::go('002009');
-		if($data['status']!=1)
-			return apiReturn::go('002011');
-		return apiReturn::go('0', $data);
+		switch($data['time_type']){
+			//统一有效期
+			case 1:
+				if($data['start_time']>time())
+					return array('code'=>'001004','msg'=>'优惠券还不能使用');
+				if($data['end_time']<time() || $data['status']!=1)
+					return array('code'=>'001004','msg'=>'优惠券已失效');
+				break;
+			//领取后有效期
+			case 2:
+				if(($data['day']*24*60*60+$data['create_time'])<time() || $data['status']!=1)
+					return array('code'=>'001004','msg'=>'优惠券已失效');
+				break;
+		}
+		
+		return array('code'=>'1','msg'=>'ok','data'=>$data);
 	}
 	
 	/**
