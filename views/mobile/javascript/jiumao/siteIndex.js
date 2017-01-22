@@ -378,7 +378,6 @@ document.addEventListener("touchstart",function(ev){
 })
 document.addEventListener("touchmove",function(ev){
 	var s = document.body.scrollTop;
-	console.log(s)
 	if(s < 50){
 		vm.search_top = false;
 		vm.search_top_small = true;
