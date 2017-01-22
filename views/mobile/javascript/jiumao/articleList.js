@@ -62,11 +62,11 @@ var vm = new Vue({
             selectorName:".samLazyImg"
         });
         if(statusOrder){
-        	$("#vedio_show").css({
+        	$(".vedio_show").css({
         		"display":"block"
         	})
         }else{
-        	$("#vedio_show").css({
+        	$(".vedio_show").css({
         		"display":"none"
         	})
         }

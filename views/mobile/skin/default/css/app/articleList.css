@@ -34,7 +34,7 @@
 .singleline{
 	border: 0;
 }
-.albumn_index .content #vedio_show{
+.albumn_index .content .vedio_show{
 	position: absolute;
 	top: 50%;
 	left: 50%;

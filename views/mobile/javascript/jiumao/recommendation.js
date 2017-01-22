@@ -96,6 +96,9 @@ var vm = new Vue({
             anim:false,
             selectorName:".samLazyImg"
         });
+        $(".vedio_show").css({
+        		"display":"none"
+        	})
     },
     methods: {
         // 改变状态并且清除每次进来的缓存
