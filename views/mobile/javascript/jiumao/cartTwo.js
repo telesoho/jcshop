@@ -170,7 +170,7 @@ function getCart2Info(self){
             console.log(data);
             self.infoMessage=data.data;
             self.showMessage=true;
-            if(data.data.payment==''){
+            if(data.data.payment.length==0){
                 self.infoMessage.payment[0].id=1;
             }
             document.body.style.overflow = 'auto';
