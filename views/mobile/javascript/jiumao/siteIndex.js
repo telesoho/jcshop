@@ -240,6 +240,7 @@ function clear_pull(){
 	removeSessionItem("keys");
 	removeSessionItem("self_info");
 	removeSessionItem("key2");
+	removeSessionItem("s_pull");
 }
 $(document).ready(function(){
 //	tanchaun(statusOrder);
