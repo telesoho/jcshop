@@ -625,25 +625,35 @@ class Apic extends IController{
 		switch($param['type']){
 			//可使用
 			case 1:
-				$where = 'a.user_id='.$user_id.' AND a.status=1 AND m.end_time>='.time();
+				$where = 'a.user_id='.$user_id.' AND a.status=1 AND (CASE m.`time_type` WHEN 1 THEN m.`end_time`>='.time().' WHEN 2 THEN (m.`day`*24*60*60+a.`create_time`)>='.time().' END )';
 				break;
 			//已过期
 			case 2:
-				$where = 'a.user_id='.$user_id.' AND (a.status!=1 OR m.end_time<'.time().')';
+				$where = 'a.user_id='.$user_id.' AND (a.status!=1 OR (CASE m.`time_type` WHEN 1 THEN m.`end_time`<'.time().' WHEN 2 THEN (m.`day`*24*60*60+a.`create_time`)<'.time().' END ))';
 				break;
 			default:
 				$this->returnJson(array('code'=>'002015','msg'=>$this->errorInfo['002015']));
 		}
 		$query->where    = $where;
-		$query->fields   = 'a.id,m.name,m.start_time,m.end_time,m.type,m.rule';
+		$query->fields   = 'a.id,m.name,m.start_time,m.end_time,m.type,m.rule,a.create_time,m.day,m.time_type';
 		$query->page     = $param['page']<1 ? 1 : $param['page'];
 		$query->pagesize = 100;
 		$data            = $query->find();
 		if($param['page']>$query->getTotalPage()) $data = array();
 		if(!empty($data)){
 			foreach($data as $k => $v){
-				$data[$k]['start_time'] = date('m-d', $v['start_time']);
-				$data[$k]['end_time']   = date('m-d', $v['end_time']);
+				switch($v['time_type']){
+					//统一有效期
+					case 1:
+						$data[$k]['start_time'] = date('m-d', $v['start_time']);
+						$data[$k]['end_time']   = date('m-d', $v['end_time']);
+						break;
+					//领取后有效期
+					case 2:
+						$data[$k]['start_time'] = date('m-d', $v['create_time']);
+						$data[$k]['end_time']   = date('m-d', $v['day']*24*60*60+$v['create_time']);
+						break;
+				}
 				switch($v['type']){
 					//满减券
 					case 1 :
@@ -696,7 +706,7 @@ class Apic extends IController{
 		/* 优惠券详情 */
 		$modelTic = new IModel('activity_ticket');
 		$infoTic  = $modelTic->getObj('pid=0 AND id='.$param['tid'].' AND end_time>'.time());
-		if(empty($infoTic)) $this->returnJson(array('code'=>'002007','msg'=>$this->errorInfo['002007'])); //优惠券不存在
+		if(empty($infoTic)) $this->returnJson(array('code'=>'002007','msg'=>$this->errorInfo['002007'])); //优惠券不存在或已过期
 		
 		/* 是否已领取 */
 		$modelAcc = new IModel('activity_ticket_access');
