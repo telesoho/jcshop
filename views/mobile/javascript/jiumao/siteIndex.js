@@ -230,7 +230,7 @@ var vm = new Vue({
     		window.location.href = "/site/article_detail?id="+id;
     	},
     	zheng:function(){
-    		window.location.href = "http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=100000241&idx=1&sn=f41ecf07dadbc93a1a10d917eb06f2e9&chksm=6b23f0325c5479242b6b80d338dba45d9bf59def5eed366848e9cc3a9d7b4e7429f5e3d9f022&scene=0#rd"
+    		window.location.href = "/site/ensure"
     	}
     }
 })
