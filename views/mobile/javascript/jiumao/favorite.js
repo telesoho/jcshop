@@ -19,10 +19,10 @@ var vm = new Vue({
     computed: {
         changeBgcolor: function(){
             if(this.state==0&&this.infoMessage.goods_data!=''){
-                return "background:#eee";
+                return "background:#f5f5f5";
             }
             else if(this.state==1&&this.infoMessage.article_data!=''){
-                return "background:#eee";
+                return "background:#f5f5f5";
             }else{
                 return "background:#fff";
             }
