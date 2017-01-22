@@ -11,9 +11,6 @@
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/custombox.min.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/products.css?v=<?php echo time(); ?>" />
-	<style>
-
-	</style>
 </head>
 <body>
 <section id="productInfo" v-cloak v-if="showMessage">
@@ -264,9 +261,8 @@
 				<div class="select_photo"><img :src="info.img"/></div>
 				<div class="select_top_right">
 					<div class="sel_title">
-						<a href="#">{{info.name}}</a>
-						<span class="storeNum" :data-store="info.store_nums">库存数量:{{info.store_nums}}</span>
-						<span class="price">￥{{info.sell_price}}</span>
+                        <span class="price"><span style="color:#ff2f5c;font-size:0.26rem;">￥</span>{{info.sell_price}}</span>
+						<span class="storeNum" :data-store="info.store_nums">库存数量： {{info.store_nums}}</span>
 					</div>
 					<a href="#select_product" class="a_da"><span class="mui-icon mui-icon-closeempty"></span></a>
 				</div>
@@ -274,13 +270,16 @@
 			<div class="select_center">
 				<h3 class="select_h3">数量</h3>
 				<div class="select_center_a">
-					<span id="buyReduceButton" @click="modified(-1)">-</span>
-					<input type="text"  id="buyNums" v-model="goodsnum" />
-					<span id="buyAddButton" @click="modified(1)">+</span>
+                    <img src="/views/mobile/skin/default/image/jmj/cart/ruduceable.png" alt="" class="reduce" style="width: 0.5rem; height: 0.5rem;" @click="modified(-1)" id="buyReduceButton" />
+                    <input type="number" readonly id="buyNums" v-model="goodsnum"  />
+                    <img src="/views/mobile/skin/default/image/jmj/cart/add.png" alt="" class="add" style="width: 0.5rem; height: 0.5rem;" @click="modified(1)" id="buyAddButton" />
+
 				</div>
 			</div>
-			<button class="select_btn"  id="joinCarButton" v-if="showCar==1" @click="joinCar">确定</button>
-			<button class="select_btn"  id="buyNowButton"  v-if="showCar==2" @click="buyNow">去付款</button>
+            <div class="contain flexbox">
+                <button class="select_btn"  id="joinCarButton" v-if="showCar==1" @click="joinCar">确定</button>
+                <button class="select_btn"  id="buyNowButton"  v-if="showCar==2" @click="buyNow">立即购买</button>
+            </div>
 		</div>
 	</section>
 	<!--翻译弹出-->
