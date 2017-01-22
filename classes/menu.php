@@ -100,6 +100,9 @@ class Menu
 				'/market/activity_speed_list' => '限时活动',
 				'/market/activity_bargain_list' => '砍价刀',
 			),
+			'优惠券' 	=> array(
+				'/market/ticket_activity_list'   => '优惠券列表',
+			),
 			'优惠券码' 	=> array(
         		'/market/ticket_discount_list'   => '优惠券码列表',
         	),

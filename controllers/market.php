@@ -15,6 +15,72 @@ class Market extends IController implements adminAuthorization
 	}
 	
 	/**
+	 * 优惠券列表
+	 */
+	public function ticket_activity_list(){
+		/* 获取参数 */
+		$param = array(
+			'page'   => IFilter::act(IReq::get('page'), 'int'),
+			'search' => IFilter::act(IReq::get('search')),
+		);
+		$where = !empty($param['search']) ? 'm.id='.$param['search'].' OR m.name LIKE "%'.$param['search'].'%"' : '';
+		
+		$query           = new IQuery('activity_ticket AS m');
+		$query->join     = 'LEFT JOIN activity AS a ON a.id=m.pid';
+		$query->where    = $where;
+		$query->fields   = 'm.*,a.name AS ac_name';
+		$query->order    = 'm.id DESC';
+		$query->page     = $param['page']<1 ? 1 : $param['page'];
+		$query->pagesize = 30;
+		$list = $query->find();
+		if(!empty($list)){
+			foreach($list as $k => $v){
+				//优惠券有效期
+				switch($v['time_type']){
+					case 1:
+						$list[$k]['valid_time'] = (empty($v['start_time']) ? '' : date('Y-m-d H:i',$v['start_time'])).'～'.(empty($v['end_time']) ? '' : date('Y-m-d H:i',$v['end_time']));
+						break;
+					case 2:
+						$list[$k]['valid_time'] = '领取后'.$v['day'].'天';
+						break;
+				}
+				//优惠券类型
+				switch($v['type']){
+					case 1:
+						$list[$k]['type_format'] = '满减券';
+						$rule                    = explode(',', $v['rule']);
+						$list[$k]['content']     = '满'.$rule[0].'减'.$rule[1].'优惠券';
+						break;
+					case 2:
+						$list[$k]['type_format'] = '无门槛券';
+						$list[$k]['content']     = '抵'.$v['rule'].'元';
+						break;
+					case 3:
+						$list[$k]['type_format'] = '折扣券';
+						$list[$k]['content']     = '全场'.($v['rule']*10).'折';
+						break;
+					case 4:
+						$list[$k]['type_format'] = '商务合作券';
+						$list[$k]['content']     = '抵'.$v['rule'].'元（不包邮）';
+						break;
+					case 5:
+						$list[$k]['type_format'] = '包邮券';
+						$list[$k]['content']     = '包邮';
+						break;
+					case 6:
+						$list[$k]['type_format'] = '税值券';
+						$list[$k]['content']     = '免税';
+						break;
+				}
+			}
+		}
+		
+		/* 视图 */
+		$this->setRenderData(array('dataList'=>$list,'pageBar'=>$query->getPageBar(),));
+		$this->redirect('ticket_activity_list');
+	}
+	
+	/**
 	 * 限时活动列表
 	 */
 	public function activity_speed_list(){
