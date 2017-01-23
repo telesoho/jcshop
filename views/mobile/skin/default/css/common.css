@@ -614,9 +614,9 @@ input[type='search']{
   color:#fff;
   font-size:0.22rem;
 }
-.albumn_index .content .img img{
-  position:relative;
-}
+/*.albumn_index .content .img img{
+  position:re;
+}*/
 .albumn_index .content .mark2{
   position:absolute;
   width:1.52rem;
