@@ -156,32 +156,37 @@ class Apic extends IController{
 		/* 分类 */
 		switch($param['tid']){
 			case 1: //药妆
-				$cid         = 126; //个性美妆
-				$aid         = 15; //专辑分类
-				$data['pic'] = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/gou.png';
+				$cid           = 126; //个性美妆
+				$aid           = 15; //专辑分类
+				$data['title'] = '狗子推荐';
+				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/gou.png'; //狗子推荐
 				break;
 			case 2: //个护
-				$cid         = 134; //基础护肤
-				$aid         = 18; //专辑分类
-				$data['pic'] = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/nai.png';
+				$cid           = 134; //基础护肤
+				$aid           = 18; //专辑分类
+				$data['title'] = '死鱼推荐';
+				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/siyu.png'; //死鱼推荐
 				break;
 			case 3: //宠物
-				$cid         = 6; //宠物用品
-				$aid         = 17; //专辑分类
-				$data['pic'] = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/tui.png';
+				$cid           = 6; //宠物用品
+				$aid           = 17; //专辑分类
+				$data['title'] = '腿毛推荐';
+				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/tui.png'; //腿毛推荐
 				break;
 			case 4: //健康
-				$cid         = 2; //居家药品
-				$aid         = 16; //专辑分类
-				$data['pic'] = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/xi.png';
+				$cid           = 2; //居家药品
+				$aid           = 16; //专辑分类
+				$data['title'] = 'RURU推荐';
+				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/ruru.png'; //RURU推荐
 				break;
 			case 5: //零食
-				$cid         = 7; //日式美食
-				$aid         = 19; //专辑分类
-				$data['pic'] = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/yi.png';
+				$cid           = 7; //日式美食
+				$aid           = 19; //专辑分类
+				$data['title'] = 'K哥推荐';
+				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/kge.png'; //K哥推荐
 				break;
 			default:
-				$this->returnJson(array('code'=>'007001','msg'=>$this->errorInfo['007001']));
+				$this->returnJson(array('code' => '007001', 'msg' => $this->errorInfo['007001']));
 		}
 		//商品分类
 		$cids = goods_class::catChild($cid);
