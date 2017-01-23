@@ -73,8 +73,9 @@
 		<!--最新品-->
 		<div class="prolistItem" v-cloak>
 			<div class="box new">
-				<div class="left">
-					<img src="/views/mobile/skin/default/image/jmj/product/new.png" alt="" style="width:3.07rem;height:0.66rem" />
+				<div class="left" style="display: -webkit-flex;">
+					<img src="/views/mobile/skin/default/image/jmj/product/new.png" alt="" style="width:0.5rem;height: 0.5rem;" />
+					<p style="line-height: 0.9rem;">最新品</p>
 				</div>
 				<a href="#" @click="toGoodsMore(1)">
 					<div class="right">
@@ -120,8 +121,9 @@
 		<!--最热卖-->
 		<div class="prolistItem" style="margin-top:0.12rem;" v-cloak>
 			<div class="box new">
-				<div class="left">
-					<img src="/views/mobile/skin/default/image/jmj/product/hot.png" alt="" style="width:3.06rem;height:0.66rem" />
+				<div class="left" style="display: -webkit-flex;">
+					<img src="/views/mobile/skin/default/image/jmj/product/hot.png" alt="" style="width:0.5rem;height: 0.5rem;" />
+					<p style="line-height: 1rem;">最热卖</p>
 				</div>
 				<div class="right">
 					<a href="#" @click="toGoodsMore(2)">
@@ -177,8 +179,9 @@
 		<section id="relate_product" v-cloak>
 			<div class="title">
 				<div class="box new">
-					<div class="left">
-						<img :src="info.pic" alt="" style="width:3.75rem;height:0.66rem" />
+					<div class="left" style="display:-webkit-flex;-webkit-align-items: center;">
+						<img :src="info.pic" alt="" style="width:0.5rem;height:0.5rem" />
+						<p style="">{{info.title}}</p>
 					</div>
 					<a href="#" @click="toGoodsMore(3)">
 						<div class="right">
