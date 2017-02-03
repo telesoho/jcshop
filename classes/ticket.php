@@ -292,7 +292,7 @@ class ticket{
 				break;
 		}
 		
-		return array('code'=>'1','msg'=>'ok','data'=>$data);
+		return array('code'=>'0','msg'=>'ok','data'=>$data);
 	}
 	
 	/**

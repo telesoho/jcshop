@@ -1782,26 +1782,27 @@ class Order extends IController implements adminAuthorization
 		$orderList           = $orderHandle->find();
 		
 		$goodsData = array();
+		$modelBag  = new IModel('goods_bag');
 		foreach($orderList as $k => $v){
 			//支付订单、已付款、不是已发货、商品未发货
 			if($v['status']==2 && $v['pay_status']==1 && $v['distribution_status']!=1 && $v['is_send']==0){
-				$modelBag = new IModel('goods_bag');
-				if($v['type'] == 2){ //礼包商品
-					$infoBag = $modelBag->getObj('goods_id='.$v['id']);
-					$goodsData[$v['goods_id']]['goods_nums'] += $v['goods_nums']*$infoBag['num'];
-				}else{ //通常商品
-					if(isset($goodsData[$v['goods_id']])){
-						//更新数量
-						$goodsData[$v['goods_id']]['goods_nums'] += $v['goods_nums'];
-					}else{
-						//添加商品
-						$goodsData[$v['goods_id']] = array(
-							'goods_name'    => $v['name'],
-							'goods_name_jp' => $v['name_jp'],
-							'goods_no'      => $v['goods_no'],
-							'goods_nums'    => $v['goods_nums'],
-						);
-					}
+				$nums = $v['goods_nums']; //商品数量
+				//是否礼包类商品
+				if($v['type']==2){
+					$infoBag = $modelBag->getObj('goods_id='.$v['goods_id']);
+					$nums    = $v['goods_nums']*$infoBag['num'];
+				}
+				if(isset($goodsData[$v['goods_id']])){
+					//更新数量
+					$goodsData[$v['goods_id']]['goods_nums'] += $nums;
+				}else{
+					//添加商品
+					$goodsData[$v['goods_id']] = array(
+						'goods_name'    => $v['name'],
+						'goods_name_jp' => $v['name_jp'],
+						'goods_no'      => $v['goods_no'],
+						'goods_nums'    => $nums,
+					);
 				}
 			}
 		}
