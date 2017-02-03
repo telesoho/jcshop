@@ -1,0 +1,85 @@
+<div class="headbar">
+    <div class="position"><span>插件管理</span><span>></span><span>插件</span><span>></span><span>妮素商品数据导入</span></div>
+</div>
+<div class="content_box">
+    <ul class="red_box">
+        <li>本插件用于同步妮素商品数据</li>
+        <li>1、默认的CSV文件编码不是UTF-8编码的，必须要先转换编码，利用工具另存为UTF-8格式</li>
+        <li>2、导入的CSV数据包必须是小于 {echo:IUpload::getMaxSize()} 的.ZIP压缩包，您可以通过修改php.ini中的 &lt;post_max_size&gt;和&lt;upload_max_filesize&gt;和&lt;memory_limit&gt;选项来修改上传数据包的大小</li>
+        <li>3、数据包里面一级目录必须包括CSV文件和与之对应的CSV图片文件夹，且两者的名字必须相同对应起来且必须是英文。例如：&lt;summer.csv&gt; 和 &lt;summer&gt;</li>
+    </ul>
+    <div class="content form_content">
+        <table class="form_table">
+            <colgroup>
+                <col width="150px" />
+                <col />
+            </colgroup>
+            <form id='nysoGoodsForm' action='' method='post' enctype='multipart/form-data'>
+                <tr>
+                    <th>商品/库存</th>
+                    <td>
+                        上传ZIP压缩包: <a href="/upload/nyso_data_import.xlsx">导入格式说明</a>
+                        <br />
+                        <input type="file" name="csvPacket" class="file" accept=".zip"/>
+                        <button class="submit" type="button" onclick="goodsSyn();"><span>商品同步</span></button>
+                        <button class="submit" type="button" onclick="stocksSyn();"><span>库存同步</span></button>
+                    </td>
+                </tr>
+            </form>
+            <form id="nysoOrderForm" action='' method='post'>
+                <tr>
+                    <th>订单/物流</th>
+                    <td>
+                        <button class="submit" type="button" onclick="ordersSyn();"><span>同步订单</span></button>
+                        <button class="submit" type="button" onclick="postsSyn();"><span>运单同步</span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>执行结果</th>
+                    <td>
+                        <textarea>{$msg}</textarea>
+                    </td>
+                </tr>
+            </form>
+        </table>
+    </div>
+</div>
+<script type='text/javascript'>
+
+    $("#nysoGoodsForm").on({
+        drop:function(e){  //拖后放
+            e.preventDefault();
+            //jquery的file要去e.originalEvent里面拿
+            var files = e.originalEvent.dataTransfer.files;
+            $('[name="csvPacket"]').val(file);
+        }
+    });
+
+    // 商品同步
+    function goodsSyn() {
+        if($('[name="csvPacket"]').val() == '')
+        {
+            alert('请上传csv数据包');
+            return false;
+        }
+        nysoGoodsForm.action = "{url:/plugins/nyso_goods_syn}";        
+        nysoGoodsForm.submit();
+    }
+
+    // 商品库存同步
+    function stocksSyn() {
+        if($('[name="csvPacket"]').val() == '')
+        {
+            alert('请上传csv数据包');
+            return false;
+        }
+        nysoGoodsForm.action = "{url:/plugins/nyso_stock_syn}";
+        nysoGoodsForm.submit();
+    }
+
+    // 订单同步
+    function ordersSyn() {
+        nysoOrderForm.action = "{url:/plugins/nyso_order_syn}"
+        nysoOrderForm.submit();
+    }
+</script>
