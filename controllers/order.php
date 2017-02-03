@@ -1721,16 +1721,16 @@ class Order extends IController implements adminAuthorization
 				);
 			$query 				= new IQuery('goods');
 			$query->fields 		= 'id,name,name_jp,sell_price,type';
-			$query_bag 			= new IQuery('goods_bag');
-			$query_bag->fields 	= 'id,goods_no,num';
+			$queryBag 			= new IQuery('goods_bag');
+			$queryBag->fields 	= 'id,goods_no,num';
 			foreach($orderGoodsList as $v1){
 				$query->where 				= 'id='.$v1['goods_id'];
 				$info 						= $query->find();
 				//礼包类商品
-				if($info[0]['type']==2){
-					$query_bag->where 		= 'goods_id='.$v1['goods_id'];
-					$info_bag 				= $query_bag->find();
-					foreach($info_bag as $k1 => $v2){
+				if($info[0]['type']==2 && strtotime($v['create_time'])>1480687200){
+					$queryBag->where 		= 'goods_id='.$v1['goods_id'];
+					$infoBag 				= $queryBag->find();
+					foreach($infoBag as $k2 => $v2){
 						$strGoods['goodsno'] 		.= '&nbsp;'.$v2['goods_no'].'<br />';
 						$strGoods['goods_nums'] 	.= $v2['num'].'<br />';
 					}
@@ -1775,29 +1775,45 @@ class Order extends IController implements adminAuthorization
 		list($join, $where) = order_class::getSearchCondition($search);
 		//拼接sql
 		$orderHandle         = new IQuery('order as o');
+		$orderHandle->join   = $join.' LEFT JOIN order_goods AS c ON c.order_id=o.id LEFT JOIN goods AS g ON g.id=c.goods_id';
 		$orderHandle->order  = "o.id desc";
 		$orderHandle->fields = "o.id AS order_id,o.status,o.pay_status,o.distribution_status,g.id AS goods_id,g.goods_no,g.name,g.name_jp,c.goods_nums,c.is_send,g.type";
-		$orderHandle->join   = $join.' LEFT JOIN order_goods AS c ON c.order_id=o.id LEFT JOIN goods AS g ON g.id=c.goods_id';
 		$orderHandle->where  = $where;
 		$orderList           = $orderHandle->find();
 		
-		$goodsData = array();
-		$modelBag  = new IModel('goods_bag');
+		$goodsData  = array();
+		$modelBag   = new IModel('goods_bag');
+		$modelGoods = new IModel('goods');
 		foreach($orderList as $k => $v){
 			//支付订单、已付款、不是已发货、商品未发货
 			if($v['status']==2 && $v['pay_status']==1 && $v['distribution_status']!=1 && $v['is_send']==0){
 				$nums = $v['goods_nums']; //商品数量
-				//是否礼包类商品
-				if($v['type']==2){
-					$infoBag = $modelBag->getObj('goods_id='.$v['goods_id']);
-					$nums    = $v['goods_nums']*$infoBag['num'];
+				//礼包类商品
+				if($v['type']==2 && strtotime($v['create_time'])>1480687200){
+					$infoBag = $modelBag->query('goods_id='.$v['goods_id'], 'id,goods_no,num');
+					foreach($infoBag as $k1 => $v1){
+						$infoGoods = $modelGoods->getObj('goods_no="'.$v1['goods_no'].'"', 'id,name,name_jp');
+						if(isset($goodsData[$v['goods_no']])){
+							//更新数量
+							$goodsData[$v['goods_no']]['goods_nums'] += $v['goods_nums']*$infoBag['num'];
+						}else{
+							//添加商品
+							$goodsData[$v['goods_no']] = array(
+								'goods_name'    => $infoGoods['name'],
+								'goods_name_jp' => $infoGoods['name_jp'],
+								'goods_no'      => $infoGoods['goods_no'],
+								'goods_nums'    => $v['goods_nums']*$infoBag['num'],
+							);
+						}
+					}
 				}
-				if(isset($goodsData[$v['goods_id']])){
+				//普通商品
+				if(isset($goodsData[$v['goods_no']])){
 					//更新数量
-					$goodsData[$v['goods_id']]['goods_nums'] += $nums;
+					$goodsData[$v['goods_no']]['goods_nums'] += $nums;
 				}else{
 					//添加商品
-					$goodsData[$v['goods_id']] = array(
+					$goodsData[$v['goods_no']] = array(
 						'goods_name'    => $v['name'],
 						'goods_name_jp' => $v['name_jp'],
 						'goods_no'      => $v['goods_no'],
@@ -1807,7 +1823,7 @@ class Order extends IController implements adminAuthorization
 			}
 		}
 		
-		$strTable ='<table width="500" border="1">';
+		$strTable = '<table width="500" border="1">';
 		$strTable .= '<tr>';
 		$strTable .= '<td style="text-align:center;font-size:12px;width:120px;">商品编号</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
@@ -1823,13 +1839,12 @@ class Order extends IController implements adminAuthorization
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$v['goods_name_jp'].' </td>';
 			$strTable .= '</tr>';
 		}
-		$strTable .='</table>';
+		$strTable .= '</table>';
 		
 		$reportObj = new report();
 		$reportObj->setFileName('未发货商品');
 		$reportObj->toDownload($strTable);
 		exit();
-		
 	}
 	
 	
