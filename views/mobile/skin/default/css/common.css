@@ -204,8 +204,8 @@ color:#ef4145 !important;}
 /*图标大小设定*/
 .img-hot{
   width:0.48rem;
-  position:relative;
-  top:0.06rem;
+  /*position:relative;
+  top:0.06rem;*/
 }
 .img-share{
   width:0.34rem;
@@ -564,7 +564,9 @@ input[type='search']{
   background:#fff;
 }
 .albumn_index .title .logo{
-  display: inline-block;
+  /*display: inline-block;*/
+  display: -webkit-flex;
+  -webkit-align-items: center;
 }
 .albumn_index .title .paper{
   margin-left:0.24rem;
@@ -586,7 +588,9 @@ input[type='search']{
   
 }
 .albumn_index .title .like{
- margin-left: 2.13rem;
+ margin-left: 2.18rem;
+ display: -webkit-flex;
+ -webkit-align-items: center;
 }
 .albumn_index .title .num{
   width:0.22rem;

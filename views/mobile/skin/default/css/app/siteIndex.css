@@ -457,7 +457,7 @@ color:#ff2f5c;
 }
 /*点赞数字*/
 .albumn_index .title .num{
-	margin-top: -0.1rem;
+	/*margin-top: -0.1rem;*/
 }
 .post_shop:last-child .xian_list{
 	display: none;
