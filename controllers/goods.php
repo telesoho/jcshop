@@ -226,9 +226,8 @@ class Goods extends IController implements adminAuthorization
 
 		$model = new IModel('supplier');
 		$supplier = $model->getObj("id =" . $data['form']['supplier_id']);
-		$data['supplier_name'] = $supplier['name'] . $data['form']['ware_house_name'];
+		$data['supplier_name'] = $supplier['supplier_name'] . $data['form']['ware_house_name'];
 
-		
 
 		/* cosme排行信息 */
 		$queryCosme 				= new IQuery('cosme');
