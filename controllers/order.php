@@ -12,9 +12,7 @@ class Order extends IController implements adminAuthorization
 	public $layout='admin';
 	function init()
 	{
-	    $jmj_config = new config('jmj');
-	    $xlobo = $jmj_config->xlobo;
-	    xlobo::init($xlobo);
+	    xlobo::init();
 	}
 	
 	/**

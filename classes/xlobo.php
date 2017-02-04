@@ -15,8 +15,8 @@ class xlobo
     private static $ServerUrl;
 
     public static function init(){
-        $jmj_config = new Config('jmj_config');
-        if ($jmj_config->xlobo){
+        $site_config = new Config('site_config');
+        if ($site_config->xlobo){
             self::$APPKEY = '16cc3c0e-76b5-4085-83a1-0c2bc3478ee3';
             self::$SecretKey = 'APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==';
             self::$AccessToken = 'AD30N4p75N4UKcG0lGwiXXAUGTD60PSbFGoaw9R84s7QoXuv8XhBTad3yO3yiUS+rw==';
