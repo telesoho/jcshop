@@ -24,10 +24,10 @@ class jcshopCsvImport extends pluginBase
 		});
 
 		plugin::reg("onBeforeCreateAction@plugins@jcshop_csv_import",function(){
-			self::controller()->jcshop_csv_import = function(){$this->redirect("jcshopCsvImport");};
+			self::controller()->jcshop_csv_import = function(){$this->redirect("jcshopDataImport");};
 		});
 		plugin::reg("onBeforeCreateAction@plugins@doJcshopCsvImport",function(){
-			self::controller()->doJcshopCsvImport = function(){$this->csvImport("jcshopCsvImport");};
+			self::controller()->doJcshopCsvImport = function(){$this->csvImport("jcshopDataImport");};
 		});
 	}
 

@@ -921,7 +921,6 @@ class nysoDataImport extends pluginBase
 		$query->where = "go.supplier_id = 1";
 		$sku_no_list = $query->find();
 
-
 		foreach($sku_no_list as $sku_no) {
 			try {
 				// 通过妮素接口取出商品库存数据
