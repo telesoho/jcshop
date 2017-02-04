@@ -556,6 +556,7 @@ class Order_Class
 				$goodsArray['goods_weight']= $val['weight'];
 				$goodsArray['goods_array'] = IFilter::addSlash(JSON::encode($specArray));
 				$goodsArray['seller_id']   = $val['seller_id'];
+				$goodsArray['duties']      = $val['duties'];	// 关税
 				$orderGoodsObj->setData($goodsArray);
 				$orderGoodsObj->add();
 			}

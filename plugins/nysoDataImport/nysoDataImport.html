@@ -16,16 +16,24 @@
             </colgroup>
             <form id='nysoGoodsForm' action='' method='post' enctype='multipart/form-data'>
                 <tr>
-                    <th>商品/库存</th>
+                    <th>商品</th>
                     <td>
                         上传ZIP压缩包: <a href="/upload/nyso_data_import.xlsx">导入格式说明</a>
                         <br />
                         <input type="file" name="csvPacket" class="file" accept=".zip"/>
                         <button class="submit" type="button" onclick="goodsSyn();"><span>商品同步</span></button>
-                        <button class="submit" type="button" onclick="stocksSyn();"><span>库存同步</span></button>
                     </td>
                 </tr>
             </form>
+            <form id='nysoStockForm' action='' method='post'>
+                <tr>
+                    <th>库存</th>
+                    <td>
+                        <button class="submit" type="button" onclick="stocksSyn();"><span>同步所有妮素商品库存</span></button>
+                    </td>
+                </tr>
+            </form>
+            
             <form id="nysoOrderForm" action='' method='post'>
                 <tr>
                     <th>订单/物流</th>
@@ -34,13 +42,14 @@
                         <button class="submit" type="button" onclick="postsSyn();"><span>运单同步</span></button>
                     </td>
                 </tr>
-                <tr>
-                    <th>执行结果</th>
-                    <td>
-                        <textarea>{$msg}</textarea>
-                    </td>
-                </tr>
             </form>
+            <tr>
+                <th>执行结果</th>
+                <td>
+                    <pre>{$info}</pre>
+                    <pre><font color=red>{$error}</font></pre>
+                </td>
+            </tr>
         </table>
     </div>
 </div>
@@ -62,24 +71,19 @@
             alert('请上传csv数据包');
             return false;
         }
-        nysoGoodsForm.action = "{url:/plugins/nyso_goods_syn}";        
-        nysoGoodsForm.submit();
+        nysoGoodsForm.action = "{url:/plugins/nyso_goods_syn}";   
+        document.getElementById("nysoGoodsForm").submit();
     }
 
     // 商品库存同步
     function stocksSyn() {
-        if($('[name="csvPacket"]').val() == '')
-        {
-            alert('请上传csv数据包');
-            return false;
-        }
-        nysoGoodsForm.action = "{url:/plugins/nyso_stock_syn}";
-        nysoGoodsForm.submit();
+        nysoStockForm.action = "{url:/plugins/nyso_stock_syn}";
+        document.getElementById("nysoStockForm").submit();
     }
 
     // 订单同步
     function ordersSyn() {
-        nysoOrderForm.action = "{url:/plugins/nyso_order_syn}"
-        nysoOrderForm.submit();
+        nysoOrderForm.action = "{url:/plugins/nyso_order_syn}";
+        document.getElementById("nysoOrderForm").submit();
     }
 </script>

@@ -581,8 +581,7 @@ class Order extends IController implements adminAuthorization
             if ( !file_exists($sfz_image2) ) IError::show_normal('用户身份证证件不存在');
 //            $data['user_data'] = $user_data;
             $ret = xlobo::add_idcard($address_data['accept_name'], $address_data['mobile'], $address_data['sfz_num'], $address_data['sfz_image1'], $address_data['sfz_image2']);
-            var_dump($ret);
-//            var_dump(xlobo::get_hub());
+//            var_dump($ret);
         }
         $this->setRenderData($data);
         $this->redirect('order_deliver_xlobo');
@@ -658,8 +657,10 @@ class Order extends IController implements adminAuthorization
 	 */
     public function order_update()
     {
-    	//获取必要数据
-    	$order_id = IFilter::act(IReq::get('id'),'int');
+    	//获取必要的参数
+    	$p_order_id = IFilter::act(IReq::get('id'),'int');	//订单ID
+
+		$p_real_freight  = IFilter::act(IReq::get('real_freight')); // 实际运费
 
     	//生成order数据
     	$dataArray                  = array();
@@ -674,13 +675,15 @@ class Order extends IController implements adminAuthorization
     	$dataArray['area']          = IFilter::act(IReq::get('area'),'int');
     	$dataArray['address']       = IFilter::act(IReq::get('address'));
     	$dataArray['mobile']        = IFilter::act(IReq::get('mobile'));
-    	$dataArray['discount']      = $order_id ? IFilter::act(IReq::get('discount'),'float') : 0;
+    	$dataArray['discount']      = $p_order_id ? IFilter::act(IReq::get('discount'),'float') : 0;
     	$dataArray['postscript']    = IFilter::act(IReq::get('postscript'));
     	$dataArray['distribution']  = IFilter::act(IReq::get('distribution'),'int');
     	$dataArray['accept_time']   = IFilter::act(IReq::get('accept_time'));
     	$dataArray['takeself']      = IFilter::act(IReq::get('takeself'));
-    	$dataArray['real_freight']  = IFilter::act(IReq::get('real_freight'));
+    	$dataArray['real_freight']  = $p_real_freight;
     	$dataArray['note']          = IFilter::act(IReq::get('note'));
+		$dataArray['sfz_num']       = IFilter::act(IReq::get('sfz_num'));	//身份证号码
+
 
 		//设置订单持有者
 		$username = IFilter::act(IReq::get('username'));
@@ -720,20 +723,27 @@ class Order extends IController implements adminAuthorization
 		$cartObj      = new Cart();
 		$goodsResult  = $countSumObj->goodsCount($cartObj->cartFormat(array("goods" => $goodsArray,"product" => $productArray)));
 		$orderData   = $countSumObj->countOrderFee($goodsResult,$dataArray['province'],$dataArray['distribution'],$dataArray['pay_type'],$dataArray['invoice'],$dataArray['discount']);
+
 		if(is_string($orderData))
 		{
 			IError::show(403,$orderData);
 			exit;
 		}
 
-		//根据商品所属商家不同批量生成订单
-		foreach($orderData as $seller_id => $goodsResult)
+		// common::print_b($orderData);
+		// die("OK");
+
+		//根据【商品所属商家+供应商+仓库名】不同批量生成订单
+		foreach($orderData as $orderKey => $goodsResult)
 		{
+			// 解析出所属商家，供应商，仓库名
+			list($seller_id, $supplier_id, $ware_house_name) = CountSum::parseOrderKey($orderKey);
+
 			//运费自定义
-			if(is_numeric($dataArray['real_freight']) && $goodsResult['deliveryPrice'] != $dataArray['real_freight'])
+			if(is_numeric($p_real_freight) && $goodsResult['deliveryPrice'] != $p_real_freight)
 			{
-				$goodsResult['orderAmountPrice'] += $dataArray['real_freight'] - $goodsResult['deliveryPrice'];
-				$goodsResult['deliveryPrice']     = $dataArray['real_freight'];
+				$goodsResult['orderAmountPrice'] += $p_real_freight - $goodsResult['deliveryPrice'];
+				$goodsResult['deliveryPrice']     = $p_real_freight;
 			}
 			$dataArray['payable_freight']= $goodsResult['deliveryOrigPrice'];
 			$dataArray['payable_amount'] = $goodsResult['sum'];
@@ -746,6 +756,10 @@ class Order extends IController implements adminAuthorization
 			$dataArray['order_amount']   = $goodsResult['orderAmountPrice'];
 			$dataArray['exp']            = $goodsResult['exp'];
 			$dataArray['point']          = $goodsResult['point'];
+			$dataArray['duties']         = $goodsResult['dutiesPrice'];
+
+			// 供应商ID
+			$dataArray['supplier_id']    = $supplier_id;
 
 			//商家ID
 			$dataArray['seller_id'] = $seller_id;
@@ -753,9 +767,10 @@ class Order extends IController implements adminAuthorization
 	    	//生成订单
 	    	$orderDB = new IModel('order');
 
-	    	//修改操作
-	    	if($order_id)
+	    	//请求参数有order_id则视为修改操作
+	    	if($p_order_id)
 	    	{
+				$order_id = $p_order_id;
 	    		//获取订单信息
 	    		$orderRow = $orderDB->getObj('id = '.$order_id);
 
@@ -828,9 +843,15 @@ class Order extends IController implements adminAuthorization
 
 			//获取订单中的商品信息
 			$orderGoodsDB         = new IQuery('order_goods as og');
-			$orderGoodsDB->join   = "left join goods as go on og.goods_id = go.id left join products as p on p.id = og.product_id";
-			$orderGoodsDB->fields = "go.id,go.name,p.spec_array,p.id as product_id,og.real_price,og.goods_nums,go.goods_no,p.products_no";
+			$orderGoodsDB->join   = "left join "
+									. " (select g.*, gs.duties_rate, gs.ware_house_name, s.supplier_name from goods as g " 
+										." left join goods_supplier as gs on g.supplier_id = gs.supplier_id and g.sku_no = gs.sku_no "
+										." left join supplier as s on g.supplier_id = s.id"
+										. " ) as go on og.goods_id = go.id " 
+									." left join products as p on p.id = og.product_id ";
+			$orderGoodsDB->fields = "go.id,go.name,p.spec_array,p.id as product_id,og.real_price,og.goods_nums,go.goods_no,p.products_no,og.duties, go.duties_rate, concat_ws(' ', go.supplier_name, go.ware_house_name) as supplier_name ";
 			$orderGoodsDB->where  = "og.order_id = ".$order_id;
+
 			$this->orderGoods     = $orderGoodsDB->find();
 
 			//获取用户名

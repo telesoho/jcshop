@@ -476,8 +476,10 @@ class Simple extends IController
 		$orderIdArray  		= array();
 		$orderNumArray 		= array();
 		$final_sum     		= 0;
-		foreach($orderData as $seller_id => $goodsResult)
+		foreach($orderData as $orderKey => $goodsResult)
 		{
+			list($seller_id, $supplier_id, $ware_house_name) = CountSum::parseOrderKey($orderKey);
+			
 			//====================================
 			/* 使用优惠券 */
 			$goodsResult['final_sum'] = $goodsResult['sum']; //原价

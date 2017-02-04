@@ -73,12 +73,16 @@ class Block extends IController
 			}
 		}
 
-		//查询条件
+		//查询条件订单信息
+
 		$table_name = 'goods as go';
-		$fields     = 'go.id as goods_id,go.name,go.img,go.store_nums,go.goods_no,go.sell_price,go.spec_array,go.is_del';
+		$join 		= 'left join supplier as s on go.supplier_id = s.id '
+					  .'left join goods_supplier as gs on go.goods_no = gs.goods_no and go.supplier_id = gs.supplier_id';
+		$fields     = 'go.id as goods_id,go.name,go.img,go.store_nums,go.goods_no,go.sell_price,go.spec_array,go.is_del,gs.duties_rate,'
+					  .'concat_ws(" ", s.supplier_name, gs.ware_house_name) AS supplier_name';
 
 //		$where   = 'go.is_del = 0';
-		$where   = ' 1=1 ';
+		$where   = ' 1=1';
 		$where  .= $goods_id  ? ' and go.id          in ('.$goods_id.')' : '';
 		$where  .= $seller_id ? ' and go.seller_id    = '.$seller_id     : '';
 		$where  .= $goods_no  ? ' and go.goods_no     = "'.$goods_no.'"' : '';
@@ -94,8 +98,13 @@ class Block extends IController
 		}
 
 		//获取商品数据
-		$goodsDB = new IModel($table_name);
-		$data    = $goodsDB->query($where,$fields,'go.id desc',$show_num);
+		$goodsDB = new IQuery($table_name);
+		$goodsDB->join = $join;
+		$goodsDB->fields = $fields;
+		$goodsDB->where = $where;
+		$goodsDB->order = 'go.id desc';
+		$goodsDB->limit = $show_num;
+		$data = $goodsDB->find();
 
 		//包含货品信息
 		if($is_products)

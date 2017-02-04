@@ -51,6 +51,18 @@
 						</td>
 					</tr>
 					<tr>
+						<th>商品来源：</th>
+						<td>
+							{echo:$supplier_name}
+						</td>
+					</tr>
+					<tr>
+						<th>税率：</th>
+						<td>
+							{echo:$form['duties_rate']*100}%
+						</td>
+					</tr>					
+					<tr>
 						<th>所属分类：</th>
 						<td>
 							<div id="__categoryBox" style="margin-bottom:8px"></div>
@@ -270,6 +282,8 @@
 							<label class="attr"><input name="_goods_commend[]" type="checkbox" value="2" />特价商品</label>
 							<label class="attr"><input name="_goods_commend[]" type="checkbox" value="3" />热卖商品</label>
 							<label class="attr"><input name="_goods_commend[]" type="checkbox" value="4" />推荐商品</label>
+							<label class="attr"><input name="_goods_commend[]" type="checkbox" value="5" />热卖榜</label>
+							<label class="attr"><input name="_goods_commend[]" type="checkbox" value="6" />每周上新</label>
 						</td>
 					</tr>
 					<tr>

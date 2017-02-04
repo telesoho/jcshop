@@ -171,9 +171,14 @@ class nysochina
         $headerParam[] = "parenter:" . self::$config['nyso_parenter'];
         $headerParam[] = "interfacename:" . $apiname;
         $headerParam[] = "token:" . $token;
-        
+
         try {
-            return self::jsonPost($api, $paramContent, $headerParam);
+            $response = self::jsonPost($api, $paramContent, $headerParam);
+            $q['api'] = $api;
+            $q['param'] = $param;
+            $q['header'] = $headerParam;
+            self::$log->info($response, $q);
+            return $response;
         } catch(Exception $e) {
             // 输出错误日志            
             $err['api'] = $api;
