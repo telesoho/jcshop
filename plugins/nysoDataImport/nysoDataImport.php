@@ -837,6 +837,7 @@ class nysoDataImport extends pluginBase
 			'jp_market_price' 	=> round($goodsSupplierData['retail_price'] * $this->exchange_rate_jp),
 			'supplier_id'		=> $goodsSupplierData['supplier_id'],
 			'sku_no'			=> $goodsSupplierData['sku_no'],
+			'is_del'			=> 2,										// 默认为下架状态
 		);
 		return $goodsData;
 	}
