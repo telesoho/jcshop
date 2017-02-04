@@ -16,13 +16,14 @@ class Block extends IController
 	 * 服务器定时任务
 	 */
 	public function autoRun(){
-		$config         = new Config('jmj_config');
-		$orderClearTime = $config->order_clear_time; //订单自动完成时间
+		$config          = new Config('jmj_config');
+		$orderClearTime  = $config->order_clear_time; //订单自动完成时间
+		$orderCancelTime = $config->order_cancel_time; //订单自动取消时间
 		
-		/* 订单自动完成 */
+		/* 订单自动完成（已发货） */
 		$modelOrder = new IModel('order');
 		$where      = 'pay_type!=0 AND status=2 AND pay_status=1 AND distribution_status=1 AND if_del=0 AND pay_time<="'.date('Y-m-d H:i:s', time()-$orderClearTime).'"';
-		$field      = 'id,order_no,pay_time';
+		$field      = 'id,order_no';
 		$listOrder  = $modelOrder->query($where, $field, '', 100);
 		if(!empty($listOrder)){
 			foreach($listOrder as $k => $v){
@@ -32,6 +33,20 @@ class Block extends IController
 					Order_Class::updateOrderStatus($v['order_no']);
 					//增加用户评论商品机会
 					Order_Class::addGoodsCommentChange($v['id']);
+				}
+			}
+		}
+		
+		/* 订单自动关闭（未付款） */
+		$modelOrder = new IModel('order');
+		$where      = 'pay_type!=0 AND status=1 AND pay_status=0 AND distribution_status=0 AND if_del=0 AND create_time<="'.date('Y-m-d H:i:s', time()-$orderCancelTime).'"';
+		$field      = 'id,order_no';
+		$listOrder  = $modelOrder->query($where, $field, '', 100);
+		if(!empty($listOrder)){
+			foreach($listOrder as $k => $v){
+				$modelOrder->setData(array('status' => 3));
+				if($modelOrder->update("id = ".$v['id'])){
+					order_class::resetOrderProp($v['id']); //还原重置订单所使用的道具
 				}
 			}
 		}
