@@ -348,7 +348,86 @@ class Cart extends IInterceptorBase
 	/**
 	 * @brief  把cookie的结构转化成为程序所用的数据结构
 	 * @param  $cartValue 购物车cookie存储结构
+		Array
+		(
+			[goods] => Array
+				(
+					[24269] => 2
+					[24270] => 1
+					[24271] => 1
+				)
+
+			[product] => Array
+				(
+				)
+
+		)
 	 * @return array : [goods]=>array( ['id']=>商品ID , ['data'] => array( [商品ID]=>array ([name]商品名称 , [img]图片地址 , [sell_price]价格, [count]购物车中此商品的数量 ,[type]类型goods,product , [goods_id]商品ID值 ) ) ) , [product]=>array( 同上 ) , [count]购物车商品和货品数量 , [sum]商品和货品总额 ;
+		Array
+		(
+			[goods] => Array
+				(
+					[id] => Array
+						(
+							[0] => 24269
+							[1] => 24270
+							[2] => 24271
+						)
+
+					[data] => Array
+						(
+							[24269] => Array
+								(
+									[id] => 24269
+									[type] => goods
+									[goods_id] => 24269
+									[count] => 2
+									[img] => 
+									[name] => FANCL/芳珂 HTC胶原蛋白粉 30日
+									[sell_price] => 202.00
+								)
+
+							[24270] => Array
+								(
+									[id] => 24270
+									[type] => goods
+									[goods_id] => 24270
+									[count] => 1
+									[img] => 
+									[name] => MUJI/无印良品 敏感肌用乳液清爽型 200ml
+									[sell_price] => 72.00
+								)
+
+							[24271] => Array
+								(
+									[id] => 24271
+									[type] => goods
+									[goods_id] => 24271
+									[count] => 1
+									[img] => 
+									[name] => Reveur 无硅洗发水 紫色（黑标） 500ml
+									[sell_price] => 65.00
+								)
+
+						)
+
+				)
+
+			[product] => Array
+				(
+					[id] => Array
+						(
+						)
+
+					[data] => Array
+						(
+						)
+
+				)
+
+			[count] => 4
+			[sum] => 541
+		)
 	 */
 	public function cartFormat($cartValue)
 	{

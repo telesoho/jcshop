@@ -19,12 +19,12 @@ class jcshopCsvImport extends pluginBase
 	{
 		//后台管理
 		plugin::reg("onSystemMenuCreate",function(){
-			$link = "/plugins/jcshopCsvImport";
+			$link = "/plugins/jcshop_csv_import";
 			Menu::$menu["插件"]["插件管理"][$link] = $this->name();
 		});
 
-		plugin::reg("onBeforeCreateAction@plugins@jcshopCsvImport",function(){
-			self::controller()->jcshopCsvImport = function(){$this->redirect("jcshopCsvImport");};
+		plugin::reg("onBeforeCreateAction@plugins@jcshop_csv_import",function(){
+			self::controller()->jcshop_csv_import = function(){$this->redirect("jcshopCsvImport");};
 		});
 		plugin::reg("onBeforeCreateAction@plugins@doJcshopCsvImport",function(){
 			self::controller()->doJcshopCsvImport = function(){$this->csvImport("jcshopCsvImport");};
@@ -232,7 +232,7 @@ class jcshopCsvImport extends pluginBase
 			}
 
 			// 查询商品是否存在, 如果商品存在，则$the_goods是该商品记录，否则为false
-			$where = "goods_no = ". "'". $goods_no . "'";
+			$where = "goods_no = ". "'". $goods_no . "' and supplier_id = 0 and ware_house_name = ''"; // supplier_id = 0：九猫
 			$the_goods = $goodsObject->getObj($where);
 
 			// 如果商品名称不为空，则修改商品名

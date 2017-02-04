@@ -367,13 +367,20 @@ class goods_class
 		}
 
 		//获取商品
-		$obj_goods = new IModel('goods');
-		$goods_info = $obj_goods->getObj($goodsWhere);
-
-		if(!$goods_info)
+		$obj_goods = new IQuery('goods as g');
+		$join = " LEFT JOIN goods_supplier as gs ON g.supplier_id = gs.supplier_id AND gs.sku_no = g.sku_no";
+		$obj_goods->where = $goodsWhere;
+		$obj_goods->join = $join ;
+		$obj_goods->limit = 1;
+		$obj_goods->fields = "g.*, gs.ware_house_name, gs.duties_rate";
+		$goods_infos = $obj_goods->find();
+		
+		if(count($goods_infos) < 1)
 		{
 			return null;
 		}
+
+		$goods_info = $goods_infos[0];
 
 		//获取商品的会员价格
 		$groupPriceDB = new IModel('group_price');
