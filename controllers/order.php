@@ -12,9 +12,7 @@ class Order extends IController implements adminAuthorization
 	public $layout='admin';
 	function init()
 	{
-	    $jmj_config = new config('jmj');
-	    $xlobo = $jmj_config->xlobo;
-	    xlobo::init($xlobo);
+	    xlobo::init();
 	}
 	
 	/**
@@ -683,8 +681,10 @@ class Order extends IController implements adminAuthorization
 	 */
     public function order_update()
     {
-    	//获取必要数据
-    	$order_id = IFilter::act(IReq::get('id'),'int');
+    	//获取必要的参数
+    	$p_order_id = IFilter::act(IReq::get('id'),'int');	//订单ID
+
+		$p_real_freight  = IFilter::act(IReq::get('real_freight')); // 实际运费
 
     	//生成order数据
     	$dataArray                  = array();
@@ -699,13 +699,15 @@ class Order extends IController implements adminAuthorization
     	$dataArray['area']          = IFilter::act(IReq::get('area'),'int');
     	$dataArray['address']       = IFilter::act(IReq::get('address'));
     	$dataArray['mobile']        = IFilter::act(IReq::get('mobile'));
-    	$dataArray['discount']      = $order_id ? IFilter::act(IReq::get('discount'),'float') : 0;
+    	$dataArray['discount']      = $p_order_id ? IFilter::act(IReq::get('discount'),'float') : 0;
     	$dataArray['postscript']    = IFilter::act(IReq::get('postscript'));
     	$dataArray['distribution']  = IFilter::act(IReq::get('distribution'),'int');
     	$dataArray['accept_time']   = IFilter::act(IReq::get('accept_time'));
     	$dataArray['takeself']      = IFilter::act(IReq::get('takeself'));
-    	$dataArray['real_freight']  = IFilter::act(IReq::get('real_freight'));
+    	$dataArray['real_freight']  = $p_real_freight;
     	$dataArray['note']          = IFilter::act(IReq::get('note'));
+		$dataArray['sfz_num']       = IFilter::act(IReq::get('sfz_num'));	//身份证号码
+
 
 		//设置订单持有者
 		$username = IFilter::act(IReq::get('username'));
@@ -745,20 +747,27 @@ class Order extends IController implements adminAuthorization
 		$cartObj      = new Cart();
 		$goodsResult  = $countSumObj->goodsCount($cartObj->cartFormat(array("goods" => $goodsArray,"product" => $productArray)));
 		$orderData   = $countSumObj->countOrderFee($goodsResult,$dataArray['province'],$dataArray['distribution'],$dataArray['pay_type'],$dataArray['invoice'],$dataArray['discount']);
+
 		if(is_string($orderData))
 		{
 			IError::show(403,$orderData);
 			exit;
 		}
 
-		//根据商品所属商家不同批量生成订单
-		foreach($orderData as $seller_id => $goodsResult)
+		// common::print_b($orderData);
+		// die("OK");
+
+		//根据【商品所属商家+供应商+仓库名】不同批量生成订单
+		foreach($orderData as $orderKey => $goodsResult)
 		{
+			// 解析出所属商家，供应商，仓库名
+			list($seller_id, $supplier_id, $ware_house_name) = CountSum::parseOrderKey($orderKey);
+
 			//运费自定义
-			if(is_numeric($dataArray['real_freight']) && $goodsResult['deliveryPrice'] != $dataArray['real_freight'])
+			if(is_numeric($p_real_freight) && $goodsResult['deliveryPrice'] != $p_real_freight)
 			{
-				$goodsResult['orderAmountPrice'] += $dataArray['real_freight'] - $goodsResult['deliveryPrice'];
-				$goodsResult['deliveryPrice']     = $dataArray['real_freight'];
+				$goodsResult['orderAmountPrice'] += $p_real_freight - $goodsResult['deliveryPrice'];
+				$goodsResult['deliveryPrice']     = $p_real_freight;
 			}
 			$dataArray['payable_freight']= $goodsResult['deliveryOrigPrice'];
 			$dataArray['payable_amount'] = $goodsResult['sum'];
@@ -771,6 +780,10 @@ class Order extends IController implements adminAuthorization
 			$dataArray['order_amount']   = $goodsResult['orderAmountPrice'];
 			$dataArray['exp']            = $goodsResult['exp'];
 			$dataArray['point']          = $goodsResult['point'];
+			$dataArray['duties']         = $goodsResult['dutiesPrice'];
+
+			// 供应商ID
+			$dataArray['supplier_id']    = $supplier_id;
 
 			//商家ID
 			$dataArray['seller_id'] = $seller_id;
@@ -778,9 +791,10 @@ class Order extends IController implements adminAuthorization
 	    	//生成订单
 	    	$orderDB = new IModel('order');
 
-	    	//修改操作
-	    	if($order_id)
+	    	//请求参数有order_id则视为修改操作
+	    	if($p_order_id)
 	    	{
+				$order_id = $p_order_id;
 	    		//获取订单信息
 	    		$orderRow = $orderDB->getObj('id = '.$order_id);
 
@@ -853,9 +867,15 @@ class Order extends IController implements adminAuthorization
 
 			//获取订单中的商品信息
 			$orderGoodsDB         = new IQuery('order_goods as og');
-			$orderGoodsDB->join   = "left join goods as go on og.goods_id = go.id left join products as p on p.id = og.product_id";
-			$orderGoodsDB->fields = "go.id,go.name,p.spec_array,p.id as product_id,og.real_price,og.goods_nums,go.goods_no,p.products_no";
+			$orderGoodsDB->join   = "left join "
+									. " (select g.*, gs.duties_rate, gs.ware_house_name, s.supplier_name from goods as g " 
+										." left join goods_supplier as gs on g.supplier_id = gs.supplier_id and g.sku_no = gs.sku_no "
+										." left join supplier as s on g.supplier_id = s.id"
+										. " ) as go on og.goods_id = go.id " 
+									." left join products as p on p.id = og.product_id ";
+			$orderGoodsDB->fields = "go.id,go.name,p.spec_array,p.id as product_id,og.real_price,og.goods_nums,go.goods_no,p.products_no,og.duties, go.duties_rate, concat_ws(' ', go.supplier_name, go.ware_house_name) as supplier_name ";
 			$orderGoodsDB->where  = "og.order_id = ".$order_id;
+
 			$this->orderGoods     = $orderGoodsDB->find();
 
 			//获取用户名
@@ -1721,16 +1741,16 @@ class Order extends IController implements adminAuthorization
 				);
 			$query 				= new IQuery('goods');
 			$query->fields 		= 'id,name,name_jp,sell_price,type';
-			$query_bag 			= new IQuery('goods_bag');
-			$query_bag->fields 	= 'id,goods_no,num';
+			$queryBag 			= new IQuery('goods_bag');
+			$queryBag->fields 	= 'id,goods_no,num';
 			foreach($orderGoodsList as $v1){
 				$query->where 				= 'id='.$v1['goods_id'];
 				$info 						= $query->find();
 				//礼包类商品
-				if($info[0]['type']==2){
-					$query_bag->where 		= 'goods_id='.$v1['goods_id'];
-					$info_bag 				= $query_bag->find();
-					foreach($info_bag as $k1 => $v2){
+				if($info[0]['type']==2 && strtotime($v['create_time'])>1480687200){
+					$queryBag->where 		= 'goods_id='.$v1['goods_id'];
+					$infoBag 				= $queryBag->find();
+					foreach($infoBag as $k2 => $v2){
 						$strGoods['goodsno'] 		.= '&nbsp;'.$v2['goods_no'].'<br />';
 						$strGoods['goods_nums'] 	.= $v2['num'].'<br />';
 					}
@@ -1775,29 +1795,45 @@ class Order extends IController implements adminAuthorization
 		list($join, $where) = order_class::getSearchCondition($search);
 		//拼接sql
 		$orderHandle         = new IQuery('order as o');
+		$orderHandle->join   = $join.' LEFT JOIN order_goods AS c ON c.order_id=o.id LEFT JOIN goods AS g ON g.id=c.goods_id';
 		$orderHandle->order  = "o.id desc";
 		$orderHandle->fields = "o.id AS order_id,o.status,o.pay_status,o.distribution_status,g.id AS goods_id,g.goods_no,g.name,g.name_jp,c.goods_nums,c.is_send,g.type";
-		$orderHandle->join   = $join.' LEFT JOIN order_goods AS c ON c.order_id=o.id LEFT JOIN goods AS g ON g.id=c.goods_id';
 		$orderHandle->where  = $where;
 		$orderList           = $orderHandle->find();
 		
-		$goodsData = array();
-		$modelBag  = new IModel('goods_bag');
+		$goodsData  = array();
+		$modelBag   = new IModel('goods_bag');
+		$modelGoods = new IModel('goods');
 		foreach($orderList as $k => $v){
 			//支付订单、已付款、不是已发货、商品未发货
 			if($v['status']==2 && $v['pay_status']==1 && $v['distribution_status']!=1 && $v['is_send']==0){
 				$nums = $v['goods_nums']; //商品数量
-				//是否礼包类商品
-				if($v['type']==2){
-					$infoBag = $modelBag->getObj('goods_id='.$v['goods_id']);
-					$nums    = $v['goods_nums']*$infoBag['num'];
+				//礼包类商品
+				if($v['type']==2 && strtotime($v['create_time'])>1480687200){
+					$infoBag = $modelBag->query('goods_id='.$v['goods_id'], 'id,goods_no,num');
+					foreach($infoBag as $k1 => $v1){
+						$infoGoods = $modelGoods->getObj('goods_no="'.$v1['goods_no'].'"', 'id,name,name_jp');
+						if(isset($goodsData[$v['goods_no']])){
+							//更新数量
+							$goodsData[$v['goods_no']]['goods_nums'] += $v['goods_nums']*$infoBag['num'];
+						}else{
+							//添加商品
+							$goodsData[$v['goods_no']] = array(
+								'goods_name'    => $infoGoods['name'],
+								'goods_name_jp' => $infoGoods['name_jp'],
+								'goods_no'      => $infoGoods['goods_no'],
+								'goods_nums'    => $v['goods_nums']*$infoBag['num'],
+							);
+						}
+					}
 				}
-				if(isset($goodsData[$v['goods_id']])){
+				//普通商品
+				if(isset($goodsData[$v['goods_no']])){
 					//更新数量
-					$goodsData[$v['goods_id']]['goods_nums'] += $nums;
+					$goodsData[$v['goods_no']]['goods_nums'] += $nums;
 				}else{
 					//添加商品
-					$goodsData[$v['goods_id']] = array(
+					$goodsData[$v['goods_no']] = array(
 						'goods_name'    => $v['name'],
 						'goods_name_jp' => $v['name_jp'],
 						'goods_no'      => $v['goods_no'],
@@ -1807,7 +1843,7 @@ class Order extends IController implements adminAuthorization
 			}
 		}
 		
-		$strTable ='<table width="500" border="1">';
+		$strTable = '<table width="500" border="1">';
 		$strTable .= '<tr>';
 		$strTable .= '<td style="text-align:center;font-size:12px;width:120px;">商品编号</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
@@ -1823,13 +1859,12 @@ class Order extends IController implements adminAuthorization
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$v['goods_name_jp'].' </td>';
 			$strTable .= '</tr>';
 		}
-		$strTable .='</table>';
+		$strTable .= '</table>';
 		
 		$reportObj = new report();
 		$reportObj->setFileName('未发货商品');
 		$reportObj->toDownload($strTable);
 		exit();
-		
 	}
 	
 	

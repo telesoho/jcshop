@@ -18,7 +18,9 @@ return array(
 		'query' => array(
 			'name'   => 'goods as go',
 			'where'  => 'go.id = #id# and go.is_del = 0',
-			'fields' => 'go.name,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id',
+			'join'	 => 'left join goods_supplier as gs on go.supplier_id = gs.supplier_id and go.sku_no = gs.sku_no',
+			'fields' => 'go.name,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,'
+						.'gs.duties_rate,gs.ware_house_name,gs.supplier_id,gs.delivery_code',
 			'type'   => 'row',
 		)
 	),
@@ -27,7 +29,9 @@ return array(
         'query' => array(
             'name'   => 'goods as go',
             'where'  => 'go.goods_no = "#goods_no#" and go.is_del = 0',
-            'fields' => 'go.name,go.id as goods_id,go.img,go.sell_price,go.jp_price,go.market_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id',
+			'join'	 => 'left join goods_supplier as gs on go.supplier_id = gs.supplier_id and go.sku_no = gs.sku_no',
+            'fields' => 'go.name,go.id as goods_id,go.img,go.sell_price,go.jp_price,go.market_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,'
+						.'gs.duties_rate,gs.ware_house_name,gs.supplier_id,gs.delivery_code',
             'type'   => 'row',
         )
     ),

@@ -222,7 +222,13 @@ class Goods extends IController implements adminAuthorization
 		{
 			die("没有找到相关商品！");
 		}
-		
+
+
+		$model = new IModel('supplier');
+		$supplier = $model->getObj("id =" . $data['form']['supplier_id']);
+		$data['supplier_name'] = $supplier['supplier_name'] . $data['form']['ware_house_name'];
+
+
 		/* cosme排行信息 */
 		$queryCosme 				= new IQuery('cosme');
 		$queryCosme->where 			= 'goods_id='.$goods_id;
@@ -423,10 +429,13 @@ class Goods extends IController implements adminAuthorization
 		//拼接sql
 		$goodsHandle = new IQuery('goods as go');
 		$goodsHandle->order    = "go.id desc";
-		$goodsHandle->fields   = "distinct go.id,go.name,go.sell_price,go.market_price,go.store_nums,go.img,go.is_del,go.seller_id,go.is_share,go.sort";
+		$goodsHandle->fields   = "distinct go.id,go.name,go.sell_price,go.market_price,go.store_nums,go.img,go.is_del,go.seller_id,go.is_share,go.sort,"
+								."s.supplier_name, gs.ware_house_name";
 		$goodsHandle->page     = $page;
-		$goodsHandle->pagesize = $search['pagesize'] ;
+		$goodsHandle->pagesize = $search['pagesize'];
 		$goodsHandle->where    = $where;
+		$join .= " LEFT JOIN supplier AS s ON s.id = go.supplier_id "
+				 . " LEFT JOIN goods_supplier as gs on gs.supplier_id = go.supplier_id and gs.sku_no = go.sku_no";
 		$goodsHandle->join     = $join;
 
 		$this->search      = $search;

@@ -147,6 +147,13 @@ class Common{
 		return false;
 	}
 	
+    
+    /**
+     * 以美观的格式打印变量
+     */
+    public static function print_b($data) {
+		echo "<pre>" . print_r($data,true) . "</pre>";
+    }
 
     /**
      * @brief 获取评价分数

@@ -19,14 +19,18 @@
 			<colgroup>
 				<col />
 				<col width="120px" />
-				<col width="120px" />
-				<col width="120px" />
+				<col width="80px" />
+				<col width="80px" />
+				<col width="80px" />
+				<col width="120px" />				
 			</colgroup>
 
 			<thead>
 				<tr>
 					<th>商品名称</th>
+					<th>供货商</th>
 					<th>商品价格</th>
+					<th>税率</th>
 					<th>商品数量</th>
 					<th>操作</th>
 				</tr>
@@ -45,7 +49,9 @@
 			<table class="list_table">
 				<col />
 				<col width="120px" />
-				<col width="120px" />
+				<col width="80px" />				
+				<col width="80px" />
+				<col width="80px" />		
 				<col width="120px" />
 
 				<tbody id="goodsBox"></tbody>
@@ -79,7 +85,9 @@
 						<%}%>
 						】
 					</td>
+					<td><%=item.supplier_name%></td>
 					<td><%=item.real_price%></td>
+					<td><%=item.duties_rate%></td>
 					<td><input class="tiny" name="goods_nums[]" value="<%=item.goods_nums ? item.goods_nums : 1%>" /></td>
 					<td>
 						<a href="javascript:void(0)" onclick="$(this).parent().parent().remove();">
@@ -190,6 +198,10 @@
 						<td><input class="normal" type="text" name="accept_name" value="" pattern="required" alt="请填写收货人姓名" /></td>
 					</tr>
 					<tr>
+						<th>收货人身份证号码:</th>
+						<td><input class="normal" type="text" name="sfz_num" value="" pattern="required" alt="请填写收货人身份证号码" /></td>
+					</tr>
+					<tr>
 						<th>收货地区:</th>
 						<td>
 							<select name="province" child="city,area"></select>
@@ -258,7 +270,7 @@ function searchGoodsCallback(goodsList)
 	goodsList.each(function()
 	{
 		var temp = $.parseJSON($(this).attr('data'));
-		var insertObject = {"id":temp.goods_id,"name":temp.name,"real_price":temp.sell_price,"product_id":temp.product_id,"spec_array":temp.spec_array ? $.parseJSON(temp.spec_array) : "","goods_no":temp.goods_no};
+		var insertObject = {"id":temp.goods_id,"name":temp.name,"supplier_name": temp.supplier_name,"duties_rate":temp.duties_rate,"real_price":temp.sell_price,"product_id":temp.product_id,"spec_array":temp.spec_array ? $.parseJSON(temp.spec_array) : "","goods_no":temp.goods_no};
 		insertGoods(insertObject);
 	});
 }
