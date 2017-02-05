@@ -54,6 +54,7 @@ class wechats
         $access_token = common::get_wechat_access_token();
         $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
         switch ($type){
+            //优惠券
             case 'coupon':
                 $params = sprintf('{
                    "touser":"%s",
@@ -161,6 +162,35 @@ class wechats
                            }
                    }
                }',$open_id,IUrl::getHost().'/simple/credit',$send_info['order_no']);
+                break;
+            case 'order_complete':
+                $params = sprintf('{
+                   "touser":"%s",
+                   "template_id":"Dk9Z_2jKN4H9UctaDlB04Hxk0NoV2tODUPmnIOMXOXo",
+                   "url":"%s",            
+                   "data":{
+                           "first": {
+                               "value":"订单支付成功",
+                               "color":"#173177"
+                           },
+                           "keyword1":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "keyword2":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "keyword3":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "remark": {
+                               "value":"订单支付成功。您的宝贝很快就会飞过来咯！",
+                               "color":"#173177"
+                           }
+                   }
+               }',$open_id,IUrl::getHost().'/ucenter/index',date('Y-m-d h:i:s',time()),$send_info['goods_name'],$send_info['order_no']);
                 break;
         }
         $ret = common::http_post_json($url,$params);
