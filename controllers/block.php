@@ -28,7 +28,7 @@ class Block extends IController
 		if(empty($resetInventory) || (time()-$resetInventory>=$inventoryTime)){
 			$modelGoods = new IModel('goods');
 			$modelGoods->setData(array('store_nums' => $inventoryNum));
-			$modelGoods->update('is_del=0 and store_nums<'.$inventoryNum);
+			$modelGoods->update('is_del=0 and store_nums<"'.$inventoryNum.'"');
 			$configSite->write(array('reset_inventory'=>time())); //写入最后更新时间
 		}
 		
