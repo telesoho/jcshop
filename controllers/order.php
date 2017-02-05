@@ -1704,6 +1704,7 @@ class Order extends IController implements adminAuthorization
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品编号</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">实付单价</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品状态</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品名称</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">日文品名</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">规格</td>';
@@ -1726,7 +1727,7 @@ class Order extends IController implements adminAuthorization
 			/* 包含商品 */
 			$orderGoodsObj        = new IQuery('order_goods');
 			$orderGoodsObj->where = "order_id = ".$v['id'];
-			$orderGoodsObj->fields = 'id,goods_array,goods_id,product_id,goods_nums,real_price';
+			$orderGoodsObj->fields = 'id,goods_array,goods_id,product_id,goods_nums,real_price,is_send';
 			$orderGoodsList = $orderGoodsObj->find();
 			foreach($orderGoodsList as $k1 => $v1){
 				$orderGoodsList[$k1] = array_merge($orderGoodsList[$k1],JSON::decode($v1['goods_array']));
@@ -1738,11 +1739,13 @@ class Order extends IController implements adminAuthorization
 				'name_jp' 		=> '', //日文名
 				'real_price' 	=> '', //实付价格
 				'goods_nums' 	=> '', //商品数量
+				'is_send_name' 	=> '', //商品状态
 				);
 			$query 				= new IQuery('goods');
 			$query->fields 		= 'id,name,name_jp,sell_price,type';
 			$queryBag 			= new IQuery('goods_bag');
 			$queryBag->fields 	= 'id,goods_no,num';
+			$textIsSend 		= array('未发货','已发货','已退货');
 			foreach($orderGoodsList as $v1){
 				$query->where 				= 'id='.$v1['goods_id'];
 				$info 						= $query->find();
@@ -1753,14 +1756,16 @@ class Order extends IController implements adminAuthorization
 					foreach($infoBag as $k2 => $v2){
 						$strGoods['goodsno'] 		.= '&nbsp;'.$v2['goods_no'].'<br />';
 						$strGoods['goods_nums'] 	.= $v2['num'].'<br />';
+						$strGoods['real_price'] 	.= round($v1['real_price']/$v2['num'],2).'<br />';
 					}
 				}else{
 					$strGoods['goodsno'] 		.= '&nbsp;'.$v1['goodsno'].'<br />';
 					$strGoods['goods_nums'] 	.= $v1['goods_nums'].'<br />';
+					$strGoods['real_price'] 	.= $v1['real_price'].'<br />';
 				}
 				$strGoods['name'] 			.= $v1['name'].'<br />';
 				$strGoods['name_jp'] 		.= $info[0]['name_jp'].'<br />';
-				$strGoods['real_price'] 	.= $v1['real_price'].'<br />';
+				$strGoods['is_send_name'] 	.= (isset($textIsSend[$v1['is_send']]) ? $textIsSend[$v1['is_send']] : '未知').'<br />';
 			}
 			//商品编号
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['goodsno'].' </td>';
@@ -1768,6 +1773,8 @@ class Order extends IController implements adminAuthorization
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['real_price'].' </td>';
 			//商品数量
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['goods_nums'].' </td>';
+			//是否发货
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['is_send_name'].' </td>';
 			//商品名称
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['name'].' </td>';
 			//日文品名

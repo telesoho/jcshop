@@ -555,17 +555,17 @@ class Order_Class
 					}
 					$specArray['value'] = trim($specArray['value'],',');
 				}
-
-				$goodsArray['product_id']  = $val['product_id'];
-				$goodsArray['goods_id']    = $val['goods_id'];
-				$goodsArray['img']         = $val['img'];
-				$goodsArray['goods_price'] = $val['sell_price'];
-				$goodsArray['real_price']  = $val['sell_price'] - $val['reduce'];
-				$goodsArray['goods_nums']  = $val['count'];
-				$goodsArray['goods_weight']= $val['weight'];
-				$goodsArray['goods_array'] = IFilter::addSlash(JSON::encode($specArray));
-				$goodsArray['seller_id']   = $val['seller_id'];
-				$goodsArray['duties']      = $val['duties'];	// 关税
+				$real_price                 = $val['sell_price']-$val['reduce']; //实付金额
+				$goodsArray['product_id']   = $val['product_id'];
+				$goodsArray['goods_id']     = $val['goods_id'];
+				$goodsArray['img']          = $val['img'];
+				$goodsArray['goods_price']  = $val['sell_price'];
+				$goodsArray['real_price']   = $real_price<=0 ? 0 : $real_price;
+				$goodsArray['goods_nums']   = $val['count'];
+				$goodsArray['goods_weight'] = $val['weight'];
+				$goodsArray['goods_array']  = IFilter::addSlash(JSON::encode($specArray));
+				$goodsArray['seller_id']    = $val['seller_id'];
+				$goodsArray['duties']       = $val['duties'];    // 关税
 				$orderGoodsObj->setData($goodsArray);
 				$orderGoodsObj->add();
 			}
