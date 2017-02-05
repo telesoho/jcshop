@@ -93,13 +93,14 @@
 	<div class="content">
 		<table class="list_table">
 			<colgroup>
-				<col width="40px" />
+				<col width="20px" />
 				<col width="360px" />
-				<col width="180px" />
+				<col width="100px" />
+				<col width="80px" />
 				<col width="90px" />
 				<col width="70px" />
 				<col width="80px" />
-				<col width="70px" />
+				<col width="60px" />
 				<col width="110px" />
 			</colgroup>
 
@@ -108,6 +109,7 @@
 					<th>选择</th>
 					<th>商品名称</th>
 					<th>分类</th>
+					<th>仓库</th>
 					<th>销售价</th>
 					<th>库存</th>
 					<th>状态</th>
@@ -126,6 +128,9 @@
 					{query:name=category_extend as ce join=left join category as cd on cd.id eq ce.category_id fields=cd.name where=ce.goods_id eq $item[id] order=cd.id asc item=$catData}
 						[{$catData['name']}]
 					{/query}
+					</td>
+					<td>
+						{echo:$item['supplier_name']. " ". $item['ware_house_name']}
 					</td>
 					<td><a href="javascript:quickEdit({$item['id']},'price');" class="orange" title="点击更新价格" id="priceText{$item['id']}">{$item['sell_price']}</a></td>
 					<td><a href="javascript:quickEdit({$item['id']},'store');" class="orange" title="点击更新库存" id="storeText{$item['id']}">{$item['store_nums']}</a></td>

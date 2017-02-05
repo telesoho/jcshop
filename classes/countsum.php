@@ -116,7 +116,8 @@ class CountSum
     	$this->point         = 0;       //增加积分
     	$this->exp           = 0;       //增加经验
     	$this->freeFreight   = array(); //商家免运费,免运费的商家ID,自营ID为0
-    	$this->tax           = 0;       //商品税金
+    	$this->tax           = 0;       //商品税金（发票增值税）
+		$this->duties        = 0;		//商品关税
     	$this->seller        = array(); //商家商品总额统计, 商家ID => 商品金额
 
 		$user_id      = $this->user_id;
@@ -145,6 +146,7 @@ class CountSum
     			$current_sum_all   = $typeRow['sell_price'] * $ac_buy_num;
     			$current_reduce_all= $typeRow['reduce']     * $ac_buy_num;
 				$typeRow['sum']    = $current_sum_all - $current_reduce_all;
+				$typeRow['duties'] = self::getGoodsDuties($typeRow['sum'],$typeRow['duties_rate']); //计算商品关税				
 
     			if(!isset($this->seller[$typeRow['seller_id']]))
     			{
@@ -160,6 +162,7 @@ class CountSum
 		    	$this->reduce += $current_reduce_all;
 		    	$this->count  += $ac_buy_num;
 		    	$this->tax    += self::getGoodsTax($typeRow['sum'],$typeRow['seller_id']);
+				$this->duties += $typeRow['duties']; //计算商品关税
 		    	$typeRow == "goods" ? ($goodsList[] = $typeRow) : ($productList[] = $typeRow);
 	    	}
 	    	else
@@ -182,8 +185,12 @@ class CountSum
 	    	{
 	    		//购物车中的商品数据
 	    		$goodsIdStr = join(',',$buyInfo['goods']['id']);
-	    		$goodsObj   = new IModel('goods as go');
-	    		$goodsList  = $goodsObj->query('go.id in ('.$goodsIdStr.')','go.name,go.cost_price,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id');
+				$goodsQuery = new IQuery('goods as go');
+				$goodsQuery->where = 'go.id in ('.$goodsIdStr.')';
+				$goodsQuery->join = ' LEFT JOIN goods_supplier as gs ON go.supplier_id = gs.supplier_id and go.sku_no = gs.sku_no ';
+				$goodsQuery->fields = 'go.name,go.cost_price,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,go.supplier_id,gs.ware_house_name,gs.duties_rate';
+				$goodsList = $goodsQuery->find();
+
 				/* 计算活动商品价格 */
 	    		$goodsList 	= api::run('goodsActivity',$goodsList,'goods_id');
 	    		//开始优惠情况判断
@@ -202,6 +209,7 @@ class CountSum
 	    			$current_sum_all           = $goodsList[$key]['sell_price'] * $goodsList[$key]['count'];
 	    			$current_reduce_all        = $goodsList[$key]['reduce']     * $goodsList[$key]['count'];
 	    			$goodsList[$key]['sum']    = $current_sum_all - $current_reduce_all;
+					$goodsList[$key]['duties'] = self::getGoodsDuties($goodsList[$key]['sum'],$goodsList[$key]['duties_rate']);
 	    			if(!isset($this->seller[$val['seller_id']]))
 	    			{
 	    				$this->seller[$val['seller_id']] = 0;
@@ -216,6 +224,7 @@ class CountSum
 			    	$this->reduce += $current_reduce_all;
 			    	$this->count  += $goodsList[$key]['count'];
 			    	$this->tax    += self::getGoodsTax($goodsList[$key]['sum'],$val['seller_id']);
+					$this->duties += $goodsList[$key]['duties'];	//计算商品关税
 			    }
 	    	}
 
@@ -226,7 +235,9 @@ class CountSum
 	    		$productIdStr = join(',',$buyInfo['product']['id']);
 	    		$productObj   = new IQuery('products as pro,goods as go');
 	    		$productObj->where  = 'pro.id in ('.$productIdStr.') and go.id = pro.goods_id';
-	    		$productObj->fields = 'pro.sell_price,pro.cost_price,pro.weight,pro.id as product_id,pro.spec_array,pro.goods_id,pro.store_nums,pro.products_no as goods_no,go.name,go.point,go.exp,go.img,go.seller_id';
+				$productObj->join   = ' left join goods_supplier as gs on go.supplier_id = gs.supplier_id and gs.sku_no = go.sku_no';
+	    		$productObj->fields = 'pro.sell_price,pro.cost_price,pro.weight,pro.id as product_id,pro.spec_array,pro.goods_id,pro.store_nums,pro.products_no as goods_no,go.name,go.point,go.exp,go.img,go.seller_id'
+									  .'gs.duties_rate,gs.ware_house_name,gs.supplier_id,gs.delivery_code';
 	    		$productList  = $productObj->find();
 
 	    		//开始优惠情况判断
@@ -245,6 +256,7 @@ class CountSum
 	    			$current_sum_all             = $productList[$key]['sell_price']  * $productList[$key]['count'];
 	    			$current_reduce_all          = $productList[$key]['reduce']      * $productList[$key]['count'];
 	    			$productList[$key]['sum']    = $current_sum_all - $current_reduce_all;
+					$productList[$key]['duities']= self::getGoodsDuties($productList[$key]['sum'],$productList[$key]['duties_rate']);//计算商品关税
 	    			if(!isset($this->seller[$val['seller_id']]))
 	    			{
 	    				$this->seller[$val['seller_id']] = 0;
@@ -259,6 +271,7 @@ class CountSum
 			    	$this->reduce += $current_reduce_all;
 			    	$this->count  += $productList[$key]['count'];
 			    	$this->tax    += self::getGoodsTax($productList[$key]['sum'],$val['seller_id']);
+					$this->duties += $productList[$key]['duities']; //计算商品关税
 			    }
 	    	}
 
@@ -300,6 +313,7 @@ class CountSum
     		'point'      => $this->point,
     		'exp'        => $this->exp,
     		'tax'        => $this->tax,
+			'duties'	 => $this->duties,
     		'freeFreight'=> $this->freeFreight,
     		'seller'     => $this->seller,
     	);
@@ -337,6 +351,16 @@ class CountSum
     	return $this->goodsCount($buyInfo,$promo,$active_id);
     }
 
+	// 生成訂單Key
+	public static function genOrderKey($seller_id, $supplier_id, $ware_house_name) {
+		return $seller_id . "." . $supplier_id . "." . $ware_house_name;
+	}
+
+	// 解析Key中的seller_id, supplier_id, ware_house_name
+	public static function parseOrderKey($orderKey) {
+		return explode(".", $orderKey);
+	}
+
     /**
      * 计算订单信息,其中部分计算都是以商品原总价格计算的$goodsSum
      * @param $goodsResult array CountSum结果集
@@ -351,19 +375,20 @@ class CountSum
      */
     public function countOrderFee($goodsResult,$province_id,$delivery_id,$payment_id,$is_invoice,$discount = 0,$promo = '',$active_id = '')
     {
-    	//根据商家进行商品分组
+    	//根据【商家+供货商+仓库】对商品进行分组
     	$sellerGoods = array();
     	foreach($goodsResult['goodsList'] as $key => $val)
     	{
-    		if(!isset($sellerGoods[$val['seller_id']]))
+			$groupKey = self::genOrderKey($val['seller_id'],$val['supplier_id'],$val['ware_house_name']);
+			if(!isset($sellerGoods[$groupKey]))
     		{
-    			$sellerGoods[$val['seller_id']] = array();
+    			$sellerGoods[$groupKey] = array();
     		}
-    		$sellerGoods[$val['seller_id']][] = $val;
+    		$sellerGoods[$groupKey][] = $val;
     	}
 
 		$cartObj = new Cart();
-    	foreach($sellerGoods as $seller_id => $item)
+    	foreach($sellerGoods as $groupKey => $item)
     	{
     		$num          = array();
     		$productID    = array();
@@ -413,7 +438,8 @@ class CountSum
 	    		'deliveryOrigPrice' => $deliveryList['org_price'],
 	    		'deliveryPrice'     => $deliveryList['price'],
 	    		'insuredPrice'      => $deliveryList['protect_price'],
-	    		'taxPrice'          => $is_invoice == true ? $sellerData['tax'] : 0,
+	    		'taxPrice'          => $is_invoice == true ? $sellerData['tax'] : 0, // 增值税税金
+				'dutiesPrice'       => $sellerData['duties'],		// 关税税金
 	    		'paymentPrice'      => $payment_id != 0 ? self::getGoodsPaymentPrice($payment_id,$sellerData['final_sum']) : 0,
 	    		'goodsResult'       => $sellerData,
 	    		'orderAmountPrice'  => 0,
@@ -423,12 +449,13 @@ class CountSum
 		    	$deliveryList['price'],
 		    	$deliveryList['protect_price'],
 		    	$extendArray['taxPrice'],
+				$extendArray['dutiesPrice'],
 		    	$extendArray['paymentPrice'],
 		    	$discount,
 	    	));
 
 			$extendArray['orderAmountPrice'] = $orderAmountPrice <= 0 ? 0 : round($orderAmountPrice,2);
-			$sellerGoods[$val['seller_id']]  = array_merge($sellerData,$extendArray);
+			$sellerGoods[$groupKey]  = array_merge($sellerData,$extendArray);
     	}
     	return $sellerGoods;
     }
@@ -455,6 +482,18 @@ class CountSum
     	}
 		$goodsTaxPrice = $goodsSum * ($tax_per * 0.01);
 		return round($goodsTaxPrice,2);
+    }
+
+    /**
+     * 获取商品的关税
+     * @param $goodsSum float 商品总价格
+     * @param $duties_rate float 商品关税
+     * @return $goodsDutiesPrice float 商品关税的税金
+     */
+    public static function getGoodsDuties($goodsSum,$duties_rate = 0)
+    {
+		$goodsDutiesPrice = $goodsSum * $duties_rate;
+		return round($goodsDutiesPrice,2);
     }
 
     /**
