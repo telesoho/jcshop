@@ -36,6 +36,12 @@ class ticket{
 				$msg         = '抵'.$ticket_data['money'].'元优惠券（包邮）';
 				$data['is_delivery'] = 1; //包邮
 				break;
+			//赞助全免券
+			case 4 :
+				$data['sum'] = 0;
+				$msg         = '赞助全免券';
+				$data['is_delivery'] = 1; //包邮
+				break;
 			default:
 				return array('code'=>'002006','msg'=>'优惠券码类型不存在');
 		}
@@ -151,6 +157,11 @@ class ticket{
 			//包邮抵扣券
 			case 3 :
 				$data['sum'] = $data['sum']-$data_ticket['money'];
+				$data['is_delivery'] = 1; //包邮
+				break;
+			//赞助全免券
+			case 4 :
+				$data['sum'] = 0;
 				$data['is_delivery'] = 1; //包邮
 				break;
 			default:
