@@ -1183,6 +1183,13 @@ class Apic extends IController{
 			foreach($listGoods as $k => $v){
 				$listGoods[$k]['img']        = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
 				$listGoods[$k]['store_nums'] = $v['nums']<$v['store_nums'] ? $v['nums'] : $v['store_nums'];
+				//已售数量
+				$queryOrder         = new IQuery('order AS m');
+				$queryOrder->join   = 'LEFT JOIN order_goods AS g ON g.order_id=m.id';
+				$queryOrder->fields = 'count(*) AS sum';
+				$where = 'm.pay_status=1 AND m.create_time>="'.date('Y-m-d H:i:s', $v['start_time']).'" AND m.create_time<="'.date('Y-m-d H:i:s', $v['end_time']).'" AND g.goods_id='.$v['goods_id'];
+				$queryOrder->where = $where;
+				$sum               = $queryOrder->find();
 			}
 		}
 		
