@@ -1724,6 +1724,88 @@ class Apic extends IController{
 	}
 	
 	/**
+	 * 猫粉说
+	 */
+	public function comment_list(){
+		$param = $this->checkData(array(
+			array('page', 'int', 0, '分页编号'),
+		));
+		$user_id = $this->tokenCheck();
+		/* 获取数据 */
+		$query           = new IQuery('comment as m');
+		$query->join     = 'LEFT JOIN user AS u ON u.id=m.user_id';
+		$query->where    = 'm.status=1 AND m.image!=""';
+		$query->fields   = 'm.id,m.image,m.comment_time,u.username,u.head_ico';
+		$query->order    = 'comment_time DESC';
+		$query->group    = 'm.order_no';
+		$query->page     = $param['page']<=0 ? 1 : $param['page'];
+		$query->pagesize = 20;
+		$list            = $query->find();
+		if($param['page']>$query->getTotalPage()) $list = array();
+		$model = new IModel('comment_praise');
+		foreach($list as $k => $v){
+			$image             = explode(',', $v['image']);
+			$list[$k]['cover'] = empty($image) ? '' : IWeb::$app->config['image_host'].'/'.$image[0];
+			$list[$k]['num']   = $model->get_count('comment_id='.$v['id']); //点赞数
+			$list[$k]['praise']= $model->get_count('comment_id='.$v['id'].' AND user_id='.$user_id); //是否已点赞
+		}
+		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $list));
+	}
+	
+	/**
+	 * 评论详情
+	 */
+	public function comment_detail(){
+		$param         = $this->checkData(array(
+			array('comment_id', 'int', 1, '评论ID'),
+		));
+		$user_id = $this->tokenCheck();
+		/* 获取数据 */
+		$query         = new IQuery('comment as m');
+		$query->join   = 'LEFT JOIN user AS u ON u.id=m.user_id';
+		$query->where  = 'm.status=1 AND m.id='.$param['comment_id'];
+		$query->fields = 'm.id,m.image,m.comment_time,u.username,u.head_ico';
+		$query->limit  = 1;
+		$list          = $query->find();
+		if(empty($list)) $this->returnJson(array('code' => '010001', 'msg' => $this->errorInfo['010001'])); //评论不存在
+		$data           = $list[0];
+		$model          = new IModel('comment_praise');
+		$data['num']    = $model->get_count('comment_id='.$param['comment_id']); //点赞数
+		$data['praise'] = $model->get_count('comment_id='.$param['comment_id'].' AND user_id='.$user_id); //是否已点赞
+		$data['image']  = explode(',', $data['image']);
+		foreach($data['image'] as $k => $v){
+			$data['image'][$k] = empty($v) ? '' : IWeb::$app->config['image_host'].'/'.$v;
+		}
+		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $data));
+	}
+	
+	/**
+	 * 评论点赞
+	 */
+	public function comment_praise(){
+		$param   = $this->checkData(array(
+			array('comment_id', 'int', 1, '评论ID'),
+			array('comment_opt', 'int', 1, '操作[1点赞-2取消]'),
+		));
+		$user_id = $this->tokenCheck();
+		/* 检查 */
+		$model = new IModel('comment');
+		$rel   = $model->get_count('comment_id='.$param['comment_id']);
+		if(empty($rel)) $this->returnJson(array('code' => '010001', 'msg' => $this->errorInfo['010001'])); //评论不存在
+		$modelP = new IModel('comment_praise');
+		$num    = $modelP->get_count('comment_id='.$param['comment_id'].' AND user_id='.$user_id);
+		if($param['comment_opt']==1 && $num<=0){
+			$modelP->setData(array('comment_id' => $param['comment_id'], 'user_id' => $user_id,));
+			$rel = $modelP->add();
+			if(!$rel) $this->returnJson(array('code' => '001005', 'msg' => $this->errorInfo['001005'])); //操作失败
+		}else if($param['comment_opt']==2 && $num>=1){
+			$rel = $modelP->del('comment_id='.$param['comment_id'].' AND user_id='.$user_id);
+			if(!$rel) $this->returnJson(array('code' => '001005', 'msg' => $this->errorInfo['001005'])); //操作失败
+		}
+		$this->returnJson(array('code' => '0', 'msg' => 'ok'));
+	}
+	
+	/**
 	 * ---------------------------------------------------物流---------------------------------------------------*
 	 */
 	/**
