@@ -25,7 +25,7 @@
                             <input name='start_time' type='text' value="" class='Wdate'
                                    pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
                                    alt='请填写一个日期'/>～
-                            <input name='end_time' type='text' value="" class='Wdate'
+                            <input name='end_time' type='text' value="{echo:date('Y-m-d',time()).' 23:59:59'}" class='Wdate'
                                    pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
                                    alt='请填写一个日期'/>
                         </label>
@@ -87,8 +87,8 @@
         <td><%=templateData['sell_price']%></td>
         <td><input text="text" class="small" name="goods_sell_price[<%=templateData['goods_id']%>]" pattern="float" alt="请填写一个数字" />元</td>
         <td><%=templateData['store_nums']%></td>
-        <td><input text="text" class="small" name="goods_nums[<%=templateData['goods_id']%>]" pattern="int" value="0" alt="请填写一个数字" /></td>
-        <td><input text="text" class="small" name="goods_quota[<%=templateData['goods_id']%>]" pattern="int" value="0" alt="请填写一个数字" /><br/>0为不限购</td>
+        <td><input text="text" class="small" name="goods_nums[<%=templateData['goods_id']%>]" pattern="int" value="20" alt="请填写一个数字" /></td>
+        <td><input text="text" class="small" name="goods_quota[<%=templateData['goods_id']%>]" pattern="int" value="2" alt="请填写一个数字" /><br/>0为不限购</td>
         <td><input type="checkbox" name="goods_delivery[<%=templateData['goods_id']%>]" value="1"/></td>
         <td><%if(templateData['is_del'] =='0'){%>
             已上架
