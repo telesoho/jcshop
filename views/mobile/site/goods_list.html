@@ -13,31 +13,8 @@
 		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/goods_list.css?v=<?php echo time(); ?>"/>
 	</head>
 	<body>
-		<!--loading页开始-->
-	<div id="loading">
-		<div class="spinner">
-			<div class="spinner-container container1">
-				<div class="circle1"></div>
-				<div class="circle2"></div>
-				<div class="circle3"></div>
-				<div class="circle4"></div>
-			</div>
-			<div class="spinner-container container2">
-				<div class="circle1"></div>
-				<div class="circle2"></div>
-				<div class="circle3"></div>
-				<div class="circle4"></div>
-			</div>
-			<div class="spinner-container container3">
-				<div class="circle1"></div>
-				<div class="circle2"></div>
-				<div class="circle3"></div>
-				<div class="circle4"></div>
-			</div>
-		</div>
-	</div>
-	<!--loading页结束-->
 	<section id="main">
+		<loadding :mes="showloadding"></loadding>
 		<div id="category_third" v-cloak>
 	        <div class="product_item" v-for="item in one_title" v-cloak>
 	            <a :href="item.url">
@@ -70,6 +47,8 @@
        </div>
 	</section>
 	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+	<!--加载动画载入-->
+	<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
@@ -86,6 +65,7 @@
 		var vm=new Vue({
 			el:'#main',
 			data:{
+				showloadding:true,
 				cid:statusOrder,
 				page:1,
 				info:[],
@@ -103,6 +83,7 @@
 			mounted:function(){
 				var self=this;
 				if(getSession("goodsinfo")){
+					self.showloadding=false;
 					self.info=getSession("goodsinfo");
 					self.page=getSession("goodspage")
 				}else{
@@ -132,6 +113,7 @@
 					did:index_Order?index_Order:""
 				},
 				success:function(data){
+					self.showloadding=false;
 					JSON.parse(data).data.map(function(items){
 						self.info.push(items)
 					})
@@ -151,7 +133,6 @@
 		
 //页面加载动画的调用
 $(window).load(function(){
-	$("#loading").fadeOut(300);
 	var temp=getItem("placeHolder");
 	 mui('body').on('tap','a',function(){document.location.href=this.href;});
 });
@@ -173,6 +154,7 @@ $(window).bind('scroll', function() {
 	if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
             stop=false;
+			vm.showloadding=true;
             getSitemapInfo(vm);
             
         }
