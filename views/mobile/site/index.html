@@ -54,6 +54,7 @@
 				</div>
 			</div>
 			<!--		限时抢				-->
+			<!--<div id="Timed_to_rob" v-if="shop_time" v-cloak>-->
 			<div id="Timed_to_rob" v-if="shop_time" v-cloak>
 				<div class="albumn_index" style="height: auto;">
 					<h1>
@@ -61,7 +62,7 @@
 		   				<p class="p1" style="font-weight: 600;">限时抢</p>
 		   				<span class="span1">离结束还剩</span>
 		   				<p class="p2"><span>{{hours}}</span> : <span>{{minutes}}</span> : <span>{{seconds}}</span></p>
-		   				<p class="p3">更多 <span><img src="/views/mobile/skin/default/image/jmj/home_redesign/more.png" style="width: 0.14rem;"/></span></p>
+		   				<p class="p3" @click="Timed_to_">更多 <span><img src="/views/mobile/skin/default/image/jmj/home_redesign/more.png" style="width: 0.14rem;"/></span></p>
 		   			</h1>
 					<div class="line_time"></div>
 					<div class="mark" style="background: #fff;">
