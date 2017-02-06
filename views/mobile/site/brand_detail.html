@@ -37,7 +37,7 @@
 			<div class="line"></div>
 			
 			<!--                  文章                                                    -->
-			<div v-if="showLastImg.description!=''">
+			<div v-if="showLastImg.description!=''" style="background: #fff;padding-bottom:0.5rem ;">
 				<!-- 收起     -->
 				<div id="article" >
 					<div id="article_top"  v-html='showLastImg.description' style="overflow : hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;padding-top :0.2rem;">
@@ -59,7 +59,7 @@
 			</div>
 			<!--                 分割线                                                      -->
 			<div v-if="showLastac.length>0" style="overflow: hidden;background: #fff;">
-				<div class="divider"></div>
+				<div class="divider" style="margin-top: 0;"></div>
 
 			<!--                  相关标签                                                 -->
 			
@@ -84,9 +84,10 @@
 					</div>
 				</div>
 			
+			
+			</div>
 			<!--                   分割线                                                      -->
 				<div class="divider divider1"></div>
-			</div>
 			<!--                  相关标签                                                 -->
 			<div class="label" style="" v-if="showLastgood!=''">
 				<div><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop02.png" style="width: 0.31rem;height: 0.31rem;margin-top:0.19rem ;"/></div>

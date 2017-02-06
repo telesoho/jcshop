@@ -36,20 +36,21 @@ var em = new Vue({
 	},
 	mounted: function(){
 		var self=this;
-		if(getSession("pinpai_infolist")||getSession("pinpai_page")){
+		if(getSession("pinpai_infolist")){
 			self.page = getSession("pinpai_page");
 			self.infolist = getSession("pinpai_infolist");
+			getRelateArticle(statusOrder,self);
 		}
-//		else{
-//			getRelateArticle(statusOrder,self);
-//			console.log(statusOrder,self.page)
-//		}
-		getRelateArticle(statusOrder,self);
-//		getRelateArticle(statusOrder,self)
+		else{
+			self.page = 1;
+			self.infolist = []
+			getRelateArticle(statusOrder,self);
+		}
 	},
 	updated:function() {
 		document.title = this.info.name;
 		$("title").html(this.info.name); 
+		
 		
 		var heights = $("#article_top").height()
 		if(heights!=0){
@@ -80,15 +81,16 @@ function getRelateArticle(statusOrder,self){
 			data.data.goods_list.map(function(item){
 				self.infolist.push(item);
 			})
-			pushSession("pinpai_infolist", self.infolist)
-			if(data.goods_list==''){
+			pushSession("pinpai_infolist", self.infolist);
+			if(data.data.goods_list==''){
                 self.infoState=true;
                 stop=false;
             }else{
             	self.infoState=false;
                 stop=true;
-				self.page++;
-            }       
+                self.page++;
+            }    
+            
             console.log(self.page);
             pushSession("pinpai_page", self.page)
 		}
@@ -114,6 +116,7 @@ $(window).bind('scroll', function() {
 	if ($(window).scrollTop() + $(window).height() +100 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
         	em.showloadding=true;
+        	console.log(1);
             stop=false;
             getRelateArticle(statusOrder,em);
         }
