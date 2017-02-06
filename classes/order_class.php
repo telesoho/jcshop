@@ -217,6 +217,15 @@ class Order_Class
 			/* 店铺主获得积分 */
 			score::incPay($orderRow['user_id'], $orderRow['order_no']);
 
+			/* 推送订单提交成功信息 */
+			$open_id = common::get_wechat_open_id($orderRow['user_id']);
+			$order_goods_query = new IQuery('order_goods');
+			$order_goods_query->where = 'order_id = ' . $orderRow['id'];
+			$data = $order_goods_query->find();
+			$goods_name = empty($data) ? '无商品信息' : json_decode($data[0]['goods_array'])['name'];
+			wechats::send_message_template($open_id,'order_complete',['goods_name'=>$goods_name,'order_no'=>$orderRow['order_no']]);
+
+
 			return $orderRow['id'];
 		}
 		else
@@ -546,17 +555,17 @@ class Order_Class
 					}
 					$specArray['value'] = trim($specArray['value'],',');
 				}
-
-				$goodsArray['product_id']  = $val['product_id'];
-				$goodsArray['goods_id']    = $val['goods_id'];
-				$goodsArray['img']         = $val['img'];
-				$goodsArray['goods_price'] = $val['sell_price'];
-				$goodsArray['real_price']  = $val['sell_price'] - $val['reduce'];
-				$goodsArray['goods_nums']  = $val['count'];
-				$goodsArray['goods_weight']= $val['weight'];
-				$goodsArray['goods_array'] = IFilter::addSlash(JSON::encode($specArray));
-				$goodsArray['seller_id']   = $val['seller_id'];
-				$goodsArray['duties']      = $val['duties'];	// 关税
+				$real_price                 = $val['sell_price']-$val['reduce']; //实付金额
+				$goodsArray['product_id']   = $val['product_id'];
+				$goodsArray['goods_id']     = $val['goods_id'];
+				$goodsArray['img']          = $val['img'];
+				$goodsArray['goods_price']  = $val['sell_price'];
+				$goodsArray['real_price']   = $real_price<=0 ? 0 : $real_price;
+				$goodsArray['goods_nums']   = $val['count'];
+				$goodsArray['goods_weight'] = $val['weight'];
+				$goodsArray['goods_array']  = IFilter::addSlash(JSON::encode($specArray));
+				$goodsArray['seller_id']    = $val['seller_id'];
+				$goodsArray['duties']       = $val['duties'];    // 关税
 				$orderGoodsObj->setData($goodsArray);
 				$orderGoodsObj->add();
 			}

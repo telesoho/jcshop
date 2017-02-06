@@ -16,9 +16,21 @@ class Block extends IController
 	 * 服务器定时任务
 	 */
 	public function autoRun(){
-		$config          = new Config('jmj_config');
-		$orderClearTime  = $config->order_clear_time; //订单自动完成时间
-		$orderCancelTime = $config->order_cancel_time; //订单自动取消时间
+		$configSite      = new Config('site_config');
+		$configJmj       = new Config('jmj_config');
+		$orderClearTime  = $configJmj->order_clear_time; //订单自动完成时间
+		$orderCancelTime = $configJmj->order_cancel_time; //订单自动取消时间
+		$inventoryTime   = $configJmj->inventory_time; //库存更新时间间隔
+		$inventoryNum    = $configJmj->inventory_num; //库存更新数量
+		$resetInventory  = $configSite->reset_inventory; //最后更新库存时间
+		
+		/* 自动更新库存 */
+		if(empty($resetInventory) || (time()-$resetInventory>=$inventoryTime)){
+			$modelGoods = new IModel('goods');
+			$modelGoods->setData(array('store_nums' => $inventoryNum));
+			$modelGoods->update('is_del=0 and store_nums<"'.$inventoryNum.'"');
+			$configSite->write(array('reset_inventory'=>time())); //写入最后更新时间
+		}
 		
 		/* 订单自动完成（已发货） */
 		$modelOrder = new IModel('order');
@@ -334,7 +346,6 @@ class Block extends IController
 							IError::show(403,'订单修改失败');
 						}
 					}
-//                     shop::associate($this->user['user_id']);
                     $this->redirect('/site/success/message/'.urlencode("支付成功").'/?callback=/ucenter/order');
 					return;
 				}

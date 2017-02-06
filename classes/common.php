@@ -299,4 +299,14 @@ class Common{
         file_put_contents($dirname.'/'.$filename,$media['mediaBody']);
         return $dirname.'/'.$filename;
     }
+    static public function get_wechat_open_id($user_id){
+        $oauth_user_query = new IQuery('oauth_user');
+        $oauth_user_query->where = 'user_id = ' . $user_id;
+        $data = $oauth_user_query->find();
+        if (empty($data)){
+            return false;
+        } else {
+            return $data[0]['oauth_user_id'];
+        }
+    }
 }
