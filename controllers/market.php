@@ -406,20 +406,26 @@ class Market extends IController implements adminAuthorization
 	public function ticket_discount_add(){
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			/* 检查参数 */
-			$_POST['start_time'] 		= strtotime($_POST['start_time']); 	//开始时间
-			$_POST['end_time'] 			= strtotime($_POST['end_time']); 	//结束时间
-			if($_POST['end_time']<=time() || $_POST['start_time']>=$_POST['end_time'])  exit( '有效时间不合理' );
-			if($_POST['num']>500) exit( '每次请勿生成超过500张' );
-			switch ($_POST['type']){
+			$_POST['start_time'] = strtotime($_POST['start_time']);    //开始时间
+			$_POST['end_time']   = strtotime($_POST['end_time']);    //结束时间
+			if($_POST['end_time']<=time() || $_POST['start_time']>=$_POST['end_time']) exit('有效时间不合理');
+			if($_POST['num']>500) exit('每次请勿生成超过500张');
+			switch($_POST['type']){
 				case 1:
-					if($_POST['ratio']<=0 || $_POST['ratio']>=1) exit( '折扣比例必须为0~1之间的数值' );
+					if($_POST['ratio']<=0 || $_POST['ratio']>=1) exit('折扣比例必须为0~1之间的数值');
 					break;
 				case 2:
+					if($_POST['money1']<=0 || $_POST['money1']>3000) exit('请输入合理的抵扣金额');
+					$_POST['money'] = $_POST['money1'];
+					break;
 				case 3:
-					if($_POST['money']<=0 || $_POST['money']>3000) exit( '请输入合理的抵扣金额' );
+					if($_POST['money2']<=0 || $_POST['money2']>3000) exit('请输入合理的抵扣金额');
+					$_POST['money'] = $_POST['money2'];
+					break;
+				case 4:
 					break;
 				default:
-					exit( '优惠券类型不存在' );
+					exit('优惠券类型不存在');
 			}
 			/* 清空未使用但已过期优惠券 */
 			$model 						= new IModel('ticket_discount');
