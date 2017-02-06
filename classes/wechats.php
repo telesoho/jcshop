@@ -201,6 +201,13 @@ class wechats
                 break;
         }
         $ret = common::http_post_json($url,$params);
-        common::log_write(print_r($ret,true));
+        $ret = json_decode($ret[1])->errcode;
+        if ($ret === 0){
+            common::log_write("消息推送成功$open_id" . print_r($ret,true));
+            return true;
+        } else {
+            common::log_write(__CLASS__ . __FUNCTION__ . print_r($ret,true));
+            return false;
+        }
     }
 }
