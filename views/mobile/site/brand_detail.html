@@ -11,6 +11,7 @@
 	<body>
 		<!--               top                         -->
 		<div id="wrap" v-cloak>
+			<loadding :mes="showloadding"></loadding>
 			<div id="band_top">
 				<div id="top">
 					<img  :src="showLastImg.banner?showLastImg.banner:img1"/>
@@ -36,7 +37,7 @@
 			<div class="line"></div>
 			
 			<!--                  文章                                                    -->
-			<div v-if="showLastImg.description!=''">
+			<div v-if="showLastImg.description!=''" style="background: #fff;padding-bottom:0.5rem ;">
 				<!-- 收起     -->
 				<div id="article" >
 					<div id="article_top"  v-html='showLastImg.description' style="overflow : hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;padding-top :0.2rem;">
@@ -58,7 +59,7 @@
 			</div>
 			<!--                 分割线                                                      -->
 			<div v-if="showLastac.length>0" style="overflow: hidden;background: #fff;">
-				<div class="divider"></div>
+				<div class="divider" style="margin-top: 0;"></div>
 
 			<!--                  相关标签                                                 -->
 			
@@ -83,9 +84,10 @@
 					</div>
 				</div>
 			
+			
+			</div>
 			<!--                   分割线                                                      -->
 				<div class="divider divider1"></div>
-			</div>
 			<!--                  相关标签                                                 -->
 			<div class="label" style="" v-if="showLastgood!=''">
 				<div><img src="/views/mobile/skin/default/image/jmj/brand_detail/shop02.png" style="width: 0.31rem;height: 0.31rem;margin-top:0.19rem ;"/></div>
@@ -124,6 +126,8 @@
 		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<!--加载动画载入-->
+		<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/jiumao/brand_detail.js?v=<?php echo time(); ?>"></script>
 		<script type="text/javascript">
 			var oArticle_footer = document.getElementsByClassName("article_footer")[0];
