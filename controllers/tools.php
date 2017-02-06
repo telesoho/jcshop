@@ -187,6 +187,34 @@ class Tools extends IController implements adminAuthorization
 		$this->redirect('api_error_list');
 	}
 	
+	/**
+	 * 视频列表
+	 */
+	public function video_list(){
+		$this->redirect('video_list');
+	}
+	
+	/**
+	 * 添加视频
+	 */
+	public function video_add(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			$model = new IModel('video');
+			$model->setData(array(
+				'url' => $_POST['url'],
+				'cat_id' => $_POST['cat_id'],
+//				'img' => $_POST['cat_id'],
+				'title' => $_POST['title'],
+				'content' => $_POST['content'],
+				'create_time' => time(),
+				'update_time' => time(),
+				'sort' => $_POST['sort'],
+				'status' => $_POST['status'],
+			));
+		}
+		$this->redirect('video_add');
+	}
+	
 	public function seo_sitemaps()
 	{
 		$siteMaps =  new SiteMaps();

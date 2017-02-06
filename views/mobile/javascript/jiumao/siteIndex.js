@@ -56,7 +56,8 @@ var vm = new Vue({
         //图文专辑
         article_:[],
         //专区
-        zhuan_index:[]
+        zhuan_index:[],
+        time_id:0
     },
     computed: {
         searth_pla: function (){
@@ -235,9 +236,9 @@ var vm = new Vue({
     	scene_pavilion:function(){
     		window.location.href = "/ucenter/error";
     	},
-    	Timed_to_:function(){
-    		window.location.href = "/site/time_purchase";
-    	}
+//  	Timed_to_:function(){
+//  		window.location.href = "/site/time_purchase?id="+this.time_id;
+//  	}
     }
 })
 function clear_pull(){
@@ -296,6 +297,7 @@ function index_home(self){
         timeout: 10000,
         success: function (data) {
         	console.log(data.data);
+        	self.time_id = data.data.speed.id
         	data.data.article_list.map(function(item){
         		if(item.is_favorite == 1){
         			item.num_color = true;

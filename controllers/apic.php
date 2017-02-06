@@ -38,6 +38,7 @@ class Apic extends IController{
 		/* 限时购 */
 		$modelSpeed = new IModel('activity_speed');
 		$infoSpeed  = $modelSpeed->getObj('type=1 AND status=1 AND start_time<='.time().' AND end_time>='.time(), 'id,start_time,end_time');
+//		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$infoSpeed));
 		if(!empty($infoSpeed)){
 			$querySpeedGoods         = new IQuery('activity_speed_access AS m');
 			$querySpeedGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
@@ -1172,7 +1173,7 @@ class Apic extends IController{
 		/* 秒杀商品列表 */
 		$queryGoods           = new IQuery('activity_speed_access AS m');
 		$queryGoods->join     = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
-		$queryGoods->fields   = 'g.id,g.name,g.store_nums,m.nums,m.sell_price,m.purchase_price,g.img';
+		$queryGoods->fields   = 'g.id,g.name,g.store_nums,m.nums,m.sell_price,g.purchase_price,g.img';
 		$queryGoods->where    = 'g.is_del=0 AND pid='.$param['time_id'];
 		$queryGoods->page     = $param['page']<1 ? 1 : $param['page'];
 		$queryGoods->pagesize = 10;
