@@ -25,7 +25,7 @@
 				<img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
 			</div>
 		</a>
-		<span @click="share" style="margin-right: 0.5rem;display: inline-block;"><img src="/views/mobile/skin/default/image/jmj/product/shied.png" style="width: 0.62rem;"/></span>
+		<span @click="share" style="margin-right: 0.4rem;display: inline-block;"><img src="/views/mobile/skin/default/image/jmj/product/shied.png" style="width: 0.62rem;"/></span>
 		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
 		
 	</div>
@@ -504,17 +504,17 @@
 				var check=scrollTop+windowHeight-docHeight
 				if(check==0){
 					this.showTop1=true;
-					this.toBottom="height:"+50+"px;max-height:90px";
+					this.toBottom="height:"+1+"rem;max-height:1rem";
 				}
 				if((windowHeight+scrollTop-this.pm1)>(docHeight+50)&&this.pm1<0){
-					e.preventDefault(); //阻止缺省事件
+//					e.preventDefault(); //阻止缺省事件
 					this.showTop1=true;
 					this.rotateState=true;
-					this.toBottom="height:"+50+"px;max-height:90px;-webkit-transition:transform 0.2s linear";
+					this.toBottom="height:"+1+"rem;max-height:1rem;-webkit-transition:transform 0.2s linear";
 					pushSession("ProductsScrollTop",docHeight-windowHeight);
 				}else{
 					//回复默认事件
-
+                    this.rotateState=false;
 				}
 
 			},
