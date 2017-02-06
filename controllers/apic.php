@@ -2996,16 +2996,36 @@ class Apic extends IController{
      * @return string
      */
     function send_wechat_message(){
-	    $id = IFilter::act(IReq::get('id'), 'int');
-	    $id = IFilter::act(IReq::get('order_id'), 'int');
-	    $wechat_access_token = common::get_wechat_access_token();
-	    if (empty($wechat_access_token)) return json_encode(['ret'=>false,'msg'=>'无法获取wechat access_token']);
-	    $oauth_user_model = new IModel('oauth_user');
-	    $data = $oauth_user_model->getObj("user_id = $id");
-	    if (empty($data)||empty($data[0])) return json_encode(['ret'=>false,'msg'=>'不存在该用户的openid']);
-	    $oauth_user_id = $data[0]['oauth_user_id'];
-        wechats::send_message_template($oauth_user_id, 'order_complete', ['goods_name'=>'商品名称','order_no'=>$order_id]);
-        return json_encode(['ret'=>true,'msg'=>$data[0]['oauth_user_id']]);
+        $id                  = IFilter::act(IReq::get('id'), 'int');
+        $type                = IFilter::act(IReq::get('type'), 'string');
+        $order_id            = IFilter::act(IReq::get('order_id'), 'int');
+        $wechat_access_token = common::get_wechat_access_token();
+        if (empty($wechat_access_token)) die(json_encode(['ret'=>false,'msg'=>'无法获取wechat access_token']));
+        $oauth_user_model = new IModel('oauth_user');
+        $data             = $oauth_user_model->getObj("user_id = $id");
+        if (empty($data)) die(json_encode(['ret'=>false,'msg'=>'不存在该用户的openid']));
+        $oauth_user_id = $data['oauth_user_id'];
+        switch ($type){
+            case 'shiming': //实名信息的推送
+                $order_model = new IModel('order');
+                $ret         = $order_model->getObj('id = ' . $order_id);
+                if (!empty($ret)){
+                    $order_no = $ret['order_no'];
+                } else {
+                    echo json_decode(['ret'=>false,'msg'=>'不存在该订单'.$order_id]);
+                    return;
+                }
+                $wechat_ret = wechats::send_message_template($oauth_user_id, 'shiming', ['order_no' => $order_no]);
+                break;
+        }
+        if ($wechat_ret){
+            $ret = json_encode(['ret'=>true,'msg'=>$oauth_user_id]);
+            echo $ret;
+        } else {
+            $ret = json_encode(['ret'=>false,'msg'=>'开发人员查看日志错误信息']);
+            echo $ret;
+        }
+        return;
     }
     function send_wechat_message2(){
 //        $data = '{

@@ -671,8 +671,14 @@ function deliver_xlobo(id)
 	});
 }
 function send_message(user_id,order_id) {
-    $.post('/apic/send_wechat_message',{'id':user_id,'order_id':order_id},function (data) {
+    $.post('/apic/send_wechat_message_by_type',{'id':user_id,'order_id':order_id,'type':'shiming'},function (data) {
+        data = JSON.parse(data);
         console.log(data);
+        if (data.ret){
+            alert('消息推送成功');
+        } else {
+            alert(data.msg);
+        }
     })
 }
 //执行回调处理

@@ -16,12 +16,13 @@
 }
 .head #cart{
     display: inline-block;
-    margin-right:0.66rem;
+    margin-right:0.4rem;
     position:relative;
 }
 .head .backImg{
     width:5rem;
     text-align:left;
+    padding-left:0.34rem;
 }
 .head .home{
     display: inline-block;
