@@ -13,26 +13,13 @@
                 <tr>
                     <th>类型：</th>
                     <td>
-                        <label class='attr'><input name="type" type="radio" value="1" onchange="page.changeType($(this));" {if:$data['type']==1}checked{/if} />限时购</label>
-                        <label class='attr'><input name="type" type="radio" value="2" onchange="page.changeType($(this));" {if:$data['type']==2}checked{/if} />秒杀</label>
+                        <label class='attr'><input name="type" type="radio" value="1" {if:$data['type']==1}checked{/if} />限时购</label>
+                        <label class='attr'><input name="type" type="radio" value="2" {if:$data['type']==2}checked{/if} />秒杀</label>
                     </td>
                 </tr>
                 <tr>
                     <th>时间：</th>
-                    <td id="type1">
-                        日期：<input name='time' type='text' value="{echo:date('Y-m-d',$data['start_time'])}" class='Wdate'
-                               pattern='date' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"
-                               alt='请填写一个日期'/>　
-                        时段：<label class='attr'><input name="time_type" type="radio" value="1" {if:date('H',$data['start_time'])==11}checked{/if}
-                            />11:00</label>
-                        <label class='attr'><input name="time_type" type="radio" value="2" {if:date('H',$data['start_time'])==16}checked{/if}
-                            />16:00</label>
-                        <label class='attr'><input name="time_type" type="radio" value="3" {if:date('H',$data['start_time'])==22}checked{/if}
-                            />22:00</label>
-                        <label>* 此限时购时段</label>
-                    </td>
-
-                    <td id="type2">
+                    <td >
                         <label></label>
                         <label class='attr'>
                             <input name='start_time' type='text' value="{echo:date('Y-m-d H:i:s',$data['start_time'])}" class='Wdate'
@@ -151,24 +138,6 @@ window.onload = function(){
 var page = {
     loading     : false,
     init        : function(){
-        page.changeType($('input[name=type]:checked'));
-    },
-    //更改活动类型
-    changeType 			: function(obj){
-        // console.log(thisObj.prop('checked'));
-        switch(obj.val()){
-            case '1': //限时购
-                $('#type1').show();
-                $('#type2').hide();
-                break;
-            case '2': //秒杀
-                $('#type1').hide();
-                $('#type2').show();
-                break;
-            default:
-                $('#type1').hide();
-                $('#type2').hide();
-        }
     },
     //输入筛选商品的条件
     searchGoodsCallback: function (goodsList) {
