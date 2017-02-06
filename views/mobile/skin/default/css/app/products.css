@@ -693,3 +693,29 @@
 #sheet.mui-popover {
     bottom:15% !important;
 }
+#hander{
+	animation:name 1s infinite;
+	-webkit-animation:name 1s infinite;
+}
+@keyframes name{
+	0%{-webkit-transform: translateY(0.2rem);}
+	50%{-webkit-transform: translateY(0);}
+	100%{-webkit-transform: translateY(0.2rem);}
+}
+@-webkit-keyframes name{
+	0%{-webkit-transform: translateY(0.2rem);}
+	50%{-webkit-transform: translateY(0);}
+	100%{-webkit-transform: translateY(0.2rem);}
+}
+			
+#share{
+	top: 6.89rem;
+}
+#backgrounds .tips{
+	position: absolute;
+	top: 40%;
+	left: 20%;
+	color:#fff;
+	font-size:0.4rem;
+	opacity: 0.8;
+}
