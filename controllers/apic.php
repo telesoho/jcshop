@@ -1145,11 +1145,11 @@ class Apic extends IController{
 	 */
 	public function activity_speed_list(){
 		/* 接收参数 */
-		$param = array(
-			'type'    => IFilter::act(IReq::get('type'), 'int'), //活动类型[1限时购-2秒杀]，必填
-			'time_id' => IFilter::act(IReq::get('time_id'), 'int'), //活动类型[1限时购-2秒杀]，必填
-			'page'    => IFilter::act(IReq::get('page'), 'int'), //分页编号
-		);
+		$param = $this->checkData(array(
+			array('type','int',1,'活动类型[1限时购-2秒杀]'),
+			array('time_id','int',0,'时间段ID'),
+			array('page','int',0,'分页编号'),
+		));
 		/* 秒杀时间段列表 */
 		$time               = strtotime(date('Y-m-d', time()));
 		$querySpeed         = new IQuery('activity_speed');
@@ -1186,7 +1186,7 @@ class Apic extends IController{
 		}
 		
 		/* 数据返回 */
-		$this->json_echo(apiReturn::go('0', array('time_list' => $listSpeed, 'goods_list' => $listGoods)));
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>array('time_list' => $listSpeed, 'goods_list' => $listGoods)));
 	}
 	
 	/**
