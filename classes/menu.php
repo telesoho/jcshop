@@ -177,6 +177,10 @@ class Menu
 				'/tools/article_cat_list'=> '专辑分类',
 				'/tools/article_list'=> '专辑列表'
 			),
+			'视频管理'=>array(
+				'/tools/video_list'=> '视频列表',
+				'/tools/video_cat_list'=> '视频分类'
+			),
 
 			'帮助管理'=>array(
    				'/tools/help_cat_list'=> '帮助分类',
