@@ -5,6 +5,7 @@ var statusOrder=Request["id"];
 var em = new Vue({
 	el:"#wrap",
 	data:{
+		showloadding:true,
 		info:[],
 		img1:'/views/mobile/skin/default/image/jmj/article/brank_banner.jpg',
 		page:1,
@@ -73,10 +74,7 @@ function getRelateArticle(statusOrder,self){
 		type:'get',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
 		success:function(data){
-			
-			
-			
-			console.log(data.article_list);
+			self.showloadding=false;
 			self.info = data.data;
 			self.infoac=data.data.article_list;
 			data.data.goods_list.map(function(item){
@@ -88,11 +86,11 @@ function getRelateArticle(statusOrder,self){
                 stop=false;
             }else{
             	self.infoState=false;
-                stop=true; 
+                stop=true;
+				self.page++;
             }       
             console.log(self.page);
             pushSession("pinpai_page", self.page)
-            self.page++;
 		}
 	});
 }
@@ -113,8 +111,9 @@ function GetRequest() {
 
 	//懒加载
 $(window).bind('scroll', function() {
-	if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+	if ($(window).scrollTop() + $(window).height() +100 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
+        	em.showloadding=true;
             stop=false;
             getRelateArticle(statusOrder,em);
         }
