@@ -482,6 +482,7 @@
 		<button type="button" class="submit" id="to_cancel" onclick="complete({$order_id},4)"><span>作废</span></button>
 
 		<button type="button" class="submit" id="to_deliver_xlobo" onclick="deliver_xlobo({$order_id});"><span>贝海做单</span></button>
+		<button type="button" class="submit" id="to_send_message" onclick="send_message({$user_id},{$order_id});"><span>补充认证信息推送</span></button>
 	</div>
 </div>
 
@@ -528,6 +529,12 @@ function initButton()
 	$('#to_deliver_xlobo').removeAttr('disabled');
 	$('#to_deliver_xlobo').removeClass('inactive');
 	{/if}
+
+    //
+    {if:in_array($orderStatus,array(1,4,8,9))}
+    $('#to_send_message').removeAttr('disabled');
+    $('#to_send_message').removeClass('inactive');
+    {/if}
 
 	//退款
 	{if:in_array($orderStatus,array(4,6,9,10))}
@@ -663,7 +670,11 @@ function deliver_xlobo(id)
 		}
 	});
 }
-
+function send_message(user_id,order_id) {
+    $.post('/apic/send_wechat_message',{'id':user_id,'order_id':order_id},function (data) {
+        console.log(data);
+    })
+}
 //执行回调处理
 function actionCallback(msg)
 {

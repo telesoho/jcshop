@@ -53,12 +53,19 @@ class wechats
     static function send_message_template($open_id, $type, $send_info){
         $access_token = common::get_wechat_access_token();
         $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
+        $template_array = array(
+            'coupon' => 'CdwoXX4wo7wjp0i73Jn8H7TQNVJEmOCV6eeI268wb-g',
+            'shop' => 'jhVJZrhXm9quRXg-vSY6IVHDhZ69BywZb4SYblLAuXA',
+            'sfz' => 'lZaBFAn9GH0eOUUKBy7laf5_AbOMWIMUweTDIPXUS7c',
+            'shiming' => 'e4FVRqsTUHdGYCfPe4H8N81c7CLIds_PDOhzGpB3I2U',
+            'order_complete' => 'Dk9Z_2jKN4H9UctaDlB04Hxk0NoV2tODUPmnIOMXOXo'
+        );
         switch ($type){
             //优惠券
             case 'coupon':
                 $params = sprintf('{
                    "touser":"%s",
-                   "template_id":"CdwoXX4wo7wjp0i73Jn8H7TQNVJEmOCV6eeI268wb-g",
+                   "template_id":"%s",
                    "url":"%s",            
                    "data":{
                            "first": {
@@ -82,12 +89,12 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,IUrl::getHost(),$send_info['quantity'],$send_info['certificateNumbers'],'优惠券的有效期时间：自' . date('Y-m-d H:i:s') . '起7天之内');
+               }',$open_id,$template_array[$type],IUrl::getHost(),$send_info['quantity'],$send_info['certificateNumbers'],'优惠券的有效期时间：自' . date('Y-m-d H:i:s') . '起7天之内');
                 break;
             case 'shop':
                 $params = sprintf('{
                    "touser":"%s",
-                   "template_id":"jhVJZrhXm9quRXg-vSY6IVHDhZ69BywZb4SYblLAuXA",
+                   "template_id":"%s",
                    "url":"%s",            
                    "data":{
                            "first": {
@@ -111,12 +118,12 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,IUrl::getHost().'/site/index/rrd/'.$send_info['recommender_id']);
+               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index/rrd/'.$send_info['recommender_id']);
                 break;
             case 'sfz':
                 $params = sprintf('{
                    "touser":"%s",
-                   "template_id":"lZaBFAn9GH0eOUUKBy7laf5_AbOMWIMUweTDIPXUS7c",
+                   "template_id":"%s",
                    "url":"%s",            
                    "data":{
                            "first": {
@@ -136,12 +143,12 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,IUrl::getHost(),$send_info['order_no'],$send_info['accept_name'] . '___' . $send_info['mobile'] . '-->' . $send_info['sfz_name'] . '___' . $send_info['mobile'], $send_info['address']);
+               }',$open_id,$template_array[$type],IUrl::getHost(),$send_info['order_no'],$send_info['accept_name'] . '___' . $send_info['mobile'] . '-->' . $send_info['sfz_name'] . '___' . $send_info['mobile'], $send_info['address']);
                 break;
             case 'shiming':
                 $params = sprintf('{
                    "touser":"%s",
-                   "template_id":"e4FVRqsTUHdGYCfPe4H8N81c7CLIds_PDOhzGpB3I2U",
+                   "template_id":"%s",
                    "url":"%s",            
                    "data":{
                            "first": {
@@ -161,12 +168,12 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,IUrl::getHost().'/simple/credit',$send_info['order_no']);
+               }',$open_id,$template_array[$type],IUrl::getHost().'/simple/credit',$send_info['order_no']);
                 break;
             case 'order_complete':
                 $params = sprintf('{
                    "touser":"%s",
-                   "template_id":"Dk9Z_2jKN4H9UctaDlB04Hxk0NoV2tODUPmnIOMXOXo",
+                   "template_id":"%s",
                    "url":"%s",            
                    "data":{
                            "first": {
@@ -190,7 +197,7 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,IUrl::getHost().'/ucenter/index',date('Y-m-d h:i:s',time()),$send_info['goods_name'],$send_info['order_no']);
+               }',$open_id,$template_array[$type],IUrl::getHost().'/ucenter/index',date('Y-m-d h:i:s',time()),$send_info['goods_name'],$send_info['order_no']);
                 break;
         }
         $ret = common::http_post_json($url,$params);
