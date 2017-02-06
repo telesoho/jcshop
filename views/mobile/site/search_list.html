@@ -14,6 +14,7 @@
 <body>
 <!--loading页结束-->
 <div id="searth_container">
+    <loadding :mes="showloadding"></loadding>
     <search-nav :search="search" :val="searth_word"></search-nav>
     <template v-if="showMessage && infoMessage.goods==''&&infoMessage.article==''" v-cloak>
         <div class="empty">
@@ -124,6 +125,8 @@
 <script src="/views/mobile/javascript/template-native.js?v=<?php echo time(); ?>"></script>
 <!--搜索组件引入-->
 <script src="/views/mobile/components/search_nav.js?v=<?php echo time(); ?>"></script>
+<!--加载动画载入-->
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/base64.js?v=<?php echo time(); ?>"></script>
@@ -157,6 +160,7 @@
     var vm = new Vue({
         el: '#searth_container',
         data: {
+            showloadding:false,
             searth_word:getItem("searth_word"),
             search:[],
             page:1,
@@ -242,6 +246,7 @@
     $(window).bind('scroll', function() {
         if ($(window).scrollTop() + $(window).height() +600 >= $(document).height() && $(window).scrollTop() > 50) {
             if(stop==true){
+                vm.showloadding=true;
                 stop=false;
                 getSearthList(vm);
             }
@@ -266,8 +271,7 @@
             success: function (data) {
                 console.log(data);
                 self.showMessage = true;
-//                  self. infoMessage =data;
-//                console.log(data);
+                self.showloadding=false;
                 self.overMessage=data;
                 for(var i=0;i<data.goods.length;i++){
                     self.infoMessage.goods.push(data.goods[i]);

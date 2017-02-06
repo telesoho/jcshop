@@ -11,6 +11,7 @@
 	<body>
 		<!--               top                         -->
 		<div id="wrap" v-cloak>
+			<loadding :mes="showloadding"></loadding>
 			<div id="band_top">
 				<div id="top">
 					<img  :src="showLastImg.banner?showLastImg.banner:img1"/>
@@ -124,6 +125,8 @@
 		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<!--加载动画载入-->
+		<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/jiumao/brand_detail.js?v=<?php echo time(); ?>"></script>
 		<script type="text/javascript">
 			var oArticle_footer = document.getElementsByClassName("article_footer")[0];

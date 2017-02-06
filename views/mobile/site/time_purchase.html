@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>限时抢购</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/timePurchase.css" />
+    <title>限时秒杀</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/timePurchase.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 <section id="timePurchasePage" v-cloak>
+    <loadding :mes="showloadding"></loadding>
       <header class="headerTitle flexbox" v-cloak>
           <div :class="initState==key?class2:class1" v-for="(item,key) in head" @click="changeState(key)">
               <div class="time">{{item.time}}</div>
@@ -128,13 +129,16 @@
 </section>
 <!--底部空隙-->
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jquery.min.js"></script>
-<script src="/views/mobile/javascript/mui.js"></script>
-<script src="/views/mobile/javascript/lazyload.js"></script>
+<!--加载动画载入-->
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <script>
     var vm= new Vue({
         el:'#timePurchasePage',
         data:{
+            showloadding:false,//是否显示加载动画
 //            头部处理
             head:[{time:'11:00',tip:'明天再来'},
                 {time:'16:00',tip:'抢购中'},
