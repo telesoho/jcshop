@@ -1464,7 +1464,7 @@ class Apic extends IController{
 		switch($param['class']){
 			//全部订单
 			case 0:
-				$where = 'pay_type!=0 AND status!=3 AND status!=4';
+				$where = 'pay_type!=0 AND status!=4';
 				break;
 			//待付款
 			case 1:
