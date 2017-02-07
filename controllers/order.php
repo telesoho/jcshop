@@ -584,10 +584,10 @@ class Order extends IController implements adminAuthorization
             if (empty($data)) IError::show_normal('订单不存在');
             if (empty($address_data)){
 //                IError::show_normal('收货地址信息不存在');
-                $user_data = common::get_user_data($user_id);
-                $sfz_image1  = $user_data['sfz_image1'];
-                $sfz_image2  = $user_data['sfz_image2'];
-                $sfz_num     = $user_data['sfz_num'];
+                $user_data  = common::get_user_data($user_id);
+                $sfz_image1 = $user_data['sfz_image1'];
+                $sfz_image2 = $user_data['sfz_image2'];
+                $sfz_num    = $user_data['sfz_num'];
             } else {
                 if (empty($address_data['accept_name'])) IError::show_normal('用户身份证姓名不存在');
                 if (empty($address_data['sfz_num'])) IError::show_normal('用户身份证号码不存在');
@@ -600,10 +600,8 @@ class Order extends IController implements adminAuthorization
                 $mobile      = $address_data['mobile'];
                 $sfz_num     = $address_data['sfz_num'];
             }
-            $sfz_image1 = __DIR__ . '/../' . $sfz_image1;
-            $sfz_image2 = __DIR__ . '/../' . $sfz_image2;
-            if ( !file_exists($sfz_image1) ) IError::show_normal(__DIR__ . '/../' . $sfz_image1.'用户身份证证件不存在');
-            if ( !file_exists($sfz_image2) ) IError::show_normal(__DIR__ . '/../' . $sfz_image2.'用户身份证证件不存在');
+            if ( !file_exists(__DIR__ . '/../' . $sfz_image1) ) IError::show_normal(__DIR__ . '/../' . $sfz_image1.'用户身份证正面照片不存在');
+            if ( !file_exists(__DIR__ . '/../' . $sfz_image1) ) IError::show_normal(__DIR__ . '/../' . $sfz_image2.'用户身份证反面照片不存在');
             $ret = xlobo::add_idcard($accept_name, $mobile, $sfz_num, $sfz_image1, $sfz_image2);
         }
         $this->setRenderData($data);
