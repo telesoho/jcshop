@@ -236,9 +236,9 @@ var vm = new Vue({
     	scene_pavilion:function(){
     		window.location.href = "/ucenter/error";
     	},
-//  	Timed_to_:function(){
-//  		window.location.href = "/site/time_purchase?id="+this.time_id;
-//  	}
+    	Timed_to_:function(){
+    		window.location.href = "/site/time_purchase?id="+this.time_id;
+    	}
     }
 })
 function clear_pull(){

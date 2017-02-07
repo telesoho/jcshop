@@ -199,6 +199,15 @@ class Tools extends IController implements adminAuthorization
 	 */
 	public function video_add(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
+			//上传logo
+			if(isset($_FILES['logo']['name']) && $_FILES['logo']['name']!=''){
+				$uploadObj = new PhotoUpload();
+				$photoInfo = $uploadObj->run();
+				if(isset($photoInfo['logo']['img']) && file_exists($photoInfo['logo']['img'])){
+					$brand['logo'] = $photoInfo['logo']['img'];
+				}
+			}
+			
 			$model = new IModel('video');
 			$model->setData(array(
 				'url' => $_POST['url'],

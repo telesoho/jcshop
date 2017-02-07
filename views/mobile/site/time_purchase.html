@@ -14,19 +14,19 @@
 <section id="timePurchasePage" v-cloak>
     <loadding :mes="showloadding"></loadding>
       <header class="headerTitle flexbox" v-cloak>
-          <div :class="initState==key?class2:class1" v-for="(item,key) in head" @click="changeState(key)">
+          <div :class="initState==key?class2:class1" v-for="(item,key) in head" @click="changeState(key,item)">
               <div class="time">{{item.time}}</div>
-              <div class="tip">{{item.tip}}</div>
+              <div class="tip">{{head[key].now==1?"抢购中":"准备开抢"}}</div>
           </div>
       </header>
     <div class="content" v-if="initState==0">
-        <div class="top">
+        <!--<div class="top">
             限时限量抢购中……
-        </div>
+        </div>-->
         <div class="wareContent" v-cloak>
-            <div class="item" v-for="item in new_data">
+            <div class="item" v-for="item in info0">
                 <div class="img flexbox">
-                    <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
+                    <img :src="item.img" alt="" />
                     <img v-if ="item.nowNum==0" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
                 </div>
                 <div class="text">
@@ -36,7 +36,7 @@
                     <div class="box box2">
                         <div class="price1"><span>抢购价</span>
                             <span style="margin-left:0.18rem;font-size:0.22rem">¥</span>
-                            <span style="font-size:0.32rem">{{item.price1}}</span></div>
+                            <span style="font-size:0.32rem">{{item.sell_price}}</span></div>
                         <div class="price2"><span>市场价</span>
                             <s><span style="margin-left:0.11rem;font-size:0.22rem">¥</span>
                                 <span style="font-size:0.26rem">{{item.price2}}</span></s></div>
@@ -47,7 +47,7 @@
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
-                        <div class="buy" :style="item.nowNum==0?style1:style2" @click="ToBuy(item)">
+                        <div class="buy" :style="head[0].now == 0?style1:style2" @click="ToBuy(item,info0,head[0].now)">
                             马上抢
                         </div>
                     </div>
@@ -56,13 +56,13 @@
         </div>
     </div>
       <div class="content" v-if="initState==1">
-          <div class="top">
+          <!--<div class="top">
               限时限量抢购中……
-          </div>
+          </div>-->
           <div class="wareContent" v-cloak>
-              <div class="item" v-for="item in new_data">
+              <div class="item" v-for="item in info">
                     <div class="img flexbox">
-                        <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
+                        <img :src="item.img" alt="" />
                         <img v-if ="item.nowNum==0" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
                     </div>
                       <div class="text">
@@ -72,7 +72,7 @@
                           <div class="box box2">
                               <div class="price1"><span>抢购价</span>
                                   <span style="margin-left:0.18rem;font-size:0.22rem">¥</span>
-                                  <span style="font-size:0.32rem">{{item.price1}}</span></div>
+                                  <span style="font-size:0.32rem">{{item.sell_price}}</span></div>
                               <div class="price2"><span>市场价</span>
                                   <s><span style="margin-left:0.11rem;font-size:0.22rem">¥</span>
                                       <span style="font-size:0.26rem">{{item.price2}}</span></s></div>
@@ -83,7 +83,7 @@
                                     <div class="bg" :style="item.style">
                                     </div>
                                 </div>
-                              <div class="buy" :style="item.nowNum==0?style1:style2" @click="ToBuy(item)">
+                              <div class="buy" :id="head[1].now == 0?style1:style2" :style="onclick == false?style1:style2" @click="ToBuy(item,info,head[1].now)">
                                   马上抢
                               </div>
                           </div>
@@ -92,13 +92,14 @@
           </div>
       </div>
     <div class="content" v-if="initState==2">
-        <div class="top">
+        <!--<div class="top">
             准备开抢……
-        </div>
+        </div>-->
         <div class="wareContent" v-cloak>
-            <div class="item" v-for="item in new_data">
+        	
+            <div class="item" v-for="item in info2">
                 <div class="img flexbox">
-                    <img src="/views/mobile/skin/default/image/jmj/img/ware1.png" alt="" />
+                    <img :src="item.img" alt="" />
                 </div>
                 <div class="text">
                     <div class="name">
@@ -107,7 +108,7 @@
                     <div class="box box2">
                         <div class="price1"><span>抢购价</span>
                             <span style="margin-left:0.18rem;font-size:0.22rem">¥</span>
-                            <span style="font-size:0.32rem">{{item.price1}}</span></div>
+                            <span style="font-size:0.32rem">{{item.sell_price}}</span></div>
                         <div class="price2"><span>市场价</span>
                             <s><span style="margin-left:0.11rem;font-size:0.22rem">¥</span>
                                 <span style="font-size:0.26rem">{{item.price2}}</span></s></div>
@@ -118,7 +119,7 @@
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
-                        <div class="buy" :style="item.nowNum==0?style1:style2" @click="ToBuy(item)">
+                        <div class="buy" :style="head[2].now == 0?style1:style2" @click="ToBuy(item,info2,head[2].now)">
                             马上抢
                         </div>
                     </div>
@@ -135,55 +136,142 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <script>
+var attr2 = []
+	var Request = new Object();
+    Request = GetRequest();
+    var statusOrder=Request["id"];
+	console.log(statusOrder);
+	
     var vm= new Vue({
         el:'#timePurchasePage',
         data:{
             showloadding:false,//是否显示加载动画
 //            头部处理
-            head:[{time:'11:00',tip:'明天再来'},
-                {time:'16:00',tip:'抢购中'},
-                {time:'22:00',tip:'准备开抢'}],
+//          head:[{time:'',tip:'明天再来',now:0},
+//              {time:'',tip:'抢购中',now:0},
+//              {time:'',tip:'准备开抢',now:0}],
+            head:[{time:'',tip:'',now:0},
+                {time:'',tip:'',now:0},
+                {time:'',tip:'',now:0}],
             initState:1,
             class1:'title flexbox',
             class2:'title flexbox active',
 //            限时购商品数据
-            info:[
-                {price1:'38.00',price2:'56.00',tota1:30,nowNum:12,name:'商品名称商品名称商品名称商品名称商品名称'},
-                {price1:'38.00',price2:'56.00',tota1:30,nowNum:0,name:'商品名称'},
-                {price1:'38.00',price2:'56.00',tota1:30,nowNum:30,name:'商品名称'},
-                {price1:'38.00',price2:'56.00',tota1:30,nowNum:18,name:'商品名称'},
-                {price1:'38.00',price2:'56.00',tota1:20,nowNum:12,name:'商品名称'},
-                {price1:'38.00',price2:'56.00',tota1:20,nowNum:12,name:'商品名称'}
-            ],
+            info:[],
+            info0:[],
+            info2:[],
 //            对剩余数量进行处理
             style1:"opacity:0.5",
-            style2:'opacity:1'
+            style2:'opacity:1',
+           onclick:false,
+           time_list:[],
+           qi_show:[{onclick:"false"},
+           		{onclick:"false"},
+           		{onclick:"false"}
+           ]
         },
         computed: {
-            new_data: function(){
-                this.info.map(function(item){
+            new_data0: function(){
+                this.info0.map(function(item){
                     item.style="width:"+item.nowNum*100/item.tota1+"%";
                 })
-                return this.info;
+                return this.info0; 
             }
+			
         },
         mounted: function(){
-
+        	var self = this;
+        	if(statusOrder == 4){
+				this.initState = 1;
+			}else if(statusOrder == 1){
+				this.initState = 0;
+			}else if(statusOrder == 5){
+				this.initState = 2;
+			}
+			time_xian(self);
+			
+			
         },
         methods: {
-            changeState: function(num){
-                this.initState=num
+            changeState: function(num,item){
+               this.initState = num;
+//              statusOrder = num;
+				console.log(item)
+               if(num == 0){
+               	statusOrder = 1;
+               }else if(num == 1){
+               	statusOrder = 4;
+               }else if(num == 2){
+               	statusOrder = 5;
+               }
+               
+	        	
+                time_xian(self,num);
+                
             },
-            ToBuy: function(obj){
-                if(obj.nowNum>0){
-                    alert("可以买")
-                }else{
-                    alert("不能买")
-                }
+            ToBuy: function(obj,info,key){
+            	console.log(key)	
+				if(key == 1){
+					window.location.href = "/site/products?id="+obj.id;	
+				}else{
+					
+				}
             }
-        }
+        },
 
     })
+    function time_xian(self,num){
+    	 mui.ajax('/apic/activity_speed_list', {
+	        dataType: 'json',
+	        type: 'get',
+	        data:{
+	        	type:1,
+	        	time_id:statusOrder?statusOrder:1
+	        },
+	        success: function (data) {
+	        	console.log(data)
+	        	if(vm.initState == 0){
+	        		vm.info0 = data.data.goods_list;
+	        	}else if(vm.initState == 1){
+	        		vm.info = data.data.goods_list;
+	        	}else if(vm.initState == 2){
+	        		vm.info2 = data.data.goods_list;
+	        		
+	        	}
+				var dd = new Date();
+		        var tt =dd.getTime()/1000;
+	        	for(var i =0;i<data.data.time_list.length;i++){
+//	        		console.log(tt - data.data.time_list[i].start_time);
+//	        		if(tt - data.data.time_list[i].start_time>0){
+//	        			console.log(tt - data.data.time_list[i].start_time);
+//	        			console.log(new Date(parseInt(tt - data.data.time_list[i].start_time)).getHours());
+//	        		}
+					
+	        		var timestamp4 = new Date(parseInt(data.data.time_list[i].start_time));//直接用 new Date(时间戳) 格式转化获得当前时间
+					vm.head[i].time = timestamp4.toTimeString().substr(0, 8); 
+					vm.head[i].now =  data.data.time_list[i].now
+					if(vm.head[i].now){}
+//	        		vm.head[i].time = new Date(parseInt(tt - data.data.time_list[i].start_time)).getHours();
+//		        	console.log(new Date(parseInt(data.data.time_list[i].start_time)).getMinutes());
+//	        		vm.head[item].time = item.start_time;
+	        	}
+	        }
+	    });
+    }
+    
+    function GetRequest() {
+      	var url = location.search; //获取url中"?"符后的字串
+      	var theRequest = new Object();
+      	if (url.indexOf("?") != -1) {
+         	var str = url.substr(1);
+          	strs = str.split("&");
+          	for(var i = 0; i < strs.length; i ++) {
+              theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+          	}
+      }
+      	return theRequest;
+	}
+
 </script>
 </body>
 </html>

@@ -20,7 +20,9 @@
 				<col width="40px" />
 				<col width="200px" />
 				<col width="200px" />
-				<col width="400px" />
+				<col width="100px" />
+				<col width="200px" />
+				<col width="100px" />
 				<col width="50px" />
 				<col width="140px" />
 			</colgroup>
@@ -46,12 +48,12 @@
 					<td>{$item['title']}</td>
 					<td>{$item['url']}</td>
 					<td>{$item['name']}</td>
-					<td><img src="{$item['img']}"></td>
+					<td><img style="max-height:50px;" src="{$item['img']}"></td>
 					<td>{echo:empty($item['create_time']) ? '' : date('Y-m-d H:i',$item['create_time'])}</td>
 					<td>
 						<?php switch($item['status']){
 							case 0: echo '禁用'; break;
-							case 1: echo '禁用'; break;
+							case 1: echo '启用'; break;
 							default: echo '未知';
 						}?>
 					</td>
