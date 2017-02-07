@@ -568,34 +568,43 @@ class Order extends IController implements adminAuthorization
 		$this->redirect('order_deliver');
 	}
 	public function order_deliver_xlobo(){
-//	    $ret = xlobo::get_goods_store('4901301229069');
-//	    var_dump($ret);
-	    $address_model = new IModel('address');
         //去掉左侧菜单和上部导航
-        $this->layout='';
-        $order_id = IFilter::act(IReq::get('id'),'int');
-        $data = array();
+        $this->layout  = '';
+        $order_id      = IFilter::act(IReq::get('id'), 'int');
+        $data          = array();
+        $address_model = new IModel('address');
         if($order_id)
         {
             $order_show  = new Order_Class();
             $data        = $order_show->getOrderShow($order_id);
             $accept_name = $data['accept_name'];
+            $mobile      = $data['mobile'];
             $user_id     = $data['user_id'];
             $address_data = $address_model->getObj('user_id = ' . $user_id . ' and accept_name = "' . $accept_name . '"');
             if (empty($data)) IError::show_normal('订单不存在');
-            if (empty($address_data)) IError::show_normal('收货地址信息不存在');
-            if (empty($address_data['accept_name'])) IError::show_normal('用户身份证姓名不存在');
-            if (empty($address_data['sfz_num'])) IError::show_normal('用户身份证号码不存在');
-            if (empty($address_data['mobile'])) IError::show_normal('用户联系方式不存在');
-            if (empty($address_data['sfz_image1'])) IError::show_normal('身份证照片信息1不存在');
-            if (empty($address_data['sfz_image2'])) IError::show_normal('身份证照片信息2不存在');
-            $sfz_image1 = __DIR__ . '/../' . $address_data['sfz_image1'];
-            $sfz_image2 = __DIR__ . '/../' . $address_data['sfz_image2'];
-            if ( !file_exists($sfz_image1) ) IError::show_normal(__DIR__ . '/../' . $address_data['sfz_image1'].'用户身份证证件不存在');
-            if ( !file_exists($sfz_image2) ) IError::show_normal('用户身份证证件不存在');
-//            $data['user_data'] = $user_data;
-            $ret = xlobo::add_idcard($address_data['accept_name'], $address_data['mobile'], $address_data['sfz_num'], $address_data['sfz_image1'], $address_data['sfz_image2']);
-//            var_dump($ret);
+            if (empty($address_data)){
+//                IError::show_normal('收货地址信息不存在');
+                $user_data = common::get_user_data($user_id);
+                $sfz_image1  = $user_data['sfz_image1'];
+                $sfz_image2  = $user_data['sfz_image2'];
+                $sfz_num     = $user_data['sfz_num'];
+            } else {
+                if (empty($address_data['accept_name'])) IError::show_normal('用户身份证姓名不存在');
+                if (empty($address_data['sfz_num'])) IError::show_normal('用户身份证号码不存在');
+                if (empty($address_data['mobile'])) IError::show_normal('用户联系方式不存在');
+                if (empty($address_data['sfz_image1'])) IError::show_normal('身份证照片信息1不存在');
+                if (empty($address_data['sfz_image2'])) IError::show_normal('身份证照片信息2不存在');
+                $sfz_image1  = $address_data['sfz_image1'];
+                $sfz_image2  = $address_data['sfz_image2'];
+                $accept_name = $address_data['accept_name'];
+                $mobile      = $address_data['mobile'];
+                $sfz_num     = $address_data['sfz_num'];
+            }
+            $sfz_image1 = __DIR__ . '/../' . $sfz_image1;
+            $sfz_image2 = __DIR__ . '/../' . $sfz_image2;
+            if ( !file_exists($sfz_image1) ) IError::show_normal(__DIR__ . '/../' . $sfz_image1.'用户身份证证件不存在');
+            if ( !file_exists($sfz_image2) ) IError::show_normal(__DIR__ . '/../' . $sfz_image2.'用户身份证证件不存在');
+            $ret = xlobo::add_idcard($accept_name, $mobile, $sfz_num, $sfz_image1, $sfz_image2);
         }
         $this->setRenderData($data);
         $this->redirect('order_deliver_xlobo');
