@@ -1976,6 +1976,14 @@ class Apic extends IController{
 			}
 		}
 		
+		/* 是否参与限时活动（限时购） */
+		$querySpeed         = new IQuery('activity_speed as m');
+		$querySpeed->join   = 'LEFT JOIN activity_speed_access AS a ON a.pid=m.id';
+		$querySpeed->where  = 'm.type=1 AND a.goods_id='.$param['id'].' AND m.start_time<='.time().' AND m.end_time>='.time().' AND status=1';
+		$querySpeed->fields = 'a.id,a.goods_id,a.sell_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
+		$listSpeed          = $querySpeed->find();
+		$dataGoods['speed_time'] = empty($listSpeed) ? '' : $listSpeed[0]['end_time'];
+		
 		/* 记录用户操作 */
 		
 		/* 返回参数 */

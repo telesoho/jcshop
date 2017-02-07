@@ -199,6 +199,11 @@ class Tools extends IController implements adminAuthorization
 	 */
 	public function video_add(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
+			$goods = array();
+			foreach(array_unique($_POST['goods_id']) as $k => $v){
+				if(!empty($v)) $goods[] = $v;
+			}
+			
 			$data = array(
 				'url'         => $_POST['url'],
 				'cat_id'      => $_POST['cat_id'],
@@ -208,6 +213,7 @@ class Tools extends IController implements adminAuthorization
 				'update_time' => time(),
 				'sort'        => $_POST['sort'],
 				'status'      => $_POST['status'],
+				'goods'       => implode(',',$_POST['goods_id']),
 			);
 			
 			//上传封面
@@ -223,7 +229,8 @@ class Tools extends IController implements adminAuthorization
 			$model = new IModel('video');
 			$model->setData($data);
 			$rel = $model->add();
-			exit(json_encode(array('code' => $rel>0 ? 0 : 1)));
+			if(!$rel) exit('操作失败');
+			$this->redirect('video_list');
 		}
 		$this->redirect('video_add');
 	}
@@ -233,6 +240,12 @@ class Tools extends IController implements adminAuthorization
 	 */
 	public function video_edit(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
+			
+			$id    = IFilter::act(IReq::get('id'), 'int');
+			$goods = array();
+			foreach(array_unique($_POST['goods_id']) as $k => $v){
+				if(!empty($v)) $goods[] = $v;
+			}
 			$data = array(
 				'url'         => $_POST['url'],
 				'cat_id'      => $_POST['cat_id'],
@@ -242,8 +255,8 @@ class Tools extends IController implements adminAuthorization
 				'update_time' => time(),
 				'sort'        => $_POST['sort'],
 				'status'      => $_POST['status'],
+				'goods'       => implode(',', $goods),
 			);
-			
 			//上传封面
 			if(isset($_FILES['img']['name']) && $_FILES['img']['name']!=''){
 				$uploadObj = new PhotoUpload();
@@ -256,12 +269,19 @@ class Tools extends IController implements adminAuthorization
 			/* 写入数据 */
 			$model = new IModel('video');
 			$model->setData($data);
-			$rel = $model->add();
-			exit(json_encode(array('code' => $rel>0 ? 0 : 1)));
+			$rel = $model->update('id='.$id);
+			if(!$rel) exit('操作失败');
+			$this->redirect('video_list');
 		}
 		$id = IFilter::act(IReq::get('id'), 'int');
 		
 		$info = (new IModel('video'))->getObj('id='.$id);
+		if(!empty($info['goods'])){
+			$modelGoods   = new IModel('goods');
+			$info['list'] = $modelGoods->query('id IN ('.$info['goods'].')', '*');
+		}else{
+			$info['list'] = array();
+		}
 		
 		$this->setRenderData(array('data' => $info));
 		$this->redirect('video_edit');
