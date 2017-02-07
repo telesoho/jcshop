@@ -644,7 +644,6 @@ class Order extends IController implements adminAuthorization
             if (empty($ret)) IError::show_normal($v . '信息不存在');
             $sendgoodsXlobo[] = $ret['goods_id'];
         }
-
         $ret = xlobo::create_logistic_single($order_id, $sendgoodsXlobo);
         if (isset($ret->Succeed) && $ret->Succeed){
             $billcode = $ret->Result->BillCode;
@@ -663,9 +662,9 @@ class Order extends IController implements adminAuthorization
             }
         } else {
             common::log_write('做单失败' . print_r($ret,true), 'ERROR');
-            $msg = @json_decode($ret->ErrorInfoList[0]['ErrorDescription']);
+            $msg = @$ret->ErrorInfoList[0]->ErrorDescription;
             $msg = isset($msg) ? $msg : '';
-            die('<script type="text/javascript">parent.actionCallback("做单失败".$msg);</script>');
+            die('<script type="text/javascript">parent.actionCallback("'."做单失败$msg".'");</script>');
         }
     }
     public function add_xlobo($ret, $order_id){
