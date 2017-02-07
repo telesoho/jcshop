@@ -211,6 +211,8 @@ class Tools extends IController implements adminAuthorization
 				'sort' => $_POST['sort'],
 				'status' => $_POST['status'],
 			));
+			$rel = $model->add();
+			exit(json_encode(array('code' => $rel>0 ? 0 : 1)));
 		}
 		$this->redirect('video_add');
 	}
