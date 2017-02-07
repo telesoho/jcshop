@@ -39,4 +39,19 @@ class area
 		//====
 		return $result;
 	}
+
+	/**
+	 * 根据地名获取ID
+	 */
+	public static function id($name) {
+		$areaDB = new IModel('areas');
+
+		$areaData = $areaDB->getObj("area_name = '". $name . "'");
+
+		if($areaData) {
+			return $areaData['area_id'];
+		} else {
+			return 0;
+		}
+	}
 }

@@ -6,7 +6,7 @@
         <li>本插件用于同步妮素商品数据</li>
         <li>1、默认的CSV文件编码不是UTF-8编码的，必须要先转换编码，利用工具另存为UTF-8格式</li>
         <li>2、导入的CSV数据包必须是小于 {echo:IUpload::getMaxSize()} 的.ZIP压缩包，您可以通过修改php.ini中的 &lt;post_max_size&gt;和&lt;upload_max_filesize&gt;和&lt;memory_limit&gt;选项来修改上传数据包的大小</li>
-        <li>3、数据包里面一级目录必须包括CSV文件和与之对应的CSV图片文件夹，且两者的名字必须相同对应起来且必须是英文。例如：&lt;summer.csv&gt; 和 &lt;summer&gt;</li>
+        <li>3、数据包里面一级目录必须包括goods.csv文件和与之对应的CSV图片文件夹，且两者的名字必须相同对应起来且必须是英文。</li>
     </ul>
     <div class="content form_content">
         <table class="form_table">
@@ -45,7 +45,7 @@
             </form>
             <tr>
                 <th>执行结果</th>
-                <td>
+                <td class="red_box">
                     <pre>{$info}</pre>
                     <pre><font color=red>{$error}</font></pre>
                 </td>
