@@ -10,9 +10,9 @@ var Request = new Object();
 			time_xian();
 		}
 //时间  倒计时	
-var hours = 0;
-var minutes = 0;
-var seconds = 0;
+var hours = "00";
+var minutes = "00";
+var seconds = "00";
 var _time = 0;
 var data = 0;
 var vm = new Vue({
@@ -337,6 +337,13 @@ function index_home(self){
 				if(hours > 24) {
 					data = parseInt(hours/24);
 					hours = parseInt(hours%24)
+				}
+				if(seconds<10){
+					seconds = "0"+seconds;
+				}if(minutes<10){
+					minutes = "0"+minutes;
+				}if(hours<10){
+					hours = "0"+hours;
 				}
 				self.hours = hours;
 				self.minutes = minutes;
