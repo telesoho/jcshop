@@ -310,7 +310,7 @@ class wechat extends pluginBase
 	 */
 	public function getMenu(){
 		$this->initConfig();
-		$accessToken = $this->getAccessToken();
+		$accessToken = $this->getAccessToken(true);
 		$urlparam = array(
 			'access_token='.$accessToken,
 		);
