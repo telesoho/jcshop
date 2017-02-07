@@ -31,25 +31,26 @@
                 </div>
                 <div class="text">
                     <div class="name">
-                        {{item.name}}{{item.name}}
+                        {{item.name}}
                     </div>
                     <div class="box box2">
                         <div class="price1"><span>抢购价</span>
                             <span style="margin-left:0.18rem;font-size:0.22rem">¥</span>
-                            <span style="font-size:0.32rem">{{item.sell_price}}</span></div>
+                            <span style="font-size:0.32rem">{{parseFloat(item.sell_price)}}</span></div>
                         <div class="price2"><span>市场价</span>
                             <s><span style="margin-left:0.11rem;font-size:0.22rem">¥</span>
                                 <span style="font-size:0.26rem">{{item.market_price}}</span></s></div>
                     </div>
                     <div class="box bottom">
                         <div class="num">
-                            仅剩 <span>{{item.nums-item.sale_nums}}</span>件
+                            仅剩 <span>{{head[0].now == 1?(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums):item.nums-item.sale_nums}}</span>件
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
                         <div class="buy" :style="head[0].now == 0?style1:style2" @click="ToBuy(item,info0,head[0].now)">
                             马上抢
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -67,7 +68,7 @@
                     </div>
                       <div class="text">
                             <div class="name">
-                                {{item.name}}{{item.name}}
+                                {{item.name}}
                             </div>
                           <div class="box box2">
                               <div class="price1"><span>抢购价</span>
@@ -79,7 +80,7 @@
                           </div>
                           <div class="box bottom">
                                 <div class="num">
-                                    仅剩 <span>{{item.nums-item.sale_nums}}</span>件
+                                    仅剩 <span>{{head[1].now == 1?(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums):item.nums-item.sale_nums}}</span>件
                                     <div class="bg" :style="item.style">
                                     </div>
                                 </div>
@@ -104,7 +105,7 @@
                 </div>
                 <div class="text">
                     <div class="name">
-                        {{item.name}}{{item.name}}
+                        {{item.name}}
                     </div>
                     <div class="box box2">
                         <div class="price1"><span>抢购价</span>
@@ -116,7 +117,7 @@
                     </div>
                     <div class="box bottom">
                         <div class="num">
-                            仅剩 <span>{{item.nums-item.sale_nums}}</span>件
+                            仅剩 <span>{{head[2].now == 1?(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums):item.nums-item.sale_nums}}</span>件
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
@@ -175,19 +176,32 @@ var attr2 = []
         computed: {
             new_data0: function(){
                 this.info0.map(function(item){
-                    item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
+                    if(vm.head[0].now == 0){
+                		item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
+                	}else{
+                		 item.style="width:"+(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums)*100/item.nums+"%";
+                	}
                 })
                 return this.info0; 
             },
             new_data1: function(){
                 this.info.map(function(item){
-                    item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
+                	if(vm.head[1].now == 0){
+                		item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
+                	}else{
+                		 item.style="width:"+(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums)*100/item.nums+"%";
+                	}
+                   
                 })
                 return this.info; 
             },
             new_data2: function(){
                 this.info2.map(function(item){
-                    item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
+                   	if(vm.head[2].now == 0){
+                		item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
+                	}else{
+                		 item.style="width:"+(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums)*100/item.nums+"%";
+                	}
                 })
                 return this.info2; 
             }
