@@ -76,7 +76,7 @@
 						{if:$item['is_send'] == 0}
                             {if:$LeftStock>=$item['goods_nums']}
 						        <input type="checkbox" name="sendgoods[]" value="{$item['id']}" />
-						        <!--<input type="checkbox" name="sendgoodsXlobo[]" value="{$item['goods_id']}" />-->
+						        <input type="checkbox" name="sendgoodsXlobo[]" value="{$item['goods_id']}" />
                             {else:}
                                 贝海无库存
                             {/if}
