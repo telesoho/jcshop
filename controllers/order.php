@@ -662,7 +662,7 @@ class Order extends IController implements adminAuthorization
             }
         } else {
             common::log_write('做单失败' . print_r($ret,true), 'ERROR');
-            $msg = @json_decode($ret->ErrorInfoList[0]['ErrorDescription']);
+            $msg = @$ret->ErrorInfoList[0]->ErrorDescription;
             $msg = isset($msg) ? $msg : '';
             die('<script type="text/javascript">parent.actionCallback("'."做单失败$msg".'");</script>');
         }
