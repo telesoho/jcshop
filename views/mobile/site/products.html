@@ -25,7 +25,7 @@
 				<img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
 			</div>
 		</a>
-		<span @click="share" style="margin-right: 0.5rem;display: inline-block;"><img src="/views/mobile/skin/default/image/jmj/product/shied.png" style="width: 0.62rem;"/></span>
+		<span @click="share" style="margin-right: 0.4rem;display: inline-block;"><img src="/views/mobile/skin/default/image/jmj/product/shied.png" style="width: 0.62rem;"/></span>
 		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
 		
 	</div>
@@ -59,10 +59,7 @@
 					</div>
 				</div>
 			</section>
-			
-			
-			
-			<section class="name-price">
+            <section class="name-price">
 				<div class="name hideCamp4">{{info.name}}</div>
 				<div class="price">
 					<div class="sell_price flexstart">
@@ -339,7 +336,7 @@
 			<p>单笔订单中的商品，显示“满288包邮”的商品，享受288包首重（500g），续重每增加100g收取运费5元。不显示“满288包邮”的商品，无法享受包邮服务，收取首重35元，续重每增加100g收取运费5元。</p>
 		</div>
 	</div>
-	<div id="backgrounds" style="width: 100%;display: none;height: 100%;background: #000;opacity: 0.5;display: none;position: absolute;left: 0;top: 0;z-index:10000;">
+	<div id="backgrounds" style="width: 100%;display: none;height: 100%;background: #000;opacity: 0.5;position: absolute;left: 0;top: 0;z-index:10000;">
 		<p style="" class="tips">点击屏幕任意区域取消操作</p>
 		<img id="hander" src="/views/mobile/skin/default/image/jmj/ticket_gain/hander.png" style="width: 0.56rem; height: 0.72rem;position: absolute;top: 0;right: 0.2rem;"/>
 	</div>
@@ -388,9 +385,9 @@
 			checkScroll:false,//判定是否通过第二页进入第一页的
 			ckeckScroll1:false,//判定第一页进入第二页的状态
 			showTop:false,//第二页顶部状态  初始为false
-            showTop1:false, //第一页底部状态 初始为false
+            showTop1:true, //第一页底部状态 初始为false
 			topHeight:"height:"+0+"px", //下拉的高度 与手指移动的位置差不多
-            toBottom:"height:"+0+"px",//上拉的高度
+            toBottom:"height:"+1+"rem",//上拉的高度
 			styleTop1:"-webkit-transform:rotate(0deg);",
 			styleTop2:"-webkit-transform:rotate(180deg);",
 			rotateState:false,
@@ -501,20 +498,20 @@
                 var scrollTop=$(window).scrollTop();//窗口的滚动高度
                 var windowHeight=$(window).height(); //窗口的高度
                 var docHeight=$(document).height(); //文档的真实高度
-				var check=scrollTop+windowHeight-docHeight
-				if(check==0){
+				var check=scrollTop+windowHeight-docHeight;
+                if(check>=0){
 					this.showTop1=true;
-					this.toBottom="height:"+50+"px;max-height:90px";
+					this.toBottom="height:"+1+"rem;max-height:1rem";
 				}
 				if((windowHeight+scrollTop-this.pm1)>(docHeight+50)&&this.pm1<0){
-					e.preventDefault(); //阻止缺省事件
+//					e.preventDefault(); //阻止缺省事件
 					this.showTop1=true;
 					this.rotateState=true;
-					this.toBottom="height:"+50+"px;max-height:90px;-webkit-transition:transform 0.2s linear";
+					this.toBottom="height:"+1+"rem;max-height:1rem;-webkit-transition:transform 0.2s linear";
 					pushSession("ProductsScrollTop",docHeight-windowHeight);
 				}else{
 					//回复默认事件
-
+                    this.rotateState=false;
 				}
 
 			},
@@ -524,10 +521,10 @@
                     this.showContainer2=true;
                     this.showContainer1=false;
                     this.showTop=false;
-                    this.showTop1=false;
+                    this.showTop1=true;
                     this.rotateState=false;
                     this.topHeight="height:"+0+"px";
-                    this.toBottom="height:"+0+"px";
+                    this.toBottom="height:"+1+"rem";
                     this.py0=0;
                     this.py1=0;
                     this.xy0=0;
@@ -537,8 +534,8 @@
 					//只有进入之后状态码才为true
 					this.checkScroll1=true;
                 }else{
-                    this.showTop1=false;
-                    this.toBottom="height:"+0+"px";
+                    this.showTop1=true;
+                    this.toBottom="height:"+1+"rem";
                 }
 			},
 			secondContainerMoveStart:function(e){
@@ -560,7 +557,7 @@
 					this.topHeight="height:"+this.pmy+"px";
 					if(this.pmy>=45){
 						this.rotateState=true;
-						this.topHeight="height:"+this.pmy+"px;max-height:90px";
+						this.topHeight="height:"+this.pmy+"px;max-height:1rem";
 					}
 				}else{
 					//回复默认事件
@@ -580,10 +577,10 @@
 					this.showContainer1=true;
 					this.checkScroll=true;
 					this.showTop=false;
-                    this.showTop1=false;
+                    this.showTop1=true;
 					this.rotateState=false;
 					this.topHeight="height:"+0+"px";
-                    this.toBottom="height:"+0+"px";
+                    this.toBottom="height:"+1+"rem";
                     this.py0=0;
                     this.py1=0;
                     this.xy0=0;
