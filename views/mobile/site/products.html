@@ -354,6 +354,7 @@
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
 <script type="text/javascript" charset="utf-8">
+var minutes,hours,seconds;
 	var statusOrder={echo:IReq::get('id')};
 	var time_all,times;
 	//记录访问位置的id
@@ -755,18 +756,18 @@
 					self.times = "今天"+timestamp4.toTimeString().substr(0, 8)+"开抢";
 				}else{
 					var end_ = parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000);
-					var minutes = parseInt(end_/60); 
-					var seconds = parseInt(end_%60); 
+					minutes = parseInt(end_/60); 
+					seconds = parseInt(end_%60); 
 					// alert(theTime1+"-"+theTime); 
 					if(minutes > 60) { 
-					var hours = parseInt(minutes/60); 
+					hours = parseInt(minutes/60); 
 					minutes = parseInt(minutes%60); 
 					} 
 					if(hours > 24) {
 						data = parseInt(hours/24);
 						hours = parseInt(hours%24);
 					}
-					console.log(hours,minutes,seconds)
+					
 					
 					if(parseInt(hours)<10){
 						hours = "0"+parseInt(hours);
@@ -821,6 +822,7 @@ function time_xian(){
 				hours = "0"+hours;
 			}
 			vm.times = "结束倒计时 "+hours+":"+minutes+":"+seconds;
+//			console.log(vm.times)
 			} 
 			
 		}
