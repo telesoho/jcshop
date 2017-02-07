@@ -2988,7 +2988,7 @@ class Apic extends IController{
      * 消息的推送
      * @return string
      */
-    function send_wechat_message(){
+    function send_wechat_message_by_type(){
         $id                  = IFilter::act(IReq::get('id'), 'int');
         $type                = IFilter::act(IReq::get('type'), 'string');
         $order_id            = IFilter::act(IReq::get('order_id'), 'int');
