@@ -1173,12 +1173,11 @@ class Apic extends IController{
 		/* 秒杀商品列表 */
 		$queryGoods           = new IQuery('activity_speed_access AS m');
 		$queryGoods->join     = 'LEFT JOIN goods AS g ON g.id=m.goods_id LEFT JOIN activity_speed AS s ON s.id=m.pid';
-		$queryGoods->fields   = 'g.id,g.name,g.store_nums,m.nums,m.sell_price,g.purchase_price,g.img,s.start_time,s.end_time';
+		$queryGoods->fields   = 'g.id,g.name,g.store_nums,m.nums,m.sell_price,g.purchase_price,g.img,g.market_price,s.start_time,s.end_time';
 		$queryGoods->where    = 'g.is_del=0 AND pid='.$param['time_id'];
 		$queryGoods->page     = $param['page']<1 ? 1 : $param['page'];
 		$queryGoods->pagesize = 10;
 		$listGoods            = $queryGoods->find();
-		
 		if($param['page']>$queryGoods->getTotalPage()) $listGoods = array();
 		if(!empty($listGoods)){
 			foreach($listGoods as $k => $v){

@@ -199,31 +199,72 @@ class Tools extends IController implements adminAuthorization
 	 */
 	public function video_add(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
-			//上传logo
-			if(isset($_FILES['logo']['name']) && $_FILES['logo']['name']!=''){
+			$data = array(
+				'url'         => $_POST['url'],
+				'cat_id'      => $_POST['cat_id'],
+				'title'       => $_POST['title'],
+				'content'     => $_POST['content'],
+				'create_time' => time(),
+				'update_time' => time(),
+				'sort'        => $_POST['sort'],
+				'status'      => $_POST['status'],
+			);
+			
+			//上传封面
+			if(isset($_FILES['img']['name']) && $_FILES['img']['name']!=''){
 				$uploadObj = new PhotoUpload();
 				$photoInfo = $uploadObj->run();
-				if(isset($photoInfo['logo']['img']) && file_exists($photoInfo['logo']['img'])){
-					$brand['logo'] = $photoInfo['logo']['img'];
+				if(isset($photoInfo['img']['img']) && file_exists($photoInfo['img']['img'])){
+					$data['img'] = $photoInfo['img']['img'];
 				}
 			}
 			
+			/* 写入数据 */
 			$model = new IModel('video');
-			$model->setData(array(
-				'url' => $_POST['url'],
-				'cat_id' => $_POST['cat_id'],
-//				'img' => $_POST['cat_id'],
-				'title' => $_POST['title'],
-				'content' => $_POST['content'],
-				'create_time' => time(),
-				'update_time' => time(),
-				'sort' => $_POST['sort'],
-				'status' => $_POST['status'],
-			));
+			$model->setData($data);
 			$rel = $model->add();
 			exit(json_encode(array('code' => $rel>0 ? 0 : 1)));
 		}
 		$this->redirect('video_add');
+	}
+	
+	/**
+	 * 添加视频
+	 */
+	public function video_edit(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			$data = array(
+				'url'         => $_POST['url'],
+				'cat_id'      => $_POST['cat_id'],
+				'title'       => $_POST['title'],
+				'content'     => $_POST['content'],
+				'create_time' => time(),
+				'update_time' => time(),
+				'sort'        => $_POST['sort'],
+				'status'      => $_POST['status'],
+			);
+			
+			//上传封面
+			if(isset($_FILES['img']['name']) && $_FILES['img']['name']!=''){
+				$uploadObj = new PhotoUpload();
+				$photoInfo = $uploadObj->run();
+				if(isset($photoInfo['img']['img']) && file_exists($photoInfo['img']['img'])){
+					$data['img'] = $photoInfo['img']['img'];
+				}
+			}
+			
+			/* 写入数据 */
+			$model = new IModel('video');
+			$model->setData($data);
+			$rel = $model->add();
+			exit(json_encode(array('code' => $rel>0 ? 0 : 1)));
+		}
+		$id = IFilter::act(IReq::get('id'), 'int');
+		
+		$info = (new IModel('video'))->getObj('id='.$id);
+		
+		$this->setRenderData(array('data' => $info));
+		$this->redirect('video_edit');
 	}
 	
 	public function seo_sitemaps()
