@@ -32,8 +32,8 @@ var vm = new Vue({
         showButton:true,
         img1:'/views/mobile/skin/default/image/jmj/cart/red.png',
         img2:'/views/mobile/skin/default/image/jmj/cart/uncho.png',
-        bg:'background:rgba(255,68,160,0.5)',
-        bg1:'background:rgba(255,68,160,1)',
+        bg:'background:rgba(255,47,92,0.5)',
+        bg1:'background:rgba(255,47,92,1)',
         state:true,
         promo:{
             val:'',

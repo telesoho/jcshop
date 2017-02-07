@@ -47,7 +47,7 @@
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
-                        <div class="buy" :style="head[0].now == 0?style1:style2" @click="ToBuy(item,info0,head[0].now)">
+                        <div class="buy" :style="head[0].shi_time == true?style2:style1" @click="ToBuy(item,info0,head[0].now)">
                             马上抢
                         </div>
                         
@@ -84,7 +84,7 @@
                                     <div class="bg" :style="item.style">
                                     </div>
                                 </div>
-                              <div class="buy" :id="head[1].now == 0?style1:style2" :style="onclick == false?style1:style2" @click="ToBuy(item,info,head[1].now)">
+                              <div class="buy" :id="head[1].shi_time" :style="head[1].shi_time == true?style2:style1" @click="ToBuy(item,info,head[1].now)">
                                   马上抢
                               </div>
                           </div>
@@ -121,7 +121,7 @@
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
-                        <div class="buy" :style="head[2].now == 0?style1:style2" @click="ToBuy(item,info2,head[2].now)">
+                        <div class="buy" :id="head[2].shi_time" :style="head[2].shi_time == true?style2:style1" @click="ToBuy(item,info2,head[2].now)">
                             马上抢
                         </div>
                     </div>
@@ -153,9 +153,10 @@ var attr2 = []
 //          head:[{time:'',tip:'明天再来',now:0},
 //              {time:'',tip:'抢购中',now:0},
 //              {time:'',tip:'准备开抢',now:0}],
-            head:[{time:'',tip:'',now:0,id:0},
-                {time:'',tip:'',now:0,id:0},
-                {time:'',tip:'',now:0,id:0}],
+            head:[{time:'',tip:'',now:0,id:0,shi_time:"false"},
+                {time:'',tip:'',now:0,id:0,shi_time:"false"},
+                {time:'',tip:'',now:0,id:0,shi_time:"false"}],
+//              shi_time:false,
             initState:0,
             class1:'title flexbox',
             class2:'title flexbox active',
@@ -267,8 +268,13 @@ var attr2 = []
 					
 	        		var timestamp4 = new Date(parseInt(data.data.time_list[i].start_time)*1000);//直接用 new Date(时间戳) 格式转化获得当前时间
 					vm.head[i].time = timestamp4.toTimeString().substr(0, 8); 
-					vm.head[i].now =  data.data.time_list[i].now
-					vm.head[i].id =  data.data.time_list[i].id
+					vm.head[i].now =  data.data.time_list[i].now;
+					vm.head[i].id =  data.data.time_list[i].id;
+					if(data.data.time_list[i].start_time<tt){
+						vm.head[i].shi_time = true;
+						
+					}
+					console.log(vm.head[i].shi_time)
 //	        		vm.head[i].time = new Date(parseInt(tt - data.data.time_list[i].start_time)).getHours();
 //		        	console.log(new Date(parseInt(data.data.time_list[i].start_time)).getMinutes());
 //	        		vm.head[item].time = item.start_time;

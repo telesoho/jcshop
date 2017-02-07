@@ -148,7 +148,7 @@
 }
 .goodsList .right .text .sellprice{
 	font-size:0.28rem;
-	color:#f3026a;
+	color:#ff2f5c;
 }
 .goodsList .right .text .num{
 	display: inline-block;
@@ -169,7 +169,7 @@
 .totalItemCal .right{
 	margin-right:0.41rem;
 	font-size:0.28rem;
-	color:#ff44a0;
+	color:#ff2f5c;
 }
 .totalItemCal .right img{
 	width:0.12rem;
@@ -211,7 +211,7 @@
 	line-height:0.3rem;
 }
 .tips .first{
-	color:#ff44a0;
+	color:#ff2f5c;
 }
 .delivery{
 	height:0.87rem;
