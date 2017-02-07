@@ -1799,6 +1799,7 @@ class Apic extends IController{
 		));
 		$user_id = $this->tokenCheck();
 		/* 检查 */
+		if(!in_array($param['opt'],array(1,2))) $this->returnJson(array('code' => '001002', 'msg' => $this->errorInfo['001002']));
 		$rel   = (new IModel('comment'))->get_count('id='.$param['comment_id']);
 		if(empty($rel)) $this->returnJson(array('code' => '010001', 'msg' => $this->errorInfo['010001'])); //评论不存在
 		$modelP = new IModel('comment_praise');
@@ -1984,7 +1985,7 @@ class Apic extends IController{
 		$querySpeed->where       = 'm.type=1 AND a.goods_id='.$param['id'].' AND m.start_time<='.time().' AND m.end_time>='.time().' AND status=1';
 		$querySpeed->fields      = 'a.id,a.goods_id,a.sell_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
 		$listSpeed               = $querySpeed->find();
-		$dataGoods['speed_time'] = empty($listSpeed) ? '' : $listSpeed[0]['end_time'];
+		$dataGoods['speed']      = empty($listSpeed) ? array() : array('start_time'=>$listSpeed[0]['start_time'],'end_time'=>$listSpeed[0]['end_time']);
 		
 		/* 记录用户操作 */
 		
@@ -2584,6 +2585,7 @@ class Apic extends IController{
 		$user_id = $this->tokenCheck();
 		
 		/* 检查 */
+		if(!in_array($param['opt'],array(1,2))) $this->returnJson(array('code' => '001002', 'msg' => $this->errorInfo['001002']));
 		$model = new IModel('video');
 		$rel   = $model->get_count('id='.$param['video_id']);
 		if(empty($rel)) $this->returnJson(array('code' => '011001', 'msg' => $this->errorInfo['011001'])); //视频不存在
