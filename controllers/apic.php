@@ -1363,7 +1363,6 @@ class Apic extends IController{
         }
 
         if($user_id){
-
             //            添加收货人的实名信息
             $access_token = common::get_wechat_access_token();
             $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
@@ -1372,6 +1371,7 @@ class Apic extends IController{
                 if (file_exists(__DIR__.'/../'.$image1)){
                     $image1 = explode('/',$image1,2)[1];
                 } else {
+                    $sqlData['media_id1'] = $image1;
                     $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
                     $image1 = common::save_url_image($url1,$dir,1);
                 }
@@ -1380,6 +1380,7 @@ class Apic extends IController{
                 if (file_exists(__DIR__.'/../'.$image2)){
                     $image2 = explode('/',$image2,2)[1];
                 } else {
+                    $sqlData['media_id2'] = $image2;
                     $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
                     $image2 = common::save_url_image($url2,$dir,2);
                 }
@@ -1387,6 +1388,7 @@ class Apic extends IController{
 
             $sqlData['sfz_image1'] = $image1;
             $sqlData['sfz_image2'] = $image2;
+            $sqlData['create_time'] = date('Y-m-d H:i:s',time());
 
 
             $model = new IModel('address');
