@@ -196,8 +196,9 @@ class xlobo
         );
         $ret = self::requests('xlobo.idcard.add', $data);
         if (isset($ret->ErrorCount) && $ret->ErrorCount > 0){
-            common::log_write('身份证上传失败' . json_encode($data));
-            common::log_write('身份证上传失败' . $sfz_image1_path . '--' . $sfz_image2_path);
+//            common::log_write('身份证上传失败' . json_encode($data));
+            common::log_write('身份证上传失败' . $sfz_name . '--' . $sfz_image1_path . '--' . filesize(__DIR__ . '/../' .$sfz_image1_path) . 'b--' . $sfz_image2_path . '--' . filesize(__DIR__ . '/../' .$sfz_image2_path) . 'b', 'ERROR');
+            
             $info = print_r($ret->ErrorInfoList, true);
             IError::show_normal($ret->ErrorInfoList[0]->ErrorDescription);
         }

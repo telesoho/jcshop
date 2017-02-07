@@ -582,7 +582,7 @@ class Order extends IController implements adminAuthorization
             $user_id     = $data['user_id'];
             $address_data = $address_model->getObj('user_id = ' . $user_id . ' and accept_name = "' . $accept_name . '"');
             if (empty($data)) IError::show_normal('订单不存在');
-            if (empty($address_data)){
+            if (empty($address_data) || empty($address_data['sfz_image1']) || empty($address_data['sfz_image2'])){
 //                IError::show_normal('收货地址信息不存在');
                 $user_data  = common::get_user_data($user_id);
                 $sfz_image1 = $user_data['sfz_image1'];
