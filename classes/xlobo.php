@@ -264,7 +264,7 @@ class xlobo
         if ($data){
             return $data[0]['area_name'];
         } else {
-            return null;
+            return 'X区';
         }
     }
     public static function get_goods_store($goods_no){

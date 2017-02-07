@@ -237,7 +237,7 @@ class Common{
     public static function get_wechat_access_token(){
         require_once __DIR__.'/../plugins/wechat/wechat.php';
         $wechat = new wechat();
-        $access_token = $wechat->getAccessToken(true);
+        $access_token = $wechat->getAccessToken();
         return $access_token;
     }
     /**
