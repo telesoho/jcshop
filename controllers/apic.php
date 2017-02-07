@@ -1172,24 +1172,25 @@ class Apic extends IController{
 		}
 		/* 秒杀商品列表 */
 		$queryGoods           = new IQuery('activity_speed_access AS m');
-		$queryGoods->join     = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
-		$queryGoods->fields   = 'g.id,g.name,g.store_nums,m.nums,m.sell_price,g.purchase_price,g.img';
+		$queryGoods->join     = 'LEFT JOIN goods AS g ON g.id=m.goods_id LEFT JOIN activity_speed AS s ON s.id=m.pid';
+		$queryGoods->fields   = 'g.id,g.name,g.store_nums,m.nums,m.sell_price,g.purchase_price,g.img,s.start_time,s.end_time';
 		$queryGoods->where    = 'g.is_del=0 AND pid='.$param['time_id'];
 		$queryGoods->page     = $param['page']<1 ? 1 : $param['page'];
 		$queryGoods->pagesize = 10;
 		$listGoods            = $queryGoods->find();
+		
 		if($param['page']>$queryGoods->getTotalPage()) $listGoods = array();
 		if(!empty($listGoods)){
 			foreach($listGoods as $k => $v){
 				$listGoods[$k]['img']        = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
 				$listGoods[$k]['store_nums'] = $v['nums']<$v['store_nums'] ? $v['nums'] : $v['store_nums'];
 				//已售数量
-				$queryOrder         = new IQuery('order AS m');
-				$queryOrder->join   = 'LEFT JOIN order_goods AS g ON g.order_id=m.id';
-				$queryOrder->fields = 'count(*) AS sum';
-				$where = 'm.pay_status=1 AND m.create_time>="'.date('Y-m-d H:i:s', $v['start_time']).'" AND m.create_time<="'.date('Y-m-d H:i:s', $v['end_time']).'" AND g.goods_id='.$v['goods_id'];
-				$queryOrder->where = $where;
-				$sum               = $queryOrder->find();
+				$queryOrder                 = new IQuery('order AS m');
+				$queryOrder->join           = 'LEFT JOIN order_goods AS g ON g.order_id=m.id';
+				$queryOrder->fields         = 'sum(g.goods_nums) AS sum';
+				$queryOrder->where          = 'm.pay_status=1 AND m.create_time>="'.date('Y-m-d H:i:s', $v['start_time']).'" AND m.create_time<="'.date('Y-m-d H:i:s', $v['end_time']).'" AND g.goods_id='.$v['id'];
+				$sum                        = $queryOrder->find();
+				$listGoods[$k]['sale_nums'] = empty($sum[0]['sum']) ? 0 : $sum[0]['sum'];
 			}
 		}
 		
