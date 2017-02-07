@@ -14,7 +14,7 @@
 <section id="timePurchasePage" v-cloak>
     <loadding :mes="showloadding"></loadding>
       <header class="headerTitle flexbox" v-cloak>
-          <div :class="initState==key?class2:class1" v-for="(item,key) in head" @click="changeState(key,item)">
+          <div :class="initState==key?class2:class1" v-for="(item,key) in head" @click="changeState(key,item,item.id)">
               <div class="time">{{item.time}}</div>
               <div class="tip">{{head[key].now==1?"抢购中":"准备开抢"}}</div>
           </div>
@@ -24,10 +24,10 @@
             限时限量抢购中……
         </div>-->
         <div class="wareContent" v-cloak>
-            <div class="item" v-for="item in info0">
+            <div class="item" v-for="item in new_data0">
                 <div class="img flexbox">
                     <img :src="item.img" alt="" />
-                    <img v-if ="item.nowNum==0" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
+                    <img v-if ="item.store_nums==0 || item.sale_nums==20" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
                 </div>
                 <div class="text">
                     <div class="name">
@@ -39,11 +39,11 @@
                             <span style="font-size:0.32rem">{{item.sell_price}}</span></div>
                         <div class="price2"><span>市场价</span>
                             <s><span style="margin-left:0.11rem;font-size:0.22rem">¥</span>
-                                <span style="font-size:0.26rem">{{item.price2}}</span></s></div>
+                                <span style="font-size:0.26rem">{{item.market_price}}</span></s></div>
                     </div>
                     <div class="box bottom">
                         <div class="num">
-                            仅剩 <span>{{item.nowNum}}</span>件
+                            仅剩 <span>{{item.nums-item.sale_nums}}</span>件
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
@@ -60,10 +60,10 @@
               限时限量抢购中……
           </div>-->
           <div class="wareContent" v-cloak>
-              <div class="item" v-for="item in info">
+              <div class="item" v-for="item in new_data1">
                     <div class="img flexbox">
                         <img :src="item.img" alt="" />
-                        <img v-if ="item.nowNum==0" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
+                        <img v-if ="item.store_nums==0 || item.sale_nums==20" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
                     </div>
                       <div class="text">
                             <div class="name">
@@ -75,11 +75,11 @@
                                   <span style="font-size:0.32rem">{{item.sell_price}}</span></div>
                               <div class="price2"><span>市场价</span>
                                   <s><span style="margin-left:0.11rem;font-size:0.22rem">¥</span>
-                                      <span style="font-size:0.26rem">{{item.price2}}</span></s></div>
+                                      <span style="font-size:0.26rem">{{item.market_price}}</span></s></div>
                           </div>
                           <div class="box bottom">
                                 <div class="num">
-                                    仅剩 <span>{{item.nowNum}}</span>件
+                                    仅剩 <span>{{item.nums-item.sale_nums}}</span>件
                                     <div class="bg" :style="item.style">
                                     </div>
                                 </div>
@@ -97,9 +97,10 @@
         </div>-->
         <div class="wareContent" v-cloak>
         	
-            <div class="item" v-for="item in info2">
+            <div class="item" v-for="item in new_data2">
                 <div class="img flexbox">
                     <img :src="item.img" alt="" />
+                     <img v-if ="item.store_nums==0 || item.sale_nums==20" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
                 </div>
                 <div class="text">
                     <div class="name">
@@ -111,11 +112,11 @@
                             <span style="font-size:0.32rem">{{item.sell_price}}</span></div>
                         <div class="price2"><span>市场价</span>
                             <s><span style="margin-left:0.11rem;font-size:0.22rem">¥</span>
-                                <span style="font-size:0.26rem">{{item.price2}}</span></s></div>
+                                <span style="font-size:0.26rem">{{item.market_price}}</span></s></div>
                     </div>
                     <div class="box bottom">
                         <div class="num">
-                            仅剩 <span>{{item.nowNum}}</span>件
+                            仅剩 <span>{{item.nums-item.sale_nums}}</span>件
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
@@ -150,10 +151,10 @@ var attr2 = []
 //          head:[{time:'',tip:'明天再来',now:0},
 //              {time:'',tip:'抢购中',now:0},
 //              {time:'',tip:'准备开抢',now:0}],
-            head:[{time:'',tip:'',now:0},
-                {time:'',tip:'',now:0},
-                {time:'',tip:'',now:0}],
-            initState:1,
+            head:[{time:'',tip:'',now:0,id:0},
+                {time:'',tip:'',now:0,id:0},
+                {time:'',tip:'',now:0,id:0}],
+            initState:0,
             class1:'title flexbox',
             class2:'title flexbox active',
 //            限时购商品数据
@@ -173,9 +174,21 @@ var attr2 = []
         computed: {
             new_data0: function(){
                 this.info0.map(function(item){
-                    item.style="width:"+item.nowNum*100/item.tota1+"%";
+                    item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
                 })
                 return this.info0; 
+            },
+            new_data1: function(){
+                this.info.map(function(item){
+                    item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
+                })
+                return this.info; 
+            },
+            new_data2: function(){
+                this.info2.map(function(item){
+                    item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
+                })
+                return this.info2; 
             }
 			
         },
@@ -193,24 +206,14 @@ var attr2 = []
 			
         },
         methods: {
-            changeState: function(num,item){
+            changeState: function(num,item,id){
                this.initState = num;
-//              statusOrder = num;
-				console.log(item)
-               if(num == 0){
-               	statusOrder = 1;
-               }else if(num == 1){
-               	statusOrder = 4;
-               }else if(num == 2){
-               	statusOrder = 5;
-               }
-               
-	        	
+               	statusOrder = id;     	
                 time_xian(self,num);
                 
             },
-            ToBuy: function(obj,info,key){
-            	console.log(key)	
+            ToBuy: function(obj,info,key,l){
+            	console.log(l)	
 				if(key == 1){
 					window.location.href = "/site/products?id="+obj.id;	
 				}else{
@@ -247,10 +250,10 @@ var attr2 = []
 //	        			console.log(new Date(parseInt(tt - data.data.time_list[i].start_time)).getHours());
 //	        		}
 					
-	        		var timestamp4 = new Date(parseInt(data.data.time_list[i].start_time));//直接用 new Date(时间戳) 格式转化获得当前时间
+	        		var timestamp4 = new Date(parseInt(data.data.time_list[i].start_time)*1000);//直接用 new Date(时间戳) 格式转化获得当前时间
 					vm.head[i].time = timestamp4.toTimeString().substr(0, 8); 
 					vm.head[i].now =  data.data.time_list[i].now
-					if(vm.head[i].now){}
+					vm.head[i].id =  data.data.time_list[i].id
 //	        		vm.head[i].time = new Date(parseInt(tt - data.data.time_list[i].start_time)).getHours();
 //		        	console.log(new Date(parseInt(data.data.time_list[i].start_time)).getMinutes());
 //	        		vm.head[item].time = item.start_time;
