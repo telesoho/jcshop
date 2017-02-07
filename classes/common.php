@@ -193,15 +193,19 @@ class Common{
         if (!file_exists($log_path)) mkdir($log_path);
         switch ($type){
             case 'DEBUG':
-                $log->pushHandler(new StreamHandler($log_path . '/'.date('Y-m-d').'-DEBUG.log', Logger::DEBUG));
+                $log->pushHandler(new StreamHandler($log_path . '/DEBUG-'.date('Y-m-d').'.log', Logger::DEBUG));
                 $log->addInfo($info);
                 break;
             case 'INFO':
-                $log->pushHandler(new StreamHandler($log_path . '/'.date('Y-m-d').'-INFO.log', Logger::INFO));
+                $log->pushHandler(new StreamHandler($log_path . '/INFO-'.date('Y-m-d').'.log', Logger::INFO));
+                $log->addInfo($info);
+                break;
+            case 'ERROR':
+                $log->pushHandler(new StreamHandler($log_path . '/ERROR-'.date('Y-m-d').'.log', Logger::INFO));
                 $log->addInfo($info);
                 break;
             default:
-                $log->pushHandler(new StreamHandler($log_path . '/'.date('Y-m-d').'-WARNING.log', Logger::WARNING));
+                $log->pushHandler(new StreamHandler($log_path . '/WARNING-'.date('Y-m-d').'.log', Logger::WARNING));
                 $log->addInfo($info);
         }
     }
