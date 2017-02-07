@@ -483,6 +483,7 @@
 
 		<button type="button" class="submit" id="to_deliver_xlobo" onclick="deliver_xlobo({$order_id});"><span>贝海做单</span></button>
 		<button type="button" class="submit" id="to_send_message" onclick="send_message({$user_id},{$order_id});"><span>补充认证信息推送</span></button>
+		<button type="button" class="submit" id="sfz_to_address_image" onclick="sfz_to_address_image({$user_id});"><span>用户实名信息->收货地址信息</span></button>
 	</div>
 </div>
 
@@ -677,6 +678,21 @@ function send_message(user_id,order_id) {
             console.log(data);
             if (data.ret){
                 alert('消息推送成功');
+            } else {
+                alert(data.msg);
+            }
+        })
+    } else{
+
+    }
+}
+function sfz_to_address_image(user_id) {
+    if (confirm('确定复制？')){
+        $.post('/apic/sfz_to_address_image',{'id':user_id},function (data) {
+            data = JSON.parse(data);
+            console.log(data);
+            if (data.ret){
+                alert('复制成功');
             } else {
                 alert(data.msg);
             }

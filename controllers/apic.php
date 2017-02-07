@@ -3233,7 +3233,22 @@ class Apic extends IController{
             wechats::send_message_template($v->oauth_user_id,'shiming',['order_no'=>$v->order_no]);
         }
     }
-	
-    
-	
+
+    /**
+     * User: chenbo
+     * 将用户实名信息复制到收货信息
+     */
+    function sfz_to_address_image(){
+        $id            = IFilter::act(IReq::get('id'), 'int');
+        $data          = common::get_user_data($id);
+        $address_model = new IModel('address');
+        $address_model->setData(['sfz_image1'=>$data['sfz_image1'],'sfz_image2'=>$data['sfz_image2']]);
+        $ret = $address_model->update('user_id = ' . $id . ' and accept_name=' . $data['sfz_name']);
+        if ($ret){
+            die(json_encode(['ret'=>true]));
+        } else {
+            die(json_encode(['ret'=>false]));
+        }
+
+    }
 }
