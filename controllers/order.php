@@ -657,8 +657,10 @@ class Order extends IController implements adminAuthorization
                 die('<script type="text/javascript">parent.actionCallback("'.$result.'");</script>');
             }
         } else {
-            common::log_write('做单失败' . print_r($ret,true));
-            die('<script type="text/javascript">parent.actionCallback("做单失败");</script>');
+            common::log_write('做单失败' . print_r($ret,true), 'ERROR');
+            $msg = @json_decode($ret->ErrorInfoList[0]['ErrorDescription']);
+            $msg = isset($msg) ? $msg : '';
+            die('<script type="text/javascript">parent.actionCallback("做单失败$msg");</script>');
         }
     }
     public function add_xlobo($ret, $order_id){
