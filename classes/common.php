@@ -277,6 +277,15 @@ class Common{
             return false;
         }
     }
+
+    /**
+     * User: chenbo
+     * 通过图片URL保存照片
+     * @param $url
+     * @param $dirname
+     * @param string $type
+     * @return string
+     */
     static public function save_url_image($url,$dirname, $type = ''){
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -314,6 +323,22 @@ class Common{
             return false;
         } else {
             return $data[0]['oauth_user_id'];
+        }
+    }
+
+    /**
+     * User: chenbo
+     * 返回用户信息
+     * @param $user_id
+     * @return array
+     */
+    static public function get_user_data($user_id){
+        $user_model = new IModel('user');
+        $ret = $user_model->getObj('id = ' . $user_id);
+        if (empty($ret)){
+            IError::show_normal('用户信息不存在');
+        } else {
+            return $ret;
         }
     }
 }
