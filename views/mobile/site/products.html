@@ -59,6 +59,12 @@
 					</div>
 				</div>
 			</section>
+			<div id="time_buy" v-if="time_shop" @click="time_buy">
+				<p>{{time_title}}</p>
+				<div><span>{{times}}</span></div>
+				<img src="/views/mobile/skin/default/image/jmj/product/timemore_pro.png" style="width: 0.13rem;"/>
+			</div>
+			
             <section class="name-price">
 				<div class="name hideCamp4">{{info.name}}</div>
 				<div class="price">
@@ -349,11 +355,15 @@
 <script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
 <script type="text/javascript" charset="utf-8">
 	var statusOrder={echo:IReq::get('id')};
+	var time_all,times;
 	//记录访问位置的id
 	setItem("product",statusOrder);
 	var vm = new Vue({
 		el: '#productInfo',
 		data: {
+			time_shop:false,
+			times:"",
+			time_title:"",
 			baoyou:"",
 			showMessage:false,
 			showContainer1:true,
@@ -458,6 +468,10 @@
 			}
 		},
 		methods: {
+			//进入限时购
+			time_buy:function(){
+				window.location.href = "/site/time_purchase"
+			},
 			//分享
 			share:function(){
 				document.body.scrollTop = 0;
@@ -668,7 +682,7 @@
 	        type:'get',//HTTP请求类型
 	        timeout:10000,//超时时间设置为10秒；
 			success:function(data){
-				console.log(data);
+//				console.log(data);
 				self.car_count = data.data.car_count
 			}
 		})
@@ -714,6 +728,59 @@
 			timeout:10000,//超时时间设置为10秒；
 			success:function(data){
 				//轮播图展示页面
+				console.log(data.data);
+				if(data.data.speed == ""){
+					self.time_shop = false;
+				}else{
+					self.time_shop = true;
+				}
+				
+				time_all = data.data.speed.end_time;
+				var datae = new Date();
+				// 结束时间
+				if(parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000)<0){
+					self.time_title = "已结束";
+				}else{
+					self.time_title = "抢购中";
+					time_xian();
+				}
+				//开始时间
+				console.log();
+				var timestamp4 = new Date(parseInt(data.data.speed.start_time)*1000);//直接用 new Date(时间戳) 格式转化获得当前时间
+				if(parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000)<0){
+					self.times = "明天再来";
+					clearInterval(times);
+				}
+				if(parseInt(data.data.speed.start_time) - parseInt(datae.getTime()/1000)>=0){
+					self.times = "今天"+timestamp4.toTimeString().substr(0, 8)+"开抢";
+				}else{
+					var end_ = parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000);
+					var minutes = parseInt(end_/60); 
+					var seconds = parseInt(end_%60); 
+					// alert(theTime1+"-"+theTime); 
+					if(minutes > 60) { 
+					var hours = parseInt(minutes/60); 
+					minutes = parseInt(minutes%60); 
+					} 
+					if(hours > 24) {
+						data = parseInt(hours/24);
+						hours = parseInt(hours%24);
+					}
+					console.log(hours,minutes,seconds)
+					
+					if(parseInt(hours)<10){
+						hours = "0"+parseInt(hours);
+					}
+					if(parseInt(minutes)<10){
+						minutes = "0"+parseInt(minutes);
+					}if(parseInt(seconds)<10){
+						seconds = "0" + parseInt(seconds);
+					}
+					self.times = "结束倒计时 "+hours+":"+minutes+":"+seconds
+					
+				}
+				
+				
 				self.showMessage=true;
 				setItem("collection",data.data);
 				self.weight=parseInt(data.data.weight)
@@ -722,6 +789,43 @@
 			}
 		});
 	}
+	
+	//限时购
+	
+function time_xian(){
+	times = setInterval(function(){
+		var myDate = new Date();
+		var data_time = myDate.getTime();
+		var all_time1 = parseInt(time_all)-parseInt(data_time/1000);
+		if(all_time1<=0){
+			self.times = "明天再来";
+			clearInterval(tims)
+		}
+		if(all_time1 > 60) { 
+			minutes = parseInt(all_time1/60); 
+			seconds = parseInt(all_time1%60); 
+			// alert(theTime1+"-"+theTime); 
+			if(minutes > 60) { 
+			hours = parseInt(minutes/60); 
+			minutes = parseInt(minutes%60); 
+			if(hours>24) {
+				data = parseInt(hours/24);
+				hours = parseInt(hours%24);
+			}
+			
+			if(seconds<10){
+				seconds = "0"+seconds;
+			}if(minutes<10){
+				minutes = "0"+minutes;
+			}if(hours<10){
+				hours = "0"+hours;
+			}
+			vm.times = "结束倒计时 "+hours+":"+minutes+":"+seconds;
+			} 
+			
+		}
+		},1000)
+}
 	function Collection1(obj){
 		var data=getItem("collection");
 		mui.ajax('/simple/favorite_add/_paramKey_/_paramVal_',{
