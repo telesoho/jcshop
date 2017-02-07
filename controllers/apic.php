@@ -2540,6 +2540,7 @@ class Apic extends IController{
 		$modelCollect       = new IModel('video_collect');
 		$info['collect']    = $modelCollect->get_count('video_id='.$param['video_id']);
 		$info['is_collect'] = $modelCollect->get_count('video_id='.$param['video_id'].' AND user_id='.$user_id);
+		
 		//相关商品
 		if(!empty($info['goods'])){
 			$queryGoods         = new IQuery('goods AS m');
@@ -2548,6 +2549,7 @@ class Apic extends IController{
 			$queryGoods->fields = 'm.id,m.name,m.img,m.sell_price,m.jp_price,c.category_id';
 			$queryGoods->order  = 'm.sale DESC,m.visit DESC';
 			$info['goods_list'] = $queryGoods->find();
+			
 			if(!empty($info['goods_list'])){
 				//搭配商品
 				$cids = array();
@@ -2556,8 +2558,9 @@ class Apic extends IController{
 					if(!empty($v['category_id'])) $cids[] = $v['category_id'];
 				}
 				//同类商品
-				$queryGoods->where    = 'm.id_del=0 AND c.category_id IN ('.implode(',', array_unique($cids)).')';
-				$info['related_list'] = $queryGoods->limit = 10;
+				$queryGoods->where    = 'm.is_del=0 AND c.category_id IN ('.implode(',', array_unique($cids)).')';
+				$queryGoods->limit    = 10;
+				$info['related_list'] = $queryGoods->find();
 				if(!empty($info['related_list'])){
 					foreach($info['related_list'] as $k => $v){
 						$info['related_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");;
