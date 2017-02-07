@@ -176,35 +176,37 @@ var attr2 = []
         },
         computed: {
             new_data0: function(){
-                this.info0.map(function(item){
-                    if(vm.head[0].now == 0){
-                		item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
+                
+                for(var i = 0;i<this.info0.length;i++){
+                	 if(vm.head[0].now == 0){
+                		this.info0[i].style="width:"+(this.info0[i].nums-this.info0[i].sale_nums)*100/this.info0[i].nums+"%";
                 	}else{
-                		 item.style="width:"+(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums)*100/item.nums+"%";
+                		 this.info0[i].style="width:"+((this.info0[i].nums-this.info0[i].sale_nums>10)? vm.head[0].numaa[i]*100/this.info0[i].nums :(this.info0[i].nums-this.info0[i].sale_nums)*100/this.info0[i].nums) +"%";
                 	}
-                	
-                })
+                }
                 return this.info0; 
             },
             new_data1: function(){
-                this.info.map(function(item){
-                	if(vm.head[1].now == 0){
-                		item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
+            	for(var i = 0;i<this.info.length;i++){
+                	 if(vm.head[1].now == 0){
+                		this.info[i].style="width:"+(this.info[i].nums-this.info[i].sale_nums)*100/this.info[i].nums+"%";
                 	}else{
-                		 item.style="width:"+(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums)*100/item.nums+"%";
+                		 this.info[i].style="width:"+((this.info[i].nums-this.info[i].sale_nums>10)? vm.head[1].numaa[i]*100/this.info[i].nums :(this.info[i].nums-this.info[i].sale_nums)*100/this.info[i].nums)+"%";
                 	}
-                   
-                })
+                }
+                
                 return this.info; 
             },
             new_data2: function(){
-                this.info2.map(function(item){
-                   	if(vm.head[2].now == 0){
-                		item.style="width:"+(item.nums-item.sale_nums)*100/item.nums+"%";
+                for(var i = 0;i<this.info2.length;i++){
+                	 if(vm.head[2].now == 0){
+                		this.info2[i].style="width:"+(this.info2[i].nums-this.info2[i].sale_nums)*100/this.info2[i].nums+"%";
+                		console.log(this.info2[i].style)
                 	}else{
-                		 item.style="width:"+(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums)*100/item.nums+"%";
+                		 this.info2[i].style="width:"+((this.info2[i].nums-this.info2[i].sale_nums>10)? vm.head[2].numaa[i]*100/this.info2[i].nums :(this.info2[i].nums-this.info2[i].sale_nums)*100/this.info2[i].nums)+"%";
                 	}
-                })
+                	
+                }
                 return this.info2; 
             }
 			
