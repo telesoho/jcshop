@@ -274,11 +274,19 @@ var attr2 = []
 						vm.head[i].shi_time = true;
 						
 					}
-					console.log(vm.head[i].shi_time)
+					
 //	        		vm.head[i].time = new Date(parseInt(tt - data.data.time_list[i].start_time)).getHours();
 //		        	console.log(new Date(parseInt(data.data.time_list[i].start_time)).getMinutes());
 //	        		vm.head[item].time = item.start_time;
 	        	}
+	        	if(data.data.time_list[2].end_time<tt){
+					vm.head[0].tip = "明天再来";
+					vm.head[1].tip = "明天再来";
+					vm.head[2].tip = "明天再来";
+					vm.head[0].shi_time = false;
+					vm.head[1].shi_time = false;
+					vm.head[2].shi_time = false;
+				}
 	        }
 	    });
     }
