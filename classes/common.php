@@ -237,7 +237,7 @@ class Common{
     public static function get_wechat_access_token(){
         require_once __DIR__.'/../plugins/wechat/wechat.php';
         $wechat = new wechat();
-        $access_token = $wechat->getAccessToken();
+        $access_token = $wechat->getAccessToken(true);
         return $access_token;
     }
     /**
@@ -299,6 +299,13 @@ class Common{
         file_put_contents($dirname.'/'.$filename,$media['mediaBody']);
         return $dirname.'/'.$filename;
     }
+
+    /**
+     * User: chenbo
+     * 获取用户微信端的open_id
+     * @param $user_id
+     * @return bool
+     */
     static public function get_wechat_open_id($user_id){
         $oauth_user_query = new IQuery('oauth_user');
         $oauth_user_query->where = 'user_id = ' . $user_id;
