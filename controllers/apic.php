@@ -1795,17 +1795,16 @@ class Apic extends IController{
 	public function comment_praise(){
 		$param   = $this->checkData(array(
 			array('comment_id', 'int', 1, '评论ID'),
-			array('comment_opt', 'int', 1, '操作[1点赞-2取消]'),
+			array('opt', 'int', 1, '操作[1点赞-2取消]'),
 		));
 		$user_id = $this->tokenCheck();
 		/* 检查 */
-		$model = new IModel('comment');
-		$rel   = $model->get_count('comment_id='.$param['comment_id']);
+		$rel   = (new IModel('comment'))->get_count('id='.$param['comment_id']);
 		if(empty($rel)) $this->returnJson(array('code' => '010001', 'msg' => $this->errorInfo['010001'])); //评论不存在
 		$modelP = new IModel('comment_praise');
 		$num    = $modelP->get_count('comment_id='.$param['comment_id'].' AND user_id='.$user_id);
 		if($param['comment_opt']==1 && $num<=0){
-			$modelP->setData(array('comment_id' => $param['comment_id'], 'user_id' => $user_id,));
+			$modelP->setData(array('comment_id' => $param['comment_id'], 'user_id' => $user_id,'create_time'=>time()));
 			$rel = $modelP->add();
 			if(!$rel) $this->returnJson(array('code' => '001005', 'msg' => $this->errorInfo['001005'])); //操作失败
 		}else if($param['comment_opt']==2 && $num>=1){
@@ -2484,10 +2483,116 @@ class Apic extends IController{
 		
 		$this->json_echo($result);
 	}
+	//---------------------------------------------------视频---------------------------------------------------
+	/**
+	 * 视频列表
+	 */
+	public function video_list(){
+		/* 获取参数 */
+		$param   = $this->checkData(array(
+			array('cid', 'int', 0, '视频分类ID'),
+			array('page', 'int', 0, '分页编号'),
+		));
+		$user_id = $this->tokenCheck();
+		/* 分类列表 */
+		$modelCat = new IModel('video_category');
+		$listCat  = $modelCat->query('status=1', 'id,name', 'sort DESC');
+		/* 视频列表 */
+		$query           = new IQuery('video');
+		$query->where    = 'status=1'.(empty($param['cid']) ? '' : ' AND cat_id='.$param['cid']);
+		$query->fields   = 'id,url,cat_id,title,hits,img';
+		$query->order    = 'id DESC';
+		$query->page     = $param['page']<=0 ? 1 : $param['page'];
+		$query->pagesize = 10;
+		$list            = $query->find();
+		if($param['page']>$query->getTotalPage()) $list = array();
+		$model = new IModel('video_collect');
+		foreach($list as $k => $v){
+			$list[$k]['collect']    = $model->get_count('video_id='.$v['id']); //收藏人数
+			$list[$k]['is_collect'] = $model->get_count('video_id='.$v['id'].' AND user_id='.$user_id); //是否以收藏
+		}
+		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => array('video_list' => $list, 'cat_list' => $listCat)));
+	}
 	
 	/**
-	 * ---------------------------------------------------分类---------------------------------------------------*
+	 * 视频详情
 	 */
+	public function video_datail(){
+		/* 获取参数 */
+		$param   = $this->checkData(array(
+			array('video_id', 'int', 1, '视频ID'),
+		));
+		$user_id = $this->tokenCheck();
+		/* 获取视频详情 */
+		$modelVideo = new IModel('video');
+		$info       = $modelVideo->getObj('status=1 AND id='.$param['video_id'], 'id,url,hits,img,title,content,goods');
+		if(empty($info)) $this->returnJson(array('code' => '011001', 'msg' => $this->errorInfo['011001']));
+		//收藏
+		$modelCollect       = new IModel('video_collect');
+		$info['collect']    = $modelCollect->get_count('video_id='.$param['video_id']);
+		$info['is_collect'] = $modelCollect->get_count('video_id='.$param['video_id'].' AND user_id='.$user_id);
+		//相关商品
+		if(!empty($info['goods'])){
+			$queryGoods         = new IQuery('goods AS m');
+			$queryGoods->join   = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
+			$queryGoods->where  = 'm.is_del=0 AND m.id IN ('.$info['goods'].')';
+			$queryGoods->fields = 'm.id,m.name,m.img,m.sell_price,m.jp_price,c.category_id';
+			$queryGoods->order  = 'm.sale DESC,m.visit DESC';
+			$info['goods_list'] = $queryGoods->find();
+			if(!empty($info['goods_list'])){
+				//搭配商品
+				$cids = array();
+				foreach($info['goods_list'] as $k => $v){
+					$info['goods_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");;
+					if(!empty($v['category_id'])) $cids[] = $v['category_id'];
+				}
+				//同类商品
+				$queryGoods->where    = 'm.id_del=0 AND c.category_id IN ('.implode(',', array_unique($cids)).')';
+				$info['related_list'] = $queryGoods->limit = 10;
+				if(!empty($info['related_list'])){
+					foreach($info['related_list'] as $k => $v){
+						$info['related_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");;
+					}
+				}
+			}
+		}
+		
+		/* 观看次数增加 */
+		$modelVideo->setData(array('hits' => 'hits+1'));
+		$modelVideo->update('id='.$param['video_id'], array('hits'));
+		
+		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $info));
+	}
+	
+	/**
+	 * 视频收藏
+	 */
+	public function video_collect(){
+		/* 获取参数 */
+		$param   = $this->checkData(array(
+			array('video_id', 'int', 1, '视频ID'),
+			array('opt', 'int', 1, '操作[1收藏-2取消]'),
+		));
+		$user_id = $this->tokenCheck();
+		
+		/* 检查 */
+		$model = new IModel('video');
+		$rel   = $model->get_count('id='.$param['video_id']);
+		if(empty($rel)) $this->returnJson(array('code' => '011001', 'msg' => $this->errorInfo['011001'])); //视频不存在
+		$modelColl = new IModel('video_collect');
+		$num       = $modelColl->get_count('video_id='.$param['video_id'].' AND user_id='.$user_id);
+		if($param['opt']==1 && $num<=0){
+			$modelColl->setData(array('video_id' => $param['video_id'], 'user_id' => $user_id,'create_time'=>time()));
+			$rel = $modelColl->add();
+			if(!$rel) $this->returnJson(array('code' => '001005', 'msg' => $this->errorInfo['001005'])); //操作失败
+		}else if($param['opt']==2 && $num>=1){
+			$rel = $modelColl->del('video_id='.$param['video_id'].' AND user_id='.$user_id);
+			if(!$rel) $this->returnJson(array('code' => '001005', 'msg' => $this->errorInfo['001005'])); //操作失败
+		}
+		$this->returnJson(array('code' => '0', 'msg' => 'ok'));
+	}
+	
+	//---------------------------------------------------分类---------------------------------------------------
 	
 	/**
 	 *一级分类的数据信息 TODO 待废弃
