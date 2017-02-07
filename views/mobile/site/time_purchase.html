@@ -24,7 +24,7 @@
             限时限量抢购中……
         </div>-->
         <div class="wareContent" v-cloak>
-            <div class="item" v-for="item in new_data0">
+            <div class="item" v-for="item,key in new_data0" @click="ToBuy(item,info0,head[0].now)">
                 <div class="img flexbox">
                     <img :src="item.img" alt="" />
                     <img v-if ="item.store_nums==0 || item.sale_nums==20" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
@@ -43,11 +43,11 @@
                     </div>
                     <div class="box bottom">
                         <div class="num">
-                            仅剩 <span>{{head[0].now == 1?(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums):item.nums-item.sale_nums}}</span>件
+                            仅剩 <span>{{head[0].now == 1?(item.nums-item.sale_nums>10? (parseInt(head[0].numaa[key]/item.nums*100))+"%" :item.nums-item.sale_nums):(item.nums-item.sale_nums)/item.nums*100+"%"}}</span>
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
-                        <div class="buy" :style="head[0].shi_time == true?style2:style1" @click="ToBuy(item,info0,head[0].now)">
+                        <div class="buy" :style="head[0].shi_time == true?style2:style1" >
                             马上抢
                         </div>
                         
@@ -61,7 +61,7 @@
               限时限量抢购中……
           </div>-->
           <div class="wareContent" v-cloak>
-              <div class="item" v-for="item in new_data1">
+              <div class="item" v-for="item,key in new_data1" @click="ToBuy(item,info,head[1].now)">
                     <div class="img flexbox">
                         <img :src="item.img" alt="" />
                         <img v-if ="item.store_nums==0 || item.sale_nums==20" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
@@ -79,12 +79,12 @@
                                       <span style="font-size:0.26rem">{{item.market_price}}</span></s></div>
                           </div>
                           <div class="box bottom">
-                                <div class="num">
-                                    仅剩 <span>{{head[1].now == 1?(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums):item.nums-item.sale_nums}}</span>件
+                                <div class="num" :id="key">
+                                    仅剩 <span>{{head[1].now == 1?(item.nums-item.sale_nums>10? (parseInt(head[1].numaa[key]/item.nums*100))+"%" :item.nums-item.sale_nums):(item.nums-item.sale_nums)/item.nums*100+"%"}}</span>
                                     <div class="bg" :style="item.style">
                                     </div>
                                 </div>
-                              <div class="buy" :id="head[1].shi_time" :style="head[1].shi_time == true?style2:style1" @click="ToBuy(item,info,head[1].now)">
+                              <div class="buy" :id="head[1].shi_time" :style="head[1].shi_time == true?style2:style1" >
                                   马上抢
                               </div>
                           </div>
@@ -98,7 +98,7 @@
         </div>-->
         <div class="wareContent" v-cloak>
         	
-            <div class="item" v-for="item in new_data2">
+            <div class="item" v-for="item,key in new_data2" @click="ToBuy(item,info2,head[2].now)">
                 <div class="img flexbox">
                     <img :src="item.img" alt="" />
                      <img v-if ="item.store_nums==0 || item.sale_nums==20" src="/views/mobile/skin/default/image/jmj/product/over.png"  class="over_img"  alt="" />
@@ -117,11 +117,11 @@
                     </div>
                     <div class="box bottom">
                         <div class="num">
-                            仅剩 <span>{{head[2].now == 1?(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums):item.nums-item.sale_nums}}</span>件
+                            仅剩 <span>{{head[2].now == 1?(item.nums-item.sale_nums>10?(parseInt(head[2].numaa[key]/item.nums*100))+"%" :(item.nums-item.sale_nums)/item.nums*100+"%"):(item.nums-item.sale_nums)/item.nums*100+"%"}}</span>
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
-                        <div class="buy" :id="head[2].shi_time" :style="head[2].shi_time == true?style2:style1" @click="ToBuy(item,info2,head[2].now)">
+                        <div class="buy" :id="head[2].shi_time" :style="head[2].shi_time == true?style2:style1" >
                             马上抢
                         </div>
                     </div>
@@ -153,9 +153,9 @@ var attr2 = []
 //          head:[{time:'',tip:'明天再来',now:0},
 //              {time:'',tip:'抢购中',now:0},
 //              {time:'',tip:'准备开抢',now:0}],
-            head:[{time:'',tip:'',now:0,id:0,shi_time:"false"},
-                {time:'',tip:'',now:0,id:0,shi_time:"false"},
-                {time:'',tip:'',now:0,id:0,shi_time:"false"}],
+            head:[{time:'',tip:'',now:0,id:0,shi_time:"false",numaa:[]},
+                {time:'',tip:'',now:0,id:0,shi_time:"false",numaa:[]},
+                {time:'',tip:'',now:0,id:0,shi_time:"false",numaa:[]}],
 //              shi_time:false,
             initState:0,
             class1:'title flexbox',
@@ -182,6 +182,7 @@ var attr2 = []
                 	}else{
                 		 item.style="width:"+(item.nums-item.sale_nums>10? "5" :item.nums-item.sale_nums)*100/item.nums+"%";
                 	}
+                	
                 })
                 return this.info0; 
             },
@@ -228,17 +229,20 @@ var attr2 = []
                 time_xian(self,num);
                 
             },
-            ToBuy: function(obj,info,key,l){
-            	console.log(l)	
+            ToBuy: function(obj,info,key){
+            	console.log(key)
 				if(key == 1){
 					window.location.href = "/site/products?id="+obj.id;	
 				}else{
-					
+//					window.location.href = "/site/products?id="+obj.id;	
 				}
             }
         },
 
     })
+    var suiji0 = Math.ceil(Math.random()*8/+2);
+   	var suiji1 = Math.ceil(Math.random()*8/+2);
+    var suiji2 = Math.ceil(Math.random()*8/+2);
     function time_xian(self,num){
     	 mui.ajax('/apic/activity_speed_list', {
 	        dataType: 'json',
@@ -274,7 +278,22 @@ var attr2 = []
 						vm.head[i].shi_time = true;
 						
 					}
-					
+						vm.head[0].numaa[0] = 8;
+						vm.head[0].numaa[1] =10;
+						vm.head[0].numaa[2] =10;
+						vm.head[0].numaa[3] =8;
+						vm.head[0].numaa[4] =15;
+						vm.head[1].numaa[0] = 3;
+						vm.head[1].numaa[1] =15;
+						vm.head[1].numaa[2] =11;
+						vm.head[1].numaa[3] =10;
+						vm.head[1].numaa[4] =12;
+						vm.head[2].numaa[0] = 10;
+						vm.head[2].numaa[1] =11;
+						vm.head[2].numaa[2] =15;
+						vm.head[2].numaa[3] =5;
+						vm.head[2].numaa[4] =13;
+					console.log(vm.head[i].numaa[2] =11)
 //	        		vm.head[i].time = new Date(parseInt(tt - data.data.time_list[i].start_time)).getHours();
 //		        	console.log(new Date(parseInt(data.data.time_list[i].start_time)).getMinutes());
 //	        		vm.head[item].time = item.start_time;
