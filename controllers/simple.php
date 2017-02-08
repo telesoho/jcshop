@@ -330,6 +330,9 @@ class Simple extends IController
     	$mobile        			= IFilter::act($addressRow['mobile'],'mobile'); //联系方式
     	$telphone      			= IFilter::act($addressRow['telphone'],'phone'); //手机
     	$zip           			= IFilter::act($addressRow['zip'],'zip'); //邮编
+        $sfz_image1             = IFilter::act($addressRow['sfz_image1']);
+        $sfz_image2             = IFilter::act($addressRow['sfz_image2']);
+        $sfz_num                = IFilter::act($addressRow['sfz_num']);
 
 		//检查订单重复
     	$checkData 				= array(
@@ -420,6 +423,9 @@ class Simple extends IController
 				'area'                => $area,
 				'address'             => $address,
 				'mobile'              => $mobile,
+				'sfz_image1'          => $sfz_image1,
+				'sfz_image2'          => $sfz_image2,
+				'sfz_num'             => $sfz_num,
 				'create_time'         => ITime::getDateTime(),
 				'postscript'          => $order_message,
 				'accept_time'         => $accept_time,
