@@ -220,9 +220,6 @@ var vm = new Vue({
 			removeSessionItem("week_new_info");
     		window.location.href = "/redesign/week_new";
     	},
-    	scene_pavilion:function(){
-//  		window.location.href = "/redesign/scenepavilion"
-    	},
     	guan:function(){
     		window.location.href = "/site/article_list";
     	},
