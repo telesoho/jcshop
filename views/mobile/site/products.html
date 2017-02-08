@@ -755,19 +755,19 @@ var minutes,hours,seconds;
 					self.times = "今天"+timestamp4.toTimeString().substr(0, 8)+"开抢";
 				}else{
 					var end_ = parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000);
-					minutes = parseInt(end_/60); 
-					seconds = parseInt(end_%60); 
-					// alert(theTime1+"-"+theTime); 
-					if(minutes > 60) { 
-					hours = parseInt(minutes/60); 
-					minutes = parseInt(minutes%60); 
-					} 
+					minutes = parseInt(end_/60);
+					seconds = parseInt(end_%60);
+					// alert(theTime1+"-"+theTime);
+					if(minutes > 60) {
+					hours = parseInt(minutes/60);
+					minutes = parseInt(minutes%60);
+					}
 					if(hours > 24) {
 						data = parseInt(hours/24);
 						hours = parseInt(hours%24);
 					}
-					
-					
+
+
 					if(parseInt(hours)<10){
 						hours = "0"+parseInt(hours);
 					}
@@ -777,7 +777,7 @@ var minutes,hours,seconds;
 						seconds = "0" + parseInt(seconds);
 					}
 					self.times = "结束倒计时 "+hours+":"+minutes+":"+seconds
-					
+
 				}
 				
 				
