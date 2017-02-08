@@ -132,7 +132,6 @@ var vm = new Vue({
 //页面加载动画的调用
 $(window).load(function(){
     $("#loading").fadeOut(300);
-
     mui('body').on('tap','.locationA',function(){
         document.location.href=this.href;
     })

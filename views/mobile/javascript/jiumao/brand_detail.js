@@ -48,10 +48,6 @@ var em = new Vue({
 		}
 	},
 	updated:function() {
-		document.title = this.info.name;
-		$("title").html(this.info.name); 
-		
-		
 		var heights = $("#article_top").height()
 		if(heights!=0){
 			if(heights<=30){
@@ -76,6 +72,7 @@ function getRelateArticle(statusOrder,self){
 		timeout:10000,//超时时间设置为10秒；
 		success:function(data){
 			self.showloadding=false;
+			document.title=data.data.name;
 			self.info = data.data;
 			self.infoac=data.data.article_list;
 			data.data.goods_list.map(function(item){
