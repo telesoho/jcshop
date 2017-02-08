@@ -244,15 +244,12 @@
 				if(key == 1){
 					window.location.href = "/site/products?id="+obj.id;	
 				}else{
-//					window.location.href = "/site/products?id="+obj.id;	
+					window.location.href = "/site/products?id="+obj.id;	
 				}
             }
         },
 
     })
-    var suiji0 = Math.ceil(Math.random()*8/+2);
-   	var suiji1 = Math.ceil(Math.random()*8/+2);
-    var suiji2 = Math.ceil(Math.random()*8/+2);
     function time_xian(self,num){
     	 mui.ajax('/apic/activity_speed_list', {
 	        dataType: 'json',
@@ -303,23 +300,19 @@
 						vm.head[2].numaa[2] =15;
 						vm.head[2].numaa[3] =5;
 						vm.head[2].numaa[4] =13;
-					console.log(vm.head[i].numaa[2] =11)
 //	        		vm.head[i].time = new Date(parseInt(tt - data.data.time_list[i].start_time)).getHours();
 //		        	console.log(new Date(parseInt(data.data.time_list[i].start_time)).getMinutes());
 //	        		vm.head[item].time = item.start_time;
 	        	}
 	        	if(data.data.time_list[2].end_time<tt){
-					vm.head[0].tip = "明天再来";
-					vm.head[1].tip = "明天再来";
-					vm.head[2].tip = "明天再来";
-					vm.head[0].shi_time = false;
-					vm.head[1].shi_time = false;
-					vm.head[2].shi_time = false;
+                    vm.head.map(function(item){
+                        item.tip="明天再来";
+                        item.shi_time = false
+                    })
 				}
 	        }
 	    });
     }
-    
     function GetRequest() {
       	var url = location.search; //获取url中"?"符后的字串
       	var theRequest = new Object();

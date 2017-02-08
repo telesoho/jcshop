@@ -138,6 +138,9 @@ class Order extends IController implements adminAuthorization
                     $this->sfz_image22 = IWeb::$app->config['image_host1'] . '/' . $user_data[0]['sfz_image2'];
                 }
                 $this->user_id = $user_id;
+                $user_data     = common::get_user_data($user_id);
+                $this->user    = $user_data;
+
 				$this->redirect('order_show',false);
 			}
 		}

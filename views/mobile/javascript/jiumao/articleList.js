@@ -7,6 +7,7 @@ var stop=true;
 var vm = new Vue({
     el: '#articleList',
     data: {
+        showloadding:true,
         page:1,
         storePage:getItem("storePage"),
         articleDetail:[],
@@ -100,6 +101,7 @@ $(window).load(function(){
 $(window).bind('scroll', function() {
     if ($(window).scrollTop() + $(window).height() +2000 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
+            vm.showloadding=true;
             stop=false;
            if(statusOrder){
             	 pullupArticleRefresh(vm,statusOrder);
@@ -126,6 +128,7 @@ function pullupArticleRefresh(self,cid){
         type: 'get',
         timeout: 10000,
         success: function (data) {
+            self.showloadding=false;
             data.data.map(function(item){
                 self.articleDetail.push(item);
             });

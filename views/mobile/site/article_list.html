@@ -14,6 +14,7 @@
 <body>
 <!--vue容器-->
 <div id="articleList">
+    <loadding :mes="showloadding"></loadding>
     <head-nav :state="2"></head-nav>
     <!--头部静态页面-->
     <section class="head">
@@ -39,6 +40,8 @@
     </div>
 </div>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<!--加载动画载入-->
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 <!--加载顶部导航-->
 <script src="/views/mobile/components/head_nav.js?v=<?php echo time(); ?>"></script>
 <!--article-list组件引入-->

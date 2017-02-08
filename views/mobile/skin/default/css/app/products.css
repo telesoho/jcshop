@@ -371,6 +371,7 @@
     max-width:100%;
     margin:0 auto;
     height:auto;
+    display: block;
 }
 #goodsContent .img_logo{
     width:0.3rem;
