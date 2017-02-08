@@ -360,6 +360,27 @@ class Tools extends IController implements adminAuthorization
 		$this->redirect('video_cat_edit');
 	}
 	
+	/**
+	 * 场景馆列表
+	 */
+	public function scene_list(){
+		$this->redirect('scene_list');
+	}
+	
+	/**
+	 * 场景馆添加
+	 */
+	public function scene_add(){
+		$this->redirect('scene_add');
+	}
+	
+	/**
+	 * 场景馆编辑
+	 */
+	public function scene_edit(){
+		$this->redirect('scene_edit');
+	}
+	
 	public function seo_sitemaps()
 	{
 		$siteMaps =  new SiteMaps();
