@@ -8,7 +8,7 @@
 		<title>分享</title>
 		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
-    	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/buy_share/share_index.css?v=<?php echo time(); ?>"/>
+    	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/order_share.css?v=<?php echo time(); ?>"/>
 	</head>
 	<body>
 		<div id="wrap_if" v-cloak>
@@ -188,4 +188,6 @@
 			})
 		</script>
 	</body>
+    {if:common::jssdk()}
+    {/if}
 </html>

@@ -356,6 +356,14 @@ class Common{
             return $ret;
         }
     }
+
+    /**
+     * User: chenbo
+     * 获取订单数据
+     * @param null $id
+     * @param null $order_no
+     * @return array
+     */
     static public function get_order_data($id = null, $order_no = null){
         $order_model = new IModel('order');
         if (!empty($id)){
@@ -369,6 +377,13 @@ class Common{
             return $data;
         }
     }
+
+    /**
+     * User: chenbo
+     * 获取地址信息
+     * @param $where
+     * @return array
+     */
     static public function get_address_data($where){
         $address_model = new IModel('address');
         $data = $address_model->getObj($where);
@@ -378,7 +393,6 @@ class Common{
             return $data;
         }
     }
-
     /**
      * User: chenbo
      * 保存上传在微信服务器的资源
@@ -397,7 +411,6 @@ class Common{
             return false;
         }
     }
-
     /**
      * User: chenbo
      * 恢复微信照片
