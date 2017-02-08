@@ -287,6 +287,79 @@ class Tools extends IController implements adminAuthorization
 		$this->redirect('video_edit');
 	}
 	
+	/**
+	 * 视频分类
+	 */
+	public function video_cat_list(){
+		$this->redirect('video_cat_list');
+	}
+	
+	/**
+	 * 视频分类添加
+	 */
+	public function video_cat_add(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			$data = array(
+				'name'   => $_POST['name'],
+				'sort'   => $_POST['sort'],
+				'status' => $_POST['status'],
+			);
+			//上传封面
+			if(isset($_FILES['icon']['name']) && $_FILES['icon']['name']!=''){
+				$uploadObj = new PhotoUpload();
+				$photoInfo = $uploadObj->run();
+				if(isset($photoInfo['icon']['img']) && file_exists($photoInfo['icon']['img'])){
+					$data['icon'] = $photoInfo['icon']['img'];
+				}
+			}
+			
+			/* 写入数据 */
+			$model = new IModel('video_category');
+			$model->setData($data);
+			$rel = $model->add();
+			if(!$rel) exit('操作失败');
+			$this->redirect('video_cat_list');
+		}
+		$this->redirect('video_cat_add');
+	}
+	
+	/**
+	 * 视频分类编辑
+	 */
+	public function video_cat_edit(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			
+			$id = IFilter::act(IReq::get('id'), 'int');
+			
+			$data = array(
+				'name'   => $_POST['name'],
+				'sort'   => $_POST['sort'],
+				'status' => $_POST['status'],
+			);
+			//上传封面
+			if(isset($_FILES['icon']['name']) && $_FILES['icon']['name']!=''){
+				$uploadObj = new PhotoUpload();
+				$photoInfo = $uploadObj->run();
+				if(isset($photoInfo['icon']['img']) && file_exists($photoInfo['icon']['img'])){
+					$data['icon'] = $photoInfo['icon']['img'];
+				}
+			}
+			
+			/* 写入数据 */
+			$model = new IModel('video_category');
+			$model->setData($data);
+			$rel = $model->update('id='.$id);
+			if(!$rel) exit('操作失败');
+			$this->redirect('video_cat_list');
+		}
+		$id = IFilter::act(IReq::get('id'), 'int');
+		
+		$info = (new IModel('video_category'))->getObj('id='.$id);
+		
+		$this->setRenderData(array('data' => $info));
+		$this->redirect('video_cat_edit');
+	}
+	
 	public function seo_sitemaps()
 	{
 		$siteMaps =  new SiteMaps();
