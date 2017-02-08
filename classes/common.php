@@ -406,7 +406,7 @@ class Common{
     static public function restore_wechat_resources($path){
         $access_token = self::get_wechat_access_token();
         $wechat_resources_model = new IModel('wechat_resources');
-        $data = $wechat_resources_model->getObj("path = $path");
+        $data = $wechat_resources_model->getObj("path = '$path'");
         if (empty($data)){
             return json_encode(['ret'=>false,'msg'=>'不存在该资源的备份信息']);
         } elseif ( ceil((time()-strtotime($data['create_time']))/86400)>3 ){

@@ -3266,11 +3266,11 @@ class Apic extends IController{
             if ($data = common::get_order_data(null,$order_no)){
                 $sfz_image1 = $data['sfz_image1'];
                 $sfz_image2 = $data['sfz_image2'];
-                common::restore_wechat_resources($sfz_image1);
-                common::restore_wechat_resources($sfz_image2);
-                die(json_encode(['ret'=>true]));
+                $msg = common::restore_wechat_resources($sfz_image1);
+                $msg .= common::restore_wechat_resources($sfz_image2);
+                die(json_encode(['ret'=>true,'msg'=>$msg]));
             } else {
-                die(json_encode(['ret'=>false]));
+                die(json_encode(['ret'=>false,'msg'=>$msg]));
             }
         }
         if (!empty($accept_name)){
@@ -3278,22 +3278,22 @@ class Apic extends IController{
             if ($data = common::get_address_data($where)){
                 $sfz_image1 = $data['sfz_image1'];
                 $sfz_image2 = $data['sfz_image2'];
-                common::restore_wechat_resources($sfz_image1);
-                common::restore_wechat_resources($sfz_image2);
-                die(json_encode(['ret'=>true]));
+                $msg = common::restore_wechat_resources($sfz_image1);
+                $msg .= common::restore_wechat_resources($sfz_image2);
+                die(json_encode(['ret'=>true,'msg'=>$msg]));
             } else {
-                die(json_encode(['ret'=>false]));
+                die(json_encode(['ret'=>false,'msg'=>$msg]));
             }
         }
         if (!empty($id)){
             if ($data = common::get_user_data($id)){
                 $sfz_image1 = $data['sfz_image1'];
                 $sfz_image2 = $data['sfz_image2'];
-                common::restore_wechat_resources($sfz_image1);
-                common::restore_wechat_resources($sfz_image2);
-                die(json_encode(['ret'=>true]));
+                $msg = common::restore_wechat_resources($sfz_image1);
+                $msg .= common::restore_wechat_resources($sfz_image2);
+                die(json_encode(['ret'=>true,'msg'=>$msg]));
             } else {
-                die(json_encode(['ret'=>false]));
+                die(json_encode(['ret'=>false,'msg'=>$msg]));
             }
         }
     }
