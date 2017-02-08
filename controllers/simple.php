@@ -1286,6 +1286,7 @@ class Simple extends IController
                 $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
 //                $image1 = $this->saveMedia($url1,$dir,1);
                 $image1 = common::save_url_image($url1,$dir,1);
+                common::save_wechat_resource($media_id1, $image1);
             } else {
                 $image1 = IFilter::act(IReq::get('image_saved1'),'string');
             }
@@ -1294,6 +1295,7 @@ class Simple extends IController
                 $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
 //                $image2 = $this->saveMedia($url2,$dir,2);
                 $image2 = common::save_url_image($url2,$dir,2);
+                common::save_wechat_resource($media_id2, $image2);
             } else {
                 $image2 = IFilter::act(IReq::get('image_saved2'),'string');
             }
