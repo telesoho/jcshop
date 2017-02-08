@@ -531,10 +531,15 @@ function initButton()
 	$('#to_deliver_xlobo').removeClass('inactive');
 	{/if}
 
-    //
+    //推送信息
     {if:in_array($orderStatus,array(1,4,8,9))}
     $('#to_send_message').removeAttr('disabled');
     $('#to_send_message').removeClass('inactive');
+    {/if}
+    //实名信息
+    {if:in_array($orderStatus,array(1,4,8,9))}
+    $('#sfz_to_address_image').removeAttr('disabled');
+    $('#sfz_to_address_image').removeClass('inactive');
     {/if}
 
 	//退款
