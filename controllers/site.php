@@ -884,6 +884,10 @@ class Site extends IController{
 		$this->redirect('ticket_gain');
 	}
 
+	function order_share(){
+	    $this->redirect('order_share');
+    }
+
     /**
      * ↓*********贝海*********↓
      */

@@ -94,7 +94,6 @@ var vm = new Vue({
     	clear_pull();
         var self=this;
         hotSearth(self);
-         index_home(self);
         if(getSession('banner')&&getSession("articleDetail")&&getSession("article_category_list")){
             self.placeHolder=getItem('placeHolder');
             self.showMessage=true;
@@ -122,7 +121,7 @@ var vm = new Vue({
         });
         $("#search_").click(function(){
         	clearInterval(times);
-        	$("#modalid-search").attr("class", "show"); 
+        	$("#modalid-search").attr("class", "show");
         });
         $("#search").focus(function(){
           		$("#nav-slider").hide();
@@ -353,12 +352,12 @@ function index_home(self){
 
 
 //定时器  限时购
-function time_xian(){
-	times = setInterval(function(){
+function time_xian(self){
+	var self = self
+	times = setInterval(function(self){
 		
 		var myDate = new Date();
 		var data_time = myDate.getTime();
-		console.log()
 		if( _time-parseInt(data_time/1000)<0 ){
 			clearInterval(times);
 			shop_time = false;
@@ -373,7 +372,6 @@ function time_xian(){
 		if(all_time1 > 60) { 
 			minutes = parseInt(all_time1/60); 
 			seconds = parseInt(all_time1%60); 
-			// alert(theTime1+"-"+theTime); 
 			if(minutes > 60) { 
 			hours = parseInt(minutes/60); 
 			minutes = parseInt(minutes%60); 
@@ -389,11 +387,15 @@ function time_xian(){
 			}if(hours<10){
 				hours = "0"+hours;
 			}
-			vm.hours = hours;
-			vm.minutes = minutes;
-			vm.seconds = seconds;
+			console.log(self)
+//			self.hours = hours;
+//			self.minutes = minutes;
+//			self.seconds = seconds;
+			document.getElementById("timer_hhh").innerHTML = hours;
+			document.getElementById("timer_mmm").innerHTML = minutes;
+			document.getElementById("timer_sss").innerHTML = seconds
 			} 
-			
+//			
 		}
 		},1000)
 }

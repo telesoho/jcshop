@@ -51,15 +51,11 @@ class wechats
      * @param $send_info
      */
     static function send_message_template($open_id, $type, $send_info){
-        $access_token = common::get_wechat_access_token();
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
-        $template_array = array(
-            'coupon' => 'CdwoXX4wo7wjp0i73Jn8H7TQNVJEmOCV6eeI268wb-g',
-            'shop' => 'jhVJZrhXm9quRXg-vSY6IVHDhZ69BywZb4SYblLAuXA',
-            'sfz' => 'lZaBFAn9GH0eOUUKBy7laf5_AbOMWIMUweTDIPXUS7c',
-            'shiming' => 'e4FVRqsTUHdGYCfPe4H8N81c7CLIds_PDOhzGpB3I2U',
-            'order_complete' => 'Dk9Z_2jKN4H9UctaDlB04Hxk0NoV2tODUPmnIOMXOXo'
-        );
+        $access_token      = common::get_wechat_access_token();
+        $url               = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
+        $site_config       = new Config('site_config');
+        $site_config_array = $site_config->getInfo();
+        $template_array    = $site_config_array['wechat_template_array'];
         switch ($type){
             //优惠券
             case 'coupon':

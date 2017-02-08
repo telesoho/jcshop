@@ -346,9 +346,6 @@ class Apic extends IController{
 		$data     = $countObj->cart_count();
 		if(is_string($data)) $this->returnJson(array('code' => '-1', 'msg' => $data));
 		/* 购物车商品列表 */
-		$query                   = new IQuery("promotion");
-		$query->where            = "type = 0 and seller_id = 0 and award_type = 6";
-		$data['condition_price'] = $query->find()[0]['condition'];
 		foreach($data['goodsList'] as $k => $v){
 			$data['goodsList'][$k]['img'] = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/120/h/120");
 		}

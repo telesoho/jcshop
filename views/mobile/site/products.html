@@ -61,7 +61,7 @@
 			</section>
 			<div id="time_buy" v-if="time_shop" @click="time_buy">
 				<p>{{time_title}}</p>
-				<div><span>{{times}}</span></div>
+				<div><span id="time_shop_buy">{{times}}</span></div>
 				<img src="/views/mobile/skin/default/image/jmj/product/timemore_pro.png" style="width: 0.13rem;"/>
 			</div>
 			
@@ -820,7 +820,7 @@ function time_xian(){
 			}if(hours<10){
 				hours = "0"+hours;
 			}
-			vm.times = "结束倒计时 "+hours+":"+minutes+":"+seconds;
+			document.getElementById("time_shop_buy").innerHTML = "结束倒计时 "+hours+":"+minutes+":"+seconds;
 //			console.log(vm.times)
 			} 
 			

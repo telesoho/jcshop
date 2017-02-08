@@ -114,7 +114,6 @@ function getPosition1(){
     var pid=getSession('product1');
     var eid=document.getElementById("product_item"+pid);
     var scroll=eid?eid:"";
-    console.log(scroll.offsetTop);
     return scroll.offsetTop;
 
 
@@ -129,7 +128,6 @@ function getScrollTop1()
     else if(document.body)
     {
         document.body.scrollTop=position-9;
-        console.log(document.body.scrollTop);
     }
     removeSessionItem('product1');
 //        console.log(position);
