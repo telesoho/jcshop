@@ -4,11 +4,25 @@ body{
 .headnav{
     margin-top:-0.04rem;
     background:#fff;
-    height:0.64rem;
+    height:0.68rem;
     line-height: 0.64rem;
+    width:100%;
+    overflow: hidden;
+    position: relative;
+}
+.headnav ul{
+    position: absolute;
+    width:100%;
+    height:0.65rem;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    display: -webkit-flex;
+    display: -webkit-box;
+    -webkit-flex-wrap: nowrap;
 }
 .headnav li{
-    -webkit-flex: 1;
+    display: block;
+    padding:0 0.24rem;
     list-style: none;
     font-size:0.26rem;
     color:#4d4d4d;
@@ -17,7 +31,7 @@ body{
 }
 .headnav li.active{
     color:#ff5959;
-    border-bottom:2px solid #ff5959 ;
+    border-bottom:3px solid #ff5959 ;
 }
 #vedioList .content{
     margin-top:0.2rem;
