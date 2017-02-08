@@ -308,7 +308,7 @@ class Common{
         curl_close($ch);
         $media = array_merge(array('mediaBody' => $package), $httpinfo);
 
-        if ($type = 3){
+        if ($type === 3){
             file_put_contents($dirname,$media['mediaBody']);
             return $dirname;
         }
