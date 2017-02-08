@@ -178,7 +178,7 @@ class Menu
 			   '/tools/video_cat_list'=> '视频分类'
 		   ),
 		   '场景馆管理'=>array(
-			   'scene_list'=>'场景馆列表',
+			   '/tools/scene_list'=>'场景馆列表',
 		   ),
 			'数据库管理'=>array(
 				'/tools/db_bak' => '数据库备份',

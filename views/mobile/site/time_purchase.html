@@ -244,7 +244,7 @@
 				if(key == 1){
 					window.location.href = "/site/products?id="+obj.id;	
 				}else{
-//					window.location.href = "/site/products?id="+obj.id;	
+					window.location.href = "/site/products?id="+obj.id;	
 				}
             }
         },
@@ -300,7 +300,6 @@
 						vm.head[2].numaa[2] =15;
 						vm.head[2].numaa[3] =5;
 						vm.head[2].numaa[4] =13;
-					console.log(vm.head[i].numaa[2] =11)
 //	        		vm.head[i].time = new Date(parseInt(tt - data.data.time_list[i].start_time)).getHours();
 //		        	console.log(new Date(parseInt(data.data.time_list[i].start_time)).getMinutes());
 //	        		vm.head[item].time = item.start_time;
@@ -308,7 +307,7 @@
 	        	if(data.data.time_list[2].end_time<tt){
                     vm.head.map(function(item){
                         item.tip="明天再来";
-                        shi_time = false
+                        item.shi_time = false
                     })
 				}
 	        }

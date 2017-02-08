@@ -17,7 +17,7 @@
 <body>
 <section id="vedio_detail" v-cloak>
     <loadding :mes="showloadding"></loadding>
-    <video src="http://www.bilibilijj.com/Files/DownLoad/12817467.mp4/www.bilibilijj.com.mp4?mp3=true" style="height:4.22rem;" width="100%" controls :poster="info.img"></video>
+    <video :src="info.url" style="height:4.22rem;" width="100%" controls :poster="info.img"></video>
     <header class="box detail_header">
         <div class="left">
             <p class="p1 hidewrap">{{info.title}}</p>
@@ -71,7 +71,7 @@
         </div>
         <div class="content" style="background:#eee">
             <span style="color:#bbb">~</span>
-            <span style="color:#bbb">暂无更多专辑</span>
+            <span style="color:#bbb">暂无更多相关商品</span>
             <span style="color:#bbb">~</span>
         </div>
     </div>

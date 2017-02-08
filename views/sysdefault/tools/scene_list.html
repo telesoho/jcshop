@@ -1,11 +1,11 @@
 <div class="headbar">
-	<div class="position"><span>工具</span><span>></span><span>视频管理</span><span>></span><span>视频列表</span></div>
+	<div class="position"><span>工具</span><span>></span><span>场景馆管理</span><span>></span><span>场景馆列表</span></div>
 	<div class="operating">
-		<a href="javascript:;" onclick="event_link('{url:/tools/video_add}')"><button class="operating_btn" type="button"><span class="addition">添加视频</span></button></a>
+		<a href="javascript:;" onclick="event_link('{url:/tools/scene_add}')"><button class="operating_btn" type="button"><span class="addition">添加视频</span></button></a>
 		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
 		<!-- <a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_discount_excel}';delModel({msg:'是否要生成excel表格'});"><button class="operating_btn" type="button"><span class="export">生成EXCEL</span></button></a> -->
 		<!--<a href="javascript:void(0)" onclick="batch_del({link:'{url:/market/ticket_discount_del}'});"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>-->
-		<form action="{url:/tools/video_list}" method="get" name="searchListForm">
+		<form action="{url:/tools/scene_list}" method="get" name="searchListForm">
 			<div class="search f_r">
 				<button class="btn" type="submit"  onclick='changeAction()'><span class="sel">搜 索</span></button>
 				关键词：<input class="small" name="search[keywords]" type="text" value="{echo:isset($_GET['search']['keywords']) ? $_GET['search']['keywords'] : ''}" placeholder="ID|路径|名称|作者" style="width:120px;" />
@@ -21,7 +21,6 @@
 				<col width="200px" />
 				<col width="200px" />
 				<col width="100px" />
-				<col width="200px" />
 				<col width="100px" />
 				<col width="50px" />
 				<col width="50px" />
@@ -32,9 +31,8 @@
 				<tr>
 					<th>ID</th>
 					<th>标题</th>
-					<th>视频地址</th>
-					<th>分类</th>
 					<th>封面</th>
+					<th>作者</th>
 					<th>创建时间</th>
 					<th>状态</th>
 					<th>排序</th>
@@ -44,13 +42,12 @@
 
 			<tbody>
 				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;$where=isset($data['where'])&&!empty($data['where']) ? $data['where'] : '';}
-				{query: name=video as m order=sort desc,id desc page=$page join=left join video_category as c on c.id eq m.cat_id fields=m.*,c.name where=$where}
+				{query: name=scene as m order=sort desc page=$page join=left join user as u on u.id eq m.user_id fields=m.*,u.username where=$where}
 				<tr>
 					<td><input type='checkbox' name='id[]' value="{$item['id']}" /> {$item['id']}</td>
 					<td>{$item['title']}</td>
-					<td>{$item['url']}</td>
-					<td>{$item['name']}</td>
-					<td><img style="max-height:50px;" src="{echo:empty($item['img']) ? '' : IWeb::$app->config['image_host'].'/'.$item['img']}"></td>
+					<td><img style="max-height:50px;" src="{echo:empty($item['cover']) ? '' : IWeb::$app->config['image_host'].'/'.$item['cover']}"></td>
+					<td>{$item['username']}</td>
 					<td>{echo:empty($item['create_time']) ? '' : date('Y-m-d H:i',$item['create_time'])}</td>
 					<td>
 						<?php switch($item['status']){
@@ -61,7 +58,7 @@
 					</td>
 					<td>{$item['sort']}</td>
 					<td>
-						<a href='{url:/tools/video_edit/id/$item[id]}'>
+						<a href='{url:/tools/scene_edit/id/$item[id]}'>
 							<img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" title="编辑" />
 						</a>
 						<!--<a href='javascript:void(0)' onclick="delModel({link:'{url:/market/ticket_discount_del/id/$item[id]}'});">-->

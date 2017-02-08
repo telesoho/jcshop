@@ -2,6 +2,7 @@ var stop=true;
 var vm = new Vue({
     el: '#articleList',
     data: {
+        showloadding:true,
         // tab数据
         tab:[
             {
@@ -138,8 +139,9 @@ $(window).load(function(){
 })
 //上拉加载
 $(window).bind('scroll', function() {
-    if ($(window).scrollTop() + $(window).height() +2000 >= $(document).height() && $(window).scrollTop() > 50) {
+    if ($(window).scrollTop() + $(window).height() +500 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
+            vm.showloadding=true;
             stop=false;
             pullupArticleRefresh(vm);
         }
@@ -162,6 +164,7 @@ function pullupArticleRefresh(self){
         type: 'get',
         timeout: 10000,
         success: function (data) {
+            self.showloadding=false;
             data.data.map(function(item){
                 self.articleDetail.push(item);
             });
