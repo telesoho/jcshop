@@ -200,10 +200,11 @@ class Tools extends IController implements adminAuthorization
 	public function video_add(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
 			$goods = array();
-			foreach(array_unique($_POST['goods_id']) as $k => $v){
-				if(!empty($v)) $goods[] = $v;
+			if(isset($_POST['goods_id'])){
+				foreach(array_unique($_POST['goods_id']) as $k => $v){
+					if(!empty($v)) $goods[] = $v;
+				}
 			}
-			
 			$data = array(
 				'url'         => $_POST['url'],
 				'cat_id'      => $_POST['cat_id'],
@@ -213,7 +214,7 @@ class Tools extends IController implements adminAuthorization
 				'update_time' => time(),
 				'sort'        => $_POST['sort'],
 				'status'      => $_POST['status'],
-				'goods'       => implode(',',$_POST['goods_id']),
+				'goods'       => implode(',',$goods),
 			);
 			
 			//上传封面
@@ -243,8 +244,10 @@ class Tools extends IController implements adminAuthorization
 			
 			$id    = IFilter::act(IReq::get('id'), 'int');
 			$goods = array();
-			foreach(array_unique($_POST['goods_id']) as $k => $v){
-				if(!empty($v)) $goods[] = $v;
+			if(isset($_POST['goods_id'])){
+				foreach(array_unique($_POST['goods_id']) as $k => $v){
+					if(!empty($v)) $goods[] = $v;
+				}
 			}
 			$data = array(
 				'url'         => $_POST['url'],
@@ -371,6 +374,53 @@ class Tools extends IController implements adminAuthorization
 	 * 场景馆添加
 	 */
 	public function scene_add(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			$data = array(
+				'title'       => $_POST['title'],
+				'content'     => $_POST['content'],
+				'status'      => $_POST['status'],
+				'user_id'     => $this->tokenCheck(),
+				'sort'        => $_POST['sort'],
+				'update_time' => time(),
+			);
+			//上传封面
+			if(isset($_FILES['cover']['name']) && $_FILES['cover']['name']!=''){
+				$uploadObj = new PhotoUpload();
+				$photoInfo = $uploadObj->run();
+				if(isset($photoInfo['cover']['img']) && file_exists($photoInfo['cover']['img'])){
+					$data['cover'] = $photoInfo['cover']['img'];
+				}
+			}
+			//上传场景图
+			if(isset($_FILES['img']['name']) && $_FILES['img']['name']!=''){
+				$uploadObj = new PhotoUpload();
+				$photoInfo = $uploadObj->run();
+				if(isset($photoInfo['img']['img']) && file_exists($photoInfo['img']['img'])){
+					$data['img'] = $photoInfo['img']['img'];
+				}
+			}
+			
+			/* 写入主表 */
+			$model = new IModel('scene');
+			$model->setData($data);
+			$rel = $model->add();
+			if(!$rel) exit('操作失败');
+			
+			/* 写入副表 */
+			if(isset($_POST['goods_id']) && !empty($_POST['goods_id'])){
+				$modelGoods = new IModel('scene_goods');
+				foreach($_POST['goods_id'] as $k => $v){
+					$modelGoods->setData(array(
+						'scene_id' => $rel,
+						'goods_id' => $v,
+						'coord_x' => $_POST['coord_x'][$v],
+						'coord_y' => $_POST['coord_y'][$v],
+					));
+					$modelGoods->add();
+				}
+			}
+			$this->redirect('scene_list');
+		}
 		$this->redirect('scene_add');
 	}
 	
@@ -378,6 +428,69 @@ class Tools extends IController implements adminAuthorization
 	 * 场景馆编辑
 	 */
 	public function scene_edit(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			
+			$id = IFilter::act(IReq::get('id'), 'int');
+			
+			$data = array(
+				'title'       => $_POST['title'],
+				'content'     => $_POST['content'],
+				'status'      => $_POST['status'],
+				'user_id'     => $this->tokenCheck(),
+				'sort'        => $_POST['sort'],
+				'create_time' => time(),
+				'update_time' => time(),
+			);
+			//上传封面
+			if(isset($_FILES['cover']['name']) && $_FILES['cover']['name']!=''){
+				$uploadObj = new PhotoUpload();
+				$photoInfo = $uploadObj->run();
+				if(isset($photoInfo['cover']['img']) && file_exists($photoInfo['cover']['img'])){
+					$data['cover'] = $photoInfo['cover']['img'];
+				}
+			}
+			//上传场景图
+			if(isset($_FILES['img']['name']) && $_FILES['img']['name']!=''){
+				$uploadObj = new PhotoUpload();
+				$photoInfo = $uploadObj->run();
+				if(isset($photoInfo['img']['img']) && file_exists($photoInfo['img']['img'])){
+					$data['img'] = $photoInfo['img']['img'];
+				}
+			}
+			
+			/* 写入主表 */
+			$model = new IModel('scene');
+			$model->setData($data);
+			$rel = $model->update('id='.$id);
+			if(!$rel) exit('操作失败');
+			
+			/* 写入副表 */
+			if(isset($_POST['goods_id']) && !empty($_POST['goods_id'])){
+				$modelGoods = new IModel('scene_goods');
+				$modelGoods->del('scene_id='.$id);
+				foreach($_POST['goods_id'] as $k => $v){
+					$modelGoods->setData(array(
+						'scene_id' => $id,
+						'goods_id' => $v,
+						'coord_x' => $_POST['coord_x'][$v],
+						'coord_y' => $_POST['coord_y'][$v],
+					));
+					$modelGoods->add();
+				}
+			}
+			
+			$this->redirect('scene_list');
+		}
+		$id = IFilter::act(IReq::get('id'), 'int');
+		
+		$info          = (new IModel('scene'))->getObj('id='.$id);
+		$query         = new IQuery('scene_goods as m');
+		$query->join   = 'LEFT JOIN goods as g ON g.id=m.goods_id';
+		$query->where  = 'scene_id='.$id;
+		$query->fields = 'm.*,g.id as goods_id,g.goods_no,g.name,g.sell_price,g.img as goods_img,g.is_del';
+		$info['list']  = $query->find();
+		
+		$this->setRenderData(array('data' => $info));
 		$this->redirect('scene_edit');
 	}
 	

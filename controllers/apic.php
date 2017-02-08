@@ -321,7 +321,7 @@ class Apic extends IController{
 	}
 	//---------------------------------------------------用户---------------------------------------------------
 	/**
-	 * 用户登陆
+	 * 用户登陆 TODO 待完善
 	 */
 	public function login(){
 		$param = $this->checkData(array(
@@ -2551,10 +2551,11 @@ class Apic extends IController{
 			$info['goods_list'] = $queryGoods->find();
 			
 			if(!empty($info['goods_list'])){
+				$info['goods_list'] = Api::run('goodsActivity',$info['goods_list']);
 				//搭配商品
 				$cids = array();
 				foreach($info['goods_list'] as $k => $v){
-					$info['goods_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");;
+					$info['goods_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
 					if(!empty($v['category_id'])) $cids[] = $v['category_id'];
 				}
 				//同类商品
@@ -2562,8 +2563,9 @@ class Apic extends IController{
 				$queryGoods->limit    = 10;
 				$info['related_list'] = $queryGoods->find();
 				if(!empty($info['related_list'])){
+					$info['goods_list'] = Api::run('goodsActivity',$info['goods_list']);
 					foreach($info['related_list'] as $k => $v){
-						$info['related_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");;
+						$info['related_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
 					}
 				}
 			}
@@ -2603,6 +2605,103 @@ class Apic extends IController{
 			if(!$rel) $this->returnJson(array('code' => '001005', 'msg' => $this->errorInfo['001005'])); //操作失败
 		}
 		$this->returnJson(array('code' => '0', 'msg' => 'ok'));
+	}
+	
+	//---------------------------------------------------场景馆---------------------------------------------------
+	/**
+	 * 场景馆列表
+	 */
+	public function scene_list(){
+		/* 获取参数 */
+		$param   = $this->checkData(array(
+			array('page', 'int', 0, '分页编号'),
+		));
+		$user_id = $this->tokenCheck();
+		/* 获取数据 */
+		$query           = new IQuery('scene');
+		$query->where    = 'status=1';
+		$query->fields   = 'id,title,cover,visit';
+		$query->order    = 'sort DESC,id DESC';
+		$query->page     = $param['page']<=0 ? 1 : $param['page'];
+		$query->pagesize = 10;
+		$list            = $query->find();
+		if($param['page']>$query->getTotalPage()) $list = array();
+		$modelPar           = new IModel('scene_praise');
+		foreach($list as $k => $v){
+			$list[$k]['cover']  = empty($v['cover']) ? '' : IWeb::$app->config['image_host'].'/'.$v['cover'];
+			$list[$k]['praise'] = $modelPar->get_count('type=1 AND scene_id='.$v['id']);
+			$list[$k]['is_praise'] = $modelPar->get_count('type=1 AND scene_id='.$v['id'].' AND user_id='.$user_id);
+		}
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$list));
+	}
+	
+	/**
+	 * 场景馆详情
+	 */
+	public function scene_detail(){
+		/* 获取参数 */
+		$param   = $this->checkData(array(
+			array('scene_id', 'int', 1, '场景馆ID'),
+		));
+		$user_id = $this->tokenCheck();
+		/* 获取数据 */
+		$modelScene = new IModel('scene as m,user as u');
+		$info       = $modelScene->getObj('u.id=m.user_id AND status=1 AND m.id='.$param['scene_id'], 'm.id,m.title,m.content,m.img,m.visit,u.username,u.head_ico');
+		if(empty($info)) $this->returnJson(array('code' => '012001', 'msg' => $this->errorInfo['012001']));
+		$info['img'] = empty($info['img']) ? '' : IWeb::$app->config['image_host'].'/'.$info['img'];
+		//喜欢/没兴趣
+		$modelPra     = new IModel('scene_praise');
+		$info['good'] = $modelPra->get_count('type=1 AND scene_id='.$param['scene_id']); //喜欢
+		$info['bad']  = $modelPra->get_count('type=2 AND scene_id='.$param['scene_id']); //没兴趣
+		//相关商品
+		$queryGoods         = new IQuery('scene_goods as m');
+		$queryGoods->join   = 'LEFT JOIN goods as g ON g.id=m.goods_id';
+		$queryGoods->where  = 'm.scene_id='.$info['id'];
+		$queryGoods->fields = 'g.id,g.name,g.goods_no,g.sell_price,g.jp_price,g.img,m.coord_x,m.coord_y';
+		$info['goods_list'] = $queryGoods->find();
+		if(!empty($info['goods_list'])){
+			$info['goods_list'] = Api::run('goodsActivity', $info['goods_list']);
+			foreach($info['goods_list'] as $k => $v){
+				$info['goods_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
+			}
+		}
+		//其他场景馆
+		$query         = new IQuery('scene');
+		$query->where  = 'status=1 AND id!='.$param['scene_id'];
+		$query->fields = 'id,title,cover,visit';
+		$query->order  = 'rand()';
+		$query->limit  = 5;
+		$info['list']  = $query->find();
+		foreach($info['list'] as $k => $v){
+			$info['list'][$k]['cover'] = empty($v['cover']) ? '' : IWeb::$app->config['image_host'].'/'.$v['cover'];
+		}
+		
+		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $info));
+	}
+	/**
+	 * 场景馆点赞
+	 */
+	public function scene_praise(){
+		/* 获取参数 */
+		$param   = $this->checkData(array(
+			array('scene_id', 'int', 1, '场景馆ID'),
+			array('opt', 'int', 1, '操作[1喜欢-2没感觉]'),
+		));
+		$user_id = $this->tokenCheck();
+		
+		/* 检查 */
+		if(!in_array($param['opt'],array(1,2))) $this->returnJson(array('code' => '001002', 'msg' => $this->errorInfo['001002']));
+		$rel   = (new IModel('scene'))->get_count('id='.$param['scene_id']);
+		if(empty($rel)) $this->returnJson(array('code' => '012001', 'msg' => $this->errorInfo['012001'])); //场景馆不存在
+		$modelColl = new IModel('scene_praise');
+		$num       = $modelColl->get_count('scene_id='.$param['scene_id'].' AND user_id='.$user_id.' AND type='.$param['opt']);
+		if($num>=1) $this->returnJson(array('code' => '012002', 'msg' => $this->errorInfo['012002'])); //重复操作
+		//进行操作
+		$modelColl->setData(array('scene_id' => $param['scene_id'], 'user_id' => $user_id,'type'=>$param['opt']));
+		$rel = $modelColl->add();
+		if(!$rel) $this->returnJson(array('code' => '001005', 'msg' => $this->errorInfo['001005'])); //操作失败
+		
+		$this->returnJson(array('code' => '0', 'msg' => 'ok','data'=>$modelColl->get_count('scene_id='.$param['scene_id'].' AND type='.$param['opt'])));
 	}
 	
 	//---------------------------------------------------分类---------------------------------------------------

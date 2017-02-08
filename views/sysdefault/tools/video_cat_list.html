@@ -5,7 +5,7 @@
 		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
 		<!-- <a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_discount_excel}';delModel({msg:'是否要生成excel表格'});"><button class="operating_btn" type="button"><span class="export">生成EXCEL</span></button></a> -->
 		<!--<a href="javascript:void(0)" onclick="batch_del({link:'{url:/market/ticket_discount_del}'});"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>-->
-		<form action="{url:/tools/api_list}" method="get" name="searchListForm">
+		<form action="{url:/tools/video_cat_list}" method="get" name="searchListForm">
 			<div class="search f_r">
 				<button class="btn" type="submit"  onclick='changeAction()'><span class="sel">搜 索</span></button>
 				关键词：<input class="small" name="search[keywords]" type="text" value="{echo:isset($_GET['search']['keywords']) ? $_GET['search']['keywords'] : ''}" placeholder="ID|路径|名称|作者" style="width:120px;" />
