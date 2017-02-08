@@ -125,7 +125,7 @@ body{
     border-top:1px solid #d3d3d3;
     position:relative;
 }
-.goodsInfo .ware .bottom:after{
+.goodsInfo .ware:nth-last-of-type(1) .bottom:after{
     background:transparent;
     position:absolute;
     content:'';
@@ -138,7 +138,7 @@ body{
     border-right: 0.21rem solid transparent;
     border-top: 0.18rem solid #d3d3d3;
 }
-.goodsInfo .ware .bottom:before{
+.goodsInfo .ware:nth-last-of-type(1) .bottom:before{
     background:transparent;
     position:absolute;
     content:'';
@@ -187,7 +187,7 @@ a.condition_price:after{
     padding:0 0.45rem;
 }
 .calPrice{
-    border-top:1px solid #d3d3d3;
+    /*border-top:1px solid #d3d3d3;*/
     margin-top:0.26rem;
     height:1.04rem;
     line-height:1.04rem;

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="x5-orientation" content="portrait">
+    <title>
+        视频特辑
+    </title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/vedio.css?v=<?php echo time(); ?>" />
+</head>
+<body>
+<section id="vedio_detail" v-cloak>
+    <loadding :mes="showloadding"></loadding>
+    <video src="http://www.bilibilijj.com/Files/DownLoad/12817467.mp4/www.bilibilijj.com.mp4?mp3=true" style="height:4.22rem;" width="100%" controls :poster="info.img"></video>
+    <header class="box detail_header">
+        <div class="left">
+            <p class="p1 hidewrap">{{info.title}}</p>
+            <p class="p2 hidewrap">{{info.content}}</p>
+        </div>
+        <div class="right flexbox" @click.stop="collection">
+            <div class="img">
+                <img :src="!info.is_collect?src1:src2" style="width:0.32rem" alt="" />
+            </div>
+            <div class="num" :style="!info.is_collect?color1:color2">{{info.collect}}</div>
+        </div>
+    </header>
+    <div class="goods_list" v-if="info.goods_list">
+        <div class="title">搭配商品 ({{info.goods_list.length}})</div>
+        <div class="item box1" v-for="item in info.goods_list" @click="toProducts(item.id)">
+            <div class="img">
+                <img :src="item.img" alt="" style="width:1.8rem;height:1.8rem;border:1px solid #eee">
+            </div>
+            <div class="right">
+                <h5 class="hideCamp">{{item.name}}</h5>
+                <div class="flexstart" style="margin-top:0.2rem">
+                    <div class="price">
+                        <span style="font-size:0.28rem;color:#ff5959">￥</span><span style="font-size:0.38rem;color:#ff5959">{{item.sell_price}}</span>
+                        <span style="font-size:0.24rem;color:#999;padding-left:0.2rem;">日本价：{{item.jp_price}}円</span>
+                    </div>
+                    <div class="buy">去购买</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relateList" v-if="info.related_list">
+        <div class="title">同类商品</div>
+        <div class="relateContainer">
+            <div class="item" v-for="item in info.related_list" @click="toProducts(item.id)">
+                <div class="img flexbox">
+                    <img :src="item.img" alt="" style="width:2.9rem;height:2.9rem" />
+                </div>
+                <div class="name hideCamp">
+                    {{item.name}}
+                </div>
+                <div class="price">
+                    <span style="color:#ff5959;font-size:0.24rem">￥</span> <span style="color:#ff5959;font-size:0.3rem;position:relative;left:-0.08rem;">{{item.sell_price}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--暂无更多专辑-->
+    <div class="flexbox empty_product" style="" v-if="infoState">
+        <div class="img">
+            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+        </div>
+        <div class="content" style="background:#eee">
+            <span style="color:#bbb">~</span>
+            <span style="color:#bbb">暂无更多专辑</span>
+            <span style="color:#bbb">~</span>
+        </div>
+    </div>
+</section>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<!--加载动画载入-->
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
+
+<!-- 微信分享 -->
+{if:IClient::isWechat() == true}
+<?php
+    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+    $this->wechat = new wechat();
+$this->wechat->setConfig();
+$this->wechat->config['wechat_jsApiSDK']=1;
+$this->wechat->jsApiSDK();
+?>
+<script>
+    //微信分享
+    var wechat_share = {
+        title: '九猫大百货-日本同价-东京直邮', //标题
+        desc: '视频特辑', //描述
+        link: "{echo:IWeb::$app->config['image_host1']}/site/ticket_gain?pid={$this->user['user_id']}&aid={echo:(new Config('jmj_config'))->activity_id}&iid={echo:ISession::get('shop_identify_id')}",
+        imgUrl: "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
+    }
+    wechat.share();
+</script>
+{/if}
+<script type="text/javascript">
+    var stop=true;
+    var aid="{echo:IReq::get('id')}";
+    console.log(aid)
+    var vm=new Vue({
+        el:"#vedio_detail",
+        data:{
+            infoState:false,
+            showloadding:true,//加载动画控制函数
+            aid:aid,
+            info:{
+                goods_list:[],
+                related_list:[]
+            },
+            src1:"/views/mobile/skin/default/image/jmj/vedio/heart.png",
+            src2:"/views/mobile/skin/default/image/jmj/vedio/heart_ed.png",
+            color1:"color:#b2b2b2",
+            color2:"color:#ff5959",
+        },
+        computed:{
+
+        },
+        mounted:function(){
+            var self=this;
+            this.getData(self);
+        },
+        methods:{
+            collection: function(){
+                var self=this;
+                $.ajax({
+                    url:"/apic/video_collect",
+                    data:{
+                        video_id:self.aid,
+                        opt:self.info.is_collect+1
+                    },
+                    dataType:'json',//服务器返回json格式数据
+                    type:'get',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    success:function(data){
+                        if(self.info.is_collect==0){
+                            self.info.is_collect=1;
+                            self.info.collect++
+                        }else{
+                            self.info.is_collect=0;
+                            self.info.collect--
+                        }
+                    }
+                })
+            },
+            toProducts: function(id){
+              window.location.href="/site/products/id/"+id
+            },
+            getData:function(self){
+                $.ajax({
+                    url:"/apic/video_datail",
+                    data:{
+                        video_id:self.aid
+                    },
+                    dataType:'json',//服务器返回json格式数据
+                    type:'get',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    success:function(data){
+                        self.showloadding=false;
+                        self.info=data.data;
+                        self.infoState=true;
+                    }
+                })
+            }
+        }
+    })
+</script>
+</body>
+
+</html>

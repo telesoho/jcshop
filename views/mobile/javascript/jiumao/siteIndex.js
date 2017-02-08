@@ -220,9 +220,6 @@ var vm = new Vue({
 			removeSessionItem("week_new_info");
     		window.location.href = "/redesign/week_new";
     	},
-    	scene_pavilion:function(){
-//  		window.location.href = "/redesign/scenepavilion"
-    	},
     	guan:function(){
     		window.location.href = "/site/article_list";
     	},
@@ -358,11 +355,15 @@ function index_home(self){
 //定时器  限时购
 function time_xian(){
 	times = setInterval(function(){
-		if( all_time1<0 ){
-			clearInterval(times);
-		}
+		
 		var myDate = new Date();
 		var data_time = myDate.getTime();
+		console.log()
+		if( _time-parseInt(data_time/1000)<0 ){
+			clearInterval(times);
+			shop_time = false;
+		}
+		
 		var all_time1 = _time-parseInt(data_time/1000);
 		if(all_time1<=0){
 			shop_time = false;

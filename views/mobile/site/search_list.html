@@ -134,7 +134,6 @@
 <script>
     //页面加载完成后调用的功能
     window.onload=function(){
-       document.getElementById("loading").remove();
         $(".mui-placeholder span").eq(1).html(getItem("searth_word")).css("color","#3d4225");
         mui('body').on('tap','.locationA',function(){document.location.href=this.href;});
         //解决tab选项卡a标签无法跳转的问题
@@ -288,7 +287,6 @@
                 pushSession("searth_answer",self.infoMessage);
                 self.page++;
                 pushSession('searth_page',self.page);
-//
             },
             error: function (xhr, type, errorThrown) {
                 //异常处理；

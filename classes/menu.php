@@ -165,23 +165,25 @@ class Menu
 		),
 
        '工具'=>array(
-       		'接口管理' => array(
-       			'/tools/api_list' => '接口列表',
-				'/tools/api_error_list' => '错误码列表',
-			),
+		   '接口管理' => array(
+			   '/tools/api_list' => '接口列表',
+			   '/tools/api_error_list' => '错误码列表',
+		   ),
+		   '专辑管理'=>array(
+			   '/tools/article_cat_list'=> '专辑分类',
+			   '/tools/article_list'=> '专辑列表'
+		   ),
+		   '视频管理'=>array(
+			   '/tools/video_list'=> '视频列表',
+			   '/tools/video_cat_list'=> '视频分类'
+		   ),
+		   '场景馆管理'=>array(
+			   'scene_list'=>'场景馆列表',
+		   ),
 			'数据库管理'=>array(
 				'/tools/db_bak' => '数据库备份',
 				'/tools/db_res' => '数据库还原',
 			),
-			'专辑管理'=>array(
-				'/tools/article_cat_list'=> '专辑分类',
-				'/tools/article_list'=> '专辑列表'
-			),
-			'视频管理'=>array(
-				'/tools/video_list'=> '视频列表',
-				'/tools/video_cat_list'=> '视频分类'
-			),
-
 			'帮助管理'=>array(
    				'/tools/help_cat_list'=> '帮助分类',
    				'/tools/help_list'=> '帮助列表'

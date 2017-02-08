@@ -1,0 +1,115 @@
+{js:my97date}
+
+<div class="headbar">
+    <div class="position"><span>视频管理</span><span>></span><span>视频分类</span><span>></span><span>编辑</span></div>
+</div>
+<div class="content_box">
+    <div class="content form_content">
+        <form action="{url:/tools/video_cat_edit}" method="post" name='video_update' enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{echo:IFilter::act(IReq::get('id'), 'int')}" />
+            <table class="form_table">
+                <col width="150px"/>
+                <col/>
+                <tr>
+                    <th>标题：</th>
+                    <td >
+                        <label class='attr'>
+                            <input name='name' type='text' value="{$data['name']}" class="normal" />
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>排序：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='sort' type='text' value="{$data['sort']}" class="samll" />
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>视频封面：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='icon' type='file' value=""/><br />
+                            <img src="{echo:empty($data['icon']) ? '' : IWeb::$app->config['image_host'].'/'.$data['icon']}" style="max-height:100px;">
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>状态：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='status' type='radio' value="0" {if:$data['status']=='0'}checked{/if}/>禁用
+                            <input name='status' type='radio' value="1" {if:$data['status']=='1'}checked{/if}/>启用
+                        </label>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <button class="submit" type='submit'><span>确 定</span></button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+
+
+<script type='text/javascript'>
+
+window.onload = function(){
+    page.init();
+};
+
+var page = {
+    loading     : false,
+    //初始化
+    init        : function(){
+    },
+    //更新
+    update      : function (obj) {
+        if(page.loading==true) return false;
+        page.loading=true;
+        var thisForm 	= $('form[name="video_update"]');
+        $.post(thisForm.attr("action"),thisForm.serialize(),function(data,status){
+            if(status=='success'){
+                console.log(data);
+                if(data.code==0){
+                    _inform('操作成功',function () {
+                        window.location.href="{url:/tools/video_list}";
+                    });
+                }
+                _inform('操作失败');
+            }
+			page.loading = false;
+        },'json');
+    },
+    //输入筛选商品的条件
+    searchGoodsCallback: function (goodsList) {
+        var result = [];
+        goodsList.each(function(k,v){
+            var temp = $.parseJSON($(this).attr('data'));
+            result.push(temp);
+        });
+        page.createGoodsList(result);
+    },
+    //创建商品数据
+    createGoodsList: function (goodsList) {
+        if (goodsList) {
+            for(var i in goodsList){
+                var templateHTML = template.render('goodsItemTemplate',{"templateData":goodsList[i]});
+                $('#goodsListBox').append(templateHTML);
+            }
+        }
+    },
+    //删除单条商品
+    delGoods 				:function(obj){
+        $(obj).parents('.goodsInfo').remove();
+    },
+};
+
+</script>

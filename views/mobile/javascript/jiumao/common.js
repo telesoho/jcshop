@@ -53,7 +53,7 @@ function getSearth(){
 	    document.body.style.overflow = 'hidden';
 	    
 	    document.body.addEventListener('touchmove', handler, false);
-    },1000)
+    },300)
 }
 function searthCancel(){
     document.getElementById("search").placeholder=getItem("placeHolder")+"件商品等你来搜";
@@ -97,6 +97,7 @@ function getPosition(){
 }
 function getScrollTop()
 {
+	
     var position=getPosition();
     if(document.documentElement&&document.documentElement.scrollTop)
     {

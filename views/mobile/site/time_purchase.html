@@ -138,11 +138,10 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <script>
-var attr2 = []
+	var attr2 = []
 	var Request = new Object();
     Request = GetRequest();
-//  var statusOrder=Request["id"];
-	var statusOrder=1;
+    var statusOrder=Request["id"];
 	console.log(statusOrder);
 	
     var vm= new Vue({
@@ -179,9 +178,9 @@ var attr2 = []
                 
                 for(var i = 0;i<this.info0.length;i++){
                 	 if(vm.head[0].now == 0){
-                		this.info0[i].style="width:"+(this.info0[i].nums-this.info0[i].sale_nums)*100/this.info0[i].nums+"%";
+                		this.info0[i].style="width:"+(100-(this.info0[i].nums-this.info0[i].sale_nums)*100/this.info0[i].nums)+"%";
                 	}else{
-                		 this.info0[i].style="width:"+((this.info0[i].nums-this.info0[i].sale_nums>10)? vm.head[0].numaa[i]*100/this.info0[i].nums :(this.info0[i].nums-this.info0[i].sale_nums)*100/this.info0[i].nums) +"%";
+                		 this.info0[i].style="width:"+((this.info0[i].nums-this.info0[i].sale_nums>10)? (100-vm.head[0].numaa[i]*100/this.info0[i].nums) :(100-(this.info0[i].nums-this.info0[i].sale_nums)*100/this.info0[i].nums)) +"%";
                 	}
                 }
                 return this.info0; 
@@ -189,9 +188,9 @@ var attr2 = []
             new_data1: function(){
             	for(var i = 0;i<this.info.length;i++){
                 	 if(vm.head[1].now == 0){
-                		this.info[i].style="width:"+(this.info[i].nums-this.info[i].sale_nums)*100/this.info[i].nums+"%";
+                		this.info[i].style="width:"+(100-(this.info[i].nums-this.info[i].sale_nums)*100/this.info[i].nums)+"%";
                 	}else{
-                		 this.info[i].style="width:"+((this.info[i].nums-this.info[i].sale_nums>10)? vm.head[1].numaa[i]*100/this.info[i].nums :(this.info[i].nums-this.info[i].sale_nums)*100/this.info[i].nums)+"%";
+                		 this.info[i].style="width:"+((this.info[i].nums-this.info[i].sale_nums>10)? (100-vm.head[1].numaa[i]*100/this.info[i].nums ):(100-(this.info[i].nums-this.info[i].sale_nums)*100/this.info[i].nums))+"%";
                 	}
                 }
                 
@@ -200,10 +199,10 @@ var attr2 = []
             new_data2: function(){
                 for(var i = 0;i<this.info2.length;i++){
                 	 if(vm.head[2].now == 0){
-                		this.info2[i].style="width:"+(this.info2[i].nums-this.info2[i].sale_nums)*100/this.info2[i].nums+"%";
+                		this.info2[i].style="width:"+(100-(this.info2[i].nums-this.info2[i].sale_nums)*100/this.info2[i].nums)+"%";
                 		console.log(this.info2[i].style)
                 	}else{
-                		 this.info2[i].style="width:"+((this.info2[i].nums-this.info2[i].sale_nums>10)? vm.head[2].numaa[i]*100/this.info2[i].nums :(this.info2[i].nums-this.info2[i].sale_nums)*100/this.info2[i].nums)+"%";
+                		 this.info2[i].style="width:"+((this.info2[i].nums-this.info2[i].sale_nums>10)? (100-vm.head[2].numaa[i]*100/this.info2[i].nums) :(100-(this.info2[i].nums-this.info2[i].sale_nums)*100/this.info2[i].nums))+"%";
                 	}
                 	
                 }
@@ -213,11 +212,20 @@ var attr2 = []
         },
         mounted: function(){
         	var self = this;
-        	if(statusOrder == 4){
-				this.initState = 1;
-			}else if(statusOrder == 1){
+//      	if(statusOrder == 4){
+//				this.initState = 1;
+//			}else if(statusOrder == 1){
+//				this.initState = 0;
+//			}else if(statusOrder == 5){
+//				this.initState = 2;
+//			}
+			var ss = new Date();
+			var sss =parseInt(ss.getTime()/1000);
+			if(1486515600<sss<1486540800){
 				this.initState = 0;
-			}else if(statusOrder == 5){
+			}else if(1486540800<sss<1486555200){
+				this.initState = 1;
+			}else if(1486555200<sss<1486569599){
 				this.initState = 2;
 			}
 			time_xian(self);
@@ -242,16 +250,13 @@ var attr2 = []
         },
 
     })
-    var suiji0 = Math.ceil(Math.random()*8/+2);
-   	var suiji1 = Math.ceil(Math.random()*8/+2);
-    var suiji2 = Math.ceil(Math.random()*8/+2);
     function time_xian(self,num){
     	 mui.ajax('/apic/activity_speed_list', {
 	        dataType: 'json',
 	        type: 'get',
 	        data:{
 	        	type:1,
-	        	time_id:statusOrder?statusOrder:1
+	        	time_id:statusOrder?statusOrder:""
 	        },
 	        success: function (data) {
 	        	console.log(data)
@@ -280,12 +285,12 @@ var attr2 = []
 						vm.head[i].shi_time = true;
 						
 					}
-						vm.head[0].numaa[0] = 8;
+						vm.head[0].numaa[0] = 12;
 						vm.head[0].numaa[1] =10;
-						vm.head[0].numaa[2] =10;
-						vm.head[0].numaa[3] =8;
+						vm.head[0].numaa[2] =7;
+						vm.head[0].numaa[3] =15;
 						vm.head[0].numaa[4] =15;
-						vm.head[1].numaa[0] = 3;
+						vm.head[1].numaa[0] = 4;
 						vm.head[1].numaa[1] =15;
 						vm.head[1].numaa[2] =11;
 						vm.head[1].numaa[3] =10;
@@ -301,17 +306,14 @@ var attr2 = []
 //	        		vm.head[item].time = item.start_time;
 	        	}
 	        	if(data.data.time_list[2].end_time<tt){
-					vm.head[0].tip = "明天再来";
-					vm.head[1].tip = "明天再来";
-					vm.head[2].tip = "明天再来";
-					vm.head[0].shi_time = false;
-					vm.head[1].shi_time = false;
-					vm.head[2].shi_time = false;
+                    vm.head.map(function(item){
+                        item.tip="明天再来";
+                        shi_time = false
+                    })
 				}
 	        }
 	    });
     }
-    
     function GetRequest() {
       	var url = location.search; //获取url中"?"符后的字串
       	var theRequest = new Object();
