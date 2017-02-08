@@ -182,14 +182,21 @@ class Common{
     public static function getLocalVersion(){
         return include(IWeb::$app->getBasePath().'docs/version.php');
     }
+
     /**
      * User: chenbo
      * 日志写
-     * @param $info
+     * @param $info 日志信息
+     * @param string $type 日志类型
+     * @param null $file 日志文件 默认b2b2c文件夹
      */
-    public static function log_write($info, $type='INFO'){
+    public static function log_write($info, $type='INFO', $file=null){
         $log = new Logger('debugger');
-        $log_path = __DIR__ . '/../backup/logs/b2b2c';
+        if (empty($file)){
+            $log_path = __DIR__ . '/../backup/logs/b2b2c';
+        } else {
+            $log_path = __DIR__ . '/../backup/logs/b2b2c/' . $file;
+        }
         if (!file_exists($log_path)) mkdir($log_path);
         switch ($type){
             case 'DEBUG':
@@ -301,6 +308,10 @@ class Common{
         curl_close($ch);
         $media = array_merge(array('mediaBody' => $package), $httpinfo);
 
+        if ($type = 3){
+            file_put_contents($dirname,$media['mediaBody']);
+            return $dirname;
+        }
         //求出文件格式
         preg_match('/\w\/(\w+)/i', $media["content_type"], $extmatches);
         $fileExt = $extmatches[1];
@@ -343,6 +354,67 @@ class Common{
             IError::show_normal('用户信息不存在');
         } else {
             return $ret;
+        }
+    }
+    static public function get_order_data($id = null, $order_no = null){
+        $order_model = new IModel('order');
+        if (!empty($id)){
+            $data = $order_model->getObj('id = ' . $id);
+        } else if (!empty($order_no)){
+            $data = $order_model->getObj('order_no = ' . $order_no);
+        }
+        if (empty($data)){
+            IError::show_normal('订单信息不存在');
+        } else {
+            return $data;
+        }
+    }
+    static public function get_address_data($where){
+        $address_model = new IModel('address');
+        $data = $address_model->getObj($where);
+        if (empty($data)){
+            IError::show_normal('地址信息不存在');
+        } else {
+            return $data;
+        }
+    }
+
+    /**
+     * User: chenbo
+     * 保存上传在微信服务器的资源
+     * @param $media_id
+     * @param $path
+     * @return bool
+     */
+    static public function save_wechat_resource($media_id, $path){
+        $wechat_resources_model = new IModel('wechat_resources');
+        $wechat_resources_model->setData(['media_id'=>$media_id,'path'=>$path,'create_time'=>date('Y-m-d H:i:s',time())]);
+        $ret = $wechat_resources_model->add();
+        if ($ret){
+            return true;
+        } else {
+            self::log_write($media_id.'-'.$path.'信息保存失败','ERROR','wechat_resource');
+            return false;
+        }
+    }
+
+    /**
+     * User: chenbo
+     * 恢复微信照片
+     * @param $path
+     */
+    static public function restore_wechat_resources($path){
+        $access_token = self::get_wechat_access_token();
+        $wechat_resources_model = new IModel('wechat_resources');
+        $data = $wechat_resources_model->getObj("path = '$path'");
+        if (empty($data)){
+            return json_encode(['ret'=>false,'msg'=>'不存在该资源的备份信息']);
+        } elseif ( ceil((time()-strtotime($data['create_time']))/86400)>3 ){
+            return json_encode(['ret'=>false,'msg'=>'超过3天']);
+        } else {
+            $url = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $data['media_id'];
+            $path = self::save_url_image($url,$path,3);
+            return json_encode(['ret'=>true,'msg'=>'恢复成功' . $path]);
         }
     }
 }

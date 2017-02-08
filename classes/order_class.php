@@ -210,21 +210,16 @@ class Order_Class
 			$smsContent = smsTemplate::payFinishToAdmin(array('{orderNo}' => $orderNo));
 			Hsms::send($mobile,$smsContent,0);
 			
-			/* 绑定店铺 */
-			shop::associate($orderRow['user_id']);
-			shop::update_order_seller_id($orderRow['id']);
-
 			/* 店铺主获得积分 */
 			score::incPay($orderRow['user_id'], $orderRow['order_no']);
 
 			/* 推送订单提交成功信息 */
-//			$open_id = common::get_wechat_open_id($orderRow['user_id']);
-//			$order_goods_query = new IQuery('order_goods');
-//			$order_goods_query->where = 'order_id = ' . $orderRow['id'];
-//			$data = $order_goods_query->find();
-//			$goods_name = empty($data) ? '无商品信息' : json_decode($data[0]['goods_array'])['name'];
-//			wechats::send_message_template($open_id,'order_complete',['goods_name'=>$goods_name,'order_no'=>$orderRow['order_no']]);
-
+            $open_id                  = common::get_wechat_open_id($orderRow['user_id']);
+            $order_goods_query        = new IQuery('order_goods');
+            $order_goods_query->where = 'order_id = ' . $orderRow['id'];
+            $data                     = $order_goods_query->find();
+            $goods_name               = empty($data) ? '无商品信息' : json_decode($data[0]['goods_array'])->name;
+			wechats::send_message_template($open_id,'order_complete',['goods_name'=>$goods_name,'order_no'=>$orderRow['order_no']]);
 
 			return $orderRow['id'];
 		}
