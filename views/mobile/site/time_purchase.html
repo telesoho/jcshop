@@ -244,7 +244,7 @@
 				if(key == 1){
 					window.location.href = "/site/products?id="+obj.id;	
 				}else{
-//					window.location.href = "/site/products?id="+obj.id;	
+					window.location.href = "/site/products?id="+obj.id;	
 				}
             }
         },
@@ -308,7 +308,7 @@
 	        	if(data.data.time_list[2].end_time<tt){
                     vm.head.map(function(item){
                         item.tip="明天再来";
-                        shi_time = false
+                        item.shi_time = false
                     })
 				}
 	        }
