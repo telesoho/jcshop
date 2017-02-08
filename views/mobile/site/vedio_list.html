@@ -122,6 +122,8 @@ $this->wechat->jsApiSDK();
         },
         methods:{
             changeState:function(item){
+                var oldId=getSession("vedioState");
+                if(oldId===item.id) return; //前端性能优化重复点击无效
                 var self=this;
                 pushSession("vedioState",item.id);
                 self.activeState=item.id;
@@ -135,17 +137,18 @@ $this->wechat->jsApiSDK();
                 //自动滚动函数
                 var Scroll=function(){
                      this.eid=document.getElementById("scrollContainer");//获取容器对象
-                    this.aid=document.getElementById("con"+item.id)
+                     this.aid=document.getElementById("con"+item.id)
                 }
                 Scroll.prototype.scr=function(){
-//                    备注 this.aid.offsetLeft（当前导航的位置）this.eid.scrollLeft（容器的滚动位置）this.eid.offsetWidth（容器的可视宽度）this.aid.offsetWidth (导航的宽度)
-                    console.log(this.eid.scrollLeft+this.aid.offsetLeft+this.aid.offsetWidth);
+//                    this.aid.offsetLeft（当前导航的位置）
+//                    this.eid.scrollLeft（容器的滚动位置）
+//                    this.eid.offsetWidth（容器的可视宽度）
+//                    this.aid.offsetWidth (导航的宽度)
                    if((this.eid.scrollLeft+this.aid.offsetLeft+this.aid.offsetWidth)<this.eid.offsetWidth) {
                        this.eid.scrollLeft-=this.aid.offsetWidth
                    }else{
                        this.eid.scrollLeft+=this.aid.offsetWidth;
                    }
-
                 }
                 var tab=new Scroll();
                 tab.scr();

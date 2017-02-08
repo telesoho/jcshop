@@ -13,8 +13,8 @@
 	    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/recommendation.css?v=<?php echo time(); ?>" />
 	</head>
 	<body>
-
 		<div id="articleList" v-cloak>
+			<loadding :mes="showloadding"></loadding>
 			<header>
 				<img src="/views/mobile/skin/default/image/jmj/article/banner.png" style="width: 100%;"/>
 			</header>
@@ -40,6 +40,8 @@
 		    </div>
 		</div>
 		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<!--加载动画载入-->
+		<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 		<!--article-list组件引入-->
 		<script src="/views/mobile/components/article_list.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
