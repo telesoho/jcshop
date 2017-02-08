@@ -1147,9 +1147,9 @@ class Apic extends IController{
 	public function activity_speed_list(){
 		/* 接收参数 */
 		$param = $this->checkData(array(
-			array('type','int',1,'活动类型[1限时购-2秒杀]'),
-			array('time_id','int',0,'时间段ID'),
-			array('page','int',0,'分页编号'),
+			array('type', 'int', 1, '活动类型[1限时购-2秒杀]'),
+			array('time_id', 'int', 0, '时间段ID'),
+			array('page', 'int', 0, '分页编号'),
 		));
 		/* 秒杀时间段列表 */
 		$time               = strtotime(date('Y-m-d', time()));
@@ -1161,13 +1161,8 @@ class Apic extends IController{
 		$listSpeed          = $querySpeed->find();
 		if(!empty($listSpeed)){
 			foreach($listSpeed as $k => $v){
-				$listSpeed[$k]['now'] = $flag = 0;
-				if(($k==0 && time()<$v['start_time']) || time()>$v['start_time']){
-					if($flag==0){
-						$listSpeed[$k]['now'] = $flag = 1;
-						$param['time_id']     = empty($param['time_id']) ? $v['id'] : $param['time_id'];
-					}
-				}
+				$listSpeed[$k]['conduct'] = $v['start_time']<=time() ? ($v['end_time']<time() ? 3 : 2) : 1; //1未开始-2正在进行-3已结束
+				$param['time_id']         = empty($param['time_id']) ? $v['id'] : $param['time_id'];
 			}
 		}
 		/* 秒杀商品列表 */
@@ -1194,7 +1189,7 @@ class Apic extends IController{
 		}
 		
 		/* 数据返回 */
-		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>array('time_list' => $listSpeed, 'goods_list' => $listGoods)));
+		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => array('now' => $param['time_id'], 'time_list' => $listSpeed, 'goods_list' => $listGoods)));
 	}
 	
 	/**
