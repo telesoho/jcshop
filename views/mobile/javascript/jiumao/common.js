@@ -53,7 +53,7 @@ function getSearth(){
 	    document.body.style.overflow = 'hidden';
 	    
 	    document.body.addEventListener('touchmove', handler, false);
-    },1000)
+    },300)
 }
 function searthCancel(){
     document.getElementById("search").placeholder=getItem("placeHolder")+"件商品等你来搜";
@@ -97,6 +97,7 @@ function getPosition(){
 }
 function getScrollTop()
 {
+	
     var position=getPosition();
     if(document.documentElement&&document.documentElement.scrollTop)
     {
@@ -113,7 +114,6 @@ function getPosition1(){
     var pid=getSession('product1');
     var eid=document.getElementById("product_item"+pid);
     var scroll=eid?eid:"";
-    console.log(scroll.offsetTop);
     return scroll.offsetTop;
 
 
@@ -128,7 +128,6 @@ function getScrollTop1()
     else if(document.body)
     {
         document.body.scrollTop=position-9;
-        console.log(document.body.scrollTop);
     }
     removeSessionItem('product1');
 //        console.log(position);

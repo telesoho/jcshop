@@ -330,6 +330,9 @@ class Simple extends IController
     	$mobile        			= IFilter::act($addressRow['mobile'],'mobile'); //联系方式
     	$telphone      			= IFilter::act($addressRow['telphone'],'phone'); //手机
     	$zip           			= IFilter::act($addressRow['zip'],'zip'); //邮编
+        $sfz_image1             = IFilter::act($addressRow['sfz_image1']);
+        $sfz_image2             = IFilter::act($addressRow['sfz_image2']);
+        $sfz_num                = IFilter::act($addressRow['sfz_num']);
 
 		//检查订单重复
     	$checkData 				= array(
@@ -420,6 +423,9 @@ class Simple extends IController
 				'area'                => $area,
 				'address'             => $address,
 				'mobile'              => $mobile,
+				'sfz_image1'          => $sfz_image1,
+				'sfz_image2'          => $sfz_image2,
+				'sfz_num'             => $sfz_num,
 				'create_time'         => ITime::getDateTime(),
 				'postscript'          => $order_message,
 				'accept_time'         => $accept_time,
@@ -1276,22 +1282,26 @@ class Simple extends IController
             $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
             $dir .= '/sfz_image';
             if (!empty($image1)){
+                $media_id1 = $image1;
                 $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
 //                $image1 = $this->saveMedia($url1,$dir,1);
                 $image1 = common::save_url_image($url1,$dir,1);
+                common::save_wechat_resource($media_id1, $image1);
             } else {
                 $image1 = IFilter::act(IReq::get('image_saved1'),'string');
             }
             if (!empty($image2)){
+                $media_id2 = $image2;
                 $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
 //                $image2 = $this->saveMedia($url2,$dir,2);
                 $image2 = common::save_url_image($url2,$dir,2);
+                common::save_wechat_resource($media_id2, $image2);
             } else {
                 $image2 = IFilter::act(IReq::get('image_saved2'),'string');
             }
             $user_id     = $this->user['user_id'];
             $user_model = new IModel('user');
-            $user_model->setData(['sfz_name'=>$sfz_name,'sfz_num'=>$sfz_num,'sfz_image1'=>$image1,'sfz_image2'=>$image2]);
+            $user_model->setData(['sfz_name'=>$sfz_name,'sfz_num'=>$sfz_num,'sfz_image1'=>$image1,'sfz_image2'=>$image2,'media_id1'=>$media_id1,'media_id2'=>$media_id2,'sfz_time'=>date('Y-m-d H:i:s',time())]);
             $user_model->update('id = ' . $user_id);
         }
 	    $this->redirect('credit');

@@ -137,6 +137,9 @@ class Order extends IController implements adminAuthorization
                     $this->sfz_image11 = IWeb::$app->config['image_host1'] . '/' . $user_data[0]['sfz_image1'];
                     $this->sfz_image22 = IWeb::$app->config['image_host1'] . '/' . $user_data[0]['sfz_image2'];
                 }
+                $this->user_id = $user_id;
+                $user_data     = common::get_user_data($user_id);
+                $this->user    = $user_data;
 
 				$this->redirect('order_show',false);
 			}
@@ -568,34 +571,41 @@ class Order extends IController implements adminAuthorization
 		$this->redirect('order_deliver');
 	}
 	public function order_deliver_xlobo(){
-//	    $ret = xlobo::get_goods_store('4901301229069');
-//	    var_dump($ret);
-	    $address_model = new IModel('address');
         //去掉左侧菜单和上部导航
-        $this->layout='';
-        $order_id = IFilter::act(IReq::get('id'),'int');
-        $data = array();
+        $this->layout  = '';
+        $order_id      = IFilter::act(IReq::get('id'), 'int');
+        $data          = array();
+        $address_model = new IModel('address');
         if($order_id)
         {
             $order_show  = new Order_Class();
             $data        = $order_show->getOrderShow($order_id);
             $accept_name = $data['accept_name'];
+            $mobile      = $data['mobile'];
             $user_id     = $data['user_id'];
             $address_data = $address_model->getObj('user_id = ' . $user_id . ' and accept_name = "' . $accept_name . '"');
             if (empty($data)) IError::show_normal('订单不存在');
-            if (empty($address_data)) IError::show_normal('收货地址信息不存在');
-            if (empty($address_data['accept_name'])) IError::show_normal('用户身份证姓名不存在');
-            if (empty($address_data['sfz_num'])) IError::show_normal('用户身份证号码不存在');
-            if (empty($address_data['mobile'])) IError::show_normal('用户联系方式不存在');
-            if (empty($address_data['sfz_image1'])) IError::show_normal('身份证照片信息1不存在');
-            if (empty($address_data['sfz_image2'])) IError::show_normal('身份证照片信息2不存在');
-            $sfz_image1 = __DIR__ . '/../' . $address_data['sfz_image1'];
-            $sfz_image2 = __DIR__ . '/../' . $address_data['sfz_image2'];
-            if ( !file_exists($sfz_image1) ) IError::show_normal(__DIR__ . '/../' . $address_data['sfz_image1'].'用户身份证证件不存在');
-            if ( !file_exists($sfz_image2) ) IError::show_normal('用户身份证证件不存在');
-//            $data['user_data'] = $user_data;
-            $ret = xlobo::add_idcard($address_data['accept_name'], $address_data['mobile'], $address_data['sfz_num'], $address_data['sfz_image1'], $address_data['sfz_image2']);
-//            var_dump($ret);
+            if (empty($address_data) || empty($address_data['sfz_image1']) || empty($address_data['sfz_image2'])){
+//                IError::show_normal('收货地址信息不存在');
+                $user_data  = common::get_user_data($user_id);
+                $sfz_image1 = $user_data['sfz_image1'];
+                $sfz_image2 = $user_data['sfz_image2'];
+                $sfz_num    = $user_data['sfz_num'];
+            } else {
+                if (empty($address_data['accept_name'])) IError::show_normal('用户身份证姓名不存在');
+                if (empty($address_data['sfz_num'])) IError::show_normal('用户身份证号码不存在');
+                if (empty($address_data['mobile'])) IError::show_normal('用户联系方式不存在');
+                if (empty($address_data['sfz_image1'])) IError::show_normal('身份证照片信息1不存在');
+                if (empty($address_data['sfz_image2'])) IError::show_normal('身份证照片信息2不存在');
+                $sfz_image1  = $address_data['sfz_image1'];
+                $sfz_image2  = $address_data['sfz_image2'];
+                $accept_name = $address_data['accept_name'];
+                $mobile      = $address_data['mobile'];
+                $sfz_num     = $address_data['sfz_num'];
+            }
+            if ( !file_exists(__DIR__ . '/../' . $sfz_image1) ) IError::show_normal(__DIR__ . '/../' . $sfz_image1.'用户身份证正面照片不存在');
+            if ( !file_exists(__DIR__ . '/../' . $sfz_image1) ) IError::show_normal(__DIR__ . '/../' . $sfz_image2.'用户身份证反面照片不存在');
+            $ret = xlobo::add_idcard($accept_name, $mobile, $sfz_num, $sfz_image1, $sfz_image2);
         }
         $this->setRenderData($data);
         $this->redirect('order_deliver_xlobo');
@@ -631,8 +641,12 @@ class Order extends IController implements adminAuthorization
 
         //发送的商品关联
         $sendgoods = IFilter::act(IReq::get('sendgoods'));
-        $sendgoodsXlobo = IFilter::act(IReq::get('sendgoodsXlobo'));
-
+        $order_goods_model = new IModel('order_goods');
+        foreach ($sendgoods as $k=>$v){
+            $ret = $order_goods_model->getObj('id =' . $v);
+            if (empty($ret)) IError::show_normal($v . '信息不存在');
+            $sendgoodsXlobo[] = $ret['goods_id'];
+        }
         $ret = xlobo::create_logistic_single($order_id, $sendgoodsXlobo);
         if (isset($ret->Succeed) && $ret->Succeed){
             $billcode = $ret->Result->BillCode;
@@ -650,8 +664,10 @@ class Order extends IController implements adminAuthorization
                 die('<script type="text/javascript">parent.actionCallback("'.$result.'");</script>');
             }
         } else {
-            common::log_write('做单失败' . print_r($ret,true));
-            die('<script type="text/javascript">parent.actionCallback("做单失败");</script>');
+            common::log_write('做单失败' . print_r($ret,true), 'ERROR');
+            $msg = @$ret->ErrorInfoList[0]->ErrorDescription;
+            $msg = isset($msg) ? $msg : '';
+            die('<script type="text/javascript">parent.actionCallback("'."做单失败$msg".'");</script>');
         }
     }
     public function add_xlobo($ret, $order_id){
@@ -1704,6 +1720,7 @@ class Order extends IController implements adminAuthorization
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品编号</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">实付单价</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品数量</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品状态</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品名称</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">日文品名</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">规格</td>';
@@ -1726,7 +1743,7 @@ class Order extends IController implements adminAuthorization
 			/* 包含商品 */
 			$orderGoodsObj        = new IQuery('order_goods');
 			$orderGoodsObj->where = "order_id = ".$v['id'];
-			$orderGoodsObj->fields = 'id,goods_array,goods_id,product_id,goods_nums,real_price';
+			$orderGoodsObj->fields = 'id,goods_array,goods_id,product_id,goods_nums,real_price,is_send';
 			$orderGoodsList = $orderGoodsObj->find();
 			foreach($orderGoodsList as $k1 => $v1){
 				$orderGoodsList[$k1] = array_merge($orderGoodsList[$k1],JSON::decode($v1['goods_array']));
@@ -1738,11 +1755,13 @@ class Order extends IController implements adminAuthorization
 				'name_jp' 		=> '', //日文名
 				'real_price' 	=> '', //实付价格
 				'goods_nums' 	=> '', //商品数量
+				'is_send_name' 	=> '', //商品状态
 				);
 			$query 				= new IQuery('goods');
 			$query->fields 		= 'id,name,name_jp,sell_price,type';
 			$queryBag 			= new IQuery('goods_bag');
 			$queryBag->fields 	= 'id,goods_no,num';
+			$textIsSend 		= array('未发货','已发货','已退货');
 			foreach($orderGoodsList as $v1){
 				$query->where 				= 'id='.$v1['goods_id'];
 				$info 						= $query->find();
@@ -1753,14 +1772,16 @@ class Order extends IController implements adminAuthorization
 					foreach($infoBag as $k2 => $v2){
 						$strGoods['goodsno'] 		.= '&nbsp;'.$v2['goods_no'].'<br />';
 						$strGoods['goods_nums'] 	.= $v2['num'].'<br />';
+						$strGoods['real_price'] 	.= round($v1['real_price']/$v2['num'],2).'<br />';
 					}
 				}else{
 					$strGoods['goodsno'] 		.= '&nbsp;'.$v1['goodsno'].'<br />';
 					$strGoods['goods_nums'] 	.= $v1['goods_nums'].'<br />';
+					$strGoods['real_price'] 	.= $v1['real_price'].'<br />';
 				}
 				$strGoods['name'] 			.= $v1['name'].'<br />';
 				$strGoods['name_jp'] 		.= $info[0]['name_jp'].'<br />';
-				$strGoods['real_price'] 	.= $v1['real_price'].'<br />';
+				$strGoods['is_send_name'] 	.= (isset($textIsSend[$v1['is_send']]) ? $textIsSend[$v1['is_send']] : '未知').'<br />';
 			}
 			//商品编号
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['goodsno'].' </td>';
@@ -1768,6 +1789,8 @@ class Order extends IController implements adminAuthorization
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['real_price'].' </td>';
 			//商品数量
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['goods_nums'].' </td>';
+			//是否发货
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['is_send_name'].' </td>';
 			//商品名称
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods['name'].' </td>';
 			//日文品名

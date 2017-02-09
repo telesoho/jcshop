@@ -5,6 +5,7 @@ var statusOrder=Request["id"];
 var em = new Vue({
 	el:"#wrap",
 	data:{
+		showloadding:true,
 		info:[],
 		img1:'/views/mobile/skin/default/image/jmj/article/brank_banner.jpg',
 		page:1,
@@ -35,21 +36,18 @@ var em = new Vue({
 	},
 	mounted: function(){
 		var self=this;
-		if(getSession("pinpai_infolist")||getSession("pinpai_page")){
+		if(getSession("pinpai_infolist")){
 			self.page = getSession("pinpai_page");
 			self.infolist = getSession("pinpai_infolist");
+			getRelateArticle(statusOrder,self);
 		}
-//		else{
-//			getRelateArticle(statusOrder,self);
-//			console.log(statusOrder,self.page)
-//		}
-		getRelateArticle(statusOrder,self);
-//		getRelateArticle(statusOrder,self)
+		else{
+			self.page = 1;
+			self.infolist = []
+			getRelateArticle(statusOrder,self);
+		}
 	},
 	updated:function() {
-		document.title = this.info.name;
-		$("title").html(this.info.name); 
-		
 		var heights = $("#article_top").height()
 		if(heights!=0){
 			if(heights<=30){
@@ -73,26 +71,25 @@ function getRelateArticle(statusOrder,self){
 		type:'get',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
 		success:function(data){
-			
-			
-			
-			console.log(data.article_list);
+			self.showloadding=false;
+			document.title=data.data.name;
 			self.info = data.data;
 			self.infoac=data.data.article_list;
 			data.data.goods_list.map(function(item){
 				self.infolist.push(item);
 			})
-			pushSession("pinpai_infolist", self.infolist)
-			if(data.goods_list==''){
+			pushSession("pinpai_infolist", self.infolist);
+			if(data.data.goods_list==''){
                 self.infoState=true;
                 stop=false;
             }else{
             	self.infoState=false;
-                stop=true; 
-            }       
+                stop=true;
+                self.page++;
+            }    
+            
             console.log(self.page);
             pushSession("pinpai_page", self.page)
-            self.page++;
 		}
 	});
 }
@@ -113,8 +110,10 @@ function GetRequest() {
 
 	//懒加载
 $(window).bind('scroll', function() {
-	if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+	if ($(window).scrollTop() + $(window).height() +100 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
+        	em.showloadding=true;
+        	console.log(1);
             stop=false;
             getRelateArticle(statusOrder,em);
         }

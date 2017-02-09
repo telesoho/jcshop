@@ -1,0 +1,204 @@
+{js:my97date}
+
+<div class="headbar">
+    <div class="position"><span>视频管理</span><span>></span><span>视频列表</span><span>></span><span>编辑</span></div>
+</div>
+<div class="content_box">
+    <div class="content form_content">
+        <form action="{url:/tools/video_edit}" method="post" name='video_update' enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{echo:IFilter::act(IReq::get('id'), 'int')}" />
+            <table class="form_table">
+                <col width="150px"/>
+                <col/>
+                <tr>
+                    <th>标题：</th>
+                    <td >
+                        <label class='attr'>
+                            <input name='title' type='text' value="{$data['title']}" class="normal" />
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>内容：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='content' type='text' value="{$data['content']}" class="normal" />
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>视频地址：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='url' type='text' value="{$data['url']}" class="normal" />
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>视频封面：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='img' type='file' value=""/><br />
+                            <img src="{echo:empty($data['img']) ? '' : IWeb::$app->config['image_host'].'/'.$data['img']}" style="max-height:100px;">
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>分类：</th>
+                    <td>
+                        <label class='attr'>
+                            <select name="cat_id">
+                                {query: name=video_category order=sort desc where=status eq 1}
+                                <option value="{$item['id']}" {if:$data['cat_id']==$item['id']}selected{/if}>{$item['name']}
+                                {/query}
+                            </select>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>排序：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='sort' type='text' value="{$data['sort']}" class="small" />
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>状态：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='status' type='radio' value="0" {if:$data['status']=='0'}checked{/if}/>禁用
+                            <input name='status' type='radio' value="1" {if:$data['status']=='1'}checked{/if}/>启用
+                        </label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>设置抢购商品：</th>
+                    <td>
+                        <table class='border_table' style='width:65%'>
+                            <button type='button'
+                                    onclick="searchGoods('{url:/block/search_goods/type/checkbox}',page.searchGoodsCallback);"
+                                    class='btn'><span>选择商品</span></button>
+                            <thead>
+                            <tr>
+                                <th>商品编号</th>
+                                <th>图片</th>
+                                <th>名称</th>
+                                <th>原价格</th>
+                                <th>状态</th>
+                                <th>删除</th>
+                            </tr>
+                            </thead>
+                            <tbody id="goodsListBox">
+                            {foreach:items=$data['list'] key=$k item=$v}
+                            <tr class="goodsInfo">
+                                <td>{$v['goods_no']}<input name="goods_id[{$v['id']}]" type="hidden" value="{$v['id']}"></td>
+                                <td> <img src="<?php echo IWeb::$app->config['image_host']; ?>/{$v['img']}"  style="max-height:100px;max-width:100px;" /></td>
+                                <td>{$v['name']}</td>
+                                <td>{$v['sell_price']}</td>
+                                <td>
+                                    <?php switch($v['is_del']){
+                                                case 0: echo '已上架'; break;
+                                                case 1: echo '已删除'; break;
+                                                case 2: echo '已下架'; break;
+                                                case 3: echo '申请上架中'; break;
+                                            } ?>
+                                </td>
+                                <td><img src="<?php echo $this->getWebSkinPath().'images/admin/icon_del.gif';?>" alt="删除" title="删除" onclick="page.delGoods(this);" /></td>
+                            </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <button class="submit" type='submit'><span>确 定</span></button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<!--商品模板-->
+<script type="text/html" id="goodsItemTemplate">
+    <tr class="goodsInfo">
+        <td><%=templateData['goods_no']%><input name="goods_id[<%=templateData['goods_id']%>]" type="hidden" value="<%=templateData['goods_id']%>"></td>
+        <td> <img src="<?php echo IWeb::$app->config['image_host']; ?>/<%=templateData['img']%>"  style="max-height:100px;max-width:100px;" /></td>
+        <td><%=templateData['name']%></td>
+        <td><%=templateData['sell_price']%></td>
+        <td><%if(templateData['is_del'] =='0'){%>
+            已上架
+            <%}%>
+            <%if(templateData['is_del'] =='1'){%>
+            已删除
+            <%}%>
+            <%if(templateData['is_del'] =='2'){%>
+            已下架
+            <%}%>
+            <%if(templateData['is_del'] =='3'){%>
+            申请上架中
+            <%}%></td>
+        <td><img src="<?php echo $this->getWebSkinPath().'images/admin/icon_del.gif';?>" alt="删除" title="删除" onclick="page.delGoods(this);" /></td>
+    </tr>
+</script>
+
+<script type='text/javascript'>
+
+window.onload = function(){
+    page.init();
+};
+
+var page = {
+    loading     : false,
+    //初始化
+    init        : function(){
+    },
+    //更新
+    update      : function (obj) {
+        if(page.loading==true) return false;
+        page.loading=true;
+        var thisForm 	= $('form[name="video_update"]');
+        $.post(thisForm.attr("action"),thisForm.serialize(),function(data,status){
+            if(status=='success'){
+                console.log(data);
+                if(data.code==0){
+                    _inform('操作成功',function () {
+                        window.location.href="{url:/tools/video_list}";
+                    });
+                }
+                _inform('操作失败');
+            }
+			page.loading = false;
+        },'json');
+    },
+    //输入筛选商品的条件
+    searchGoodsCallback: function (goodsList) {
+        var result = [];
+        goodsList.each(function(k,v){
+            var temp = $.parseJSON($(this).attr('data'));
+            result.push(temp);
+        });
+        page.createGoodsList(result);
+    },
+    //创建商品数据
+    createGoodsList: function (goodsList) {
+        if (goodsList) {
+            for(var i in goodsList){
+                var templateHTML = template.render('goodsItemTemplate',{"templateData":goodsList[i]});
+                $('#goodsListBox').append(templateHTML);
+            }
+        }
+    },
+    //删除单条商品
+    delGoods 				:function(obj){
+        $(obj).parents('.goodsInfo').remove();
+    },
+};
+
+</script>

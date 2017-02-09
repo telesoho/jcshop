@@ -13,37 +13,9 @@
 		<link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css?v=<?php echo time(); ?>" />
 	</head>
 	<body>
-		<!--loading页开始-->
-		<div id="loading">
-			<div class="spinner">
-				<div class="spinner-container container1">
-					<div class="circle1"></div>
-					<div class="circle2"></div>
-					<div class="circle3"></div>
-					<div class="circle4"></div>
-				</div>
-				<div class="spinner-container container2">
-					<div class="circle1"></div>
-					<div class="circle2"></div>
-					<div class="circle3"></div>
-					<div class="circle4"></div>
-				</div>
-				<div class="spinner-container container3">
-					<div class="circle1"></div>
-					<div class="circle2"></div>
-					<div class="circle3"></div>
-					<div class="circle4"></div>
-				</div>
-			</div>
-		</div>
-		<!--loading页结束-->
 		<div id="wrap_list_" >
 		<section id="siteMap">
-			
-		    <!--<header id="searchs">
-		    	<input type="text" name="" id="" placeholder="2万多件好货等你带回家" />
-		    	<img src="/views/mobile/skin/default/image/jmj/redesign/pic1.png" style="width: 0.24rem"/>
-		    </header>-->
+			<loadding :mes="showloadding"></loadding>
 		    <div style="background: #b8b8b8;height: 1px;width: 100%;opacity: .3;"></div>
 		    <section id="main" v-cloak>
 		    	<search-nav :search="search" :val="null" style="position: relative;top: 0;left: 0;"></search-nav>
@@ -123,7 +95,7 @@
 	        <img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt=""  />
 	    </div>
 	    
-		<div id="line_xx" style="height: 1rem;background: #f5f5f5;display: none;">
+		<div id="line_xx" style="height: 1rem;background: #fff;display: none;">
 			
 		</div>		
 		</div>
@@ -132,6 +104,8 @@
 	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+	<!--加载动画载入-->
+	<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 	<!--搜索组件引入-->
 	<script src="/views/mobile/components/search_nav.js?v=<?php echo time(); ?>"></script>
 	<!--//底部导航样式的引入-->
@@ -150,6 +124,7 @@
 			var vm=new Vue({
 				el:'#main',
 				data:{
+					showloadding:true,
 					color1:"color:#949494 ;",
 					color2:"color:#ff5959 ;", // ed
 					img1:"/views/mobile/skin/default/image/jmj/redesign/img2.png",
@@ -183,7 +158,6 @@
 						}else{
 							self.info[keys].list[0].state2 = true;
 						}
-						
 						s_pull = false;
 						pushSession("s_pull",s_pull);
 					}
@@ -198,10 +172,6 @@
 				        lazyload.init({
 				            anim:false,
 				            selectorName:".samLazyImg"
-				        });
-				        var gallery = mui('#slider1');
-				        gallery.slider({
-				            interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
 				        });
 					removeSessionItem("pinpai_infolist");
     				removeSessionItem("pinpai_page");
@@ -281,8 +251,7 @@
 				type:'get',
 				timeout:10000,
 				success:function(data){
-					
-//						console.log(data.data);
+					self.showloadding=false;
 					if(statusOrder=="3"){
 						self.chooses_show = false;
 						self.chooses = 1;
@@ -296,20 +265,15 @@
 						items.list.map(function(items2){
 							items2.state2=false;
 						})
-//						data.data[0].list[0].state2=true;
-//						data.data[0].state=true;
 						data.data[0].move_states=true;
 						self.info.push(items);
-						
 						if(items.state){
 							self.class_fe = true;
 						}else{
 							self.class_fe = false;
 						}
 					})
-					console.log(self.info.length)
 					pushSession("self_info",self.info)
-					
 				}
 			});
 		}

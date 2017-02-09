@@ -148,10 +148,16 @@
 					<th>送货时间:</th><td>{$accept_time}</td>
 				</tr>
                 <tr>
-                    <th>身份证正面:</th><td><img src="{$this->sfz_image1}" alt="身份证正面" width="200"></td>
+                    <th>正面:</th><td><img src="{$this->sfz_image1}" alt="身份证正面" width="200"></td>
                 </tr>
                 <tr>
-                    <th>身份证背面:</th><td><img src="{$this->sfz_image2}" alt="身份证背面" width="200"></td>
+                    <th>背面:</th><td><img src="{$this->sfz_image2}" alt="身份证背面" width="200"></td>
+                </tr>
+                <tr>
+                    <th>操作:</th>
+                    <td>
+                        <button type="button" class="submit" id="restore_image1" onclick="restore_image1({$user_id},'{$accept_name}');"><span>照片恢复</span></button>
+                    </td>
                 </tr>
 			</tbody>
 		</table>
@@ -230,10 +236,16 @@
 					<th>Email:</th><td>{$email}</td>
 				</tr>
                 <tr>
-                    <th>实名身份证正面:</th><td><img src="{$this->sfz_image11}" alt="身份证正面" width="200"></td>
+                    <th>正面:</th><td><img src="{$this->sfz_image11}" alt="身份证正面" width="200"></td>
                 </tr>
                 <tr>
-                    <th>实名身份证背面:</th><td><img src="{$this->sfz_image22}" alt="身份证背面" width="200"></td>
+                    <th>背面:</th><td><img src="{$this->sfz_image22}" alt="身份证背面" width="200"></td>
+                </tr>
+                <tr>
+                    <th>操作:</th>
+                    <td>
+                        <button type="button" class="submit" id="restore_image2" onclick="restore_image2({$user_id});"><span>照片恢复</span></button>
+                    </td>
                 </tr>
 			</tbody>
 		</table>
@@ -272,6 +284,18 @@
 						{/if}
 					</td>
 				</tr>
+                <tr>
+                    <th>正面:</th><td><img src="{$sfz_image1}" alt="正面"> </td>
+                </tr>
+                <tr>
+                    <th>反面:</th><td><img src="{$sfz_image2}" alt="反面"> </td>
+                </tr>
+                <tr>
+                    <th>操作:</th>
+                    <td>
+                        <button type="button" class="submit" id="restore_image3" onclick="restore_image3({$order_no});"><span>照片恢复</span></button>
+                    </td>
+                </tr>
 			</tbody>
 		</table>
 	</div>
@@ -482,6 +506,8 @@
 		<button type="button" class="submit" id="to_cancel" onclick="complete({$order_id},4)"><span>作废</span></button>
 
 		<button type="button" class="submit" id="to_deliver_xlobo" onclick="deliver_xlobo({$order_id});"><span>贝海做单</span></button>
+		<button type="button" class="submit" id="to_send_message" onclick="send_message({$user_id},{$order_id});"><span>补充认证信息推送</span></button>
+		<button type="button" class="submit" id="sfz_to_address_image" onclick="sfz_to_address_image({$user_id});"><span>用户实名信息->收货地址信息</span></button>
 	</div>
 </div>
 
@@ -528,6 +554,27 @@ function initButton()
 	$('#to_deliver_xlobo').removeAttr('disabled');
 	$('#to_deliver_xlobo').removeClass('inactive');
 	{/if}
+
+    //推送信息
+    {if:in_array($orderStatus,array(1,4,8,9))}
+    $('#to_send_message').removeAttr('disabled');
+    $('#to_send_message').removeClass('inactive');
+    {/if}
+    //实名信息
+    {if:in_array($orderStatus,array(1,4,8,9))}
+    $('#sfz_to_address_image').removeAttr('disabled');
+    $('#sfz_to_address_image').removeClass('inactive');
+    {/if}
+
+    $('#restore_image1').removeAttr('disabled');
+    $('#restore_image1').removeClass('inactive');
+
+    $('#restore_image2').removeAttr('disabled');
+    $('#restore_image2').removeClass('inactive');
+
+    $('#restore_image3').removeAttr('disabled');
+    $('#restore_image3').removeClass('inactive');
+
 
 	//退款
 	{if:in_array($orderStatus,array(4,6,9,10))}
@@ -663,7 +710,79 @@ function deliver_xlobo(id)
 		}
 	});
 }
+//推送信息
+function send_message(user_id,order_id) {
+    if (confirm('确定发送？')){
+        $.post('/apic/send_wechat_message_by_type',{'id':user_id,'order_id':order_id,'type':'shiming'},function (data) {
+            data = JSON.parse(data);
+            console.log(data);
+            if (data.ret){
+                alert('消息推送成功');
+            } else {
+                alert(data.msg);
+            }
+        })
+    } else{
 
+    }
+}
+function sfz_to_address_image(user_id) {
+    if (confirm('确定复制？')){
+        $.post('/apic/sfz_to_address_image',{'id':user_id},function (data) {
+            data = JSON.parse(data);
+            console.log(data);
+            if (data.ret){
+                alert('复制成功');
+            } else {
+                alert(data.msg);
+            }
+        })
+    } else{
+
+    }
+}
+function restore_image1(user_id, accept_name) {
+    if (confirm('确定恢复？')){
+        $.post('/apic/restore_image',{'user_id':user_id,'accept_name':accept_name},function (data) {
+            data = JSON.parse(data);
+            console.log(data);
+            if (data.ret){
+                alert('恢复成功');
+//                location.reload();
+            } else {
+                alert(data.msg);
+            }
+        })
+    }
+}
+function restore_image2(user_id) {
+    if (confirm('确定恢复？')){
+        $.post('/apic/restore_image',{'user_id':user_id},function (data) {
+            data = JSON.parse(data);
+            console.log(data);
+            if (data.ret){
+                alert('恢复成功');
+//                location.reload();
+            } else {
+                alert(data.msg);
+            }
+        })
+    }
+}
+function restore_image3(order_no) {
+    if (confirm('确定恢复？')){
+        $.post('/apic/restore_image',{'order_no':order_no},function (data) {
+            data = JSON.parse(data);
+            console.log(data);
+            if (data.ret){
+                alert('恢复成功');
+//                location.reload();
+            } else {
+                alert(data.msg);
+            }
+        })
+    }
+}
 //执行回调处理
 function actionCallback(msg)
 {

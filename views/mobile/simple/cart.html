@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
 	<!--<link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css" />-->
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/cart.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/cart.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 <div id="cart_info">
@@ -31,12 +31,12 @@
 		<header v-if="showMessage">
 			<a href="http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=100000021&idx=1&sn=5fdb0e149001831242d616090c0ad549&chksm=6b23f0d65c5479c03816d4d8b04cec7635847914686a023dbc2a1d0e17f1012e7d4d9fee59bf&scene=0#wechat_redirect" class="classA"><img src="/views/mobile/skin/default/image/jmj/cart/cart-banner.png" alt="" style="width:100%"  /></a>
 		</header>
-		<div class="goodsInfo" v-for="item in newGoods" :style="newGoods.length==1?bottom_check:''">
+		<div class="goodsInfo"  :style="newGoods.length==1?bottom_check:''">
 			<div class="top">
 				<img src="/views/mobile/skin/default/image/jmj/cart/plane.png" alt="" style="width:0.37rem;height:0.37rem;"/>
 				<span>东京直邮</span>
 			</div>
-			<div class="ware">
+			<div class="ware" v-for="item in newGoods">
 				<div class="box head-name">
 					<a :href="item.url" class="classA">
 						<div class="name">
@@ -63,12 +63,7 @@
 					</div>
 				</div>
 				<div class="bottom box">
-					<div class="bottom-left">
-						商品金额
-					</div>
-					<div class="bottom-right">
-						￥ {{item.totalPrice}}
-					</div>
+
 				</div>
 			</div>
 		</div>

@@ -884,6 +884,10 @@ class Site extends IController{
 		$this->redirect('ticket_gain');
 	}
 
+	function order_share(){
+	    $this->redirect('order_share');
+    }
+
     /**
      * ↓*********贝海*********↓
      */
@@ -909,4 +913,10 @@ class Site extends IController{
     /**
      * ↑*********贝海*********↑
      */
+
+    function test(){
+        $id         = IFilter::act(IReq::get('id'), 'int');
+        $image_path = common::get_wechat_qrcode('user24', 'user24');
+        echo IWeb::$app->config['image_host'] . "/$image_path";
+    }
 }

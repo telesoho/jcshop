@@ -14,7 +14,7 @@
         .top .tip{
             font-weight:bold;
             font-size:0.44rem;
-            color:#ff44a0;
+            color:#ff5959;
             margin-left:0.2rem;
             position:relative;
             top:-0.05rem;
@@ -43,7 +43,7 @@
         }
         .addCredit{
             display:block;
-            background:#ff44a0;
+            background:#ff5959;
             border-radius:0.08rem;
             width:5.5rem;
             height:0.9rem;
@@ -55,15 +55,20 @@
         }
         .successPay{
             display:block;
-            border:1px solid #ff44a0;
+            border:1px solid #ff5959;
             border-radius:0.08rem;
             width:5.5rem;
             height:0.9rem;
             line-height:0.9rem;
             text-align:center;
             font-size:0.32rem;
-            color:#ff44a0;
+            color:#ff5959;
             margin-top:0.67rem;
+        }
+        .share{
+        	width: 100%;
+        	margin-top: 0.5rem;
+        	text-align: center;
         }
     </style>
 </head>
@@ -92,6 +97,9 @@
     <div class="bottom flexbox">
         <a href="{url:/simple/credit}" class="addCredit">添加身份证信息</a>
         <a href="{url:/ucenter/order}?status=2" class="successPay">完成</a>
+    </div>
+    <div class="share">
+    	<a href="/site/order_share"><img src="/views/mobile/skin/default/image/buy_share/success_share.png" style="width: 5.28rem;"/></a>
     </div>
 <script>
 

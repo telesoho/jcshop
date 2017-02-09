@@ -16,6 +16,8 @@ return array(
 	'xlobo'                 => false, //false开发环境，true生产环境
 	'order_clear_time'      => 30*24*60*60, //订单自动确认时间
 	'order_cancel_time'     => 2*60*60, //订单自动关闭时间
+	'inventory_time'        => 24*60*60, //库存自动更新时间间隔
+	'inventory_num'         => 5, //库存更新数
 )
 
 ?>

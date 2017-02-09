@@ -92,9 +92,9 @@ class APIGoods{
 		if(!empty($listSpeed)){
 			$queryOrder         = new IQuery('order AS m');
 			$queryOrder->join   = 'LEFT JOIN order_goods AS g ON g.order_id=m.id';
-			$queryOrder->fields = 'count(*) AS sum';
+			$queryOrder->fields = 'sum(g.goods_nums) AS sum';
 			foreach($listSpeed as $k => $v){
-				$where = 'm.pay_status=1 AND m.pay_time>="'.date('Y-m-d H:i:s', $v['start_time']).'" AND m.pay_time<="'.date('Y-m-d H:i:s', $v['end_time']).'" AND g.goods_id='.$v['goods_id'];
+				$where = 'm.pay_status=1 AND m.create_time>="'.date('Y-m-d H:i:s', $v['start_time']).'" AND m.create_time<="'.date('Y-m-d H:i:s', $v['end_time']).'" AND g.goods_id='.$v['goods_id'];
 				//限购数量已售完
 				$queryOrder->where = $where;
 				$sum               = $queryOrder->find();

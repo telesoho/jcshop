@@ -5,123 +5,225 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>评论详情</title>
+    <title>喵粉们说</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
     <link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/comment/comment1.css?v=<?php echo time(); ?>"/>
 </head>
 <body>
 <div id="comment_detail_Info" v-cloak>
-     
+     <header>
+     	<div class="detail_shop">
+     		<img src="/views/mobile/skin/default/image/admin_ico.png"/>
+     		<p>资生堂新透白美肌，夜间祛斑修护凝霜</p>
+     		<span >¥<span>452.00</span></span>
+     	</div>
+     	<div class="detail_pin">
+     		<div class="left_p">
+     			<p>喵粉总体评价：</p>
+     		</div>
+     		<div class="right_p">
+     			<ul >
+     				<li v-for="item in mark">{{item.name}}</li>
+     			</ul>
+     		</div>
+     	</div>
+     </header>
+     <section>
+     	<div class="user_list_detail">
+     		<h1>
+     			<img src="/views/mobile/skin/default/image/6F65F4C3-37CD-417C-9B83-60BE30B0AB6D@1x.png" />
+     			<p>飞雪</p>
+     			<div>
+     				<span>2016-10-01</span>
+     				<span>17:34:02</span>
+     			</div>
+     		</h1>
+     		<div class="img_detail">
+     			<div class="scorll">
+     				<ul>
+     					<li><img src="/views/mobile/skin/default/image/bolo_none.jpg"/></li>
+     					<li><img src="/views/mobile/skin/default/image/bolo_none.jpg"/></li>
+     					<li><img src="/views/mobile/skin/default/image/bolo_none.jpg"/></li>
+     					<li><img src="/views/mobile/skin/default/image/bolo_none.jpg"/></li>
+     					<li><img src="/views/mobile/skin/default/image/bolo_none.jpg"/></li>
+     				</ul>
+     			</div>
+     		</div>
+     		<div class="label">
+     			<ul>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     			</ul>
+     		</div>
+     		<!--<div class="audio">
+     			<img src="/views/mobile/skin/default/image/jmj/audio.png" style="width: 0.7rem;"/>
+     			<span class="ee"><span>19</span>’</span>
+     		</div>-->
+     		<div class="bottom_">
+     			
+     		</div>
+     	</div>
+     	
+     	<div class="user_list_detail">
+     		<h1>
+     			<img src="/views/mobile/skin/default/image/6F65F4C3-37CD-417C-9B83-60BE30B0AB6D@1x.png" />
+     			<p>飞雪</p>
+     			<div>
+     				<span>2016-10-01</span>
+     				<span>17:34:02</span>
+     			</div>
+     		</h1>
+     		<div class="img_detail">
+     			<div class="scorll">
+     				<ul>
+     					<li><img src="/views/mobile/skin/default/image/bolo_none.jpg"/></li>
+     					<li><img src="/views/mobile/skin/default/image/bolo_none.jpg"/></li>
+     					<li><img src="/views/mobile/skin/default/image/bolo_none.jpg"/></li>
+     					<li><img src="/views/mobile/skin/default/image/bolo_none.jpg"/></li>
+     					<li><img src="/views/mobile/skin/default/image/bolo_none.jpg"/></li>
+     				</ul>
+     			</div>
+     		</div>
+     		<div class="label">
+     			<ul>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     				<li>物流快</li>
+     			</ul>
+     		</div>
+     		<!--<div class="audio">
+     			<img src="/views/mobile/skin/default/image/jmj/audio.png" style="width: 0.7rem;"/>
+     			<span class="ee"><span>19</span>’</span>
+     		</div>-->
+     		<div class="bottom_">
+     			
+     		</div>
+     	</div>
+     </section>
 </div>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
-<script>
-    var getId="{echo:IReq::get('id')}";
-    var vm=new Vue({
-        el:"#commentInfo",
-        data:{
-            id:getId,//获取页面传过来的id
 
-        },
-        computed:{
-
-        },
-        mounted:function(){
-            getCommentDetail(this);
-        },
-        methods:{
-//            从本地选择图片或者拍照
-            choImgFun:function(){
-                chooseImage(this);
-            },
-            //删除最后一张已选择的图片
-            delImg:function(key){
-                this.img.splice(key,1);
-                this.choImg.splice(key,1);
-                this.imgLength--;
-            },
-            //图片预览功能
-            perview:function(item){
-                perviewImg(item,this);
-            },
-            //开始录音
-            startV:function(e){
-                console.log(e)
-                var self=this;
-                startRecord(self);
-                //开始录音得清除播放的动画
-                clearInterval(self.v);
-                this.voiceState=2;
-            },
-            voicePlay:function(){
-                //开始录音得清除录音的动画
-                clearInterval(self.f);
-                playVoice(this);
-            },
-            //停止录音
-            endV:function(e){
-                stopRecord(this);
-            },
-            beginStart:function(){
-                this.voice="";
-                this.localVoice="";
-                this.voiceState=2;
-                startRecord(this);
-                //开始录音得清除播放的动画
-                clearInterval(self.v);
-                this.pause=false;
-            },
-            //删除录音功能
-            delVoice:function(){
-                var self=this;
-                this.voice="";
-                clearInterval(self.f);
-                clearInterval(self.v);
-                self.voiceState=1;
-                self.pause=false;
-            },
-//            选择标签,最多只能选择三个标签
-            changeState:function(item){
-                if(this.maxMark>this.markLen){
-                    if(!item.cho){
-                        item.cho=true;
-                        this.markLen++
-                    }else{
-                        item.cho=false;
-                        this.markLen--
-                    }
-                }else{
-                    if(item.cho){
-                        item.cho=false;
-                        this.markLen--
-                    }
-                }
-            },
-            //提交并上传文件到微信服务器
-            submit:function(){
-                if(!this.checkSub){
-                    return false;
-                }
-                this.showLoad=true;
-                upload(this);
-            }
-        }
-    })
-    function getTagList(self){
-        mui.ajax('/apic/comment_tag_list',{
-            dataType:'json',//服务器返回json格式数据
-            type:'get',//HTTP请求类型
-            timeout:10000,//超时时间设置为10秒
-            success:function(data){
-                data.data.map(function(item){
-                    item.cho=false;
-                })
-                self.mark=data.data;
-            }
-        });
-    }
+<script type="text/javascript">
+	var getId="{echo:IReq::get('id')}";
+	var vm=new Vue({
+	    el:"#comment_detail_Info",
+	    data:{
+	        id:getId,//获取页面传过来的id
+			mark:[],
+	    },
+	    computed:{
+	
+	    },
+	    mounted:function(){
+	    	getTagList(this);
+//	        getCommentDetail(this);
+	    },
+	    methods:{
+	//            从本地选择图片或者拍照
+	        choImgFun:function(){
+	            chooseImage(this);
+	        },
+	        //删除最后一张已选择的图片
+	        delImg:function(key){
+	            this.img.splice(key,1);
+	            this.choImg.splice(key,1);
+	            this.imgLength--;
+	        },
+	        //图片预览功能
+	        perview:function(item){
+	            perviewImg(item,this);
+	        },
+	        //开始录音
+	        startV:function(e){
+	            console.log(e)
+	            var self=this;
+	            startRecord(self);
+	            //开始录音得清除播放的动画
+	            clearInterval(self.v);
+	            this.voiceState=2;
+	        },
+	        voicePlay:function(){
+	            //开始录音得清除录音的动画
+	            clearInterval(self.f);
+	            playVoice(this);
+	        },
+	        //停止录音
+	        endV:function(e){
+	            stopRecord(this);
+	        },
+	        beginStart:function(){
+	            this.voice="";
+	            this.localVoice="";
+	            this.voiceState=2;
+	            startRecord(this);
+	            //开始录音得清除播放的动画
+	            clearInterval(self.v);
+	            this.pause=false;
+	        },
+	        //删除录音功能
+	        delVoice:function(){
+	            var self=this;
+	            this.voice="";
+	            clearInterval(self.f);
+	            clearInterval(self.v);
+	            self.voiceState=1;
+	            self.pause=false;
+	        },
+	//            选择标签,最多只能选择三个标签
+	        changeState:function(item){
+	            if(this.maxMark>this.markLen){
+	                if(!item.cho){
+	                    item.cho=true;
+	                    this.markLen++
+	                }else{
+	                    item.cho=false;
+	                    this.markLen--
+	                }
+	            }else{
+	                if(item.cho){
+	                    item.cho=false;
+	                    this.markLen--
+	                }
+	            }
+	        },
+	        //提交并上传文件到微信服务器
+	        submit:function(){
+	            if(!this.checkSub){
+	                return false;
+	            }
+	            this.showLoad=true;
+	            upload(this);
+	        }
+	    }
+	})
+	function getTagList(self){
+	    mui.ajax('/apic/comment_tag_list',{
+	        dataType:'json',//服务器返回json格式数据
+	        type:'get',//HTTP请求类型
+	        timeout:10000,//超时时间设置为10秒
+	        success:function(data){
+	        	
+	            data.data.map(function(item){
+	            	
+	                item.cho=false;
+	            })
+	            self.mark=data.data;
+	            console.log(self.mark)
+	        }
+	    });
+	}
 </script>
 
 <!-- 微信分享 -->
@@ -253,6 +355,7 @@ $this->wechat->jsApiSDK();
     }
 </script>
 {/if}
+
 
 
 </body>

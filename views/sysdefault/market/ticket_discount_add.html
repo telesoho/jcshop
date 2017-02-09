@@ -20,19 +20,29 @@
 				<tr>
 					<th>优惠券类型：</th>
 					<td>
-						<label class='attr'><input type='radio' name='type' value='1' checked=checked onchange="changeType(this);"/>折扣券</label>
-						<label class='attr'><input type='radio' name='type' value='2' onchange="changeType(this);"/>抵扣券</label>
-						<label class='attr'><input type='radio' name='type' value='3' onchange="changeType(this);"/>包邮抵扣券</label>
+						<label class='attr'><input type='radio' name='type' value='1' checked=checked onchange="page.changeType(this);"/>折扣券</label>
+						<label class='attr'><input type='radio' name='type' value='2' onchange="page.changeType(this);"/>抵扣券</label>
+						<label class='attr'><input type='radio' name='type' value='3' onchange="page.changeType(this);"/>包邮抵扣券</label>
+						<label class='attr'><input type='radio' name='type' value='4' onchange="page.changeType(this);"/>赞助全免券</label>
 					</td>
 				</tr>
-				<tr id="ratio">
+				<tr class="ticket_type" style="display:none;">
 					<th>折扣比例：</th>
 					<td><input type='text' class='small' pattern='float' alt='必须填写数字' name='ratio' /><label>* 请填写折扣券折扣数（必须0~1之间的数值）例：0.85</label></td>
 				</tr>
-				<tr style="display:none;" id="money">
+				<tr class="ticket_type" style="display:none;">
 					<th>抵扣金额：</th>
-					<td><input type='text' class='small' pattern='int' alt='必须填写数字' name='money' /><label>* 请填写抵扣券抵扣金额</label></td>
+					<td><input type='text' class='small' pattern='int' alt='必须填写数字' name='money1' /><label>* 请填写抵扣券抵扣金额</label></td>
 					<label>* 最高抵扣金额3000</label>
+				</tr>
+				<tr class="ticket_type" style="display:none;">
+					<th>抵扣金额：</th>
+					<td><input type='text' class='small' pattern='int' alt='必须填写数字' name='money2' /><label>* 请填写抵扣券抵扣金额</label></td>
+					<label>* 最高抵扣金额3000</label>
+				</tr>
+				<tr class="ticket_type" style="display:none;">
+					<th>优惠规则：</th>
+					<td>使用该优惠券后金额全免</td>
 				</tr>
 				<tr>
 					<th>有效时间段：</th>
@@ -72,19 +82,22 @@
 		$('[name="value"]').attr('readonly',true);
 		$('[name="value"]').css('background','#bbb');
 	}
+	
+	$(function () {
+		page.init(); //初始化
+	});
 
-	function changeType(obj) {
-		var thisObj = $(obj);
-		switch( thisObj.val() ){
-			case '1':
-				$('#ratio').show();
-				$('#money').hide();
-				break;
-			case '2':
-			case '3':
-				$('#ratio').hide();
-				$('#money').show();
-				break;
-		}
-	}
+	var page = {
+		loading 	: false,
+		//初始化
+		init 		: function () {
+			page.changeType();
+		},
+		//修改优惠券类型
+		changeType 	: function (obj) {
+			var thisVal = $('input[name=type]:checked').val();
+			$('tr.ticket_type').eq(thisVal-1).show().siblings('tr.ticket_type').hide();
+		},
+	};
+
 </script>

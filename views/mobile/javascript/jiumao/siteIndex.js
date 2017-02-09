@@ -10,9 +10,9 @@ var Request = new Object();
 			time_xian();
 		}
 //时间  倒计时	
-var hours = 0;
-var minutes = 0;
-var seconds = 0;
+var hours = "00";
+var minutes = "00";
+var seconds = "00";
 var _time = 0;
 var data = 0;
 var vm = new Vue({
@@ -56,7 +56,8 @@ var vm = new Vue({
         //图文专辑
         article_:[],
         //专区
-        zhuan_index:[]
+        zhuan_index:[],
+        time_id:0
     },
     computed: {
         searth_pla: function (){
@@ -93,7 +94,6 @@ var vm = new Vue({
     	clear_pull();
         var self=this;
         hotSearth(self);
-         index_home(self);
         if(getSession('banner')&&getSession("articleDetail")&&getSession("article_category_list")){
             self.placeHolder=getItem('placeHolder');
             self.showMessage=true;
@@ -121,7 +121,7 @@ var vm = new Vue({
         });
         $("#search_").click(function(){
         	clearInterval(times);
-        	$("#modalid-search").attr("class", "show"); 
+        	$("#modalid-search").attr("class", "show");
         });
         $("#search").focus(function(){
           		$("#nav-slider").hide();
@@ -219,9 +219,6 @@ var vm = new Vue({
 			removeSessionItem("week_new_info");
     		window.location.href = "/redesign/week_new";
     	},
-    	scene_pavilion:function(){
-//  		window.location.href = "/redesign/scenepavilion"
-    	},
     	guan:function(){
     		window.location.href = "/site/article_list";
     	},
@@ -234,6 +231,9 @@ var vm = new Vue({
     	},
     	scene_pavilion:function(){
     		window.location.href = "/ucenter/error";
+    	},
+    	Timed_to_:function(){
+    		window.location.href = "/site/time_purchase?id="+this.time_id;
     	}
     }
 })
@@ -293,6 +293,7 @@ function index_home(self){
         timeout: 10000,
         success: function (data) {
         	console.log(data.data);
+        	self.time_id = data.data.speed.id
         	data.data.article_list.map(function(item){
         		if(item.is_favorite == 1){
         			item.num_color = true;
@@ -333,6 +334,13 @@ function index_home(self){
 					data = parseInt(hours/24);
 					hours = parseInt(hours%24)
 				}
+				if(seconds<10){
+					seconds = "0"+seconds;
+				}if(minutes<10){
+					minutes = "0"+minutes;
+				}if(hours<10){
+					hours = "0"+hours;
+				}
 				self.hours = hours;
 				self.minutes = minutes;
 				self.seconds = seconds;
@@ -344,13 +352,17 @@ function index_home(self){
 
 
 //定时器  限时购
-function time_xian(){
-	times = setInterval(function(){
-		if( all_time1<0 ){
-			clearInterval(times);
-		}
+function time_xian(self){
+	var self = self
+	times = setInterval(function(self){
+		
 		var myDate = new Date();
 		var data_time = myDate.getTime();
+		if( _time-parseInt(data_time/1000)<0 ){
+			clearInterval(times);
+			shop_time = false;
+		}
+		
 		var all_time1 = _time-parseInt(data_time/1000);
 		if(all_time1<=0){
 			shop_time = false;
@@ -360,7 +372,6 @@ function time_xian(){
 		if(all_time1 > 60) { 
 			minutes = parseInt(all_time1/60); 
 			seconds = parseInt(all_time1%60); 
-			// alert(theTime1+"-"+theTime); 
 			if(minutes > 60) { 
 			hours = parseInt(minutes/60); 
 			minutes = parseInt(minutes%60); 
@@ -376,11 +387,15 @@ function time_xian(){
 			}if(hours<10){
 				hours = "0"+hours;
 			}
-			vm.hours = hours;
-			vm.minutes = minutes;
-			vm.seconds = seconds;
+			console.log(self)
+//			self.hours = hours;
+//			self.minutes = minutes;
+//			self.seconds = seconds;
+			document.getElementById("timer_hhh").innerHTML = hours;
+			document.getElementById("timer_mmm").innerHTML = minutes;
+			document.getElementById("timer_sss").innerHTML = seconds
 			} 
-			
+//			
 		}
 		},1000)
 }

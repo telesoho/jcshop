@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="x5-orientation" content="portrait">
+    <title>
+        视频特辑
+    </title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/vedio.css?v=<?php echo time(); ?>" />
+</head>
+<body>
+    <section id="vedioList" v-cloak>
+        <loadding :mes="showloadding"></loadding>
+        <div class="banner">
+            <img src="/views/mobile/skin/default/image/jmj/vedio/banner.png" alt="" style="width:100%" />
+        </div>
+        <!--视频的顶部导航-->
+        <div class="headnav">
+            <ul id="scrollContainer">
+                <li v-for="item in headNav" @click="changeState(item)" :class="activeState===item.id?active:''" :id="'con'+item.id">{{item.name}}</li>
+            </ul>
+        </div>
+        <!--视频的专辑列表页面-->
+        <div class="content" v-if="contentInfo.length" style="padding-bottom:0.2rem">
+            <div class="item" v-for="(item,key) in contentInfo">
+                <div class="img" @click="linkTo(item.id)">
+                    <img :src="item.img" alt="" style="width:100%;height:2.8rem;" class="bgimg"/>
+                    <div class="bg"></div>
+                    <div class="play">
+                        <img src="/views/mobile/skin/default/image/jmj/vedio/play.png" alt="" style="width:0.88rem;" />
+                    </div>
+                    <div class="dis box">
+                        <p class="hidewrap distribution">{{item.title}}</p>
+                        <div class="watch">
+                            <img src="/views/mobile/skin/default/image/jmj/vedio/find.png" alt="" style="width:0.24rem" />
+                            <span>{{item.hits}}</span>
+                        </div>
+                    </div>
+                    <div class="collection" @click.stop="collection(item,key)">
+                        <img :src="!item.is_collect?src1:src2" style="width:0.32rem" alt="" />
+                        <span :style="!item.is_collect?color1:color2">{{item.collect}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--暂无更多专辑-->
+        <div class="flexbox empty_product" style="" v-if="infoState">
+            <div class="img">
+                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+            </div>
+            <div class="content" style="background:#eee">
+                <span style="color:#bbb">~</span>
+                <span style="color:#bbb">暂无更多专辑</span>
+                <span style="color:#bbb">~</span>
+            </div>
+        </div>
+    </section>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<!--加载动画载入-->
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
+
+<!-- 微信分享 -->
+{if:IClient::isWechat() == true}
+<?php
+    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+    $this->wechat = new wechat();
+$this->wechat->setConfig();
+$this->wechat->config['wechat_jsApiSDK']=1;
+$this->wechat->jsApiSDK();
+?>
+<script>
+    //微信分享
+    var wechat_share = {
+        title: '九猫大百货-日本同价-东京直邮', //标题
+        desc: '视频特辑', //描述
+        link: "{echo:IWeb::$app->config['image_host1']}/site/ticket_gain?pid={$this->user['user_id']}&aid={echo:(new Config('jmj_config'))->activity_id}&iid={echo:ISession::get('shop_identify_id')}",
+        imgUrl: "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
+    }
+    wechat.share();
+</script>
+{/if}
+<script type="text/javascript">
+    var stop=true;
+    var vm=new Vue({
+        el:"#vedioList",
+        data:{
+            showloadding:true,//加载动画控制函数
+            activeState:0,//导航的初始选中状态
+            page:1, //初始的页数
+            active:"active",//导航的激活状态
+             headNav:[],
+             contentInfo:[],
+//            收藏视频的数据
+            src1:"/views/mobile/skin/default/image/jmj/vedio/heart1.png",
+            src2:"/views/mobile/skin/default/image/jmj/vedio/heart_ed.png",
+            color1:"color:rgba(255,255,255,0.5)",
+            color2:"color:#ff5959",
+            infoState:false
+        },
+        computed:{
+
+        },
+        mounted:function(){
+            var self=this;
+            //初始化状态 导航的选中状态
+            this.activeState=getSession("vedioState")?getSession("vedioState"):0;
+            //判断是否需要重新请求数据
+            self.page=getItem("vedioDataPage")?getItem("vedioDataPage"):1;
+            self.contentInfo=getItem("vedioData")?getItem("vedioData"):[];//一个框框引发的血案
+            this.getData(self);
+        },
+        methods:{
+            changeState:function(item){
+                var oldId=getSession("vedioState");
+                if(oldId===item.id) return; //前端性能优化重复点击无效
+                var self=this;
+                pushSession("vedioState",item.id);
+                self.activeState=item.id;
+                self.showloadding=true;
+                //重置请求
+                self.contentInfo=[];
+                self.page=1;
+                removeItem("vedioData");
+                removeItem("vedioDataPage");
+                self.getData(self);
+                //自动滚动函数
+                var Scroll=function(){
+                     this.eid=document.getElementById("scrollContainer");//获取容器对象
+                     this.aid=document.getElementById("con"+item.id)
+                }
+                Scroll.prototype.scr=function(){
+//                    this.aid.offsetLeft（当前导航的位置）
+//                    this.eid.scrollLeft（容器的滚动位置）
+//                    this.eid.offsetWidth（容器的可视宽度）
+//                    this.aid.offsetWidth (导航的宽度)
+                   if((this.eid.scrollLeft+this.aid.offsetLeft+this.aid.offsetWidth)<this.eid.offsetWidth) {
+                       this.eid.scrollLeft-=this.aid.offsetWidth
+                   }else{
+                       this.eid.scrollLeft+=this.aid.offsetWidth;
+                   }
+                }
+                var tab=new Scroll();
+                tab.scr();
+            },
+            linkTo:function(id){
+                window.location.href="/site/vedio_detail/id/"+id;
+            },
+            collection: function(item,key){
+                var self=this;
+                $.ajax({
+                    url:"/apic/video_collect",
+                    data:{
+                        video_id:item.id,
+                        opt:item.is_collect+1
+                    },
+                    dataType:'json',//服务器返回json格式数据
+                    type:'get',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    success:function(data){
+                        if(item.is_collect==0){
+                            self.contentInfo[key].is_collect=1;
+                            self.contentInfo[key].collect++
+                        }else{
+                            self.contentInfo[key].is_collect=0;
+                            self.contentInfo[key].collect--
+                        }
+                        setItem('vedioData',self.contentInfo);
+                    }
+                })
+            },
+            getData:function(self){
+                $.ajax({
+                    url:"/apic/video_list",
+                    data:{
+                        cid:self.activeState,
+                        page:self.page
+                    },
+                    dataType:'json',//服务器返回json格式数据
+                    type:'get',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    success:function(data){
+                        self.showloadding=false;
+                        //在获取的数组前面插入全部心得
+                        data.data.cat_list.unshift({id:0,name:"全部视频"})
+                        self.headNav=data.data.cat_list;
+                        //处理所获取的视频列表数据
+                        if(data.data.video_list){
+                            self.contentInfo=self.contentInfo.concat(data.data.video_list)
+                        }
+                        //判断是否终止请求
+                        if(data.data.video_list.length==0){
+                            stop=false;
+                            self.infoState=true
+                        }else{
+                            stop=true;
+                            self.page++;
+                        }
+                        setItem('vedioData',self.contentInfo);
+                        setItem('vedioDataPage',self.page);
+                    }
+                })
+            }
+        }
+    })
+    $(window).bind('scroll', function() {
+        if ($(window).scrollTop() + $(window).height() +200 >= $(document).height() && $(window).scrollTop() > 50) {
+            if(stop==true){
+                stop=false;
+                vm.showloadding=true;
+                vm.getData(vm)
+            }
+        }
+    });
+</script>
+</body>
+
+</html>

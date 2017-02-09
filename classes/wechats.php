@@ -51,13 +51,17 @@ class wechats
      * @param $send_info
      */
     static function send_message_template($open_id, $type, $send_info){
-        $access_token = common::get_wechat_access_token();
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
+        $access_token      = common::get_wechat_access_token();
+        $url               = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
+        $site_config       = new Config('site_config');
+        $site_config_array = $site_config->getInfo();
+        $template_array    = $site_config_array['wechat_template_array'];
         switch ($type){
+            //优惠券
             case 'coupon':
                 $params = sprintf('{
                    "touser":"%s",
-                   "template_id":"CdwoXX4wo7wjp0i73Jn8H7TQNVJEmOCV6eeI268wb-g",
+                   "template_id":"%s",
                    "url":"%s",            
                    "data":{
                            "first": {
@@ -81,12 +85,12 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,IUrl::getHost(),$send_info['quantity'],$send_info['certificateNumbers'],'优惠券的有效期时间：自' . date('Y-m-d H:i:s') . '起7天之内');
+               }',$open_id,$template_array[$type],IUrl::getHost(),$send_info['quantity'],$send_info['certificateNumbers'],'优惠券的有效期时间：自' . date('Y-m-d H:i:s') . '起7天之内');
                 break;
             case 'shop':
                 $params = sprintf('{
                    "touser":"%s",
-                   "template_id":"jhVJZrhXm9quRXg-vSY6IVHDhZ69BywZb4SYblLAuXA",
+                   "template_id":"%s",
                    "url":"%s",            
                    "data":{
                            "first": {
@@ -110,12 +114,12 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,IUrl::getHost().'/site/index/rrd/'.$send_info['recommender_id']);
+               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index/rrd/'.$send_info['recommender_id']);
                 break;
             case 'sfz':
                 $params = sprintf('{
                    "touser":"%s",
-                   "template_id":"lZaBFAn9GH0eOUUKBy7laf5_AbOMWIMUweTDIPXUS7c",
+                   "template_id":"%s",
                    "url":"%s",            
                    "data":{
                            "first": {
@@ -135,12 +139,12 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,IUrl::getHost(),$send_info['order_no'],$send_info['accept_name'] . '___' . $send_info['mobile'] . '-->' . $send_info['sfz_name'] . '___' . $send_info['mobile'], $send_info['address']);
+               }',$open_id,$template_array[$type],IUrl::getHost(),$send_info['order_no'],$send_info['accept_name'] . '___' . $send_info['mobile'] . '-->' . $send_info['sfz_name'] . '___' . $send_info['mobile'], $send_info['address']);
                 break;
             case 'shiming':
                 $params = sprintf('{
                    "touser":"%s",
-                   "template_id":"e4FVRqsTUHdGYCfPe4H8N81c7CLIds_PDOhzGpB3I2U",
+                   "template_id":"%s",
                    "url":"%s",            
                    "data":{
                            "first": {
@@ -160,10 +164,46 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,IUrl::getHost().'/simple/credit',$send_info['order_no']);
+               }',$open_id,$template_array[$type],IUrl::getHost().'/simple/credit',$send_info['order_no']);
+                break;
+            case 'order_complete':
+                $params = sprintf('{
+                   "touser":"%s",
+                   "template_id":"%s",
+                   "url":"%s",            
+                   "data":{
+                           "first": {
+                               "value":"订单支付成功",
+                               "color":"#173177"
+                           },
+                           "keyword1":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "keyword2":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "keyword3":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "remark": {
+                               "value":"订单支付成功。您的宝贝很快就会飞过来咯！",
+                               "color":"#173177"
+                           }
+                   }
+               }',$open_id,$template_array[$type],IUrl::getHost().'/ucenter/index',date('Y-m-d h:i:s',time()),$send_info['goods_name'],$send_info['order_no']);
                 break;
         }
         $ret = common::http_post_json($url,$params);
-        common::log_write(print_r($ret,true));
+        $ret = json_decode($ret[1])->errcode;
+        if ($ret === 0){
+            common::log_write("消息推送成功$open_id" . print_r($ret,true));
+            return true;
+        } else {
+            common::log_write(__CLASS__ . __FUNCTION__ . print_r($ret,true));
+            return false;
+        }
     }
 }

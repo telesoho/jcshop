@@ -53,6 +53,21 @@ sit_products.css更改
 /**
 编辑地址样式
 **/
+.mui-input-row{
+	overflow-y: scroll;
+}
+.mui-input-row{
+	overflow-y: scroll;
+}
+#modalid77{
+	overflow-y: scroll;
+}
+.mui-content{
+	overflow-y: scroll;
+}
+#addressNew{
+	overflow-y: scroll;
+}
 .row_b_t{}
 #addressNew .title{font-size:0.28rem;padding:0.1rem 0.1rem;margin-bottom:0.1rem;}
 .row_margin{margin-top:0.13rem;}
@@ -67,10 +82,12 @@ sit_products.css更改
     font-size:0.3rem;
     padding-left:0.16rem;}
 
-#que_{margin-top: 1rem}
+#que_{height: 3.5rem;}
 .newAddrSub_position{width:100%;overflow:hidden; position: relative}
 .newAddrSub_position .submit_suc{width:100%;background:#f3026a;color:#fff;border:0;border-radius:0;height:1rem;font-size:0.36rem;}
-
+footer-fixed1{
+	
+}
 /**
 购物车new样式
 **/
@@ -193,11 +210,11 @@ sit_products.css更改
 #cart .left_cart{
 	border: 1px solid #999;
 	width: 45%;
-	height: 3rem;
+	height: 2rem;
 }
 #cart .left_cart div{
 	width: 80%;
-	height: 80%;
+	height: 60%;
 	margin: 0.1rem auto 0;
 	display: -webkit-flex;
 	-webkit-justify-content: center;
@@ -211,11 +228,11 @@ sit_products.css更改
 #cart .right_cart{
 	border: 1px solid #999;
 	width: 45%;
-	height: 3rem;
+	height: 2rem;
 }
 #cart .right_cart div{
 	width: 80%;
-	height: 80%;
+	height: 60%;
 	margin: 0.1rem auto 0;
 	display: -webkit-flex;
 	-webkit-justify-content: center;

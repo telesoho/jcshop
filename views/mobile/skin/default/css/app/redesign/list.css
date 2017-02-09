@@ -83,6 +83,7 @@ li{
 #list_shop ul li p{
 	font-size:0.26rem;
 	color:#1f1f1f;
+	line-height: 0.32rem;
 }
 #list_shop ul li .span2{
 	display: block;

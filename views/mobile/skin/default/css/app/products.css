@@ -16,12 +16,13 @@
 }
 .head #cart{
     display: inline-block;
-    margin-right:0.66rem;
+    margin-right:0.4rem;
     position:relative;
 }
 .head .backImg{
     width:5rem;
     text-align:left;
+    padding-left:0.34rem;
 }
 .head .home{
     display: inline-block;
@@ -119,10 +120,10 @@
     display: inline-block;
     background:#1f1f1f;
     border-radius:0.28rem;
-    padding:0 .1rem;
+    padding:0.05rem .1rem;
     width:auto;
     left:0;
-    height:0.28rem;
+    height:0.38rem;
     line-height:0.28rem;
     font-size:0.2rem;
     color:#ffffff;
@@ -261,7 +262,7 @@
     position:absolute;
     overflow: hidden;
     width:100%;
-    height:2.68rem;
+    height:2.78rem;
     z-index:2;
 }
 #relatebrand{
@@ -270,7 +271,7 @@
     width:100%;
     overflow-x: scroll;
     overflow-y: hidden;
-    height:3.03rem;
+    height:3.13rem;
     background:#fff;
     display: -webkit-flex;
     display: -webkit-box;
@@ -279,7 +280,7 @@
 .relateBrand .brandlist .item{
     display: inline-block;
     width:2.3rem;
-    height:2.93rem;
+    height:3.13rem;
     text-align:center;
 }
 .relateBrand .brandlist .item img{
@@ -370,6 +371,7 @@
     max-width:100%;
     margin:0 auto;
     height:auto;
+    display: block;
 }
 #goodsContent .img_logo{
     width:0.3rem;
@@ -692,4 +694,56 @@
 }
 #sheet.mui-popover {
     bottom:15% !important;
+}
+
+/*		分享商品				*/
+#hander{
+	animation:name 1s infinite;
+	-webkit-animation:name 1s infinite;
+}
+@keyframes name{
+	0%{-webkit-transform: translateY(0.2rem);}
+	50%{-webkit-transform: translateY(0);}
+	100%{-webkit-transform: translateY(0.2rem);}
+}
+@-webkit-keyframes name{
+	0%{-webkit-transform: translateY(0.2rem);}
+	50%{-webkit-transform: translateY(0);}
+	100%{-webkit-transform: translateY(0.2rem);}
+}
+			
+#share{
+	top: 6.89rem;
+}
+#backgrounds .tips{
+	position: absolute;
+	top: 40%;
+	left: 20%;
+	color:#fff;
+	font-size:0.4rem;
+	opacity: 0.8;
+}
+/*          限时购                  */
+#time_buy{
+	width: 100%;
+	height: 0.9rem;
+	display: -webkit-flex;
+	-webkit-justify-content: space-between;
+	-webkit-align-items: center;
+	background: rgba(255,47,92,0.2);
+}
+#time_buy p{
+	font-size: 0.26rem;
+	color:#484848;
+	margin-left: 0.4rem;
+}
+#time_buy div{
+	margin-right: -3rem;
+}
+#time_buy div span{
+	font-size:0.26rem;
+	color:#484848;
+}
+#time_buy img{
+	margin-right: 0.39rem;
 }

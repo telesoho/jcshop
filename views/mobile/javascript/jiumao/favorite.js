@@ -24,7 +24,7 @@ var vm = new Vue({
             else if(this.state==1&&this.infoMessage.article_data!=''){
                 return "background:#f5f5f5";
             }else{
-                return "background:#fff";
+                return "background:#f5f5f5";
             }
         },
         // 读取和设置

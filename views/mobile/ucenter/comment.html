@@ -272,6 +272,7 @@ $this->wechat->jsApiSDK();
                         success: function (res1) {
                             self.imgLength++;
                             self.choImg.push(res1.serverId);
+                            console.log(res1.serverId);
                         }
                     });
                 })
