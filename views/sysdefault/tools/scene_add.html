@@ -1,0 +1,180 @@
+{js:my97date}
+
+<div class="headbar">
+    <div class="position"><span>场景馆管理</span><span>></span><span>场景馆列表</span><span>></span><span>添加</span></div>
+</div>
+<div class="content_box">
+    <div class="content form_content">
+        <form action="{url:/tools/scene_add}" method="post" name='video_update' enctype="multipart/form-data">
+            <table class="form_table">
+                <col width="150px"/>
+                <col/>
+                <tr>
+                    <th>标题：</th>
+                    <td >
+                        <label class='attr'>
+                            <input name='title' type='text' value="" class="normal" />
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>内容：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='content' type='text' value="" class="normal" />
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>封面：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='cover' type='file' value=""/><br />
+                        </label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>场景图：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='img' type='file' value=""/><br />
+                        </label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>排序：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='sort' type='text' value="{$data['sort']}" class="small" />
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>状态：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='status' type='radio' value="0" />禁用
+                            <input name='status' type='radio' value="1" checked/>启用
+                        </label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>设置抢购商品：</th>
+                    <td>
+                        <table class='border_table' style='width:65%'>
+                            <button type='button'
+                                    onclick="searchGoods('{url:/block/search_goods/type/checkbox}',page.searchGoodsCallback);"
+                                    class='btn'><span>选择商品</span></button>
+                            <thead>
+                            <tr>
+                                <th>商品编号</th>
+                                <th>X坐标</th>
+                                <th>Y坐标</th>
+                                <th>图片</th>
+                                <th>名称</th>
+                                <th>原价格</th>
+                                <th>状态</th>
+                                <th>删除</th>
+                            </tr>
+                            </thead>
+                            <tbody id="goodsListBox">
+
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <button class="submit" type='submit'><span>确 定</span></button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<!--商品模板-->
+<script type="text/html" id="goodsItemTemplate">
+    <tr class="goodsInfo">
+        <td><%=templateData['goods_no']%><input name="goods_id[<%=templateData['goods_id']%>]" type="hidden" value="<%=templateData['goods_id']%>"></td>
+        <td><input name="coord_x[<%=templateData['goods_id']%>]" class="small" type="text" value=""></td>
+        <td><input name="coord_y[<%=templateData['goods_id']%>]" class="small" type="text" value=""></td>
+        <td> <img src="<?php echo IWeb::$app->config['image_host']; ?>/<%=templateData['img']%>"  style="max-height:100px;max-width:100px;" /></td>
+        <td><%=templateData['name']%></td>
+        <td><%=templateData['sell_price']%></td>
+        <td><%if(templateData['is_del'] =='0'){%>
+            已上架
+            <%}%>
+            <%if(templateData['is_del'] =='1'){%>
+            已删除
+            <%}%>
+            <%if(templateData['is_del'] =='2'){%>
+            已下架
+            <%}%>
+            <%if(templateData['is_del'] =='3'){%>
+            申请上架中
+            <%}%></td>
+        <td><img src="<?php echo $this->getWebSkinPath().'images/admin/icon_del.gif';?>" alt="删除" title="删除" onclick="page.delGoods(this);" /></td>
+    </tr>
+</script>
+
+<script type='text/javascript'>
+
+window.onload = function(){
+    page.init();
+};
+
+var page = {
+    loading     : false,
+    //初始化
+    init        : function(){
+    },
+    //更新
+    update      : function (obj) {
+        if(page.loading==true) return false;
+        page.loading=true;
+        var thisForm 	= $('form[name="video_update"]');
+        $.post(thisForm.attr("action"),thisForm.serialize(),function(data,status){
+            if(status=='success'){
+                console.log(data);
+                if(data.code==0){
+                    _inform('操作成功',function () {
+                        window.location.href="{url:/tools/video_list}";
+                    });
+                }
+                _inform('操作失败');
+            }
+			page.loading = false;
+        },'json');
+    },
+    //输入筛选商品的条件
+    searchGoodsCallback: function (goodsList) {
+        var result = [];
+        goodsList.each(function(k,v){
+            var temp = $.parseJSON($(this).attr('data'));
+            result.push(temp);
+        });
+        page.createGoodsList(result);
+    },
+    //创建商品数据
+    createGoodsList: function (goodsList) {
+        if (goodsList) {
+            for(var i in goodsList){
+                var templateHTML = template.render('goodsItemTemplate',{"templateData":goodsList[i]});
+                $('#goodsListBox').append(templateHTML);
+            }
+        }
+    },
+    //删除单条商品
+    delGoods 				:function(obj){
+        $(obj).parents('.goodsInfo').remove();
+    },
+};
+
+</script>
