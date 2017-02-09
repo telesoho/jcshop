@@ -430,4 +430,33 @@ class Common{
             return json_encode(['ret'=>true,'msg'=>'恢复成功' . $path]);
         }
     }
+
+    static public function get_wechat_qrcode($id, $type = 1){
+        $access_token = common::get_wechat_access_token();
+        if ($type === 1){
+            $action_name = 'QR_SCENE';
+            $params = array(
+                'expire_seconds' => 2592000,
+                'action_name' => '',
+                'action_info' => array(
+                    'scene'=>['scene_id'=>$id]
+                )
+            );
+        } elseif($type === 2) {
+            $action_name = 'QR_LIMIT_SCENE';
+            $params = array(
+                'action_name' => '',
+                'action_info' => array(
+                    'scene'=>['scene_id'=>$id]
+                )
+            );
+        }
+        $ret = self::curl_http("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=$access_token",$params);
+        $ticket = json_decode($ret)->ticket;
+        $url = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=$ticket";
+        $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
+        $dir .= '/share_qrcode';
+        $image_path = common::save_url_image($url,$dir);
+        return $image_path;
+    }
 }
