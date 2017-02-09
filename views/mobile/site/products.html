@@ -175,8 +175,8 @@
 			</section>
 			<!--喵粉心得，待添加-->
 			<!--上拉进入商品详情-->
-			<section class="pull" :style="toBottom" v-if="showTop1">
-				<img src="/views/mobile/skin/default/image/jmj/product/pull.png" :style="rotateState?styleTop2:styleTop1" alt="" />
+			<section class="pull" :style="'-webkit-'+toBottom" v-if="showTop1">
+				<img src="/views/mobile/skin/default/image/jmj/product/pull.png" :style="'-webkit-'+(rotateState?styleTop2:styleTop1)" alt="" />
 				<div class="content">上拉加载商品详情</div>
 			</section>
             <div style="height:1rem;background:#f5f5f5"></div>
@@ -185,7 +185,7 @@
 	<div id="pullrefresh2" class="v-container v-container2" v-if="showContainer2" @touchstart="secondContainerMoveStart" @touchmove="secondContainerMove" @touchend="endtouch2">
 		<div class="scro scro1" style="background:#f5f5f5;">
 			<div class="topTips" v-if="showTop" :style="topHeight">
-				<img src="/views/mobile/skin/default/image/jmj/product/pull.png" :style="rotateState?styleTop1:styleTop2" alt="" />
+				<img src="/views/mobile/skin/default/image/jmj/product/pull.png" :style="'-webkit-'+(rotateState?styleTop1:styleTop2)" alt="" />
 				<span>下拉进入上一页</span>
 			</div>
 			<!--商品的图文详情-->
@@ -399,8 +399,8 @@ var minutes,hours,seconds;
             showTop1:true, //第一页底部状态 初始为false
 			topHeight:"height:"+0+"px", //下拉的高度 与手指移动的位置差不多
             toBottom:"height:"+1+"rem",//上拉的高度
-			styleTop1:"-webkit-transform:rotate(0deg);",
-			styleTop2:"-webkit-transform:rotate(180deg);",
+			styleTop1:"transform:rotate(0deg);",
+			styleTop2:"transform:rotate(180deg);",
 			rotateState:false,
 			car_count:0,
 			newTop:0,
@@ -522,7 +522,7 @@ var minutes,hours,seconds;
 //					e.preventDefault(); //阻止缺省事件
 					this.showTop1=true;
 					this.rotateState=true;
-					this.toBottom="height:"+1+"rem;max-height:1rem;-webkit-transition:transform 0.2s linear";
+					this.toBottom="transition:-webkit-transform 0.2s linear;height:"+1+"rem;max-height:1rem;";
 					pushSession("ProductsScrollTop",docHeight-windowHeight);
 				}else{
 					//回复默认事件

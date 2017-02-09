@@ -25,7 +25,7 @@ li{
 }
 #header .left_youbalance{
 	padding:0 0.39rem ;
-	border-right: 1px dashed #fff;
+	border-right: 1px dashed rgba(255,255,255,0.3);
 	text-align: center;
 }
 #header p{
