@@ -3331,7 +3331,7 @@ class Apic extends IController{
                 $this->json_echo(['ret'=>false,'msg'=>'优惠券生成失败']);
             }
         } else {
-            $this->json_echo(['ret'=>false,'msg'=>"$num 位好友领取成功"]);
+            $this->json_echo(['ret'=>false,'msg'=>"您无法领取礼品优惠券，$num 位好友领取成功"]);
         }
     }
 }
