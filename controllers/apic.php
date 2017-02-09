@@ -1366,7 +1366,7 @@ class Apic extends IController{
                     $sqlData['media_id1'] = $image1;
                     $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
                     $image1 = common::save_url_image($url1,$dir,1);
-                    common::save_wechat_resource($sqlData['media_id1'], $image2);
+                    common::save_wechat_resource($sqlData['media_id1'], $image1);
                 }
             }
             if (!empty($image2)){

@@ -456,6 +456,7 @@ class Common{
         $url = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=$ticket";
         $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
         $dir .= '/share_qrcode';
-        common::save_url_image($url,$dir);
+        $image_path = common::save_url_image($url,$dir);
+        return $image_path;
     }
 }

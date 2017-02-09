@@ -913,4 +913,10 @@ class Site extends IController{
     /**
      * ↑*********贝海*********↑
      */
+
+    function test(){
+        $id = IFilter::act(IReq::get('id'), 'int');
+        $image_path = common::get_wechat_qrcode('1');
+        var_dump($image_path);
+    }
 }
