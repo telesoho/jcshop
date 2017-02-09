@@ -208,7 +208,7 @@ class nysoDataImport extends pluginBase
 			if($ware_house_name && $jcItem["ware_house_name"] !== $ware_house_name) {
 				$e = new Exception("订单中存在不在同一仓库的商品");
 				nysochina::$log->err($e->getMessage(), $jcOrder);
-				throw $e;				
+				throw $e;
 			}
 			
 			if($delivery_code && $jcItem["delivery_code"] !== $delivery_code) {

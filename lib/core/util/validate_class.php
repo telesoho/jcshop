@@ -160,4 +160,16 @@ class IValidate
     {
     	return (bool)preg_match("|^[\w\.\-<>=\!\x{4e00}-\x{9fa5}\s*]+$|u",$str);
     }
+
+
+	/**
+	 * @brief 按指定格式验证日期字符串是否是正确的日期
+	 * @param string $date 自定义格式的日期
+	 * @param string $format 日期格式 
+	 * IFilter::isValidDateTime("2012-12-21", "Y-m-d");
+	 */
+	public static function dateTime($date, $date_format) {
+		$dateInfo = date_parse_from_format($date_format, $date);
+		return (bool)($dateInfo['error_count'] == 0);
+	}
 }

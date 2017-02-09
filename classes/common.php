@@ -431,11 +431,11 @@ class Common{
         }
     }
 
-    static public function get_wechat_qrcode($id, $type = 1){
+    static public function get_wechat_qrcode($scene_id, $relation_id,$type = 1){
         $access_token = common::get_wechat_access_token();
         $params = array(
             'action_info' => array(
-                'scene'=>['scene_id'=>$id]
+                'scene'=>['scene_id'=>$scene_id]
             )
         );
         if ($type === 1){
@@ -445,17 +445,22 @@ class Common{
             $params['action_name'] = 'QR_LIMIT_SCENE';
         }
         $ret = self::http_post_json("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=$access_token",json_encode($params));
-        $errcode = json_decode($ret[1])->errcode;
-        if ($errcode !== 0){
-            common::log_write('生成分享二维码失败' . print_r($ret,true) . ",id$id", 'ERROR');
+        if (isset(json_decode($ret[1])->errcode)){
+            self::log_write('生成分享二维码失败' . print_r($ret,true) . "*scene_id*$scene_id*", 'ERROR');
             return false;
         }
         $ticket = json_decode($ret[1])->ticket;
-        $url = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=$ticket";
-        $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
+        $url    = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=$ticket";
+        $dir    = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
         $dir .= '/share_qrcode';
-        $image_path = common::save_url_image($url,$dir);
-        common::log_write(json_decode($ret) . '-----' . $image_path,'INFO','share_qrcode');
-        return $image_path;
+        $image_path = common::save_url_image($url, $dir);
+        $wechat_qrcode_model = new IModel('wechat_qrcode');
+        $wechat_qrcode_model->setData(['image_path'=>$image_path,'relation_id'=>$relation_id,'scene_id'=>$scene_id,'ticket'=>$ticket]);
+        $ret = $wechat_qrcode_model->add();
+        if ($ret){
+            return $image_path;
+        } else {
+            return false;
+        }
     }
 }

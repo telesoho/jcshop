@@ -24,7 +24,40 @@ return array(
 			'type'   => 'row',
 		)
 	),
-    //取商品数据通过
+
+	//取九猫商品数据
+	'getJcshopGoodsInfoForApib' => array(
+		'query' => array(
+			'name'   => 'goods as go',
+			'where'  => 'go.sku_no in (#nos#) and go.is_del = 0 and go.supplier_id = 0 ',
+			'join'	 => 'left join goods_supplier as gs on go.supplier_id = gs.supplier_id and go.sku_no = gs.sku_no ',
+			'fields' => 'go.name as SkuName,go.goods_no as SkuNo, go.sell_price as SettlePrice,go.weight as Weight,go.goods_no as BarCode, go.content as Details, go.market_price as RetailPrice,'
+						.'gs.duties_rate as Rate,gs.ware_house_name as WareHouseName,gs.delivery_code as DeliveryCode',
+		)
+	),
+
+	//取九猫商品库存
+	'getJcshopStockForApib' => array(
+		'query' => array(
+			'name'   => 'goods as go',
+			'where'  => 'go.sku_no in (#nos#) and go.is_del = 0 and go.supplier_id = 0 ',
+			'fields' => 'go.sku_no as SkuNo, go.store_nums as Quantity',
+		)
+	),
+
+	//取九猫商品数据
+	'getGoodsInfoBySkuNo' => array(
+		'query' => array(
+			'name'   => 'goods as go',
+			'where'  => 'go.sku_no = "#sku_no#" and go.is_del = 0 and go.supplier_id = 0 ',
+			'join'	 => 'left join goods_supplier as gs on go.supplier_id = gs.supplier_id and go.sku_no = gs.sku_no ',
+			'fields' => 'go.id,go.name,go.goods_no,go.sell_price,go.weight,go.content,go.market_price,go.img,'
+						.'gs.duties_rate,gs.ware_house_name,gs.delivery_code',
+			'type'	=> 'row',
+		)
+	),
+	
+    //取商品数据通过商品编号
     'getGoodsInfoByGoodsNO' => array(
         'query' => array(
             'name'   => 'goods as go',

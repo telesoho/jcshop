@@ -618,6 +618,7 @@ class wechat extends pluginBase
 立刻点击下方“九猫大百货”逛逛逛吧~！
 
 偷偷告诉你：添加九猫个人微信：jiumaojia001 加入九猫VIP群，群里发放优惠券哦~');
+                $this->add_qrcode_follow($postObj->EventKey,$postObj->FromUserName);
             }
                 break;
 		}

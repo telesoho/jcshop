@@ -39,4 +39,26 @@ class area
 		//====
 		return $result;
 	}
+
+	/**
+	 * 根据地名获取ID
+	 * id('省', '市', '区', '县' ...)
+	 */
+	public static function id() {
+		$result     = array();
+		$paramArray = func_get_args();
+
+		$areaDB = new IModel('areas');
+		$parent_id = '0';
+		foreach($paramArray as $area_name) {
+			$area = $areaDB->getObj("parent_id = $parent_id and area_name = '$area_name'", "area_id");
+			if($area) {
+				$result[$area_name] = $area['area_id'];
+				$parent_id = $area['area_id'];
+			} else {
+				break;
+			}
+		}
+		return $result;
+	}
 }
