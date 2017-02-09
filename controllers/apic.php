@@ -1668,10 +1668,9 @@ class Apic extends IController{
 			array('voice_media_id', 'string', 0, '微信语音ID'),
 		));
 		$user_id = $this->tokenCheck();
-		Common::dblog($param);
 		//检测
-		$result = Comment_Class::can_comment($param['id'], $user_id);
-		if(is_string($result)) $this->returnJson(array('code' => '-1', 'msg' => $result));
+		$comment = Comment_Class::can_comment($param['id'], $user_id);
+		if(is_string($comment)) $this->returnJson(array('code' => '-1', 'msg' => $comment));
 		
 		/* 通过微信下载图片和语音 */
 		$wechat = new wechat();
@@ -1690,6 +1689,7 @@ class Apic extends IController{
 		
 		/* 开始评论 */
 		$modelComment = new IModel("comment");
+		$listComment = $modelComment->query('order_no='.$comment['order_no'].' AND status=0');
 		$modelComment->setData(array(
 			'point'        => 5,
 			'contents'     => '',
@@ -1699,19 +1699,19 @@ class Apic extends IController{
 			'image'        => implode(',', $data['image']),
 			'voice'        => $data['voice'],
 		));
-		$rel = $modelComment->update('id='.$param['id']);
+		$rel = $modelComment->update('order_no='.$comment['order_no'].' AND status=0');
 		if(!$rel) $this->returnJson(array('code' => '003008', 'msg' => $this->errorInfo['003008']));
 		
 		/* 更新商品信息 */
-		$infoComment = $modelComment->getObj('id = '.$param['id']);
+		$goods = array();
+		foreach($listComment as $k => $v) $goods[] = $v['goods_id'];
 		$modelGoods  = new IModel('goods');
 		$modelGoods->setData(array(
 			'comments' => 'comments + 1',
-			'grade'    => 'grade + '.$infoComment['point'],
+			'grade'    => 'grade + 5',
 		));
-		$modelGoods->update('id = '.$infoComment['goods_id'], array('grade', 'comments'));
+		$modelGoods->update('id IN ('.explode(',',$goods).')', array('grade', 'comments'));
 		
-		Common::dblog('ssss');
 		$this->returnJson(array('code' => '0', 'msg' => 'ok'));
 	}
 	
