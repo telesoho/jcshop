@@ -820,7 +820,12 @@ function time_xian(){
 			}if(hours<10){
 				hours = "0"+hours;
 			}
-			document.getElementById("time_shop_buy").innerHTML = "结束倒计时 "+hours+":"+minutes+":"+seconds;
+			if(document.getElementById("time_shop_buy")){
+				document.getElementById("time_shop_buy").innerHTML = "结束倒计时 "+hours+":"+minutes+":"+seconds;
+			}
+			else{
+				return;
+			}
 //			console.log(vm.times)
 			} 
 			
