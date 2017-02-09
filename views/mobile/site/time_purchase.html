@@ -16,7 +16,7 @@
       <header class="headerTitle flexbox" v-cloak>
           <div :class="initState==key?class2:class1" v-for="(item,key) in head" @click="changeState(key,item,item.id)">
               <div class="time">{{item.time}}</div>
-              <div class="tip">{{head[key].now==1?"抢购中":"准备开抢"}}</div>
+              <div class="tip">{{head[key].now==2?"抢购中":(head[key].now==1?"准备开抢":"明天再来")}}</div>
           </div>
       </header>
     <div class="content" v-if="initState==0">
@@ -43,7 +43,7 @@
                     </div>
                     <div class="box bottom">
                         <div class="num">
-                            仅剩 <span>{{head[0].now == 1?(item.nums-item.sale_nums>10? (parseInt(head[0].numaa[key]/item.nums*100))+"%" :item.nums-item.sale_nums):(item.nums-item.sale_nums)/item.nums*100+"%"}}</span>
+                            仅剩 <span>{{head[0].now == 2?(item.nums-item.sale_nums>10? (parseInt(head[0].numaa[key]/item.nums*100))+"%" :item.nums-item.sale_nums):(item.nums-item.sale_nums)/item.nums*100+"%"}}</span>
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
@@ -80,7 +80,7 @@
                           </div>
                           <div class="box bottom">
                                 <div class="num" :id="key">
-                                    仅剩 <span>{{head[1].now == 1?(item.nums-item.sale_nums>10? (parseInt(head[1].numaa[key]/item.nums*100))+"%" :item.nums-item.sale_nums):(item.nums-item.sale_nums)/item.nums*100+"%"}}</span>
+                                    仅剩 <span>{{head[1].now == 2?(item.nums-item.sale_nums>10? (parseInt(head[1].numaa[key]/item.nums*100))+"%" :(item.nums-item.sale_nums)/item.nums*100+"%"):(item.nums-item.sale_nums)/item.nums*100+"%"}}</span>
                                     <div class="bg" :style="item.style">
                                     </div>
                                 </div>
@@ -116,8 +116,8 @@
                                 <span style="font-size:0.26rem">{{item.market_price}}</span></s></div>
                     </div>
                     <div class="box bottom">
-                        <div class="num">
-                            仅剩 <span>{{head[2].now == 1?(item.nums-item.sale_nums>10?(parseInt(head[2].numaa[key]/item.nums*100))+"%" :(item.nums-item.sale_nums)/item.nums*100+"%"):(item.nums-item.sale_nums)/item.nums*100+"%"}}</span>
+                        <div class="num" :name="(parseInt(item.nums)-item.sale_nums)/parseInt(item.nums)*100">
+                            仅剩 <span>{{head[2].now == 2?((item.nums-item.sale_nums>10?(parseInt(head[2].numaa[key]/item.nums*100))+"%" :(item.nums-item.sale_nums)/item.nums*100+"%")):((parseInt(item.nums)-item.sale_nums)/parseInt(item.nums)*100+"%")}}</span>
                             <div class="bg" :style="item.style">
                             </div>
                         </div>
@@ -152,6 +152,7 @@
 //          head:[{time:'',tip:'明天再来',now:0},
 //              {time:'',tip:'抢购中',now:0},
 //              {time:'',tip:'准备开抢',now:0}],
+			nows:0,
             head:[{time:'',tip:'',now:0,id:0,shi_time:"false",numaa:[]},
                 {time:'',tip:'',now:0,id:0,shi_time:"false",numaa:[]},
                 {time:'',tip:'',now:0,id:0,shi_time:"false",numaa:[]}],
@@ -175,9 +176,12 @@
         },
         computed: {
             new_data0: function(){
-                
+//              console.log(vm.head[0].now);
+//              console.log(vm.head[1].now)
+//              console.log(vm.head[2].now)
                 for(var i = 0;i<this.info0.length;i++){
-                	 if(vm.head[0].now == 0){
+                	
+                	 if(vm.head[0].now != 2){
                 		this.info0[i].style="width:"+(100-(this.info0[i].nums-this.info0[i].sale_nums)*100/this.info0[i].nums)+"%";
                 	}else{
                 		 this.info0[i].style="width:"+((this.info0[i].nums-this.info0[i].sale_nums>10)? (100-vm.head[0].numaa[i]*100/this.info0[i].nums) :(100-(this.info0[i].nums-this.info0[i].sale_nums)*100/this.info0[i].nums)) +"%";
@@ -187,7 +191,7 @@
             },
             new_data1: function(){
             	for(var i = 0;i<this.info.length;i++){
-                	 if(vm.head[1].now == 0){
+                	 if(vm.head[1].now != 2){
                 		this.info[i].style="width:"+(100-(this.info[i].nums-this.info[i].sale_nums)*100/this.info[i].nums)+"%";
                 	}else{
                 		 this.info[i].style="width:"+((this.info[i].nums-this.info[i].sale_nums>10)? (100-vm.head[1].numaa[i]*100/this.info[i].nums ):(100-(this.info[i].nums-this.info[i].sale_nums)*100/this.info[i].nums))+"%";
@@ -198,7 +202,7 @@
             },
             new_data2: function(){
                 for(var i = 0;i<this.info2.length;i++){
-                	 if(vm.head[2].now == 0){
+                	 if(vm.head[2].now != 2){
                 		this.info2[i].style="width:"+(100-(this.info2[i].nums-this.info2[i].sale_nums)*100/this.info2[i].nums)+"%";
                 		console.log(this.info2[i].style)
                 	}else{
@@ -219,15 +223,21 @@
 //			}else if(statusOrder == 5){
 //				this.initState = 2;
 //			}
-			var ss = new Date();
-			var sss =parseInt(ss.getTime()/1000);
-			if(1486515600<sss<1486540800){
-				this.initState = 0;
-			}else if(1486540800<sss<1486555200){
-				this.initState = 1;
-			}else if(1486555200<sss<1486569599){
-				this.initState = 2;
-			}
+//			var ss = new Date();
+//			var sss =parseInt(ss.getTime()/1000);
+//			
+//			if(sss < 1486540800){
+//				this.initState = 0;
+//				console.log(0)
+//			}else if(1486540800<=sss<1486555200){
+//				console.log(sss)
+//				this.initState = 1;
+//				console.log(1)
+//			}else if(1486555200<=sss<1486569599){
+//				console.log(sss-1486555200)
+//				this.initState = 2;
+//				console.log(2)
+//			}
 			time_xian(self);
 			
 			
@@ -259,7 +269,11 @@
 	        	time_id:statusOrder?statusOrder:""
 	        },
 	        success: function (data) {
-	        	console.log(data)
+	        	console.log(data.data);
+	        	self.nows = data.data.now;
+	        	
+	        	
+	        	
 	        	if(vm.initState == 0){
 	        		vm.info0 = data.data.goods_list;
 	        	}else if(vm.initState == 1){
@@ -276,10 +290,16 @@
 //	        			console.log(tt - data.data.time_list[i].start_time);
 //	        			console.log(new Date(parseInt(tt - data.data.time_list[i].start_time)).getHours());
 //	        		}
-					
+					if( self.nows == data.data.time_list[0].id){
+		        		self.initState = 0;
+		        	}else if(self.nows == data.data.time_list[1].id){
+		        		self.initState = 1;
+		        	}else if(self.nows == data.data.time_list[2].id){
+		        		self.initState = 2;
+		        	}
 	        		var timestamp4 = new Date(parseInt(data.data.time_list[i].start_time)*1000);//直接用 new Date(时间戳) 格式转化获得当前时间
 					vm.head[i].time = timestamp4.toTimeString().substr(0, 8); 
-					vm.head[i].now =  data.data.time_list[i].now;
+					vm.head[i].now =  data.data.time_list[i].conduct;
 					vm.head[i].id =  data.data.time_list[i].id;
 					if(data.data.time_list[i].start_time<tt){
 						vm.head[i].shi_time = true;
