@@ -3325,13 +3325,13 @@ class Apic extends IController{
             $ticket_access_model->setData(['user_id' => $user_id, 'ticket_id' => $ticket_id, 'status' => 1, 'from' => $from, 'create_time' => date('Y-m-d H:i:s')]);
             $ret = $ticket_access_model->add();
             if ($ret){
-                die(json_encode(['ret'=>true,'msg'=>'在《个人中心》->《我的优惠券》中查看优惠券']));
+                $this->json_echo(['ret'=>true,'msg'=>'在《个人中心》->《我的优惠券》中查看优惠券']);
             } else {
                 common::log_write("$user_id 优惠券生成失败,ticket_id:$ticket_id,from:$from");
-                die(json_encode(['ret'=>false,'msg'=>'优惠券生成失败']));
+                $this->json_echo(['ret'=>false,'msg'=>'优惠券生成失败']);
             }
         } else {
-            die(json_encode(['ret'=>false,'msg'=>"$num 位好友领取成功"]));
+            $this->json_echo(['ret'=>false,'msg'=>"$num 位好友领取成功"]);
         }
     }
 }
