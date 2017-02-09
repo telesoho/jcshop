@@ -433,30 +433,29 @@ class Common{
 
     static public function get_wechat_qrcode($id, $type = 1){
         $access_token = common::get_wechat_access_token();
+        $params = array(
+            'action_info' => array(
+                'scene'=>['scene_id'=>$id]
+            )
+        );
         if ($type === 1){
-            $action_name = 'QR_SCENE';
-            $params = array(
-                'expire_seconds' => 2592000,
-                'action_name' => '',
-                'action_info' => array(
-                    'scene'=>['scene_id'=>$id]
-                )
-            );
+            $params['expire_seconds'] = 2592000;
+            $params['action_name'] = 'QR_SCENE';
         } elseif($type === 2) {
-            $action_name = 'QR_LIMIT_SCENE';
-            $params = array(
-                'action_name' => '',
-                'action_info' => array(
-                    'scene'=>['scene_id'=>$id]
-                )
-            );
+            $params['action_name'] = 'QR_LIMIT_SCENE';
         }
-        $ret = self::curl_http("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=$access_token",$params);
-        $ticket = json_decode($ret)->ticket;
+        $ret = self::http_post_json("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=$access_token",json_encode($params));
+        $errcode = json_decode($ret[1])->errcode;
+        if ($errcode !== 0){
+            common::log_write('生成分享二维码失败' . print_r($ret,true) . ",id$id", 'ERROR');
+            return false;
+        }
+        $ticket = json_decode($ret[1])->ticket;
         $url = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=$ticket";
         $dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : 'upload';
         $dir .= '/share_qrcode';
         $image_path = common::save_url_image($url,$dir);
+        common::log_write(json_decode($ret) . '-----' . $image_path,'INFO','share_qrcode');
         return $image_path;
     }
 }
