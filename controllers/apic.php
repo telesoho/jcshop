@@ -3309,13 +3309,13 @@ class Apic extends IController{
      * 用户获取分享成功所得的优惠券
      */
     function get_share_ticket(){
-        $user_id      = $this->user['user_id'];
-        $user_data = common::get_user_data($user_id);
-        $open_id = common::get_wechat_open_id($user_id);
-        $follow_query = new IQuery('follow');
-        $follow_query->where = "relation_id = user_id_$user_id";
-        $data = $follow_query->find();
-        $num = count($data);
+        $user_id             = $this->user['user_id'];
+        $user_data           = common::get_user_data($user_id);
+        $open_id             = common::get_wechat_open_id($user_id);
+        $follow_query        = new IQuery('follow');
+        $follow_query->where = "scene_id = 'user_id_$user_id'";
+        $data                = $follow_query->find();
+        $num                 = count($data);
                 wechats::send_message_template($open_id,'receive',['ticket_name'=>'满288抵扣优惠券','username'=>$user_data['username']]);
         if ($num > 4){
 //            赠送优惠券
