@@ -37,9 +37,9 @@ class Apic extends IController{
 		
 		/* 限时购 */
 		$modelSpeed = new IModel('activity_speed');
-		$infoSpeed  = $modelSpeed->getObj('type=1 AND status=1 AND start_time<='.time().' AND end_time>='.time(), 'id,start_time,end_time');
-//		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$infoSpeed));
+		$infoSpeed  = $modelSpeed->query('type=1 AND status=1 AND start_time<='.time().' AND end_time>='.time(), 'id,start_time,end_time','start_time DESC',1);
 		if(!empty($infoSpeed)){
+			$infoSpeed 				 = $infoSpeed[0];
 			$querySpeedGoods         = new IQuery('activity_speed_access AS m');
 			$querySpeedGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
 			$querySpeedGoods->where  = 'pid='.$infoSpeed['id'];
