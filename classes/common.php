@@ -455,7 +455,7 @@ class Common{
         $dir .= '/share_qrcode';
         $image_path = common::save_url_image($url, $dir);
         $wechat_qrcode_model = new IModel('wechat_qrcode');
-        $wechat_qrcode_model->setData(['image_path'=>$image_path,'relation_id'=>$relation_id,'scene_id'=>$scene_id,'ticket'=>$ticket]);
+        $wechat_qrcode_model->setData(['image_path'=>$image_path,'relation_id'=>$relation_id,'scene_id'=>$scene_id,'ticket'=>$ticket,'type'=>$type]);
         $ret = $wechat_qrcode_model->add();
         if ($ret){
             return $image_path;

@@ -885,7 +885,18 @@ class Site extends IController{
 	}
 
 	function order_share(){
-	    $this->redirect('order_share');
+        $share_no     = IFilter::act(IReq::get('share_no'));
+        $user_id      = $this->user['user_id'];
+        $share_no_arr = explode(',', $share_no);
+        if ($user_id === $share_no_arr[2]){
+            $this->sponsor = true;
+        } else {
+            $this->sponsor    = false;
+            $image_path       = common::get_wechat_qrcode($user_id, $share_no, 1);
+            $this->image_path = $image_path;
+        }
+        $this->share_no = $share_no;
+        $this->redirect('order_share');
     }
 
     /**
