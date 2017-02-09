@@ -3242,92 +3242,6 @@ class Apic extends IController{
         }
         return;
     }
-    function send_wechat_message2(){
-//        $data = '{
-//"RECORDS":[
-//{
-//"order_no":"20170105163459673094",
-//"accept_name":"周松枫",
-//"address":"昌国街道环城北路238号舟山市妇幼保健院外科大楼一楼供应室",
-//"mobile":"13857228373",
-//"user_id":5784,
-//"sfz_name":"叶周幸",
-//"oauth_user_id":"orEYdwyih4TVnLlPGbqV4njBR9Os"
-//},
-//{
-//"order_no":"20170105211832143307",
-//"accept_name":"HT",
-//"address":"农行新区宏伟平价超市代收（记得打电话）",
-//"mobile":"18343355955",
-//"user_id":5812,
-//"sfz_name":"赵梓名",
-//"oauth_user_id":"orEYdw8W1YgXdFZkqIUIHCKDNBEY"
-//},
-//{
-//"order_no":"20170105214953255447",
-//"accept_name":"HT",
-//"address":"农行新区宏伟超市代收（打电话）",
-//"mobile":"18343355955",
-//"user_id":6328,
-//"sfz_name":"赵梓名",
-//"oauth_user_id":"orEYdwxO3RoLnOFo-tnhGpLj_-tw"
-//}
-//]
-//}';
-        $data = '{
-"RECORDS":[
-{
-"order_no":"20170113195310302921",
-"accept_name":"王婷",
-"address":"万新村，17区冠云中里，4号楼，1门，405",
-"mobile":"13030037326",
-"user_id":6541,
-"sfz_name":"王婷",
-"oauth_user_id":"orEYdw--dEIojNATz1MSebLP3KbQ"
-},
-{
-"order_no":"20170114012113446265",
-"accept_name":"程林",
-"address":"乐居雅花园2期48栋406",
-"mobile":"13951762851",
-"user_id":7504,
-"sfz_name":"程林",
-"oauth_user_id":"orEYdw8S769CTzbijgDm-wVc7eVE"
-},
-{
-"order_no":"20170116233009697028",
-"accept_name":"张甲元",
-"address":"吉回族自治州昌吉市乌伊东路126号 嘉和小区 14号楼1单元1401",
-"mobile":"15999085628",
-"user_id":4280,
-"sfz_name":null,
-"oauth_user_id":"orEYdw3vfmGjdfrQ5f6uDyQQ_EDg"
-},
-{
-"order_no":"20170116233009697028",
-"accept_name":"余-张甲元",
-"address":"吉回族自治州昌吉市乌伊东路126号 嘉和小区 14号楼1单元1401",
-"mobile":"15999085628",
-"user_id":4280,
-"sfz_name":null,
-"oauth_user_id":"orEYdw98ZZpmvDrD6lJyR5YAhPnY"
-},
-{
-"order_no":"20170116233009697028",
-"accept_name":"陈-张甲元",
-"address":"吉回族自治州昌吉市乌伊东路126号 嘉和小区 14号楼1单元1401",
-"mobile":"15999085628",
-"user_id":4280,
-"sfz_name":null,
-"oauth_user_id":"orEYdw0X44crd6F3MOdXES6Hfpig"
-}
-]}';
-        $data = json_decode($data);
-        var_dump($data);
-        foreach ($data->RECORDS as $k=>$v){
-            wechats::send_message_template($v->oauth_user_id,'shiming',['order_no'=>$v->order_no]);
-        }
-    }
 
     /**
      * User: chenbo
@@ -3387,6 +3301,37 @@ class Apic extends IController{
             } else {
                 die(json_encode(['ret'=>false,'msg'=>$msg]));
             }
+        }
+    }
+
+    /**
+     * User: chenbo
+     * 用户获取分享成功所得的优惠券
+     */
+    function get_share_ticket(){
+        $user_id      = $this->user['user_id'];
+        $user_data = common::get_user_data($user_id);
+        $open_id = common::get_wechat_open_id($user_id);
+        $follow_query = new IQuery('follow');
+        $follow_query->where = "relation_id = user_id_$user_id";
+        $data = $follow_query->find();
+        $num = count($data);
+                wechats::send_message_template($open_id,'receive',['ticket_name'=>'满288抵扣优惠券','username'=>$user_data['username']]);
+        if ($num > 4){
+//            赠送优惠券
+            $ticket_access_model = new IModel('ticket_access');
+            $ticket_id           = 18;
+            $from                = 1;
+            $ticket_access_model->setData(['user_id' => $user_id, 'ticket_id' => $ticket_id, 'status' => 1, 'from' => $from, 'create_time' => date('Y-m-d H:i:s')]);
+            $ret = $ticket_access_model->add();
+            if ($ret){
+                die(json_encode(['ret'=>true,'msg'=>'在《个人中心》->《我的优惠券》中查看优惠券']));
+            } else {
+                common::log_write("$user_id 优惠券生成失败,ticket_id:$ticket_id,from:$from");
+                die(json_encode(['ret'=>false,'msg'=>'优惠券生成失败']));
+            }
+        } else {
+            die(json_encode(['ret'=>false,'msg'=>"$num 位好友领取成功"]));
         }
     }
 }
