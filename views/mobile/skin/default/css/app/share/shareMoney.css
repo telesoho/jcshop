@@ -15,16 +15,30 @@ li{
 	height: 2.8rem;
 	display: -webkit-flex;
 	-webkit-align-items: center;
+	overflow: hidden;
 }
 #header .img_top{
 	width: 1.8rem;
 	height: 1.8rem;
-	background: url(../../../image/buy_share/zz.png);
+	background: #FF2F5C;
 	background-size: 100% 100%;
 	margin-left: 0.2rem;
+	position: relative;
+	border-radius:50% ;
+}
+#header .img_top img{
+	width: 1.7rem;
+	height: 1.7rem;
+	background: blue;
+	border-radius:50% ;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -0.85rem;
+	margin-top: -0.85rem;
 }
 #header .left_youbalance{
-	padding:0 0.39rem ;
+	padding:0 0.36rem 0 0.3rem;
 	border-right: 1px dashed #fff;
 	text-align: center;
 }
@@ -38,7 +52,7 @@ li{
 	color: rgba(247,247,247,0.8);
 }
 #header .right_nobalance{
-	padding:0 0.7rem 0 0.4rem ;
+	padding:0 0.6rem 0 0.4rem ;
 	text-align: center;
 }
 /*			说明				*/
@@ -86,7 +100,7 @@ section li .shop_img{
 }
 section li .shop_title p{
 	width: 5.5rem;
-	padding:0.1rem 0.3rem 0;
+	padding:0.1rem 0.2rem 0 0.3rem;
 	margin-bottom:0.4rem ;
 	font-size: 0.26rem;
 	color: #484848;
@@ -102,11 +116,13 @@ section li .price_{
 	padding-left:0.3rem ;
 	display: -webkit-flex;
 	-webkit-align-items: center;
+	-webkit-justify-content: space-between;
+	padding-right:0.2rem ;
 }
 section li .price_ span:nth-of-type(1){
 	color: #ff2f5c;
 	font-size: 0.24rem;
-	margin-right:0.2rem ;
+/*	margin-right:0.2rem ;*/
 }
 section li .price_ span:nth-of-type(1) span{
 	font-size: 0.32rem;
@@ -114,13 +130,13 @@ section li .price_ span:nth-of-type(1) span{
 section li .price_ span:nth-of-type(2){
 	font-size: 0.24rem;
 	color: #b8b8b8;
+	margin-left: -0.68rem;
 }
 section li .price_ span:nth-of-type(3){
 	width: 1.4rem;
 	height: 0.56rem;
 	border-radius:0.08rem ;
 	border: 1px solid#ff2f5c;
-	margin-left: 0.4rem;
 	color: #ff2f5c;
 	font-size: 0.28rem;
 	line-height: 0.56rem;
