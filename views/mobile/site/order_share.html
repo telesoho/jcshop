@@ -57,7 +57,8 @@
 			<div id="Popup_window" v-if="tan">
 				<!--		普通领奖关注九猫家公众号 			-->
 				<div>
-					<p class="window_1">恭喜您! 成功领取&nbsp;<span>68</span>&nbsp;元代金券!</p>
+					<!--<p class="window_1">恭喜您! 成功领取&nbsp;<span>68</span>&nbsp;元代金券!</p>-->
+					<p class="window_1">{{p_data}}</p>
 					<p v-if="friends" class="window_2">代金券编号:&nbsp;<span>EEEEEEEEEEE</span></p>
 					<img v-if = "friends" class="window_img1" src="/views/mobile/skin/default/image/buy_share/tatle.png"/>
 					<img v-if = "friends == false" src="/views/mobile/skin/default/image/buy_share/qq.png" style="width: 5.54rem;margin: 0.56rem auto 0.66rem;"/>
@@ -90,14 +91,14 @@
 			 var vm= new Vue({
 				el:'#wrap_if',
 				data:{
-					share_:false,
 					tan:false,
 					bg:false,
 					img1:true,
 					//分享人
 					sent_per:true,
 					//没关注and已关注
-					friends:true
+					friends:true,
+					p_data:''
 				},
 				computed:{
 					
@@ -132,38 +133,7 @@
 				},
 				methods:{
 					share_receive:function(){
-						if(this.share_){
-							$("#share_show").css({
-								"color":"#999",
-								"zIndex":"1"
-							});
-							this.tan = true;
-							this.share_ = !this.share_;
-							this.bg = true;
-							this.img1 = true;
-							document.body.scrollTop = 0
-							$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
-							
-						}else{
-							this.bg = true;
-							this.img1 = false;
-							$(document).on('touchmove',function(event) { event.preventDefault(); }, false);	
-							$("#share_show").css({
-								"color":"#fff",
-								"zIndex":"1000"
-							});
-							
-						setTimeout(function(){
-							document.getElementById("backgrounds").onclick = function(){
-								$(document).unbind('touchmove');
-								vm.share_ = true;
-								vm.bg = false;
-								vm.img1 = true;
-							}
-						},1000)
-							
-							
-						}
+						index_share();
 					},
 					returns:function(){
 						window.location.href = "/site/index";
@@ -179,13 +149,33 @@
 								"zIndex":"1"
 							});
 							this.tan = true;
-							this.share_ = !this.share_;
 							this.bg = true;
 							document.body.scrollTop = 0
 							$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
 						}
 					}
 			})
+			 
+			 function index_share(){
+			 	mui.ajax('/apic/banner_list',{
+		        dataType:'json',
+		        type:'get',
+		        timeout:10000,
+		        success:function(data){
+		        	data = JSON.parse(data);
+		        	vm.p_data = data.msg ;
+		        	$("#share_show").css({
+						"color":"#999",
+						"zIndex":"1"
+					});
+					this.tan = true;
+					this.bg = true;
+					this.img1 = true;
+					document.body.scrollTop = 0
+					$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
+		        }
+		    });
+			 }
 		</script>
 	</body>
     {if:common::jssdk()&&IClient::isWechat()}
