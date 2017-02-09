@@ -915,8 +915,8 @@ class Site extends IController{
      */
 
     function test(){
-        $id = IFilter::act(IReq::get('id'), 'int');
-        $image_path = common::get_wechat_qrcode('1');
-        var_dump($image_path);
+        $id         = IFilter::act(IReq::get('id'), 'int');
+        $image_path = common::get_wechat_qrcode('user24', 'user24');
+        echo IWeb::$app->config['image_host'] . "/$image_path";
     }
 }
