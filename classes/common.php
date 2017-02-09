@@ -431,7 +431,7 @@ class Common{
         }
     }
 
-    static public function get_wechat_qrcode($id, $relation_id,$type = 1){
+    static public function get_wechat_qrcode($scene_id, $relation_id,$type = 1){
         $access_token = common::get_wechat_access_token();
         $params = array(
             'action_info' => array(
