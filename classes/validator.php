@@ -25,12 +25,13 @@ class Validator {
         "phone" => array('name' => 'Validator::v_phone','desc' => '电话号码验证'),
         "mobile" => array('name' => 'Validator::v_mobile','desc' => '手机号码验证'),
         "url" => array('name' => 'Validator::v_url','desc' => 'Url地址验证'),
-        "check" => array('name' => 'Validator::v_check','desc' => '正则验证'),
-        "required" => array('name' => 'Validator::v_required','desc' => '是否为空验证'),
+        "regexp" => array('name' => 'Validator::v_regexp','desc' => '正则验证'),
+        "require" => array('name' => 'Validator::v_require','desc' => '是不为空验证'),
         "percent" => array('name' => 'Validator::v_percent','desc' => '百分比数字验证'),
         "username" => array('name' => 'Validator::v_username','desc' => '用户名验证'),
         "filename" => array('name' => 'Validator::v_filename','desc' => '文件名或者文件路径验证'),
         "strict" => array('name' => 'Validator::v_strict','desc' => '常用检索过滤'),
+        "array" => array('name' => 'Validator::v_array','desc' => '数组验证'),
     );
 
     // 错误信息
@@ -84,7 +85,9 @@ class Validator {
         return $this->errMsg?false:true;
     }
 
-    
+    /**
+     * 验证对象
+     */
     public function validate_obj($input, $validators) {
         foreach($validators as $v) {
             list($fun_def, $param) = $this->parseValidator($v);
@@ -151,6 +154,37 @@ class Validator {
         return ($len >= $minlen && $len < $maxlen);
     }
 
+    // 是否是数组array:[1-10]
+    static public function v_array($val, $param) {
+        if(!is_array($val)) {
+            return false;
+        }
+
+        if("" == $param) {
+            return true;
+        }
+
+        $re = '/\[(\d*)-(\d*)\]/';
+        if(!preg_match($re, $param, $m))
+        {
+            return false;
+        }
+
+        $len = count($val);
+        $minlen = intval($m[1]);
+        $maxlen = intval($m[2]);
+
+        if($m[1] == '') {
+            return $len <= $maxlen;
+        }
+
+        if($m[2] == '') {
+            return $len >= $minlen;
+        }
+
+        return ($len >= $minlen && $len < $maxlen);
+    }
+
     /**
      * @brief Email格式验证
      * @param string $str 需要验证的字符串
@@ -158,6 +192,7 @@ class Validator {
      */
     public static function v_email($str, $param)
     {
+        if($str == "") return true;
         return (bool)preg_match('/^\w+([-+.]\w+)*@\w+([-.]\w+)+$/i',$str);
     }
     /**
@@ -167,6 +202,7 @@ class Validator {
      */
     public static function v_qq($str, $param)
     {
+        if($str == "") return true;
         return (bool)preg_match('/^[1-9][0-9]{4,}$/i',$str);
     }
     /**
@@ -176,6 +212,7 @@ class Validator {
      */
     public static function v_idcard($str, $param)
     {
+        if($str == "") return true;
         return (bool)preg_match('/^\d{15}(\d{2}[0-9x])?$/i',$str);
     }
     /**
@@ -186,6 +223,7 @@ class Validator {
      */
     public static function v_ip($str, $param)
     {
+        if($str == "") return true;
         return (bool)preg_match('/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/i',$str);
     }
     /**
@@ -196,6 +234,7 @@ class Validator {
      */
     public static function v_zip($str, $param)
     {
+        if($str == "") return true;
         return (bool)preg_match('/^\d{6}$/i',$str);
     }
 
@@ -206,6 +245,7 @@ class Validator {
      */
     public static function v_phone($str,$param)
     {
+        if($str == "") return true;
         return (bool)preg_match('/^((\d{3,4})|\d{3,4}-)?\d{3,8}(-\d+)*$/i',$str);
     }
     /**
@@ -215,6 +255,7 @@ class Validator {
      */
     public static function v_mobile($str, $param)
     {
+        if($str == "") return true;
 		return (bool)preg_match("!^1[3|4|5|7|8][0-9]\d{4,8}$!",$str);
     }
     /**
@@ -224,6 +265,7 @@ class Validator {
      */
     public static function v_url($str, $param)
     {
+        if($str == "") return true;
         return (bool)preg_match('/^[a-zA-z]+:\/\/(\w+(-\w+)*)(\.(\w+(-\w+)*))+(\/?\S*)?$/i',$str);
     }
     /**
@@ -232,7 +274,7 @@ class Validator {
      * @param string $str 需要验证的字符串
      * @return bool 验证通过返回 true 不通过返回 false
      */
-    public static function v_check($str, $reg)
+    public static function v_regexp($str, $reg)
     {
         return (bool)preg_match('/^'.$reg.'$/i',$str);
     }
@@ -241,10 +283,12 @@ class Validator {
      * @param string $str 需要验证的字符串
      * @return bool 验证通过返回 true 不通过返回 false
      */
-    public static function v_required($str, $param)
+    public static function v_require($str, $param)
     {
          return (bool)preg_match('/\S+/i',$str);
     }
+
+
 
 	/**
      * @brief 百分比数字
@@ -253,6 +297,7 @@ class Validator {
      */
     public static function v_percent($str, $param)
     {
+        if($str == "") return true;
     	return (bool)preg_match('/^[1-9][0-9]*$/',$str);
     }
 
@@ -263,6 +308,7 @@ class Validator {
      */
     public static function v_username($str, $param)
     {
+        if($str == "") return true;
         $re = '/\[([-+]?\d*)-([-+]?\d*)\]/';
         $minlen = 2;
         $maxlen = 40;
@@ -287,6 +333,7 @@ class Validator {
      */
     public static function v_filename($str,$param)
     {
+        if($str == "") return true;
 		return (bool)preg_match("%^[\w\./]+$%",$str);
     }
 
@@ -297,35 +344,41 @@ class Validator {
      */
     public static function v_strict($str, $param)
     {
+        if($str == "") return true;
     	return (bool)preg_match("|^[\w\.\-<>=\!\x{4e00}-\x{9fa5}\s*]+$|u",$str);
     }
 
 }
 
-/*
-$v = new Validator();
 
-$validators = array(
-    "OrderNo" => array('isset','size:[1-40]'),
-    "OrderTime" => array('isset','datetime:YmdHis'), 
-    "GoodsPrice" => array('number','min:1','max:20'), 
-    "Email" => array('email'), 
-    "Username" => array('username:[2-8]'), 
-    "mobile"  => array('mobile'),
-);
+// $v = new Validator();
 
-$val = array(
-    'OrderNo' => 'abc',
-    'OrderTime' => '20121221121212',
-    "GoodsPrice" => 22.23,
-    "Email" => "afdafd@gmail.com",
-    "Username" => "1234568",
-    "mobile" => "13667787828",
-);
+// $validators = array(
+//     "OrderNo" => array('isset','size:[1-40]'),
+//     "OrderTime" => array('isset','datetime:YmdHis'), 
+//     "GoodsPrice" => array('number','min:1','max:20'), 
+//     "Email" => array('email'), 
+//     "Username" => array('username:[2-8]'), 
+//     "mobile"  => array('require','mobile'),
+//     'paytype'  => array('regexp:[135]'),
+//     'city'  => array(),
+//     "OrderItems" => array('isset','array:[1-]'),
+// );
 
-// print _validate(14, array('int', 'min:3', 'max:12'));
-// print $v->_validate("9adf", array('string', 'ranglen:[3,10]'));
-if(!$v->validate_array($val, $validators)){
-    print_r($v->getErrMsg());
-}
-*/
+// $val = array(
+//     'OrderNo' => 'abc',
+//     'OrderTime' => '20121221121212',
+//     "GoodsPrice" => 22.23,
+//     "Email" => "afdafd@gmail.com",
+//     "Username" => "12345678",
+//     "mobile" => "",
+//     "paytype" => "4",
+//     'city' => '',
+//     "OrderItems" => array("1", "2"), 
+// );
+
+// // print _validate(14, array('int', 'min:3', 'max:12'));
+// // print $v->_validate("9adf", array('string', 'ranglen:[3,10]'));
+// if(!$v->validate_array($val, $validators)){
+//     print_r($v->getErrMsg());
+// }

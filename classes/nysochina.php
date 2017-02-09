@@ -11,6 +11,32 @@ use Monolog\Formatter\LineFormatter;
  */
 class nysochina
 {
+    // 根据仓库名称取得对应的发货方式
+    private static $WareHouseName2DeliverType = array(
+        "国内4仓" => "5",    //国内发货
+        "国内5仓" => "5",    //国内发货
+        "国内9仓" => "5",    //国内发货
+        "国内10仓" => "5",   //国内发货
+        "国内13仓" => "5",   //国内发货
+        "海外1仓" => "4",    //海外直邮
+        "海外2仓" => "4",    //海外直邮
+        "海外13仓" => "4",   //海外直邮
+        "海外16仓" => "4",   //海外直邮
+        "香港1仓" => "2",    //香港直邮
+        "香港2仓" => "2",    //香港直邮
+        "香港9仓" => "2",    //香港直邮
+        "香港13仓" => "2",   //香港直邮
+        "香港14仓" => "2",   //香港直邮
+        "国内8仓" => "2",    //香港直邮
+        "保税1仓" => "1",    //包税区
+        "保税7仓" => "1",    //包税区
+        "保税9仓" => "1",    //包税区
+        "保税10仓" => "1",   //包税区
+        "保税12仓" => "1",   //包税区
+        "保税13仓" => "1",   //包税区
+        "保税16仓" => "1",   //包税区
+    );
+
     private static $config = array(
         'nyso_server'       =>  "http://121.41.84.251:9090",
         'nyso_userkey'      =>  "jiumaojiatest",
@@ -107,40 +133,40 @@ class nysochina
         ));
     }
 
-    public static function testOrder(){
-		// $orderNo = "KA-" . date("YmdHis");
-		$orderNo = "KA-20170116";
-        $param["OrderNo"] = $orderNo;
-        $param["OrderTime"] = "20161016122450";
+    // public static function testOrder(){
+	// 	// $orderNo = "KA-" . date("YmdHis");
+	// 	$orderNo = "KA-20170116";
+    //     $param["OrderNo"] = $orderNo;
+    //     $param["OrderTime"] = "20161016122450";
 
-        $item["BuyQuantity"] ="2";
-        $item["SkuNo"] = "FAN5852";
-        $item["Tax"] = "23.8";
-		$item["BuyPrice"] = "100";  // 实际用户购买时的价格，即下单价？
-        $items[] = $item;
+    //     $item["BuyQuantity"] ="2";
+    //     $item["SkuNo"] = "FAN5852";
+    //     $item["Tax"] = "23.8";
+	// 	$item["BuyPrice"] = "100";  // 实际用户购买时的价格，即下单价？
+    //     $items[] = $item;
 
-        $param["OrderItems"] = $items;
-        $param["PostalPrice"] = "20";   // 邮费
-        $param["GoodsPrice"] = "200.0"; // 货值
-        $param["Nick"] = "啊啊啊啊啊啊啊";
-        $param["OrderPrice"] = "220";  // 订单总价
-        $param["Tax"] = "23.8";         // 商品税费
-        $param["City"] = "北京";
-        $param["PayType"] = "1";
-        $param["PayerName"] = "穆国峰";
-        $param["Province"] = "北京";
-        $param["DetailedAddres"] = "北京北京朝阳区望京soho";
-        $param["Remark"] = "";
-        $param["ConsigneeName"] = "穆国峰";
-        $param["ConsigneeNumber"] = "15712341234";
-        $param["Favourable"] = "23.8";        // 优惠金额
-        $param["IdCard"] = "230404198812150116";
-        $param["PayNo"] = "sadadad";
-        $param["District"] = "朝阳区";
-        $param["DeliveryType"] = "1";
+    //     $param["OrderItems"] = $items;
+    //     $param["PostalPrice"] = "20";   // 邮费
+    //     $param["GoodsPrice"] = "200.0"; // 货值
+    //     $param["Nick"] = "啊啊啊啊啊啊啊";
+    //     $param["OrderPrice"] = "220";  // 订单总价
+    //     $param["Tax"] = "23.8";         // 商品税费
+    //     $param["City"] = "北京";
+    //     $param["PayType"] = "1";
+    //     $param["PayerName"] = "穆国峰";
+    //     $param["Province"] = "北京";
+    //     $param["DetailedAddres"] = "北京北京朝阳区望京soho";
+    //     $param["Remark"] = "";
+    //     $param["ConsigneeName"] = "穆国峰";
+    //     $param["ConsigneeNumber"] = "15712341234";
+    //     $param["Favourable"] = "23.8";        // 优惠金额
+    //     $param["IdCard"] = "230404198812150116";
+    //     $param["PayNo"] = "sadadad";
+    //     $param["District"] = "朝阳区";
+    //     $param["DeliveryType"] = "1";
 
-		return self::addOrder($param);
-    }
+	// 	return self::addOrder($param);
+    // }
 
 	/**
 	 * 订单新增接口
@@ -188,6 +214,13 @@ class nysochina
             throw $e;
         }
 	}
+
+    /**
+     * 根据仓库名取得对应的发货方式
+     */
+    public static function getDeliveryType ($wareHouseName) {
+        return self::$WareHouseName2DeliverType[$wareHouseName];
+    }
 
 	/**
 	 * 向指定 URL 发送POST方法的请求
