@@ -133,7 +133,22 @@
 				},
 				methods:{
 					share_receive:function(){
-						index_share();
+                        mui.ajax('/apic/get_share_ticket',{
+                            dataType:'json',
+                            type:'get',
+                            timeout:10000,
+                            success:function(data){
+                                vm.p_data = data.msg ;
+                                $("#share_show").css({
+                                    "color":"#999",
+                                    "zIndex":"1"
+                                });
+                                this.tan = true;
+                                this.bg = true;
+                                this.img1 = true;
+                                document.body.scrollTop = 0
+                                $(document).on('touchmove',function(event) { event.preventDefault(); }, false);
+                            }
 					},
 					returns:function(){
 						window.location.href = "/site/index";
@@ -157,22 +172,13 @@
 			})
 			 
 			 function index_share(){
-			 	mui.ajax('/apic/banner_list',{
+			 	mui.ajax('/apic/get_share_ticket',{
 		        dataType:'json',
 		        type:'get',
 		        timeout:10000,
 		        success:function(data){
-		        	data = JSON.parse(data);
 		        	vm.p_data = data.msg ;
-		        	$("#share_show").css({
-						"color":"#999",
-						"zIndex":"1"
-					});
-					this.tan = true;
-					this.bg = true;
-					this.img1 = true;
-					document.body.scrollTop = 0
-					$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
+		        	return true;
 		        }
 		    });
 			 }

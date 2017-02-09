@@ -3309,13 +3309,13 @@ class Apic extends IController{
      * 用户获取分享成功所得的优惠券
      */
     function get_share_ticket(){
-        $user_id      = $this->user['user_id'];
-        $user_data = common::get_user_data($user_id);
-        $open_id = common::get_wechat_open_id($user_id);
-        $follow_query = new IQuery('follow');
-        $follow_query->where = "relation_id = user_id_$user_id";
-        $data = $follow_query->find();
-        $num = count($data);
+        $user_id             = $this->user['user_id'];
+        $user_data           = common::get_user_data($user_id);
+        $open_id             = common::get_wechat_open_id($user_id);
+        $follow_query        = new IQuery('follow');
+        $follow_query->where = "scene_id = 'user_id_$user_id'";
+        $data                = $follow_query->find();
+        $num                 = count($data);
                 wechats::send_message_template($open_id,'receive',['ticket_name'=>'满288抵扣优惠券','username'=>$user_data['username']]);
         if ($num > 4){
 //            赠送优惠券
@@ -3325,13 +3325,13 @@ class Apic extends IController{
             $ticket_access_model->setData(['user_id' => $user_id, 'ticket_id' => $ticket_id, 'status' => 1, 'from' => $from, 'create_time' => date('Y-m-d H:i:s')]);
             $ret = $ticket_access_model->add();
             if ($ret){
-                die(json_encode(['ret'=>true,'msg'=>'在《个人中心》->《我的优惠券》中查看优惠券']));
+                $this->json_echo(['ret'=>true,'msg'=>'在《个人中心》->《我的优惠券》中查看优惠券']);
             } else {
                 common::log_write("$user_id 优惠券生成失败,ticket_id:$ticket_id,from:$from");
-                die(json_encode(['ret'=>false,'msg'=>'优惠券生成失败']));
+                $this->json_echo(['ret'=>false,'msg'=>'优惠券生成失败']);
             }
         } else {
-            die(json_encode(['ret'=>false,'msg'=>"$num 位好友领取成功"]));
+            $this->json_echo(['ret'=>false,'msg'=>"您无法领取礼品优惠券，$num 位好友领取成功"]);
         }
     }
 }

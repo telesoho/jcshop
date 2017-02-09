@@ -14,6 +14,55 @@ class Comment extends IController implements adminAuthorization
 	{
 
 	}
+	
+	/**
+	 * 添加评论
+	 */
+	public function comment_add(){
+		if($_SERVER['REQUEST_METHOD']=='POST'){
+			
+			//上传评论图
+			foreach($_FILES['img']['name'] as $k => $v){
+				if(empty($v)){
+					unset($_FILES['img']['name'][$k]);
+					unset($_FILES['img']['type'][$k]);
+					unset($_FILES['img']['tmp_name'][$k]);
+					unset($_FILES['img']['error'][$k]);
+					unset($_FILES['img']['size'][$k]);
+				}
+			}
+			$uploadObj = new PhotoUpload();
+			$photoInfo = $uploadObj->run();
+			$img       = array();
+			if(!empty($photoInfo)){
+				foreach($photoInfo['img'] as $k => $v){
+					if($v['flag']!='1') die(IUpload::errorMessage($v['flag']));
+					$img[] = $v['img'];
+				}
+			}
+			
+			$data = array(
+				'goods_id'     => $_POST['goods_id'],
+				'order_no'     => Order_Class::createOrderNum(),
+				'status'       => 1,
+				'user_id'      => $_POST['user_id'],
+				'time'         => date('Y-m-d H:i:s', time()),
+				'comment_time' => date('Y-m-d', time()),
+				'point'        => 5,
+				'tag'          => isset($_POST['tag']) ? implode(',', $_POST['tag']) : '',
+				'image'        => implode(',', $img),
+			);
+			
+			/* 写入主表 */
+			$model = new IModel('comment');
+			$model->setData($data);
+			$rel = $model->add();
+			if(!$rel) exit('操作失败');
+			
+			$this->redirect('comment_list');
+		}
+		$this->redirect('comment_add');
+	}
 
 	function suggestion_list()
 	{
