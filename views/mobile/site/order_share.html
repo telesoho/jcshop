@@ -91,6 +91,7 @@
 						<img class="window_img2" @click="returns" src="/views/mobile/skin/default/image/buy_share/return.png"/>
 						<p>返回九猫家</p>
 					</div>
+                    <img src="{$this->image_path}" alt="图丢啦！" style="width: 5.54rem;display: block;margin: 0 auto">
 					<span style="font-size: 0.28rem; color: #898989;display: block;width: 100%;text-align: center;">长按二维码并关注,即可使用。</span>
 					<t id="sssssss" style="width: 1px;height: 1.29rem;background: #fff; position: absolute;right:0.42rem ;top: 7.2rem; background: rgba(255,255,255,0.4);">
 			    		<strong style="width: 0.5rem;height: 0.5rem;position: absolute;left: -0.25rem;top: 1.29rem;z-index: 88;">
@@ -113,7 +114,13 @@
 		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 		<script type="text/javascript">
-             var sponsor = {$this->sponsor}
+             var sponsor = "{$this->sponsor}";
+             var friends = "{$this->friends}";
+             if(sponsor == 1){
+                 sponsor = true;
+             }else{
+                 sponsor = false;
+             }
 			 var vm= new Vue({
 				el:'#wrap_if',
 				data:{
@@ -121,8 +128,7 @@
 					bg:false,
 					img1:true,
 					//分享人
-					sent_per:true,
-					//没关注and已关注
+					sent_per:sponsor,
 					friends:true,
 					p_data:''
 				},
