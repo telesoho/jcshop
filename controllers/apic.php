@@ -1668,7 +1668,7 @@ class Apic extends IController{
 			array('voice_media_id', 'string', 0, '微信语音ID'),
 		));
 		$user_id = $this->tokenCheck();
-		
+		Common::dblog($param);
 		//检测
 		$result = Comment_Class::can_comment($param['id'], $user_id);
 		if(is_string($result)) $this->returnJson(array('code' => '-1', 'msg' => $result));
@@ -1711,6 +1711,7 @@ class Apic extends IController{
 		));
 		$modelGoods->update('id = '.$infoComment['goods_id'], array('grade', 'comments'));
 		
+		Common::dblog('ssss');
 		$this->returnJson(array('code' => '0', 'msg' => 'ok'));
 	}
 	
