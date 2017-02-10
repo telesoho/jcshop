@@ -3346,17 +3346,14 @@ class Apic extends IController{
         $user_data           = common::get_user_data($user_id);
         $open_id             = common::get_wechat_open_id($user_id);
         $follow_query        = new IQuery('follow');
-        $follow_query->where = "scene_id = 'user_id_$user_id'";
+        $share_no            = IFilter::act(IReq::get('share_no'));
+        $follow_query->where = "scene_id = 'qrscene_,$share_no'";
         $data                = $follow_query->find();
         $num                 = count($data);
-        if($user_id==='24'){$num=5;}
+//        if($user_id==='24'){$num=5;}
         if ($num > 4){
 //            赠送优惠券
-            $ticket_access_model = new IModel('activity_ticket_access');
-            $ticket_id           = 18;
-            $from                = 1;
-            $ticket_access_model->setData(['user_id' => $user_id, 'ticket_id' => $ticket_id, 'status' => 1, 'from' => $from, 'create_time' => date('Y-m-d H:i:s')]);
-            $ret = $ticket_access_model->add();
+            $ret = common::create_ticket($user_id, 'share');
             if ($ret){
                 wechats::send_message_template($open_id,'receive',['ticket_name'=>'满288抵扣优惠券','username'=>$user_data['username']]);
                 $this->json_echo(['ret'=>true,'msg'=>'《个人中心》->《我的优惠券》<br>中查看优惠券']);

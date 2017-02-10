@@ -885,10 +885,11 @@ class Site extends IController{
 	}
 
 	function order_share(){
-        $share_no     = IFilter::act(IReq::get('share_no'));
-        $user_id      = $this->user['user_id'];
-        $share_no_arr = explode(',', $share_no);
-        $wechat_data  = common::get_wechat_info($user_id);
+        $share_no       = IFilter::act(IReq::get('share_no'));
+        $this->share_no = $share_no;
+        $user_id        = $this->user['user_id'];
+        $share_no_arr   = explode(',', $share_no);
+        $wechat_data    = common::get_wechat_info($user_id);
         //是否已经关注
         if ($wechat_data['subscribe'] === 1){
             $this->friends = 1;

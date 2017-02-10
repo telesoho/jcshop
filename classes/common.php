@@ -357,7 +357,13 @@ class Common{
      * @param $user_id
      * @return array
      */
-    static public function get_user_data($user_id){
+    static public function get_user_data($user_id, $open_id = null){
+        if (!empty($open_id)){
+            $oauth_user_model = new IModel('oauth_user');
+            $data = $oauth_user_model->getObj("oauth_user_id = '$open_id'");
+            if (empty($data)) IError::show_normal('用户信息不存在');
+            $user_id = $data['user_id'];
+        }
         $user_model = new IModel('user');
         $ret = $user_model->getObj('id = ' . $user_id);
         if (empty($ret)){
@@ -477,5 +483,26 @@ class Common{
         } else {
             return false;
         }
+    }
+
+    /**
+     * User: chenbo
+     * 创建分享赠送的优惠券
+     * @param $user_id
+     * @param $type
+     * @return int
+     */
+    static public function create_ticket($user_id,$type){
+        $ticket_access_model   = new IModel('activity_ticket_access');
+        switch ($type){
+            case 'share':
+                $create_time = time();
+                $ticket_access_id    = 18;
+                $from                = 1;
+                $ticket_access_model->setData(['user_id' => $user_id, 'ticket_id' => $ticket_access_id, 'status' => 1, 'from' => $from, 'create_time' => $create_time]);
+                $ret = $ticket_access_model->add();
+                return $ret;
+        }
+
     }
 }
