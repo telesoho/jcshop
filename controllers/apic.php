@@ -1763,26 +1763,46 @@ class Apic extends IController{
 	 * 评论详情
 	 */
 	public function comment_detail(){
-		$param         = $this->checkData(array(
+		$param   = $this->checkData(array(
 			array('comment_id', 'int', 1, '评论ID'),
 		));
 		$user_id = $this->tokenCheck();
 		/* 获取数据 */
 		$query         = new IQuery('comment as m');
-		$query->join   = 'LEFT JOIN user AS u ON u.id=m.user_id';
+		$query->join   = 'LEFT JOIN user AS u ON u.id=m.user_id LEFT JOIN goods AS g ON g.id=m.goods_id';
 		$query->where  = 'm.status=1 AND m.id='.$param['comment_id'];
-		$query->fields = 'm.id,m.image,m.comment_time,u.username,u.head_ico,m.contents';
+		$query->fields = 'm.id,m.goods_id,m.order_no,m.image,m.comment_time,u.username,u.head_ico,m.contents,g.name,g.img as goods_img,g.sell_price,g.jp_price';
 		$query->limit  = 1;
 		$list          = $query->find();
 		if(empty($list)) $this->returnJson(array('code' => '010001', 'msg' => $this->errorInfo['010001'])); //评论不存在
-		$data           = $list[0];
-		$model          = new IModel('comment_praise');
-		$data['num']    = $model->get_count('comment_id='.$param['comment_id']); //点赞数
-		$data['praise'] = $model->get_count('comment_id='.$param['comment_id'].' AND user_id='.$user_id); //是否已点赞
-		$data['image']  = explode(',', $data['image']);
+		$list              = Api::run('goodsActivity', $list);
+		$data              = $list[0];
+		$model             = new IModel('comment_praise');
+		$data['num']       = $model->get_count('comment_id='.$param['comment_id']); //点赞数
+		$data['praise']    = $model->get_count('comment_id='.$param['comment_id'].' AND user_id='.$user_id); //是否已点赞
+		$data['goods_img'] = empty($data['goods_img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$data['goods_img']."/w/500/h/500");
+		$data['image']     = explode(',', $data['image']);
 		foreach($data['image'] as $k => $v){
 			$data['image'][$k] = empty($v) ? '' : IWeb::$app->config['image_host'].'/'.$v;
 		}
+		
+		/* 获取数据 */
+		$queryComment         = new IQuery('comment as m');
+		$queryComment->join   = 'LEFT JOIN user AS u ON u.id=m.user_id';
+		$queryComment->where  = 'm.status=1 AND m.id!='.$param['comment_id'].' AND m.`image`!=""';
+		$queryComment->fields = 'm.id,m.image,m.comment_time,u.username,u.head_ico';
+		$queryComment->order  = 'rand()';
+		$queryComment->group  = 'm.order_no';
+		$queryComment->limit  = 6;
+		$listComment          = $query->find();
+		foreach($listComment as $k => $v){
+			$image                     = explode(',', $v['image']);
+			$listComment[$k]['cover']  = empty($image) ? '' : IWeb::$app->config['image_host'].'/'.$image[0];
+			$listComment[$k]['num']    = $model->get_count('comment_id='.$v['id']); //点赞数
+			$listComment[$k]['praise'] = $model->get_count('comment_id='.$v['id'].' AND user_id='.$user_id); //是否已点赞
+		}
+		$data['list'] = $listComment;
+		
 		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $data));
 	}
 	

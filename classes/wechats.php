@@ -224,6 +224,36 @@ class wechats
                    }
                }',$open_id,$template_array[$type],IUrl::getHost().'/site/ticket_list',$send_info['username'],$send_info['ticket_name'],date('Y-m-d H:i:s',time()));
                 break;
+            case 'ship':
+                $params = sprintf('{
+                   "touser":"%s",
+                   "template_id":"%s",
+                   "url":"%s",            
+                   "data":{
+                           "first": {
+                               "value":"发货通知",
+                               "color":"#173177"
+                           },
+                           "keyword1":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "keyword2":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "keyword3":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "remark": {
+                               "value":"优惠券领取成功，在《个人中心》->《我的优惠券》中查看优惠券",
+                               "color":"#173177"
+                           }
+                   }
+               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['order_no'],$send_info['name'],$send_info['billcode'],$send_info['remark']);
+                break;
+
         }
         $ret = common::http_post_json($url,$params);
         if (json_decode($ret[1])->errcode === 0){

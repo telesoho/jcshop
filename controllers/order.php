@@ -659,6 +659,8 @@ class Order extends IController implements adminAuthorization
                 $ret = Order_Class::sendDeliveryGoods($order_id,$sendgoods,$this->admin['admin_id']);
                 if($ret === true)
                 {
+                    $open_id = common::get_wechat_open_id($this->user['user_id']);
+                    wechats::send_message_template($open_id,'ship',['order_no'=>common::get_order_data($order_id)['order_no'],'name'=>'贝海国际物流','billcode'=>$billcode,'remark'=>'您的宝贝已发货，请耐心等待' ]);
                     die('<script type="text/javascript">parent.actionCallback();</script>');
                 }
                 die('<script type="text/javascript">parent.actionCallback("'.$result.'");</script>');

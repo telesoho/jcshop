@@ -951,7 +951,7 @@ OEF;
                 $follow_model->add();
             }
             //推送信息
-            $scene_id_arr = explode(',', $scene_id)[1];
+            $scene_id_arr = explode(',', $scene_id);
             $type         = $scene_id_arr[1];
             $remark       = ",$scene_id_arr[1],$scene_id_arr[2],$scene_id_arr[3]";
             $user_data    = common::get_user_data(null, $open_id);
