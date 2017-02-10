@@ -20,7 +20,9 @@ var vm = new Vue({
         showContainer:false,
         leftClass:'showWrapper1',
         rightClass:'hideWrapper1',
-        tuikuans:false
+        tuikuans:false,
+        stylealreadyComment:"border:none;color:#fff;background:rgb(102,102,102)" , //用户以已经评价的样式
+        showstylealreadyComment:false
     },
     computed: {
         goods_new: function (){
@@ -47,13 +49,18 @@ var vm = new Vue({
 //              this.order_detailInfo.button2Url='';
             };
             if(this.order_detailInfo.orderStatus==3){
-            	
+                var t = parseInt(this.order_detailInfo.comment_id);
                 this.order_detailInfo.button1='删除订单';
                 this.order_detailInfo.button1Url='/site/error';
-                this.order_detailInfo.button2='评价';
-                this.order_detailInfo.button2Url='/ucenter/comment?id='+statusOrder;
+                if(t>0){
+                    this.order_detailInfo.button2='评价';
+                    this.order_detailInfo.button2Url='/ucenter/comment?id='+this.order_detailInfo.comment_id;
+                }else{
+                    this.showstylealreadyComment=true;
+                    this.order_detailInfo.button2='已评价';
+                    this.order_detailInfo.button2Url="#";
+                }
             }
-            
             return this.order_detailInfo;
         }
     },

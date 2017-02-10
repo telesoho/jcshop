@@ -136,7 +136,7 @@
         computed:{
             checkSubmit:function(){
                 //判断用户选择内容是否可以提交
-                if(this.markLen||this.choImg.length||this.voice!="")
+                if(this.markLen||this.choImg.length||this.voice!=""||this.textarea!="")
                 {
                     this.checkSub=true;
                 }
@@ -253,6 +253,32 @@
             }
         });
     }
+    //提交图片 语音
+    function upload(self){
+//        处理获得的数据
+        var sub_data={
+            id:self.id,
+            content:self.textarea,
+            tag_id:self.tag_id,
+            image_media_id:self.choImg.join(","),
+            voice_media_id:self.voice
+        };
+        console.log("图片"+sub_data.image_media_id);
+        console.log("语音"+sub_data.voice_media_id)
+        //发送ajax提交后台
+        mui.ajax('/apic/comment_add',{
+            data:sub_data,
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒
+            success:function(data){
+                console.log(sub_data)
+                console.log(data);
+                self.showLoad=false; //停止加载
+                window.location.href="/ucenter/order"
+            }
+        });
+    }
 </script>
 
 <!-- 微信分享 -->
@@ -360,31 +386,7 @@ $this->wechat->jsApiSDK();
             self.pause=true;
         }
     }
-    //提交图片 语音
-    function upload(self){
-//        处理获得的数据
-        var sub_data={
-            id:self.id,
-            content:self.textarea,
-            tag_id:self.tag_id,
-            image_media_id:self.choImg.join(","),
-            voice_media_id:self.voice
-        };
-        console.log("图片"+sub_data.image_media_id);
-        console.log("语音"+sub_data.voice_media_id)
-        //发送ajax提交后台
-        mui.ajax('/apic/comment_add',{
-            data:sub_data,
-            dataType:'json',//服务器返回json格式数据
-            type:'get',//HTTP请求类型
-            timeout:10000,//超时时间设置为10秒
-            success:function(data){
-                console.log(data);
-                self.showLoad=false; //停止加载
-                window.location.href="/ucenter/order"
-            }
-        });
-    }
+
 </script>
 {/if}
 
