@@ -485,24 +485,4 @@ class Common{
         }
     }
 
-    /**
-     * User: chenbo
-     * 创建分享赠送的优惠券
-     * @param $user_id
-     * @param $type
-     * @return int
-     */
-    static public function create_ticket($user_id,$type){
-        $ticket_access_model   = new IModel('activity_ticket_access');
-        switch ($type){
-            case 'share':
-                $create_time = time();
-                $ticket_access_id    = 18;
-                $from                = 1;
-                $ticket_access_model->setData(['user_id' => $user_id, 'ticket_id' => $ticket_access_id, 'status' => 1, 'from' => $from, 'create_time' => $create_time]);
-                $ret = $ticket_access_model->add();
-                return $ret;
-        }
-
-    }
 }
