@@ -3362,14 +3362,17 @@ class Apic extends IController{
      * 用户获取分享成功所得的优惠券
      */
     function get_share_ticket(){
-        $sponsor            = IFilter::act(IReq::get('sponsor'));
-        $friends            = IFilter::act(IReq::get('friends'));
+        $sponsor  = IFilter::act(IReq::get('sponsor'));
+        $friends  = IFilter::act(IReq::get('friends'));
+        $share_no = IFilter::act(IReq::get('share_no'));
+        $user_id  = $this->user['user_id'];
         if ($sponsor === 'false'){ //普通用户
             if ($friends === 'true'){ //已经关注
-                $user_id   = $this->user['user_id'];
+                $ret     = ticket::if_exsites_ticket($user_id, $share_no);
+                if ($ret) $this->json_echo(['ret'=>true,'msg'=>'你已经领取过了<br>《个人中心》->《我的优惠券》<br>中查看优惠券']);
                 $open_id   = common::get_wechat_open_id($user_id);
                 $user_data = common::get_user_data($user_id);
-                $ret       = common::create_ticket($user_id, 'share');
+                $ret       = ticket::create_ticket($user_id, 'share',$share_no);
                 if ($ret){
                     wechats::send_message_template($open_id,'receive',['ticket_name'=>'满288抵扣优惠券','username'=>$user_data['username']]);
                     $this->json_echo(['ret'=>true,'msg'=>'《个人中心》->《我的优惠券》<br>中查看优惠券']);
@@ -3385,7 +3388,6 @@ class Apic extends IController{
         $user_data           = common::get_user_data($user_id);
         $open_id             = common::get_wechat_open_id($user_id);
         $follow_query        = new IQuery('follow');
-        $share_no            = IFilter::act(IReq::get('share_no'));
         $follow_query->where = "scene_id = 'qrscene_$share_no'";
         common::log_write($follow_query->getSql(),'ERROR');
         $data                = $follow_query->find();
@@ -3393,7 +3395,7 @@ class Apic extends IController{
 //        if($user_id==='24'){$num=5;}
         if ($num > 4){
 //            赠送优惠券
-            $ret = common::create_ticket($user_id, 'share');
+            $ret = ticket::create_ticket($user_id, 'share', $share_no);
             if ($ret){
                 wechats::send_message_template($open_id,'receive',['ticket_name'=>'满288抵扣优惠券','username'=>$user_data['username']]);
                 $this->json_echo(['ret'=>true,'msg'=>'《个人中心》->《我的优惠券》<br>中查看优惠券']);
@@ -3403,7 +3405,7 @@ class Apic extends IController{
             }
         } else {
             $num2 = 5-$num;
-            $this->json_echo(['ret'=>false,'msg'=>"您无法领取礼品优惠券<br>$num 位好友领取你的红包成功<br>还需要$num2领取红包"]);
+            $this->json_echo(['ret'=>false,'msg'=>"您无法领取礼品优惠券<br>$num 位好友领取你的红包成功<br>还需要$num2 位好友分享获得红包"]);
         }
     }
 }
