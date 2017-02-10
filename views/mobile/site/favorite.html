@@ -13,8 +13,8 @@
 </head>
 <body>
 <!--收藏页面-->
-<section id="favorite">
-    <template v-if="infoMessage.goods_data==''&&infoMessage.article_data==''">
+<section id="favorite" v-cloak>
+    <template v-if="infoMessage.goods_data.length===0&&infoMessage.article_data.length===0">
         <div class="empty">
             <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;" />
             <div class="content">收藏的内容和商品都在这里哦，赶紧去种草吧！</div>
