@@ -948,13 +948,12 @@ OEF;
             } else {
 	            $follow_model = new IModel('follow');
                 $follow_model->setData(['scene_id'=>$scene_id, 'open_id'=>$open_id ,'follow_time'=>date('Y-m-d H:i:s',time())]);
-                $wechat_qrcode_model = new IModel('wechat_qrcode');
-                $user_id = explode('_',$scene_id)[1];
-                $data = $wechat_qrcode_model->getObj("user_id = $user_id");
-                if ($data){
-                    wechats::send_message_template($open_id,'receive',['asd']);
-                }
                 $follow_model->add();
+            }
+            //推送信息
+            $type = explode(',',$scene_id)[1];
+            if ($type == 'share'){
+                wechats::send_message_template($open_id,'receive',['ticket_name'=>'满288抵扣优惠券','username'=>common::get_wechat_info(null,$open_id)['nickname']]);
             }
         } else {
             $follow_model = new IModel('follow');

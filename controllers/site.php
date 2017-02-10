@@ -889,21 +889,25 @@ class Site extends IController{
         $user_id      = $this->user['user_id'];
         $share_no_arr = explode(',', $share_no);
         $wechat_data  = common::get_wechat_info($user_id);
-        if ($wechat_data->subscribe === 1){
+        //是否已经关注
+        if ($wechat_data['subscribe'] === 1){
             $this->friends = 1;
         } else {
             $this->friends = 0;
         }
+        //是否为发起人
         if ($user_id === $share_no_arr[2]){
             $this->sponsor = 1;
         } else {
             $this->sponsor       = 0;
+            //获取该次分享的专属二维码
             $wechat_qrcode_model = new IModel('wechat_qrcode');
             $qrcode_data         = $wechat_qrcode_model->getObj("relation_id = '$share_no'");
             if (!empty($qrcode_data)){
                 $image_path = $qrcode_data['image_path'];
             } else {
-                $image_path = common::get_wechat_qrcode($user_id, $share_no, 1);
+                //永久二维码
+                $image_path = common::get_wechat_qrcode($share_no, $share_no, 2);
             }
             $this->image_path = IWeb::$app->config['image_host'] . '/' . $image_path;
         }
