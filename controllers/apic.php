@@ -1746,7 +1746,7 @@ class Apic extends IController{
 		$query->order    = 'comment_time DESC';
 		$query->group    = 'm.order_no';
 		$query->page     = $param['page']<=0 ? 1 : $param['page'];
-		$query->pagesize = 20;
+		$query->pagesize = 12;
 		$list            = $query->find();
 		if($param['page']>$query->getTotalPage()) $list = array();
 		$model = new IModel('comment_praise');
