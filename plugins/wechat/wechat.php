@@ -951,10 +951,12 @@ OEF;
                 $follow_model->add();
             }
             //推送信息
-            $type = explode(',',$scene_id)[1];
-            if ($type == 'share'){
-                $user_data = common::get_user_data(null, $open_id);
-                $ret       = common::create_ticket($user_data['id'], $type);
+            $scene_id_arr = explode(',', $scene_id)[1];
+            $type         = $scene_id_arr[1];
+            $remark       = ",$scene_id_arr[1],$scene_id_arr[2],$scene_id_arr[3]";
+            $user_data    = common::get_user_data(null, $open_id);
+            if ($type == 'share' && !(ticket::if_exsites_ticket($user_data['id'],$remark))){
+                $ret       = ticket::create_ticket($user_data['id'], $type, $remark);
                 if ($ret){
                     wechats::send_message_template($open_id,'receive',['ticket_name'=>'满288抵扣优惠券','username'=>common::get_wechat_info(null,$open_id)['nickname']]);
                 } else {

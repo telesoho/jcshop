@@ -20,7 +20,6 @@ class Comment extends IController implements adminAuthorization
 	 */
 	public function comment_add(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
-			
 			//上传评论图
 			foreach($_FILES['img']['name'] as $k => $v){
 				if(empty($v)){
