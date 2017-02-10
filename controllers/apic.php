@@ -1693,9 +1693,8 @@ class Apic extends IController{
 		$listComment = $modelComment->query('order_no='.$comment['order_no'].' AND status=0');
 		$modelComment->setData(array(
 			'point'        => 5,
-			'contents'     => '',
+			'contents'     => $param['content'],
 			'status'       => 1,
-			'content'      => $param['content'],
 			'comment_time' => ITime::getNow("Y-m-d"),
 			'tag'          => $param['tag_id'],
 			'image'        => implode(',', $data['image']),
