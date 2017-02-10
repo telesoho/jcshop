@@ -17,12 +17,31 @@
     <div class="con leftContainer">
         <div  v-for="item in con1">
             <img :src="item.img" alt="" style="width:3.5rem"/>
-            <div>这是测试</div>
+            <div class="p">
+            	<div class="pic_name">
+            		<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
+            		<p>阿猫阿狗</p>
+            	</div>
+            	<div class="facire_num">
+            		<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
+            		<span>11</span>
+            	</div>
+            </div>
         </div>
     </div>
     <div class="con rightContainer">
         <div  v-for="item in con2">
-            <img :src="item.img" alt="" style="width:3.5rem"/><div>这是测试</div>
+            <img :src="item.img" alt="" style="width:3.5rem"/>
+           <div class="p">
+            	<div class="pic_name">
+            		<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
+            		<p>阿猫阿狗</p>
+            	</div>
+            	<div class="facire_num">
+            		<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
+            		<span>11</span>
+            	</div>
+            </div>
         </div>
     </div>
     <footer-nav :state="2"></footer-nav>
@@ -48,8 +67,36 @@
                 {img:"/views/mobile/skin/default/image/jmj/home_redesign/1.png"},
                 {img:'http://m.jiumaojia.com/pic/thumb/img/upload@_@2016@_@12@_@19@_@20161219165324695.jpg@_@w@_@750@_@h@_@380'}
             ]
+          },
+          computed:{
+          	
+          },
+          mounted:function(){
+          	var self = this;
+          	user_side(self);
+          },
+          methods:{
+          	
           }
       })
+      function user_side(self){
+      	$.ajax({
+      		type:"get",
+      		dataType:'json',
+      		data:{
+      			page:1
+      		},
+      		url:"/apic/comment_list",
+      		async:true,
+      		success:function(data){
+      			console.log(data.data);
+      			for(var i = 0;i<data.data.length;i++){
+      				console.log(2*i);
+      				console.log(2*i+1)
+      			}
+      		}
+      	});
+      }
 </script>
 </body>
 </html>
