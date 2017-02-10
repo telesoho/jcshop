@@ -1,10 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="x5-orientation" content="portrait">
+    <title>分享赚钱</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/share/shareMoneyDetail.css?v=<?php echo time(); ?>" />
 </head>
 <body>
-
+    <div id="shareMoneryDetail" v-cloak>
+        <loadding :mes="showloadding"></loadding>
+        <sharemoney :share="data_s"></sharemoney>
+        <ul class="top flexbox">
+           <li :class="state==1?active:''" @click="changeState(1)">已到账</li>
+            <li :class="state==2?active:''"  @click="changeState(2)">未到账</li>
+        </ul>
+        <ul class="share_money" v-if="state==1">
+            <li v-for="item in info1" class="box">
+                <div class="left">
+                    <img :src="item.img" alt=""/>
+                    <span>{{item.name}}</span></div>
+                <div class="right">
+                    <span  class="s1">获得：</span>
+                    <span style="" class="s2">
+                        <span class="s3">￥</span>
+                        <span class="s4">{{item.pri}}</span>
+                    </span>
+                </div>
+            </li>
+        </ul>
+        <ul class="share_money" v-if="state==2">
+            <li v-for="item in info2" class="box">
+                <div class="left">
+                    <img :src="item.img" alt=""/>
+                    <span>{{item.name}}</span></div>
+                <div class="right">
+                    <span  class="s1">待获得：</span>
+                    <span style="" class="s2">
+                        <span class="s3">￥</span>
+                        <span class="s4">{{item.pri}}</span>
+                    </span>
+                </div>
+            </li>
+        </ul>
+        <!--暂无更多专辑-->
+        <div class="flexbox empty_product" style="" v-if="(state==2&&infoState2)||(state==1&&infoState1)">
+            <div class="img">
+                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+            </div>
+            <div class="content" style="background:#f5f5f5">
+                <span style="color:#bbb">~</span>
+                <span style="color:#bbb">别拉了，已经到底了</span>
+                <span style="color:#bbb">~</span>
+            </div>
+        </div>
+    </div>
+<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+<!--加载动画载入-->
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/share_Money.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script type="text/javascript">
+    var vm= new Vue({
+        el:"#shareMoneryDetail",
+        data:{
+            data_s:{
+                "img":"/views/mobile/skin/default/image/buy_share/share_bg.png",
+                "youbalance":"100.00",
+                "nobalance":"60.00"
+            },
+            showloadding:true,
+            state:1,//顶部导航的初始状态
+            active:'active',
+            info1:[],
+            info2:[],
+            page1:1,
+            page2:1,
+            stop1:true,
+            stop2:true,
+            infoState1:false,
+            infoState2:false
+        },
+        mounted:function(){
+            this.getData1(this)
+        },
+        methods:{
+            getData1:function(self){
+                setTimeout(function(){
+                    self.showloadding=false;
+                    var dat=[
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:80},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:80},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
+                    ]
+                    self.info1=self.info1.concat(dat);
+                    self.page1++;
+                    self.stop1=true;
+                    if(self.page1===4){
+                        self.infoState1=true;
+                        self.stop1=false;
+                    }
+                },500)
+            },
+            getData2:function(self){
+                setTimeout(function(){
+                    self.showloadding=false;
+                    var dat=[
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小三",pri:8},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小三",pri:70},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小三",pri:8},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小三",pri:8},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:80},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
+                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
+                    ]
+                    self.info2=self.info2.concat(dat)
+                    self.page2++;
+                    self.stop2=true;
+                    if(self.page2===3){
+                        self.infoState2=true;
+                        self.stop2=false;
+                    }
+                },500)
+            },
+            changeState:function(num){
+                var self=this;
+                self.state=num;
+                if(self.state===2&&self.page2===1) {self.showloadding=true;self.getData2(self)};
+            }
+        }
+    })
+    //执行window滚动函数
+    $(window).bind('scroll', function() {
+         switch  (vm.state) {
+             case 1 :{
+                 scroll1(vm);
+                 return;
+             }
+             case 2 :{
+                 scroll2(vm);
+                 return;
+             }
+         }
+    });
+    function scroll1(vm){
+        if ($(window).scrollTop() + $(window).height() +200 >= $(document).height() && $(window).scrollTop() > 50) {
+            if(vm.stop1==true){
+                vm.stop1=false;
+                vm.showloadding=true;
+                vm.getData1(vm)
+            }
+        }
+    }
+    function scroll2(vm){
+        if(vm.stop2==true){
+            vm.stop2=false;
+            vm.showloadding=true;
+            vm.getData2(vm)
+        }
+    }
+</script>
 </body>
 </html>
