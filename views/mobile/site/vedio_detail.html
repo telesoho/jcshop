@@ -85,26 +85,7 @@
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
 
-<!-- 微信分享 -->
-{if:IClient::isWechat() == true}
-<?php
-    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
-    $this->wechat = new wechat();
-$this->wechat->setConfig();
-$this->wechat->config['wechat_jsApiSDK']=1;
-$this->wechat->jsApiSDK();
-?>
-<script>
-    //微信分享
-    var wechat_share = {
-        title: vm.info.title, //标题
-        desc: vm.info.content, //描述
-        link: "",
-        imgUrl:vm.info.img , //图片
-    }
-    wechat.share();
-</script>
-{/if}
+
 <script type="text/javascript">
     var stop=true;
     var aid="{echo:IReq::get('id')}";
@@ -176,6 +157,26 @@ $this->wechat->jsApiSDK();
         }
     })
 </script>
+<!-- 微信分享 -->
+{if:IClient::isWechat() == true}
+<?php
+    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+    $this->wechat = new wechat();
+$this->wechat->setConfig();
+$this->wechat->config['wechat_jsApiSDK']=1;
+$this->wechat->jsApiSDK();
+?>
+<script>
+    //微信分享
+    var wechat_share = {
+        title: vm.info.title, //标题
+        desc: vm.info.content, //描述
+        link: "",
+        imgUrl:vm.info.img , //图片
+    }
+    wechat.share();
+</script>
+{/if}
 </body>
 
 </html>
