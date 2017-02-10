@@ -186,7 +186,7 @@ var vm = new Vue({
     		}
     	},
     	Video_pro:function(){
-    		window.location.href = "/site/article_list?id=3";
+    		window.location.href = "/site/vedio_list";
     	},
     	Brand_pavilion:function(){
     		window.location.href = "/site/sitemap?id=3";
