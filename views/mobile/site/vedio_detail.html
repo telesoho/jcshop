@@ -17,7 +17,7 @@
 <body>
 <section id="vedio_detail" v-cloak>
     <loadding :mes="showloadding"></loadding>
-    <video :src="info.url" style="height:4.22rem;" width="100%" controls :poster="info.img"></video>
+    <iframe :src="info.url" style="width:100%;height:4.22rem;display: block;overflow: hidden" frameborder="0"></iframe>
     <header class="box detail_header">
         <div class="left">
             <p class="p1 hidewrap">{{info.title}}</p>

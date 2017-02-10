@@ -70,7 +70,7 @@
 				<div class="top_1" v-else>
 					<img src="/views/mobile/skin/default/image/buy_share/vouchers.png"/>
 					<p>打开红包</p>
-					<div class="www"  @click="share_receive2"></div>
+					<div class="www"  @click="share_receive"></div>
 				</div>
 				<div class="bottom_1">
 					<img src="/views/mobile/skin/default/image/buy_share/fanhui.png"/>
@@ -84,16 +84,28 @@
 				<div>
 					<!--<p class="window_1">恭喜您! 成功领取&nbsp;<span>68</span>&nbsp;元代金券!</p>-->
                     <div class="window_1" v-html="p_data"></div>
+                    <!--     发起人       -->
+                    <img v-if = "sent_per" class="window_img1" src="/views/mobile/skin/default/image/buy_share/tatle.png"/>
+                    <div class="window_div" v-if = "sent_per == true">
+                        <img class="window_img2" @click="returns" src="/views/mobile/skin/default/image/buy_share/return.png"/>
+                        <p>返回九猫家</p>
+                    </div>
 					<!--<p v-if="friends" class="window_2">代金券编号:&nbsp;<span>EEEEEEEEEEE</span></p>-->
-					<img v-if = "friends" class="window_img1" src="/views/mobile/skin/default/image/buy_share/tatle.png"/>
-					<!--<img v-if = "friends == false" src="/views/mobile/skin/default/image/buy_share/qq.png" style="width: 5.54rem;margin: 0.56rem auto 0.66rem;"/>-->
-					<div class="window_div" v-if = "friends == true">
-						<img class="window_img2" @click="returns" src="/views/mobile/skin/default/image/buy_share/return.png"/>
-						<p>返回九猫家</p>
-					</div>
-                    <img v-if = "friends == false" src="{$this->image_path}" alt="图丢啦！" style="width: 2.54rem;display: block;margin: 0 auto">
-					<span v-if = "friends == false"  style="font-size: 0.28rem; color: #898989;display: block;width: 100%;text-align: center;">长按二维码并关注,即可领取优惠券红包。</span>
-					<t id="sssssss" style="width: 1px;height: 1.29rem;background: #fff; position: absolute;right:0.42rem ;top: 7.2rem; background: rgba(255,255,255,0.4);">
+                    <!--  为普通用户 -->
+                    <div v-if="sent_per==false">
+                        <!--         普通用户已关注       -->
+                        <img v-if = "friends" class="window_img1" src="/views/mobile/skin/default/image/buy_share/tatle.png"/>
+                        <!--<img v-if = "friends == false" src="/views/mobile/skin/default/image/buy_share/qq.png" style="width: 5.54rem;margin: 0.56rem auto 0.66rem;"/>-->
+                        <div class="window_div" v-if = "friends == true">
+                            <img class="window_img2" @click="returns" src="/views/mobile/skin/default/image/buy_share/return.png"/>
+                            <p>返回九猫家</p>
+                        </div>
+
+                        <!--        普通用户未关注        -->
+                        <img v-if = "friends == false" src="{$this->image_path}" alt="图丢啦！" style="width: 2.54rem;display: block;margin: 0 auto">
+                        <span v-if = "friends == false"  style="font-size: 0.28rem; color: #898989;display: block;width: 100%;text-align: center;">长按二维码并关注,即可领取优惠券红包。</span>
+                    </div>
+                    <t id="sssssss" style="width: 1px;height: 1.29rem;background: #fff; position: absolute;right:0.42rem ;top: 7.2rem; background: rgba(255,255,255,0.4);">
 			    		<strong style="width: 0.5rem;height: 0.5rem;position: absolute;left: -0.25rem;top: 1.29rem;z-index: 88;">
 			    			<img id="guan" @click="guan" src="/views/mobile/skin/default/image/jmj/ticket_gain/guan.png" style="width: 0.5rem;height: 0.5rem;"/>
 			    		</strong>
@@ -116,6 +128,7 @@
 		<script type="text/javascript">
              var sponsor = "{$this->sponsor}";
              var friends = "{$this->friends}";
+             var share_no = "{$this->share_no}";
              if(sponsor == 1){
                  sponsor = true;
              }else{
@@ -179,7 +192,8 @@
                         })
                         mui.ajax('/apic/get_share_ticket',{
                             dataType:'json',
-                            type:'get',
+                            type:'post',
+                            data:{share_no:share_no,sponsor:sponsor,friends:friends},
                             timeout:10000,
                             success:function(data){
                                 vm.p_data = data.msg ;

@@ -193,7 +193,7 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,$template_array[$type],IUrl::getHost().'/ucenter/index',date('Y-m-d h:i:s',time()),$send_info['goods_name'],$send_info['order_no']);
+               }',$open_id,$template_array[$type],IUrl::getHost().'/ucenter/index',date('Y-m-d H:i:s',time()),$send_info['goods_name'],$send_info['order_no']);
                 break;
             case 'receive':
                 $params = sprintf('{
@@ -222,16 +222,15 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,$template_array[$type],IUrl::getHost().'/site/ticket_list',$send_info['username'],$send_info['ticket_name'],date('Y-m-d h:i:s',time()));
+               }',$open_id,$template_array[$type],IUrl::getHost().'/site/ticket_list',$send_info['username'],$send_info['ticket_name'],date('Y-m-d H:i:s',time()));
                 break;
         }
         $ret = common::http_post_json($url,$params);
-        $ret = json_decode($ret[1])->errcode;
-        if ($ret === 0){
-            common::log_write("消息推送成功$open_id" . print_r($ret,true));
+        if (json_decode($ret[1])->errcode === 0){
+            common::log_write("消息推送成功:$open_id" . print_r($ret,true));
             return true;
         } else {
-            common::log_write(__CLASS__ . __FUNCTION__ . print_r($ret,true), 'ERROR');
+            common::log_write(__CLASS__ . "-" . __FUNCTION__ . '-' . print_r($ret,true), 'ERROR');
             return false;
         }
     }

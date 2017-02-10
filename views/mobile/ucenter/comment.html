@@ -47,7 +47,7 @@
               </div>
           </div>
       </div>
-    <div class="voiceInfo">
+    <div class="voiceInfo" v-if="hideVoice">
         <h3 class="top">说点什么吧</h3>
         <div class="content content1 flexbox" v-if="voiceState==1">
             <img src="/views/mobile/skin/default/image/jmj/comment/voice1.png" alt="" style="width:1.2rem;margin-top:0.3rem" @click="startV"/>
@@ -66,6 +66,11 @@
                 <span class="del" @click="delVoice">删除</span>
             </div>
         </div>
+    </div>
+    <div class="texteare">
+        <textarea maxlength="100" name="" id="textear"  rows="5" v-model="textarea"
+                  placeholder="写下购买体会和使用感受来帮助其他小伙伴 ^_^" @change="changeNum"></textarea>
+        <p >{{inputLength}}/100</p>
     </div>
     <div class="markInfo">
         <div class="top">
@@ -100,8 +105,10 @@
             imgLength:0,//当前已上传图片数量
             maxMark:3,//最大可以选择标签数
             voiceState:1, //录制状态 1代表没有录制  2代表录正在录制  3 代表录制完成
-            markLen:0, //当前所选标签的长度
+            markLen:0, //当前所选标签的长度,
+            hideVoice:false,//开发中隐藏评论
             checkSub:false,
+            textarea:"",
             style1:"opacity:0.5",
             style2:"opacity:1",
             //播放语音的动画
@@ -123,12 +130,13 @@
 //            用户选择标签选项
             class1:"item",
             class2:"item active",
-            mark:[]
+            mark:[],
+            inputLength:100
         },
         computed:{
             checkSubmit:function(){
                 //判断用户选择内容是否可以提交
-                if(this.markLen||this.choImg.length||this.voice!="")
+                if(this.markLen||this.choImg.length||this.voice!=""||this.textarea!="")
                 {
                     this.checkSub=true;
                 }
@@ -201,6 +209,10 @@
                 self.voiceState=1;
                 self.pause=false;
             },
+            changeNum: function(){
+                var length=parseInt(document.getElementById("textear").value.length);
+                this.inputLength= 100-length;
+            },
 //            选择标签,最多只能选择三个标签
             changeState:function(item){
                 if(this.maxMark>this.markLen){
@@ -238,6 +250,32 @@
                     item.cho=false;
                 })
                 self.mark=data.data;
+            }
+        });
+    }
+    //提交图片 语音
+    function upload(self){
+//        处理获得的数据
+        var sub_data={
+            id:self.id,
+            content:self.textarea,
+            tag_id:self.tag_id,
+            image_media_id:self.choImg.join(","),
+            voice_media_id:self.voice
+        };
+        console.log("图片"+sub_data.image_media_id);
+        console.log("语音"+sub_data.voice_media_id)
+        //发送ajax提交后台
+        mui.ajax('/apic/comment_add',{
+            data:sub_data,
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            timeout:10000,//超时时间设置为10秒
+            success:function(data){
+                console.log(sub_data)
+                console.log(data);
+                self.showLoad=false; //停止加载
+                window.location.href="/ucenter/order"
             }
         });
     }
@@ -348,29 +386,7 @@ $this->wechat->jsApiSDK();
             self.pause=true;
         }
     }
-    //提交图片 语音
-    function upload(self){
-//        处理获得的数据
-        var sub_data={
-            id:self.id,
-            tag_id:self.tag_id,
-            image_media_id:self.choImg.join(","),
-            voice_media_id:self.voice
-        };
-        console.log("图片"+sub_data.image_media_id);
-        console.log("语音"+sub_data.voice_media_id)
-        //发送ajax提交后台
-        mui.ajax('/apic/comment_add',{
-            data:sub_data,
-            dataType:'json',//服务器返回json格式数据
-            type:'get',//HTTP请求类型
-            timeout:10000,//超时时间设置为10秒
-            success:function(data){
-                self.showLoad=false; //停止加载
-                window.location.href="/ucenter/order"
-            }
-        });
-    }
+
 </script>
 {/if}
 
