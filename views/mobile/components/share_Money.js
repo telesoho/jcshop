@@ -1,5 +1,5 @@
 Vue.component("sharemoney",{
-	template:'<header id="header">\
+	template:'<header id="header" @click="share_detail(share.key)">\
 			   <div class="img_top">\
 			   		<img :src="share.img"/>\
 			   </div>\
@@ -12,5 +12,12 @@ Vue.component("sharemoney",{
 			   		<span>未到账(元)</span>\
 			   </div>\
 		</header>',
-		props:["share"]
+		props:["share"],
+		methods:{
+			share_detail:function(key){
+				if(key == 1){
+					window.location.href = "/ucenter/shareMoneyDetail"
+				}
+			}
+		}
 })

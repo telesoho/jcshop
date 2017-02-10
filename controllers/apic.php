@@ -1667,6 +1667,7 @@ class Apic extends IController{
 			array('image_media_id', 'string', 0, '微信图片ID[多个使用"英文逗号"分割]'),
 			array('voice_media_id', 'string', 0, '微信语音ID'),
 		));
+		Common::dblog($param);
 		$user_id = $this->tokenCheck();
 		//检测
 		$comment = Comment_Class::can_comment($param['id'], $user_id);
@@ -1712,6 +1713,7 @@ class Apic extends IController{
 		));
 		$modelGoods->update('id IN ('.explode(',',$goods).')', array('grade', 'comments'));
 		
+		Common::dblog('comment_end');
 		$this->returnJson(array('code' => '0', 'msg' => 'ok'));
 	}
 	

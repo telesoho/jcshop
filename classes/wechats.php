@@ -231,7 +231,7 @@ class wechats
             common::log_write("消息推送成功$open_id" . print_r($ret,true));
             return true;
         } else {
-            common::log_write(__CLASS__ . __FUNCTION__ . print_r($ret,true));
+            common::log_write(__CLASS__ . __FUNCTION__ . print_r($ret,true), 'ERROR');
             return false;
         }
     }

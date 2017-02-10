@@ -345,9 +345,8 @@ class Common{
         $open_id      = self::get_wechat_open_id($user_id);
         $access_token = common::get_wechat_access_token();
         $url          = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$access_token&openid=$open_id&lang=zh_CN";
-        $curl         = new \Wenpeng\Curl\Curl();
-        $ret          = $curl->url($url);
-        return $ret;
+        $ret          = self::curl_http($url,'','GET');
+        return json_decode($ret);
     }
 
     /**

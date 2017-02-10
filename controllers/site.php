@@ -885,21 +885,27 @@ class Site extends IController{
 	}
 
 	function order_share(){
-        $share_no    = IFilter::act(IReq::get('share_no'));
-        $user_id     = $this->user['user_id'];
-        $wechat_data = common::get_wechat_info($user_id);
-        if ($wechat_data['subscribe'] === 1){
+        $share_no     = IFilter::act(IReq::get('share_no'));
+        $user_id      = $this->user['user_id'];
+        $share_no_arr = explode(',', $share_no);
+        $wechat_data  = common::get_wechat_info($user_id);
+        if ($wechat_data->subscribe === 1){
             $this->friends = 1;
         } else {
             $this->friends = 0;
         }
-        $share_no_arr = explode(',', $share_no);
         if ($user_id === $share_no_arr[2]){
             $this->sponsor = 1;
         } else {
-            $this->sponsor    = 0;
-            $image_path       = common::get_wechat_qrcode($user_id, $share_no, 1);
-            $this->image_path = $image_path;
+            $this->sponsor       = 0;
+            $wechat_qrcode_model = new IModel('wechat_qrcode');
+            $qrcode_data         = $wechat_qrcode_model->getObj("relation_id = '$share_no'");
+            if (!empty($qrcode_data)){
+                $image_path = $qrcode_data['image_path'];
+            } else {
+                $image_path = common::get_wechat_qrcode($user_id, $share_no, 1);
+            }
+            $this->image_path = IWeb::$app->config['image_host'] . '/' . $image_path;
         }
         $this->share_no = $share_no;
         $this->redirect('order_share');

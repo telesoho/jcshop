@@ -13,7 +13,7 @@
 </head>
 <body>
 	<div id="wrap_share">
-		<sharemoney :share="data_s"></sharemoney>
+		<sharemoney :share="data_s" @click="share_detail"></sharemoney>
 		<div id="instructions" >
 			<img src="/views/mobile/skin/default/image/buy_share/share_title.png"/>
 		</div>
@@ -24,48 +24,6 @@
 				<p>最热分享</p>
 			</h1>
 			<ul>
-				<li>
-					<div class="shop_img">
-						<img src=""/>
-					</div>
-					<div class="shop_title">
-						<p>算得上是所所所所所所所萨达四大四大所是的发送到发送到所少时诵诗书</p>
-						<div class="price_">
-							<span>赚 ¥<span>7</span></span>
-							<span>九猫价: ¥100.00</span>
-							<span>开始分享</span>
-						</div>
-					</div>
-					
-				</li>
-				<li>
-					<div class="shop_img">
-						<img src=""/>
-					</div>
-					<div class="shop_title">
-						<p>算得上是所所所所所所所萨达四大四大所是的发送到发送到所少时诵诗书</p>
-						<div class="price_">
-							<span>赚 ¥<span>7</span></span>
-							<span>九猫价: ¥100.00</span>
-							<span>开始分享</span>
-						</div>
-					</div>
-					
-				</li>
-				<li>
-					<div class="shop_img">
-						<img src=""/>
-					</div>
-					<div class="shop_title">
-						<p>算得上是所所所所所所所萨达四大四大所是的发送到发送到所sdsssssss少时诵诗书事实上事实上所所</p>
-						<div class="price_">
-							<span>赚 ¥<span>7</span></span>
-							<span>九猫价: ¥100.00</span>
-							<span>开始分享</span>
-						</div>
-					</div>
-					
-				</li>
 				<li>
 					<div class="shop_img">
 						<img src=""/>
@@ -91,7 +49,8 @@
 		var data_s = {
 			"img":"",
 			"youbalance":"100.00",
-			"nobalance":"60.00"
+			"nobalance":"60.00",
+			"key":"1"
 		}
 		 var vm= new Vue({
 			el:'#wrap_share',
@@ -107,6 +66,9 @@
 			updated:function(){
 			},
 			methods:{
+				share_detail:function(){
+					alert(1)
+				}
 			}
 			})
 	</script>
