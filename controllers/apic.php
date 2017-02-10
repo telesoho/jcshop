@@ -1863,6 +1863,7 @@ class Apic extends IController{
 		/* 获取参数 */
 		$param   = $this->checkData(array(
 			array('id', 'int', 1, '商品ID'),
+			array('page', 'int', 0, '评论分页'),
 		));
 		$user_id = $this->tokenCheck();
 		
@@ -1885,6 +1886,35 @@ class Apic extends IController{
 		foreach($listPhoto as $k => $v){
 			$dataGoods['photo'][$k] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/600/h/600");
 		}
+		
+		/* 相关评论 */
+		$queryComment              = new IQuery('comment as m');
+		$queryComment->join        = 'LEFT JOIN user as u ON u.id=m.user_id';
+		$queryComment->where       = 'status=1 AND goods_id='.$param['id'];
+		$queryComment->fields      = 'm.id,m.contents,m.recontents,m.recomment_time,m.tag,m.image,m.voice,m.user_id,u.username,u.head_ico';
+		$queryComment->page        = $param['page']<=0 ? 1 : $param['page'];
+		$queryComment->pagesize    = 10;
+		$commetList = $queryComment->find();
+		if($param['page']>$queryComment->getTotalPage()) $commetList = array();
+		if(!empty($commetList)){
+			$modelTag = new IModel('comment_tag');
+			foreach($commetList as $k => $v){
+				//语音
+				$commetList[$k]['voice'] = empty($v['voice']) ? '' : IWeb::$app->config['image_host'].'/'.$v['voice'];
+				//评论图片
+				$image             = explode(',', $v['image']);
+				if(!empty($image)){
+					foreach($image as $k1 => $v1) $image[$k1] = empty($v1) ? '' : IWeb::$app->config['image_host'].'/'.$v1;
+				}
+				$commetList[$k]['image'] = $image;
+				//标签
+				$tag = array();
+				$listTag = $modelTag->query('id IN ('.$v['tag'].') AND status=1','name');
+				foreach($listTag as $k1 => $v1) $tag[] = $v1['name'];
+				$commetList[$k]['tag'] = $tag;
+			}
+		}
+		$dataGoods['comment_list'] = $commetList;
 		
 		/* 相关专辑 */
 		$queryArt                  = new IQuery('article as m');
