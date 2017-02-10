@@ -60,8 +60,8 @@ var vm = new Vue({
                 	 var t = parseInt(item.comment_id);
                 	if(t > 0){
                 		item.button1='去评价';
-                    	item.button1Url='/ucenter/comment?id=';
-                    	vm.show_ping;false;
+                    	item.button1Url='/ucenter/comment?id='+t;
+                    	vm.show_ping=false;
                 	}else{
                     	item.button1='已评价';
                     	vm.show_ping=true;

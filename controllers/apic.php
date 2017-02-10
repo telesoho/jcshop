@@ -1663,11 +1663,11 @@ class Apic extends IController{
 	public function comment_add(){
 		$param   = $this->checkData(array(
 			array('id', 'int', 1, '评论ID'),
+			array('content', 'string', 0, '评论内容'),
 			array('tag_id', 'string', 0, '标签ID[多个使用"英文逗号"分割]'),
 			array('image_media_id', 'string', 0, '微信图片ID[多个使用"英文逗号"分割]'),
 			array('voice_media_id', 'string', 0, '微信语音ID'),
 		));
-		Common::dblog($param);
 		$user_id = $this->tokenCheck();
 		//检测
 		$comment = Comment_Class::can_comment($param['id'], $user_id);
@@ -1695,6 +1695,7 @@ class Apic extends IController{
 			'point'        => 5,
 			'contents'     => '',
 			'status'       => 1,
+			'content'      => $param['content'],
 			'comment_time' => ITime::getNow("Y-m-d"),
 			'tag'          => $param['tag_id'],
 			'image'        => implode(',', $data['image']),
@@ -1713,7 +1714,6 @@ class Apic extends IController{
 		));
 		$modelGoods->update('id IN ('.explode(',',$goods).')', array('grade', 'comments'));
 		
-		Common::dblog('comment_end');
 		$this->returnJson(array('code' => '0', 'msg' => 'ok'));
 	}
 	
@@ -1772,7 +1772,7 @@ class Apic extends IController{
 		$query         = new IQuery('comment as m');
 		$query->join   = 'LEFT JOIN user AS u ON u.id=m.user_id';
 		$query->where  = 'm.status=1 AND m.id='.$param['comment_id'];
-		$query->fields = 'm.id,m.image,m.comment_time,u.username,u.head_ico';
+		$query->fields = 'm.id,m.image,m.comment_time,u.username,u.head_ico,m.content';
 		$query->limit  = 1;
 		$list          = $query->find();
 		if(empty($list)) $this->returnJson(array('code' => '010001', 'msg' => $this->errorInfo['010001'])); //评论不存在
@@ -2515,6 +2515,7 @@ class Apic extends IController{
 		if($param['page']>$query->getTotalPage()) $list = array();
 		$model = new IModel('video_collect');
 		foreach($list as $k => $v){
+			$list[$k]['img']        = empty($v['img']) ? '' : IWeb::$app->config['image_host'].'/'.$v['img'];
 			$list[$k]['collect']    = $model->get_count('video_id='.$v['id']); //收藏人数
 			$list[$k]['is_collect'] = $model->get_count('video_id='.$v['id'].' AND user_id='.$user_id); //是否以收藏
 		}
@@ -2534,6 +2535,7 @@ class Apic extends IController{
 		$modelVideo = new IModel('video');
 		$info       = $modelVideo->getObj('status=1 AND id='.$param['video_id'], 'id,url,hits,img,title,content,goods');
 		if(empty($info)) $this->returnJson(array('code' => '011001', 'msg' => $this->errorInfo['011001']));
+		$info['img'] 	    = empty($v['img']) ? '' : IWeb::$app->config['image_host'].'/'.$v['img'];
 		//收藏
 		$modelCollect       = new IModel('video_collect');
 		$info['collect']    = $modelCollect->get_count('video_id='.$param['video_id']);

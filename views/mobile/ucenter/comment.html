@@ -366,6 +366,7 @@ $this->wechat->jsApiSDK();
             type:'get',//HTTP请求类型
             timeout:10000,//超时时间设置为10秒
             success:function(data){
+                console.log(data);
                 self.showLoad=false; //停止加载
                 window.location.href="/ucenter/order"
             }
