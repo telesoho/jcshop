@@ -47,7 +47,7 @@
               </div>
           </div>
       </div>
-    <div class="voiceInfo">
+    <div class="voiceInfo" v-if="hideVoice">
         <h3 class="top">说点什么吧</h3>
         <div class="content content1 flexbox" v-if="voiceState==1">
             <img src="/views/mobile/skin/default/image/jmj/comment/voice1.png" alt="" style="width:1.2rem;margin-top:0.3rem" @click="startV"/>
@@ -66,6 +66,11 @@
                 <span class="del" @click="delVoice">删除</span>
             </div>
         </div>
+    </div>
+    <div class="texteare">
+        <textarea maxlength="100" name="" id="textear"  rows="5" v-model="textarea"
+                  placeholder="写下购买体会和使用感受来帮助其他小伙伴 ^_^" @change="changeNum"></textarea>
+        <p >{{inputLength}}/100</p>
     </div>
     <div class="markInfo">
         <div class="top">
@@ -100,8 +105,10 @@
             imgLength:0,//当前已上传图片数量
             maxMark:3,//最大可以选择标签数
             voiceState:1, //录制状态 1代表没有录制  2代表录正在录制  3 代表录制完成
-            markLen:0, //当前所选标签的长度
+            markLen:0, //当前所选标签的长度,
+            hideVoice:false,//开发中隐藏评论
             checkSub:false,
+            textarea:"",
             style1:"opacity:0.5",
             style2:"opacity:1",
             //播放语音的动画
@@ -123,7 +130,8 @@
 //            用户选择标签选项
             class1:"item",
             class2:"item active",
-            mark:[]
+            mark:[],
+            inputLength:100
         },
         computed:{
             checkSubmit:function(){
@@ -200,6 +208,10 @@
                 clearInterval(self.v);
                 self.voiceState=1;
                 self.pause=false;
+            },
+            changeNum: function(){
+                var length=parseInt(document.getElementById("textear").value.length);
+                this.inputLength= 100-length;
             },
 //            选择标签,最多只能选择三个标签
             changeState:function(item){
@@ -353,6 +365,7 @@ $this->wechat->jsApiSDK();
 //        处理获得的数据
         var sub_data={
             id:self.id,
+            content:self.textarea,
             tag_id:self.tag_id,
             image_media_id:self.choImg.join(","),
             voice_media_id:self.voice
