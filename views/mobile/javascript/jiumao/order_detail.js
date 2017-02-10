@@ -47,11 +47,17 @@ var vm = new Vue({
 //              this.order_detailInfo.button2Url='';
             };
             if(this.order_detailInfo.orderStatus==3){
-            	
+                var t = parseInt(this.order_detailInfo.comment_id);
                 this.order_detailInfo.button1='删除订单';
                 this.order_detailInfo.button1Url='/site/error';
-                this.order_detailInfo.button2='评价';
-                this.order_detailInfo.button2Url='/ucenter/comment?id='+statusOrder;
+                if(t>0){
+                    this.order_detailInfo.button2='评价';
+                    this.order_detailInfo.button2Url='/ucenter/comment?id='+this.order_detailInfo.comment_id;
+                }else{
+                    this.order_detailInfo.button2='已评价';
+                    this.order_detailInfo.button2Url="#";
+                }
+
             }
             
             return this.order_detailInfo;

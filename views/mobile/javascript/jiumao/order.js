@@ -58,6 +58,7 @@ var vm = new Vue({
                 };
                 if(item.orderStatusVal==6){	 
                 	 var t = parseInt(item.comment_id);
+                     console.log(t)
                 	if(t > 0){
                 		item.button1='去评价';
                     	item.button1Url='/ucenter/comment?id='+t;
@@ -107,9 +108,8 @@ var vm = new Vue({
                 }
             })
         },
-        comment_ed:function(item,id){
-        	console.log(id+item.id);
-        	window.location.href = id+item.id;
+        comment_ed:function(url){
+        	window.location.href = url;
         }
     }
 })
