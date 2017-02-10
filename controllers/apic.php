@@ -37,9 +37,9 @@ class Apic extends IController{
 		
 		/* 限时购 */
 		$modelSpeed = new IModel('activity_speed');
-		$infoSpeed  = $modelSpeed->getObj('type=1 AND status=1 AND start_time<='.time().' AND end_time>='.time(), 'id,start_time,end_time');
-//		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$infoSpeed));
+		$infoSpeed  = $modelSpeed->query('type=1 AND status=1 AND start_time<='.time().' AND end_time>='.time(), 'id,start_time,end_time','start_time DESC',1);
 		if(!empty($infoSpeed)){
+			$infoSpeed 				 = $infoSpeed[0];
 			$querySpeedGoods         = new IQuery('activity_speed_access AS m');
 			$querySpeedGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
 			$querySpeedGoods->where  = 'pid='.$infoSpeed['id'];
@@ -1667,6 +1667,7 @@ class Apic extends IController{
 			array('image_media_id', 'string', 0, '微信图片ID[多个使用"英文逗号"分割]'),
 			array('voice_media_id', 'string', 0, '微信语音ID'),
 		));
+		Common::dblog($param);
 		$user_id = $this->tokenCheck();
 		//检测
 		$comment = Comment_Class::can_comment($param['id'], $user_id);
@@ -1712,6 +1713,7 @@ class Apic extends IController{
 		));
 		$modelGoods->update('id IN ('.explode(',',$goods).')', array('grade', 'comments'));
 		
+		Common::dblog('comment_end');
 		$this->returnJson(array('code' => '0', 'msg' => 'ok'));
 	}
 	
