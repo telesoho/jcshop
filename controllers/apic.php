@@ -1771,7 +1771,7 @@ class Apic extends IController{
 		$query         = new IQuery('comment as m');
 		$query->join   = 'LEFT JOIN user AS u ON u.id=m.user_id';
 		$query->where  = 'm.status=1 AND m.id='.$param['comment_id'];
-		$query->fields = 'm.id,m.image,m.comment_time,u.username,u.head_ico,m.content';
+		$query->fields = 'm.id,m.image,m.comment_time,u.username,u.head_ico,m.contents';
 		$query->limit  = 1;
 		$list          = $query->find();
 		if(empty($list)) $this->returnJson(array('code' => '010001', 'msg' => $this->errorInfo['010001'])); //评论不存在
