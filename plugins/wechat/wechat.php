@@ -952,7 +952,7 @@ OEF;
                 $user_id = explode('_',$scene_id)[1];
                 $data = $wechat_qrcode_model->getObj("user_id = $user_id");
                 if ($data){
-                    wechats::send_message_template($open_id,'receive',[''])
+                    wechats::send_message_template($open_id,'receive',['asd']);
                 }
                 $follow_model->add();
             }
