@@ -84,7 +84,8 @@ body{
     width:5.3rem;
     color:#fff;
     height:0.32rem;
-    z-index:4
+    z-index:4;
+    font-size:0.28rem;
 }
 #vedioList .content .item .img .dis .watch {
     /*width:1.2rem;*/
