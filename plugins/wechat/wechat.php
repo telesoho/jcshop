@@ -953,7 +953,13 @@ OEF;
             //推送信息
             $type = explode(',',$scene_id)[1];
             if ($type == 'share'){
-                wechats::send_message_template($open_id,'receive',['ticket_name'=>'满288抵扣优惠券','username'=>common::get_wechat_info(null,$open_id)['nickname']]);
+                $user_data = common::get_user_data(null, $open_id);
+                $ret       = common::create_ticket($user_data['id'], $type);
+                if ($ret){
+                    wechats::send_message_template($open_id,'receive',['ticket_name'=>'满288抵扣优惠券','username'=>common::get_wechat_info(null,$open_id)['nickname']]);
+                } else {
+                    common::log_write($open_id.'-优惠券生成失败','ERROR');
+                }
             }
         } else {
             $follow_model = new IModel('follow');

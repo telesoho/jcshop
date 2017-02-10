@@ -116,6 +116,7 @@
 		<script type="text/javascript">
              var sponsor = "{$this->sponsor}";
              var friends = "{$this->friends}";
+             var share_no = "{$this->share_no}";
              if(sponsor == 1){
                  sponsor = true;
              }else{
@@ -179,7 +180,8 @@
                         })
                         mui.ajax('/apic/get_share_ticket',{
                             dataType:'json',
-                            type:'get',
+                            type:'post',
+                            data:{share_no:share_no},
                             timeout:10000,
                             success:function(data){
                                 vm.p_data = data.msg ;
