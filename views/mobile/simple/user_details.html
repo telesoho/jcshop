@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="x5-orientation" content="portrait">
+		<title></title>
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/swiper-3.4.0.min.css" />
+    	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/user_details.css" />
+	</head>
+	<body>
+		<div id="wrap_info" >
+			<!--		轮播图				-->
+			<div class="swiper-container">
+			    <div class="swiper-wrapper">
+				    <div class="swiper-slide"><img src="https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2899479515,2587442361&fm=58"/></div>
+				    <div class="swiper-slide"><img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=435776751,3008915459&fm=58"/></div>
+				    <div class="swiper-slide"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2434560235,935681266&fm=58"/></div>
+				 </div>
+			    <!-- 如果需要分页器 -->
+			    <div class="swiper-pagination"></div>
+			</div>
+			<!--		用户			-->
+			<div id="user_show">
+				<div class="user_top">
+					<div class="name">
+						<img class="Head_pic" src=""/>
+						<p>
+							<span></span>
+							<span>15小时前</span>
+						</p>
+					</div>
+					<img class="thumb" src="/views/mobile/skin/default/image/jmj/favorite/Thumb.png"/>
+				</div>
+				<div class="after"></div>
+				<div class="other_user">
+					<div class="others">
+						<ul>
+							<li><img src=""/></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="wenzi">
+					<div class="left_wenzi">他说</div>
+					<div class="right_wenzi">少时诵诗书所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所</div>
+			</div>
+			<div id="form_shop">
+				<h1>评论来自</h1>
+				<div class="from_shop">
+					<img src=""/>
+					<div class="right_shop">
+						<p>资生堂红色蜜露 精华化妆液</p>
+						<div>
+							<span><span>¥</span> 590.00</span>
+							<span>日本价：3490.00</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="said_list">
+				<h1>人气喵粉说</h1>
+				<ul>
+					<li>
+						<img class="logo" src=""/>
+						<div class="list_photo">
+							<div class="list_left">
+								<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
+								<span>wwwww</span>
+							</div>
+							<div class="list_right">
+								<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
+								<span>22</span>
+							</div>
+						</div>
+					</li>
+					<li>
+						<img class="logo" src=""/>
+						<div class="list_photo">
+							<div class="list_left">
+								<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
+								<span>wwwww</span>
+							</div>
+							<div class="list_right">
+								<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
+								<span>22</span>
+							</div>
+						</div>
+					</li>
+					<li>
+						<img class="logo" src=""/>
+						<div class="list_photo">
+							<div class="list_left">
+								<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
+								<span>wwwww</span>
+							</div>
+							<div class="list_right">
+								<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
+								<span>22</span>
+							</div>
+						</div>
+					</li>
+					<li>
+						<img class="logo" src=""/>
+						<div class="list_photo">
+							<div class="list_left">
+								<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
+								<span>wwwww</span>
+							</div>
+							<div class="list_right">
+								<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
+								<span>22</span>
+							</div>
+						</div>
+					</li>
+					<li>
+						<img class="logo" src=""/>
+						<div class="list_photo">
+							<div class="list_left">
+								<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
+								<span>wwwww</span>
+							</div>
+							<div class="list_right">
+								<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
+								<span>22</span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script src="/views/mobile/javascript/jquery.min.js"></script>
+		<script src="/views/mobile/javascript/vue.js"></script>
+		<script src="/views/mobile/javascript/swiper-3.4.0.min.js"></script>
+<script type="text/javascript">   
+	var vm = new Vue({
+		el:"wrap_info",
+		data:{
+			comment_time:"",
+			username:"",
+			info:[]
+		},
+		computed:{
+			
+		},
+		mounted:function(){
+			var self = this;
+			user_detail(self);
+		},
+		methods:{
+			
+		},
+		updated:function(){
+			
+		}
+	})
+	function user_detail(self){
+		$.ajax({
+			type:"get",
+			url:"/apic/comment_detail",
+			dataType:"json",
+			data:{
+				comment_id:1750
+			},
+			async:true,
+			success:function(data){
+				console.log(data.data)
+				self.info = data.data;
+				self.comment_time = data.data.comment_time;
+				self.username = data.data.username;
+			}
+		});
+	}
+	//轮播图
+	var mySwiper = new Swiper ('.swiper-container', {
+	direction: 'horizontal',
+	loop: true,
+	// 如果需要分页器
+	pagination: '.swiper-pagination',
+	paginationType : 'fraction',
+	    autoplay : 3000,
+	});
+</script>
+	</body>
+</html>

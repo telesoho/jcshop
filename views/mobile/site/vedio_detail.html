@@ -97,10 +97,10 @@ $this->wechat->jsApiSDK();
 <script>
     //微信分享
     var wechat_share = {
-        title: '九猫大百货-日本同价-东京直邮', //标题
-        desc: '视频特辑', //描述
-        link: "{echo:IWeb::$app->config['image_host1']}/site/ticket_gain?pid={$this->user['user_id']}&aid={echo:(new Config('jmj_config'))->activity_id}&iid={echo:ISession::get('shop_identify_id')}",
-        imgUrl: "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
+        title: vm.info.title, //标题
+        desc: vm.info.content, //描述
+        link: "",
+        imgUrl:vm.info.img , //图片
     }
     wechat.share();
 </script>
