@@ -2535,6 +2535,7 @@ class Apic extends IController{
 		$modelVideo = new IModel('video');
 		$info       = $modelVideo->getObj('status=1 AND id='.$param['video_id'], 'id,url,hits,img,title,content,goods');
 		if(empty($info)) $this->returnJson(array('code' => '011001', 'msg' => $this->errorInfo['011001']));
+		$info['img'] 	    = empty($v['img']) ? '' : IWeb::$app->config['image_host'].'/'.$v['img'];
 		//收藏
 		$modelCollect       = new IModel('video_collect');
 		$info['collect']    = $modelCollect->get_count('video_id='.$param['video_id']);
