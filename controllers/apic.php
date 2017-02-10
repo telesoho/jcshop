@@ -2515,6 +2515,7 @@ class Apic extends IController{
 		if($param['page']>$query->getTotalPage()) $list = array();
 		$model = new IModel('video_collect');
 		foreach($list as $k => $v){
+			$list[$k]['img']        = empty($v['img']) ? '' : IWeb::$app->config['image_host'].'/'.$v['img'];
 			$list[$k]['collect']    = $model->get_count('video_id='.$v['id']); //收藏人数
 			$list[$k]['is_collect'] = $model->get_count('video_id='.$v['id'].' AND user_id='.$user_id); //是否以收藏
 		}
