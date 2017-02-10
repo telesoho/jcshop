@@ -98,6 +98,7 @@ body{
 #vedioList .content .item .img .dis .watch img{
     position:relative;
     left:0.1rem;
+    top:0.03rem;
 }
 #vedioList .content .item .img .dis .watch span{
     font-size:0.2rem;
@@ -143,6 +144,7 @@ body{
     font-size:0.24rem;
     color:#999;
     width:6rem;
+    line-height:0.38rem;
 }
 .detail_header .right{
    margin:0.2rem 0;
