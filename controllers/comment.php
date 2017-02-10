@@ -46,6 +46,7 @@ class Comment extends IController implements adminAuthorization
 				'order_no'     => Order_Class::createOrderNum(),
 				'status'       => 1,
 				'user_id'      => $_POST['user_id'],
+				'contents'     => $_POST['contents'],
 				'time'         => date('Y-m-d H:i:s', time()),
 				'comment_time' => date('Y-m-d', time()),
 				'point'        => 5,

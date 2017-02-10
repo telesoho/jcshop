@@ -1663,11 +1663,11 @@ class Apic extends IController{
 	public function comment_add(){
 		$param   = $this->checkData(array(
 			array('id', 'int', 1, '评论ID'),
+			array('content', 'string', 0, '评论内容'),
 			array('tag_id', 'string', 0, '标签ID[多个使用"英文逗号"分割]'),
 			array('image_media_id', 'string', 0, '微信图片ID[多个使用"英文逗号"分割]'),
 			array('voice_media_id', 'string', 0, '微信语音ID'),
 		));
-		Common::dblog($param);
 		$user_id = $this->tokenCheck();
 		//检测
 		$comment = Comment_Class::can_comment($param['id'], $user_id);
@@ -1695,6 +1695,7 @@ class Apic extends IController{
 			'point'        => 5,
 			'contents'     => '',
 			'status'       => 1,
+			'content'      => $param['content'],
 			'comment_time' => ITime::getNow("Y-m-d"),
 			'tag'          => $param['tag_id'],
 			'image'        => implode(',', $data['image']),
@@ -1713,7 +1714,6 @@ class Apic extends IController{
 		));
 		$modelGoods->update('id IN ('.explode(',',$goods).')', array('grade', 'comments'));
 		
-		Common::dblog('comment_end');
 		$this->returnJson(array('code' => '0', 'msg' => 'ok'));
 	}
 	
@@ -1772,7 +1772,7 @@ class Apic extends IController{
 		$query         = new IQuery('comment as m');
 		$query->join   = 'LEFT JOIN user AS u ON u.id=m.user_id';
 		$query->where  = 'm.status=1 AND m.id='.$param['comment_id'];
-		$query->fields = 'm.id,m.image,m.comment_time,u.username,u.head_ico';
+		$query->fields = 'm.id,m.image,m.comment_time,u.username,u.head_ico,m.content';
 		$query->limit  = 1;
 		$list          = $query->find();
 		if(empty($list)) $this->returnJson(array('code' => '010001', 'msg' => $this->errorInfo['010001'])); //评论不存在
@@ -1863,6 +1863,7 @@ class Apic extends IController{
 		/* 获取参数 */
 		$param   = $this->checkData(array(
 			array('id', 'int', 1, '商品ID'),
+			array('page', 'int', 0, '评论分页'),
 		));
 		$user_id = $this->tokenCheck();
 		
@@ -1885,6 +1886,35 @@ class Apic extends IController{
 		foreach($listPhoto as $k => $v){
 			$dataGoods['photo'][$k] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/600/h/600");
 		}
+		
+		/* 相关评论 */
+		$queryComment              = new IQuery('comment as m');
+		$queryComment->join        = 'LEFT JOIN user as u ON u.id=m.user_id';
+		$queryComment->where       = 'status=1 AND goods_id='.$param['id'];
+		$queryComment->fields      = 'm.id,m.contents,m.recontents,m.recomment_time,m.tag,m.image,m.voice,m.user_id,u.username,u.head_ico';
+		$queryComment->page        = $param['page']<=0 ? 1 : $param['page'];
+		$queryComment->pagesize    = 10;
+		$commetList = $queryComment->find();
+		if($param['page']>$queryComment->getTotalPage()) $commetList = array();
+		if(!empty($commetList)){
+			$modelTag = new IModel('comment_tag');
+			foreach($commetList as $k => $v){
+				//语音
+				$commetList[$k]['voice'] = empty($v['voice']) ? '' : IWeb::$app->config['image_host'].'/'.$v['voice'];
+				//评论图片
+				$image             = explode(',', $v['image']);
+				if(!empty($image)){
+					foreach($image as $k1 => $v1) $image[$k1] = empty($v1) ? '' : IWeb::$app->config['image_host'].'/'.$v1;
+				}
+				$commetList[$k]['image'] = $image;
+				//标签
+				$tag = array();
+				$listTag = $modelTag->query('id IN ('.$v['tag'].') AND status=1','name');
+				foreach($listTag as $k1 => $v1) $tag[] = $v1['name'];
+				$commetList[$k]['tag'] = $tag;
+			}
+		}
+		$dataGoods['comment_list'] = $commetList;
 		
 		/* 相关专辑 */
 		$queryArt                  = new IQuery('article as m');
