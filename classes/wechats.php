@@ -226,12 +226,11 @@ class wechats
                 break;
         }
         $ret = common::http_post_json($url,$params);
-        $ret = json_decode($ret[1])->errcode;
-        if ($ret === 0){
-            common::log_write("消息推送成功$open_id" . print_r($ret,true));
+        if (json_decode($ret[1])->errcode === 0){
+            common::log_write("消息推送成功:$open_id" . print_r($ret,true));
             return true;
         } else {
-            common::log_write(__CLASS__ . __FUNCTION__ . print_r($ret,true), 'ERROR');
+            common::log_write(__CLASS__ . "-" . __FUNCTION__ . '-' . print_r($ret,true), 'ERROR');
             return false;
         }
     }
