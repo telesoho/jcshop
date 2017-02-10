@@ -86,13 +86,13 @@
                     <div class="window_1" v-html="p_data"></div>
 					<!--<p v-if="friends" class="window_2">代金券编号:&nbsp;<span>EEEEEEEEEEE</span></p>-->
 					<img v-if = "friends" class="window_img1" src="/views/mobile/skin/default/image/buy_share/tatle.png"/>
-					<img v-if = "friends == false" src="/views/mobile/skin/default/image/buy_share/qq.png" style="width: 5.54rem;margin: 0.56rem auto 0.66rem;"/>
-					<div class="window_div" v-if = "friends">
+					<!--<img v-if = "friends == false" src="/views/mobile/skin/default/image/buy_share/qq.png" style="width: 5.54rem;margin: 0.56rem auto 0.66rem;"/>-->
+					<div class="window_div" v-if = "friends == true">
 						<img class="window_img2" @click="returns" src="/views/mobile/skin/default/image/buy_share/return.png"/>
 						<p>返回九猫家</p>
 					</div>
-                    <img src="{$this->image_path}" alt="图丢啦！" style="width: 5.54rem;display: block;margin: 0 auto">
-					<span style="font-size: 0.28rem; color: #898989;display: block;width: 100%;text-align: center;">长按二维码并关注,即可使用。</span>
+                    <img v-if = "friends == false" src="{$this->image_path}" alt="图丢啦！" style="width: 2.54rem;display: block;margin: 0 auto">
+					<span v-if = "friends == false"  style="font-size: 0.28rem; color: #898989;display: block;width: 100%;text-align: center;">长按二维码并关注,即可领取优惠券红包。</span>
 					<t id="sssssss" style="width: 1px;height: 1.29rem;background: #fff; position: absolute;right:0.42rem ;top: 7.2rem; background: rgba(255,255,255,0.4);">
 			    		<strong style="width: 0.5rem;height: 0.5rem;position: absolute;left: -0.25rem;top: 1.29rem;z-index: 88;">
 			    			<img id="guan" @click="guan" src="/views/mobile/skin/default/image/jmj/ticket_gain/guan.png" style="width: 0.5rem;height: 0.5rem;"/>
@@ -121,6 +121,11 @@
              }else{
                  sponsor = false;
              }
+             if(friends == 1){
+                 friends = true;
+             }else{
+                 friends = false;
+             }
 			 var vm= new Vue({
 				el:'#wrap_if',
 				data:{
@@ -129,7 +134,7 @@
 					img1:true,
 					//分享人
 					sent_per:sponsor,
-					friends:true,
+					friends:friends,
 					p_data:''
 				},
 				computed:{

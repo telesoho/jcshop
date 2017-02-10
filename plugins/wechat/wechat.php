@@ -948,6 +948,12 @@ OEF;
             } else {
 	            $follow_model = new IModel('follow');
                 $follow_model->setData(['scene_id'=>$scene_id, 'open_id'=>$open_id ,'follow_time'=>date('Y-m-d H:i:s',time())]);
+                $wechat_qrcode_model = new IModel('wechat_qrcode');
+                $user_id = explode('_',$scene_id)[1];
+                $data = $wechat_qrcode_model->getObj("user_id = $user_id");
+                if ($data){
+                    wechats::send_message_template($open_id,'receive',[''])
+                }
                 $follow_model->add();
             }
         } else {
