@@ -276,10 +276,11 @@ class Market extends IController implements adminAuthorization
 	 */
 	public function activity_add(){
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+			
 			/* 活动 */
 			$dataActivity 				= array(
 				'status' 		=> 1,
-				'type' 			=> implode(',',$_POST['type']), //包含活动类型[1优惠券随机领取-2消费成长]
+				'type' 			=> empty($_POST['type']) ? '' : implode(',',$_POST['type']), //包含活动类型[1优惠券随机领取-2消费成长]
 				'name' 			=> $_POST['name'], //活动名称
 				'num' 			=> $_POST['num'], //优惠券总数
 				'share_score' 	=> $_POST['share_score'], //分享获得积分数
