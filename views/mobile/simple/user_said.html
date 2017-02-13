@@ -9,94 +9,157 @@
     <title>喵粉说</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/user_said.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/user_said.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 <!--收藏页面-->
-<section id="userSaid" class="box">
+<section id="userSaid" class="box" v-cloak>
+    <loadding :mes="showloadding"></loadding>
     <div class="con leftContainer">
-        <div  v-for="item in con1">
-            <img :src="item.img" alt="" style="width:3.5rem"/>
-            <div class="p">
-            	<div class="pic_name">
-            		<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
-            		<p>阿猫阿狗</p>
-            	</div>
-            	<div class="facire_num">
-            		<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
-            		<span>11</span>
-            	</div>
-            </div>
-        </div>
+        <ul>
+            <li v-for="item in con1" @click="goToDetail(item.id)">
+                <div class="img flexbox" :style="item.style">
+                    <img :src="item.cover" alt="" class="img_goods"/>
+                </div>
+                <div class="text box">
+                    <div class="left">
+                        <img :src="item.head_ico" alt="" class="icon_l" />
+                        <span class="hidewrap">{{item.username}}</span>
+                    </div>
+                    <div class="right">
+                        <img src="/views/mobile/skin/default/image/jmj/userSaid/dianz.png" alt="" class="heart" />
+                        <span>{{item.num}}</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
     <div class="con rightContainer">
-        <div  v-for="item in con2">
-            <img :src="item.img" alt="" style="width:3.5rem"/>
-           <div class="p">
-            	<div class="pic_name">
-            		<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
-            		<p>阿猫阿狗</p>
-            	</div>
-            	<div class="facire_num">
-            		<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
-            		<span>11</span>
-            	</div>
-            </div>
-        </div>
+        <ul>
+            <li v-for="item in con2" @click="goToDetail(item.id)">
+                <div class="img flexbox" :style="item.style">
+                    <img :src="item.cover" alt="" class="img_goods"/>
+                </div>
+                <div class="text box">
+                    <div class="left">
+                        <img :src="item.head_ico" alt="" class="icon_l" />
+                        <span class="hidewrap">{{item.username}}</span>
+                    </div>
+                    <div class="right">
+                        <img src="/views/mobile/skin/default/image/jmj/userSaid/dianz.png" alt="" class="heart" />
+                        <span>{{item.num}}</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
     <footer-nav :state="2"></footer-nav>
 </section>
 <!--头信息结束-->
 <script src="/views/mobile/javascript/vue.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 <!--//底部导航样式的引入-->
 <script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/jiumao/common.js"></script>
 <script type="text/javascript">
+     var stop=true;
       var vm=new Vue({
           el:"#userSaid",
           data:{
-            con1:[
-                {img:"/views/mobile/skin/default/image/jmj/home_redesign/1.png"},
-                {img:'/views/mobile/skin/default/image/jmj/home_redesign/1.png'},
-                {img:'http://m.jiumaojia.com/pic/thumb/img/upload@_@2016@_@12@_@19@_@20161219165324695.jpg@_@w@_@750@_@h@_@380'},
-                {img:"http://m.jiumaojia.com/pic/thumb/img/upload@_@2017@_@01@_@23@_@20170123142235771.jpg@_@w@_@750@_@h@_@380"}
-            ],
-            con2:[{img:'http://m.jiumaojia.com/pic/thumb/img/upload@_@2016@_@12@_@19@_@20161219165324695.jpg@_@w@_@750@_@h@_@380'},
-                {img:'http://m.jiumaojia.com/pic/thumb/img/upload@_@2016@_@12@_@19@_@20161219165324695.jpg@_@w@_@750@_@h@_@380'},
-                {img:"/views/mobile/skin/default/image/jmj/home_redesign/1.png"},
-                {img:'http://m.jiumaojia.com/pic/thumb/img/upload@_@2016@_@12@_@19@_@20161219165324695.jpg@_@w@_@750@_@h@_@380'}
-            ]
+            showloadding:true, //初始加载动画
+            con1:[],
+            con2:[],
+            page:1,
+            nomore:false
           },
           computed:{
-          	
+
           },
           mounted:function(){
           	var self = this;
-          	user_side(self);
+              if(getSession("sessionUserSaid1")){
+                  self.showloadding=false;
+                  self.con1=getSession("sessionUserSaid1")?getSession("sessionUserSaid1"):[];
+                  self.con2=getSession("sessionUserSaid2")?getSession("sessionUserSaid2"):[];
+                  self.page=getSession("sessionUserSaidPage")?getSession("sessionUserSaidPage"):1;
+              }else{
+                  user_side(self)
+              }
+
           },
           methods:{
-          	
+              goToDetail:function(id){
+                  window.location.href="/simple/user_details?id="+id
+              }
           }
-      })
+      });
       function user_side(self){
       	$.ajax({
       		type:"get",
       		dataType:'json',
       		data:{
-      			page:1
+      			page:self.page,
       		},
       		url:"/apic/comment_list",
       		async:true,
       		success:function(data){
-      			console.log(data.data);
-      			for(var i = 0;i<data.data.length;i++){
-      				console.log(2*i);
-      				console.log(2*i+1)
+      		    self.showloadding=false;
+                var arr1=[];
+                var arr2=[];
+      			for(var i = 0;i<data.data.length/2;i++){
+                    data.data[i].ht=null;
+                    arr1.push(data.data[2*i])
+                    arr2.push(data.data[2*i+1])
       			}
+                self.con1=self.con1.concat(Random_arr.fun(arr1)) ;
+                self.con2=self.con2.concat(Random_arr.fun(arr2));
+                if(data.data.length<6){
+                    self.nomore=true;
+                }else{
+                    stop=true;
+                    self.page++;
+                }
+                pushSession("sessionUserSaid1",self.con1);
+                pushSession("sessionUserSaid2",self.con2);
+                pushSession("sessionUserSaidPage",self.page);
       		}
       	});
       }
+      //随机排序方法
+    var Random_arr={
+        old_arr:[1,1,2,2,3,3],
+        fun:function(arr){
+            var _this=this;
+           var new_arr=_this.old_arr.sort(_this.randomSet);
+            if (arr instanceof Array){
+                for(var i=0,m=arr.length;i<m;i++){
+                    arr[i].ht=new_arr[i];
+                }
+                arr.map(function(item){
+                    switch (item.ht){
+                        case 1: {item.style="height:3.5rem" ;return;}
+                        case 2: {item.style="height:2.6rem;" ;return;}
+                        case 3: {item.style="height:4.2rem;" ;return;}
+                    }
+                })
+            }
+            return arr;
+        },
+        randomSet:function(a,b){
+            return Math.random()>0.5 ? -1 : 1;
+        }
+    }
+      $(window).bind('scroll', function() {
+          if ($(window).scrollTop() + $(window).height() +200 >= $(document).height() && $(window).scrollTop() > 50) {
+              if(stop==true){
+                  stop=false;
+                  vm.showloadding=true;
+                  user_side(vm);
+              }
+          }
+      });
 </script>
 </body>
 </html>
