@@ -276,11 +276,11 @@ class Market extends IController implements adminAuthorization
 	 */
 	public function activity_add(){
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			
+			$type = empty($_POST['type']) ? '' : array();
 			/* 活动 */
 			$dataActivity 				= array(
 				'status' 		=> 1,
-				'type' 			=> empty($_POST['type']) ? '' : implode(',',$_POST['type']), //包含活动类型[1优惠券随机领取-2消费成长]
+				'type' 			=> implode(',',$type), //包含活动类型[1优惠券随机领取-2消费成长]
 				'name' 			=> $_POST['name'], //活动名称
 				'num' 			=> $_POST['num'], //优惠券总数
 				'share_score' 	=> $_POST['share_score'], //分享获得积分数
@@ -295,7 +295,7 @@ class Market extends IController implements adminAuthorization
 			if($activity_id == false) exit('数据写入错误');
 			$modelTicket 				= new IModel('activity_ticket');
 			/* 优惠券随机领取活动 */
-			if(in_array(1,$_POST['type'])){
+			if(in_array(1,$type)){
 				foreach($_POST['ticket_name'] as $k => $v){
 					$dataTicket 		= array(
 						'pid' 			=> $activity_id, //活动ID，0为普通优惠券
@@ -311,7 +311,7 @@ class Market extends IController implements adminAuthorization
 				}
 			}
 			/* 消费成长活动 */
-			if(in_array(2,$_POST['type'])){
+			if(in_array(2,$type)){
 				$modelGrow 				= new IModel('activity_grow');
 				foreach($_POST['grow_money'] as $k => $v){
 					$did 				= $_POST['goods_id'][$k];
