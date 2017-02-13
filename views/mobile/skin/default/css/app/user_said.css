@@ -30,7 +30,7 @@ body,html{
 }
 #userSaid .con .text{
 	height:0.9rem;
-	line-height:0.8rem;
+	/*line-height:0.8rem;*/
 }
 #userSaid .con .text .left span{
 	font-size:0.2rem;
@@ -44,21 +44,22 @@ body,html{
 	font-family:HelveticaNeue;
 	font-size:0.2rem;
 	color:#b8b8b8;
-	margin-right:0.1rem;
+	margin-right:0.15rem;
+}
+.icon_img_c{
+	display: inline-block;
 }
 .icon_l{
 	margin-left:0.1rem;
 	width:0.4rem;
 	height:0.4rem;
 	border-radius:0.4rem;
-	position:relative;
-	top:-0.2rem;
+
 }
 .heart{
 	width:0.28rem;
 	height:0.28rem;
-	position: relative;
-	top:0.05rem;
+	margin-right:0.05rem;
 }
 /*#userSaid .con .p{*/
 	/*width: 3.5rem;*/
