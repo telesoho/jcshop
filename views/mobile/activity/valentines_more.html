@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="x5-orientation" content="portrait">
+		<title>情人节商品</title>
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/goods_list.css?v=<?php echo time(); ?>"/>
+	</head>
+	<body>
+		<section id="main">
+		<loadding :mes="showloadding"></loadding>
+		<div id="category_third" v-cloak>
+	        <div class="product_item" v-for="item in one_title" v-cloak>
+	            <a :href="item.url">
+	                <div class="img">
+	                    <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"/>
+	                    <img src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg img-ware" :dataimg="item.img"/>
+	                </div>
+	                <div class="content">
+	                    <div class="name">
+	                        {{item.name}}
+	                    </div>
+	                    <div class="price">
+	                        <span class="sellprice">¥{{item.sell_price}}</span>
+	                        <span class="japanprice">日本价：{{item.jp_price}}円</span>
+	                        <span class="openprice">国内价：¥{{item.market_price}}</span>
+	                    </div>
+	                </div>
+	            </a>
+	        </div>
+		</div>
+		<div class="flexbox empty_product" style="" v-if="infoState">
+            <div class="img">
+                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+            </div>
+            <div class="content">
+                <span style="color:#fff">~</span>
+                <span style="color:#fff">憋拉了，到底了</span>
+                <span style="color:#fff">~</span>
+            </div>
+       </div>
+	</section>
+	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+	<!--加载动画载入-->
+	<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
+	<!--<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>-->
+	
+	<script>
+	var Request = new Object();
+    Request = GetRequest();
+    var statusOrder=Request["id"];
+    console.log(statusOrder)
+    var stop=true;
+		var vm=new Vue({
+			el:'#main',
+			data:{
+				showloadding:true,
+				cid:statusOrder,
+				page:1,
+				info:[],
+				stop:true,
+				infoState:false
+			},
+			computed:{
+				one_title:function(){
+					this.info.map(function(items){
+						items.url="/site/products?id="+items.id;
+					})
+					return this.info;
+				}
+			},
+			mounted:function(){
+				var self=this;
+				if(getSession("goodsinfo")){
+					self.showloadding=false;
+					self.info=getSession("goodsinfo");
+					self.page=getSession("goodspage")
+				}else{
+						self.page=1;
+						getSitemapInfo(self);
+				}
+				
+			},
+			updated:function(){
+	            lazyload.init({
+	                anim:false,
+	                selectorName:".samLazyImg"
+	            });
+	        },
+			methods:{
+			}
+		})
+		
+		// AJAX
+		function getSitemapInfo(self){
+			$.ajax({
+				type:"get",
+				url:"/apic/activity_goods_list",
+				data:{
+					aid:statusOrder,
+					page:self.page
+				},
+				success:function(data){
+					self.showloadding=false;
+					JSON.parse(data).data.map(function(items){
+						self.info.push(items)
+					})
+					pushSession("goodsinfo",self.info)
+					if( JSON.parse(data).data == '' ){
+						stop = false;
+						self.infoState = true
+					}else{
+						stop = true;
+					}
+					self.page++;
+					pushSession("goodspage",self.page)
+				}
+			});
+		}
+
+		
+//页面加载动画的调用
+$(window).load(function(){
+	var temp=getItem("placeHolder");
+	 mui('body').on('tap','a',function(){document.location.href=this.href;});
+});
+//获取url中"?"符后的字串
+function GetRequest() {
+  	var url = location.search; //获取url中"?"符后的字串
+ 	 var theRequest = new Object();
+  	if(url.indexOf("?") != -1){
+      	var str = url.substr(1);
+      	strs = str.split("&");
+      	for(var i = 0; i < strs.length; i ++) {
+         	theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+     	}
+  	}
+  return theRequest;
+}
+//		上拉加载:
+$(window).bind('scroll', function() {
+	if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
+        if(stop==true){
+            stop=false;
+			vm.showloadding=true;
+            getSitemapInfo(vm);
+        }
+   }
+});
+//							缓存
+function pushSession(key,value){
+    var val=JSON.stringify(value)?JSON.stringify(value):[];
+    if(window.sessionStorage){
+        sessionStorage.setItem(key,val);
+    }else{
+        console.log("无法使用缓存");
+        return "";
+    }
+}
+function getSession(key){
+    if(window.sessionStorage){
+        var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+        return JSON.parse(state);
+    }else{
+        console.log("无法使用缓存");
+        return "";
+    }
+}
+
+
+	</script>
+	</body>
+</html>
