@@ -354,14 +354,16 @@ class Market extends IController implements adminAuthorization
 			/* 商品添加、删除操作 */
 			if(isset($_POST['play'])){
 				$modelGoods 			= new IModel('goods');
+				
 				switch($_POST['play']){
 					case 'add':
 						$goods_ids 		= array();
-						foreach($_POST['data'] as $k => $v)
+						foreach($_POST['data'] as $k => $v){
 							$goods_ids[] 	= $v['goods_id'];
+						}
 						$modelGoods->setData(array('activity'=>$_POST['aid']));
-						$rel 			= $modelGoods->update('activity=0 AND id IN ('.implode(',',$goods_ids).')');
-						exit(json_encode( $rel>0 ? array('code'=>'0','msg'=>'有'.$rel.'条数据添加成功') : array('code'=>'100','data'=>'数据写入错误') ));
+						$rel 			= $modelGoods->update('id IN ('.implode(',',$goods_ids).')');
+						exit(json_encode( $rel>0 ? array('code'=>'0','msg'=>'有'.$rel.'条数据添加成功') : array('code'=>'100','msg'=>'数据写入错误') ));
 						break;
 					case 'del':
 						$modelGoods->setData(array('activity'=>0));
