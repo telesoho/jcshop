@@ -389,10 +389,12 @@ class Apic extends IController{
 	 * 加入购物车
 	 */
 	function cart_join(){
-		$param = $this->checkData(array(
+		$param          = $this->checkData(array(
 			array('goods', 'string', 1, '商品，格式<商品ID:数量>，多个商品用英文逗号分割'),
 			array('type', 'string', 0, '类型[goods商品-product货品]'),
 		));
+		$param['goods'] = trim($param['goods'], ',');
+		$param['type']  = empty($param['type']) ? 'goods' : $param['type'];
 		//加入购物车
 		$cartObj = new Cart();
 		foreach(explode(',', $param['goods']) as $k => $v){
@@ -404,7 +406,7 @@ class Apic extends IController{
 			$rel = $cartObj->add($goods[0], $goods[1], $param['type']);
 			if(!$rel){
 				(new IModel('goods_car'))->rollback(); //回滚
-				$this->returnJson(array('code' => '004003', 'msg' => $this->errorInfo['004003'])); //购物车加入失败
+				$this->returnJson(array('code' => '001004', 'msg' => $cartObj->getError())); //购物车加入失败
 			}
 		}
 		
@@ -863,8 +865,9 @@ class Apic extends IController{
 			array('did','int',0,'推荐ID'),
 			array('tag','string',0,'标签'),
 			array('page','int',0,'分页'),
+			array('pagesize','int',0,'每页条数'),
 		));
-		$param['pagesize'] = 20;
+		$param['pagesize'] = empty($param['pagesize']) ? 20 : $param['pagesize'];
 		$data  = Api::run('goodsList', $param);
 		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$data));
 	}
@@ -1793,7 +1796,7 @@ class Apic extends IController{
 			array('comment_id', 'int', 1, '评论ID'),
 		));
 		$user_id = $this->tokenCheck();
-		/* 获取数据 */
+		/* 评论详情 */
 		$query         = new IQuery('comment as m');
 		$query->join   = 'LEFT JOIN user AS u ON u.id=m.user_id LEFT JOIN goods AS g ON g.id=m.goods_id';
 		$query->where  = 'm.status=1 AND m.id='.$param['comment_id'];
@@ -1811,8 +1814,11 @@ class Apic extends IController{
 		foreach($data['image'] as $k => $v){
 			$data['image'][$k] = empty($v) ? '' : IWeb::$app->config['image_host'].'/'.$v;
 		}
+		//点赞人
+		$modelPraise       = new IModel('comment_praise as m,user as u');
+		$data['user_list'] = $modelPraise->query('m.user_id=u.id AND comment_id='.$param['comment_id'], 'u.id,u.username,u.head_ico','m.id ASC',10);
 		
-		/* 获取数据 */
+		/* 人气猫粉说 */
 		$queryComment         = new IQuery('comment as m');
 		$queryComment->join   = 'LEFT JOIN user AS u ON u.id=m.user_id';
 		$queryComment->where  = 'm.status=1 AND m.id!='.$param['comment_id'].' AND m.`image`!=""';
