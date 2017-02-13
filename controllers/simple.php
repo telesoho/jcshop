@@ -594,7 +594,7 @@ class Simple extends IController
 		plugin::trigger('setCallback','/ucenter/order');
 		//订单金额为0时，订单自动完成
 		if($this->final_sum <= 0){
-			$this->redirect('/site/success/message/'.urlencode("订单确认成功，等待发货"));
+			$this->redirect('/site/success/message/'.urlencode("订单确认成功，等待发货").'/share_no/,share,'.$this->user['user_id'].','.$dataArray['order_no']);
 		}else{
 			//清空购物车
 			if(!$gid) IInterceptor::reg("cart@onFinishAction");
