@@ -58,13 +58,13 @@
 				</div>
 				<div class="morning_shop">
 					<ul>
-						<li v-for="item in info3">
+						<li v-for="item in info3" @click="shop_pro(item.id)">
 							<img :src="item.img"/>
 							<p>{{item.name}}</p>
 							<span>¥<span> {{item.sell_price}}</span></span>
 						</li>
 					</ul>
-					<span class="more" @click="morning(5)">更多推荐</span>
+					<span class="more" @click="morning(6)">更多推荐</span>
 				</div>
 				
 			</div>
@@ -98,11 +98,11 @@
 		},
 		methods:{
 			morning:function(id){
+				removeSessionItem("goodspage");
+				removeSessionItem("goodsinfo");	
 				window.location.href = "/activity/valentines_more?id="+id
 			},
 			shop_pro:function(id){
-				removeSessionItem("goodspage");
-				removeSessionItem("goodsinfo");			
 				window.location.href = "/site/products?id="+id;
 			}
 		}
