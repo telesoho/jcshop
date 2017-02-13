@@ -2411,11 +2411,13 @@ class Apic extends IController{
 			$queryGoods->join   = 'left join relation as r on r.goods_id=m.id';
 			$queryGoods->fields = 'm.id,m.name,m.sell_price,m.purchase_price,m.img';
 			$queryGoods->order  = 'sale DESC,visit DESC';
+			$queryGoods->group  = 'm.id';
 			$queryGoods->limit  = 5;
 			//商品统计模型
 			$queryGoodsCount         = new IQuery('goods as m');
 			$queryGoodsCount->join   = 'left join relation as r on r.goods_id=m.id';
 			$queryGoodsCount->fields = 'count(m.id) as num';
+			$queryGoodsCount->group  = 'm.id';
 			//专辑收藏模型
 			$queryFavorite         = new IQuery('favorite_article');
 			$queryFavorite->fields = 'count(id) as num';
