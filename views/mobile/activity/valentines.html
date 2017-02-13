@@ -11,125 +11,160 @@
 	    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/valentines.css?v=<?php echo time(); ?>" />
 	</head>
 	<body style="background:#ffd6d6">
-		<header>
-			<div class="morning_img">
-				<img src="/views/mobile/skin/default/image/jmj/active_valentines/01.jpg"/>
-				<img src="/views/mobile/skin/default/image/jmj/active_valentines/ 02.jpg"/>
-				<img src="/views/mobile/skin/default/image/jmj/active_valentines/tjb.jpg" style="width: 100%;"/>
+		<div id="wrap_info" v-cloak>
+			<header>
+				<div class="morning_img">
+					<img src="/views/mobile/skin/default/image/jmj/active_valentines/01.jpg"/>
+					<img src="/views/mobile/skin/default/image/jmj/active_valentines/ 02.jpg"/>
+					<img src="/views/mobile/skin/default/image/jmj/active_valentines/tjb.jpg" style="width: 100%;"/>
+				</div>
+				<div class="morning_shop">
+					<ul>
+						<li v-for="item in info1" @click="shop_pro(item.id)">
+							<img :src="item.img"/>
+							<p>{{item.name}}</p>
+							<span>¥<span> {{item.sell_price}}</span></span>
+						</li>
+					</ul>
+					<span class="more" @click="morning(4)">更多推荐</span>
+				</div>
+				
+			</header>
+			<!--		中午			-->
+			<section style="margin-top: 0.2rem;" id="div2">
+				<div class="morning_img">
+					<img src="/views/mobile/skin/default/image/jmj/active_valentines/03.jpg"/>
+					<img src="/views/mobile/skin/default/image/jmj/active_valentines/04.jpg"/>
+					<img src="/views/mobile/skin/default/image/jmj/active_valentines/tjb.jpg" style="width: 100%;"/>
+				</div>
+				<div class="morning_shop">
+					<ul>
+						<li v-for="item in info2" @click="shop_pro(item.id)">
+							<img :src="item.img"/>
+							<p>{{item.name}}</p>
+							<span>¥<span> {{item.sell_price}} </span></span>
+						</li>
+					</ul>
+					<span class="more" @click="morning(5)">更多推荐</span>
+				</div>
+				
+			</section>
+			<!--		晚上			-->
+			<div id="evening" style="margin-top: 0.2rem;">
+				<div class="morning_img">
+					<img src="/views/mobile/skin/default/image/jmj/active_valentines/05.jpg"/>
+					<img src="/views/mobile/skin/default/image/jmj/active_valentines/06.jpg"/>
+					<img src="/views/mobile/skin/default/image/jmj/active_valentines/tjb.jpg" style="width: 100%;"/>
+				</div>
+				<div class="morning_shop">
+					<ul>
+						<li v-for="item in info3" @click="shop_pro(item.id)">
+							<img :src="item.img"/>
+							<p>{{item.name}}</p>
+							<span>¥<span> {{item.sell_price}}</span></span>
+						</li>
+					</ul>
+					<span class="more" @click="morning(6)">更多推荐</span>
+				</div>
+				
 			</div>
-			<div class="morning_shop">
-				<ul>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-				</ul>
-				<span class="more">更多推荐</span>
+			<!--		说明			-->
+			<div style="margin-top: 0.2rem;">
+				<img src="/views/mobile/skin/default/image/jmj/active_valentines/07.jpg" alt="" style="width: 100%;"/>
 			</div>
-			
-		</header>
-		<!--		中午			-->
-		<section style="margin-top: 0.2rem;">
-			<div class="morning_img">
-				<img src="/views/mobile/skin/default/image/jmj/active_valentines/03.jpg"/>
-				<img src="/views/mobile/skin/default/image/jmj/active_valentines/04.jpg"/>
-				<img src="/views/mobile/skin/default/image/jmj/active_valentines/tjb.jpg" style="width: 100%;"/>
-			</div>
-			<div class="morning_shop">
-				<ul>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-				</ul>
-				<span class="more">更多推荐</span>
-			</div>
-			
-		</section>
-		<!--		晚上			-->
-		<div id="evening" style="margin-top: 0.2rem;">
-			<div class="morning_img">
-				<img src="/views/mobile/skin/default/image/jmj/active_valentines/05.jpg"/>
-				<img src="/views/mobile/skin/default/image/jmj/active_valentines/06.jpg"/>
-				<img src="/views/mobile/skin/default/image/jmj/active_valentines/tjb.jpg" style="width: 100%;"/>
-			</div>
-			<div class="morning_shop">
-				<ul>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-					<li>
-						<img src=""/>
-						<p>资生堂洗发水18资生堂洗发水18</p>
-						<span>¥<span> 24.00</span></span>
-					</li>
-				</ul>
-				<span class="more">更多推荐</span>
-			</div>
-			
 		</div>
-		<!--		说明			-->
-		<div style="margin-top: 0.2rem;">
-			<img src="/views/mobile/skin/default/image/jmj/active_valentines/07.jpg" alt="" style="width: 100%;"/>
-		</div>
+		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+		
+		<script type="text/javascript">
+	var vm= new Vue({
+		el:'#wrap_info',
+		data:{
+			info1:[],
+			info2:[],
+			info3:[],
+		},
+		computed:{
+				
+		},
+		mounted:function(){
+			var self = this;		
+			valentines1(self);
+			valentines2(self);
+			valentines3(self);
+		},
+		updated:function(){
+
+		},
+		methods:{
+			morning:function(id){
+				removeSessionItem("goodspage");
+				removeSessionItem("goodsinfo");	
+				window.location.href = "/activity/valentines_more?id="+id
+			},
+			shop_pro:function(id){
+				window.location.href = "/site/products?id="+id;
+			}
+		}
+	})
+			function valentines1(self){
+				$.ajax({
+					type:"get",
+					url:"/apic/activity_goods_list",
+					data:{
+						aid:4,
+						pagesize :6
+					},
+					dataType:"json",
+					async:true,
+					success:function(data){
+						console.log(data.data);
+						self.info1 = data.data;
+						removeSessionItem("goodspage");
+					removeSessionItem("goodsinfo");	
+					}
+				});
+			}
+			function valentines2(self,aid){
+				$.ajax({
+					type:"get",
+					url:"/apic/activity_goods_list",
+					data:{
+						aid:5,
+						pagesize :6
+					},
+					dataType:"json",
+					async:true,
+					success:function(data){
+						console.log(data.data);
+						self.info2 = data.data;
+						removeSessionItem("goodspage");
+				removeSessionItem("goodsinfo");	
+					}
+				});
+			}
+			function valentines3(self,aid){
+				$.ajax({
+					type:"get",
+					url:"/apic/activity_goods_list",
+					data:{
+						aid:6,
+						pagesize :6
+					},
+					dataType:"json",
+					async:true,
+					success:function(data){
+						console.log(data.data);
+						self.info3 = data.data;
+						removeSessionItem("goodspage");
+				removeSessionItem("goodsinfo");	
+					}
+				});
+			}
+  function removeSessionItem(key){
+        window.sessionStorage.removeItem(key);
+    }
+
+		</script>
 	</body>
 </html>

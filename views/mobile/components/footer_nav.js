@@ -19,10 +19,11 @@ var FOOTERINFOR={
             url:'/site/sitemap'
         },
         {class:'icon showGrass',
-            name:'用户说',
-            img1:'/views/mobile/skin/default/image/jmj/new_active/index/user_saided.png',
-            img2:'/views/mobile/skin/default/image/jmj/new_active/index/user_said.png',
-            url:'/simple/user_said'
+            name:'草原',
+            img1:'/views/mobile/skin/default/image/jmj/new_active/index/grassed.png',
+            img2:'/views/mobile/skin/default/image/jmj/new_active/index/grass.png',
+//          url:'/simple/user_said'
+			url:'/site/favorite'
         },
         {class:'icon',
             name:'购物车',

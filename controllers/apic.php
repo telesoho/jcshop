@@ -676,13 +676,13 @@ class Apic extends IController{
 				switch($v['time_type']){
 					//统一有效期
 					case 1:
-						$data[$k]['start_time'] = date('m-d', $v['start_time']);
-						$data[$k]['end_time']   = date('m-d', $v['end_time']);
+						$data[$k]['start_time'] = date('m-d H:i', $v['start_time']);
+						$data[$k]['end_time']   = date('m-d H:i', $v['end_time']);
 						break;
 					//领取后有效期
 					case 2:
-						$data[$k]['start_time'] = date('m-d', $v['create_time']);
-						$data[$k]['end_time']   = date('m-d', $v['day']*24*60*60+$v['create_time']);
+						$data[$k]['start_time'] = date('m-d H:i', $v['create_time']);
+						$data[$k]['end_time']   = date('m-d H:i', $v['day']*24*60*60+$v['create_time']);
 						break;
 				}
 				switch($v['type']){
@@ -3419,11 +3419,12 @@ class Apic extends IController{
         $user_id             = $this->user['user_id'];
         $user_data           = common::get_user_data($user_id);
         $open_id             = common::get_wechat_open_id($user_id);
-        $follow_query        = new IQuery('follow');
-        $follow_query->where = "scene_id = 'qrscene_$share_no'";
-        common::log_write($follow_query->getSql(),'ERROR');
-        $data                = $follow_query->find();
-        $num                 = count($data);
+        //好友领取记录
+        $activity_ticket_access_query        = new IQuery('activity_ticket_access');
+        $activity_ticket_access_query->where = "remark = '$share_no'";
+        $data                                = $activity_ticket_access_query->find();
+        $num                                 = count($data);
+        common::log_write($activity_ticket_access_query->getSql(),'ERROR');
 //        if($user_id==='24'){$num=5;}
         if ($num > 4){
 //            赠送优惠券

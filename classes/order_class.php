@@ -219,7 +219,7 @@ class Order_Class
             $order_goods_query->where = 'order_id = ' . $orderRow['id'];
             $data                     = $order_goods_query->find();
             $goods_name               = empty($data) ? '无商品信息' : json_decode($data[0]['goods_array'])->name;
-//			wechats::send_message_template($open_id,'order_complete',['goods_name'=>$goods_name,'order_no'=>$orderRow['order_no']]);
+			wechats::send_message_template($open_id,'order_complete',['goods_name'=>$goods_name,'order_no'=>$orderRow['order_no']]);
 
 			return $orderRow['id'];
 		}
