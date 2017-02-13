@@ -85,9 +85,13 @@ ul li span span{
 	overflow: hidden;
 }
 .bottom_logo{
+	display: -webkit-flex;
+	-webkit-align-items: flex-start;
+	-webkit-justify-content: center;
 	width:100%;
-	height:4.28rem;
+	height:4.65rem;
 	overflow: hidden;
+	background:#fff;
 }
 .shop_va h1{
 	height:1.3rem;

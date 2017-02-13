@@ -60,7 +60,9 @@ li{
 #user_show .name .Head_pic{
 	width: 0.9rem;
 	height: 0.9rem;
+	border-radius: 50%;
 }
+
 #user_show  .name p{
 	margin-left:0.24rem ;
 }
@@ -128,6 +130,8 @@ li{
 #user_show .others li img{
 	width: 0.6rem;
 	height: 0.6rem;
+	border-radius:50% ;
+	border: 0;
 }
 #wenzi{
 	margin-top:0.2rem ;
