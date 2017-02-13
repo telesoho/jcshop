@@ -28,7 +28,7 @@
 			<div id="user_show">
 				<div class="user_top">
 					<div class="name">
-						<img class="Head_pic" src=""/>
+						<img class="Head_pic" :src="head_ico"/>
 						<p>
 							<span>{{username}}</span>
 							<span>15小时前</span>
@@ -51,7 +51,7 @@
 			</div>
 			<div id="form_shop">
 				<h1>评论来自</h1>
-				<div class="from_shop">
+				<div class="from_shop" @click="goods_shop(goods_id)">
 					<img :src="goods_img"/>
 					<div class="right_shop">
 						<p>{{shop_name}}</p>
@@ -100,11 +100,13 @@
 			sell_price:"",
 			goods_img:"",
 			info_img:[],
+			goods_id:"",
 			info_list:[],
 			head_ico:"",
 			thumbimg1:"/views/mobile/skin/default/image/jmj/favorite/Thumb_ed.png",
 			thumbimg2:"/views/mobile/skin/default/image/jmj/favorite/Thumb.png",
-			thumbs_h:""
+			thumbs_h:"",
+			
 		},
 		computed:{
 				
@@ -120,7 +122,12 @@
 				window.location.href = "/simple/user_details?id="+id;
 			},
 			thumb:function(opt){
+				console.log(opt)
 				collection();
+			},
+			goods_shop:function(id){
+				console.log(id)
+				window.location.href = "/site/products?id="+id;
 			}
 		}
 	})
@@ -129,7 +136,7 @@
 	        dataType:'json',
 	        type:'get',
 	        data:{
-	        	comment_id:statusOrder?statusOrder:1750
+	        	comment_id:statusOrder?statusOrder:1762
 	        },
 	        timeout:10000,
 	        success:function(data){
@@ -148,16 +155,18 @@
 				self.sell_price = data.data.sell_price;
 				self.goods_img = data.data.goods_img;
 				self.head_ico = data.data.head_ico;
+				self.goods_id = data.data.goods_id;
+				self.thumbs_h = data.data.delivery
 	        }
 	    });
 	}
 	
 // 收藏接口
-function collection(){
+function collection(opt){
     mui.ajax('/apic/comment_praise',{
         data:{
-            comment_id :1750,
-            opt :"1"
+            comment_id :1762,
+            opt :opt
         },
         dataType:'json',//服务器返回json格式数据
         type:'get',//HTTP请求类型

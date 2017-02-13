@@ -56,12 +56,12 @@
 			</section>
 		</template>
 		<div id="order_state0" v-if="showMessage && orderInfo.length>0" v-cloak>
-				<div class="order_menu_list" v-for="item1 in orderInfo_new"  v-cloak>
+				<div class="order_menu_list" v-for="item1,key in orderInfo_new"  v-cloak>
 					<div class="top box">
 						<span class="left hidewrap">订单编号：{{item1.order_no}}</span>
 						<span class="status hidewrap">{{item1.orderStatusText}}</span>
 					</div>
-					<a :href="item1.url" class="locationA">
+					<a href="#" @click="shop_shop(item1.url,key)" class="">
 						<div class="goodsList" v-for="goodsListItem in item1.firstList">
 							<div class="content">
 								<div class="left flexbox">

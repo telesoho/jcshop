@@ -18,10 +18,12 @@ li{
 }
 .swiper-slide{
 	width: 100%;
+	overflow: hidden;
 	height: 100%;
 }
 .swiper-slide img{
 	width: 100%;
+	height: 7.5rem;
 }
 .swiper-pagination{
 	width: 0.76rem;
@@ -180,6 +182,12 @@ li{
 	color:#484848;
 	margin-bottom: 0.1rem;
 	line-height: 0.3rem;
+	overflow: hidden;
+	line-height: 0.34rem;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 #form_shop .right_shop div span:nth-of-type(1){
 	font-size:0.34rem;
