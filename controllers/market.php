@@ -276,10 +276,6 @@ class Market extends IController implements adminAuthorization
 	 */
 	public function activity_add(){
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			foreach($_POST as $k => $v)
-				if(empty($v)) exit('数据填写不完整');
-			if(!isset($_POST['type']) || empty(implode(',',$_POST['type'])))
-				exit('至少包含一种活动');
 			/* 活动 */
 			$dataActivity 				= array(
 				'status' 		=> 1,
