@@ -676,13 +676,13 @@ class Apic extends IController{
 				switch($v['time_type']){
 					//统一有效期
 					case 1:
-						$data[$k]['start_time'] = date('m-d', $v['start_time']);
-						$data[$k]['end_time']   = date('m-d', $v['end_time']);
+						$data[$k]['start_time'] = date('m-d H:i', $v['start_time']);
+						$data[$k]['end_time']   = date('m-d H:i', $v['end_time']);
 						break;
 					//领取后有效期
 					case 2:
-						$data[$k]['start_time'] = date('m-d', $v['create_time']);
-						$data[$k]['end_time']   = date('m-d', $v['day']*24*60*60+$v['create_time']);
+						$data[$k]['start_time'] = date('m-d H:i', $v['create_time']);
+						$data[$k]['end_time']   = date('m-d H:i', $v['day']*24*60*60+$v['create_time']);
 						break;
 				}
 				switch($v['type']){
