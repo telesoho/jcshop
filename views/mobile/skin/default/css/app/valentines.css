@@ -12,17 +12,17 @@ img{
 }
 header{
 	width: 100%;
-	overflow: hidden
+	overflow: hidden;
 	background:#fff1f1 ;
 }
 section{
 	width: 100%;
-	overflow: hidden
+	overflow: hidden;
 	background:#fff1f1 ;
 }
 #evening{
 	width: 100%;
-	overflow: hidden
+	overflow: hidden;
 	background:#fff1f1 ;
 }
 img{
@@ -57,7 +57,6 @@ ul li p{
 	white-space: nowrap;
 	margin-top: 0.12rem;
 	margin-bottom: 0.08rem;
-	line-height: ;
 }
 ul li span{
 	font-size:0.2rem;
