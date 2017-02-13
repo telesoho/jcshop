@@ -947,4 +947,15 @@ class Site extends IController{
         $image_path = common::get_wechat_qrcode('user24', 'user24');
         echo IWeb::$app->config['image_host'] . "/$image_path";
     }
+    function message(){
+        set_time_limit(0);
+        $user_query = new IQuery('user as a');
+        $user_query->join = 'left join oauth_user as b on a.id=b.user_id';
+//        $user_query->where = "a.id IN (12,24,51)";
+        $user_data = $user_query->find();
+        foreach ($user_data as $k=>$v){
+            wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
+            sleep(3);
+        }
+    }
 }
