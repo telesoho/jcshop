@@ -22,7 +22,8 @@ var FOOTERINFOR={
             name:'草原',
             img1:'/views/mobile/skin/default/image/jmj/new_active/index/grassed.png',
             img2:'/views/mobile/skin/default/image/jmj/new_active/index/grass.png',
-            url:'/site/favorite'
+//          url:'/simple/user_said'
+			url:'/site/favorite'
         },
         {class:'icon',
             name:'购物车',

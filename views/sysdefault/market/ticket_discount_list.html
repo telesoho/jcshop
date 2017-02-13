@@ -46,12 +46,14 @@
 							case 1: echo '折扣券';break;
 							case 2: echo '抵扣用';break;
 							case 3: echo '包邮抵扣券';break;
+							case 3: echo '赞助全免券';break;
 						} ?>
 					</td>
 					<td>
 						<?php switch($item['type']){
 							case 1: echo '打'.($item['ratio']*10).'折';break;
 							case 2:case 3: echo '抵'.$item['money'].'元';break;
+							case 4: echo '金额全免';break;
 						} ?>
 					</td>
 					<td>{set:$text_status=array('','未使用','已使用')}{$text_status[$item['status']]}</td>
