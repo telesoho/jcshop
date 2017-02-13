@@ -386,6 +386,32 @@ class Apic extends IController{
 	}
 	
 	/**
+	 * 加入购物车
+	 */
+	function cart_join(){
+		$param = $this->checkData(array(
+			array('goods', 'string', 1, '商品，格式<商品ID:数量>，多个商品用英文逗号分割'),
+			array('type', 'string', 0, '类型[goods商品-product货品]'),
+		));
+		//加入购物车
+		$cartObj = new Cart();
+		foreach(explode(',', $param['goods']) as $k => $v){
+			$goods = explode(':', $v);
+			if(count($goods)!=2){
+				(new IModel('goods_car'))->rollback(); //回滚
+				$this->returnJson(array('code' => '004002', 'msg' => $this->errorInfo['004002'])); //参数格式有误
+			}
+			$rel = $cartObj->add($goods[0], $goods[1], $param['type']);
+			if(!$rel){
+				(new IModel('goods_car'))->rollback(); //回滚
+				$this->returnJson(array('code' => '004003', 'msg' => $this->errorInfo['004003'])); //购物车加入失败
+			}
+		}
+		
+		$this->returnJson(array('code' => '0', 'msg' => 'ok'));
+	}
+	
+	/**
 	 * 购物车结算页面
 	 */
 	public function cart2(){
@@ -1821,11 +1847,11 @@ class Apic extends IController{
 		if(empty($rel)) $this->returnJson(array('code' => '010001', 'msg' => $this->errorInfo['010001'])); //评论不存在
 		$modelP = new IModel('comment_praise');
 		$num    = $modelP->get_count('comment_id='.$param['comment_id'].' AND user_id='.$user_id);
-		if($param['comment_opt']==1 && $num<=0){
+		if($param['opt']==1 && $num<=0){
 			$modelP->setData(array('comment_id' => $param['comment_id'], 'user_id' => $user_id,'create_time'=>time()));
 			$rel = $modelP->add();
 			if(!$rel) $this->returnJson(array('code' => '001005', 'msg' => $this->errorInfo['001005'])); //操作失败
-		}else if($param['comment_opt']==2 && $num>=1){
+		}else if($param['opt']==2 && $num>=1){
 			$rel = $modelP->del('comment_id='.$param['comment_id'].' AND user_id='.$user_id);
 			if(!$rel) $this->returnJson(array('code' => '001005', 'msg' => $this->errorInfo['001005'])); //操作失败
 		}
