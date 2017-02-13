@@ -7,18 +7,19 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="x5-orientation" content="portrait">
 		<title></title>
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/swiper-3.4.0.min.css" />
-    	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/user_details.css" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/swiper-3.4.0.min.css?v=<?php echo time(); ?>" />
+		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+    	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/user_details.css?v=<?php echo time(); ?>" />
 	</head>
 	<body>
-		<div id="wrap_info" >
+		<div id="wrap_info" v-cloak>
 			<!--		轮播图				-->
 			<div class="swiper-container">
 			    <div class="swiper-wrapper">
-				    <div class="swiper-slide"><img src="https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2899479515,2587442361&fm=58"/></div>
-				    <div class="swiper-slide"><img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=435776751,3008915459&fm=58"/></div>
-				    <div class="swiper-slide"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2434560235,935681266&fm=58"/></div>
+				    <div class="swiper-slide" v-for="item in info_img"><img :src="item"/></div>
+				    <!--<div class="swiper-slide"><img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=435776751,3008915459&fm=58"/></div>-->
+				    <!--<div class="swiper-slide"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2434560235,935681266&fm=58"/></div>-->
 				 </div>
 			    <!-- 如果需要分页器 -->
 			    <div class="swiper-pagination"></div>
@@ -29,11 +30,11 @@
 					<div class="name">
 						<img class="Head_pic" src=""/>
 						<p>
-							<span></span>
+							<span>{{username}}</span>
 							<span>15小时前</span>
 						</p>
 					</div>
-					<img class="thumb" src="/views/mobile/skin/default/image/jmj/favorite/Thumb.png"/>
+					<img class="thumb" @click="thumb(thumbs_h)" :src="thumbs_h==1?thumbimg1:thumbimg2"/>
 				</div>
 				<div class="after"></div>
 				<div class="other_user">
@@ -46,17 +47,17 @@
 			</div>
 			<div id="wenzi">
 					<div class="left_wenzi">他说</div>
-					<div class="right_wenzi">少时诵诗书所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所</div>
+					<div class="right_wenzi">{{contents}}</div>
 			</div>
 			<div id="form_shop">
 				<h1>评论来自</h1>
 				<div class="from_shop">
-					<img src=""/>
+					<img :src="goods_img"/>
 					<div class="right_shop">
-						<p>资生堂红色蜜露 精华化妆液</p>
+						<p>{{shop_name}}</p>
 						<div>
-							<span><span>¥</span> 590.00</span>
-							<span>日本价：3490.00</span>
+							<span><span>¥</span> {{sell_price}}</span>
+							<span>日本价：{{jp_price}}</span>
 						</div>
 					</div>
 				</div>
@@ -64,64 +65,12 @@
 			<div id="said_list">
 				<h1>人气喵粉说</h1>
 				<ul>
-					<li>
-						<img class="logo" src=""/>
+					<li v-for="item in info_list" @click="other_detail(item.id)">
+						<img class="logo" :src="item.goods_img"/>
 						<div class="list_photo">
 							<div class="list_left">
-								<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
-								<span>wwwww</span>
-							</div>
-							<div class="list_right">
-								<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
-								<span>22</span>
-							</div>
-						</div>
-					</li>
-					<li>
-						<img class="logo" src=""/>
-						<div class="list_photo">
-							<div class="list_left">
-								<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
-								<span>wwwww</span>
-							</div>
-							<div class="list_right">
-								<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
-								<span>22</span>
-							</div>
-						</div>
-					</li>
-					<li>
-						<img class="logo" src=""/>
-						<div class="list_photo">
-							<div class="list_left">
-								<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
-								<span>wwwww</span>
-							</div>
-							<div class="list_right">
-								<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
-								<span>22</span>
-							</div>
-						</div>
-					</li>
-					<li>
-						<img class="logo" src=""/>
-						<div class="list_photo">
-							<div class="list_left">
-								<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
-								<span>wwwww</span>
-							</div>
-							<div class="list_right">
-								<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
-								<span>22</span>
-							</div>
-						</div>
-					</li>
-					<li>
-						<img class="logo" src=""/>
-						<div class="list_photo">
-							<div class="list_left">
-								<img src="/views/mobile/skin/default/image/jmj/favorite/11.png" style="width: 0.4rem;"/>
-								<span>wwwww</span>
+								<img :src="item.head_ico" style="width: 0.4rem;"/>
+								<span>{{item.username}}</span>
 							</div>
 							<div class="list_right">
 								<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
@@ -132,57 +81,114 @@
 				</ul>
 			</div>
 		</div>
-		<script src="/views/mobile/javascript/jquery.min.js"></script>
-		<script src="/views/mobile/javascript/vue.js"></script>
-		<script src="/views/mobile/javascript/swiper-3.4.0.min.js"></script>
-<script type="text/javascript">   
-	var vm = new Vue({
-		el:"wrap_info",
+		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/swiper-3.4.0.min.js?v=<?php echo time(); ?>"></script>
+
+<script type="text/javascript">
+	var Request = new Object();
+    Request = GetRequest();
+    var statusOrder=Request["id"];
+	var vm= new Vue({
+		el:'#wrap_info',
 		data:{
 			comment_time:"",
 			username:"",
-			info:[]
+			contents:"",
+			shop_name:"",
+			jp_price:"",
+			sell_price:"",
+			goods_img:"",
+			info_img:[],
+			info_list:[],
+			head_ico:"",
+			thumbimg1:"/views/mobile/skin/default/image/jmj/favorite/Thumb_ed.png",
+			thumbimg2:"/views/mobile/skin/default/image/jmj/favorite/Thumb.png",
+			thumbs_h:""
 		},
 		computed:{
-			
+				
 		},
 		mounted:function(){
 			var self = this;
-			user_detail(self);
-		},
-		methods:{
-			
+			user_details(self);
 		},
 		updated:function(){
-			
+		},
+		methods:{
+			other_detail:function(id){
+				window.location.href = "/simple/user_details?id="+id;
+			},
+			thumb:function(opt){
+				collection();
+			}
 		}
 	})
-	function user_detail(self){
-		$.ajax({
-			type:"get",
-			url:"/apic/comment_detail",
-			dataType:"json",
-			data:{
-				comment_id:1750
-			},
-			async:true,
-			success:function(data){
-				console.log(data.data)
-				self.info = data.data;
+	function user_details(self){
+		mui.ajax('/apic/comment_detail',{
+	        dataType:'json',
+	        type:'get',
+	        data:{
+	        	comment_id:statusOrder?statusOrder:1750
+	        },
+	        timeout:10000,
+	        success:function(data){
+	            console.log(data.data);
+	            data.data.image.map(function(item){
+	            	self.info_img.push(item);
+	            })
+	            data.data.list.map(function(item){
+	            	self.info_list.push(item)
+	            })
 				self.comment_time = data.data.comment_time;
 				self.username = data.data.username;
-			}
-		});
+				self.contents = data.data.contents;
+				self.shop_name = data.data.name;
+				self.jp_price = data.data.jp_price;
+				self.sell_price = data.data.sell_price;
+				self.goods_img = data.data.goods_img;
+				self.head_ico = data.data.head_ico;
+	        }
+	    });
 	}
-	//轮播图
-	var mySwiper = new Swiper ('.swiper-container', {
-	direction: 'horizontal',
-	loop: true,
-	// 如果需要分页器
-	pagination: '.swiper-pagination',
-	paginationType : 'fraction',
-	    autoplay : 3000,
-	});
+	
+// 收藏接口
+function collection(){
+    mui.ajax('/apic/comment_praise',{
+        data:{
+            comment_id :1750,
+            opt :"1"
+        },
+        dataType:'json',//服务器返回json格式数据
+        type:'get',//HTTP请求类型
+        timeout:10000,//超时时间设置为10秒；
+        success:function(data){
+            console.log(data);
+        },
+    });
+}
+//轮播图
+var mySwiper = new Swiper ('.swiper-container', {
+direction: 'horizontal',
+loop: true,
+// 如果需要分页器
+pagination: '.swiper-pagination',
+paginationType : 'fraction',
+    autoplay : 3000,
+});
+//	获	取 URL中 传过来的参数id
+function GetRequest() {
+  var url = location.search; //获取url中"?"符后的字串
+  var theRequest = new Object();
+  if (url.indexOf("?") != -1) {
+      var str = url.substr(1);
+      strs = str.split("&");
+      for(var i = 0; i < strs.length; i ++) {
+          theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+      }
+  }
+  return theRequest;
+}
 </script>
 	</body>
 </html>
