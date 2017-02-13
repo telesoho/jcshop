@@ -17,7 +17,8 @@
 			<!--		轮播图				-->
 			<div class="swiper-container">
 			    <div class="swiper-wrapper">
-				    <div class="swiper-slide" v-for="item in info_img"><img :src="item"/></div>
+				    <!--<div class="swiper-slide" v-for="item in info_img"><img :src="item"/></div>-->
+				    <div class="swiper-slide" v-for="item in info_img" :name="item"><img :src="item"/></div> 
 				    <!--<div class="swiper-slide"><img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=435776751,3008915459&fm=58"/></div>-->
 				    <!--<div class="swiper-slide"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2434560235,935681266&fm=58"/></div>-->
 				 </div>
@@ -37,7 +38,7 @@
 					<img class="thumb" @click="thumb(thumbs_h)" :src="thumbs_h==1?thumbimg1:thumbimg2"/>
 				</div>
 				<div class="after"></div>
-				<div class="other_user">
+				<div class="other_user" v-if='other_user'>
 					<div class="others">
 						<ul>
 							<li><img src=""/></li>
@@ -106,7 +107,7 @@
 			thumbimg1:"/views/mobile/skin/default/image/jmj/favorite/Thumb_ed.png",
 			thumbimg2:"/views/mobile/skin/default/image/jmj/favorite/Thumb.png",
 			thumbs_h:"",
-			
+			other_user:true
 		},
 		computed:{
 				
@@ -116,6 +117,15 @@
 			user_details(self);
 		},
 		updated:function(){
+			//轮播图
+			var mySwiper = new Swiper ('.swiper-container', {
+			direction: 'horizontal',
+			loop: true,
+			// 如果需要分页器
+			pagination: '.swiper-pagination',
+			paginationType : 'fraction',
+			    autoplay : 3000,
+			});
 		},
 		methods:{
 			other_detail:function(id){
@@ -123,7 +133,7 @@
 			},
 			thumb:function(opt){
 				console.log(opt)
-				collection();
+				collection(opt);
 			},
 			goods_shop:function(id){
 				console.log(id)
@@ -156,7 +166,15 @@
 				self.goods_img = data.data.goods_img;
 				self.head_ico = data.data.head_ico;
 				self.goods_id = data.data.goods_id;
-				self.thumbs_h = data.data.delivery
+				self.thumbs_h = data.data.delivery;
+				console.log(data.data.other_user)
+				if(data.data.other_user != ""){					
+//					self.other_user = data.data.other_user;
+					self.other_user = true;
+					
+				}else{
+					self.other_user = false;
+				}
 	        }
 	    });
 	}
@@ -176,15 +194,7 @@ function collection(opt){
         },
     });
 }
-//轮播图
-var mySwiper = new Swiper ('.swiper-container', {
-direction: 'horizontal',
-loop: true,
-// 如果需要分页器
-pagination: '.swiper-pagination',
-paginationType : 'fraction',
-    autoplay : 3000,
-});
+
 //	获	取 URL中 传过来的参数id
 function GetRequest() {
   var url = location.search; //获取url中"?"符后的字串

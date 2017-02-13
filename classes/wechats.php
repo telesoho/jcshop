@@ -52,6 +52,7 @@ class wechats
      */
     static function send_message_template($open_id, $type, $send_info){
         $access_token      = common::get_wechat_access_token();
+        if ($type=='member') $access_token = 'v8MDkRdEuPtaorHeE20-bi-a70_PMGfNcZCHalnSJo_sCl_aanTkL9kJRDf5ylLoqGphGYSnKKhWoCtZ_QI6B9BQBSkVk92WHVmYXXjDeG1gF1rp4Sv590fk4qDBfAduVBRcAIAJPF';
         $url               = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
         $site_config       = new Config('site_config');
         $site_config_array = $site_config->getInfo();
@@ -252,6 +253,31 @@ class wechats
                            }
                    }
                }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['order_no'],$send_info['name'],$send_info['billcode'],$send_info['remark']);
+                break;
+            case 'member':
+                $params = sprintf('{
+                   "touser":"%s",
+                   "template_id":"%s",
+                   "url":"%s",            
+                   "data":{
+                           "first": {
+                               "value":"欢迎成为九猫家会员",
+                               "color":"#173177"
+                           },
+                           "keyword1":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "keyword2":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "remark": {
+                               "value":"喵~亲爱的，送您58元新用户优惠券，请添加喵酱个人微信：jiumaojia001 领取~加入VIP群第一时间享受最新优惠",
+                               "color":"#173177"
+                           }
+                   }
+               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['number'],$send_info['create_time']);
                 break;
 
         }
