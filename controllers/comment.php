@@ -34,6 +34,7 @@ class Comment extends IController implements adminAuthorization
 			$photoInfo = $uploadObj->run();
 			$img       = array();
 			if(!empty($photoInfo)){
+				common::dblog($photoInfo);
 				foreach($photoInfo['img'] as $k => $v){
 					if($v['flag']!='1') die(IUpload::errorMessage($v['flag']));
 					$img[] = $v['img'];

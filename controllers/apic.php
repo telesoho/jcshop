@@ -830,17 +830,17 @@ class Apic extends IController{
 	 * 活动商品列表
 	 */
 	public function activity_goods_list(){
-		$param = array(
-			'pagesize' => 20, //每页显示条数
-			'page'     => IFilter::act(IReq::get('page'), 'int'),//分页，选填
-			'aid'      => IFilter::act(IReq::get('aid'), 'int'), //活动ID，选填
-			'cid'      => IFilter::act(IReq::get('cid')), //分类ID，选填
-			'bid'      => IFilter::act(IReq::get('bid')), //品牌ID，选填
-			'did'      => IFilter::act(IReq::get('did'), 'int'), //推荐ID，选填
-			'tag'      => IFilter::act(IReq::get('tag')), //标签，选填
-		);
+		$param = $this->checkData(array(
+			array('aid','int',0,'活动ID'),
+			array('cid','string',0,'分类ID'),
+			array('bid','string',0,'品牌ID'),
+			array('did','int',0,'推荐ID'),
+			array('tag','string',0,'标签'),
+			array('page','int',0,'分页'),
+		));
+		$param['pagesize'] = 20;
 		$data  = Api::run('goodsList', $param);
-		$this->json_echo(apiReturn::go('0', $data));
+		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>$data));
 	}
 	
 	/**
@@ -1746,7 +1746,7 @@ class Apic extends IController{
 		$query->order    = 'comment_time DESC';
 		$query->group    = 'm.order_no';
 		$query->page     = $param['page']<=0 ? 1 : $param['page'];
-		$query->pagesize = 20;
+		$query->pagesize = 12;
 		$list            = $query->find();
 		if($param['page']>$query->getTotalPage()) $list = array();
 		$model = new IModel('comment_praise');

@@ -276,14 +276,11 @@ class Market extends IController implements adminAuthorization
 	 */
 	public function activity_add(){
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			foreach($_POST as $k => $v)
-				if(empty($v)) exit('数据填写不完整');
-			if(!isset($_POST['type']) || empty(implode(',',$_POST['type'])))
-				exit('至少包含一种活动');
+			$type = empty($_POST['type']) ? array() : $_POST['type'];
 			/* 活动 */
 			$dataActivity 				= array(
 				'status' 		=> 1,
-				'type' 			=> implode(',',$_POST['type']), //包含活动类型[1优惠券随机领取-2消费成长]
+				'type' 			=> implode(',',$type), //包含活动类型[1优惠券随机领取-2消费成长]
 				'name' 			=> $_POST['name'], //活动名称
 				'num' 			=> $_POST['num'], //优惠券总数
 				'share_score' 	=> $_POST['share_score'], //分享获得积分数
@@ -298,7 +295,7 @@ class Market extends IController implements adminAuthorization
 			if($activity_id == false) exit('数据写入错误');
 			$modelTicket 				= new IModel('activity_ticket');
 			/* 优惠券随机领取活动 */
-			if(in_array(1,$_POST['type'])){
+			if(in_array(1,$type)){
 				foreach($_POST['ticket_name'] as $k => $v){
 					$dataTicket 		= array(
 						'pid' 			=> $activity_id, //活动ID，0为普通优惠券
@@ -314,7 +311,7 @@ class Market extends IController implements adminAuthorization
 				}
 			}
 			/* 消费成长活动 */
-			if(in_array(2,$_POST['type'])){
+			if(in_array(2,$type)){
 				$modelGrow 				= new IModel('activity_grow');
 				foreach($_POST['grow_money'] as $k => $v){
 					$did 				= $_POST['goods_id'][$k];
@@ -357,14 +354,16 @@ class Market extends IController implements adminAuthorization
 			/* 商品添加、删除操作 */
 			if(isset($_POST['play'])){
 				$modelGoods 			= new IModel('goods');
+				
 				switch($_POST['play']){
 					case 'add':
 						$goods_ids 		= array();
-						foreach($_POST['data'] as $k => $v)
+						foreach($_POST['data'] as $k => $v){
 							$goods_ids[] 	= $v['goods_id'];
+						}
 						$modelGoods->setData(array('activity'=>$_POST['aid']));
-						$rel 			= $modelGoods->update('activity=0 AND id IN ('.implode(',',$goods_ids).')');
-						exit(json_encode( $rel>0 ? array('code'=>'0','msg'=>'有'.$rel.'条数据添加成功') : array('code'=>'100','data'=>'数据写入错误') ));
+						$rel 			= $modelGoods->update('id IN ('.implode(',',$goods_ids).')');
+						exit(json_encode( $rel>0 ? array('code'=>'0','msg'=>'有'.$rel.'条数据添加成功') : array('code'=>'100','msg'=>'数据写入错误') ));
 						break;
 					case 'del':
 						$modelGoods->setData(array('activity'=>0));

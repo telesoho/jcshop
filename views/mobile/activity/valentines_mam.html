@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>男生送女生</title>
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+	    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+	    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/valentines.css?v=<?php echo time(); ?>" />
+	</head>
+	<body style="background: #f5f5f5;">
+	    <div id="mainContainer">
+			<div class="top_logo">
+				<img :src="topLogo" style="width: 100%;"/>
+			</div>
+			<div id="shop_va">
+				<h1>
+					<span></span>
+					<p>喵酱精选</p>
+					<span></span>
+				</h1>
+			</div>
+			<div class="bottom_logo">
+				<img :src="bottomLogo" style="width: 100%;"/>
+			</div>
+		</div>
+
+	</body>
+	<script src="/views/mobile/javascript/vue.js"></script>
+	<script src="/views/mobile/javascript/mui.js"></script>
+	<script>
+		var vm=new Vue({
+			 el:"#mainContainer",
+
+		})
+	</script>
+</html>

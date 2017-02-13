@@ -69,9 +69,25 @@ sit_products.css更改
 	overflow-y: scroll;
 }
 .row_b_t{}
-#addressNew .title{font-size:0.28rem;padding:0.1rem 0.1rem;margin-bottom:0.1rem;}
+ .title{
+	font-size:0.28rem;
+	padding:0.1rem 0.1rem;
+	margin-bottom:0.1rem;
+}
 .row_margin{margin-top:0.13rem;}
-.mui-input-row input{
+.mui-modal input{
+	 border-left:0;
+    border-right:0;
+    /*border-bottom:1px solid #bbb;*/
+    margin-bottom: 0.1rem;
+    border-radius:0.2rem;
+    height:0.92rem;
+    color:#040404;
+    font-size:0.3rem;
+    padding-left:0.16rem;
+}
+
+.name_user input{
     border-left:0;
     border-right:0;
     /*border-bottom:1px solid #bbb;*/
@@ -80,10 +96,15 @@ sit_products.css更改
     height:0.92rem;
     color:#040404;
     font-size:0.3rem;
-    padding-left:0.16rem;}
+    padding-left:0.16rem;
+    }
 
-#que_{height: 3.5rem;}
-.newAddrSub_position{width:100%;overflow:hidden; position: relative}
+#que_{
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+}
+/*.newAddrSub_position{width:100%;overflow:hidden; position: relative}*/
 .newAddrSub_position .submit_suc{width:100%;background:#f3026a;color:#fff;border:0;border-radius:0;height:1rem;font-size:0.36rem;}
 footer-fixed1{
 	
@@ -210,15 +231,16 @@ footer-fixed1{
 #cart .left_cart{
 	border: 1px solid #999;
 	width: 45%;
-	height: 2rem;
+	height: 3rem;
 }
 #cart .left_cart div{
 	width: 80%;
-	height: 60%;
+	height: 80%;
 	margin: 0.1rem auto 0;
 	display: -webkit-flex;
 	-webkit-justify-content: center;
 	-webkit-align-items: center;
+	overflow: hidden;
 }
 #cart .left_cart p{
 	width: 100%;
@@ -228,11 +250,11 @@ footer-fixed1{
 #cart .right_cart{
 	border: 1px solid #999;
 	width: 45%;
-	height: 2rem;
+	height: 3rem;
 }
 #cart .right_cart div{
 	width: 80%;
-	height: 60%;
+	height: 80%;
 	margin: 0.1rem auto 0;
 	display: -webkit-flex;
 	-webkit-justify-content: center;
@@ -243,9 +265,7 @@ footer-fixed1{
 	text-align: center;
 	color: #6d6d3d;
 }
-.title{
-	height: auto;
-}
+
 .title span:nth-child(1){
 	font-weight: bold;
     font-size: 0.26rem;
