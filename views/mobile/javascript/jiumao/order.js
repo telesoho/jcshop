@@ -23,7 +23,8 @@ var vm = new Vue({
         showContainer:false,
         leftClass:'showWrapper',
         rightClass:'hideWrapper',
-        show_ping:false
+        show_ping:false,
+        orderStatusText:[]
     },
     computed: {
         // 读取和设置
@@ -110,6 +111,12 @@ var vm = new Vue({
         },
         comment_ed:function(url){
         	window.location.href = url;
+        },
+        shop_shop:function(url,key){
+        	if(vm.orderStatusText[key] == "已取消"){
+        	}else{
+        		window.location.href = url;
+        	}
         }
     }
 })
@@ -158,6 +165,9 @@ function getOrder(self){
             self.showMessage=true;
             data.data.map(function(item){
                 self.orderInfo.push(item);
+            })
+            self.orderInfo.map(function(item){
+            	self.orderStatusText.push(item.orderStatusText)
             })
             if(data.data==''){
                 self.infoState=true;

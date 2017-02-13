@@ -15,7 +15,7 @@
     <loadding :mes="showloadding"></loadding>
       <header class="headerTitle flexbox" v-cloak>
           <div :class="initState==key?class2:class1" v-for="(item,key) in head" @click="changeState(key,item,item.id)">
-              <div class="time">{{item.time}}+{{item.name}}</div>
+              <div class="time">{{item.time}}</div>
               <div class="tip">{{head[key].now==2?"抢购中":(head[key].now==1?"准备开抢":"明天再来")}}</div>
           </div>
       </header>
