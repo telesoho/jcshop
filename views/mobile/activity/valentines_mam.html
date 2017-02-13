@@ -51,7 +51,7 @@
 				</div>
 			</div>
             <div class="shop_va" style="margin-top:0.2rem;">
-                <h1 class="flexbox">
+                <h1 class="flexbox" style="border-bottom:none">
                     <span class="line"></span>
                     <span class="circle"></span>
                     <span class="text">{{title}}</span>
@@ -59,11 +59,11 @@
                     <span class="line"></span>
                 </h1>
             </div>
-			<div class="bottom_logo flexbox"  @click="toPage">
-				<img :src="bottomLogo" style="width: 100%;"/>
+			<div class="bottom_logo"  @click="toPage">
+				<img :src="bottomLogo" style="width: 7rem;"/>
 			</div>
 		</div>
-
+		<div style="height:0.7rem;"></div>
 	</body>
 	<script src="/views/mobile/javascript/vue.js"></script>
 	<script src="/views/mobile/javascript/mui.js"></script>
