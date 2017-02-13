@@ -14,6 +14,7 @@
 	</head>
 	<body>
 		<div id="wrap_info" v-cloak>
+			<loadding :mes="true"></loadding>
 			<!--		轮播图				-->
 			<div class="swiper-container">
 			    <div class="swiper-wrapper">
@@ -32,16 +33,16 @@
 						<img class="Head_pic" :src="head_ico"/>
 						<p>
 							<span>{{username}}</span>
-							<span>15小时前</span>
+							<span>{{data_}}</span>
 						</p>
 					</div>
 					<img class="thumb" @click="thumb(thumbs_h)" :src="thumbs_h==1?thumbimg1:thumbimg2"/>
 				</div>
 				<div class="after"></div>
-				<div class="other_user" v-if='other_user'>
+				<div class="other_user" v-if='other_user' >
 					<div class="others">
 						<ul>
-							<li><img src=""/></li>
+							<li @click="other_users(item.id)" v-for="item in other_user_info"><img :src="item.head_ico"/></li>
 						</ul>
 					</div>
 				</div>
@@ -74,8 +75,8 @@
 								<span>{{item.username}}</span>
 							</div>
 							<div class="list_right">
-								<img src="/views/mobile/skin/default/image/jmj/favorite/uesr_dian.png" style="width: 0.28rem;"/>
-								<span>22</span>
+								<img :src="item.praise==1?thumbimg1:thumbimg2" style="width: 0.28rem;"/>
+								<span>{{item.num}}</span>
 							</div>
 						</div>
 					</li>
@@ -83,7 +84,9 @@
 			</div>
 		</div>
 		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+		
 		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/swiper-3.4.0.min.js?v=<?php echo time(); ?>"></script>
 
 <script type="text/javascript">
@@ -104,10 +107,12 @@
 			goods_id:"",
 			info_list:[],
 			head_ico:"",
+			data_:"",
 			thumbimg1:"/views/mobile/skin/default/image/jmj/favorite/Thumb_ed.png",
 			thumbimg2:"/views/mobile/skin/default/image/jmj/favorite/Thumb.png",
 			thumbs_h:"",
-			other_user:true
+			other_user:true,
+			other_user_info:[]	
 		},
 		computed:{
 				
@@ -131,9 +136,17 @@
 			other_detail:function(id){
 				window.location.href = "/simple/user_details?id="+id;
 			},
+			other_users:function(id){
+				window.location.href = "/simple/user_details?id="+id;
+			},
 			thumb:function(opt){
-				console.log(opt)
-				collection(opt);
+				if(opt == 1){
+					vm.thumbs_h = 2
+				}else{
+					vm.thumbs_h = 1
+				}
+				console.log(vm.thumbs_h)
+				collection(vm.thumbs_h);
 			},
 			goods_shop:function(id){
 				console.log(id)
@@ -146,11 +159,11 @@
 	        dataType:'json',
 	        type:'get',
 	        data:{
-	        	comment_id:statusOrder?statusOrder:1762
+	        	comment_id:statusOrder
 	        },
 	        timeout:10000,
 	        success:function(data){
-	            console.log(data.data);
+//	            console.log(data.data);
 	            data.data.image.map(function(item){
 	            	self.info_img.push(item);
 	            })
@@ -166,10 +179,10 @@
 				self.goods_img = data.data.goods_img;
 				self.head_ico = data.data.head_ico;
 				self.goods_id = data.data.goods_id;
-				self.thumbs_h = data.data.delivery;
-				console.log(data.data.other_user)
-				if(data.data.other_user != ""){					
-//					self.other_user = data.data.other_user;
+				self.thumbs_h = data.data.praise;
+				self.data_ = data.data.comment_time;
+				if(data.data.user_list != ""){					
+					self.other_user_info = data.data.user_list;
 					self.other_user = true;
 					
 				}else{
@@ -183,16 +196,26 @@
 function collection(opt){
     mui.ajax('/apic/comment_praise',{
         data:{
-            comment_id :1762,
+            comment_id :statusOrder,
             opt :opt
         },
         dataType:'json',//服务器返回json格式数据
         type:'get',//HTTP请求类型
         timeout:10000,//超时时间设置为10秒；
         success:function(data){
-            console.log(data);
+//          console.log(data);
         },
     });
+}
+
+$(window).bind("scroll",function(){
+	if($(window).scrollTop()+$(window).height()>$(document).height()&&$(window).scrollTop()>50){
+		
+	}
+})
+//开场动画
+window.onload=function(){
+    $("#loading").fadeOut(500);
 }
 
 //	获	取 URL中 传过来的参数id
