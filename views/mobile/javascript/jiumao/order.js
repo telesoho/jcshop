@@ -23,7 +23,8 @@ var vm = new Vue({
         showContainer:false,
         leftClass:'showWrapper',
         rightClass:'hideWrapper',
-        show_ping:false
+        show_ping:false,
+        orderStatusText:[]
     },
     computed: {
         // 读取和设置
@@ -58,10 +59,11 @@ var vm = new Vue({
                 };
                 if(item.orderStatusVal==6){	 
                 	 var t = parseInt(item.comment_id);
+                     console.log(t)
                 	if(t > 0){
                 		item.button1='去评价';
-                    	item.button1Url='/ucenter/comment?id=';
-                    	vm.show_ping;false;
+                    	item.button1Url='/ucenter/comment?id='+t;
+                    	vm.show_ping=false;
                 	}else{
                     	item.button1='已评价';
                     	vm.show_ping=true;
@@ -107,9 +109,14 @@ var vm = new Vue({
                 }
             })
         },
-        comment_ed:function(item,id){
-        	console.log(id+item.id);
-        	window.location.href = id+item.id;
+        comment_ed:function(url){
+        	window.location.href = url;
+        },
+        shop_shop:function(url,key){
+        	if(vm.orderStatusText[key] == "已取消"){
+        	}else{
+        		window.location.href = url;
+        	}
         }
     }
 })
@@ -158,6 +165,9 @@ function getOrder(self){
             self.showMessage=true;
             data.data.map(function(item){
                 self.orderInfo.push(item);
+            })
+            self.orderInfo.map(function(item){
+            	self.orderStatusText.push(item.orderStatusText)
             })
             if(data.data==''){
                 self.infoState=true;

@@ -618,6 +618,7 @@ class wechat extends pluginBase
 立刻点击下方“九猫大百货”逛逛逛吧~！
 
 偷偷告诉你：添加九猫个人微信：jiumaojia001 加入九猫VIP群，群里发放优惠券哦~');
+                $this->add_qrcode_follow($postObj->EventKey,$postObj->FromUserName);
             }
                 break;
 		}
@@ -948,6 +949,19 @@ OEF;
 	            $follow_model = new IModel('follow');
                 $follow_model->setData(['scene_id'=>$scene_id, 'open_id'=>$open_id ,'follow_time'=>date('Y-m-d H:i:s',time())]);
                 $follow_model->add();
+            }
+            //推送信息
+            $scene_id_arr = explode(',', $scene_id);
+            $type         = $scene_id_arr[1];
+            $remark       = ",$scene_id_arr[1],$scene_id_arr[2],$scene_id_arr[3]";
+            $user_data    = common::get_user_data(null, $open_id);
+            if ($type == 'share' && !(ticket::if_exsites_ticket($user_data['id'],$remark))){
+                $ret       = ticket::create_ticket($user_data['id'], $type, $remark);
+                if ($ret){
+                    wechats::send_message_template($open_id,'receive',['ticket_name'=>'满288抵扣优惠券','username'=>common::get_wechat_info(null,$open_id)['nickname']]);
+                } else {
+                    common::log_write($open_id.'-优惠券生成失败','ERROR');
+                }
             }
         } else {
             $follow_model = new IModel('follow');

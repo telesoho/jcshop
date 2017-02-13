@@ -9,7 +9,7 @@
 	<title>订单详情</title>
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/order.css?v=1.0.1" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/order.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 	<div id="loading">
@@ -131,7 +131,7 @@
 				<template v-else>
 					<a :href="buttonurl.button1Url" class="locationA buttom_fixd buttom_fixd1">{{buttonurl.button1}}</a>
 				</template>
-				<a :href="buttonurl.button2Url" class="locationA buttom_fixd buttom_fixd2">{{buttonurl.button2}}</a>
+				<a :href="buttonurl.button2Url" class="locationA buttom_fixd buttom_fixd2" :style="showstylealreadyComment?stylealreadyComment:''">{{buttonurl.button2}}</a>
 				
 			</div>
 		</template>
@@ -147,10 +147,10 @@
 			</div>
 		</section>
 	</section>
-    <script src="/views/mobile/javascript/vue.js"></script>
-	<script src="/views/mobile/javascript/jquery.min.js"></script>
-	<script src="/views/mobile/javascript/mui.js"></script>
-	<script src="/views/mobile/javascript/jiumao/order_detail.js"></script>
+    <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/javascript/jiumao/order_detail.js?v=<?php echo time(); ?>"></script>
 	<script type="text/javascript">
 	
 	</script>

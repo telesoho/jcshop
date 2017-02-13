@@ -168,3 +168,31 @@ padding:0.1rem 0.2rem;}
 .mui-icon-arrowright{
 	font-size: 0.35rem;
 }
+/*					share					*/
+#share_mon{
+	position: absolute;
+	bottom:0.5rem ;
+	left: 3.24rem;
+	width: 3.12rem;
+	height: 0.48rem;
+	border-radius:0.2rem ;
+	background: rgba(0,0,0,0.5);
+	display: -webkit-flex;
+	-webkit-align-items: center;
+	padding-left:0.1rem ;
+}
+#share_mon p{
+	font-size: 0.24rem;
+	color: #ffffff;
+	opacity: 0.8;
+	display: -webkit-flex;
+	-webkit-align-items: center;
+}
+#share_mon p span{
+	font-size: 0.24rem;
+	color: #fff;
+}
+#share_mon p span span{
+	font-size: 0.28rem;
+	color: #fff;
+}

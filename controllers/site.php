@@ -885,7 +885,35 @@ class Site extends IController{
 	}
 
 	function order_share(){
-	    $this->redirect('order_share');
+        $share_no       = IFilter::act(IReq::get('share_no'));
+        $this->share_no = $share_no;
+        $user_id        = $this->user['user_id'];
+        $share_no_arr   = explode(',', $share_no);
+        $wechat_data    = common::get_wechat_info($user_id);
+        //是否已经关注
+        if ($wechat_data['subscribe'] === 1){
+            $this->friends = 1;
+        } else {
+            $this->friends = 0;
+        }
+        //是否为发起人
+        if ($user_id === $share_no_arr[2]){
+            $this->sponsor = 1;
+        } else {
+            $this->sponsor       = 0;
+            //获取该次分享的专属二维码
+            $wechat_qrcode_model = new IModel('wechat_qrcode');
+            $qrcode_data         = $wechat_qrcode_model->getObj("relation_id = '$share_no'");
+            if (!empty($qrcode_data)){
+                $image_path = $qrcode_data['image_path'];
+            } else {
+                //永久二维码
+                $image_path = common::get_wechat_qrcode($share_no, $share_no, 2);
+            }
+            $this->image_path = IWeb::$app->config['image_host'] . '/' . $image_path;
+        }
+        $this->share_no = $share_no;
+        $this->redirect('order_share');
     }
 
     /**
@@ -918,5 +946,16 @@ class Site extends IController{
         $id         = IFilter::act(IReq::get('id'), 'int');
         $image_path = common::get_wechat_qrcode('user24', 'user24');
         echo IWeb::$app->config['image_host'] . "/$image_path";
+    }
+    function message(){
+        set_time_limit(0);
+        $user_query = new IQuery('user as a');
+        $user_query->join = 'left join oauth_user as b on a.id=b.user_id';
+//        $user_query->where = "a.id IN (12,24,51)";
+        $user_data = $user_query->find();
+        foreach ($user_data as $k=>$v){
+            wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
+            sleep(3);
+        }
     }
 }

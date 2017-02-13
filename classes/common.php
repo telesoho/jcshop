@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../plugins/vendor/autoload.php';
+require_once __DIR__.'/../plugins/curl/Curl.php';
 use Endroid\QrCode\QrCode;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -340,6 +341,15 @@ class Common{
             return $data[0]['oauth_user_id'];
         }
     }
+    static public function get_wechat_info($user_id, $open_id = null){
+        if (empty($open_id)) {
+            $open_id = self::get_wechat_open_id($user_id);
+        }
+        $access_token = common::get_wechat_access_token();
+        $url          = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$access_token&openid=$open_id&lang=zh_CN";
+        $ret          = self::curl_http($url,'','GET');
+        return json_decode($ret,true);
+    }
 
     /**
      * User: chenbo
@@ -347,7 +357,13 @@ class Common{
      * @param $user_id
      * @return array
      */
-    static public function get_user_data($user_id){
+    static public function get_user_data($user_id, $open_id = null){
+        if (!empty($open_id)){
+            $oauth_user_model = new IModel('oauth_user');
+            $data = $oauth_user_model->getObj("oauth_user_id = '$open_id'");
+            if (empty($data)) IError::show_normal('用户信息不存在');
+            $user_id = $data['user_id'];
+        }
         $user_model = new IModel('user');
         $ret = $user_model->getObj('id = ' . $user_id);
         if (empty($ret)){
@@ -431,18 +447,23 @@ class Common{
         }
     }
 
-    static public function get_wechat_qrcode($id, $relation_id,$type = 1){
+    static public function get_wechat_qrcode($scene_id, $relation_id,$type = 1){
         $access_token = common::get_wechat_access_token();
-        $params = array(
-            'action_info' => array(
-                'scene'=>['scene_id'=>$scene_id]
-            )
-        );
         if ($type === 1){
+            $params = array(
+                'action_info' => array(
+                    'scene'=>['scene_id'=>$scene_id]
+                )
+            );
             $params['expire_seconds'] = 2592000;
             $params['action_name'] = 'QR_SCENE';
         } elseif($type === 2) {
-            $params['action_name'] = 'QR_LIMIT_SCENE';
+            $params = array(
+                'action_info' => array(
+                    'scene'=>['scene_str'=>$scene_id]
+                )
+            );
+            $params['action_name'] = 'QR_LIMIT_STR_SCENE';
         }
         $ret = self::http_post_json("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=$access_token",json_encode($params));
         if (isset(json_decode($ret[1])->errcode)){
@@ -455,7 +476,7 @@ class Common{
         $dir .= '/share_qrcode';
         $image_path = common::save_url_image($url, $dir);
         $wechat_qrcode_model = new IModel('wechat_qrcode');
-        $wechat_qrcode_model->setData(['image_path'=>$image_path,'relation_id'=>$relation_id,'scene_id'=>$scene_id,'ticket'=>$ticket]);
+        $wechat_qrcode_model->setData(['image_path'=>$image_path,'relation_id'=>$relation_id,'scene_id'=>$scene_id,'ticket'=>$ticket,'type'=>$type,'create_time'=>date('Y-m-d H:i:s',time())]);
         $ret = $wechat_qrcode_model->add();
         if ($ret){
             return $image_path;
@@ -463,4 +484,5 @@ class Common{
             return false;
         }
     }
+
 }

@@ -17,7 +17,7 @@
 <body>
 <section id="vedio_detail" v-cloak>
     <loadding :mes="showloadding"></loadding>
-    <video :src="info.url" style="height:4.22rem;" width="100%" controls :poster="info.img"></video>
+    <iframe :src="info.url" style="width:100%;height:4.22rem;display: block;overflow: hidden" frameborder="0"></iframe>
     <header class="box detail_header">
         <div class="left">
             <p class="p1 hidewrap">{{info.title}}</p>
@@ -85,26 +85,7 @@
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
 
-<!-- 微信分享 -->
-{if:IClient::isWechat() == true}
-<?php
-    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
-    $this->wechat = new wechat();
-$this->wechat->setConfig();
-$this->wechat->config['wechat_jsApiSDK']=1;
-$this->wechat->jsApiSDK();
-?>
-<script>
-    //微信分享
-    var wechat_share = {
-        title: '九猫大百货-日本同价-东京直邮', //标题
-        desc: '视频特辑', //描述
-        link: "{echo:IWeb::$app->config['image_host1']}/site/ticket_gain?pid={$this->user['user_id']}&aid={echo:(new Config('jmj_config'))->activity_id}&iid={echo:ISession::get('shop_identify_id')}",
-        imgUrl: "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/jmj/img/cat-logo-small.png'}", //图片
-    }
-    wechat.share();
-</script>
-{/if}
+
 <script type="text/javascript">
     var stop=true;
     var aid="{echo:IReq::get('id')}";
@@ -176,6 +157,26 @@ $this->wechat->jsApiSDK();
         }
     })
 </script>
+<!-- 微信分享 -->
+{if:IClient::isWechat() == true}
+<?php
+    require_once __DIR__ . '/../../../../plugins/wechat/wechat.php';
+    $this->wechat = new wechat();
+$this->wechat->setConfig();
+$this->wechat->config['wechat_jsApiSDK']=1;
+$this->wechat->jsApiSDK();
+?>
+<script>
+    //微信分享
+    var wechat_share = {
+        title: vm.info.title, //标题
+        desc: vm.info.content, //描述
+        link: "",
+        imgUrl:vm.info.img , //图片
+    }
+    wechat.share();
+</script>
+{/if}
 </body>
 
 </html>

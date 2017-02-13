@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="x5-orientation" content="portrait">
+    <title>场景馆title</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/scene/scene.css?v=<?php echo time(); ?>" />
+</head>
+<body>
+<div id="scene_detail">
+    <!--头部定位-->
+    <div class="head">
+        <div class="backImg">
+            <img src="/views/mobile/skin/default/image/jmj/product/back.png" alt="" style="width:0.43rem" @click="back"/>
+        </div>
+        <a href="/simple/cart" id="cart" class="locationA">
+            <div class="img">
+                <div class="mark flexbox">{{car_count}}</div>
+                <img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
+            </div>
+        </a>
+        <a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
+    </div>
+</div>
+<script src="/views/mobile/javascript/vue.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script type="text/javascript">
+     var vm=new Vue({
+         el:"#scene_detail",
+         data:{
+             car_count:0
+         },
+         mounted:function(){
+            var self=this;
+             car_shop_num(self)
+         },
+         methods:{
+             back:function(){
+                 window.history.back();
+             }
+         }
+     })
+     //获取购物车数量
+     function car_shop_num(self){
+         $.ajax({
+             url:"/apic/cart_count",
+             dataType:'json',//服务器返回json格式数据
+             type:'get',//HTTP请求类型
+             timeout:10000,//超时时间设置为10秒；
+             success:function(data){
+//				console.log(data);
+                 self.car_count = data.data.car_count
+             }
+         })
+     }
+</script>
+</body>
+</html>
+

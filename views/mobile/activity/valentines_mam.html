@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>男生送女生</title>
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+	    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+	    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/valentines.css?v=<?php echo time(); ?>" />
+	</head>
+	<body style="background: #f5f5f5;">
+	    <div id="mainContainer" v-cloak>
+			<div class="top_logo flexbox">
+				<img :src="topLogo" style="width:100%;"/>
+			</div>
+			<div class="shop_va">
+				<h1 class="flexbox">
+					<span class="line"></span>
+					<span class="circle"></span>
+					<span class="text">喵酱精选</span>
+					<span class="circle"></span>
+					<span class="line"></span>
+				</h1>
+				<div class="con">
+					<a :href="'/site/products/id/'+item.id" class="goodsItem flexs" v-for="item in goodsInfo">
+						<div class="img">
+							<img :src="item.img" alt="" />
+						</div>
+						<div class="middle">
+							<div class="name hideCamp">{{item.name}}</div>
+							<div class="price box">
+								<div class="price_l">
+									<span>￥</span>
+									<span>{{item.sell_price}}</span>
+								</div>
+								<div class="price_r">
+									<span>日本价：</span>
+									<span>{{item.jp_price}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="cart flexbox" @click.prevent="joinCarOne(item)">
+							<img src="/views/mobile/skin/default/image/jmj/active_valentines/cart.png" alt="">
+						</div>
+					</a>
+					<div class="buyAll flexbox" @click.prevent="joinCar">
+						<span>一键购买</span>
+					</div>
+				</div>
+			</div>
+            <div class="shop_va" style="margin-top:0.2rem;">
+                <h1 class="flexbox" style="border-bottom:none">
+                    <span class="line"></span>
+                    <span class="circle"></span>
+                    <span class="text">{{title}}</span>
+                    <span class="circle"></span>
+                    <span class="line"></span>
+                </h1>
+            </div>
+			<div class="bottom_logo"  @click="toPage">
+				<img :src="bottomLogo" style="width: 7rem;"/>
+			</div>
+		</div>
+		<div style="height:0.7rem;"></div>
+	</body>
+	<script src="/views/mobile/javascript/vue.js"></script>
+	<script src="/views/mobile/javascript/mui.js"></script>
+	<script>
+        var eid="{echo:IReq::get('id')}";
+		var vm=new Vue({
+			 el:"#mainContainer",
+			 data:{
+			     aid:eid,
+                 title:"",
+			 	topLogo:"",
+				 bottomLogo:"",
+                 href:"",
+				 goodsInfo:[],
+                 allBuyData:''
+			 },
+			mounted:function(){
+			 	var self=this;
+                getLocalMSG(eid,self);
+				getInfo(self);
+			},
+			methods:{
+                joinCarOne:function(obj){
+                    var data=obj.id+":1";
+                    var btnArray = ['取消', '确认'];
+                    mui.confirm('是否加入购物车？', '加入购物车', btnArray, function(e) {
+                        if (e.index == 1) {
+                            mui.ajax({
+                                data:{
+                                    goods:data
+                                },
+                                url:"/apic/cart_join",
+                                dataType:'json',//服务器返回json格式数据
+                                type:'get',//HTTP请求类型
+                                timeout:10000,//超时时间设置为10秒；
+                                success:function(data){
+                                    console.log(data);
+                                    if(data.code!=0){
+                                    	alert(data.msg);
+                                    	return false;
+                                    }
+                                    alert("添加成功!")
+                                }
+                            })
+                        } else {
+
+                        }
+                    })
+                },
+                joinCar:function(){
+                    var self=this;
+                    var btnArray = ['取消', '确认'];
+                    mui.confirm('是否全部加入购物车？', '加入购物车', btnArray, function(e) {
+                        if (e.index == 1) {
+                            mui.ajax({
+                                data:{
+                                    goods:self.allBuyData
+                                },
+                                url:"/apic/cart_join",
+                                dataType:'json',//服务器返回json格式数据
+                                type:'get',//HTTP请求类型
+                                timeout:10000,//超时时间设置为10秒；
+                                success:function(data){
+                                    console.log(data);
+                                    if(data.code!=0){
+                                    	alert(data.msg);
+                                    	return false;
+                                    }
+                                    alert("添加成功!");
+                                    
+                                }
+                            })
+                        } else {
+
+                        }
+                    })
+                },
+                toPage:function(){
+                    window.location.href=this.href;
+                }
+			}
+		})
+		function getInfo(self){
+            mui.ajax({
+                data:{
+                   aid:eid?eid:3
+                },
+                url:"/apic/activity_goods_list",
+                dataType:'json',//服务器返回json格式数据
+                type:'get',//HTTP请求类型
+                timeout:10000,//超时时间设置为10秒；
+                success:function(data){
+				    self.goodsInfo=data.data;
+                    self.goodsInfo.map(function(item){
+                        self.allBuyData+=item.id+":1,"
+                    })
+                }
+            })
+		}
+		function getLocalMSG(eid,self){
+		    switch (eid){
+                case '7' :{
+                    document.title="女生送男生";
+                    self.topLogo="/views/mobile/skin/default/image/jmj/active_valentines/w.png";
+                    self.bottomLogo="/views/mobile/skin/default/image/jmj/active_valentines/q.png";
+                    self.title="男生送女生";
+                    self.href="/activity/valentines_mam/id/8";
+                    return;
+                }
+                case '8' :{
+                    document.title="男生送女生";
+                    self.topLogo="/views/mobile/skin/default/image/jmj/active_valentines/q.png";
+                    self.bottomLogo="/views/mobile/skin/default/image/jmj/active_valentines/w.png";
+                    self.title="女生送男生";
+                    self.href="/activity/valentines_mam/id/7";
+                    return;
+                }
+                default: {
+                    document.title="女生送男生";
+                    self.topLogo="/views/mobile/skin/default/image/jmj/active_valentines/w.png";
+                    self.bottomLogo="/views/mobile/skin/default/image/jmj/active_valentines/q.png";
+                    self.title="男生送女生";
+                    self.href="/activity/valentines_mam/id/7";
+                    return;
+                }
+            }
+        }
+	</script>
+</html>

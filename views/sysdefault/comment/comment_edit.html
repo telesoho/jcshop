@@ -20,7 +20,10 @@
 					<td><a href="{url:/member/member_edit/uid/$items[user_id]}">{$items['username']}</a></td>
 				</tr>
 				<tr>
-					<th>评价时间：</th><td>{$items['time']}</td>
+					<th>购买时间：</th><td>{$items['time']}</td>
+				</tr>
+				<tr>
+					<th>评价时间：</th><td>{$items['comment_time']}</td>
 				</tr>
 				<tr>
 					<th>评价商品：</th><td><a href="{url:/goods/products/id/$items['goods_id']}" target="_blank">{$items['name']}</a></td>
@@ -31,9 +34,23 @@
 				<tr>
 					<th>评价分数：</th><td>{$items['point']}分</td>
 				</tr>
-				{if:$items['seller_id']}
-				<tr><th>商家：</th><td><a href="{url:/site/home/id/$items['seller_id']}" target="_blank">商家主页</a></td></tr>
-				{/if}
+
+				<tr>
+					<th>图片：</th>
+					<td>
+						{foreach:items=explode(',',$items['image'])}
+							<img src="{echo:empty($item) ? '' : IWeb::$app->config['image_host'].'/'.$item}" style="max-height:300px;"><br/>
+						{/foreach}
+					</td>
+				</tr>
+				<tr>
+					<th>标签：</th>
+					<td>
+						{query:name=comment_tag where=id in ($items[tag]) item=$v}
+							<input type="button" value="{$v['name']}">
+						{/query}
+					</td>
+				</tr>
 				<tr>
 					<th>回复评价：</th>
 					<td><textarea class='normal' name='recontents'>{$items['recontents']}</textarea><label>卖家对买家评论的回复</label></td>

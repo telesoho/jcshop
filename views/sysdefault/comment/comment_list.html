@@ -14,6 +14,7 @@
 				<input class="small" name="search[likeValue]" type="text" /><button class="btn" type="submit"><span class="sch">搜 索</span></button>
 			</form>
 		</div>
+		<a href="javascript:;" onclick="event_link('{url:/comment/comment_add}')"><button class="operating_btn" type="button"><span class="addition">添加评论</span></button></a>
 		<a href="javascript:void(0)" onclick="selectAll('check[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
 		<a href="javascript:void(0)" onclick="delModel({form:'comment_list',msg:'确定要删除选中的记录吗？'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
 	</div>
@@ -55,12 +56,12 @@
 
 		<tbody>
 			{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
-			{query: name=comment as c join=left join goods as goods on c.goods_id eq goods.id left join user as u on c.user_id eq u.id fields=c.id,c.time,u.id as userid,u.username,goods.id as goods_id,goods.name as goods_name,c.recomment_time page=$page where=$where order = c.id desc}
+			{query: name=comment as c join=left join goods as goods on c.goods_id eq goods.id left join user as u on c.user_id eq u.id fields=c.id,c.comment_time,c.time,u.id as userid,u.username,goods.id as goods_id,goods.name as goods_name,c.recomment_time page=$page where=$where order = c.id desc}
 			<tr>
-				<td><input name="check[]" type="checkbox" value="{$item['id']}" /></td>
+				<td><input name="check[]" type="checkbox" value="{$item['id']}" />{$item['id']}</td>
 				<td><a href="{url:/member/member_edit/uid/$item[userid]}">{$item['username']}</a></td>
 				<td><a href="{url:/site/products/id/$item['goods_id']}" target="_blank">{$item['goods_name']}</a></td>
-				<td>{$item['time']}</td>
+				<td>{$item['comment_time']}</td>
 				<td>{if:$item['recomment_time']>0}已回复{else:}未回复{/if}</td>
 				<td>
 					<a href="{url:/comment/comment_edit/cid/$item[id]}"><img class="operator" src="{skin:images/admin/icon_check.gif}" alt="查看" /></a>

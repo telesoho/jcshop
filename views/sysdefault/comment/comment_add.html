@@ -1,0 +1,195 @@
+{js:my97date}
+
+<div class="headbar">
+    <div class="position"><span>会员</span><span>></span><span>评论管理</span><span>></span><span>添加</span></div>
+</div>
+<div class="content_box">
+    <div class="content form_content">
+        <form action="{url:/comment/comment_add}" method="post" name='form_update' enctype="multipart/form-data">
+            <table class="form_table">
+                <col width="150px"/>
+                <col/>
+                <tr>
+                    <th>评价商品：</th>
+                    <td>
+                        <table class='border_table' style='width:65%'>
+                            <button type='button'
+                                    onclick="searchGoods('{url:/block/search_goods/type/checkbox}',page.searchGoodsCallback);"
+                                    class='btn'><span>选择商品</span></button>
+                            <thead>
+                            <tr>
+                                <th>商品编号</th>
+                                <th>图片</th>
+                                <th>名称</th>
+                                <th>价格</th>
+                                <th>状态</th>
+                                <th>删除</th>
+                            </tr>
+                            </thead>
+                            <tbody id="goodsListBox">
+
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>用户名：</th>
+                    <td>
+                        <label class='attr' >
+                            <input type="hidden" value="" name="user_id">
+                            <button onclick='page.searchUser();' class="btn" type="button"><span>筛选条件</span></button>
+                            <label class="green" id="username"></label>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>图片：</th>
+                    <td>
+                        <label class='attr'>
+                            <input name='img[]' type='file' value=""/><br />
+                            <input name='img[]' type='file' value=""/><br />
+                            <input name='img[]' type='file' value=""/><br />
+                            <input name='img[]' type='file' value=""/>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>内容：</th>
+                    <td>
+                        <label class='attr'>
+                            <textarea name="contents"></textarea>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>标签：</th>
+                    <td>
+                        <label class='attr'>
+                            {query:name=comment_tag where=status eq 1 fields=id,name order=sort desc lmit=20}
+                                <input type="checkbox" name="tag[]" value="{$item['id']}">{$item['name']}
+                            {/query}
+                        </label>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <button class="submit" type='submit'><span>确 定</span></button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<!--商品模板-->
+<script type="text/html" id="goodsItemTemplate">
+    <tr class="goodsInfo">
+        <td><%=templateData['goods_no']%><input name="goods_id" type="hidden" value="<%=templateData['goods_id']%>"></td>
+        <td> <img src="<?php echo IWeb::$app->config['image_host']; ?>/<%=templateData['img']%>"  style="max-height:100px;max-width:100px;" /></td>
+        <td><%=templateData['name']%></td>
+        <td><%=templateData['sell_price']%></td>
+        <td><%if(templateData['is_del'] =='0'){%>
+            已上架
+            <%}%>
+            <%if(templateData['is_del'] =='1'){%>
+            已删除
+            <%}%>
+            <%if(templateData['is_del'] =='2'){%>
+            已下架
+            <%}%>
+            <%if(templateData['is_del'] =='3'){%>
+            申请上架中
+            <%}%></td>
+        <td><img src="<?php echo $this->getWebSkinPath().'images/admin/icon_del.gif';?>" alt="删除" title="删除" onclick="page.delGoods(this);" /></td>
+    </tr>
+</script>
+
+
+<script type='text/javascript'>
+
+window.onload = function(){
+    page.init();
+};
+
+//筛选用户回调函数
+function searchUserCallback(userIds)
+{
+    console.log(userIds);
+    if(userIds.split(',').length >1 ){
+        _confirm('有多个用户，请更详细筛选');
+    }
+    var defaultText = userIds ? '已选择用户' :'用户不存在';
+    art.dialog({'id':'userCondition'}).close();
+    $('input[name=user_id]').val(userIds);
+    $('#username').text(defaultText);
+}
+
+var page = {
+    loading     : false,
+    //初始化
+    init        : function(){
+    },
+    //更新
+    update      : function (obj) {
+        if(page.loading==true) return false;
+        page.loading=true;
+        var thisForm 	= $('form[name="api_update"]');
+        $.post(thisForm.attr("action"),thisForm.serialize(),function(data,status){
+            if(status=='success'){
+                console.log(data);
+                if(data.code==0){
+                    _inform('操作成功',function () {
+                        window.location.href="{url:/tools/api_list}";
+                    });
+                }
+                _inform('操作失败');
+            }
+			page.loading = false;
+        },'json');
+    },
+    //输入筛选商品的条件
+    searchGoodsCallback: function (goodsList) {
+        var result = [];
+        if(goodsList.length>1){
+            _inform('只能选择1件商品');
+            return false;
+        }
+        goodsList.each(function(k,v){
+            var temp = $.parseJSON($(this).attr('data'));
+            result.push(temp);
+        });
+        page.createGoodsList(result);
+    },
+    //创建商品数据
+    createGoodsList: function (goodsList) {
+        if (goodsList) {
+            for(var i in goodsList){
+                var templateHTML = template.render('goodsItemTemplate',{"templateData":goodsList[i]});
+                $('#goodsListBox').html(templateHTML);
+            }
+        }
+    },
+    //删除单条商品
+    delGoods 				:function(obj){
+        $(obj).parents('.goodsInfo').remove();
+    },
+    //筛选用户
+    searchUser              : function(){
+        art.dialog.open('{url:/block/search_user}',{
+            'id':'userCondition',
+            'title':'选择用户',
+            'ok':function(iframeWin, topWin){
+                var iframeObj = $(iframeWin.document);
+                iframeObj.find('form').submit();
+                return false;
+            }
+        });
+    }
+};
+
+
+
+</script>

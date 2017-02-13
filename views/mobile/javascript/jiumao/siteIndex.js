@@ -104,9 +104,7 @@ var vm = new Vue({
         }else{
             getBanner(self);
             getArticle_category_list(self);
-//          pullupInfoRefresh(self);
-           index_home(self);
-        }
+        }index_home(self);
         time_xian();
     },
     updated:function() {
@@ -124,31 +122,10 @@ var vm = new Vue({
         	$("#modalid-search").attr("class", "show");
         });
         $("#search").focus(function(){
-          		$("#nav-slider").hide();
-				$("#slider1").hide();
-				$("#Timed_to_rob").hide();
-				$("#Video_special").hide();
-				$("#article_list").hide();
-				$("#the_zone").hide();
-				$("#footer_index").hide();
-				$(".footer").hide();
-				$(".recommended ").hide();
-				$("#z_special").hide();
-				$("#aaaa").hide();
-				clearInterval(times);
+          		fexed_hide();
         })
         $("#search").blur(function(){
-			$("#nav-slider").show();
-			$("#slider1").show();
-			$("#Timed_to_rob").show();
-			$("#Video_special").show();
-			$("#article_list").show();
-			$("#the_zone").show();
-			$("#footer_index").show();
-			$(".footer").show();
-			$(".recommended ").show();
-			$("#z_special").show();
-			$("#aaaa").show();
+				fexed_show();
 		});
 		
     },
@@ -209,7 +186,7 @@ var vm = new Vue({
     		}
     	},
     	Video_pro:function(){
-    		window.location.href = "/site/article_list?id=3";
+    		window.location.href = "/site/vedio_list";
     	},
     	Brand_pavilion:function(){
     		window.location.href = "/site/sitemap?id=3";
@@ -237,6 +214,35 @@ var vm = new Vue({
     	}
     }
 })
+//解决fexed和软键盘问题
+function fexed_hide(){
+	$("#nav-slider").hide();
+		$("#slider1").hide();
+		$("#Timed_to_rob").hide();
+		$("#Video_special").hide();
+		$("#article_list").hide();
+		$("#the_zone").hide();
+		$("#footer_index").hide();
+		$(".footer").hide();
+		$(".recommended ").hide();
+		$("#z_special").hide();
+		$("#aaaa").hide();
+		clearInterval(times);
+}
+
+function fexed_show(){
+	$("#nav-slider").show();
+	$("#slider1").show();
+	$("#Timed_to_rob").show();
+	$("#Video_special").show();
+	$("#article_list").show();
+	$("#the_zone").show();
+	$("#footer_index").show();
+	$(".footer").show();
+	$(".recommended ").show();
+	$("#z_special").show();
+	$("#aaaa").show();
+}
 function clear_pull(){
 	removeSessionItem("state");
 	removeSessionItem("state2");
@@ -387,7 +393,6 @@ function time_xian(self){
 			}if(hours<10){
 				hours = "0"+hours;
 			}
-			console.log(self)
 //			self.hours = hours;
 //			self.minutes = minutes;
 //			self.seconds = seconds;

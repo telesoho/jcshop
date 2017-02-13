@@ -12,6 +12,31 @@
 	</head>
 	<body>
 		<div id="wrap_if" v-cloak>
+            <!--loading页开始-->
+            <div id="loading" style="display: none;position: absolute;left: 50%;top: 50%;margin-top: -0.5rem;margin-left: -0.5rem" >
+                <div class="spinner">
+                    <div class="spinner-container container1">
+                        <div class="circle1"></div>
+                        <div class="circle2"></div>
+                        <div class="circle3"></div>
+                        <div class="circle4"></div>
+                    </div>
+                    <div class="spinner-container container2">
+                        <div class="circle1"></div>
+                        <div class="circle2"></div>
+                        <div class="circle3"></div>
+                        <div class="circle4"></div>
+                    </div>
+                    <div class="spinner-container container3">
+                        <div class="circle1"></div>
+                        <div class="circle2"></div>
+                        <div class="circle3"></div>
+                        <div class="circle4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!--       内容        -->
 			<header>
 				<div class="top_share">
 					<div v-if=sent_per>
@@ -45,7 +70,7 @@
 				<div class="top_1" v-else>
 					<img src="/views/mobile/skin/default/image/buy_share/vouchers.png"/>
 					<p>打开红包</p>
-					<div class="www"  @click="share_receive2"></div>
+					<div class="www"  @click="share_receive"></div>
 				</div>
 				<div class="bottom_1">
 					<img src="/views/mobile/skin/default/image/buy_share/fanhui.png"/>
@@ -57,16 +82,30 @@
 			<div id="Popup_window" v-if="tan">
 				<!--		普通领奖关注九猫家公众号 			-->
 				<div>
-					<p class="window_1">恭喜您! 成功领取&nbsp;<span>68</span>&nbsp;元代金券!</p>
-					<p v-if="friends" class="window_2">代金券编号:&nbsp;<span>EEEEEEEEEEE</span></p>
-					<img v-if = "friends" class="window_img1" src="/views/mobile/skin/default/image/buy_share/tatle.png"/>
-					<img v-if = "friends == false" src="/views/mobile/skin/default/image/buy_share/qq.png" style="width: 5.54rem;margin: 0.56rem auto 0.66rem;"/>
-					<div class="window_div" v-if = "friends">
-						<img class="window_img2" @click="returns" src="/views/mobile/skin/default/image/buy_share/return.png"/>
-						<p>返回九猫家</p>
-					</div>
-					<span style="font-size: 0.28rem; color: #898989;display: block;width: 100%;text-align: center;">长按二维码并关注,即可使用。</span>
-					<t id="sssssss" style="width: 1px;height: 1.29rem;background: #fff; position: absolute;right:0.42rem ;top: 7.2rem; background: rgba(255,255,255,0.4);">
+					<!--<p class="window_1">恭喜您! 成功领取&nbsp;<span>68</span>&nbsp;元代金券!</p>-->
+                    <div class="window_1" v-html="p_data"></div>
+                    <!--     发起人       -->
+                    <img v-if = "sent_per" class="window_img1" src="/views/mobile/skin/default/image/buy_share/tatle.png"/>
+                    <div class="window_div" v-if = "sent_per == true">
+                        <img class="window_img2" @click="returns" src="/views/mobile/skin/default/image/buy_share/return.png"/>
+                        <p>返回九猫家</p>
+                    </div>
+					<!--<p v-if="friends" class="window_2">代金券编号:&nbsp;<span>EEEEEEEEEEE</span></p>-->
+                    <!--  为普通用户 -->
+                    <div v-if="sent_per==false">
+                        <!--         普通用户已关注       -->
+                        <img v-if = "friends" class="window_img1" src="/views/mobile/skin/default/image/buy_share/tatle.png"/>
+                        <!--<img v-if = "friends == false" src="/views/mobile/skin/default/image/buy_share/qq.png" style="width: 5.54rem;margin: 0.56rem auto 0.66rem;"/>-->
+                        <div class="window_div" v-if = "friends == true">
+                            <img class="window_img2" @click="returns" src="/views/mobile/skin/default/image/buy_share/return.png"/>
+                            <p>返回九猫家</p>
+                        </div>
+
+                        <!--        普通用户未关注        -->
+                        <img v-if = "friends == false" src="{$this->image_path}" alt="图丢啦！" style="width: 2.54rem;display: block;margin: 0 auto">
+                        <span v-if = "friends == false"  style="font-size: 0.28rem; color: #898989;display: block;width: 100%;text-align: center;">长按二维码并关注,即可领取优惠券红包。</span>
+                    </div>
+                    <t id="sssssss" style="width: 1px;height: 1.29rem;background: #fff; position: absolute;right:0.42rem ;top: 7.2rem; background: rgba(255,255,255,0.4);">
 			    		<strong style="width: 0.5rem;height: 0.5rem;position: absolute;left: -0.25rem;top: 1.29rem;z-index: 88;">
 			    			<img id="guan" @click="guan" src="/views/mobile/skin/default/image/jmj/ticket_gain/guan.png" style="width: 0.5rem;height: 0.5rem;"/>
 			    		</strong>
@@ -87,17 +126,29 @@
 		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 		<script type="text/javascript">
+             var sponsor = "{$this->sponsor}";
+             var friends = "{$this->friends}";
+             var share_no = "{$this->share_no}";
+             if(sponsor == 1){
+                 sponsor = true;
+             }else{
+                 sponsor = false;
+             }
+             if(friends == 1){
+                 friends = true;
+             }else{
+                 friends = false;
+             }
 			 var vm= new Vue({
 				el:'#wrap_if',
 				data:{
-					share_:false,
 					tan:false,
 					bg:false,
 					img1:true,
 					//分享人
-					sent_per:true,
-					//没关注and已关注
-					friends:true
+					sent_per:sponsor,
+					friends:friends,
+					p_data:''
 				},
 				computed:{
 					
@@ -106,12 +157,16 @@
 					
 				},
 				updated:function(){
+                    $("#loading").css({
+                        "display":"none"
+                    })
 					if(vm.friends){
 						$("#Popup_window").animate({
 							top: "50%",
 							marginTop: "-4.45rem",		
 						});
 					}else{
+
 						$("#Popup_window").css({
 							"background":" url(/views/mobile/skin/default/image/buy_share/ww.png)",
 							"backgroundSize": "100% 100%",
@@ -132,38 +187,23 @@
 				},
 				methods:{
 					share_receive:function(){
-						if(this.share_){
-							$("#share_show").css({
-								"color":"#999",
-								"zIndex":"1"
-							});
-							this.tan = true;
-							this.share_ = !this.share_;
-							this.bg = true;
-							this.img1 = true;
-							document.body.scrollTop = 0
-							$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
-							
-						}else{
-							this.bg = true;
-							this.img1 = false;
-							$(document).on('touchmove',function(event) { event.preventDefault(); }, false);	
-							$("#share_show").css({
-								"color":"#fff",
-								"zIndex":"1000"
-							});
-							
-						setTimeout(function(){
-							document.getElementById("backgrounds").onclick = function(){
-								$(document).unbind('touchmove');
-								vm.share_ = true;
-								vm.bg = false;
-								vm.img1 = true;
-							}
-						},1000)
-							
-							
-						}
+                        $("#loading").css({
+                            "display":"block"
+                        })
+                        mui.ajax('/apic/get_share_ticket',{
+                            dataType:'json',
+                            type:'post',
+                            data:{share_no:share_no,sponsor:sponsor,friends:friends},
+                            timeout:10000,
+                            success:function(data){
+                                vm.p_data = data.msg ;
+                                vm.tan = true;
+                                vm.bg = true;
+                                vm.img1 = true;
+                                document.body.scrollTop = 0
+                                $(document).on('touchmove',function(event) { event.preventDefault(); }, false);
+                            }
+                        })
 					},
 					returns:function(){
 						window.location.href = "/site/index";
@@ -179,22 +219,51 @@
 								"zIndex":"1"
 							});
 							this.tan = true;
-							this.share_ = !this.share_;
 							this.bg = true;
 							document.body.scrollTop = 0
 							$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
 						}
 					}
 			})
+			 
+			 function index_share(){
+			 	mui.ajax('/apic/get_share_ticket',{
+		        dataType:'json',
+		        type:'get',
+		        timeout:10000,
+		        success:function(data){
+		        	vm.p_data = data.msg ;
+		        	return true;
+		        }
+		    });
+			 }
+             window.onload=function(){
+
+
+             }
 		</script>
 	</body>
     {if:common::jssdk()&&IClient::isWechat()}
     <script>
         wx.ready(function(){
             wx.onMenuShareTimeline({
-                title: '分享标题', // 分享标题
-                link: '分享链接', // 分享链接
-                imgUrl: '', // 分享图标
+                title: '您的好友分享红包给你啦', // 分享标题
+                link: "{echo:IWeb::$app->config['image_host'].'/site/order_share/share_no/'.$this->scene_id}", // 分享链接
+                imgUrl: "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/buy_share/mainbody.png'}", // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            wx.onMenuShareAppMessage({
+                title: '您的好友分享红包给你啦', // 分享标题
+                desc: '打开领取优惠券红包', // 分享描述
+                link: "{echo:IWeb::$app->config['image_host'].'/site/order_share/share_no/'.$this->share_no}", // 分享链接
+                imgUrl: "{echo:IWeb::$app->config['image_host'] . '/views/mobile/skin/default/image/buy_share/mainbody.png'}", // 分享图标
+                type: 'link', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                 success: function () {
                     // 用户确认分享后执行的回调函数
                 },

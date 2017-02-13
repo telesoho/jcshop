@@ -56,12 +56,12 @@
 			</section>
 		</template>
 		<div id="order_state0" v-if="showMessage && orderInfo.length>0" v-cloak>
-				<div class="order_menu_list" v-for="item1 in orderInfo_new"  v-cloak>
+				<div class="order_menu_list" v-for="item1,key in orderInfo_new"  v-cloak>
 					<div class="top box">
 						<span class="left hidewrap">订单编号：{{item1.order_no}}</span>
 						<span class="status hidewrap">{{item1.orderStatusText}}</span>
 					</div>
-					<a :href="item1.url" class="locationA">
+					<a href="#" @click="shop_shop(item1.url,key)" class="">
 						<div class="goodsList" v-for="goodsListItem in item1.firstList">
 							<div class="content">
 								<div class="left flexbox">
@@ -109,7 +109,7 @@
 						</div>
 						<div class="right" v-if="item1.orderStatusVal==6">
 							<span class=" button" v-if="show_ping" style="background: #666;">{{item1.button1}}</span>
-							<span @click="comment_ed(item1,item1.button1Url)" class=" button" v-else >{{item1.button1}}</span>
+							<span @click="comment_ed(item1.button1Url)" class=" button" v-else >{{item1.button1}}</span>
 						</div>
 					</div>
 				</div>
