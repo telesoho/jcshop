@@ -17,7 +17,7 @@
     <loadding :mes="showloadding"></loadding>
     <div class="con leftContainer">
         <ul>
-            <li v-for="item in con1" @click="goToDetail(item.id)">
+            <li v-for="item in con1" @click="goToDetail(item.id)" v-cloak>
                 <div class="img flexbox" :style="item.style">
                     <img :src="item.cover" alt="" class="img_goods"/>
                 </div>
@@ -36,7 +36,7 @@
     </div>
     <div class="con rightContainer">
         <ul>
-            <li v-for="item in con2" @click="goToDetail(item.id)">
+            <li v-for="item in con2" @click="goToDetail(item.id)" v-cloak>
                 <div class="img flexbox" :style="item.style">
                     <img :src="item.cover" alt="" class="img_goods"/>
                 </div>

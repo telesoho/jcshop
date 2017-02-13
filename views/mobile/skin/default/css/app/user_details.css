@@ -225,6 +225,7 @@ li{
 	height: 4.23rem;
 	border: 1px solid #e2e2e2;
 	overflow: hidden;
+	margin-bottom: 0.16rem;
 }
 #said_list ul li .logo{
 	width: 3.48rem;
