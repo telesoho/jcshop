@@ -3443,4 +3443,28 @@ class Apic extends IController{
             $this->json_echo(['ret'=>false,'msg'=>"您无法领取礼品优惠券<br>$num 位好友领取你的红包成功<br>还需要$num2 位好友分享获得红包"]);
         }
     }
+
+    /**
+     * User: chenbo
+     * 获取物流信息
+     * @return string
+     */
+    function get_logistic_info(){
+        xlobo::init();
+        $data           = xlobo::get_logistic_info(['DB233201898JP'])[0];
+        $billCode       = $data->BillCode;
+        $businessNo     = $data->BusinessNo;
+        $billStatusList = $data->BillStatusList;
+        $ret            = array_map(function ($v) {
+            return (array)$v;
+        }, $billStatusList);
+        return json_encode(['ret'=>true,'data'=>$ret,'msg'=>'查询物流信息成功']);
+    }
+    function tip_coupon_expires(){
+        $activity_ticket_access_query = new IQuery('activity_ticket_access as a');
+        $activity_ticket_access_query->join = 'left join activity_ticket as b on a.ticket_id = b.id';
+        $activity_ticket_access_query->fields = 'a.*,b.name';
+        $data = $activity_ticket_access_query->find();
+        common::print_b($data);
+    }
 }
