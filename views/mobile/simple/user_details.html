@@ -47,7 +47,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="wenzi">
+			<div id="wenzi" v-if="contents_show">
 					<div class="left_wenzi">他说</div>
 					<div class="right_wenzi">{{contents}}</div>
 			</div>
@@ -99,6 +99,7 @@
 			comment_time:"",
 			username:"",
 			contents:"",
+			contents_show:true,
 			shop_name:"",
 			jp_price:"",
 			sell_price:"",
@@ -172,7 +173,12 @@
 	            })
 				self.comment_time = data.data.comment_time;
 				self.username = data.data.username;
-				self.contents = data.data.contents;
+				if(data.data.contents ==null || data.data.contents ==""){
+					self.contents_show = false;
+				}else{
+					self.contents = data.data.contents;
+					self.contents_show = true;
+				}
 				self.shop_name = data.data.name;
 				self.jp_price = data.data.jp_price;
 				self.sell_price = data.data.sell_price;
