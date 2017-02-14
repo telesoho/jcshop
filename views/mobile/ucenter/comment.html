@@ -68,8 +68,9 @@
         </div>
     </div>
     <div class="texteare">
+    	<h1>说点什么吧</h1>
         <textarea maxlength="100" name="" id="textear"  rows="5" v-model="textarea"
-                  placeholder="写下购买体会和使用感受来帮助其他小伙伴 ^_^" @change="changeNum"></textarea>
+                  placeholder="写下购买体会和使用感受来帮助其他小伙伴 ^_^" @keyup="changeNum"></textarea>
         <p >{{inputLength}}/100</p>
     </div>
     <div class="markInfo">

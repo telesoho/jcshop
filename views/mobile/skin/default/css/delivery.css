@@ -126,7 +126,7 @@ p:nth-child(1){
 	left: -0.1rem;
 }
 p:nth-child(2){
-	top: 2rem;
+	top: 1.8rem;
 	left: -0.1rem;
 }
 p:nth-child(3){
@@ -141,7 +141,7 @@ p:nth-child(5){
 	top: 7rem;
 	left: -0.1rem;
 }
-#active{
+.wuliu_bom .active{
 	background: url(../../../skin/default/image/18F173E7-1FCD-44C5-916F-752613041A00@1x.png);
 	background-size: cover;
 	width: 0.4rem;

@@ -26,6 +26,37 @@
         </a>
         <a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
     </div>
+    <div style="height:0.8rem;"></div>
+    <!--场景馆下面关联商品-->
+    <section class="relateGoods">
+        <div class="con">
+            <h3 class="box">
+                <p>相关商品 ({{relateGoodsInfo.length}})</p>
+                <div @click="buyAll">一键购买</div>
+            </h3>
+            <a :href="'/site/products/id/'+item.id" class="goodsItem flexs" v-for="item in relateGoodsInfo">
+                <div class="img">
+                    <img :src="item.img" alt="" :id="'img'+item.id"/>
+                </div>
+                <div class="middle">
+                    <div class="name hideCamp">{{item.name}}</div>
+                    <div class="price box">
+                        <div class="price_l">
+                            <span>￥</span>
+                            <span>{{item.sell_price}}</span>
+                        </div>
+                        <div class="price_r">
+                            <span>日本价：</span>
+                            <span>{{item.jp_price}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cart flexbox" @click.prevent="joinCarOne(item)">
+                    <img src="/views/mobile/skin/default/image/jmj/active_valentines/cart.png" alt="">
+                </div>
+            </a>
+        </div>
+    </section>
 </div>
 <script src="/views/mobile/javascript/vue.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
@@ -35,15 +66,77 @@
      var vm=new Vue({
          el:"#scene_detail",
          data:{
-             car_count:0
+             car_count:0,
+             relateGoodsInfo:[],
+             allBuy:"",
+             ajaxButton:true
          },
          mounted:function(){
             var self=this;
-             car_shop_num(self)
+             car_shop_num(self);
+             getRelateInfo(self);
          },
          methods:{
              back:function(){
                  window.history.back();
+             },
+//             单件商品添加购物车
+             joinCarOne:function(item){
+                 if(this.ajaxButton){
+                     this.ajaxButton=false;
+                 }else{
+                     return;
+                 }
+                 var self=this;
+                 var data=item.id+":1";
+                 mui.ajax({
+                     data:{
+                         goods:data
+                     },
+                     url:"/apic/cart_join",
+                     dataType:'json',//服务器返回json格式数据
+                     type:'get',//HTTP请求类型
+                     timeout:10000,//超时时间设置为10秒；
+                     success:function(data){
+                         self.ajaxButton=true;
+                         console.log(data);
+                         if(data.code!=0){
+                             alert(data.msg);
+                             return false;
+                         }
+                         flyCart(item.id);
+                         self.car_count++;
+                     }
+                 })
+             },
+             buyAll:function(){
+                 var self=this;
+                 if(self.ajaxButton){
+                     self.ajaxButton=false;
+                 }else{
+                     return;
+                 }
+                 mui.ajax({
+                     data:{
+                         goods:self.allBuy
+                     },
+                     url:"/apic/cart_join",
+                     dataType:'json',//服务器返回json格式数据
+                     type:'get',//HTTP请求类型
+                     timeout:10000,//超时时间设置为10秒；
+                     success:function(data){
+                         self.ajaxButton=true;
+                         console.log(data);
+                         if(data.code!=0){
+                             alert(data.msg);
+                             return false;
+                         }
+                         self.relateGoodsInfo.map(function(item){
+                             flyCart(item.id);
+                             self.car_count++;
+                         })
+                     }
+                 })
              }
          }
      })
@@ -59,6 +152,49 @@
                  self.car_count = data.data.car_count
              }
          })
+     }
+     //临时获取需要的数据
+     function getRelateInfo(self){
+         mui.ajax({
+             data:{
+                 aid:3
+             },
+             url:"/apic/activity_goods_list",
+             dataType:'json',//服务器返回json格式数据
+             type:'get',//HTTP请求类型
+             timeout:10000,//超时时间设置为10秒；
+             success:function(data){
+                 self.relateGoodsInfo=data.data;
+                 self.relateGoodsInfo.map(function(item){
+                     self.allBuy+=item.id+":1,"
+                 })
+             }
+         })
+     }
+     //    实现商品飞入购物车函数
+     function flyCart(id){
+         var cartPosition,top,pro,cloneDiv,scrollTop,divWidth;
+//        定义购物车的位置
+         cartPosition=$("#cart").offset();
+         scrollTop=$(window).scrollTop();
+//        定义商品图片的位置
+         pro=$("#img"+id).offset();
+         top=pro.top+cartPosition.top-scrollTop*2;
+         divWidth=$("#img"+id).width()/2;
+         console.log(divWidth)
+         //克隆div实现动画
+         cloneDiv=$("#img"+id).clone();
+         console.log($("#img"+id).width());
+         console.log(cloneDiv);
+         $("#img"+id).parent().append(cloneDiv);
+         cloneDiv.addClass("rotate").css({'left':divWidth/2,'z-index':100}).animate({
+             left: cartPosition.left-$("#cart").width(),
+             top:-top+$("#cart").height(),
+             width:10,
+             height:10,
+         },"slow",function(){
+             cloneDiv.remove();
+         });
      }
 </script>
 </body>

@@ -22,7 +22,6 @@ class Apic extends IController{
 		//        header("Content-type: application/json");
 	}
 	
-	
 	//---------------------------------------------------主要页面---------------------------------------------------
 	/**
 	 * 商城主页
@@ -43,11 +42,12 @@ class Apic extends IController{
 			$querySpeedGoods         = new IQuery('activity_speed_access AS m');
 			$querySpeedGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
 			$querySpeedGoods->where  = 'pid='.$infoSpeed['id'];
-			$querySpeedGoods->fields = 'm.sell_price,g.id,g.name,g.img,g.sell_price AS old_price,g.purchase_price';
+			$querySpeedGoods->fields = 'm.sell_price,m.name_de,g.id,g.name,g.name_de,g.img,g.sell_price AS old_price,g.purchase_price';
 			$infoSpeed['list']       = $querySpeedGoods->find();
 			if(!empty($infoSpeed['list'])){
 				foreach($infoSpeed['list'] as $k => $v){
-					$infoSpeed['list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/240/h/240");
+					$infoSpeed['list'][$k]['name'] = empty($v['name_de']) ? $v['name'] : $v['name_de'];
+					$infoSpeed['list'][$k]['img']  = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/240/h/240");
 				}
 			}
 		}
@@ -64,7 +64,7 @@ class Apic extends IController{
 			//商品列表模型
 			$queryGoods         = new IQuery('goods as m');
 			$queryGoods->join   = 'left join relation as r on r.goods_id=m.id';
-			$queryGoods->fields = 'm.id,m.name,m.sell_price,m.purchase_price,m.img';
+			$queryGoods->fields = 'm.id,m.name_de,m.name,m.sell_price,m.purchase_price,m.img';
 			$queryGoods->order  = 'sale DESC,visit DESC';
 			$queryGoods->limit  = 5;
 			//商品统计模型
@@ -102,7 +102,8 @@ class Apic extends IController{
 					/* 计算活动商品价格 */
 					$listArt[$k]['list'] = api::run('goodsActivity', $listArt[$k]['list']);
 					foreach($listArt[$k]['list'] as $k1 => $v1){
-						$listArt[$k]['list'][$k1]['img'] = empty($v1['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/180/h/180");
+						$listArt[$k]['list'][$k1]['name'] = empty($v1['name_de']) ? $v1['name'] : $v1['name_de'];
+						$listArt[$k]['list'][$k1]['img']  = empty($v1['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/180/h/180");
 					}
 				}
 			}
@@ -120,13 +121,14 @@ class Apic extends IController{
 			$queryGo         = new IQuery('goods AS m');
 			$queryGo->join   = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
 			$queryGo->where  = 'm.is_del=0 AND c.category_id IN ('.$cid.')';
-			$queryGo->fields = 'm.id,m.name,m.sell_price,m.purchase_price,m.img';
+			$queryGo->fields = 'm.id,m.name,m.name_de,m.sell_price,m.purchase_price,m.img';
 			$queryGo->order  = 'sale DESC,visit DESC';
 			$queryGo->limit  = 4;
 			$listGo          = $queryGo->find();
 			if(!empty($listGo)){
 				foreach($listGo as $k1 => $v1){
-					$listGo[$k1]['img'] = empty($v1['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/180/h/180");
+					$listGo[$k1]['name'] = empty($v1['name_de']) ? $v1['name'] : $v1['name_de'];
+					$listGo[$k1]['img']  = empty($v1['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v1['img']."/w/180/h/180");
 				}
 			}
 			$pro_list[] = array(
@@ -390,20 +392,18 @@ class Apic extends IController{
 	 */
 	function cart_join(){
 		$param          = $this->checkData(array(
-			array('goods', 'string', 1, '商品，格式<商品ID:数量>，多个商品用英文逗号分割'),
-			array('type', 'string', 0, '类型[goods商品-product货品]'),
+			array('goods', 'string', 1, '商品格式<商品ID:数量:类型[goods商品-product货品]>多个商品用英文逗号分割'),
 		));
 		$param['goods'] = trim($param['goods'], ',');
-		$param['type']  = empty($param['type']) ? 'goods' : $param['type'];
 		//加入购物车
 		$cartObj = new Cart();
 		foreach(explode(',', $param['goods']) as $k => $v){
 			$goods = explode(':', $v);
-			if(count($goods)!=2){
+			if(count($goods)!=3){
 				(new IModel('goods_car'))->rollback(); //回滚
 				$this->returnJson(array('code' => '004002', 'msg' => $this->errorInfo['004002'])); //参数格式有误
 			}
-			$rel = $cartObj->add($goods[0], $goods[1], $param['type']);
+			$rel = $cartObj->add($goods[0], $goods[1], $goods[2]);
 			if(!$rel){
 				(new IModel('goods_car'))->rollback(); //回滚
 				$this->returnJson(array('code' => '001004', 'msg' => $cartObj->getError())); //购物车加入失败
@@ -1928,6 +1928,16 @@ class Apic extends IController{
 		$dataGoods['discount'] = empty($dataGoods['original_price']) ? '' : round($dataGoods['sell_price']/$dataGoods['original_price'], 2)*10; //计算折扣率
 		$dataGoods['img']      = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$dataGoods['img']."/w/500/h/500");
 		
+		/* 相关货号 */
+		$modelPro = new IModel('products');
+		$products = $modelPro->query('goods_id='.$param['id'], 'id,products_no,spec_array,store_nums,sell_price,weight');
+		if(!empty($products)){
+			foreach($products as $k => $v){
+				$products[$k]['spec_array'] = json_decode($v['spec_array']);
+			}
+		}
+		$dataGoods['products'] = $products;
+		
 		/* 商品图 */
 		$queryPhoto         = new IQuery('goods_photo_relation as g');
 		$queryPhoto->join   = 'left join goods_photo as p on p.id=g.photo_id ';
@@ -1939,13 +1949,13 @@ class Apic extends IController{
 		}
 		
 		/* 相关评论 */
-		$queryComment              = new IQuery('comment as m');
-		$queryComment->join        = 'LEFT JOIN user as u ON u.id=m.user_id';
-		$queryComment->where       = 'status=1 AND goods_id='.$param['id'];
-		$queryComment->fields      = 'm.id,m.contents,m.recontents,m.recomment_time,m.tag,m.image,m.voice,m.user_id,u.username,u.head_ico';
-		$queryComment->page        = $param['page']<=0 ? 1 : $param['page'];
-		$queryComment->pagesize    = 10;
-		$commetList = $queryComment->find();
+		$queryComment           = new IQuery('comment as m');
+		$queryComment->join     = 'LEFT JOIN user as u ON u.id=m.user_id';
+		$queryComment->where    = 'status=1 AND goods_id='.$param['id'];
+		$queryComment->fields   = 'm.id,m.contents,m.recontents,m.recomment_time,m.tag,m.image,m.voice,m.user_id,u.username,u.head_ico';
+		$queryComment->page     = $param['page']<=0 ? 1 : $param['page'];
+		$queryComment->pagesize = 10;
+		$commetList             = $queryComment->find();
 		if($param['page']>$queryComment->getTotalPage()) $commetList = array();
 		if(!empty($commetList)){
 			$modelTag = new IModel('comment_tag');
@@ -1953,14 +1963,14 @@ class Apic extends IController{
 				//语音
 				$commetList[$k]['voice'] = empty($v['voice']) ? '' : IWeb::$app->config['image_host'].'/'.$v['voice'];
 				//评论图片
-				$image             = explode(',', $v['image']);
+				$image = explode(',', $v['image']);
 				if(!empty($image)){
 					foreach($image as $k1 => $v1) $image[$k1] = empty($v1) ? '' : IWeb::$app->config['image_host'].'/'.$v1;
 				}
 				$commetList[$k]['image'] = $image;
 				//标签
-				$tag = array();
-				$listTag = $modelTag->query('id IN ('.$v['tag'].') AND status=1','name');
+				$tag     = array();
+				$listTag = $modelTag->query('id IN ('.$v['tag'].') AND status=1', 'name');
 				foreach($listTag as $k1 => $v1) $tag[] = $v1['name'];
 				$commetList[$k]['tag'] = $tag;
 			}
@@ -2051,7 +2061,7 @@ class Apic extends IController{
 			$queryGoods->limit         = 10;
 			$dataGoods['related_list'] = $queryGoods->find();
 			if(!empty($dataGoods['related_list'])){
-				$dataGoods['related_list'] = Api::run('goodsActivity',$dataGoods['related_list']);
+				$dataGoods['related_list'] = Api::run('goodsActivity', $dataGoods['related_list']);
 				foreach($dataGoods['related_list'] as $k => $v){
 					$dataGoods['related_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$v['img'].'/w/500/h/500');
 				}
@@ -2059,12 +2069,12 @@ class Apic extends IController{
 		}
 		
 		/* 是否参与限时活动（限时购） */
-		$querySpeed              = new IQuery('activity_speed as m');
-		$querySpeed->join        = 'LEFT JOIN activity_speed_access AS a ON a.pid=m.id';
-		$querySpeed->where       = 'm.type=1 AND a.goods_id='.$param['id'].' AND m.start_time<='.time().' AND m.end_time>='.time().' AND status=1';
-		$querySpeed->fields      = 'a.id,a.goods_id,a.sell_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
-		$listSpeed               = $querySpeed->find();
-		$dataGoods['speed']      = empty($listSpeed) ? array() : array('start_time'=>$listSpeed[0]['start_time'],'end_time'=>$listSpeed[0]['end_time']);
+		$querySpeed         = new IQuery('activity_speed as m');
+		$querySpeed->join   = 'LEFT JOIN activity_speed_access AS a ON a.pid=m.id';
+		$querySpeed->where  = 'm.type=1 AND a.goods_id='.$param['id'].' AND m.start_time<='.time().' AND m.end_time>='.time().' AND status=1';
+		$querySpeed->fields = 'a.id,a.goods_id,a.sell_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
+		$listSpeed          = $querySpeed->find();
+		$dataGoods['speed'] = empty($listSpeed) ? array() : array('start_time' => $listSpeed[0]['start_time'], 'end_time' => $listSpeed[0]['end_time']);
 		
 		/* 记录用户操作 */
 		
@@ -3442,5 +3452,65 @@ class Apic extends IController{
             $num2 = 5-$num;
             $this->json_echo(['ret'=>false,'msg'=>"您无法领取礼品优惠券<br>$num 位好友领取你的红包成功<br>还需要$num2 位好友分享获得红包"]);
         }
+    }
+
+    /**
+     * User: chenbo
+     * 获取物流信息
+     * @return string
+     */
+    function get_logistic_info(){
+        $order_no            = IFilter::act(IReq::get('order_no'));
+        $order_query         = new IQuery('order as a');
+        $order_query->join   = 'left join delivery_doc as b on a.id = b.order_id';
+        $order_query->fields = 'a.*,b.delivery_code,b.delivery_type';
+        $order_query->where  = "order_no = $order_no";
+        $data                = $order_query->find();
+        if (empty($data)){
+            common::log_write($order_query->getSql(), 'ERROR','logistic');
+            $this->returnJson(array('code' => '-1', 'msg' => '订单未发货', 'data' => null));
+        }
+        xlobo::init();
+        $data           = xlobo::get_logistic_info([$data[0]['delivery_code']])[0];
+        $billCode       = $data->BillCode;
+        $businessNo     = $data->BusinessNo;
+        $billStatusList = $data->BillStatusList;
+        $ret            = array_map(function ($v) {
+            return (array)$v;
+        }, $billStatusList);
+        $this->returnJson(array('code' => '0', 'msg' => '查询物流信息成功', 'data' => ['type' => 'xlobo', 'name'=>'贝海国际物流', 'order_no' => $order_no, 'data' => $ret]));
+    }
+    function tip_coupon_expires(){
+        $activity_ticket_access_query = new IQuery('activity_ticket_access as a');
+        $activity_ticket_access_query->fields = 'a.*, b.`name`,b.type,c.oauth_user_id';
+        $activity_ticket_access_query->join = "left join activity_ticket AS b ON a.ticket_id = b.id left join oauth_user AS c ON a.user_id = c.user_id";
+        $activity_ticket_access_query->where = "(
+		time_type = 2
+		AND ADDDATE(
+			FROM_UNIXTIME(a.create_time, '%Y-%m-%d'),
+			b.`day`
+		) = CURDATE()
+	)
+OR (
+	NOW() < FROM_UNIXTIME(b.end_time)
+	AND NOW() > FROM_UNIXTIME(b.start_time)
+	AND time_type = 1
+	AND DATEDIFF(
+		CURDATE(),
+		FROM_UNIXTIME(b.end_time, '%Y-%m-%d')
+	) = 3
+)";
+        $data = $activity_ticket_access_query->find();
+        foreach ($data as $v) {
+            if ($v['type'] === 1){
+                $end_time = date('Y-m-d H:i:s', v['end_time']);
+            } elseif ($v['type'] === 2){
+                $end_time = date('Y-m-d H:i:s', strtotime('+1 day', v['end_time']));
+            }
+            $oauth_user_id = $v['oauth_user_id'];
+            $oauth_user_id = 'orEYdw0X44crd6F3MOdXES6Hfpig';
+            wechats::send_message_template($oauth_user_id, 'tip_coupon_expires', ['coupon_name'=>$v['name'], 'end_time'=>$end_time]);
+        }
+        common::print_b($data);
     }
 }

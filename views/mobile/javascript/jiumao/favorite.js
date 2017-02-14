@@ -4,7 +4,10 @@
 var vm = new Vue({
     el: '#favorite',
     data: {
-        infoMessage:'',
+        infoMessage:{
+            goods_data:[],
+            article_data:[]
+        },
         state:getSession('favoriteState'),
         head_state: {
             left_red:'/views/mobile/skin/default/image/jmj/favorite/ware_red.png',
