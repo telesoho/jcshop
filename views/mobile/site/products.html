@@ -10,24 +10,12 @@
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/custombox.min.css?v=<?php echo time(); ?>" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/public_top.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/products.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 <section id="productInfo" v-cloak v-if="showMessage">
-	<!--头部定位-->
-	<div class="head">
-		<div class="backImg">
-			<img src="/views/mobile/skin/default/image/jmj/product/back.png" alt="" style="width:0.43rem" @click="back"/>
-		</div>
-		<span @click="share" style="display: inline-block;position: absolute;right: 0;top: 1.02rem;"><img src="/views/mobile/skin/default/image/jmj/product/shareMoney.png" style="width: 1.07rem;"/></span>
-		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
-		<a href="/simple/cart" id="cart" class="locationA">
-			<div class="img">
-				<div class="mark flexbox">{{car_count}}</div>
-				<img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
-			</div>
-		</a>
-	</div>
+	<top_back_car :msg="car_count"></top_back_car>
 	<div id="pullrefresh1" class="v-container" v-if="showContainer1" @touchstart="firstContainerMoveStart" @touchmove="firstContainerMove" @touchend="endtouch1">
 		<div class="scro scro1" style="background:#fff">
 			<section style="" class="carousel flexbox">
@@ -358,6 +346,7 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/top_back.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 var minutes,hours,seconds;
 	var statusOrder={echo:IReq::get('id')};
