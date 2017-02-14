@@ -236,10 +236,9 @@ class CountSum
 	    		$productObj   = new IQuery('products as pro,goods as go');
 	    		$productObj->where  = 'pro.id in ('.$productIdStr.') and go.id = pro.goods_id';
 				$productObj->join   = ' left join goods_supplier as gs on go.supplier_id = gs.supplier_id and gs.sku_no = go.sku_no';
-	    		$productObj->fields = 'pro.sell_price,pro.cost_price,pro.weight,pro.id as product_id,pro.spec_array,pro.goods_id,pro.store_nums,pro.products_no as goods_no,go.name,go.point,go.exp,go.img,go.seller_id'
+	    		$productObj->fields = 'pro.sell_price,pro.cost_price,pro.weight,pro.id as product_id,pro.spec_array,pro.goods_id,pro.store_nums,pro.products_no as goods_no,go.name,go.point,go.exp,go.img,go.seller_id,'
 									  .'gs.duties_rate,gs.ware_house_name,gs.supplier_id,gs.delivery_code';
 	    		$productList  = $productObj->find();
-
 	    		//开始优惠情况判断
 	    		foreach($productList as $key => $val)
 	    		{
