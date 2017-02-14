@@ -100,7 +100,7 @@ class Cart extends IInterceptorBase
 	{
 		//规格必填
 		if($type == "goods")
-		{
+			{
 			$productsDB = new IModel('products');
 			if($productsDB->getObj('goods_id = '.$gid))
 			{
