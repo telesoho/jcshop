@@ -2,7 +2,8 @@
  * Created by yb on 2017/1/22.
  */
 Vue.component('loadding', {
-    template: '<div id="loading" v-if="mes">\
+    template: '<link ddddd/>\
+    <div id="loading" v-if="mes">\
     <div class="spinner">\
     <div class="spinner-container container1">\
     <div class="circle1"></div>\

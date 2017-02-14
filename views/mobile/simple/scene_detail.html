@@ -68,7 +68,8 @@
          data:{
              car_count:0,
              relateGoodsInfo:[],
-             allBuy:""
+             allBuy:"",
+             ajaxButton:true
          },
          mounted:function(){
             var self=this;
@@ -81,6 +82,11 @@
              },
 //             单件商品添加购物车
              joinCarOne:function(item){
+                 if(this.ajaxButton){
+                     this.ajaxButton=false;
+                 }else{
+                     return;
+                 }
                  var self=this;
                  var data=item.id+":1";
                  mui.ajax({
@@ -92,6 +98,7 @@
                      type:'get',//HTTP请求类型
                      timeout:10000,//超时时间设置为10秒；
                      success:function(data){
+                         self.ajaxButton=true;
                          console.log(data);
                          if(data.code!=0){
                              alert(data.msg);
@@ -104,6 +111,11 @@
              },
              buyAll:function(){
                  var self=this;
+                 if(self.ajaxButton){
+                     self.ajaxButton=false;
+                 }else{
+                     return;
+                 }
                  mui.ajax({
                      data:{
                          goods:self.allBuy
@@ -113,6 +125,7 @@
                      type:'get',//HTTP请求类型
                      timeout:10000,//超时时间设置为10秒；
                      success:function(data){
+                         self.ajaxButton=true;
                          console.log(data);
                          if(data.code!=0){
                              alert(data.msg);
