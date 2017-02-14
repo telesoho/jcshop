@@ -3450,15 +3450,25 @@ class Apic extends IController{
      * @return string
      */
     function get_logistic_info(){
+        $order_no            = IFilter::act(IReq::get('order_no'));
+        $order_query         = new IQuery('order as a');
+        $order_query->join   = 'left join delivery_doc as b on a.id = b.order_id';
+        $order_query->fields = 'a.*,b.delivery_code,b.delivery_type';
+        $order_query->where  = "order_no = $order_no";
+        $data                = $order_query->find();
+        if (empty($data)){
+            common::log_write($order_query->getSql(), 'ERROR','logistic');
+            $this->returnJson(array('code' => '-1', 'msg' => '订单未发货', 'data' => null));
+        }
         xlobo::init();
-        $data           = xlobo::get_logistic_info(['DB233201898JP'])[0];
+        $data           = xlobo::get_logistic_info([$data[0]['delivery_code']])[0];
         $billCode       = $data->BillCode;
         $businessNo     = $data->BusinessNo;
         $billStatusList = $data->BillStatusList;
         $ret            = array_map(function ($v) {
             return (array)$v;
         }, $billStatusList);
-        $this->returnJson(array('code' => '0', 'msg' => '查询物流信息成功', 'data' => ['type' => 'xlobo', 'name'=>'贝海国际物流', 'order_no' => '121', 'data' => $ret]));
+        $this->returnJson(array('code' => '0', 'msg' => '查询物流信息成功', 'data' => ['type' => 'xlobo', 'name'=>'贝海国际物流', 'order_no' => $order_no, 'data' => $ret]));
     }
     function tip_coupon_expires(){
         $activity_ticket_access_query = new IQuery('activity_ticket_access as a');

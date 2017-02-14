@@ -53,6 +53,7 @@
 	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
     <script>
+        var order_no = "<?php echo $_GET['order_no']; ?>"
         var em = new Vue({
             el:"#wrap_top",
             data:{
@@ -72,6 +73,7 @@
             $.ajax({
                 dataType:"json",
                 url:'/apic/get_logistic_info',
+                data:{order_no:order_no},
                 success:function (data) {
 //                    console.log(data.data);
                     if(data.data.type == "xlobo"){
