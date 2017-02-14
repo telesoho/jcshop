@@ -88,7 +88,7 @@
 				
 		},
 		mounted:function(){
-			var self = this;		
+			var self = this;
 			valentines1(self);
 			valentines2(self);
 			valentines3(self);
@@ -99,7 +99,7 @@
 		methods:{
 			morning:function(id){
 				removeSessionItem("goodspage");
-				removeSessionItem("goodsinfo");	
+				removeSessionItem("goodsinfo");
 				window.location.href = "/activity/valentines_more?id="+id
 			},
 			shop_pro:function(id){
@@ -121,7 +121,7 @@
 						console.log(data.data);
 						self.info1 = data.data;
 						removeSessionItem("goodspage");
-					removeSessionItem("goodsinfo");	
+					removeSessionItem("goodsinfo");
 					}
 				});
 			}
@@ -139,7 +139,7 @@
 						console.log(data.data);
 						self.info2 = data.data;
 						removeSessionItem("goodspage");
-				removeSessionItem("goodsinfo");	
+				removeSessionItem("goodsinfo");
 					}
 				});
 			}
@@ -157,7 +157,7 @@
 						console.log(data.data);
 						self.info3 = data.data;
 						removeSessionItem("goodspage");
-				removeSessionItem("goodsinfo");	
+				removeSessionItem("goodsinfo");
 					}
 				});
 			}

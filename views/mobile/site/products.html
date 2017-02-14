@@ -10,25 +10,14 @@
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/custombox.min.css?v=<?php echo time(); ?>" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/public_top.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/products.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 <section id="productInfo" v-cloak v-if="showMessage">
-	<!--头部定位-->
-	<div class="head">
-		<div class="backImg">
-			<img src="/views/mobile/skin/default/image/jmj/product/back.png" alt="" style="width:0.43rem" @click="back"/>
-		</div>
-		<a href="/simple/cart" id="cart" class="locationA">
-			<div class="img">
-				<div class="mark flexbox">{{car_count}}</div>
-				<img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
-			</div>
-		</a>
-		<span @click="share" style="margin-right: 0.4rem;display: inline-block;"><img src="/views/mobile/skin/default/image/jmj/product/shied.png" style="width: 0.62rem;"/></span>
-		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
-	</div>
+	<top_back_car :msg="car_count"></top_back_car>
 	<div id="pullrefresh1" class="v-container" v-if="showContainer1" @touchstart="firstContainerMoveStart" @touchmove="firstContainerMove" @touchend="endtouch1">
+		<span @click="share" style="display: inline-block;position: absolute;right: 0;top: 1.02rem;z-index: 999;"><img src="/views/mobile/skin/default/image/jmj/product/shareMoney.png" style="width: 1.07rem;"/></span>
 		<div class="scro scro1" style="background:#fff">
 			<section style="" class="carousel flexbox">
 				<!--轮播开始-->
@@ -71,7 +60,8 @@
 						<span style="font-size:0.26rem;color:#ff2f5c">¥&nbsp;</span>
 						<span style="font-size:0.46rem;color:#ff2f5c"> {{info.sell_price}}</span>
 						<div class="act">
-							立省{{(info.market_price - info.sell_price).toFixed(2)}}元
+							<img src="/views/mobile/skin/default/image/jmj/product/re.png" alt="">
+							<span>省 {{(info.market_price - info.sell_price).toFixed(2)}} 元</span>
 						</div>
 					</div>
 					<div class="cPrice">
@@ -342,8 +332,13 @@
 		</div>
 	</div>
 	<div id="backgrounds" style="width: 100%;display: none;height: 100%;background: #000;opacity: 0.5;position: absolute;left: 0;top: 0;z-index:10000;">
-		<p style="" class="tips">点击屏幕任意区域取消操作</p>
-		<img id="hander" src="/views/mobile/skin/default/image/jmj/ticket_gain/hander.png" style="width: 0.56rem; height: 0.72rem;position: absolute;top: 0;right: 0.2rem;"/>
+		<div id="" class="tips">
+			<p style="font-size:0.30rem ;letter-spacing: 0.02rem;" >点击分享到朋友圈或好友,若好友在48小时内下单</p>
+			<p style="font-size:0.3rem ;letter-spacing: 0.02rem;">您将获得该笔订单金额的7%的现金提成。</p>
+			<p style="margin-top: 0.6rem;letter-spacing: 0.02rem;">(具体规则见 个人中心-分享赚钱页面)</p>
+			</div>	
+			<img id="hander" src="/views/mobile/skin/default/image/jmj/ticket_gain/hander.png" style="width: 0.56rem; height: 0.72rem;position: absolute;top: 0;right: 0.2rem;"/>
+			
 	</div>
 </section>
 
@@ -352,6 +347,7 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/top_back.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 var minutes,hours,seconds;
 	var statusOrder={echo:IReq::get('id')};

@@ -9,6 +9,7 @@
 	<title>确认订单</title>
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/public_top.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/shopcar.css?v=<?php echo time(); ?>" />
 	<script src="/views/mobile/javascript/orderFormClass.js?v=<?php echo time(); ?>"></script>
 </head>
@@ -39,18 +40,8 @@
 <!--loading页结束-->
 <!--vue容器-->
 <div id="wareListShop" v-if="showMessage" v-cloak>
-	<div class="top_fixd">
-        <div class="backImg">
-			<img src="/views/mobile/skin/default/image/jmj/product/back.png" alt="" style="width:0.43rem" @click="back"/>
-		</div>
-		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
-		<a href="/simple/cart" id="cart" class="locationA">
-			<div class="img">
-				<div class="mark flexbox">{{car_count}}</div>
-				<img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
-			</div>
-		</a>
-    </div>
+
+    <top_back_car :msg="car_count"></top_back_car>
 	<template v-if="showMessage && infoMessage.addressList.length==0" v-cloak>
 		<a href="{url:/simple/addaddress}?from=cart2">
 			<div class="order_addAddr">
@@ -227,5 +218,6 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/cartTwo.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/top_back.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
