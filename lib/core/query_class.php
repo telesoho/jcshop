@@ -8,6 +8,35 @@
  * @version 4.4
  * @note
  */
+ /* 示例
+$subQuery = array(
+    'sa' => array(
+        'table' => 'goods g',
+        'fields' => '*',
+        'join' => "left join order_goods as og on og.goods_id = g.id",
+        'where' => 'a = b and 1=1 ',
+    ),
+    'sb' => array(
+        'table' => 'goods g',
+        'fields' => '*',
+        'where' => 'a = b and 1=1 ',
+    ),    
+);
+
+$query = new IQuery("@sa, goods as g");
+$query->subQueries = $subQuery;
+$query->join = "left join @sa on sa.goods_id = #goods_id#";
+$query->where = ' sq.c = b';
+$query->params = array('#goods_id#' => '123')
+
+print $query->getSql();
+
+// output
+select * from (select * from iwebshop_goods g left join order_goods as og on og.goods_id = g.id where a = b and 1=1    ) as sa,
+	iwebshop_goods as g 
+	left join (select * from iwebshop_goods g left join order_goods as og on og.goods_id = g.id where a = b and 1=1    ) as sa on sa.goods_id = 123 
+	where  sq.c = b 
+*/
 /**
  * @brief IQuery 系统统一查询类
  * @class IQuery
@@ -19,15 +48,21 @@ class IQuery
 	private $sql      = array('table'=>'','fields'=>'*','where'=>'','join'=>'','group'=>'','having'=>'','order'=>'','limit'=>'limit 5000');
 	private $tablePre = '';
 	public  $paging   = null;//分页类库
+    private $subQueries = array();  // 子查询
+	private $params = array();
 
     /**
      * @brief 构造函数
-     * @param string $name     表名
+     * @param string $name     表名/子查询
      */
 	public function __construct($name)
 	{
 		$this->tablePre = IWeb::$app->config['DB']['tablePre'];
-		$this->table    = $name;
+		if(is_array($name)) {
+            $this->subQueries = $name;
+		} else {
+			$this->table = $name;
+		}
 		$this->dbo=IDBFactory::getDB();
 	}
     /**
@@ -71,6 +106,34 @@ class IQuery
     		$this->sql['where'] = 'where '.preg_replace($exp,$rep,$str);
     	}
     }
+	/**
+	 * @brief 设置子查询
+	 * @param &$query 子查询IQuery
+	 */
+	public function setSubQueries($query)
+	{
+		if(is_array($query))
+		{
+            foreach($query as $aname => $subq) {
+                
+                $q = new IQuery("");
+                foreach($subq as $k => $v){
+                    $q->$k = $v;
+                }
+    			$this->subQueries["@".$aname] = "(" . $q->getSql() . ") as " . $aname;
+            }
+		}
+	}
+
+	// 设定SQL参数
+	// $query->params = array('#sku_no#' => '233232');
+	public function setParams($params) {
+		if(is_array($params)) {
+			$this->params = $params;
+		}
+	}
+
+
     /**
      * @brief 取得where子句数据
      * @return String
@@ -92,6 +155,8 @@ class IQuery
 	{
 		switch($name)
 		{
+			case 'params':$this->setParams($value);break;
+			case 'subQueries':$this->setSubQueries($value);break;
 			case 'table':$this->setTable($value);break;
 			case 'fields':$this->sql['fields'] = $value;break;
 			case 'where':$this->setWhere($value);break;
@@ -182,10 +247,24 @@ class IQuery
 	 */
     public function getSql()
     {
-    	return "select $this->fields from $this->table $this->join $this->where $this->group $this->having $this->order";
+        $sql = "select $this->fields from $this->table $this->join $this->where $this->group $this->having $this->order";
+        if($this->subQueries) {
+            foreach($this->subQueries as $k => $q) {
+				$sql = strtr($sql, array(
+					$this->tablePre . $k => $q,
+					$k => $q,
+				));
+            }
+        }
+		if($this->params) {
+			$sql = strtr($sql, $this->params);				
+		}
+    	return $sql;
     }
+
     function query($sql = ''){
         $result = $this->dbo->query($sql);
         return $result;
     }
 }
+
