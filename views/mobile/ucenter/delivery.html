@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/delivery.css?v=<?php echo time(); ?>"/>
 </head>
 <body>
+<div id="wrap_top" v-cloak>
 	<div id="top">
 		<img src="/views/mobile/skin/default/image/bd.png" style="width: 7.5rem;height: 1.94rem;"/>
 	</div>
@@ -25,9 +26,9 @@
 		<div id="sub_bottom">
 			<ul>
 				<li>物流状态：<span>运输中</span></li>
-				<li>承运来源：<span>EMS</span></li>
-				<li>订单编号：<span>248953500304506003666</span></li>
-				<li>联系电话：<span>0571-11113333</span></li>
+				<li>承运来源：<span>{{info.name}}</span></li>
+				<li>订单编号：<span>{{info.order_no}}</span></li>
+				<!--<li>联系电话：<span>0571-11113333</span></li>-->
 			</ul>
 		</div>
 	</div>
@@ -38,37 +39,50 @@
 	
 	<div id="btm_foorter">
 		<ul>
-			<li>
-				<p>浙江省杭州市滨江区EMS派件员张三正在为您排件文案文案，期待再次为您服务</p>
-				<span>2016-09-23  15:05:39</span>
+			<li v-for="item in info1">
+				<p>{{item.StatusDetail}}</p>
+				<span>{{item.StartTime}}</span>
 			</li>
-			<li>
-				<p>浙江省杭州市滨江区EMS派件员张三正在为您排件文案文案，期待再次为您服务</p>
-				<span>2016-09-23  15:05:39</span>
-			</li>
-			<li>
-				<p>浙江省杭州市滨江区EMS派件员张三正在为您排件文案文案，期待再次为您服务</p>
-				<span>2016-09-23  15:05:39</span>
-			</li>
-			<li>
-				<p>EMS 日本东京公司名称收件员已揽收</p>
-				<span>2016-09-23  15:05:39</span>
-			</li>
-			<li>
-				<p>包裹正在等待揽收</p>
-				<span>2016-09-23  15:05:39</span>
-			</li>
+
 		</ul>
 		<div class="wuliu_bom">
-			<p id="active"></p>
-			<p></p>
-			<p></p>
-			<p></p>
-			<p></p>
+			<p  v-for="item,key in info.data" :class="key==0? 'active':'2'"></p>
 		</div>
 	</div>
+</div>
 	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-	<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+    <script>
+        var em = new Vue({
+            el:"#wrap_top",
+            data:{
+                info:[],
+                info1:[]
+            },
+            computed:{
+            },
+            mounted:function () {
+                var self = this;
+                delivery(self);
+            },
+            updated:function () {
+            }
+        })
+        function delivery(self) {
+            $.ajax({
+                dataType:"json",
+                url:'/apic/get_logistic_info',
+                success:function (data) {
+//                    console.log(data.data);
+                    if(data.data.type == "xlobo"){
+                        self.info = data.data;
+                        console.log(self.info.name);
+                        self.info1 =  self.info.data.reverse()
+                    }
+
+                }
+            })
+        }
+    </script>
 </body>
 </html>

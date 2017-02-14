@@ -122,10 +122,12 @@
 					<td name="disStatusColor{$item['distribution_status']}">{echo:Order_Class::getOrderDistributionStatusText($item)}</td>
 					<td title="{$item['distribute_name']}">{$item['distribute_name']}</td>
 					<td>
-						<span class="prt" title="购物清单打印" onclick="window.open('{url:/order/shop_template/id/$item[id]}');">购</span>
-						<span class="prt" title="配货单打印" onclick="window.open('{url:/order/pick_template/id/$item[id]}');">配</span>
-						<span class="prt" title="联合打印" onclick="window.open('{url:/order/merge_template/id/$item[id]}');">合</span>
-						<span class="prt" title="快递单打印" onclick="window.open('{url:/order/expresswaybill_template/id/$item[id]}');">递</span>
+                        <img src="<?php echo IWeb::$app->config['image_host'];?>/{$item['sfz_image1']}" style="padding-bottom: 5px;padding-top: 5px;" width="50" alt="">
+                        <img src="<?php echo IWeb::$app->config['image_host'];?>/{$item['sfz_image2']}" style="padding-bottom: 5px;padding-top: 5px;" width="50" alt="">
+						<!--<span class="prt" title="购物清单打印" onclick="window.open('{url:/order/shop_template/id/$item[id]}');">购</span>-->
+						<!--<span class="prt" title="配货单打印" onclick="window.open('{url:/order/pick_template/id/$item[id]}');">配</span>-->
+						<!--<span class="prt" title="联合打印" onclick="window.open('{url:/order/merge_template/id/$item[id]}');">合</span>-->
+						<!--<span class="prt" title="快递单打印" onclick="window.open('{url:/order/expresswaybill_template/id/$item[id]}');">递</span>-->
 						<span class="prt" title="贝海快递单打印" onclick="window.open('{url:/order/express/id/$item[id]}');">贝</span>
 					</td>
 					<td>{$item['payment_name']}</td>

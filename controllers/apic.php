@@ -3458,7 +3458,7 @@ class Apic extends IController{
         $ret            = array_map(function ($v) {
             return (array)$v;
         }, $billStatusList);
-        $this->returnJson(array('code' => '0', 'msg' => '查询物流信息成功', 'data' => ['type' => 'xlobo', 'data' => $ret]));
+        $this->returnJson(array('code' => '0', 'msg' => '查询物流信息成功', 'data' => ['type' => 'xlobo', 'name'=>'贝海国际物流', 'order_no' => '121', 'data' => $ret]));
     }
     function tip_coupon_expires(){
         $activity_ticket_access_query = new IQuery('activity_ticket_access as a');
