@@ -3472,9 +3472,35 @@ class Apic extends IController{
     }
     function tip_coupon_expires(){
         $activity_ticket_access_query = new IQuery('activity_ticket_access as a');
-        $activity_ticket_access_query->join = 'left join activity_ticket as b on a.ticket_id = b.id';
-        $activity_ticket_access_query->fields = 'a.*,b.name';
+        $activity_ticket_access_query->fields = 'a.*, b.`name`,b.type,c.oauth_user_id';
+        $activity_ticket_access_query->join = "left join activity_ticket AS b ON a.ticket_id = b.id left join oauth_user AS c ON a.user_id = c.user_id";
+        $activity_ticket_access_query->where = "(
+		time_type = 2
+		AND ADDDATE(
+			FROM_UNIXTIME(a.create_time, '%Y-%m-%d'),
+			b.`day`
+		) = CURDATE()
+	)
+OR (
+	NOW() < FROM_UNIXTIME(b.end_time)
+	AND NOW() > FROM_UNIXTIME(b.start_time)
+	AND time_type = 1
+	AND DATEDIFF(
+		CURDATE(),
+		FROM_UNIXTIME(b.end_time, '%Y-%m-%d')
+	) = 3
+)";
         $data = $activity_ticket_access_query->find();
+        foreach ($data as $v) {
+            if ($v['type'] === 1){
+                $end_time = date('Y-m-d H:i:s', v['end_time']);
+            } elseif ($v['type'] === 2){
+                $end_time = date('Y-m-d H:i:s', strtotime('+1 day', v['end_time']));
+            }
+            $oauth_user_id = $v['oauth_user_id'];
+            $oauth_user_id = 'orEYdw0X44crd6F3MOdXES6Hfpig';
+            wechats::send_message_template($oauth_user_id, 'tip_coupon_expires', ['coupon_name'=>$v['name'], 'end_time'=>$end_time]);
+        }
         common::print_b($data);
     }
 }
