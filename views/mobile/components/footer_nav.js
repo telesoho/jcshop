@@ -2,6 +2,14 @@
  * Created by yb on 2016/12/20.
  */
 // 注册一个首页的底部导航
+// 引入css文件函数
+function LoaderCss(fileName){
+     var fileref=document.createElement("link");
+    fileref.setAttribute("rel", "stylesheet");
+    fileref.setAttribute("type", "text/css");
+    fileref.setAttribute("href", fileName);
+}
+LoaderCss("/views/mobile/skin/default/css/text.css");
 var FOOTERINFOR={
     class1:"tabelitem active locationA",
     class2:'tabelitem locationA',
