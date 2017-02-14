@@ -142,6 +142,8 @@ li{
 #wenzi .left_wenzi{
 	width: 20%;
 	height: auto;
+	font-size:0.3rem;
+	color:#484848;
 	display: -webkit-flex;
 	-webkit-align-items: center;
 	-webkit-justify-content: center;
@@ -149,6 +151,8 @@ li{
 #wenzi .right_wenzi{
 	width: 70%;
 	padding: 0.2rem 0.2rem 0.2rem 0.2rem;
+	text-align:Justify;
+	text-justify:inter-ideograph;
 }
 #form_shop{
 	background: #fff;

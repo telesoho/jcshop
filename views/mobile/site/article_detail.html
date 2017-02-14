@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/public_top.css?v=<?php echo time(); ?>" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
 </head>
 <style>video{width: 100%;height: auto;}</style>
@@ -17,18 +18,7 @@
 	<div id="wrap_article" v-cloak>
 
 <section>
-    <div class="top_fixd">
-        <div class="backImg">
-			<img src="/views/mobile/skin/default/image/jmj/product/back.png" alt="" style="width:0.43rem" @click="back"/>
-		</div>
-		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
-		<a href="/simple/cart" id="cart" class="locationA">
-			<div class="img">
-				<div class="mark flexbox">{{car_count}}</div>
-				<img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
-			</div>
-		</a>
-    </div>
+    <top_back_car :msg="car_count"></top_back_car>
     <div class="article_title">
         <img src="<?php echo IWeb::$app->config['image_host'] . '/' ?>{$this->articleRow['image']}" alt="" width="100%" />
     </div>
@@ -151,6 +141,7 @@
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/top_back.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js"></script>
 <script>
     //获取url的商品id
@@ -158,6 +149,9 @@
     Request = GetRequest();
     var getId=Request["id"];
     var stop = true;
+    var json = {
+    	"car_count":''
+    }
     //文章商品分类
     var vm=new Vue({
         el:'#wrap_article',
@@ -168,6 +162,7 @@
             },
             info:[],
             car_count:0,
+            data_top:json
         },
         computed: {
           new_info: function(){
@@ -213,7 +208,8 @@
 	        timeout:10000,//超时时间设置为10秒；
 			success:function(data){
 				console.log(data);
-				self.car_count = data.data.car_count
+				self.car_count = data.data.car_count;
+				json.car_count = data.data.car_count;
 			}
 		})
 	}
