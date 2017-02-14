@@ -419,7 +419,7 @@ class Apic extends IController{
 	public function cart2(){
 		$param = $this->checkData(array(
 			array('id','int',0,'商品ID'),
-			array('type','string',0,'商品类型[goods单品购买-product购物车购买]'),
+			array('type','string',0,'商品类型[goods商品购买-product货品购买]'),
 			array('num','string',0,'商品数量'),
 			array('code','int',0,'优惠券码'),
 			array('ticket_aid','int',0,'优惠券ID'),
