@@ -116,21 +116,27 @@
     font-weight: bold;
 }
 .sell_price .act{
-    margin-left:0.21rem;
+    position: relative;
+    margin-left:0.1rem;
+    top:-0.1rem;
+    height:0.35rem;
+    line-height: 0.35rem;
+}
+.sell_price .act img{
+    position: absolute;
+    width:1.452rem;
+    height:0.35rem;
+    z-index: 1;
+}
+.sell_price .act span{
+    position: relative;
+    z-index: 2;
+    font-size:0.2rem ;
+    color:#fff;
     display: inline-block;
-    background:#1f1f1f;
-    border-radius:0.28rem;
-    padding:0.05rem .1rem;
-    width:auto;
-    left:0;
-    height:0.38rem;
-    line-height:0.28rem;
-    font-size:0.2rem;
-    color:#ffffff;
-    text-align:center;
-    position:relative;
-    top:-0.05rem;
-    font-weight:normal;
+    left:0.23rem;
+    line-height: 0.35rem;
+
 }
 .cPrice{
     font-size:0.26rem;
