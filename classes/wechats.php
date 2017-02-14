@@ -52,7 +52,6 @@ class wechats
      */
     static function send_message_template($open_id, $type, $send_info){
         $access_token      = common::get_wechat_access_token();
-        if ($type=='member') $access_token = 'v8MDkRdEuPtaorHeE20-bi-a70_PMGfNcZCHalnSJo_sCl_aanTkL9kJRDf5ylLoqGphGYSnKKhWoCtZ_QI6B9BQBSkVk92WHVmYXXjDeG1gF1rp4Sv590fk4qDBfAduVBRcAIAJPF';
         $url               = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
         $site_config       = new Config('site_config');
         $site_config_array = $site_config->getInfo();
