@@ -25,7 +25,7 @@
 				<img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
 			</div>
 		</a>
-		<span @click="share" style="margin-right: 0.4rem;display: inline-block;"><img src="/views/mobile/skin/default/image/jmj/product/shied.png" style="width: 0.62rem;"/></span>
+		<span @click="share" style="display: inline-block;position: absolute;right: 0.3rem;top: 1.02rem;"><img src="/views/mobile/skin/default/image/jmj/product/shareMoney.png" style="width: 1.07rem;"/></span>
 		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
 	</div>
 	<div id="pullrefresh1" class="v-container" v-if="showContainer1" @touchstart="firstContainerMoveStart" @touchmove="firstContainerMove" @touchend="endtouch1">
@@ -343,8 +343,13 @@
 		</div>
 	</div>
 	<div id="backgrounds" style="width: 100%;display: none;height: 100%;background: #000;opacity: 0.5;position: absolute;left: 0;top: 0;z-index:10000;">
-		<p style="" class="tips">点击屏幕任意区域取消操作</p>
-		<img id="hander" src="/views/mobile/skin/default/image/jmj/ticket_gain/hander.png" style="width: 0.56rem; height: 0.72rem;position: absolute;top: 0;right: 0.2rem;"/>
+		<div id="" class="tips">
+			<p style="font-size:0.30rem ;letter-spacing: 0.02rem;" >点击分享到朋友圈或好友,若好友在48小时内下单</p>
+			<p style="font-size:0.3rem ;letter-spacing: 0.02rem;">您将获得该笔订单金额的7%的现金提成。</p>
+			<p style="margin-top: 0.6rem;letter-spacing: 0.02rem;">(具体规则见 个人中心-分享赚钱页面)</p>
+			</div>	
+			<img id="hander" src="/views/mobile/skin/default/image/jmj/ticket_gain/hander.png" style="width: 0.56rem; height: 0.72rem;position: absolute;top: 0;right: 0.2rem;"/>
+			
 	</div>
 </section>
 
