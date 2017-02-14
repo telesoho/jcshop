@@ -17,10 +17,10 @@ class xlobo
     public static function init(){
         $site_config = new Config('site_config');
         if ($site_config->xlobo){
-            self::$APPKEY = '16cc3c0e-76b5-4085-83a1-0c2bc3478ee3';
-            self::$SecretKey = 'APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==';
+            self::$APPKEY      = '16cc3c0e-76b5-4085-83a1-0c2bc3478ee3';
+            self::$SecretKey   = 'APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==';
             self::$AccessToken = 'AD30N4p75N4UKcG0lGwiXXAUGTD60PSbFGoaw9R84s7QoXuv8XhBTad3yO3yiUS+rw==';
-            self::$ServerUrl = 'http://bill.open.xlobo.com/api/router/rest';
+            self::$ServerUrl   = 'http://bill.open.xlobo.com/api/router/rest';
         } else {
             self::$APPKEY      = '68993573-E38D-4A8A-A263-055C401F9369';
             self::$SecretKey   = 'APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==';
@@ -44,9 +44,13 @@ class xlobo
         $curl->setHeader('Content-Type', 'application/x-www-form-urlencoded; charset=GBK');
         $ret = $curl->post($url, $params);
         if ($ret === false) {
+            common::log_write(print_r($ret,true),'ERROR','xlobo');
+            common::log_write(print_r($params,true),'ERROR','xlobo');
             IError::show_normal('服务器未响应'.self::$ServerUrl);
         }
         if (isset($ret->ErrorCode)){
+            common::log_write(print_r($ret,true),'ERROR','xlobo');
+            common::log_write(print_r($params,true),'ERROR','xlobo');
             IError::show_normal($ret->resourceValue.self::$ServerUrl.'<br>'.print_r($params,true));
         }
         return $ret;

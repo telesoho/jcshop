@@ -223,6 +223,12 @@ class Goods extends IController implements adminAuthorization
 			die("没有找到相关商品！");
 		}
 
+		if(!$goods_id) {
+			$data['form']['supplier_id'] = "0";
+			$data['form']['ware_house_name'] = "";
+			$data['form']['duties_rate'] = "0.0";
+			$data['form']['type'] = '1';
+		}
 
 		$model = new IModel('supplier');
 		$supplier = $model->getObj("id =" . $data['form']['supplier_id']);
