@@ -781,7 +781,7 @@ class Order_Class
         return $result;
 	}
 
-	/**
+	/** chenbo
 	 * @brief 商品发货接口
 	 * @param string $order_id 订单id
 	 * @param array $order_goods_relation 订单与商品关联id

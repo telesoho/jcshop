@@ -42,7 +42,7 @@ class Apic extends IController{
 			$querySpeedGoods         = new IQuery('activity_speed_access AS m');
 			$querySpeedGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
 			$querySpeedGoods->where  = 'pid='.$infoSpeed['id'];
-			$querySpeedGoods->fields = 'm.sell_price,m.name_de,g.id,g.name,g.name_de,g.img,g.sell_price AS old_price,g.purchase_price';
+			$querySpeedGoods->fields = 'm.sell_price,g.name_de,g.id,g.name,g.name_de,g.img,g.sell_price AS old_price,g.purchase_price';
 			$infoSpeed['list']       = $querySpeedGoods->find();
 			if(!empty($infoSpeed['list'])){
 				foreach($infoSpeed['list'] as $k => $v){
@@ -419,7 +419,7 @@ class Apic extends IController{
 	public function cart2(){
 		$param = $this->checkData(array(
 			array('id','int',0,'商品ID'),
-			array('type','string',0,'商品类型[goods单品购买-product购物车购买]'),
+			array('type','string',0,'商品类型[goods商品购买-product货品购买]'),
 			array('num','string',0,'商品数量'),
 			array('code','int',0,'优惠券码'),
 			array('ticket_aid','int',0,'优惠券ID'),
@@ -3480,9 +3480,15 @@ class Apic extends IController{
         }, $billStatusList);
         $this->returnJson(array('code' => '0', 'msg' => '查询物流信息成功', 'data' => ['type' => 'xlobo', 'name'=>'贝海国际物流', 'order_no' => $order_no, 'data' => $ret]));
     }
+
+    /**
+     * User: chenbo
+     * 三天后过期提醒
+     */
     function tip_coupon_expires(){
+        set_time_limit(0);
         $activity_ticket_access_query = new IQuery('activity_ticket_access as a');
-        $activity_ticket_access_query->fields = 'a.*, b.`name`,b.type,c.oauth_user_id';
+        $activity_ticket_access_query->fields = 'a.*, b.`name`,b.end_time,b.time_type,b.day,c.oauth_user_id';
         $activity_ticket_access_query->join = "left join activity_ticket AS b ON a.ticket_id = b.id left join oauth_user AS c ON a.user_id = c.user_id";
         $activity_ticket_access_query->where = "(
 		time_type = 2
@@ -3501,16 +3507,56 @@ OR (
 	) = 3
 )";
         $data = $activity_ticket_access_query->find();
+        $i = 0;
         foreach ($data as $v) {
-            if ($v['type'] === 1){
-                $end_time = date('Y-m-d H:i:s', v['end_time']);
-            } elseif ($v['type'] === 2){
-                $end_time = date('Y-m-d H:i:s', strtotime('+1 day', v['end_time']));
+            if ($v['time_type'] === '1'){
+                $end_time = date('Y-m-d H:i:s', $v['end_time']);
+            } elseif ($v['time_type'] === '2'){
+//                $end_time = date('Y-m-d H:i:s', $v['end_time']);
+                $end_time = date('Y-m-d H:i:s', strtotime("+ ".$v['day']." day", $v['create_time']));
             }
             $oauth_user_id = $v['oauth_user_id'];
             $oauth_user_id = 'orEYdw0X44crd6F3MOdXES6Hfpig';
-            wechats::send_message_template($oauth_user_id, 'tip_coupon_expires', ['coupon_name'=>$v['name'], 'end_time'=>$end_time]);
+            $ret = wechats::send_message_template($oauth_user_id, 'tip_coupon_expires', ['coupon_name'=>$v['name'], 'end_time'=>$end_time]);
+            if ($ret){
+                $i +=1;
+                continue;
+            } else{
+                $v[] = __FUNCTION__;
+                common::log_write(print_r($v), 'ERROR', 'wechat');
+                return;
+            }
         }
-        common::print_b($data);
+        common::print_b($i);
+        return;
+    }
+
+    /**
+     * User: chenbo
+     * 所有会员提醒加个人号
+     */
+    function all_member_message(){
+        set_time_limit(0);
+        $user_query        = new IQuery('user as a');
+        $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
+        $user_query->where = "a.id IN (12,24,51)";
+        $user_data         = $user_query->find();
+        $i = 0;
+        foreach ($user_data as $k=>$v){
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
+            if ($ret){
+                $i++;
+                continue;
+            } else {
+                $v[] = __FUNCTION__;
+                common::log_write(print_r($v), 'ERROR', 'wechat');
+                return;
+            }
+        }
+        common::print_b($i);
+        return;
+    }
+    function fourty_message(){
+
     }
 }
