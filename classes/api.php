@@ -106,7 +106,7 @@ class Api
 		//参数重置order,limit参数
 		if(!empty($aguments))
 		{
-			foreach($aguments as $param)
+			foreach($aguments as $key => $param)
 			{
 				if(is_numeric($param))
 				{
@@ -114,6 +114,9 @@ class Api
 				}
 				else if(is_array($param))
 				{
+					if($key == "params") {
+						$queryInfo['params'] = $param['params'];
+					} else 
 					//分页模式
 					if($param[0] == 'page')
 					{

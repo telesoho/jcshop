@@ -279,6 +279,31 @@ class wechats
                    }
                }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['number'],$send_info['create_time']);
                 break;
+            case 'tip_coupon_expires':
+                $params = sprintf('{
+                   "touser":"%s",
+                   "template_id":"%s",
+                   "url":"%s",            
+                   "data":{
+                           "first": {
+                               "value":"%s将要过期",
+                               "color":"#173177"
+                           },
+                           "keyword1":{
+                               "value":"优惠券的使用",
+                               "color":"#173177"
+                           },
+                           "keyword2":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "remark": {
+                               "value":"点击查看详情",
+                               "color":"#173177"
+                           }
+                   }
+               }',$open_id, $template_array[$type], IUrl::getHost().'/site/ticket_list',$send_info['coupon_name'],$send_info['end_time']);
+                break;
 
         }
         $ret = common::http_post_json($url,$params);
