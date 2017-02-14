@@ -1,3 +1,12 @@
+function top_back(classrount){
+	var head = document.getElementsByTagName("head")[0]
+	var filerount = document.createElement("link");
+	filerount.setAttribute("rel","stylesheet");
+	filerount.setAttribute("type","text/css");
+	filerount.setAttribute("href",classrount);
+	head.appendChild(filerount);
+}
+top_back("/views/mobile/componentsCss/top_back.css?v=<?php echo time(); ?>");
 Vue.component("top_back_car",{
 	template:'<div class="top_fixd">\
         <div class="backImg">\

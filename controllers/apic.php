@@ -42,7 +42,7 @@ class Apic extends IController{
 			$querySpeedGoods         = new IQuery('activity_speed_access AS m');
 			$querySpeedGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
 			$querySpeedGoods->where  = 'pid='.$infoSpeed['id'];
-			$querySpeedGoods->fields = 'm.sell_price,m.name_de,g.id,g.name,g.name_de,g.img,g.sell_price AS old_price,g.purchase_price';
+			$querySpeedGoods->fields = 'm.sell_price,g.name_de,g.id,g.name,g.name_de,g.img,g.sell_price AS old_price,g.purchase_price';
 			$infoSpeed['list']       = $querySpeedGoods->find();
 			if(!empty($infoSpeed['list'])){
 				foreach($infoSpeed['list'] as $k => $v){

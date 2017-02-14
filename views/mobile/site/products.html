@@ -10,14 +10,13 @@
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/custombox.min.css?v=<?php echo time(); ?>" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/public_top.css?v=<?php echo time(); ?>" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/products.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 <section id="productInfo" v-cloak v-if="showMessage">
 	<top_back_car :msg="car_count"></top_back_car>
 	<div id="pullrefresh1" class="v-container" v-if="showContainer1" @touchstart="firstContainerMoveStart" @touchmove="firstContainerMove" @touchend="endtouch1">
-		<span @click="share" style="display: inline-block;position: absolute;right: 0;top: 1.02rem;z-index: 999;"><img src="/views/mobile/skin/default/image/jmj/product/shareMoney.png" style="width: 1.07rem;"/></span>
+		<span @click="share" style="display: inline-block;position: fixed;right: 0;top: 1.02rem;z-index: 999;"><img src="/views/mobile/skin/default/image/jmj/product/shareMoney.png" style="width: 1.07rem;"/></span>
 		<div class="scro scro1" style="background:#fff">
 			<section style="" class="carousel flexbox">
 				<!--轮播开始-->
