@@ -94,10 +94,11 @@ var vm = new Vue({
         sho: function(){
             this.showImg=!this.showImg
         },
-        getDelivery: function (eid) {
-            console.log(eid);
-            this.showContainer = true;
-            Delivery(eid);
+        getDelivery: function (id) {
+            // console.log(eid);
+            // this.showContainer = true;
+            // Delivery(eid);
+            window.location.href = "/ucenter/delivery/order_no/"+id;
         },
         cancelOrder: function (url) {
             var btnArray = ['取消', '确认'];
