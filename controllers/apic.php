@@ -2752,11 +2752,14 @@ class Apic extends IController{
 		$queryGoods         = new IQuery('scene_goods as m');
 		$queryGoods->join   = 'LEFT JOIN goods as g ON g.id=m.goods_id';
 		$queryGoods->where  = 'g.is_del=0 AND m.scene_id='.$info['id'];
-		$queryGoods->fields = 'g.id,g.name,g.goods_no,g.sell_price,g.jp_price,g.img,m.coord_x,m.coord_y';
+		$queryGoods->fields = 'g.id,g.name,g.goods_no,g.sell_price,g.store_nums,g.jp_price,g.img,m.coord_x,m.coord_y';
 		$info['goods_list'] = $queryGoods->find();
 		if(!empty($info['goods_list'])){
 			$info['goods_list'] = Api::run('goodsActivity', $info['goods_list']);
+			$modelFor           = new IModel('favorite');
 			foreach($info['goods_list'] as $k => $v){
+				$count                         = $modelFor->get_count('user_id='.$user_id.' AND rid='.$v['id']);
+				$dataGoods['is_favorite']      = !empty($count) ? 1 : 0; //是否已收藏
 				$info['goods_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
 			}
 		}
