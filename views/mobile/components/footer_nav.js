@@ -3,13 +3,16 @@
  */
 // 注册一个首页的底部导航
 // 引入css文件函数
-function LoaderCss(fileName){
-     var fileref=document.createElement("link");
-    fileref.setAttribute("rel", "stylesheet");
-    fileref.setAttribute("type", "text/css");
-    fileref.setAttribute("href", fileName);
+function footer(name){
+	var date = "?v="+Date.parse(new Date())
+	var head = document.getElementsByTagName("head")[0];
+	var filelink = document.createElement("link");
+	filelink.setAttribute("rel","stylesheet");
+	filelink.setAttribute("type","text/css");
+	filelink.setAttribute("href",name+date);
+	head.appendChild(filelink);
 }
-LoaderCss("/views/mobile/skin/default/css/text.css");
+footer("/views/mobile/componentsCss/footer_nav_component.css")
 var FOOTERINFOR={
     class1:"tabelitem active locationA",
     class2:'tabelitem locationA',
@@ -52,8 +55,8 @@ Vue.component('footer-nav', {
     data:function(){
         return FOOTERINFOR
     },
-    props:['state'],
-    template: '<footer>\
+    props:['state','states'],
+    template: '<footer v-if="states">\
     <nav class="footerNav"  style="z-index:25">\
     <a :class="state==key?class1:class2" :href="item.url" v-for="(item,key) in nav">\
     <span :class="item.class">\

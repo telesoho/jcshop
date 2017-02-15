@@ -1,0 +1,189 @@
+/*专辑页面*/
+.albumn_index{
+  overflow-x: hidden;
+  margin-top:0.22rem;
+  background:#f8f8f8;
+}
+
+
+.albumn_index .title{
+	display: -webkit-flex;
+	-webkit-align-items: center;
+	-webkit-justify-content: flex-start;
+	padding:0 0.2rem ;
+  height:0.9rem;
+  width: 100%;
+  font-size:0.3rem;
+/*  line-height:0.9rem;*/
+  background:#fff;
+}
+.albumn_index .title .logo{
+  /*display: inline-block;*/
+  display: -webkit-flex;
+  -webkit-align-items: center;
+}
+.albumn_index .title .paper{
+  margin-left:0.24rem;
+  top:0.07rem;
+}
+.albumn_index .title .name{
+  margin-left:0.10rem;
+  color:#3d4245;
+  font-size:0.3rem;
+  /*width: 1.8rem;*/
+}
+.mui-pull-right{
+	float: none;
+}
+.albumn_index .title  .images{
+	margin-left: 0.19rem;
+}
+.albumn_index .title .share{
+  
+}
+.albumn_index .title .like{
+ margin-left: 2.18rem;
+ display: -webkit-flex;
+ -webkit-align-items: center;
+}
+.albumn_index .title .num{
+  width:0.22rem;
+  font-size:0.3rem;
+  color:#171717;
+  margin-left: 0.13rem;
+  /*margin-top: -0.55rem;*/
+}
+
+
+.albumn_index .content{
+  position:relative;
+  width:7.5rem;
+}
+.albumn_index .content .mark1{
+  position:absolute;
+  width:1.28rem;
+  height:0.38rem;
+  line-height:0.38rem;
+  text-align:center;
+  top:0.24rem;
+  left:4.29rem;
+  background:rgba(0,0,0,0.5);
+  border-radius:0.04rem;
+  color:#fff;
+  font-size:0.22rem;
+}
+/*.albumn_index .content .img img{
+  position:re;
+}*/
+.albumn_index .content .mark2{
+  position:absolute;
+  width:1.52rem;
+  height:0.38rem;
+  line-height:0.38rem;
+  text-align:center;
+  top:0.24rem;
+  right:0.11rem;
+  background:rgba(0,0,0,0.5);
+  border-radius:0.04rem;
+  color:#fff;
+  font-size:0.22rem;
+}
+.albumn_index .content .mark2 img{
+  width:0.33rem;
+  margin-right:0.08rem;
+}
+.albumn_index .title .vedio_name{
+  display:inline-block;
+  position:relative;
+  top:-0.15rem;
+  margin-left:0.23rem;
+  min-width:2rem;
+  color:#3d4245;
+  font-size:0.3rem;
+  width:1.88rem;
+}
+.albumn_index .title .vedio_name span{
+  position:absolute;
+  left:0;
+  top:0.34rem;
+  font-size:0.22rem;
+  color:#bbb;
+}
+.albumn_index .title .vedio_name span img{
+  position:relative;
+  top:0.05rem;
+  margin-right:0.15rem;
+}
+.albumn_index .mark{
+  /*margin-top:-0.06rem;*/
+  z-index:12;
+  height:3.07rem;
+  overflow-y: hidden;
+  width:100%;
+}
+.albumn_index .product{
+  z-index:11;
+  position:relative;
+  height:3.32rem;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  background:#fff;
+  margin-top:-0.06rem;
+}
+.albumn_index .product .slider{
+  z-index:13;
+  position:absolute;
+  height:3.3rem;
+  display: -webkit-flex;
+  -webkit-justify-content: flex-start;
+  -webkit-overflow-scrolling: touch;
+}
+.single{
+  width:100%;
+  position:relative;
+}
+.single:after{
+  background:transparent;
+  position:absolute;
+  content:'';
+  left:3.5rem;
+  top:-0.23rem;
+  z-index:24;
+  width: 0;
+  height: 0;
+  border-left: 0.25rem solid transparent;
+  border-right: 0.25rem solid transparent;
+  border-bottom: 0.25rem solid #fff;
+}
+
+.albumn_index .product .slider .item{
+  position:relative;
+  width:1.8rem;
+  height:3rem;
+  margin-top:0.2rem;
+  margin-left:0.4rem;
+}
+.albumn_index .product .img{
+  margin:0 auto;
+  width:1.8rem;
+  height:1.8rem;
+}
+.albumn_index .product .img img{
+  width:1.8rem;
+  height:1.8rem;
+}
+.albumn_index .product .name{
+  width:1.8rem;
+  font-size:0.24rem;
+  color:#3d4225;
+  margin-bottom:0.1rem;
+  margin-top:0.17rem;
+}
+.singleline{
+  position:absolute;
+  top:0.1rem;
+  left:1.95rem;
+  width:1px;
+  border-left:1px solid #b8b8b8;
+  height:2.2rem;
+}

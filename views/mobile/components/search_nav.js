@@ -1,7 +1,16 @@
 /**
  * Created by yb on 2016/12/20.
  */
-
+function active(classname){
+	var date ="?v=" + Date.parse(new Date())
+	var head = document.getElementsByTagName("head")[0];
+	var search_file = document.createElement("link");
+	search_file.setAttribute("rel","stylesheet");
+	search_file.setAttribute("type","text/css");
+	search_file.setAttribute("href",classname+date);
+	head.appendChild(search_file);
+}
+active("/views/mobile/componentsCss/search_nav_component.css")
 // 创建一个搜索的组件
 Vue.component('search-nav', {
     template:'<section class="search-header" id="homeHeader" style="position:fixed;z-index:1000">\

@@ -55,6 +55,16 @@ var HEADERINFOR={
         },
     ],
 }
+function active(classname){
+	var date = "?v="+Date.parse(new Date());
+	var head = document.getElementsByTagName("head")[0];
+	var head_file = document.createElement("link");
+	head_file.setAttribute("rel","stylesheet");
+	head_file.setAttribute("type","text/css");
+	head_file.setAttribute("href",classname+date);
+	head.appendChild(head_file);
+}
+active("/views/mobile/componentsCss/head_nav_component.css")
 Vue.component('head-nav', {
     data:function(){
         return HEADERINFOR

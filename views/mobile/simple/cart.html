@@ -84,7 +84,7 @@
 			</a>
 		</div>
 	</template>
-	<footer-nav :state="3"></footer-nav>
+	<footer-nav :state="3" :states="cart_st"></footer-nav>
 </div>
 <div style="height:90px;"></div>
 <script src="/views/mobile/javascript/vue.js"></script>
@@ -97,6 +97,7 @@
 		el: '#cart_info',
 		data: {
 			showMessage:false,
+			cart_st:false,
 			infoMessage:{
 				goodsList:[]
 			},
@@ -136,6 +137,7 @@
 			clear_pull();
 		},
 		updated:function() {
+			this.cart_st = true;
 		},
 		methods: {
 			getData: function () {

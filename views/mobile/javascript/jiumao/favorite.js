@@ -17,7 +17,9 @@ var vm = new Vue({
             bg1:'color:#3d4225',
             bg2:'color:#ff2f5c',
             img:'width:0.31rem;height:0.31rem;margin-right:0.22rem;'
-        }
+        },
+        favorite_st:false,
+        btn_:false
     },
     computed: {
         changeBgcolor: function(){
@@ -54,6 +56,10 @@ var vm = new Vue({
     },
     mounted: function(){
     	clear_pull()
+    },
+    updated:function(){
+    	this.favorite_st = true;
+    	this.btn_ = true;
     },
     methods: {
         getData: function () {
