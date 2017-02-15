@@ -36,7 +36,145 @@
     right:-0.175rem;
     top:0;
 }
-/*关联商品样式*/
+/*场景馆样式*/
+.sceneDetail{
+    position:relative;
+}
+.sceneDetail .goods{
+    position:absolute;
+    z-index:2;
+}
+.sceneDetail .cho{
+    height:2.59rem;
+    background:#fff;
+    margin-bottom:0.2rem;
+}
+.sceneDetail .cho .lik{
+    width:2.8rem;
+    height:2.59rem;
+    display: -webkit-flex;
+    -webkit-justify-content: center;
+    -webkit-flex-wrap: wrap;
+}
+.sceneDetail .cho .lik img{
+    margin-top:0.2rem;
+    width:1.47rem;
+    height:1.47rem;
+}
+.sceneDetail .cho .lik p{
+    width:100%;
+    text-align: center;
+    font-size:0.22rem;
+    color:#bbb;
+}
+.sceneDetail .cho .lik .num1{
+    font-size:0.26rem;
+    color:#ff2f5c;
+}
+.sceneDetail .cho .lik .num2{
+    font-size:0.26rem;
+    color:#484848;
+    font-family:HelveticaNeue;
+}
+/*场景馆弹窗样式*/
+.mui-popover{
+    background:#fff;
+}
+.mui-popover .header{
+    background:#fff;
+    height:1.63rem;
+}
+.mui-popover .header .goodsimg{
+    display: inline-block;
+    width:2.4rem;
+    height:2.4rem;
+    background:#fff;
+    position: relative;
+    left:0.24rem;
+    top:-1.2rem;
+    box-shadow:0 0.07rem 0.08rem 0 rgba(184,184,184,0.14);
+}
+.mui-popover .header .xximg{
+    width:0.38rem;
+    height:0.38rem;
+    margin:0.3rem;
+}
+.mui-popover .article{
+    background:#fff;
+    height:1.5rem;
+}
+.mui-popover .article .left{
+    font-size:0.36rem;
+    color:#1f1f1f;
+    line-height:0.42rem;
+    width:4.68rem;
+    margin-left:0.34rem;
+}
+.mui-popover .article .right{
+   margin-right:0.26rem;
+}
+.mui-popover .article .right span{
+    font-family:HelveticaNeue-Medium;
+    font-size:0.4rem;
+    color:#ff2f5c;
+}
+.mui-popover .article .right span:nth-child(1){
+    font-size:0.26rem;
+}
+.mui-popover .num{
+    background:#fff;
+    height:1.6rem;
+}
+.mui-popover .numA{
+   border:1px solid #b8b8b8;
+    width:1.8rem;
+    height:0.6rem;
+    border-radius:0.6rem;
+    margin-left:0.37rem;
+}
+.mui-popover .num img{
+    width:0.5rem;
+    height:0.5rem;
+    vertical-align: middle;
+}
+.mui-popover .num input{
+    width:0.5rem;
+    height:0.5rem;
+    text-align: center;
+    border:none;
+    color:#484848;
+    font-size:0.3rem;
+    margin:0 0.03rem;
+}
+.mui-popover .buyy{
+    height:1.17rem;
+    display: -webkit-flex;
+    background:#fff;
+}
+.mui-popover .buyy .right{
+    background:#ff5959;
+    width:6.1rem;
+    text-align: center;
+    line-height:1.17rem;
+    font-size:0.36rem;
+    color:#fff;
+}
+.mui-popover .buyy .left{
+    width:1.42rem;
+    border-top:1px solid #eee;
+}
+.mui-popover .buyy .left img{
+    position:relative;
+    top:0.05rem;
+}
+.mui-popover .buyy .left span{
+    display: inline-block;
+    width:100%;
+    text-align: center;
+    position:relative;
+    top:-0.05rem;
+}
+    /*关联商品样式*/
 .con h3{
     height:0.8rem;
     line-height:0.8rem;
@@ -85,6 +223,7 @@
 .con .goodsItem .middle .price{
     width:3.7rem;
     margin-top:0.2rem;
+    -webkit-align-items: baseline;
 }
 .con .goodsItem .middle .price .price_l span{
     color:#ff2f5c;
@@ -122,4 +261,40 @@
     to{
         -webkit-transform:rotate(360deg)
     }
+}
+/*关联的相关专辑*/
+.relateScene{
+    margin-top:0.2rem;
+    height:2.87rem;
+    position: relative;
+    background:#fff;
+    overflow: hidden;
+}
+.relateScene h4{
+    font-size:0.28rem;
+    color:#484848;
+    padding-left:0.2rem;
+    height:0.75rem;
+    line-height:0.75rem;
+}
+.relateScene .wrapper{
+    position: absolute;
+    width:100%;
+    height:2.05rem;
+    overflow: hidden;
+    padding-left:0.1rem;
+}
+.relateScene .wrapper .mark{
+    width:100%;
+    display: -webkit-flex;
+    display: -webkit-box;
+    -webkit-flex-wrap: nowrap;
+    overflow-x: scroll;
+    height:2.4rem;
+}
+.relateScene .wrapper .mark a{
+    display:block;
+}
+.relateScene .wrapper .mark img{
+    margin:0.1rem;
 }
