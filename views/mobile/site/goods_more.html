@@ -1,43 +1,17 @@
-
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="x5-orientation" content="portrait">
-    <title></title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemao1.css" />
+	<title>商品列表</title>
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemao1.css?v=<?php echo time(); ?>" />
 </head>
 <body>
-<!--loading页开始-->
-<div id="loading">
-    <div class="spinner">
-        <div class="spinner-container container1">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container2">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container3">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-    </div>
-</div>
-<!--loading页结束-->
-<!--三级分类-->
 <section id="category" v-cloak>
+	<loadding :mes="state_"></loadding>	
     <div id="category_third" >
         <div class="product_item" v-for="item in brand_list">
             <a :href="item.url">
@@ -64,17 +38,17 @@
     </div>
     
     <footer>
-    <div class="flexbox empty_product" style="background:#f8f8f8" v-if="infoState">
-        <div class="img">
-            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
-        </div>
-        <div class="content">
-            <span style="color:#fff">~</span>
-            <span style="color:#fff">憋拉了，到底了</span>
-            <span style="color:#fff">~</span>
-        </div>
-    </div>
-</footer>
+	    <div class="flexbox empty_product" style="background:#f8f8f8" v-if="infoState">
+	        <div class="img">
+	            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+	        </div>
+	        <div class="content">
+	            <span style="color:#fff">~</span>
+	            <span style="color:#fff">憋拉了，到底了</span>
+	            <span style="color:#fff">~</span>
+	        </div>
+	    </div>
+	</footer>
 </section>
 
 
@@ -82,15 +56,15 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 
 <script type="text/javascript">
 
  $(window).load(function(){
-        $("#loading").fadeOut(300);
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','a',function(){document.location.href=this.href;});
     })
-var stop=true;
+	var stop=true;
 	var Request = new Object();
     Request = GetRequest();
     var tidOrder=Request["tid"];
@@ -105,7 +79,8 @@ var stop=true;
 				page:1,
 				stop:false,
 				infoState:false,
-				longing:false
+				longing:false,
+				state_:true
 			},
 			computed:{
 				brand_list:function(){
@@ -121,6 +96,7 @@ var stop=true;
 			mounted:function(){
 				var self = this;
 				if(getSession("goodsinfo")){
+					self.state_ = false;
 					self.info=getSession("goodsinfo");
 					self.page=getSession("goodspage")
 				}else{
@@ -135,6 +111,7 @@ var stop=true;
 					selectorName:".samLazyImg",
 					
 				});
+				
 			},
 			methods:{
 
@@ -151,6 +128,7 @@ var stop=true;
 				type: 'get',
 				timeout: 10000,
 				success: function(data){
+					self.state_ = false;
 					console.log(data)
 					data.goods_list.map(function(item){
 						self.info.push(item);
@@ -182,6 +160,7 @@ $(window).bind('scroll', function() {
         if(stop==true){
             stop=false;
             longing=true;
+            em.state_ = true;
             getActiveInfo(em);
             
         }else{
@@ -228,5 +207,6 @@ $(window).bind('scroll', function() {
 
 
 </script>
+
 </body>
 </html>
