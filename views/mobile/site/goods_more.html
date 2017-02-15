@@ -7,36 +7,19 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<title>商品列表</title>
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemao1.css?v=<?php echo time(); ?>" />
+	<!--<link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemao1.css?v=<?php echo time(); ?>" />-->
 </head>
 <body>
 <section id="category" v-cloak>
 	<loadding :mes="state_"></loadding>	
-    <div id="category_third" >
-        <div class="product_item" v-for="item in brand_list">
-            <a :href="item.url">
-                <div class="img">
-                    <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"  />
-                    <img :dataimg="item.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg img-ware" />
-                    <img src="" alt="" class="" />
-                </div>
-                <div class="content">
-                    <div class="name">
-						{{item.name}}
-                    </div>
-                    <div class="price">
-                        <span class="sellprice">¥{{item.sell_price}}</span>
-                        <span class="japanprice">日本价：{{item.jp_price}}円</span>
-                        <span class="openprice">国内价：¥{{item.market_price}}</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div id="londing" v-if="longing"  style=" display:none;width:100%;display: block;margin: 0 auto;">
+	<div id="category_third" >
+		<div class="product_item" v-for="item in brand_list">
+    		<goods_list :item="item"></goods_list>
+		</div>
+    	<div id="londing" v-if="longing"  style=" display:none;width:100%;display: block;margin: 0 auto;">
 	    	<img src="/views/mobile/skin/default/image/jmj/icon/longing.gif" style="width:6rem;display: block;margin: 0 auto;"/>
 	    </div>
     </div>
-    
     <footer>
 	    <div class="flexbox empty_product" style="background:#f8f8f8" v-if="infoState">
 	        <div class="img">
@@ -57,6 +40,7 @@
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/goods_more.js?v=<?php echo time(); ?>"></script>
 
 <script type="text/javascript">
 
@@ -75,6 +59,7 @@
 				tid:tidOrder,
 				mid:midOrder,
 				info:[],
+				info_str:"",
 				tre:"",
 				page:1,
 				stop:false,
@@ -88,8 +73,8 @@
 						item.url="/site/products?id="+item.id;
 						
 					})
-					document.title=this.tre;
 					
+					document.title=this.tre;
 					return this.info;
 				},
 			},
@@ -103,6 +88,7 @@
 						self.page=1;
 						getActiveInfo(self);
 				}	
+				
 			},
 			updated:function() {
 				// 页面加载完成执行的函数;
@@ -129,26 +115,26 @@
 				timeout: 10000,
 				success: function(data){
 					self.state_ = false;
-					console.log(data)
+//					console.log(data)
 					data.goods_list.map(function(item){
 						self.info.push(item);
 					})
+					
 					pushSession("goodsinfo",self.info)
 					self.tre = data.title;
 					if(data.goods_list==''){
 						self.infoState=true;
 	                    stop=false;
 	                    self.longing = false
-	                }else{
-	                	 self.infoState=false;
+	               }else{
+	                	self.infoState=false;
 	                    stop=true;
-	                   self. longing=true
+	                   	self. longing=true;
+	                   	self.page++;
+	                	pushSession("goodspage",self.page)
 	                }
-	                console.log(self.page)
-	                self.page++;
 	                
-	                pushSession("goodspage",self.page)
-	                
+	               
 				}
 
 			});
