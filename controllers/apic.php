@@ -66,6 +66,7 @@ class Apic extends IController{
 			$queryGoods->join   = 'left join relation as r on r.goods_id=m.id';
 			$queryGoods->fields = 'm.id,m.name_de,m.name,m.sell_price,m.purchase_price,m.img';
 			$queryGoods->order  = 'sale DESC,visit DESC';
+			$queryGoods->group  = 'm.id';
 			$queryGoods->limit  = 5;
 			//商品统计模型
 			$queryGoodsCount         = new IQuery('goods as m');
@@ -123,6 +124,7 @@ class Apic extends IController{
 			$queryGo->where  = 'm.is_del=0 AND c.category_id IN ('.$cid.')';
 			$queryGo->fields = 'm.id,m.name,m.name_de,m.sell_price,m.purchase_price,m.img';
 			$queryGo->order  = 'sale DESC,visit DESC';
+			$queryGo->group  = 'm.id';
 			$queryGo->limit  = 4;
 			$listGo          = $queryGo->find();
 			if(!empty($listGo)){
@@ -2749,7 +2751,7 @@ class Apic extends IController{
 		//相关商品
 		$queryGoods         = new IQuery('scene_goods as m');
 		$queryGoods->join   = 'LEFT JOIN goods as g ON g.id=m.goods_id';
-		$queryGoods->where  = 'm.scene_id='.$info['id'];
+		$queryGoods->where  = 'g.is_del=0 AND m.scene_id='.$info['id'];
 		$queryGoods->fields = 'g.id,g.name,g.goods_no,g.sell_price,g.jp_price,g.img,m.coord_x,m.coord_y';
 		$info['goods_list'] = $queryGoods->find();
 		if(!empty($info['goods_list'])){
