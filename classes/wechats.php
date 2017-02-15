@@ -247,11 +247,11 @@ class wechats
                                "color":"#173177"
                            },
                            "remark": {
-                               "value":"优惠券领取成功，在《个人中心》->《我的优惠券》中查看优惠券",
+                               "value":"喵~感谢您对九猫家的信任与支持！我们已经收到您的订单啦~ 日本供货商将在3-5个工作日完成配货哒，正常情况下10-15个工作日您将收到您买的宝贝，请耐心等待哦ฅ՞•ﻌ•՞ฅ~\n如果有任何订单退换货等问题请添加客服喵微信：\njiumaojia006；想要领取优惠券的小伙伴欢迎添加喵酱个人微信：jiumaojia001；更多优惠群里第一时间共享哦~么么哒~",
                                "color":"#173177"
                            }
                    }
-               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['order_no'],$send_info['name'],$send_info['billcode'],$send_info['remark']);
+               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['order_no'],$send_info['name'],$send_info['billcode']);
                 break;
             case 'member':
                 $params = sprintf('{
@@ -260,7 +260,7 @@ class wechats
                    "url":"%s",            
                    "data":{
                            "first": {
-                               "value":"欢迎成为九猫家会员",
+                               "value":"喵~欢迎成为九猫家的一份子~",
                                "color":"#173177"
                            },
                            "keyword1":{
@@ -272,7 +272,7 @@ class wechats
                                "color":"#173177"
                            },
                            "remark": {
-                               "value":"喵~亲爱的，送您58元新用户优惠券，请添加喵酱个人微信：jiumaojia001 领取~加入VIP群第一时间享受最新优惠",
+                               "value":"情人节7折活动还在进行哦~\n各位小仙女们赶紧添加喵酱个人微信jiumaojia001\n领取新人优惠券58元~ 老客也有优惠哦~\n折上折草鸡优惠哦~\n限时优惠咯~",
                                "color":"#173177"
                            }
                    }
