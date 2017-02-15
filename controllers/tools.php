@@ -468,6 +468,7 @@ class Tools extends IController implements adminAuthorization
 			if(isset($_POST['goods_id']) && !empty($_POST['goods_id'])){
 				$modelGoods = new IModel('scene_goods');
 				$modelGoods->del('scene_id='.$id);
+				
 				foreach($_POST['goods_id'] as $k => $v){
 					$modelGoods->setData(array(
 						'scene_id' => $id,
