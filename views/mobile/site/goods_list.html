@@ -7,44 +7,18 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="x5-orientation" content="portrait">
 		<title>商品列表</title>
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
-		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/goods_list.css?v=<?php echo time(); ?>"/>
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
 	</head>
 	<body>
-	<section id="main">
+	<section id="main" v-cloak>
 		<loadding :mes="showloadding"></loadding>
 		<div id="category_third" v-cloak>
 	        <div class="product_item" v-for="item in one_title" v-cloak>
-	            <a :href="item.url">
-	                <div class="img">
-	                    <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"/>
-	                    <img src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg img-ware" :dataimg="item.img"/>
-	                </div>
-	                <div class="content">
-	                    <div class="name">
-	                        {{item.name}}
-	                    </div>
-	                    <div class="price">
-	                        <span class="sellprice">¥{{item.sell_price}}</span>
-	                        <span class="japanprice">日本价：{{item.jp_price}}円</span>
-	                        <span class="openprice">国内价：¥{{item.market_price}}</span>
-	                    </div>
-	                </div>
-	            </a>
+	           <goods_list :item = "item"></goods_list>
 	        </div>
 		</div>
-		<div class="flexbox empty_product" style="" v-if="infoState">
-            <div class="img">
-                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
-            </div>
-            <div class="content">
-                <span style="color:#bbb">~</span>
-                <span style="color:#bbb">憋拉了，到底了</span>
-                <span style="color:#bbb">~</span>
-            </div>
-       </div>
+		<whether :state="infoState"></whether>
 	</section>
 	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 	<!--加载动画载入-->
@@ -53,7 +27,8 @@
 	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
-	<!--<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>-->
+	<script src="/views/mobile/components/goods_more.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/components/Whether.js?v=<?php echo time(); ?>"></script>
 	
 	<script>
 	var Request = new Object();
