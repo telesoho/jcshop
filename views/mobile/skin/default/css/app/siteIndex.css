@@ -365,6 +365,10 @@ li{
 .hot_category ul li img{
 	display: block;
 	margin-bottom:0.1rem ;
+	
+}
+.hot_category .item img{
+	margin-left: 0.1rem;
 }
 /*			专区			*/
 #the_zone .banner{
@@ -386,7 +390,7 @@ li{
 	overflow-x: scroll;
 }
 #the_zone ul li{
-	width: 1.71rem;
+	width: 2.2rem;
 }
 #the_zone .hot_category{
 	overflow: hidden;
@@ -399,7 +403,7 @@ li{
 	font-size:0.2rem;
 	color:#3d4245;
 	margin-top: 0.14rem;
-	width: 1.56rem;
+	width: 2.2rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
