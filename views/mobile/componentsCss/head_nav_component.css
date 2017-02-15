@@ -1,0 +1,19 @@
+#nav-slider{
+  height:0.7rem;
+  background:#fff;
+}
+#nav-slider #Control{
+  height:0.7rem;
+}
+#nav-slider .mui-scroll-wrapper{
+  background:#fff !important;
+}
+#nav-slider .mui-scroll{
+  height:0.7rem;
+}
+#nav-slider .mui-control-item{
+  height:0.7rem;
+  position:relative;
+  display:inline-block;
+  padding:0.1rem 0.15rem;
+}

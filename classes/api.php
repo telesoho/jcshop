@@ -106,7 +106,7 @@ class Api
 		//参数重置order,limit参数
 		if(!empty($aguments))
 		{
-			foreach($aguments as $key => $param)
+			foreach($aguments as $param)
 			{
 				if(is_numeric($param))
 				{
@@ -114,18 +114,19 @@ class Api
 				}
 				else if(is_array($param))
 				{
-					if($key == "params") {
-						$queryInfo['params'] = $param['params'];
-					} else 
 					//分页模式
-					if($param[0] == 'page')
+					if(isset($param[0]) && $param[0] == 'page')
 					{
 						unset($queryInfo['limit']);
 						$queryInfo['page']  = $param[1];
 					}
 					else
 					{
-						$queryInfo['where'] = strtr($queryInfo['where'],array($param[0] => $param[1]));
+						if(isset($param['params'])) {
+							$queryInfo['params'] = $param['params'];
+						} else {
+							$queryInfo['where'] = strtr($queryInfo['where'],array($param[0] => $param[1]));
+						}
 					}
 				}
 				else

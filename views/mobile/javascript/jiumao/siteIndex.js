@@ -20,6 +20,7 @@ var vm = new Vue({
     data: {
         // components:{"Nav": Nav},
         showMessage:false,
+        index_st:false,
         page:1,
         speed:[],
         search_top:false,
@@ -127,7 +128,7 @@ var vm = new Vue({
         $("#search").blur(function(){
 				fexed_show();
 		});
-		
+		this.index_st = true;
     },
     methods: {
     	zhuan_shop:function(item){

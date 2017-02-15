@@ -7,10 +7,13 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="x5-orientation" content="portrait">
 		<title>全部分类</title>
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
 		<link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemap.css?v=<?php echo time(); ?>" />
+		<script src="/views/mobile/javascript/vue.js"></script>
+		<!--//底部导航样式的引入-->
+		<script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
+		
 	</head>
 	<body>
 		<div id="wrap_list_" >
@@ -19,7 +22,7 @@
 		    <div style="background: #b8b8b8;height: 1px;width: 100%;opacity: .3;"></div>
 		    <section id="main" v-cloak>
 		    	<search-nav :search="search" :val="null" style="position: relative;top: 0;left: 0;"></search-nav>
-		    	<footer-nav :state="1"></footer-nav>
+		    	<footer-nav :state="1" :states="sitemap_st"></footer-nav>
 		    	<section id="main-nav">
 		    		<div class="main-nav_left">
 		    			<p @click="choose(0)" :style="chooses == 0?color2:color1">分类</p>
@@ -101,15 +104,14 @@
 		</div>
 	</body>
 	
-	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+	
 	<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 	<!--加载动画载入-->
 	<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 	<!--搜索组件引入-->
 	<script src="/views/mobile/components/search_nav.js?v=<?php echo time(); ?>"></script>
-	<!--//底部导航样式的引入-->
-	<script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
+	
 	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 	<!--<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>-->
@@ -124,6 +126,7 @@
 			var vm=new Vue({
 				el:'#main',
 				data:{
+					sitemap_st:false,
 					showloadding:true,
 					color1:"color:#949494 ;",
 					color2:"color:#ff5959 ;", // ed
@@ -175,7 +178,7 @@
 				        });
 					removeSessionItem("pinpai_infolist");
     				removeSessionItem("pinpai_page");
-    				
+    				this.sitemap_st = true;
     				//手指滑动时候
 //					document.body.scrollTop = ;
 				},

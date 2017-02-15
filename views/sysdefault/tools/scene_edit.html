@@ -86,9 +86,9 @@
                             <tbody id="goodsListBox">
                             {foreach:items=$data['list'] key=$k item=$v}
                             <tr class="goodsInfo">
-                                <td>{$v['goods_no']}<input name="goods_id[{$v['id']}]" type="hidden" value="{$v['id']}"></td>
-                                <td><input name="coord_x[{$v['id']}]" class="small" type="text" value="{$v['coord_x']}"></td>
-                                <td><input name="coord_y[{$v['id']}]" class="small" type="text" value="{$v['coord_y']}"></td>
+                                <td>{$v['goods_no']}<input name="goods_id[{$v['goods_id']}]" type="hidden" value="{$v['goods_id']}"></td>
+                                <td><input name="coord_x[{$v['goods_id']}]" class="small" type="text" value="{$v['coord_x']}"></td>
+                                <td><input name="coord_y[{$v['goods_id']}]" class="small" type="text" value="{$v['coord_y']}"></td>
                                 <td> <img src="<?php echo IWeb::$app->config['image_host']; ?>/{$v['goods_img']}"  style="max-height:100px;max-width:100px;" /></td>
                                 <td>{$v['name']}</td>
                                 <td>{$v['sell_price']}</td>

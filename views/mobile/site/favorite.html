@@ -18,7 +18,7 @@
         <div class="empty">
             <img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;" />
             <div class="content">收藏的内容和商品都在这里哦，赶紧去种草吧！</div>
-            <a href="{url:/site/index}" class="gotoFind">去种草</a>
+            <a href="{url:/site/index}" class="gotoFind" v-if="btn_">去种草</a>
         </div>
     </template>
     <div class="favorite_content" v-else>
@@ -104,7 +104,7 @@
             </template>
         <div style="height:1rem;"></div>
     </div>
-    <footer-nav :state="2"></footer-nav>
+    <footer-nav :state="2" :states="favorite_st"></footer-nav>
 </section>
 <!--<span class="mui-icon-extra mui-icon-extra-top" id="pagetop"></span>-->
 <!--头信息结束-->

@@ -66,6 +66,7 @@ class Apic extends IController{
 			$queryGoods->join   = 'left join relation as r on r.goods_id=m.id';
 			$queryGoods->fields = 'm.id,m.name_de,m.name,m.sell_price,m.purchase_price,m.img';
 			$queryGoods->order  = 'sale DESC,visit DESC';
+			$queryGoods->group  = 'm.id';
 			$queryGoods->limit  = 5;
 			//商品统计模型
 			$queryGoodsCount         = new IQuery('goods as m');
@@ -123,6 +124,7 @@ class Apic extends IController{
 			$queryGo->where  = 'm.is_del=0 AND c.category_id IN ('.$cid.')';
 			$queryGo->fields = 'm.id,m.name,m.name_de,m.sell_price,m.purchase_price,m.img';
 			$queryGo->order  = 'sale DESC,visit DESC';
+			$queryGo->group  = 'm.id';
 			$queryGo->limit  = 4;
 			$listGo          = $queryGo->find();
 			if(!empty($listGo)){
@@ -419,7 +421,7 @@ class Apic extends IController{
 	public function cart2(){
 		$param = $this->checkData(array(
 			array('id','int',0,'商品ID'),
-			array('type','string',0,'商品类型[goods单品购买-product购物车购买]'),
+			array('type','string',0,'商品类型[goods商品购买-product货品购买]'),
 			array('num','string',0,'商品数量'),
 			array('code','int',0,'优惠券码'),
 			array('ticket_aid','int',0,'优惠券ID'),
@@ -2749,13 +2751,16 @@ class Apic extends IController{
 		//相关商品
 		$queryGoods         = new IQuery('scene_goods as m');
 		$queryGoods->join   = 'LEFT JOIN goods as g ON g.id=m.goods_id';
-		$queryGoods->where  = 'm.scene_id='.$info['id'];
-		$queryGoods->fields = 'g.id,g.name,g.goods_no,g.sell_price,g.jp_price,g.img,m.coord_x,m.coord_y';
+		$queryGoods->where  = 'g.is_del=0 AND m.scene_id='.$info['id'];
+		$queryGoods->fields = 'g.id,g.name,g.goods_no,g.sell_price,g.store_nums,g.jp_price,g.img,m.coord_x,m.coord_y';
 		$info['goods_list'] = $queryGoods->find();
 		if(!empty($info['goods_list'])){
 			$info['goods_list'] = Api::run('goodsActivity', $info['goods_list']);
+			$modelFor           = new IModel('favorite');
 			foreach($info['goods_list'] as $k => $v){
-				$info['goods_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
+				$count                                 = $modelFor->get_count('user_id='.$user_id.' AND rid='.$v['id']);
+				$info['goods_list'][$k]['is_favorite'] = !empty($count) ? 1 : 0; //是否已收藏
+				$info['goods_list'][$k]['img']         = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
 			}
 		}
 		//其他场景馆

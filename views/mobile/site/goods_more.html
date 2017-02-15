@@ -1,80 +1,37 @@
-
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="x5-orientation" content="portrait">
-    <title></title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemao1.css" />
+	<title>商品列表</title>
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+	<!--<link rel="stylesheet" href="/views/mobile/skin/default/css/app/sitemao1.css?v=<?php echo time(); ?>" />-->
 </head>
 <body>
-<!--loading页开始-->
-<div id="loading">
-    <div class="spinner">
-        <div class="spinner-container container1">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container2">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-        <div class="spinner-container container3">
-            <div class="circle1"></div>
-            <div class="circle2"></div>
-            <div class="circle3"></div>
-            <div class="circle4"></div>
-        </div>
-    </div>
-</div>
-<!--loading页结束-->
-<!--三级分类-->
 <section id="category" v-cloak>
-    <div id="category_third" >
-        <div class="product_item" v-for="item in brand_list">
-            <a :href="item.url">
-                <div class="img">
-                    <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"  />
-                    <img :dataimg="item.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg img-ware" />
-                    <img src="" alt="" class="" />
-                </div>
-                <div class="content">
-                    <div class="name">
-						{{item.name}}
-                    </div>
-                    <div class="price">
-                        <span class="sellprice">¥{{item.sell_price}}</span>
-                        <span class="japanprice">日本价：{{item.jp_price}}円</span>
-                        <span class="openprice">国内价：¥{{item.market_price}}</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div id="londing" v-if="longing"  style=" display:none;width:100%;display: block;margin: 0 auto;">
+	<loadding :mes="state_"></loadding>	
+	<div id="category_third" >
+		<div class="product_item" v-for="item in brand_list">
+    		<goods_list :item="item"></goods_list>
+		</div>
+    	<div id="londing" v-if="longing"  style=" display:none;width:100%;display: block;margin: 0 auto;">
 	    	<img src="/views/mobile/skin/default/image/jmj/icon/longing.gif" style="width:6rem;display: block;margin: 0 auto;"/>
 	    </div>
     </div>
-    
     <footer>
-    <div class="flexbox empty_product" style="background:#f8f8f8" v-if="infoState">
-        <div class="img">
-            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
-        </div>
-        <div class="content">
-            <span style="color:#fff">~</span>
-            <span style="color:#fff">憋拉了，到底了</span>
-            <span style="color:#fff">~</span>
-        </div>
-    </div>
-</footer>
+	    <div class="flexbox empty_product" style="background:#f8f8f8" v-if="infoState">
+	        <div class="img">
+	            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+	        </div>
+	        <div class="content">
+	            <span style="color:#fff">~</span>
+	            <span style="color:#fff">憋拉了，到底了</span>
+	            <span style="color:#fff">~</span>
+	        </div>
+	    </div>
+	</footer>
 </section>
 
 
@@ -82,15 +39,16 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/goods_more.js?v=<?php echo time(); ?>"></script>
 
 <script type="text/javascript">
 
  $(window).load(function(){
-        $("#loading").fadeOut(300);
         //解决tab选项卡a标签无法跳转的问题
         mui('body').on('tap','a',function(){document.location.href=this.href;});
     })
-var stop=true;
+	var stop=true;
 	var Request = new Object();
     Request = GetRequest();
     var tidOrder=Request["tid"];
@@ -101,11 +59,13 @@ var stop=true;
 				tid:tidOrder,
 				mid:midOrder,
 				info:[],
+				info_str:"",
 				tre:"",
 				page:1,
 				stop:false,
 				infoState:false,
-				longing:false
+				longing:false,
+				state_:true
 			},
 			computed:{
 				brand_list:function(){
@@ -113,20 +73,22 @@ var stop=true;
 						item.url="/site/products?id="+item.id;
 						
 					})
-					document.title=this.tre;
 					
+					document.title=this.tre;
 					return this.info;
 				},
 			},
 			mounted:function(){
 				var self = this;
 				if(getSession("goodsinfo")){
+					self.state_ = false;
 					self.info=getSession("goodsinfo");
 					self.page=getSession("goodspage")
 				}else{
 						self.page=1;
 						getActiveInfo(self);
 				}	
+				
 			},
 			updated:function() {
 				// 页面加载完成执行的函数;
@@ -135,6 +97,7 @@ var stop=true;
 					selectorName:".samLazyImg",
 					
 				});
+				
 			},
 			methods:{
 
@@ -151,26 +114,27 @@ var stop=true;
 				type: 'get',
 				timeout: 10000,
 				success: function(data){
-					console.log(data)
+					self.state_ = false;
+//					console.log(data)
 					data.goods_list.map(function(item){
 						self.info.push(item);
 					})
+					
 					pushSession("goodsinfo",self.info)
 					self.tre = data.title;
 					if(data.goods_list==''){
 						self.infoState=true;
 	                    stop=false;
 	                    self.longing = false
-	                }else{
-	                	 self.infoState=false;
+	               }else{
+	                	self.infoState=false;
 	                    stop=true;
-	                   self. longing=true
+	                   	self. longing=true;
+	                   	self.page++;
+	                	pushSession("goodspage",self.page)
 	                }
-	                console.log(self.page)
-	                self.page++;
 	                
-	                pushSession("goodspage",self.page)
-	                
+	               
 				}
 
 			});
@@ -182,6 +146,7 @@ $(window).bind('scroll', function() {
         if(stop==true){
             stop=false;
             longing=true;
+            em.state_ = true;
             getActiveInfo(em);
             
         }else{
@@ -228,5 +193,6 @@ $(window).bind('scroll', function() {
 
 
 </script>
+
 </body>
 </html>

@@ -2,6 +2,17 @@
  * Created by yb on 2016/12/26.
  */
 // 专辑列表组件 用到的地方有三个  首页专辑  article-list  pro_list(字段不对暂时未列入) 以及今日好货推荐
+function active(classname){
+	var date ="?v=" + Date.parse(new Date())
+	var head = document.getElementsByTagName("head")[0];
+	var art_file = document.createElement("link");
+	art_file.setAttribute("rel","stylesheet");
+	art_file.setAttribute("type","text/css");
+	art_file.setAttribute("href",classname+date);
+	head.appendChild(art_file);
+	console.log(art_file)
+}
+active("/views/mobile/componentsCss/article_list_component.css")
 Vue.component('article-list', {
     template:'<div>\
     <div class="title" v-if="state==0">\
