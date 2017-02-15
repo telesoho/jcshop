@@ -2758,9 +2758,9 @@ class Apic extends IController{
 			$info['goods_list'] = Api::run('goodsActivity', $info['goods_list']);
 			$modelFor           = new IModel('favorite');
 			foreach($info['goods_list'] as $k => $v){
-				$count                         = $modelFor->get_count('user_id='.$user_id.' AND rid='.$v['id']);
-				$dataGoods['is_favorite']      = !empty($count) ? 1 : 0; //是否已收藏
-				$info['goods_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
+				$count                                 = $modelFor->get_count('user_id='.$user_id.' AND rid='.$v['id']);
+				$info['goods_list'][$k]['is_favorite'] = !empty($count) ? 1 : 0; //是否已收藏
+				$info['goods_list'][$k]['img']         = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/500/h/500");
 			}
 		}
 		//其他场景馆
