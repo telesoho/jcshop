@@ -3552,15 +3552,14 @@ OR (
         $user_data         = $user_query->find();
         $i                 = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
+        $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
             $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
             if ($ret){
-                $ret = print_r($ret, true);
-                common::log_write("信息推送失败：" . $v['username'] . ';' . $ret, 'ERROR', 'wechat');
+                common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
                 $i++;
             } else {
-                $ret = print_r($ret, true);
-                common::log_write("信息推送失败：" . $v['username'] . ';' . $ret, 'ERROR', 'wechat');
+                common::log_write(__FUNCTION__ . "信息推送失败：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
             }
         }
         $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
@@ -3574,15 +3573,15 @@ OR (
         $user_data         = $user_query->find();
         $i = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
+        $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
             $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
             wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig','member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
             if ($ret){
                 $i++;
-                $success_username[] = $v['username'];
+                common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'fourty_member_message'.$start_time);
             } else {
-                $ret = print_r($ret, true);
-                common::log_write("信息推送失败：" . $v['username'] . ';' . $ret, 'ERROR', 'wechat');
+                common::log_write(__FUNCTION__ . "信息推送失败：" . $v['username'], 'ERROR', 'fourty_member_message'.$start_time);
             }
         }
         $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
