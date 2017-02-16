@@ -218,15 +218,16 @@
     padding: 0 0.2rem;
     letter-spacing: 0.01rem;
 }
-.relateBrand .brandlist {
+.relateBrand .brandlists {
     width:100%;
     margin-top:0.36rem;
     height:2.93rem;
     background:#fff;
     overflow: hidden;
     position: relative;
+    padding-left: 0.1rem;
 }
-.relateBrand .mark{
+.relateBrand .brandlists .mark{
     position:absolute;
     overflow: hidden;
     width:100%;
@@ -245,6 +246,35 @@
     display: -webkit-box;
     -webkit-flex-wrap: nowrap;
 }
+#relatebrand .content .img img{
+	width: 1.56rem;
+	height: 1.56rem;
+	margin: 0.1rem;
+	display: block;
+	margin: 0.1rem auto;
+}
+ #relatebrand .content{
+ 	width: 2.4rem;
+ 	margin-left: 0.1rem;
+ }
+ #relatebrand .content ..content .item{
+ 	width: 2.4rem;
+ }
+ #relatebrand .content .item .img{
+ 	width: 2.1rem;
+ 	height: 1.8rem;
+ }
+  #relatebrand .content .item .name{
+ 	width: 2.4rem;
+    font-size: 0.24rem;
+    color: #3d4225;
+    margin-bottom: 0.1rem;
+ }
+#relatebrand .price{
+    font-size: 0.28rem;
+    color: #ff2f5c;
+    font-family: helvetica;
+ }
 .relateBrand .brandlist .item{
     display: inline-block;
     width:2.3rem;

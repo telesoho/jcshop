@@ -714,14 +714,14 @@ function deliver_xlobo(id)
 function send_message(user_id,order_id) {
     if (confirm('确定发送？')){
         $.post('/apic/send_wechat_message_by_type',{'id':user_id,'order_id':order_id,'type':'shiming'},function (data) {
-            data = JSON.parse(data);
+//            data = JSON.parse(data);
             console.log(data);
             if (data.ret){
                 alert('消息推送成功');
             } else {
                 alert(data.msg);
             }
-        })
+		},'json');
     } else{
 
     }
@@ -729,14 +729,14 @@ function send_message(user_id,order_id) {
 function sfz_to_address_image(user_id) {
     if (confirm('确定复制？')){
         $.post('/apic/sfz_to_address_image',{'id':user_id},function (data) {
-            data = JSON.parse(data);
+//            data = JSON.parse(data);
             console.log(data);
             if (data.ret){
                 alert('复制成功');
             } else {
                 alert(data.msg);
             }
-        })
+		},'json');
     } else{
 
     }
@@ -744,7 +744,7 @@ function sfz_to_address_image(user_id) {
 function restore_image1(user_id, accept_name) {
     if (confirm('确定恢复？')){
         $.post('/apic/restore_image',{'user_id':user_id,'accept_name':accept_name},function (data) {
-            data = JSON.parse(data);
+//            data = JSON.parse(data);
             console.log(data);
             if (data.ret){
                 alert('恢复成功');
@@ -752,13 +752,13 @@ function restore_image1(user_id, accept_name) {
             } else {
                 alert(data.msg);
             }
-        })
+        },'json');
     }
 }
 function restore_image2(user_id) {
     if (confirm('确定恢复？')){
         $.post('/apic/restore_image',{'user_id':user_id},function (data) {
-            data = JSON.parse(data);
+//            data = JSON.parse(data);
             console.log(data);
             if (data.ret){
                 alert('恢复成功');
@@ -766,13 +766,13 @@ function restore_image2(user_id) {
             } else {
                 alert(data.msg);
             }
-        })
+		},'json');
     }
 }
 function restore_image3(order_no) {
     if (confirm('确定恢复？')){
         $.post('/apic/restore_image',{'order_no':order_no},function (data) {
-            data = JSON.parse(data);
+//            data = JSON.parse(data);
             console.log(data);
             if (data.ret){
                 alert('恢复成功');
@@ -780,7 +780,7 @@ function restore_image3(order_no) {
             } else {
                 alert(data.msg);
             }
-        })
+		},'json');
     }
 }
 //执行回调处理

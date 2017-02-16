@@ -248,8 +248,14 @@ class Common{
      */
     public static function get_wechat_access_token(){
         require_once __DIR__.'/../plugins/wechat/wechat.php';
-        $wechat = new wechat();
+        $wechat       = new wechat();
         $access_token = $wechat->getAccessToken();
+        if (is_array($access_token)){
+            common::log_write(print_r($access_token, true), 'ERROR', 'access_token');
+            return false;
+//            header('Content-Type:application/json');
+//            die(json_encode(['code'=>-1, 'msg'=>'access_token获取失败', 'data'=>$access_token]));
+        }
         return $access_token;
     }
     /**
@@ -435,6 +441,7 @@ class Common{
     static public function restore_wechat_resources($path){
         header('Content-Type:application/json;charset=UTF-8');
         $access_token = self::get_wechat_access_token();
+        if ($access_token === false) return json_encode(['ret'=>true,'msg'=>'access_token获取失败' . $path]);
         $wechat_resources_model = new IModel('wechat_resources');
         $data = $wechat_resources_model->getObj("path = '$path'");
         if (empty($data)){
