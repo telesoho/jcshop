@@ -217,7 +217,7 @@
 				<div class="top">
 					喵粉都爱买
 				</div>
-				<div class="content">
+				<!--<div class="content">
 					<a :href="item.url" class="item locationA" v-for="item in relateList">
 						<div class="img">
 							<img :src="item.img" alt="" />
@@ -234,7 +234,8 @@
 							</div>
 						</div>
 					</a>
-				</div>
+				</div>-->
+				<goods_list :msg="relateList"></goods_list>
 			</section>
 			<div style="height: 0.9rem;">
 			</div>
@@ -347,6 +348,7 @@
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/components/top_back.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
+<script src="/views/mobile/components/List_of_goods.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 var minutes,hours,seconds;
 	var statusOrder={echo:IReq::get('id')};

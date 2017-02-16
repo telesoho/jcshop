@@ -158,7 +158,7 @@
 
 .albumn_index .product .slider .item{
   position:relative;
-  width:2.2rem;
+  width:2.4rem;
   height:3rem;
   margin-top:0.2rem;
   margin-left:0.2rem;
@@ -174,8 +174,8 @@
   margin-left:0.1rem;
 }
 .albumn_index .product .name{
-  width:2.2rem;
-  font-size:0.24rem;
+  width:2.4rem;
+  font-size:0.2rem;
   color:#3d4225;
   margin-bottom:0.1rem;
   margin-top:0.17rem;

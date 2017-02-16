@@ -949,22 +949,23 @@ class Apic extends IController{
 				if(empty($dataAdr)) $this->json_echo(apiReturn::go('005001')); //收货地址不存在
 				
 				//生成的订单数据
-				$dataArray = array('order_no'        => Order_Class::createOrderNum(), 'user_id' => $user_id, 'pay_type' => 13, //微信支付
-								   'distribution'    => 1, //配送方式
-								   'payable_amount'  => 0, //商品价格
-								   'real_amount'     => 0, //实付商品价格
-								   'payable_freight' => 0, //运费价格
-								   'real_freight'    => 0, //实付运费价格
-								   'order_amount'    => 0, //订单总价
-								   'accept_name'     => $dataAdr['accept_name'], //收货人姓名
-								   'postcode'        => $dataAdr['zip'], //邮编
-								   'province'        => $dataAdr['province'], //省ID
-								   'city'            => $dataAdr['city'], //市ID
-								   'area'            => $dataAdr['area'], //区ID
-								   'address'         => $dataAdr['address'], //详细地址
-								   'mobile'          => $dataAdr['mobile'], //手机
-								   'pay_time'        => time(), //付款时间
-								   'create_time'     => time(), 'note' => '活动商品赠送', 'type_source' => 1, //单个商品购买
+				$dataArray = array(
+					'order_no'        => Order_Class::createOrderNum(), 'user_id' => $user_id, 'pay_type' => 13, //微信支付
+					'distribution'    => 1, //配送方式
+					'payable_amount'  => 0, //商品价格
+					'real_amount'     => 0, //实付商品价格
+					'payable_freight' => 0, //运费价格
+					'real_freight'    => 0, //实付运费价格
+					'order_amount'    => 0, //订单总价
+					'accept_name'     => $dataAdr['accept_name'], //收货人姓名
+					'postcode'        => $dataAdr['zip'], //邮编
+					'province'        => $dataAdr['province'], //省ID
+					'city'            => $dataAdr['city'], //市ID
+					'area'            => $dataAdr['area'], //区ID
+					'address'         => $dataAdr['address'], //详细地址
+					'mobile'          => $dataAdr['mobile'], //手机
+					'pay_time'        => time(), //付款时间
+					'create_time'     => time(), 'note' => '活动商品赠送', 'type_source' => 1, //单个商品购买
 				);
 				//记录领取记录
 				$modelRec->setData(array('user_id' => $user_id, 'grow_id' => $gid, 'create_time' => time(),));
@@ -2057,7 +2058,7 @@ class Apic extends IController{
 			$queryGoods                = new IQuery('goods AS m');
 			$queryGoods->join          = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
 			$queryGoods->where         = 'm.is_del=0 AND c.category_id IN ('.implode(',', $cids).')';
-			$queryGoods->fields        = 'm.id,m.name,m.sell_price,m.market_price,m.img';
+			$queryGoods->fields        = 'm.id,m.name,m.sell_price,m.market_price,m.jp_price,m.img';
 			$queryGoods->order         = 'm.sale DESC,m.visit DESC';
 			$queryGoods->group         = 'm.id';
 			$queryGoods->limit         = 10;
