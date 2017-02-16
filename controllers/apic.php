@@ -3542,35 +3542,40 @@ OR (
      */
     function all_member_message(){
         set_time_limit(0);
+        $start             = IFilter::act(IReq::get('start'));
         $user_query        = new IQuery('user as a');
         $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
         $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) > 48";
-//        $user_query->where = "a.id IN (19,24,51)";
+        $user_query->where = "a.id IN (24,51)";
+        $user_query->limit = 20000;
         $user_data         = $user_query->find();
-        $i = 0;
+        $i                 = 0;
+        if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         foreach ($user_data as $k=>$v){
             $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
             if ($ret){
+                $ret = print_r($ret, true);
+                common::log_write("信息推送失败：" . $v['username'] . ';' . $ret, 'ERROR', 'wechat');
                 $i++;
-                continue;
             } else {
-                $v[] = __FUNCTION__;
-                common::log_write(print_r($v), 'ERROR', 'wechat');
-                break;
+                $ret = print_r($ret, true);
+                common::log_write("信息推送失败：" . $v['username'] . ';' . $ret, 'ERROR', 'wechat');
             }
         }
         $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
     }
     function fourty_member_message(){
         set_time_limit(0);
+        $start             = IFilter::act(IReq::get('start'));
         $user_query        = new IQuery('user as a');
         $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
         $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) < 48";
         $user_data         = $user_query->find();
         $i = 0;
+        if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         foreach ($user_data as $k=>$v){
-            $v['oauth_user_id'] = 'orEYdw0X44crd6F3MOdXES6Hfpig';
-//            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
+//            $v['oauth_user_id'] = 'orEYdw0X44crd6F3MOdXES6Hfpig';
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
             $ret = true;
             if ($ret){
                 $i++;
