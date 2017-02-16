@@ -3388,6 +3388,7 @@ class Apic extends IController{
             if ($data = common::get_address_data($where)){
 				$rel1  = json_decode(common::restore_wechat_resources($data['sfz_image1']),true);
 				$rel2  = json_decode(common::restore_wechat_resources($data['sfz_image2']),true);
+				common::dblog(array($rel1,$rel2));
 				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'恢复失败')));
             }
         }
