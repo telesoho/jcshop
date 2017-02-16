@@ -1932,12 +1932,22 @@ class Apic extends IController{
 		$dataGoods['img']      = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$dataGoods['img']."/w/500/h/500");
 		
 		/* 相关货号 */
+		$dataGoods['products_spec'] = array();
 		$modelPro = new IModel('products');
 		$products = $modelPro->query('goods_id='.$param['id'], 'id,products_no,spec_array,store_nums,sell_price,weight');
 		if(!empty($products)){
+			$products_spec = array();
 			foreach($products as $k => $v){
-				$products[$k]['spec_array'] = json_decode($v['spec_array']);
+				$products[$k]['spec_array'] = json_decode($v['spec_array'],true);
+				foreach($products[$k]['spec_array'] as $k1 => $v1){
+					if(isset($products_spec[$v1['id']]['list']) && in_array($v1['value'],$products_spec[$v1['id']]['list'])){
+						continue;
+					}
+					$products_spec[$v1['id']]['name'] = $v1['name'];
+					$products_spec[$v1['id']]['list'][] = $v1['value'];
+				}
 			}
+			$dataGoods['products_spec'] = $products_spec;
 		}
 		$dataGoods['products'] = $products;
 		
@@ -1952,33 +1962,20 @@ class Apic extends IController{
 		}
 		
 		/* 相关评论 */
-		$queryComment           = new IQuery('comment as m');
-		$queryComment->join     = 'LEFT JOIN user as u ON u.id=m.user_id';
-		$queryComment->where    = 'status=1 AND goods_id='.$param['id'];
-		$queryComment->fields   = 'm.id,m.contents,m.recontents,m.recomment_time,m.tag,m.image,m.voice,m.user_id,u.username,u.head_ico';
-		$queryComment->page     = $param['page']<=0 ? 1 : $param['page'];
-		$queryComment->pagesize = 10;
-		$commetList             = $queryComment->find();
-		if($param['page']>$queryComment->getTotalPage()) $commetList = array();
-		if(!empty($commetList)){
-			$modelTag = new IModel('comment_tag');
-			foreach($commetList as $k => $v){
-				//语音
-				$commetList[$k]['voice'] = empty($v['voice']) ? '' : IWeb::$app->config['image_host'].'/'.$v['voice'];
-				//评论图片
-				$image = explode(',', $v['image']);
-				if(!empty($image)){
-					foreach($image as $k1 => $v1) $image[$k1] = empty($v1) ? '' : IWeb::$app->config['image_host'].'/'.$v1;
-				}
-				$commetList[$k]['image'] = $image;
-				//标签
-				$tag     = array();
-				$listTag = $modelTag->query('id IN ('.$v['tag'].') AND status=1', 'name');
-				foreach($listTag as $k1 => $v1) $tag[] = $v1['name'];
-				$commetList[$k]['tag'] = $tag;
+		$modelComment = new IModel('comment AS m,user AS u');
+		$content      = $modelComment->query('m.contents!="" AND m.user_id=u.id AND m.status=1 AND m.goods_id='.$param['id'],
+			'm.id,m.contents,m.recontents,m.recomment_time,m.tag,m.image,m.voice,m.user_id,u.username,u.head_ico',
+			'm.time DESC', 2);
+		$img          = $modelComment->query('m.image!="" AND m.user_id=u.id AND m.status=1 AND m.goods_id='.$param['id'],
+			'm.id,m.contents,m.recontents,m.recomment_time,m.tag,m.image,m.voice,m.user_id,u.username,u.head_ico',
+			'm.time DESC', 4);
+		if(!empty($img)){
+			foreach($img as $k => $v){
+				$image            = strstr($v['image'], ',', true);
+				$img[$k]['image'] = empty($image) ? '' : IWeb::$app->config['image_host'].'/'.$image;
 			}
 		}
-		$dataGoods['comment_list'] = $commetList;
+		$dataGoods['comment'] = array('content' => $content, 'img' => $img);
 		
 		/* 相关专辑 */
 		$queryArt                  = new IQuery('article as m');
