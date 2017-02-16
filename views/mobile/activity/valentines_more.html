@@ -17,34 +17,10 @@
 		<loadding :mes="showloadding"></loadding>
 		<div id="category_third" v-cloak>
 	        <div class="product_item" v-for="item in one_title" v-cloak>
-	            <a :href="item.url">
-	                <div class="img">
-	                    <img src="/views/mobile/skin/default/image/jmj/product/icon-third.png" alt="" class="img-logo"/>
-	                    <img src="/views/mobile/skin/default/image/jmj/icon/bg_lazy.jpg" alt="" class="samLazyImg img-ware" :dataimg="item.img"/>
-	                </div>
-	                <div class="content">
-	                    <div class="name">
-	                        {{item.name}}
-	                    </div>
-	                    <div class="price">
-	                        <span class="sellprice">¥{{item.sell_price}}</span>
-	                        <span class="japanprice">日本价：{{item.jp_price}}円</span>
-	                        <span class="openprice">国内价：¥{{item.market_price}}</span>
-	                    </div>
-	                </div>
-	            </a>
+	            <goods_list :item="item"></goods_list>
 	        </div>
 		</div>
-		<div class="flexbox empty_product" style="" v-if="infoState">
-            <div class="img">
-                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
-            </div>
-            <div class="content">
-                <span style="color:#fff">~</span>
-                <span style="color:#fff">憋拉了，到底了</span>
-                <span style="color:#fff">~</span>
-            </div>
-       </div>
+		<whether :state="infoState"></whether>
 	</section>
 	<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
 	<!--加载动画载入-->
@@ -53,13 +29,12 @@
 	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 	<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
-	<!--<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>-->
-	
+	<script src="/views/mobile/components/goods_more.js?v=<?php echo time(); ?>"></script>
+	<script src="/views/mobile/components/Whether.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 	<script>
 	var Request = new Object();
     Request = GetRequest();
     var statusOrder=Request["id"];
-    console.log(statusOrder)
     var stop=true;
 		var vm=new Vue({
 			el:'#main',
@@ -112,11 +87,12 @@
 				},
 				success:function(data){
 					self.showloadding=false;
-					JSON.parse(data).data.map(function(items){
+					console.log(data.data)
+					data.data.map(function(items){
 						self.info.push(items)
 					})
 					pushSession("goodsinfo",self.info)
-					if( JSON.parse(data).data == '' ){
+					if( data.data == '' ){
 						stop = false;
 						self.infoState = true
 					}else{
