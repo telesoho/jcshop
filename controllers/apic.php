@@ -3380,7 +3380,7 @@ class Apic extends IController{
             if ($data = common::get_order_data(null,$order_no)){
 				$rel1  = json_decode(common::restore_wechat_resources($data['sfz_image1']),true);
 				$rel2  = json_decode(common::restore_wechat_resources($data['sfz_image2']),true);
-				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'恢复失败')));
+				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'正面照：'.$rel1['msg'].'；背面照：'.$rel2['msg'])));
             }
         }
         if (!empty($accept_name)){
@@ -3388,16 +3388,14 @@ class Apic extends IController{
             if ($data = common::get_address_data($where)){
 				$rel1  = json_decode(common::restore_wechat_resources($data['sfz_image1']),true);
 				$rel2  = json_decode(common::restore_wechat_resources($data['sfz_image2']),true);
-				var_dump(array($rel1,$rel2));
-//				common::dblog(array($rel1,$rel2));
-				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'恢复失败')));
+				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'正面照：'.$rel1['msg'].'；背面照：'.$rel2['msg'])));
             }
         }
         if (!empty($id)){
             if ($data = common::get_user_data($id)){
 				$rel1  = json_decode(common::restore_wechat_resources($data['sfz_image1']),true);
 				$rel2  = json_decode(common::restore_wechat_resources($data['sfz_image2']),true);
-				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'恢复失败')));
+				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'正面照：'.$rel1['msg'].'；背面照：'.$rel2['msg'])));
             }
         }
         die(json_encode(['ret'=>false,'msg'=>'错误']));
