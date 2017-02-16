@@ -3378,38 +3378,27 @@ class Apic extends IController{
         $order_no    = IFilter::act(IReq::get('order_no'), 'int');
         if (!empty($order_no)){
             if ($data = common::get_order_data(null,$order_no)){
-                $sfz_image1 = $data['sfz_image1'];
-                $sfz_image2 = $data['sfz_image2'];
-                $msg = common::restore_wechat_resources($sfz_image1);
-//                $msg .= common::restore_wechat_resources($sfz_image2);
-                die($msg);
-            } else {
-                die(json_encode(['ret'=>false,'msg'=>$msg]));
+				$rel1  = json_decode(common::restore_wechat_resources($data['sfz_image1']),true);
+				$rel2  = json_decode(common::restore_wechat_resources($data['sfz_image2']),true);
+				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'恢复失败')));
             }
         }
         if (!empty($accept_name)){
             $where = "user_id = $id and accept_name = '$accept_name'";
             if ($data = common::get_address_data($where)){
-                $sfz_image1 = $data['sfz_image1'];
-                $sfz_image2 = $data['sfz_image2'];
-                $msg = common::restore_wechat_resources($sfz_image1);
-//                $msg .= common::restore_wechat_resources($sfz_image2);
-                die($msg);
-            } else {
-                die(json_encode(['ret'=>false,'msg'=>$msg]));
+				$rel1  = json_decode(common::restore_wechat_resources($data['sfz_image1']),true);
+				$rel2  = json_decode(common::restore_wechat_resources($data['sfz_image2']),true);
+				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'恢复失败')));
             }
         }
         if (!empty($id)){
             if ($data = common::get_user_data($id)){
-                $sfz_image1 = $data['sfz_image1'];
-                $sfz_image2 = $data['sfz_image2'];
-                $msg = common::restore_wechat_resources($sfz_image1);
-//                $msg .= common::restore_wechat_resources($sfz_image2);
-                die($msg);
-            } else {
-                die(json_encode(['ret'=>false,'msg'=>$msg]));
+				$rel1  = json_decode(common::restore_wechat_resources($data['sfz_image1']),true);
+				$rel2  = json_decode(common::restore_wechat_resources($data['sfz_image2']),true);
+				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'恢复失败')));
             }
         }
+        die(json_encode(['ret'=>false,'msg'=>'错误']));
     }
 
     /**
