@@ -368,7 +368,8 @@ li{
 	
 }
 .hot_category .item img{
-	margin-left: 0.1rem;
+	/*margin-left: 0.1rem;*/
+	margin: 0 auto;
 }
 /*			专区			*/
 #the_zone .banner{
@@ -382,7 +383,7 @@ li{
 #the_zone ul{
 	width: 100%;
 	margin-top: 0.25rem;
-	padding-left:0.3rem ;
+	padding-left:0.1rem ;
 	-webkit-flex-wrap: nowrap;
 }
 #the_zone .slider{
@@ -390,7 +391,7 @@ li{
 	overflow-x: scroll;
 }
 #the_zone ul li{
-	width: 2.2rem;
+	width: 2.4rem;
 }
 #the_zone .hot_category{
 	overflow: hidden;
@@ -403,7 +404,7 @@ li{
 	font-size:0.2rem;
 	color:#3d4245;
 	margin-top: 0.14rem;
-	width: 2.2rem;
+	width: 2.4rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
