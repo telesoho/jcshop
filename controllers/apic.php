@@ -416,7 +416,7 @@ class Apic extends IController{
 	}
 	
 	/**
-	 * 购物车结算页面
+	 * 购物车结算页面 TODO 待补充
 	 */
 	public function cart2(){
 		$param = $this->checkData(array(
@@ -1947,7 +1947,7 @@ class Apic extends IController{
 					$products_spec[$v1['id']]['list'][] = $v1['value'];
 				}
 			}
-			$dataGoods['products_spec'] = $products_spec;
+			$dataGoods['products_spec'] = array_values($products_spec);
 		}
 		$dataGoods['products'] = $products;
 		
