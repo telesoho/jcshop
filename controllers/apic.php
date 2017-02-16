@@ -373,6 +373,8 @@ class Apic extends IController{
 			$car_list               = JSON::decode(str_replace(array('&', '$'), array('"', ','), $infoCar['content']));
 			foreach($car_list['goods'] as $k => $v)
 				$car_count += $v;
+			foreach($car_list['product'] as $k => $v)
+				$car_count += $v;
 		}
 		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>array('car_count'=>$car_count)));
 	}
