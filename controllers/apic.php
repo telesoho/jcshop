@@ -3543,26 +3543,58 @@ OR (
      */
     function all_member_message(){
         set_time_limit(0);
+        $start             = IFilter::act(IReq::get('start'));
         $user_query        = new IQuery('user as a');
         $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
-        $user_query->where = "a.id IN (12,24,51)";
+        $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) > 48";
+        $user_query->where = "a.id IN (24,51)";
+        $user_query->limit = 20000;
         $user_data         = $user_query->find();
-        $i = 0;
+        $i                 = 0;
+        if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         foreach ($user_data as $k=>$v){
             $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
             if ($ret){
+                $ret = print_r($ret, true);
+                common::log_write("信息推送失败：" . $v['username'] . ';' . $ret, 'ERROR', 'wechat');
                 $i++;
+            } else {
+                $ret = print_r($ret, true);
+                common::log_write("信息推送失败：" . $v['username'] . ';' . $ret, 'ERROR', 'wechat');
+            }
+        }
+        $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
+    }
+    function fourty_member_message(){
+        set_time_limit(0);
+        $start             = IFilter::act(IReq::get('start'));
+        $user_query        = new IQuery('user as a');
+        $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
+        $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) < 48";
+        $user_data         = $user_query->find();
+        $i = 0;
+        if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
+        foreach ($user_data as $k=>$v){
+//            $v['oauth_user_id'] = 'orEYdw0X44crd6F3MOdXES6Hfpig';
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
+            $ret = true;
+            if ($ret){
+                $i++;
+                $success_username[] = $v['username'];
                 continue;
             } else {
                 $v[] = __FUNCTION__;
                 common::log_write(print_r($v), 'ERROR', 'wechat');
-                return;
+                break;
             }
         }
-        common::print_b($i);
-        return;
+        common::log_write(print_r($success_username,true), 'INFO', 'wechat');
+        $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
     }
-    function fourty_message(){
-
+    function order_message(){
+        $open_id_arr = ['orEYdw5QShdxdphix7TxAgqxljVI', 'orEYdw0X44crd6F3MOdXES6Hfpig'];
+        foreach ($open_id_arr as $v){
+            wechats::send_message_template($v, 'ship', ['order_no'=>'2017052456', 'name'=>'商品名称', 'billcode'=>'23', 'remark'=>'喵~感谢您对九猫家的信任与支持！我们已经收到您的订单啦~ 日本供货商将在3-5个工作日完成配货哒，正常情况下10-15个工作日您将收到您买的宝贝，请耐心等待哦ฅ՞•ﻌ•՞ฅ~\n如果有任何订单退换货等问题请添加客服喵微信：\njiumaojia006；想要领取优惠券的小伙伴欢迎添加喵酱个人微信：jiumaojia001；更多优惠群里第一时间共享哦~么么哒~']);
+        }
     }
 }
