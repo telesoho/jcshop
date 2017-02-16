@@ -164,21 +164,21 @@
   margin-left:0.2rem;
 }
 .albumn_index .product .img{
-  margin:0 auto;
   width:1.8rem;
   height:1.8rem;
+  margin-top: 0.15rem;
 }
 .albumn_index .product .img img{
   width:1.8rem;
   height:1.8rem;
-  margin-left:0.1rem;
+  margin-left: 0.1rem;
 }
 .albumn_index .product .name{
   width:2.4rem;
-  font-size:0.2rem;
+  font-size:0.24rem;
   color:#3d4225;
   margin-bottom:0.1rem;
-  margin-top:0.17rem;
+  /*margin-top:0.17rem;*/
 }
 /*.singleline{
   position:absolute;
