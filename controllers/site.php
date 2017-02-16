@@ -377,8 +377,19 @@ class Site extends IController{
 
 	//商品展示
 	function products(){
-		$this->iid_info();
 		$goods_id         = IFilter::act(IReq::get('id'), 'int');
+		//分享赚
+		$sid              = IFilter::act(IReq::get('sid'), 'string');
+        $sid_sess = ISession::get('sid');
+        if (!empty(!empty($sid))){
+            if (!empty($sid_sess)){
+                $sid_sess[] = $sid;
+                ISession::set('sid', $sid_sess);
+            } else {
+                $new_sid_sess[] = $sid;
+                ISession::set('sid', $new_sid_sess);
+            }
+        }
 		$this->product_id = $goods_id;
 		if(!$goods_id){
 			IError::show(403, "传递的参数不正确");
