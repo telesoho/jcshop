@@ -24,6 +24,11 @@
     <section id="user_Info">
         <!--<cat-refresh :mes="showmessage"></cat-refresh>-->
     	<div class="headBox">
+    		<div class="logo_img">
+    			<img v-if='info.head_ico == null' src="/views/mobile/skin/default/image/index/bd@2x.png" style="width: 100%;height: 3.1rem;"/>
+    			<img v-else :src="info.head_ico" style="width: 100%;height: 3.1rem;"/>
+    		</div>
+    		<div style="width: 100%;height: 100%;background: #000;opacity: 0.1;position: absolute;top: 0;left: 0;"></div>
 	        <div class="whiteBack" v-cloak>
 	            <img src="/views/mobile/skin/default/image/jmj/img/cat_logo.png" v-if='info.head_ico == null' />
 	            <img :src="info.head_ico" v-else />
@@ -32,8 +37,12 @@
 			    <div class="userName hidewrap" v-if="info.username == null">九猫家的小小猫</div>
 			    <div class="userName hidewrap" style="width:1.7rem;height: 0.5rem;" v-else>{{info.username}}</div>
 	        </div>
+	        <!--<div id="share_mon">
+	        	<p>90.00 <span>元</span></p>
+	        	
+	        </div>-->
 	    </div>
-        <footer-nav :state="4"></footer-nav>
+        <footer-nav :state="4" :states="ucenterindex_st"></footer-nav>
     </section>
     <section id="section-user-info">
             <ul class="myOrders mui-table-view">
@@ -45,7 +54,7 @@
                 </li>
             </ul>
             <!-- 									center								-->
-           	<div id="center" style="height: 3.9rem;width: 100%;background: #eee;">
+           	<div id="center" style="height: 3.4rem;width: 100%;background: #eee;">
            		 <div class="order" style="height: 1.6rem;">
                 <div class="mui-row">
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
@@ -70,29 +79,29 @@
                     </div>
                 </div>
             </div>
-            <!--						划分线						-->
+            <!--						划分线							-->
             <div style="height: 0.3rem;"></div>
             <!--                                  第二排  种草 收货地址等                                      -->
-            <div class="order" style="height: 2rem;">
+            <div class="order" style="height: 1.5rem;">
                 <div class="mui-row">
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
                         <a class="mui-navigate-right locationA" href="/site/ticket_list">
-                        <img src="/views/mobile/skin/default/image/index/youhuijuan.png" style="height: 0.7rem;width: 0.7rem;margin-top: 0.2rem;"/>
+                        <img src="/views/mobile/skin/default/image/index/youhuijuan.png" style="height: 0.7rem;width: 0.7rem;"/>
                         <div class="mui-media-body" >我的优惠劵</div></a>
                     </div>
                     <div class="mui-col-xs-3 mui-col-sm-3" style="text-align:center">
                         <a href="/ucenter/error" class="locationA">
-                        <img src="/views/mobile/skin/default/image/index/integral.png" style="height: 0.7rem;width: 0.7rem;margin-top: 0.2rem;"/>
+                        <img src="/views/mobile/skin/default/image/index/integral.png" style="height: 0.7rem;width: 0.7rem;"/>
                         <div class="mui-media-body">积分商城</div></a>
                     </div>
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
                         <a href="/ucenter/connect" class="locationA">
-                        <img src="/views/mobile/skin/default/image/index/CustomerService.png" style="height: 0.7rem;width: 0.7rem;margin-top: 0.2rem;"/>
+                        <img src="/views/mobile/skin/default/image/index/CustomerService.png" style="height: 0.7rem;width: 0.7rem;"/>
                             <div class="mui-media-body">客服与反馈</div></a>
                     </div>
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
                         <a class="mui-navigate-right locationA" href="/simple/addresslist">
-                        <img src="/views/mobile/skin/default/image/index/positioning.png" style="height: 0.7rem;width: 0.7rem;margin-top: 0.2rem;"/>
+                        <img src="/views/mobile/skin/default/image/index/positioning.png" style="height: 0.7rem;width: 0.7rem;"/>
                         <div class="mui-media-body">收货地址</div></a>
                     </div>
                 </div>
@@ -103,31 +112,45 @@
             
             
             <!--							第三排  数据实名认证							-->
-            <div class="order" style="height: 2.06rem;">
+            <div class="order" style="height: 1.5rem;">
                 <div class="mui-row">
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
                         <a class="mui-navigate-right locationA" href="{url:/simple/credit}" style="width: 100%;height: 100%;">
-                        <img src="/views/mobile/skin/default/image/index/Idcertification.png" style="height: 0.7rem;width: 0.7rem;margin-top: 0.25rem;"/>
+                        <img src="/views/mobile/skin/default/image/index/Idcertification.png" style="height: 0.7rem;width: 0.7rem;"/>
                         <div class="mui-media-body">实名认证</div></a>
                     </div>
                     <div class="mui-col-xs-3 mui-col-sm-3" style="text-align:center">
                         <a href="http://mp.weixin.qq.com/s/4dxweYcR2Cm9Eo15-N8PUQ" class="locationA" style="width: 100%;height: 100%;">
-                        <img src="/views/mobile/skin/default/image/index/Aboutninecatshome.png" style="height: 0.7rem;width: 0.7rem;margin-top: 0.25rem;"/>
+                        <img src="/views/mobile/skin/default/image/index/Aboutninecatshome.png" style="height: 0.7rem;width: 0.7rem;"/>
                         <div class="mui-media-body">关于九猫家</div></a>
                     </div>
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
                         <a href="/ucenter/uuu" class="locationA" style="width: 100%;height: 100%;">
-                        <img src="/views/mobile/skin/default/image/index/public.png" style="height: 0.7rem;width: 0.7rem;margin-top: 0.25rem;"/>
+                        <img src="/views/mobile/skin/default/image/index/public.png" style="height: 0.7rem;width: 0.7rem;"/>
                             <div class="mui-media-body">关注公众号</div></a>
                     </div>
                     <div class=" mui-col-xs-3 mui-col-sm-3" style="text-align:center">
                         <a href="/ucenter/recommendation" class="locationA" style="width: 100%;height: 100%;">
-                        <img src="/views/mobile/skin/default/image/index/Goodrecommendation.png" style="height: 0.7rem;width: 0.7rem;margin-top: 0.25rem;"/>
+                        <img src="/views/mobile/skin/default/image/index/Goodrecommendation.png" style="height: 0.7rem;width: 0.7rem;"/>
                         <div class="mui-media-body">好货推荐</div></a>
                     </div>
                 </div>
             </div>
-        
+        <!--								新增第四排						-->
+         <!--<div class="order" style="height: 1.5rem;">
+                <div class="mui-row">
+                    <div class=" mui-col-xs-3 mui-col-sm-3" @click="favorite" style="text-align:center">
+                        <a href="/site/favorite" class="locationA" style="width: 100%;height: 100%;">
+                         <div class="public__"><img src="/views/mobile/skin/default/image/index/grass.png" style="width: 0.52rem;"/></div>
+                        <div class="mui-media-body">种草</div></a>
+                    </div>
+                    <div class="mui-col-xs-3 mui-col-sm-3" style="text-align:center">
+                        <a href="" class="" style="width: 100%;height: 100%;">
+                        <div class="public__"><img src="/views/mobile/skin/default/image/index/share_.png" style="width: 0.47rem;"/></div>
+                        <div class="mui-media-body">分享赚钱</div></a>
+                    </div>
+                </div>
+            </div>-->
         <div style="height:1.3rem"></div>
             <!--<ul class="mui-table-view" style="margin-top: 25px;margin-bottom:0.7rem;">
                 <li class="mui-table-view-cell">
@@ -168,13 +191,22 @@
     	el:"#user_Info",
 		data:{
 			info:"",
-            showmessage:false
+            showmessage:false,
+            ucenterindex_st:false
 		},
 
 		mounted: function(){
 			clear_pull();
 			var self = this;
 			getInfo(self);
+		},
+		updated:function(){
+			this.ucenterindex_st = true;
+		},
+		methods:{
+			favorite:function(){
+				alert(1)
+			}
 		}
     })
 
