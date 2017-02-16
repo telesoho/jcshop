@@ -307,10 +307,10 @@ class wechats
         }
         $ret = common::http_post_json($url,$params);
         if (json_decode($ret[1])->errcode === 0){
-            common::log_write("消息推送成功:$open_id" . print_r($ret,true));
+            common::log_write("消息推送-成功:$open_id" . print_r($ret,true), 'INFO', 'send_message');
             return true;
         } else {
-            common::log_write(__CLASS__ . "-" . __FUNCTION__ . '-' . print_r($ret,true), 'ERROR');
+            common::log_write("消息推送-失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
             return false;
         }
     }

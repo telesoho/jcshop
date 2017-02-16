@@ -433,6 +433,7 @@ class Common{
      * @param $path
      */
     static public function restore_wechat_resources($path){
+        header('Content-Type:application/json;charset=UTF-8');
         $access_token = self::get_wechat_access_token();
         $wechat_resources_model = new IModel('wechat_resources');
         $data = $wechat_resources_model->getObj("path = '$path'");

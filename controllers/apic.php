@@ -3373,8 +3373,8 @@ class Apic extends IController{
                 $sfz_image1 = $data['sfz_image1'];
                 $sfz_image2 = $data['sfz_image2'];
                 $msg = common::restore_wechat_resources($sfz_image1);
-                $msg .= common::restore_wechat_resources($sfz_image2);
-                die(json_encode(['ret'=>true,'msg'=>$msg]));
+//                $msg .= common::restore_wechat_resources($sfz_image2);
+                die($msg);
             } else {
                 die(json_encode(['ret'=>false,'msg'=>$msg]));
             }
@@ -3385,8 +3385,8 @@ class Apic extends IController{
                 $sfz_image1 = $data['sfz_image1'];
                 $sfz_image2 = $data['sfz_image2'];
                 $msg = common::restore_wechat_resources($sfz_image1);
-                $msg .= common::restore_wechat_resources($sfz_image2);
-                die(json_encode(['ret'=>true,'msg'=>$msg]));
+//                $msg .= common::restore_wechat_resources($sfz_image2);
+                die($msg);
             } else {
                 die(json_encode(['ret'=>false,'msg'=>$msg]));
             }
@@ -3396,8 +3396,8 @@ class Apic extends IController{
                 $sfz_image1 = $data['sfz_image1'];
                 $sfz_image2 = $data['sfz_image2'];
                 $msg = common::restore_wechat_resources($sfz_image1);
-                $msg .= common::restore_wechat_resources($sfz_image2);
-                die(json_encode(['ret'=>true,'msg'=>$msg]));
+//                $msg .= common::restore_wechat_resources($sfz_image2);
+                die($msg);
             } else {
                 die(json_encode(['ret'=>false,'msg'=>$msg]));
             }
@@ -3549,15 +3549,14 @@ OR (
         $user_data         = $user_query->find();
         $i                 = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
+        $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
             $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
             if ($ret){
-                $ret = print_r($ret, true);
-                common::log_write("信息推送失败：" . $v['username'] . ';' . $ret, 'ERROR', 'wechat');
+                common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
                 $i++;
             } else {
-                $ret = print_r($ret, true);
-                common::log_write("信息推送失败：" . $v['username'] . ';' . $ret, 'ERROR', 'wechat');
+                common::log_write(__FUNCTION__ . "信息推送失败：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
             }
         }
         $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
@@ -3571,21 +3570,17 @@ OR (
         $user_data         = $user_query->find();
         $i = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
+        $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
-//            $v['oauth_user_id'] = 'orEYdw0X44crd6F3MOdXES6Hfpig';
             $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
-            $ret = true;
+            wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig','member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
             if ($ret){
                 $i++;
-                $success_username[] = $v['username'];
-                continue;
+                common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'fourty_member_message'.$start_time);
             } else {
-                $v[] = __FUNCTION__;
-                common::log_write(print_r($v), 'ERROR', 'wechat');
-                break;
+                common::log_write(__FUNCTION__ . "信息推送失败：" . $v['username'], 'ERROR', 'fourty_member_message'.$start_time);
             }
         }
-        common::log_write(print_r($success_username,true), 'INFO', 'wechat');
         $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
     }
     function order_message(){
