@@ -19,19 +19,8 @@
     	<div id="londing" v-if="longing"  style=" display:none;width:100%;display: block;margin: 0 auto;">
 	    	<img src="/views/mobile/skin/default/image/jmj/icon/longing.gif" style="width:6rem;display: block;margin: 0 auto;"/>
 	    </div>
-    </div>
-    <footer>
-	    <div class="flexbox empty_product" style="background:#f8f8f8" v-if="infoState">
-	        <div class="img">
-	            <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
-	        </div>
-	        <div class="content">
-	            <span style="color:#fff">~</span>
-	            <span style="color:#fff">憋拉了，到底了</span>
-	            <span style="color:#fff">~</span>
-	        </div>
-	    </div>
-	</footer>
+   </div>
+	<whether :state="infoState"></whether>
 </section>
 
 
@@ -41,7 +30,7 @@
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/components/goods_more.js?v=<?php echo time(); ?>"></script>
-
+<script src="/views/mobile/components/Whether.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 
  $(window).load(function(){
