@@ -268,7 +268,7 @@ class APIGoods{
 			'did'      => isset($param['did']) ? $param['did'] : '', //推荐ID，选填
 			'tag'      => isset($param['tag']) ? $param['tag'] : '', //标签，选填
 		);
-		$param['fields']   = !empty($param['firlds']) ? $param['firlds'] : 'm.id,m.name,m.sell_price,m.original_price,m.img,m.activity,m.jp_price,m.market_price,b.name AS brand_name,b.logo AS brand_logo';//查询字段，选填
+		$param['fields']   = !empty($param['firlds']) ? $param['firlds'] : 'm.id,m.name,m.name_de,m.sell_price,m.original_price,m.img,m.activity,m.jp_price,m.market_price,b.name AS brand_name,b.logo AS brand_logo';//查询字段，选填
 		$param['pagesize'] = !empty($param['pagesize']) ? $param['pagesize'] : 20;
 		
 		/* 获取下级分类 */
