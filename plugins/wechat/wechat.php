@@ -109,7 +109,7 @@ class wechat extends pluginBase
 				$cacheObj->set('accessToken',$result['access_token']);
 				return $result['access_token'];
 			}else{
-				die($json);
+				return JSON::decode($json);
 			}
 		}
 	}

@@ -52,6 +52,10 @@ class wechats
      */
     static function send_message_template($open_id, $type, $send_info){
         $access_token      = common::get_wechat_access_token();
+        if ($access_token === false){
+            common::log_write("消息推送-失败:$open_id,获取access_token失败,日志文件夹access_token ERROR", 'INFO', 'send_message');
+            return false;
+        }
         $url               = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
         $site_config       = new Config('site_config');
         $site_config_array = $site_config->getInfo();
@@ -307,10 +311,14 @@ class wechats
         }
         $ret = common::http_post_json($url,$params);
         if (json_decode($ret[1])->errcode === 0){
-            common::log_write("消息推送成功:$open_id" . print_r($ret,true));
+            common::log_write("消息推送-成功:$open_id" . print_r($ret,true), 'INFO', 'send_message');
             return true;
         } else {
-            common::log_write(__CLASS__ . "-" . __FUNCTION__ . '-' . print_r($ret,true), 'ERROR');
+            if (isset(json_decode($ret[1])->errmsg)){
+                common::log_write("消息推送-".json_decode($ret[1])->errmsg."失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+            } else {
+                common::log_write("消息推送-失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+            }
             return false;
         }
     }
