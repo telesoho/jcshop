@@ -995,4 +995,12 @@ class Ucenter extends IController implements userAuthorization
 		$this->setRenderData(array('propId' => $propIds));
 		$this->redirect('redpacket');
     }
+
+    /**
+     * User: chenbo
+     * 分享赚钱
+     */
+    function share_memoney_detail(){
+        $this->redirect('share_memoney_detail');
+    }
 }

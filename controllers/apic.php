@@ -3230,8 +3230,9 @@ class Apic extends IController{
 		
 		$userObj = new IModel('user');
 		$where   = 'id = '.$user_id;
-		$userRow = $userObj->getObj($where, array('head_ico', 'username'));
-		
+		$userRow = $userObj->getObj($where, array('head_ico', 'username', 'balance'));
+		$userRow['u_balance'] = $userRow['balance'];
+		unset($userRow['balance']);
 		$memberObj = new IModel('member');
 		$where     = 'user_id = '.$user_id;
 		$memberRow = $memberObj->getObj($where);
@@ -3594,5 +3595,14 @@ OR (
 //        foreach ($open_id_arr as $v){
 //            wechats::send_message_template($v, 'ship', ['order_no'=>'2017052456', 'name'=>'商品名称', 'billcode'=>'23', 'remark'=>'喵~感谢您对九猫家的信任与支持！我们已经收到您的订单啦~ 日本供货商将在3-5个工作日完成配货哒，正常情况下10-15个工作日您将收到您买的宝贝，请耐心等待哦ฅ՞•ﻌ•՞ฅ~\n如果有任何订单退换货等问题请添加客服喵微信：\njiumaojia006；想要领取优惠券的小伙伴欢迎添加喵酱个人微信：jiumaojia001；更多优惠群里第一时间共享哦~么么哒~']);
 //        }
+    }
+    function share_money_detail(){
+        $data       = common::get_user_data($this->user['user_id']);
+        if (empty($data)){
+            $this->returnJson(['code'=>-1, 'msg'=>'获取用户信息失败', 'data'=>$data]);
+        } else {
+            $this->returnJson(['code'=>0, 'msg'=>'用户分享赚信息', 'data'=>$data]);
+        }
+        $this->data = $data;
     }
 }
