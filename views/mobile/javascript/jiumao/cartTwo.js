@@ -64,7 +64,7 @@ var vm = new Vue({
         },
         sell: function(){
             this.infoMessage.goodsList.map(function(item){
-                item.sell_pri=(item.sell_price-item.reduce).toFixed(2)
+                item.sell_pri=(item.sell_price-item.reduce).toFixed(2);
             })
             return this.infoMessage.goodsList;
         },

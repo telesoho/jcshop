@@ -63,8 +63,10 @@
 						</div>
 					</div>
 					<div class="cPrice">
-						<span class="chinaPrice">国内价： <s> {{info.market_price}}</s></span>
-						<span class="jaPrice">日本价：{{parseInt(info.jp_price)}} 円</span>
+						<div style="display: -webkit-flex;-webkit-justify-content: center;">
+							<span class="chinaPrice">国内价： <s> {{info.market_price}}</s></span>
+							<span class="jaPrice">日本价：{{parseInt(info.jp_price)}} 円</span>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -279,7 +281,7 @@
 				 <div class="size" v-for="(item,key) in info.products_spec">
 						<h4>{{item.name}}</h4>
 					 	<div class="cho_size">
-							<span v-for="item1 in item.list" :class="item.cho==item1?'active':''" @click="changeSize(key,item1)">{{item1}}</span>
+							<span  @click="changeSize(key,item1,item.name)" v-for="item1 in item.list" :class="item.cho==item1?'active':''">{{item1}}</span>
 						</div>
 				 </div>
 			</div>
@@ -684,10 +686,10 @@ var minutes,hours,seconds;
 					}
 				}
 			},
-			changeSize:function(key,size){
+			changeSize:function(key,size,name){
 				//判定选择尺寸 规格
 				var _this=this;
-				checkSize(_this,key,size);
+				checkSize(_this,key,size,name);
 			}
 		}
 	});
@@ -753,54 +755,12 @@ var minutes,hours,seconds;
 				}else{
 					self.time_shop = true;
 				}
-				
-				time_all = data.data.speed.end_time;
-				var datae = new Date();
-				// 结束时间
-				if(parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000)<0){
-					self.time_title = "已结束";
-				}else{
-					self.time_title = "抢购中";
-					time_xian();
-				}
-				//开始时间
-				console.log();
-				var timestamp4 = new Date(parseInt(data.data.speed.start_time)*1000);//直接用 new Date(时间戳) 格式转化获得当前时间
-				if(parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000)<0){
-					self.times = "明天再来";
-					clearInterval(times);
-				}
-				if(parseInt(data.data.speed.start_time) - parseInt(datae.getTime()/1000)>=0){
-					self.times = "今天"+timestamp4.toTimeString().substr(0, 8)+"开抢";
-				}else{
-					var end_ = parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000);
-					minutes = parseInt(end_/60);
-					seconds = parseInt(end_%60);
-					// alert(theTime1+"-"+theTime);
-					if(minutes > 60) {
-					hours = parseInt(minutes/60);
-					minutes = parseInt(minutes%60);
-					}
-					if(hours > 24) {
-						data = parseInt(hours/24);
-						hours = parseInt(hours%24);
-					}
+				xian(self,data);
 
-
-					if(parseInt(hours)<10){
-						hours = "0"+parseInt(hours);
-					}
-					if(parseInt(minutes)<10){
-						minutes = "0"+parseInt(minutes);
-					}if(parseInt(seconds)<10){
-						seconds = "0" + parseInt(seconds);
-					}
-					self.times = "结束倒计时 "+hours+":"+minutes+":"+seconds
-
-				}
 				self.showMessage=true;
 				setItem("collection",data.data);
-				self.weight=parseInt(data.data.weight)
+				self.weight=parseInt(data.data.weight);
+				console.log(data.data.products_spec)
 				//如果没有规格 那商品的type类型为products
 				if(data.data.products_spec.length>0){
 					self.type='product'
@@ -813,7 +773,52 @@ var minutes,hours,seconds;
 			}
 		});
 	}
-	
+	function xian(self,data){
+		time_all = data.data.speed.end_time;
+		var datae = new Date();
+		// 结束时间
+		if(parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000)<0){
+			self.time_title = "已结束";
+		}else{
+			self.time_title = "抢购中";
+			time_xian();
+		}
+		//开始时间
+		console.log();
+		var timestamp4 = new Date(parseInt(data.data.speed.start_time)*1000);//直接用 new Date(时间戳) 格式转化获得当前时间
+		if(parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000)<0){
+			self.times = "明天再来";
+			clearInterval(times);
+		}
+		if(parseInt(data.data.speed.start_time) - parseInt(datae.getTime()/1000)>=0){
+			self.times = "今天"+timestamp4.toTimeString().substr(0, 8)+"开抢";
+		}else{
+			var end_ = parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000);
+			minutes = parseInt(end_/60);
+			seconds = parseInt(end_%60);
+			// alert(theTime1+"-"+theTime);
+			if(minutes > 60) {
+				hours = parseInt(minutes/60);
+				minutes = parseInt(minutes%60);
+			}
+			if(hours > 24) {
+				data = parseInt(hours/24);
+				hours = parseInt(hours%24);
+			}
+
+
+			if(parseInt(hours)<10){
+				hours = "0"+parseInt(hours);
+			}
+			if(parseInt(minutes)<10){
+				minutes = "0"+parseInt(minutes);
+			}if(parseInt(seconds)<10){
+				seconds = "0" + parseInt(seconds);
+			}
+			self.times = "结束倒计时 "+hours+":"+minutes+":"+seconds
+
+		}
+	}
 	//限时购
 	
 function time_xian(){
@@ -890,7 +895,8 @@ function time_xian(){
 			alert("请选择商品规格");
 			return;
 		};
-		data1=id+":"+buyNums+":"+self.type
+		data1=id+":"+buyNums+":"+self.type;
+		console.log(data1);
 		mui.ajax({
 			data:{
 				goods:data1
@@ -901,7 +907,6 @@ function time_xian(){
 			timeout:10000,//超时时间设置为10秒；
 			success:function(data){
 				self.ajaxButton=true;
-				console.log(data);
 				if(data.code!=0){
 					alert(data.msg);
 					return false;
@@ -945,7 +950,6 @@ function time_xian(){
 //        定义商品图片的位置
 		pro=$(".select_photo").offset();
 		top=pro.top+cartPosition.top-scrollTop*2;
-		console.log(top);
 		//克隆div实现动画
 		cloneDiv=$(".select_photo").clone();
 		$(".select_photo").parent().append(cloneDiv);
@@ -960,11 +964,7 @@ function time_xian(){
 		});
 	}
 
-	function checkSize(_this,key,size){
-//		如果只有一个商品规格
-//		for(var i=0,j=_this.info.products.length;i<j;i++){
-//
-//		}
+	function checkSize(_this,key,size,name){
 		var l=_this.info.products_spec.length;
 		var temp=_this.info.products_spec[key].cho;
 		_this.info.products_spec[key].cho=size;
@@ -984,7 +984,6 @@ function time_xian(){
 					_this.info.products_spec[key].cho=temp;
 					alert("该商品库存不足")
 				}
-
 			 }
 		})
 	}

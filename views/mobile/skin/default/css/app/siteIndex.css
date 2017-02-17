@@ -280,6 +280,8 @@ body{
 .yuanjia{
 	font-size:0.22rem;
 	color:#b8b8b8;
+	width: 2.2rem;
+	text-align: center;
 }
 .line_time{
 	height: 1px;
@@ -364,11 +366,9 @@ li{
 }
 .hot_category ul li img{
 	display: block;
+	margin: 0 auto;
 	margin-bottom:0.1rem ;
 	
-}
-.hot_category .item img{
-	margin-left: 0.1rem;
 }
 /*			专区			*/
 #the_zone .banner{
@@ -407,6 +407,7 @@ li{
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	text-align: center;
 }
 #the_zone .link_zhuan{
 	width: 100%;
@@ -460,6 +461,8 @@ li{
 font-size:0.2;
 color:#ff2f5c;
 font-family:helvetica ;
+text-align: center;
+width: 2.2rem;
 }
 /*点赞数字*/
 .albumn_index .title .num{
