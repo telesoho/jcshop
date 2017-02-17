@@ -370,6 +370,19 @@ class Simple extends IController
     		$order_type 		= $activeObject->getOrderType();
     	}
 
+    	//判断商品是否是分享赚
+//        $share_goods_arr = ISession::get('sid');
+//    	if (!empty($share_goods_arr)){
+//            $share_goods_arr = array_unique($share_goods_arr);
+//            $data[] = $share_goods_arr;
+//            $data[] = $goodsResult['goodsList'];
+//            foreach ($goodsResult['goodsList'] as $k => $v){
+//                if (in_array($v['goods_no'], $share_goods_arr)){
+//                    $goodsResult['goodsList'][$k]['is_share'] = $share_goods_arr
+//                }
+//            }
+//        }
+
     	//支付方式
 		$paymentObj 			= new IModel('payment');
 		$paymentRow 			= $paymentObj->getObj('id='.$payment,'type,name');

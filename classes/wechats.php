@@ -50,7 +50,7 @@ class wechats
      * @param $type
      * @param $send_info
      */
-    static function send_message_template($open_id, $type, $send_info){
+    static function send_message_template($open_id, $type, $send_info, $log_info = ''){
         $access_token      = common::get_wechat_access_token();
         if ($access_token === false){
             common::log_write("消息推送-失败:$open_id,获取access_token失败,日志文件夹access_token ERROR", 'INFO', 'send_message');
@@ -307,17 +307,41 @@ class wechats
                    }
                }',$open_id, $template_array[$type], IUrl::getHost().'/site/ticket_list',$send_info['coupon_name'],$send_info['end_time']);
                 break;
-
+            case 'project':
+                $params = sprintf('{
+                   "touser":"%s",
+                   "template_id":"%s",
+                   "url":"%s",            
+                   "data":{
+                           "first": {
+                               "value":"定时推送消息情况",
+                               "color":"#173177"
+                           },
+                           "keyword1":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "keyword2":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "remark": {
+                               "value":"%s",
+                               "color":"#173177"
+                           }
+                   }
+               }',$open_id, $template_array[$type], IUrl::getHost(),$send_info['type'],$send_info['time'],$send_info['info']);
+                break;
         }
         $ret = common::http_post_json($url,$params);
         if (json_decode($ret[1])->errcode === 0){
-            common::log_write("消息推送-成功:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+            common::log_write("$log_info 消息推送-成功:$open_id" . print_r($ret,true), 'INFO', 'send_message');
             return true;
         } else {
             if (isset(json_decode($ret[1])->errmsg)){
-                common::log_write("消息推送-".json_decode($ret[1])->errmsg."失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+                common::log_write("$log_info 消息推送-".json_decode($ret[1])->errmsg."失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
             } else {
-                common::log_write("消息推送-失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+                common::log_write("$log_info 消息推送-失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
             }
             return false;
         }
