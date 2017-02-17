@@ -335,13 +335,13 @@ class wechats
         }
         $ret = common::http_post_json($url,$params);
         if (json_decode($ret[1])->errcode === 0){
-            common::log_write("$log_info 消息推送-成功:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+            common::log_write("$log_info 消息推送-成功:$open_id " . print_r($ret,true), 'INFO', 'send_message');
             return true;
         } else {
             if (isset(json_decode($ret[1])->errmsg)){
-                common::log_write("$log_info 消息推送-".json_decode($ret[1])->errmsg."失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+                common::log_write("$log_info 消息推送-".json_decode($ret[1])->errmsg."失败:$open_id " . print_r($ret,true), 'INFO', 'send_message');
             } else {
-                common::log_write("$log_info 消息推送-失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+                common::log_write("$log_info 消息推送-失败:$open_id " . print_r($ret,true), 'INFO', 'send_message');
             }
             return false;
         }
