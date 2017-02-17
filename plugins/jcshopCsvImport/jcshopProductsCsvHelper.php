@@ -21,7 +21,7 @@ class jcshopPacketHelper extends jcshopPacketHelperAbstract
 	 */
 	public function getDataTitle()
 	{
-		return array("品牌名","商品JAN编码","商品名称","商品类目","销售价格","库存数量","商品详情","图片","销售属性","商家编码","物流重量");
+		return array("品牌名","商品JAN编码","商品名称","商品类目","销售价格","库存数量","商品详情","图片","规格","规格编号","物流重量");
 	}
 	/**
 	 * override abstruact function

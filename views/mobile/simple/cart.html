@@ -53,8 +53,8 @@
                             <img :src="item.img" alt=""  style="width:1.2rem;height:1.2rem" />
                             <div>
 								<div class="size" if="item.spec_array">
-									<span v-if=" item.spec_array.length>1 " v-for="sizes,key in item.spec_array">{{sizes.value}}<t v-if="key==0">色</t><t v-if="key==1">码</t><span v-if="key==0"> , </span></span>
-									<span v-if=" item.spec_array.length==1 " v-for="sizes,key in item.spec_array">{{sizes.value}}<t>色</t></span></span>
+									<span v-if=" item.spec_array.length>1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t v-if="key==0">色</t><t v-if="key==1">码</t><span v-if="key==0"> , </span></span>
+									<span v-if=" item.spec_array.length==1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t>色</t></span></span>
 								</div>
 								<div class="sellprice">
 									￥ {{item.sell_price}}
@@ -119,11 +119,10 @@
 			newGoods: function() {
 				this.infoMessage.goodsList.map(function(item){
 					item.totalPrice=(item.sell_price*item.count).toFixed(2);
-					console.log(item.totalPrice);
                     item.url="/site/products?id="+item.goods_id;
 					item.newCount=item.count;
 					if(item.spec_array){
-						item.spec_array = JSON.parse(item.spec_array).reverse();
+						item.spec_array_two = JSON.parse(item.spec_array).reverse();
 					}
 				});
 				return  this.infoMessage.goodsList;
