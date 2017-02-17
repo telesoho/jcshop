@@ -547,7 +547,17 @@ class Simple extends IController
 			{
 				IError::show(403,'订单生成错误');
 			}
-
+            //判断商品是否是分享赚
+            $share_goods_arr = ISession::get('sid');
+            if (!empty($share_goods_arr)){
+                $share_goods_arr = array_unique($share_goods_arr);
+                foreach ($goodsResult['goodsResult']['goodsList'] as $k => $v){
+                    $goodsResult['goodsResult']['goodsList'][$k]['share_no'] = '';
+                    foreach ($share_goods_arr as $va){
+                        if (explode('_', $va)[1] == $v['goods_no']) $goodsResult['goodsResult']['goodsList'][$k]['share_no'] = $va;
+                    }
+                }
+            }
 			/*将订单中的商品插入到order_goods表*/
 	    	$orderInstance = new Order_Class();
 	    	$orderInstance->insertOrderGoods($order_id,$goodsResult['goodsResult']);

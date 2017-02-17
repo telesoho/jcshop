@@ -561,6 +561,7 @@ class Order_Class
 				$goodsArray['goods_array']  = IFilter::addSlash(JSON::encode($specArray));
 				$goodsArray['seller_id']    = $val['seller_id'];
 				$goodsArray['duties']       = $val['duties'];    // 关税
+				$goodsArray['share_no']     = $val['share_no'];    // 分享码
 				$orderGoodsObj->setData($goodsArray);
 				$orderGoodsObj->add();
 			}
