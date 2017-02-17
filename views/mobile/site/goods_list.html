@@ -35,7 +35,6 @@
     Request = GetRequest();
     var statusOrder=Request["id"];
     var index_Order = Request["did"];
-    console.log(index_Order)
     var stop=true;
 		var vm=new Vue({
 			el:'#main',
@@ -87,19 +86,20 @@
 					page:self.page,
 					did:index_Order?index_Order:""
 				},
-				success:function(data){
+				success:function(data){	
 					self.showloadding=false;
-					JSON.parse(data).data.map(function(items){
+					data.data.map(function(items){
 						self.info.push(items)
 					})
 					pushSession("goodsinfo",self.info)
-					if( JSON.parse(data).data == '' ){
+					if( data.data == '' ){
 						stop = false;
 						self.infoState = true
 					}else{
 						stop = true;
 					}
 					self.page++;
+					console.log(self.page)
 					pushSession("goodspage",self.page)
 				}
 			});

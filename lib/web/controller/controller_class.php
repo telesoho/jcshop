@@ -492,7 +492,8 @@ class IController extends IControllerBase
 			unset($backData['explain']);
 			//记录接口调用日志 TODO
 		}
-		/* 返回参数 */
+        header("Content-Type:application/json; charset=utf-8");
+        /* 返回参数 */
 		die(json_encode($backData));
 	}
 	

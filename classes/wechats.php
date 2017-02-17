@@ -50,8 +50,12 @@ class wechats
      * @param $type
      * @param $send_info
      */
-    static function send_message_template($open_id, $type, $send_info){
+    static function send_message_template($open_id, $type, $send_info, $log_info = ''){
         $access_token      = common::get_wechat_access_token();
+        if ($access_token === false){
+            common::log_write("消息推送-失败:$open_id,获取access_token失败,日志文件夹access_token ERROR", 'INFO', 'send_message');
+            return false;
+        }
         $url               = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
         $site_config       = new Config('site_config');
         $site_config_array = $site_config->getInfo();
@@ -272,11 +276,11 @@ class wechats
                                "color":"#173177"
                            },
                            "remark": {
-                               "value":"情人节7折活动还在进行哦~\n各位小仙女们赶紧添加喵酱个人微信jiumaojia001\n领取新人优惠券58元~ 老客也有优惠哦~\n折上折草鸡优惠哦~\n限时优惠咯~",
+                               "value":"%s",
                                "color":"#173177"
                            }
                    }
-               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['number'],$send_info['create_time']);
+               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['number'],$send_info['create_time'], $send_info['remark']);
                 break;
             case 'tip_coupon_expires':
                 $params = sprintf('{
@@ -303,14 +307,42 @@ class wechats
                    }
                }',$open_id, $template_array[$type], IUrl::getHost().'/site/ticket_list',$send_info['coupon_name'],$send_info['end_time']);
                 break;
-
+            case 'project':
+                $params = sprintf('{
+                   "touser":"%s",
+                   "template_id":"%s",
+                   "url":"%s",            
+                   "data":{
+                           "first": {
+                               "value":"定时推送消息情况",
+                               "color":"#173177"
+                           },
+                           "keyword1":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "keyword2":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "remark": {
+                               "value":"%s",
+                               "color":"#173177"
+                           }
+                   }
+               }',$open_id, $template_array[$type], IUrl::getHost(),$send_info['type'],$send_info['time'],$send_info['info']);
+                break;
         }
         $ret = common::http_post_json($url,$params);
         if (json_decode($ret[1])->errcode === 0){
-            common::log_write("消息推送-成功:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+            common::log_write("$log_info 消息推送-成功:$open_id" . print_r($ret,true), 'INFO', 'send_message');
             return true;
         } else {
-            common::log_write("消息推送-失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+            if (isset(json_decode($ret[1])->errmsg)){
+                common::log_write("$log_info 消息推送-".json_decode($ret[1])->errmsg."失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+            } else {
+                common::log_write("$log_info 消息推送-失败:$open_id" . print_r($ret,true), 'INFO', 'send_message');
+            }
             return false;
         }
     }

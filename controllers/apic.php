@@ -8,7 +8,7 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	
+	private $remark = "情人节7折活动还在进行哦~\n各位小仙女们赶紧添加喵酱个人微信jiumaojia001\n领取新人优惠券58元~ 老客也有优惠哦~\n折上折草鸡优惠哦~\n限时优惠咯~";
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
@@ -373,6 +373,8 @@ class Apic extends IController{
 			$car_list               = JSON::decode(str_replace(array('&', '$'), array('"', ','), $infoCar['content']));
 			foreach($car_list['goods'] as $k => $v)
 				$car_count += $v;
+			foreach($car_list['product'] as $k => $v)
+				$car_count += $v;
 		}
 		$this->returnJson(array('code'=>'0','msg'=>'ok','data'=>array('car_count'=>$car_count)));
 	}
@@ -416,7 +418,7 @@ class Apic extends IController{
 	}
 	
 	/**
-	 * 购物车结算页面
+	 * 购物车结算页面 TODO 待补充
 	 */
 	public function cart2(){
 		$param = $this->checkData(array(
@@ -1396,8 +1398,12 @@ class Apic extends IController{
                     $image1 = explode('/',$image1,2)[1];
                 } else {
                     $sqlData['media_id1'] = $image1;
-                    $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
-                    $image1 = common::save_url_image($url1,$dir,1);
+                    if ($access_token === false){
+                        $image1 = 'upload/sfz_image/ware_lazy.png';
+                    } else {
+                        $url1 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image1;
+                        $image1 = common::save_url_image($url1,$dir,1);
+                    }
                     common::save_wechat_resource($sqlData['media_id1'], $image1);
                 }
             }
@@ -1406,8 +1412,12 @@ class Apic extends IController{
                     $image2 = explode('/',$image2,2)[1];
                 } else {
                     $sqlData['media_id2'] = $image2;
-                    $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
-                    $image2 = common::save_url_image($url2,$dir,2);
+                    if ($access_token === false){
+                        $image1 = 'upload/sfz_image/ware_lazy.png';
+                    } else {
+                        $url2 = 'https://api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id=' . $image2;
+                        $image2 = common::save_url_image($url2,$dir,2);
+                    }
                     common::save_wechat_resource($sqlData['media_id2'], $image2);
                 }
             }
@@ -1932,12 +1942,22 @@ class Apic extends IController{
 		$dataGoods['img']      = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$dataGoods['img']."/w/500/h/500");
 		
 		/* 相关货号 */
+		$dataGoods['products_spec'] = array();
 		$modelPro = new IModel('products');
 		$products = $modelPro->query('goods_id='.$param['id'], 'id,products_no,spec_array,store_nums,sell_price,weight');
 		if(!empty($products)){
+			$products_spec = array();
 			foreach($products as $k => $v){
-				$products[$k]['spec_array'] = json_decode($v['spec_array']);
+				$products[$k]['spec_array'] = json_decode($v['spec_array'],true);
+				foreach($products[$k]['spec_array'] as $k1 => $v1){
+					if(isset($products_spec[$v1['id']]['list']) && in_array($v1['value'],$products_spec[$v1['id']]['list'])){
+						continue;
+					}
+					$products_spec[$v1['id']]['name'] = $v1['name'];
+					$products_spec[$v1['id']]['list'][] = $v1['value'];
+				}
 			}
+			$dataGoods['products_spec'] = array_values($products_spec);
 		}
 		$dataGoods['products'] = $products;
 		
@@ -1952,33 +1972,20 @@ class Apic extends IController{
 		}
 		
 		/* 相关评论 */
-		$queryComment           = new IQuery('comment as m');
-		$queryComment->join     = 'LEFT JOIN user as u ON u.id=m.user_id';
-		$queryComment->where    = 'status=1 AND goods_id='.$param['id'];
-		$queryComment->fields   = 'm.id,m.contents,m.recontents,m.recomment_time,m.tag,m.image,m.voice,m.user_id,u.username,u.head_ico';
-		$queryComment->page     = $param['page']<=0 ? 1 : $param['page'];
-		$queryComment->pagesize = 10;
-		$commetList             = $queryComment->find();
-		if($param['page']>$queryComment->getTotalPage()) $commetList = array();
-		if(!empty($commetList)){
-			$modelTag = new IModel('comment_tag');
-			foreach($commetList as $k => $v){
-				//语音
-				$commetList[$k]['voice'] = empty($v['voice']) ? '' : IWeb::$app->config['image_host'].'/'.$v['voice'];
-				//评论图片
-				$image = explode(',', $v['image']);
-				if(!empty($image)){
-					foreach($image as $k1 => $v1) $image[$k1] = empty($v1) ? '' : IWeb::$app->config['image_host'].'/'.$v1;
-				}
-				$commetList[$k]['image'] = $image;
-				//标签
-				$tag     = array();
-				$listTag = $modelTag->query('id IN ('.$v['tag'].') AND status=1', 'name');
-				foreach($listTag as $k1 => $v1) $tag[] = $v1['name'];
-				$commetList[$k]['tag'] = $tag;
+		$modelComment = new IModel('comment AS m,user AS u');
+		$content      = $modelComment->query('m.contents!="" AND m.user_id=u.id AND m.status=1 AND m.goods_id='.$param['id'],
+			'm.id,m.contents,m.recontents,m.recomment_time,m.tag,m.image,m.voice,m.user_id,u.username,u.head_ico',
+			'm.time DESC', 2);
+		$img          = $modelComment->query('m.image!="" AND m.user_id=u.id AND m.status=1 AND m.goods_id='.$param['id'],
+			'm.id,m.contents,m.recontents,m.recomment_time,m.tag,m.image,m.voice,m.user_id,u.username,u.head_ico',
+			'm.time DESC', 4);
+		if(!empty($img)){
+			foreach($img as $k => $v){
+				$image            = strstr($v['image'], ',', true);
+				$img[$k]['image'] = empty($image) ? '' : IWeb::$app->config['image_host'].'/'.$image;
 			}
 		}
-		$dataGoods['comment_list'] = $commetList;
+		$dataGoods['comment'] = array('content' => $content, 'img' => $img);
 		
 		/* 相关专辑 */
 		$queryArt                  = new IQuery('article as m');
@@ -3373,38 +3380,27 @@ class Apic extends IController{
         $order_no    = IFilter::act(IReq::get('order_no'), 'int');
         if (!empty($order_no)){
             if ($data = common::get_order_data(null,$order_no)){
-                $sfz_image1 = $data['sfz_image1'];
-                $sfz_image2 = $data['sfz_image2'];
-                $msg = common::restore_wechat_resources($sfz_image1);
-//                $msg .= common::restore_wechat_resources($sfz_image2);
-                die($msg);
-            } else {
-                die(json_encode(['ret'=>false,'msg'=>$msg]));
+				$rel1  = json_decode(common::restore_wechat_resources($data['sfz_image1']),true);
+				$rel2  = json_decode(common::restore_wechat_resources($data['sfz_image2']),true);
+				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'正面照：'.$rel1['msg'].'；背面照：'.$rel2['msg'])));
             }
         }
         if (!empty($accept_name)){
             $where = "user_id = $id and accept_name = '$accept_name'";
             if ($data = common::get_address_data($where)){
-                $sfz_image1 = $data['sfz_image1'];
-                $sfz_image2 = $data['sfz_image2'];
-                $msg = common::restore_wechat_resources($sfz_image1);
-//                $msg .= common::restore_wechat_resources($sfz_image2);
-                die($msg);
-            } else {
-                die(json_encode(['ret'=>false,'msg'=>$msg]));
+				$rel1  = json_decode(common::restore_wechat_resources($data['sfz_image1']),true);
+				$rel2  = json_decode(common::restore_wechat_resources($data['sfz_image2']),true);
+				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'正面照：'.$rel1['msg'].'；背面照：'.$rel2['msg'])));
             }
         }
         if (!empty($id)){
             if ($data = common::get_user_data($id)){
-                $sfz_image1 = $data['sfz_image1'];
-                $sfz_image2 = $data['sfz_image2'];
-                $msg = common::restore_wechat_resources($sfz_image1);
-//                $msg .= common::restore_wechat_resources($sfz_image2);
-                die($msg);
-            } else {
-                die(json_encode(['ret'=>false,'msg'=>$msg]));
+				$rel1  = json_decode(common::restore_wechat_resources($data['sfz_image1']),true);
+				$rel2  = json_decode(common::restore_wechat_resources($data['sfz_image2']),true);
+				$rel1['ret']&&$rel2['ret'] ? die(json_encode(array('ret'=>true,'msg'=>'恢复成功'))) : die(json_encode(array('ret'=>false,'msg'=>'正面照：'.$rel1['msg'].'；背面照：'.$rel2['msg'])));
             }
         }
+        die(json_encode(['ret'=>false,'msg'=>'错误']));
     }
 
     /**
@@ -3554,15 +3550,16 @@ OR (
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'],'remark'=>$this->remark], __FUNCTION__);
             if ($ret){
                 common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
                 $i++;
             } else {
-                common::log_write(__FUNCTION__ . "信息推送失败：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
+                common::log_write(__FUNCTION__ . "信息推送****失败：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
             }
         }
-        $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
+        wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>$start_time . '\n' . date('Y-m-d H:i:s',time()), 'info'=>"用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
+        $this->returnJson(['code'=>0, 'msg'=>'所有会员用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
     }
     function fourty_member_message(){
         set_time_limit(0);
@@ -3575,21 +3572,26 @@ OR (
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
-            wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig','member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime']]);
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$this->remark], __FUNCTION__);
+//            wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig','member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$remark], __FUNCTION__);
             if ($ret){
                 $i++;
                 common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'fourty_member_message'.$start_time);
             } else {
-                common::log_write(__FUNCTION__ . "信息推送失败：" . $v['username'], 'ERROR', 'fourty_member_message'.$start_time);
+                common::log_write(__FUNCTION__ . "信息推送****失败：" . $v['username'], 'ERROR', 'fourty_member_message'.$start_time);
             }
         }
+        wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>$start_time . '\n' . date('Y-m-d H:i:s',time()), 'info'=>"用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
         $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
     }
     function order_message(){
-        $open_id_arr = ['orEYdw5QShdxdphix7TxAgqxljVI', 'orEYdw0X44crd6F3MOdXES6Hfpig'];
-        foreach ($open_id_arr as $v){
-            wechats::send_message_template($v, 'ship', ['order_no'=>'2017052456', 'name'=>'商品名称', 'billcode'=>'23', 'remark'=>'喵~感谢您对九猫家的信任与支持！我们已经收到您的订单啦~ 日本供货商将在3-5个工作日完成配货哒，正常情况下10-15个工作日您将收到您买的宝贝，请耐心等待哦ฅ՞•ﻌ•՞ฅ~\n如果有任何订单退换货等问题请添加客服喵微信：\njiumaojia006；想要领取优惠券的小伙伴欢迎添加喵酱个人微信：jiumaojia001；更多优惠群里第一时间共享哦~么么哒~']);
-        }
+        $start_time = date('Y-m-d H:i:s',time());
+        $user_data = ['a','d'];
+        $i = 1;
+        wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>$start_time . '\n' . date('Y-m-d H:i:s',time()), 'info'=>"用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
+//        $open_id_arr = ['orEYdw5QShdxdphix7TxAgqxljVI', 'orEYdw0X44crd6F3MOdXES6Hfpig'];
+//        foreach ($open_id_arr as $v){
+//            wechats::send_message_template($v, 'ship', ['order_no'=>'2017052456', 'name'=>'商品名称', 'billcode'=>'23', 'remark'=>'喵~感谢您对九猫家的信任与支持！我们已经收到您的订单啦~ 日本供货商将在3-5个工作日完成配货哒，正常情况下10-15个工作日您将收到您买的宝贝，请耐心等待哦ฅ՞•ﻌ•՞ฅ~\n如果有任何订单退换货等问题请添加客服喵微信：\njiumaojia006；想要领取优惠券的小伙伴欢迎添加喵酱个人微信：jiumaojia001；更多优惠群里第一时间共享哦~么么哒~']);
+//        }
     }
 }
