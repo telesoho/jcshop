@@ -15,6 +15,13 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 	//SKU cache
 	private $skuCache = array();
 
+	const SPEC_NAME_KEYS = "spec_name_keys";
+
+	// 规格值数组
+	public $spec_vals = array();
+
+	// 规格表对象
+	public $spec_objs  = array();
 
 	/**
 	 * override abstract function
@@ -24,7 +31,7 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 	{
 		return array(
 			"品牌名","商品JAN编码","商品名称","商品类目","销售价格","日本市场价格","库存数量","商品详情","重设图片",
-			"销售属性","商家编码","物流重量","商品详情日文","商品名称日文","状态",
+			"规格日文","规格","规格编号","物流重量","商品详情日文","商品名称日文","状态",
 			"日本价格", "商品标题是中文","商品详情是中文","标签","最新商品","热卖商品","推荐商品");
 	}
 
@@ -35,38 +42,102 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 	public function getColumnCallback()
 	{
 		// 设置回调函数
-		return array();
+		return array(
+			"规格日文" => "spec_jp_callback",
+		);
 	}
 
 	/**
-	 * 销售属性 回调函数
-     * 将：{"尺寸":"S","颜色":"绿"}
-	 * 转换为：[{"id":"1","type":"1","value":"S","name":"尺寸"},{"id":"2","type":"1","value":"绿","name":"颜色"}]
+	 * 规格名
 	 */
-	protected function spec_array_callback($content) {
-		if(!$content) 
-			return "";
+	protected function spec_jp_callback($content) {
+		if(!$content) {
+			return array();
+		}
 
-		try{
+		// 返回值
+		$ret_val = array();
 
-			$skus = JSON::decode($content); 
+		// 从JSON中解析规格
+		$specs = json_decode($content, true);
 
-			$skuProps = array();
-			$index = 0;
-			foreach($skus as $key => $val) {
-				$skuProp['id'] = ++$index;
-				$skuProp['type'] = "1"; // 1：文字类型， 2：图片类型
-				$skuProp['name'] = $key;
-				$skuProp['value'] = $val;
-				$skuProps[] = $skuProp;
+		
+		// 如果有规格名定义,则读取规格名
+		$spec_names = array();
+		if(isset($specs[self::SPEC_NAME_KEYS])) {
+			$spec_names = $specs[SPEC_NAME_KEYS];
+			// 从规格值数组中删除规格定义
+			unset($specs[self::SPEC_NAME_KEYS]);
+		} else {
+			// 没有规格名定义，则设定默认的规格名color，size
+			$spec_names = array('color','size');
+		}
+
+		// 读取数据库中的规格定义
+		$specDB = new IModel("spec");
+		foreach($spec_names as $spec_name) {
+			$this->spec_objs[$spec_name] = $specDB->getObj("name='$spec_name'");
+			
+			// 如果规格
+			if(!$this->spec_objs[$spec_name]) {
+				// 新增规格记录
+				$new_spec = array (
+					'name' => $spec_name,
+					'note' => '导入数据自动增加',
+					'value' => '',
+					'value_jp' => '',
+				);
+				$specDB->setData($new_spec);
+				$new_spec['id'] = $specDB->add();
+				$this->spec_objs[$spec_name] = $new_spec;
 			}
-			$content = JSON::encode($skuProps);
+
+			// 解析规格值
+			$this->spec_jp_vals[$spec_name] = common::spec_split($this->spec_objs[$spec_name]['value_jp']);
+			$this->spec_vals[$spec_name] = common::spec_split($this->spec_objs[$spec_name]['value']);
 		}
-		catch(Exception $e){
-			$this->error($e->getMessage());
-			return "";
+
+		// 处理规格值
+		foreach($specs as $key => $spec) {
+			$product = array();
+			$skuProps = array();
+			foreach($spec as $k => $v) {
+				// 是否是规格
+				if(isset($this->spec_objs[$k])){
+					// 日文规格值不存在时,插入规格
+					$vindex = array_search($v, $this->spec_jp_vals[$k]);
+					if($vindex === false) {
+						$this->spec_jp_vals[$k][] = $v;
+						// 将日文规格作为中文规格
+						$this->spec_vals[$k][] = $v;
+						$vindex = count($this->spec_jp_vals[$k]) - 1;
+					}
+
+					$skuProp['id'] = $this->spec_objs[$k]['id'];
+					$skuProp['type'] = "1"; // 1：文字类型， 2：图片类型
+					$skuProp['name'] = $this->spec_objs[$k]['name'];
+					$skuProp['value'] = $vindex;
+					$skuProps[] = $skuProp;
+
+				} else {
+					// 价格
+					if($k == "jp_price") {
+						$product[$k] = intval(str_replace(",", "", $v));
+					} else {
+						$product[$k] = $v;
+					}
+				}
+			}
+			$product['spec'] = $skuProps;
+			$ret_val[$key] = $product;			
 		}
-		return $content;
+
+		// common::print_b($spec_names);
+		// common::print_b($this->spec_objs);
+		// common::print_b($this->spec_vals);
+		// common::print_b($ret_val);
+
+		return $ret_val;
 	}
 
 	//整合采集信息
@@ -74,7 +145,21 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 	{
 		// 拷贝商品详情页面图片
 		$this->copyDetailImage();
-		return  parent::collect();
+		$ret =  parent::collect();
+
+		// 保存规格数组
+		// common::print_b($this->spec_objs);
+		// common::print_b($this->spec_vals);
+		// common::print_b($this->spec_jp_vals);
+		$specDB = new IModel("spec");
+		foreach($this->spec_objs as $k => $s) {
+			$s['value'] = common::to_spec($this->spec_vals[$k]);
+			$s['value_jp'] = common::to_spec($this->spec_jp_vals[$k]);
+			$specDB->setData($s);
+			$specDB->update("id=" . $s['id']);
+		}
+
+		return $ret;
 	}
 
 	//拷贝商品详情图片

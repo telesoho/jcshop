@@ -506,4 +506,23 @@ class Common{
         return $name;  
     }
 
+    /**
+     * 将规格值字符串变为数组
+     * @param $spec_values 规格值 ["S","M","L"]
+     * @return array('S', 'M', 'L')
+     */
+    static function spec_split($spec_values) {
+        $chars = preg_split('/\["|","|"\]/', $spec_values, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        return $chars;
+    }
+
+    /**
+     * 将规数组变为格值字符串
+     * @param $spec_values 规格值 ["S","M","L"]
+     * @return array('S', 'M', 'L')
+     */
+    static function to_spec($spec_array) {
+        $content = implode('","',$spec_array);
+        return '["' . $content. '"]';
+    }
 }
