@@ -48,18 +48,17 @@
                     </div>
                 </div>
                 <!--编辑收货地址模态框-->
-                <div :id="item.href1" class="mui-modal">
-                    <div class="mui-content" style="background:#f8f8f8">
-                        <div id="addressNew">
-                            <div class="title">请填写你的真实姓名，否则订单无法发出</div>
-                            <div class="mui-input-row row_b_t">
-                                <input type="text" class="mui-input-clear changeHH" v-model="item.name">
+                <div :id="item.href1" class="mui-modal" style="height: 8rem;">
+                   <!--<div class="" style="background:#f8f8f8">-->
+                      <!--<div id="addressNew" >-->
+                            <div class="title">请填写你的真实姓名，否则订单无法发出!</div>
+                            <div class="name_user" >
+                                <input type="text" v-model="item.name">
                             </div>
-                            <div class="mui-input-row row_margin row_b_t" style="border-bottom:1px solid #bbb">
-                                <input type="hidden" class="mui-input-clear"  v-model="item.id">
+                               <input type="hidden" class="mui-input-clear"  v-model="item.id">
                                 <input type="number" class="mui-input-clear"  v-model="item.mob" :id="item.mobileId">
                                 <input type="text" class="mui-input-clear" :value="item.text" :id="item.userCityId" @focus="checkCity(item)" >
-                                <input type="text" class="mui-input-clear"  v-model="item.addr">
+                               <input type="text" class="mui-input-clear"  v-model="item.addr">
                                 <input type="number" class="mui-input-clear"  v-model="item.zi" >
                                 <input type="text" name="" :id="item.card" v-model="item.card" placeholder="收货人身份证号" />
                                 <div class="title"><span>收货人身份证正反面照片</span><span>请务必保证收货人姓名与身份证姓名一致!</span></div>
@@ -82,15 +81,14 @@
                                 </div>
                                 <footer id="que_">
                                     <div id="footer-fixed1">
-                                        <div class="newAddrSub2 newAddrSub_position" style="text-align:center">
+                                        <div class="newAddrSub2 newAddrSub_position">
                                             <button   class="submit_suc" @click="editSubmit(item)">完成</button>
                                         </div>
                                     </div>
                                 </footer>
-                            </div>
-                        </div>
-                    </div>
+                            <!--</div>-->
 
+					
                 </div>
             </div>
         </div>
@@ -112,6 +110,16 @@
 {if:common::jssdk()}
 {/if}
 <script>
+	$("input").focus(function(){
+      		$("#que_").css({
+      			"display":"none"
+      		})
+   });
+    $("input").blur(function(){
+			$("#que_").css({
+      			"display":"block"
+      		})
+	});
     var cityPicker3;
     var Request = new Object();
     Request = GetRequest();

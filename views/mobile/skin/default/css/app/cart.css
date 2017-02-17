@@ -50,6 +50,18 @@ body{
 .goodsInfo .ware .head-name{
     margin-top:0.2rem;
 }
+.goodsInfo .ware .left .classA{
+    display: block;
+    display: -webkit-flex;
+}
+.goodsInfo .ware .left .size{
+    margin-top: 0.5rem;
+    padding-left: 0.05rem;
+}
+.goodsInfo .ware .left .size span{
+    font-size: 0.28rem;
+    color: #bbbbbb;
+}
 .goodsInfo .ware .name{
     width:5.37rem;
     margin-left:0.36rem;
@@ -74,11 +86,10 @@ body{
     vertical-align: bottom;
 }
 .sellprice{
-    display:inline-block;
-    position:relative;
-    top:-0.4rem;
+    display: block;
     font-size:0.28rem;
     color:#ff2f5c;
+    margin-top: 0.1rem;
 }
 .goodsInfo .ware .right{
     width:1.93rem;
