@@ -8,7 +8,7 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = "情人节7折活动还在进行哦~\n各位小仙女们赶紧添加喵酱个人微信jiumaojia001\n领取新人优惠券58元~ 老客也有优惠哦~\n折上折草鸡优惠哦~\n限时优惠咯~";
+	private $remark = '情人节7折活动还在进行哦~\n各位小仙女们赶紧添加喵酱个人微信jiumaojia001\n领取新人优惠券58元~ 老客也有优惠哦~\n折上折草鸡优惠哦~\n限时优惠咯~';
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
@@ -3543,7 +3543,7 @@ OR (
         $user_query        = new IQuery('user as a');
         $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
         $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) > 48";
-        $user_query->where = "a.id IN (24,51)";
+        if ($start == 'test') $user_query->where = "a.id IN (24,51)";
         $user_query->limit = 20000;
         $user_data         = $user_query->find();
         $i                 = 0;
@@ -3567,6 +3567,7 @@ OR (
         $user_query        = new IQuery('user as a');
         $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
         $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) < 48";
+        if ($start == 'test') $user_query->where = "a.id IN (24,51)";
         $user_data         = $user_query->find();
         $i = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
