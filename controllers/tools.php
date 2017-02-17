@@ -382,6 +382,7 @@ class Tools extends IController implements adminAuthorization
 				'user_id'     => $this->tokenCheck(),
 				'sort'        => $_POST['sort'],
 				'update_time' => time(),
+				'create_time' => time(),
 			);
 			//上传封面
 			if(isset($_FILES['cover']['name']) && $_FILES['cover']['name']!=''){
