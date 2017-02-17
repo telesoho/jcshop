@@ -276,11 +276,11 @@ class wechats
                                "color":"#173177"
                            },
                            "remark": {
-                               "value":"情人节7折活动还在进行哦~\n各位小仙女们赶紧添加喵酱个人微信jiumaojia001\n领取新人优惠券58元~ 老客也有优惠哦~\n折上折草鸡优惠哦~\n限时优惠咯~",
+                               "value":"%s",
                                "color":"#173177"
                            }
                    }
-               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['number'],$send_info['create_time']);
+               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['number'],$send_info['create_time'], $send_info['remark']);
                 break;
             case 'tip_coupon_expires':
                 $params = sprintf('{
