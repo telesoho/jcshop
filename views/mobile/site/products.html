@@ -51,7 +51,6 @@
 				<div><span id="time_shop_buy">{{times}}</span></div>
 				<img src="/views/mobile/skin/default/image/jmj/product/timemore_pro.png" style="width: 0.13rem;"/>
 			</div>
-			
             <section class="name-price">
 				<div class="name hideCamp4">{{info.name}}</div>
 				<div class="price">
@@ -98,6 +97,17 @@
 					<li class="right"><span class="mui-icon mui-icon-arrowright" style="color:#bbb;font-size:0.3rem;margin-right:0.25rem;"></span></li>
 				</ul>
 			</a>
+			<div style="height:0.2rem;background:#f5f5f5;" v-if="info.products_spec.length>0"></div>
+			<!--选择颜色尺码入口-->
+			<div class="box colorSize" v-if="info.products_spec.length>0" @click="popverCar(3)">
+				<div class="left">
+					选择<span v-for="item in info.products_spec" style="color:#1f1f1f">{{item.name}}</span>
+				</div>
+				<div class="right">
+					<span class="mui-icon mui-icon-arrowright" style="color:#bbb;font-size:0.3rem;margin-right:0.25rem;"></span>
+				</div>
+			</div>
+			<div></div>
 			<div style="height:0.2rem;background:#f5f5f5;"></div>
 			<!--关联品牌-->
 			<section class="relate relateBrand" v-if="info.brand.id" v-cloak>
@@ -151,7 +161,7 @@
 					<span class="text">相关专辑</span>
 					<span class="bg"></span>
 				</div>
-				<div class="articlelist" >
+				<div class="articlelist">
 					<div class="mark">
 						<div class="con" id="relateArticle">
 							<div class="item" v-for="item in article">
@@ -248,7 +258,7 @@
 				<span class="collection_text" :style="info.is_favorite==0?style1:style2">{{info.is_favorite==0?text1:text2}}</span>
 			</div>
 			<div class="joinButton"><div  id="joinButton" @click="popverCar(1)">加入购物车</div></div>
-			<div class="buyBottom"><div   id="buyBottom" @click="popverCar1(2)">立即购买</div></div>
+			<div class="buyBottom"><div   id="buyBottom" @click="popverCar(2)">立即购买</div></div>
 		</div>
 	</section>
 	<!--弹出购物车-->
@@ -264,19 +274,32 @@
 					<a href="#select_product" class="a_da"><span class="mui-icon mui-icon-closeempty"></span></a>
 				</div>
 			</div>
-			<div class="select_center">
+			<!--选择颜色尺码-->
+			<div class="select_size" v-if="info.products_spec.length>0">
+				 <div class="size" v-for="(item,key) in info.products_spec">
+						<h4>{{item.name}}</h4>
+					 	<div class="cho_size">
+							<span v-for="item1 in item.list" :class="item.cho==item1?'active':''" @click="changeSize(key,item1)">{{item1}}</span>
+						</div>
+				 </div>
+			</div>
+			<!--选择颜色尺码结束-->
+			<div class="select_center" :style="info.products_spec.length>0?'':'border-top:1px solid #eee'">
 				<h3 class="select_h3">数量</h3>
 				<div class="select_center_a">
                     <img src="/views/mobile/skin/default/image/jmj/cart/ruduceable.png" alt="" class="reduce" style="width: 0.5rem; height: 0.5rem;" @click="modified(-1)" id="buyReduceButton" />
                     <input type="number" readonly id="buyNums" v-model="goodsnum"  />
                     <img src="/views/mobile/skin/default/image/jmj/cart/add.png" alt="" class="add" style="width: 0.5rem; height: 0.5rem;" @click="modified(1)" id="buyAddButton" />
-
 				</div>
 			</div>
-            <div class="contain flexbox">
+            <div class="contain flexbox" v-if="showCar!=3">
                 <button class="select_btn"  id="joinCarButton" v-if="showCar==1" @click="joinCar">确定</button>
                 <button class="select_btn"  id="buyNowButton"  v-if="showCar==2" @click="buyNow">立即购买</button>
             </div>
+			<div class="colorSizePoper flexbox" v-if="showCar==3">
+					<div class="item left" @click="joinCar">加入购物车</div>
+					<div class="item right" @click="buyNow">立即购买</div>
+			</div>
 		</div>
 	</section>
 	<!--翻译弹出-->
@@ -370,7 +393,6 @@ var minutes,hours,seconds;
 					img:''
 				}]
 			},
-			goodsnum:1,
 			weight:"",
 			relateArticle:[],
 			img1:'/views/mobile/skin/default/image/jmj/product/remove.png',
@@ -403,7 +425,11 @@ var minutes,hours,seconds;
 //			弹窗
 			y01:0,
 			y0:0,
-			y1:0
+			y1:0,
+//			用户选择产品颜色  尺码
+			type:'goods',
+			choId:false,
+			goodsnum:1
 		},
 		computed: {
 			showLastImg:function(){
@@ -604,15 +630,7 @@ var minutes,hours,seconds;
 				Collection1(self);
 			},
 			popverCar: function(num){
-				if(num==1){
-					this.showCar=1
-				}
-				mui("#select_product").popover('show');
-			},
-			popverCar1: function(num){
-				if(num==2){
-					this.showCar=2
-				}
+				this.showCar=num;
 				mui("#select_product").popover('show');
 			},
 			modified: function(num){
@@ -665,6 +683,11 @@ var minutes,hours,seconds;
 						this.newTop=-textTop+par;
 					}
 				}
+			},
+			changeSize:function(key,size){
+				//判定选择尺寸 规格
+				var _this=this;
+				checkSize(_this,key,size);
 			}
 		}
 	});
@@ -775,11 +798,16 @@ var minutes,hours,seconds;
 					self.times = "结束倒计时 "+hours+":"+minutes+":"+seconds
 
 				}
-				
-				
 				self.showMessage=true;
 				setItem("collection",data.data);
 				self.weight=parseInt(data.data.weight)
+				//如果没有规格 那商品的type类型为products
+				if(data.data.products_spec.length>0){
+					self.type='product'
+				}
+				data.data.products_spec.map(function(item){
+					item.cho=false;
+				});
 				self.info=data.data;
 				self.relateArticle=data.data.article_list;
 			}
@@ -851,32 +879,41 @@ function time_xian(){
 	}
 	//商品加入购物车
 	function joinCartFun(self)
-	{
+	{   var id,data1;
 		var buyNums   = self.goodsnum;
-		var price     = self.info.sell_price;
-		var productId = $('#product_id').val();
-		var type      = productId ? 'product' : 'goods';
-		var goods_id  = (type == 'product') ? productId : self.info.id;
-		$.getJSON(creatUrl("simple/joinCart"),{"goods_id":goods_id,"type":type,"goods_num":buyNums,"random":Math.random},function(content)
-		{
-			if(content.isError == false)
-			{
-				//获取购物车信息
-				$.getJSON(creatUrl("simple/showCart"),{"random":Math.random},function(json)
-				{
-					//实现商品飞入购物车动画
-					flyCart(self);
-					self.car_count=json.count;
-				});
+		if(self.type=='goods'){
+			id      = self.info.id;
+		}else{
+			id     =self.choId
+		}
+		if(!id){
+			alert("请选择商品规格");
+			return;
+		};
+		data1=id+":"+buyNums+":"+self.type
+		mui.ajax({
+			data:{
+				goods:data1
+			},
+			url:"/apic/cart_join",
+			dataType:'json',//服务器返回json格式数据
+			type:'get',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			success:function(data){
+				self.ajaxButton=true;
+				console.log(data);
+				if(data.code!=0){
+					alert(data.msg);
+					return false;
+				}
+				flyCart(self);
+				self.car_count+=buyNums;
 			}
-			else
-			{
-				alert(content.message);
-			}
-		});
+		})
 	}
 	function buyNowFun(self)
 	{
+		var id;
 		//设置必要参数
 		var buyNums = self.goodsnum;
 		var storeNum=self.info.store_nums;
@@ -885,17 +922,17 @@ function time_xian(){
 			$('#buyNums').val(storeNum);
 			return;
 		}
-		var id      = self.info.id;
-		var type    = 'goods';
-		//普通购买
-		var url = "/simple/cart2?id="+id+"&num="+buyNums+"&type="+type;
-
-		//有促销活动（团购，抢购）
-		if(self.info.promo && self.info.activity)
-		{
-			url += "&promo="+self.info.promo+"&activity="+self.info.activity;
+		if(self.type=='goods'){
+			var id      = self.info.id;
+		}else{
+			     id     =self.choId
 		}
-
+		if(!id){
+			  alert("请选择商品规格");
+			return;
+		};
+		//普通购买
+		var url = "/simple/cart2?id="+id+"&num="+buyNums+"&type="+self.type;
 		//页面跳转
 		window.location.href = url;
 	}
@@ -922,8 +959,34 @@ function time_xian(){
             mui("#select_product").popover('hide');
 		});
 	}
-	function getActionSheet(){
 
+	function checkSize(_this,key,size){
+//		如果只有一个商品规格
+//		for(var i=0,j=_this.info.products.length;i<j;i++){
+//
+//		}
+		var l=_this.info.products_spec.length;
+		var temp=_this.info.products_spec[key].cho;
+		_this.info.products_spec[key].cho=size;
+		_this.info.products.map(function(item){
+			var str1,str2;
+			 for(var i=0;i<l;i++){
+				 str1+=item.spec_array[i].value;
+				 str2+=_this.info.products_spec[i].cho
+			 }
+			 if(str1===str2){
+			 	if(item.store_nums>0){
+					_this.choId=item.id;
+					_this.info.store_nums=item.store_nums;
+					_this.info.sell_price=item.sell_price;
+					_this.info.weight=item.weight;
+				}else{
+					_this.info.products_spec[key].cho=temp;
+					alert("该商品库存不足")
+				}
+
+			 }
+		})
 	}
 </script>
 <!-- 微信分享 -->
