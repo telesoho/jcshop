@@ -72,21 +72,28 @@
     text-align: center;
 }
 .sell_price{
-    padding-left:2.95rem;
     position:relative;
     width:100%;
     font-weight: bold;
+    display: -webkit-flex;
+    justify-content: center;
+}
+.sell_price span{
+
 }
 .sell_price .act{
-    position: relative;
+    position: absolute;
     margin-left:0.1rem;
-    top:-0.1rem;
+    top:0.14rem;
+    left: 4.5rem;
     height:0.35rem;
     line-height: 0.35rem;
+    width: 1.86rem;
 }
 .sell_price .act img{
     position: absolute;
-    width:1.452rem;
+    left: 0;
+    width:1.62rem;
     height:0.35rem;
     z-index: 1;
 }
