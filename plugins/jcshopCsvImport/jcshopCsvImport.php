@@ -107,18 +107,20 @@ class jcshopCsvImport extends pluginBase
 		$this->goodsCsvImport($zipDir, $imageDir);
 
 // 		$this->productsCsvImport($zipDir, $imageDir);
-		
+
+		$data['msg'] = "导入完毕";
 		//清理csv文件数据
 		IFile::rmdir($uploadCsvDir,true);
-		$this->redirect($returnUrl);
+		$this->redirect($returnUrl, $data);
 	}
 
 	protected function log($msg) {
 		$this->log->write($msg);
 	}
 
-	protected function error($msg){
-		$this->log->write("ERROR:" . $msg ."\n");
+	protected function error($msg, $context=null){
+		$context_msg = print_r($context, true);
+		$this->log->write("ERROR: $msg \n [$context_msg ]" );
 	}
 	
 	private function goodsCsvImport($zipDir, $imageDir) {
@@ -145,6 +147,7 @@ class jcshopCsvImport extends pluginBase
 		
 		//从csv中解析数据
 		$collectData = $goodsCsvHelper->collect();
+
 
 		$this->processGoodsData($collectData);
 
@@ -177,7 +180,9 @@ class jcshopCsvImport extends pluginBase
 			'store_nums' 		=> '库存数量',
 			'content'    		=> '商品详情',
 			'reset_img'        	=> '重设图片',
-			'spec_array' 		=> '销售属性',
+			'spec' 				=> '规格',
+			'spec_jp' 			=> '规格日文',			
+			'sku_no'			=> '规格编号',
 			'weight'     		=> '物流重量',
 			'name_jp'	 		=> '商品名称日文',
 			'content_jp'		=> '商品详情日文',
@@ -193,6 +198,7 @@ class jcshopCsvImport extends pluginBase
 
 		//实例化商品
 		$goodsObject     	= new IModel('goods');
+		$productObject      = new IModel('product');
 		$photoRelationDB 	= new IModel('goods_photo_relation');
 		$photoDB         	= new IModel('goods_photo');
 		$cateExtendDB    	= new IModel('category_extend');
@@ -217,6 +223,13 @@ class jcshopCsvImport extends pluginBase
 				$this->error("商品JAN编码为空：" . JSON::encode($val));
 				continue;				
 			}
+
+			// 规格编号
+			$field = trim($val[$titleToCols['sku_no']]);
+			if('' === $field) {
+				$this->error("规格编号为空：" . JSON::encode($val));
+				continue;				
+			}
 			
 			$goods_no = IFilter::act($field, "string", 20);
 			$theData['goods_no'] = $goods_no;
@@ -232,7 +245,7 @@ class jcshopCsvImport extends pluginBase
 			}
 
 			// 查询商品是否存在, 如果商品存在，则$the_goods是该商品记录，否则为false
-			$where = "goods_no = ". "'". $goods_no . "' and supplier_id = 0 and ware_house_name = ''"; // supplier_id = 0：九猫
+			$where = "goods_no = '$goods_no' and supplier_id = 0"; // supplier_id = 0：九猫
 			$the_goods = $goodsObject->getObj($where);
 
 			// 如果商品名称不为空，则修改商品名
@@ -282,9 +295,6 @@ class jcshopCsvImport extends pluginBase
 				$theData['search_words'] = ','.$tag.',';
 				keywords::add($tag);
 			}
-			
-			
-			// 销售属性
 
 			// 商家编码
 
@@ -510,6 +520,34 @@ class jcshopCsvImport extends pluginBase
 						$photoRelationDB->add();
 					}
 					
+				}
+			}
+
+			// 处理日文规格
+			$specs = $val[$titleToCols['spec_jp']];
+			$productsDB = new IModel("products");
+
+			foreach($specs as $k => $spec) {
+				$spec_json = JSON::encode($spec['spec']);
+				$where = "goods_id=$goods_id and spec_array='$spec_json'"; 
+				$theProduct = $productsDB->getObj($where);
+
+				if($theProduct) {
+					// 更改
+					$product['spec_array'] = JSON::encode($spec['spec']);
+					$product['jp_price'] = isset($spec['jp_price'])?$spec['jp_price']:0;
+					$product['sell_price'] = isset($spec['sell_price'])?$spec['sell_price']:0;
+					$productsDB->setData($product);
+					$productsDB->update($where);
+				} else {
+					// 增加记录
+					$product['products_no'] = "$goods_no-$k" ;
+					$product['goods_id'] = $goods_id;
+					$product['spec_array'] = JSON::encode($spec['spec']);
+					$product['jp_price'] = isset($spec['jp_price'])?$spec['jp_price']:0;
+					$product['sell_price'] = isset($spec['sell_price'])?$spec['sell_price']:0;
+					$productsDB->setData($product);
+					$productsDB->add();
 				}
 			}
 		}
