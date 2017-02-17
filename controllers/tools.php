@@ -379,9 +379,10 @@ class Tools extends IController implements adminAuthorization
 				'title'       => $_POST['title'],
 				'content'     => $_POST['content'],
 				'status'      => $_POST['status'],
-				'user_id'     => $this->tokenCheck(),
+				'user_id'     => $this->user['user_id'],
 				'sort'        => $_POST['sort'],
 				'update_time' => time(),
+				'create_time' => time(),
 			);
 			//上传封面
 			if(isset($_FILES['cover']['name']) && $_FILES['cover']['name']!=''){
@@ -436,7 +437,7 @@ class Tools extends IController implements adminAuthorization
 				'title'       => $_POST['title'],
 				'content'     => $_POST['content'],
 				'status'      => $_POST['status'],
-				'user_id'     => $this->tokenCheck(),
+				'user_id'     => $this->user['user_id'],
 				'sort'        => $_POST['sort'],
 				'create_time' => time(),
 				'update_time' => time(),

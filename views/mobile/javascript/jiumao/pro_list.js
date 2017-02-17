@@ -113,12 +113,7 @@ window.onload=function(){
 //上拉加载
 var stop=true;
 $(window).bind('scroll', function() {
-    if ($(window).scrollTop() + $(window).height() +600 >= $(document).height() && $(window).scrollTop() > 50) {
-        if(stop==true){
-            stop=false;
-            pullupRefresh()
-        }
-    }
+
     if($(window).scrollTop()>100){
         $(".fix-toTop").show();
         $(".fix-toTop").css("position","fixed");
@@ -127,28 +122,6 @@ $(window).bind('scroll', function() {
         $(".fix-toTop").css("position","fixed");
     }
 });
-function pullupRefresh() {
-    mui.ajax('index.php?controller=apic&action=article_list',{
-        data:pageData,
-        dataType:'json',	// 服务器返回json格式数据
-        type:'post',		// HTTP请求类型
-        timeout:10000,		// 超时时间设置为10秒；
-        success:function(data){
-            console.log(data);
-            var pageAlbum={};
-            pageAlbum.data=data;
-           
-//				document.getElementById("pullContainer").appendChild(div);
-//               mui('#pullrefresh').pullRefresh().endPullupToRefresh(pageData.page==data[0].totalpage);
-            if(data[0].totalpage>pageData.page){
-                stop = true;
-            }else{
-                stop = false;
-            }
-            pageData.page++;
-        }
-    });
-}
 function getPro_list(self,sub_data){
     mui.ajax('/apic/pro_list',{
         data:sub_data,
