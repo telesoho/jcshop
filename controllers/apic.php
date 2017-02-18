@@ -3601,6 +3601,11 @@ OR (
 //            wechats::send_message_template($v, 'ship', ['order_no'=>'2017052456', 'name'=>'商品名称', 'billcode'=>'23', 'remark'=>'喵~感谢您对九猫家的信任与支持！我们已经收到您的订单啦~ 日本供货商将在3-5个工作日完成配货哒，正常情况下10-15个工作日您将收到您买的宝贝，请耐心等待哦ฅ՞•ﻌ•՞ฅ~\n如果有任何订单退换货等问题请添加客服喵微信：\njiumaojia006；想要领取优惠券的小伙伴欢迎添加喵酱个人微信：jiumaojia001；更多优惠群里第一时间共享哦~么么哒~']);
 //        }
     }
+
+    /**
+     * User: chenbo
+     * 分享赚
+     */
     function share_money_detail(){
         $data       = common::get_user_data($this->user['user_id']);
         if (empty($data)){
@@ -3609,6 +3614,12 @@ OR (
             $this->returnJson(['code'=>0, 'msg'=>'用户分享赚信息', 'data'=>$data]);
         }
         $this->data = $data;
+    }
+    function get_share_money(){
+        $share_money_query        = new IQuery('share_money');
+        $share_money_query->where = "user_id = " . $this->user['user_id'];
+        $data                     = $share_money_query->find();
+        $this->returnJson(['code'=>0, 'msg'=>'用户分享赚动态', 'data'=>$data]);
     }
     function test(){
         $user_query = new IQuery('user');

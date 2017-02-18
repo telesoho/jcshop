@@ -223,6 +223,9 @@ class Ucenter extends IController implements userAuthorization
 		    		//增加用户评论商品机会
 		    		Order_Class::addGoodsCommentChange($id);
 
+		    		//分享赚
+                    $this->share_money_settlement($id);
+
 		    		//确认收货以后直接跳转到评论页面
 		    		$this->redirect('evaluation');
 				}
@@ -998,17 +1001,21 @@ class Ucenter extends IController implements userAuthorization
 
     /**
      * User: chenbo
-     * 分享赚钱
+     * 订单完成后分享赚更新
      */
-    function share_memoney_detail(){
-        $this->redirect('share_memoney_detail');
-    }
-
     function share_money_settlement(){
-        $order_id = ''
+        $order_id = 463;
         $data = order_class::getOrderGoods($order_id);
-        var_dump($data);
-//        $share_money_model = new IModel('share_money');
-//        $share_money_model->add();
+        $share_money_model = new IModel('share_money');
+        foreach ($data as $k=>$v){
+            if (!empty($v['share_no'])){
+                $explode_data = explode('_',$v['share_no']);
+                $goods_data   = common::get_goods_data(null, $v['goodsno']);
+                $share_money  = 0.07 * $goods_data['sell_price'];
+                $share_money_model->setData(['time'=>date('Y-m-d H:i:s'), 'user_id'=>$explode_data[0], 'order_id'=> $order_id, 'share_no'=> $v['share_no'], 'share_money'=>$share_money]);
+                $share_money_model->add();
+            }
+        }
+        return;
     }
 }
