@@ -3546,9 +3546,11 @@ OR (
         $user_query        = new IQuery('user as a');
         $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
         $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) > 48";
-        if ($start == 'test') $user_query->where = "a.id IN (24,51)";
-//        $user_query->limit = 20000;
-        $user_query->limit = $start;
+        if ($start == 'test') {
+            $user_query->where = "a.id IN (24,51)";
+        } else {
+            $user_query->limit = $start;
+        }
         $user_data         = $user_query->find();
         $i                 = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
@@ -3607,5 +3609,11 @@ OR (
             $this->returnJson(['code'=>0, 'msg'=>'用户分享赚信息', 'data'=>$data]);
         }
         $this->data = $data;
+    }
+    function test(){
+        $user_query = new IQuery('user');
+        $start             = IFilter::act(IReq::get('start'));
+        $data = $user_query->find();
+        $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => 1222, 'success'=>222]]);
     }
 }
