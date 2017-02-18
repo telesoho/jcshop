@@ -58,7 +58,8 @@ li{
 #list_shop ul{
 	width: 100%;
 	display: -webkit-flex;
-	flex-wrap: wrap;
+	-webkit-flex-wrap: wrap;
+	/*不加内核前缀不对*/
 }
 #list_shop ul li{
 	width: 3.64rem;
@@ -76,6 +77,7 @@ li{
 	-webkit-justify-content: center;
 	-webkit-align-items: center;
 	margin-bottom:0.1rem ;
+
 }
 #list_shop ul li div img{
 	width: 2.9rem;
@@ -91,6 +93,7 @@ li{
 	font-size:0.24rem;
 	color:#ff2f5c;
 }
-#list_shop ul li .span2 span{
+#list_shop ul li .span2 span {
 	font-size: 0.3rem;
-	color:#ff2f5c;
+	color: #ff2f5c;
+}
