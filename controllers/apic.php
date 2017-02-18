@@ -3547,13 +3547,14 @@ OR (
         $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
         $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) > 48";
         if ($start == 'test') $user_query->where = "a.id IN (24,51)";
-        $user_query->limit = 20000;
+//        $user_query->limit = 20000;
+        $user_query->limit = $start;
         $user_data         = $user_query->find();
         $i                 = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'],'remark'=>$this->remark, 'remark_goods_id'=>$remark_goods_id], __FUNCTION__);
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'],'remark'=>$this->remark, 'remark_goods_id'=>$this->remark_goods_id], __FUNCTION__);
             if ($ret){
                 common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
                 $i++;
@@ -3576,7 +3577,7 @@ OR (
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$this->remark, 'remark_goods_id'=>$remark_goods_id], __FUNCTION__);
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$this->remark, 'remark_goods_id'=>$this->remark_goods_id], __FUNCTION__);
 //            wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig','member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$remark], __FUNCTION__);
             if ($ret){
                 $i++;
