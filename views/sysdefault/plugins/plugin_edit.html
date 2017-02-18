@@ -79,7 +79,9 @@
 			</select>
 		<%}else if(item['type'] == "text"){%>
 			<input type="text" name="<%=key%>" value="<%=item['value']%>" class="normal" pattern="<%=item['pattern']%>" />
-		<%}%>
+		<%}else if(item['type'] == "label"){%>
+			<label><%=item['value'] %></label>
+		<%}%>		
 	</td>
 </tr>
 <%}%>
