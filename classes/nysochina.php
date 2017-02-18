@@ -37,18 +37,44 @@ class nysochina
         "保税16仓" => "1",   //包税区
     );
 
-    private static $config = array(
+    private static $apiKey = array(
+        "AddOrder"          =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
+        "PostSynchro"       =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
+        "SkuSynchro"        =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
+        "StockSynchro"      =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
+        "searchOrder"       =>  array("partner" => "nyso_supParenter", "key" => "nyso_supUserKey"),
+        "orderDelivery"     =>  array("partner" => "nyso_supParenter", "key" => "nyso_supUserKey"),
+        "supGoodsSynchro"   =>  array("partner" => "nyso_supParenter", "key" => "nyso_supUserKey"),
+        "supStockSynchro"   =>  array("partner" => "nyso_supParenter", "key" => "nyso_supUserKey"),
+    );
+
+    public static $config = array(
         'nyso_server'       =>  "http://121.41.84.251:9090",
         'nyso_userkey'      =>  "jiumaojiatest",
+        'nyso_supUserKey'   =>  "b306f5829b6045f8a10efacebcd5b5c1",
         'nyso_parenter'     =>  "1161_651",
+
+        // 妮素平台电子订单接口
         "AddOrder"          =>  "/api/AddOrder.shtml",
         "PostSynchro"       =>  "/api/PostSynchro.shtml",
         "SkuSynchro"        =>  "/api/SkuSynchro.shtml",
         "StockSynchro"      =>  "/api/StockSynchro.shtml",
+
+        // 妮素供应商平台接口
+        "searchOrder"       =>  "/api/sup/searchOrder.shtml",
+        "orderDelivery"     =>  "/api/sup/orderDelivery.shtml",
+        "supGoodsSynchro"   =>  "/api/sup/supGoodsSynchro.shtml",
+        "supStockSynchro"   =>  "/api/sup/supStockSynchro.shtml",
+
+        // 是否输出调试信息
+        "debug"             => "false",
     );
 
     public static $log ;
 
+    public static function config() {
+        return self::$config;
+    }
 
     /**
      * 初始化函数
@@ -74,6 +100,33 @@ class nysochina
         self::$log->pushHandler($stream);
     }
 
+    /**
+     * 妮素API的统一调用接口
+     * @param $api_name 接口名称
+     * @param $req 接口参数
+     * @return 妮素API返回的JSON结果
+     * @throw  Exception
+     */
+    public static function run($api_name, $req) {
+        $url = self::$config['nyso_server'] . self::$config[$api_name];
+        return self::doQuery($url, $req, "" , $api_name);
+    }
+
+    // 根据查询到的妮素订单生成订单号
+    public static function getOrderId($nysoOrder) {
+        $orderTime = date_parse_from_format("Y-m-d H:i:s", $nysoOrder['OrderTime']);
+        $mobile = $nysoOrder['ConsigneeNumber'];
+        $orderId = "NS" . $orderTime->format("YmdHis") . substr($mobile, -4);
+        return $orderId;
+    }
+
+
+    /*=====================================================================================
+     *       妮素商品          妮素订单
+     * 妮素 ==========> 九猫 ============> 妮素
+     * 电子订单接口部分，用于从妮素平台拉取商品及向妮素推送九猫平台订单
+     * 
+     *======================================================================================*/
     /**
      * 商品数据同步
      * @param $skus SKU列表，如果为NULL，则同步全部商品数据
@@ -120,65 +173,19 @@ class nysochina
 		return self::doQuery($url, $param, "getPosts", $apiName);
 	}
 
-    public static function testGoodsSyn(){
-		return nysochina::getGoods(array("FAN5852"));
-    }
-
-    public static function testPostsSyn() {
-        return nysochina::getPosts(array(
-            "KA-20170116144016",
-            "KA-20170116143700",
-            "KA-20170116142843",
-            "KA-20170116102711",
-        ));
-    }
-
-    // public static function testOrder(){
-	// 	// $orderNo = "KA-" . date("YmdHis");
-	// 	$orderNo = "KA-20170116";
-    //     $param["OrderNo"] = $orderNo;
-    //     $param["OrderTime"] = "20161016122450";
-
-    //     $item["BuyQuantity"] ="2";
-    //     $item["SkuNo"] = "FAN5852";
-    //     $item["Tax"] = "23.8";
-	// 	$item["BuyPrice"] = "100";  // 实际用户购买时的价格，即下单价？
-    //     $items[] = $item;
-
-    //     $param["OrderItems"] = $items;
-    //     $param["PostalPrice"] = "20";   // 邮费
-    //     $param["GoodsPrice"] = "200.0"; // 货值
-    //     $param["Nick"] = "啊啊啊啊啊啊啊";
-    //     $param["OrderPrice"] = "220";  // 订单总价
-    //     $param["Tax"] = "23.8";         // 商品税费
-    //     $param["City"] = "北京";
-    //     $param["PayType"] = "1";
-    //     $param["PayerName"] = "穆国峰";
-    //     $param["Province"] = "北京";
-    //     $param["DetailedAddres"] = "北京北京朝阳区望京soho";
-    //     $param["Remark"] = "";
-    //     $param["ConsigneeName"] = "穆国峰";
-    //     $param["ConsigneeNumber"] = "15712341234";
-    //     $param["Favourable"] = "23.8";        // 优惠金额
-    //     $param["IdCard"] = "230404198812150116";
-    //     $param["PayNo"] = "sadadad";
-    //     $param["District"] = "朝阳区";
-    //     $param["DeliveryType"] = "1";
-
-	// 	return self::addOrder($param);
-    // }
-
-	/**
-	 * 订单新增接口
-     * @param $order 订单详情
-	 */
-	public static function addOrder($order) {
-        $apiName = "AddOrder";
-        $url = self::$config['nyso_server'] . self::$config[$apiName];
-        $param = $order;
-        return self::doQuery($url, $param, "addOrder", $apiName);
+    /**
+     * 返回json
+     * @param $data
+     */
+	private static function exitJSON($data){
+		header('Content-type: application/json');
+		echo json_encode($data);
+		exit();
 	}
 
+    /*===================================================================================
+     * 私有函数
+     *==================================================================================*/
 	/**
 	 * 执行接口API
 	 * @param api 接口URL
@@ -186,31 +193,40 @@ class nysochina
 	 * @param info 信息
 	 * @param apiname 接口名
 	 */
-	public static function doQuery($api, $param, $info, $apiname) {
+	private static function doQuery($api, $param, $info, $apiname) {
 		//当前系统时间：格式为yyyy-MM-dd
         $dateStr = date("Y-m-d");
 		$paramContent = json_encode($param);
-        $tokenStr = self::$config['nyso_userkey'] . $dateStr . $apiname . $paramContent;
+        $apiPartner = self::$config[self::$apiKey[$apiname]['partner']];
+        $apiKey = self::$config[self::$apiKey[$apiname]['key']];
+        $tokenStr = $apiKey . $dateStr . $apiname . $paramContent;
 
         $token = strtoupper(md5($tokenStr));
 
-        $headerParam[] = "parenter:" . self::$config['nyso_parenter'];
-        $headerParam[] = "interfacename:" . $apiname;
-        $headerParam[] = "token:" . $token;
+        $headerParam[] = "parenter:$apiPartner";
+        $headerParam[] = "interfacename:$apiname";
+        $headerParam[] = "token:$token";
 
         try {
             $response = self::jsonPost($api, $paramContent, $headerParam);
-            $q['api'] = $api;
-            $q['param'] = $param;
-            $q['header'] = $headerParam;
-            self::$log->info($response, $q);
+            if(self::$config['debug'] == "true") {
+                $context['api'] = $api;
+                $context['param'] = $param;
+                $context['header'] = $headerParam;
+                $context['info'] = $info;
+                $context['response'] = $response;
+                self::$log->info($api, $context);
+            }
             return $response;
-        } catch(Exception $e) {
+        } catch(Exception $e) {         
             // 输出错误日志            
-            $err['api'] = $api;
-            $err['param'] = $param;
-            $err['header'] = $headerParam;
-            self::$log->err($e->getMessage(), $err);
+            $context['api'] = $api;
+            $context['param'] = $param;
+            $context['header'] = $headerParam;
+            $context['tokenStr'] = $tokenStr;
+            $context['info'] = $info;
+            self::$log->err($e->getMessage(), $context);
+           
             throw $e;
         }
 	}
@@ -218,7 +234,7 @@ class nysochina
     /**
      * 根据仓库名取得对应的发货方式
      */
-    public static function getDeliveryType ($wareHouseName) {
+    private static function getDeliveryType ($wareHouseName) {
         return self::$WareHouseName2DeliverType[$wareHouseName];
     }
 
@@ -231,7 +247,7 @@ class nysochina
 	 *            请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
 	 * @return 所代表远程资源的响应结果
 	 */
-	public static function jsonPost($url, $paramContent, $header) {
+	private static function jsonPost($url, $paramContent, $header) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
@@ -246,22 +262,22 @@ class nysochina
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $paramContent);
-
+        
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        
+
         if (false === $response) {
             throw new Exception(curl_error($ch), $httpCode);           
         }
 
         curl_close($ch);
 
-        $result = json_decode($response);
-        
-        if( isset($result->{'success'}) && $result->{'success'} == false ) {
-            throw new Exception($result->{'Message'}, $result->{'Code'});
-        }
+        $result = json_decode($response, true);
 
-        return $response;
+        if(isset($result['success']) && !$result['success'] ) {
+            throw new Exception(print_r($result, true));
+        }
+        return $result;
 	}
+     
 }
