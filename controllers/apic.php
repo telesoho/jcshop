@@ -8,8 +8,8 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '一天下来眼睛都很累啦~ 喵酱提醒你该滴滴眼药水~休息一下啦~ 小林制药隐形眼镜滴眼液，适用于长时间使用电脑、佩戴隐形眼镜引起的眼部干涩，眼疲劳，眼部分泌物过，视线模糊等眼部不适的问题~ 今早9:00九猫家限时抢价格超级优惠呢~快快来看看吧~';
-	private $remark_goods_id = 5900;
+	private $remark = '工作一天辛苦啦~ 记得好好吃饭哦~ 要是胃不舒服问题就大啦~如果有小伙伴有这方面苦恼的话，喵酱给你推荐一个神器~ 太田胃散，日本口碑最好的胃药，木有之一，消化不良，食欲不振等问题都不在话下，8岁以上儿童就能食用！纯植物萃取，安全可靠，没有副作用！家中常备良药~今晚20:00九猫家限时抢有上新打折哦~快快来看看吧~';
+	private $remark_goods_id = 8128;
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
