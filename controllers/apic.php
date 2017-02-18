@@ -8,7 +8,8 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '情人节7折活动还在进行哦~\n各位小仙女们赶紧添加喵酱个人微信jiumaojia001\n领取新人优惠券58元~ 老客也有优惠哦~\n折上折草鸡优惠哦~\n限时优惠咯~';
+	private $remark = '一天下来眼睛都很累啦~ 喵酱提醒你该滴滴眼药水~休息一下啦~ 小林制药隐形眼镜滴眼液，适用于长时间使用电脑、佩戴隐形眼镜引起的眼部干涩，眼疲劳，眼部分泌物过，视线模糊等眼部不适的问题~ 今早9:00九猫家限时抢价格超级优惠呢~快快来看看吧~';
+	private $remark_goods_id = 5900;
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
@@ -19,7 +20,8 @@ class Apic extends IController{
 		$stream->setFormatter($formatter);
 		$this->log = new Logger('api');
 		$this->log->pushHandler($stream);
-		//        header("Content-type: application/json");
+
+		
 	}
 	
 	//---------------------------------------------------主要页面---------------------------------------------------
@@ -3551,7 +3553,7 @@ OR (
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'],'remark'=>$this->remark], __FUNCTION__);
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'],'remark'=>$this->remark, 'remark_goods_id'=>$remark_goods_id], __FUNCTION__);
             if ($ret){
                 common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
                 $i++;
@@ -3574,7 +3576,7 @@ OR (
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$this->remark], __FUNCTION__);
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$this->remark, 'remark_goods_id'=>$remark_goods_id], __FUNCTION__);
 //            wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig','member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$remark], __FUNCTION__);
             if ($ret){
                 $i++;
