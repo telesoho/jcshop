@@ -1003,4 +1003,12 @@ class Ucenter extends IController implements userAuthorization
     function share_memoney_detail(){
         $this->redirect('share_memoney_detail');
     }
+
+    function share_money_settlement(){
+        $order_id = ''
+        $data = order_class::getOrderGoods($order_id);
+        var_dump($data);
+//        $share_money_model = new IModel('share_money');
+//        $share_money_model->add();
+    }
 }
