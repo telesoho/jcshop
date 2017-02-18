@@ -280,7 +280,7 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['number'],$send_info['create_time'], $send_info['remark']);
+               }',$open_id,$template_array[$type],IUrl::getHost()."/site/products?id=".$send_info['remark_goods_id'],$send_info['number'],$send_info['create_time'], $send_info['remark']);
                 break;
             case 'tip_coupon_expires':
                 $params = sprintf('{
