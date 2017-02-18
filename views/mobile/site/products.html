@@ -6,10 +6,9 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<title>商品详情</title>
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/custombox.min.css?v=<?php echo time(); ?>" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/products.css?v=<?php echo time(); ?>" />
 </head>
 <body>
@@ -229,24 +228,6 @@
 				<div class="top">
 					喵粉都爱买
 				</div>
-				<!--<div class="content">
-					<a :href="item.url" class="item locationA" v-for="item in relateList">
-						<div class="img">
-							<img :src="item.img" alt="" />
-						</div>
-						<div class="con">
-							<div class="name hidewrap">
-								{{item.name}}
-							</div>
-							<div class="price">
-								<span style="font-size:0.22rem;color:#ff2f5c">¥ </span>{{item.sell_price}}
-							</div>
-							<div class="relate_price">
-								国内价：<span style="font-family:HelveticaNeue;font-size:0.26rem;color:#b8b8b8;">{{item.market_price}}</span>
-							</div>
-						</div>
-					</a>
-				</div>-->
 				<goods_list :msg="relateList"></goods_list>
 			</section>
 			<div style="height: 0.9rem;">
@@ -367,16 +348,17 @@
 	</div>
 </section>
 
-<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/vue.js"></script>
+<script src="/views/mobile/javascript/jquery.min.js?"></script>
+<script src="/views/mobile/javascript/mui.js?"></script>
+<script src="/views/mobile/javascript/lazyload.js"></script>
+<script src="/views/mobile/javascript/jiumao/common.js"></script>
+<script src="/views/mobile/javascript/jiumao/wechat.js"></script>
 <script src="/views/mobile/components/top_back.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 <script src="/views/mobile/components/List_of_goods.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 var minutes,hours,seconds;
-	var statusOrder={echo:IReq::get('id')};
+	var statusOrder="{echo:IReq::get('id')}";
 	var time_all,times;
 	//记录访问位置的id
 	setItem("product",statusOrder);
@@ -482,6 +464,10 @@ var minutes,hours,seconds;
 			var gallery = mui('#controllor');
 			gallery.slider({
 				interval:2000//自动轮播周期，若为0则不自动播放，默认为0；
+			});
+			lazyload.init({
+				anim:false,
+				selectorName:".samLazyImg"
 			});
 //			状态判定代码
 			if(this.checkScroll){

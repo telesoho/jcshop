@@ -16,8 +16,8 @@ Vue.component('goods_list',{
                     <img src="" alt="" class="" />\
                 </div>\
                 <div class="content">\
-                    <div class="name">{{item.name}}</div>\
-                    <div class="price">\
+                    <div class="name" style="text-align: center">{{item.name}}</div>\
+                    <div class="price" style="text-align: center">\
                         <span class="sellprice">¥{{item.sell_price}}</span>\
                         <span class="japanprice">日本价：{{item.jp_price}}円</span>\
                         <span class="openprice">国内价：¥{{item.market_price}}</span>\

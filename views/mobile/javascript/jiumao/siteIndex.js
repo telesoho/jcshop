@@ -316,7 +316,6 @@ function index_home(self){
         	//时间
         	var myDate = new Date();
         	var data_time = myDate.getTime();
-            
 			self.speed = data.data.speed;
 			if(self.speed == ""){
 				self.shop_time = false;
