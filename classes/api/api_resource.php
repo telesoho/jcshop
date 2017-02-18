@@ -56,7 +56,23 @@ return array(
 			'type'	=> 'row',
 		)
 	),
-	
+
+	// 取九猫商品数据，包含products
+	'getGoodsInfoBySkuNo2' => array(
+		'query' => array(
+			'name' => '@sa as sg',
+			'where' => 'sg.sku_no = "#sku_no#"',
+			'subQueries' => array(
+				'sa' => array(
+					'table'   => 'goods as g',
+					'where'  => 'g.sku_no = "#sku_no#" or p.products_no = "#sku_no#"',
+					'join'	 => 'left join products as p on g.id = p.goods_id',
+					'fields' => 'ifnull(p.products_no, g.sku_no) as sku_no, g.id as goods_id,p.id as product_id ',
+					),
+				),
+		)
+	),
+
     //取商品数据通过商品编号
     'getGoodsInfoByGoodsNO' => array(
         'query' => array(

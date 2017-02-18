@@ -253,6 +253,7 @@ class IQuery
             foreach($this->subQueries as $k => $q) {
 				$sql = strtr($sql, array(
 					"@" . $this->tablePre . $k => $q,	// setJoin时会把@key替换为@iwebshop_key
+					$this->tablePre . "@" . $k => $q,   // setTable会把@key替换为iwebshop_@key
 					"@" . $k => $q,
 				));
             }
