@@ -13,30 +13,9 @@
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/order.css?v=<?php echo time(); ?>" />
 </head>
 <body>
-<div id="loading">
-	<div class="spinner">
-		<div class="spinner-container container1">
-			<div class="circle1"></div>
-			<div class="circle2"></div>
-			<div class="circle3"></div>
-			<div class="circle4"></div>
-		</div>
-		<div class="spinner-container container2">
-			<div class="circle1"></div>
-			<div class="circle2"></div>
-			<div class="circle3"></div>
-			<div class="circle4"></div>
-		</div>
-		<div class="spinner-container container3">
-			<div class="circle1"></div>
-			<div class="circle2"></div>
-			<div class="circle3"></div>
-			<div class="circle4"></div>
-		</div>
-	</div>
-</div>
 <!--loading页结束-->
 <div id="orderList">
+	<loadding :mes="showloadding"></loadding>
 	<header class="flexbox head" v-cloak>
 		<div class="headItem" v-for="(item,key) in headData" :style="orderClass==key?divA:divC" @click="changeStatus(key)">{{item}}
 			<span :style="orderClass==key?spanA:spanC"></span>
@@ -115,31 +94,22 @@
 				</div>
                 <div class="flexbox empty_product" v-if="infoState">
                 <div class="img">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
+                    <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" style="width:1.36rem;margin-top:0.6rem" alt=""/>
                 </div>
-                <div class="content">
-                    <span >~</span>
-                    <span >憋拉了，到底了</span>
-                    <span >~</span>
+                <div class="content" style="margin-top:0.3rem;margin-bottom:0.3rem;">
+                    <span style="color:#bbb" >~</span>
+                    <span style="color:#bbb">憋拉了，到底了</span>
+                    <span style="color:#bbb">~</span>
                 </div>
             </div>
 			</div>
 	</div>
-	<section>
-		<!--物流弹出菜单-->
-		<div id="div_action" :class="showContainer?leftClass:rightClass">
-			<div class="head">
-				<span @click="showContainer=false">返回</span><span>查看物流2</span>
-			</div>
-			<div id="div_text">
-
-			</div>
-		</div>
-	</section>
 </div>
-<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/vue.js"></script>
+<!--加载动画载入-->
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/jiumao/order.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

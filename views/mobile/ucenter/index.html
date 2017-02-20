@@ -7,12 +7,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
     <title>个人中心</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>"/>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/personalCenter.css?v=<?php echo time(); ?>" />
 </head>
 <body>
@@ -21,7 +19,7 @@
         <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         <h1 class="mui-title">个人中心</h1>
     </header>-->
-    <section id="user_Info">
+    <section id="user_Info" v-cloak>
         <!--<cat-refresh :mes="showmessage"></cat-refresh>-->
     	<div class="headBox">
     		<div class="logo_img">
@@ -38,8 +36,7 @@
 			    <div class="userName hidewrap" style="width:1.7rem;height: 0.5rem;" v-else>{{info.username}}</div>
 	        </div>
 	        <div id="share_mon">
-	        	<p>{{info.u_balance}}<span>元</span></p>
-	        	
+	        	<p>{{info.u_balance?info.u_balance:0}}<span> 元</span></p>
 	        </div>
 	    </div>
         <footer-nav :state="4" :states="ucenterindex_st"></footer-nav>
