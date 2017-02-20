@@ -6,14 +6,24 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<title>商品详情</title>
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
-	<link rel="stylesheet" href="/views/mobile/skin/default/css/custombox.min.css?v=<?php echo time(); ?>" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+	<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
 	<link rel="stylesheet" href="/views/mobile/skin/default/css/app/products.css?v=<?php echo time(); ?>" />
 </head>
 <body>
 <section id="productInfo" v-cloak v-if="showMessage">
+    <!--弹窗-->
+    <div v-if="popup_state==1" class="popup"  @touchmove="stopEvent">
+        <div>
+            <img src="/views/mobile/skin/default/image/jmj/product/ttt.jpg" alt="" class="img1"/>
+            <div class="text">偷偷告诉你：添加喵酱微信：jiumaojia001<br/>
+                给你发独家优惠券哦^-^
+            </div>
+            <img src="/views/mobile/skin/default/image/jmj/icon/close.png" class="img2" @click.stop="close_Popup" />
+        </div>
+    </div>
+    <!--弹窗结束-->
 	<top_back_car :msg="car_count"></top_back_car>
 	<div id="pullrefresh1" class="v-container" v-if="showContainer1" @touchstart="firstContainerMoveStart" @touchmove="firstContainerMove" @touchend="endtouch1">
 		<span @click="share" style="display: inline-block;position: fixed;right: 0;top: 1.02rem;z-index: 999;"><img src="/views/mobile/skin/default/image/jmj/product/shareMoney.png" style="width: 1.07rem;"/></span>
@@ -63,8 +73,10 @@
 						</div>
 					</div>
 					<div class="cPrice">
-						<span class="chinaPrice">国内价： <s> {{info.market_price}}</s></span>
-						<span class="jaPrice">日本价：{{parseInt(info.jp_price)}} 円</span>
+						<div style="display: -webkit-flex;-webkit-justify-content: center;">
+							<span class="chinaPrice">国内价： <s> {{info.market_price}}</s></span>
+							<span class="jaPrice">日本价：{{parseInt(info.jp_price)}} 円</span>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -227,24 +239,6 @@
 				<div class="top">
 					喵粉都爱买
 				</div>
-				<!--<div class="content">
-					<a :href="item.url" class="item locationA" v-for="item in relateList">
-						<div class="img">
-							<img :src="item.img" alt="" />
-						</div>
-						<div class="con">
-							<div class="name hidewrap">
-								{{item.name}}
-							</div>
-							<div class="price">
-								<span style="font-size:0.22rem;color:#ff2f5c">¥ </span>{{item.sell_price}}
-							</div>
-							<div class="relate_price">
-								国内价：<span style="font-family:HelveticaNeue;font-size:0.26rem;color:#b8b8b8;">{{item.market_price}}</span>
-							</div>
-						</div>
-					</a>
-				</div>-->
 				<goods_list :msg="relateList"></goods_list>
 			</section>
 			<div style="height: 0.9rem;">
@@ -279,7 +273,7 @@
 				 <div class="size" v-for="(item,key) in info.products_spec">
 						<h4>{{item.name}}</h4>
 					 	<div class="cho_size">
-							<span v-for="item1 in item.list" :class="item.cho==item1?'active':''" @click="changeSize(key,item1)">{{item1}}</span>
+							<span  @click="changeSize(key,item1,item.name)" v-for="item1 in item.list" :class="item.cho==item1?'active':''">{{item1}}</span>
 						</div>
 				 </div>
 			</div>
@@ -365,22 +359,25 @@
 	</div>
 </section>
 
-<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
-<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/vue.js"></script>
+<script src="/views/mobile/javascript/jquery.min.js?"></script>
+<script src="/views/mobile/javascript/mui.js?"></script>
+<script src="/views/mobile/javascript/lazyload.js"></script>
+<script src="/views/mobile/javascript/jiumao/common.js"></script>
+<script src="/views/mobile/javascript/jiumao/wechat.js"></script>
 <script src="/views/mobile/components/top_back.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 <script src="/views/mobile/components/List_of_goods.js?v=<?php echo time(); ?>" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 var minutes,hours,seconds;
-	var statusOrder={echo:IReq::get('id')};
+	var statusOrder="{echo:IReq::get('id')}";
+    var popup_state="{echo:IReq::get('t')}";
 	var time_all,times;
 	//记录访问位置的id
 	setItem("product",statusOrder);
 	var vm = new Vue({
 		el: '#productInfo',
 		data: {
+            popup_state:popup_state,
 			time_shop:false,
 			times:"",
 			time_title:"",
@@ -471,7 +468,7 @@ var minutes,hours,seconds;
 				return arr;
 			}
 		},
-		mounted: function(){
+		mounted: function(e){
 			var self=this;
 			getProductDetail(statusOrder,self);
 			car_shop_num(self);
@@ -480,6 +477,10 @@ var minutes,hours,seconds;
 			var gallery = mui('#controllor');
 			gallery.slider({
 				interval:2000//自动轮播周期，若为0则不自动播放，默认为0；
+			});
+			lazyload.init({
+				anim:false,
+				selectorName:".samLazyImg"
 			});
 //			状态判定代码
 			if(this.checkScroll){
@@ -491,6 +492,14 @@ var minutes,hours,seconds;
 			}
 		},
 		methods: {
+//		    弹窗状态处理
+            stopEvent:function(e){
+               e.preventDefault();
+            },
+            close_Popup:function(e){
+              e.preventDefault=false;
+              this.popup_state=null;
+            },
 			//进入限时购
 			time_buy:function(){
 				window.location.href = "/site/time_purchase"
@@ -684,10 +693,10 @@ var minutes,hours,seconds;
 					}
 				}
 			},
-			changeSize:function(key,size){
+			changeSize:function(key,size,name){
 				//判定选择尺寸 规格
 				var _this=this;
-				checkSize(_this,key,size);
+				checkSize(_this,key,size,name);
 			}
 		}
 	});
@@ -753,54 +762,12 @@ var minutes,hours,seconds;
 				}else{
 					self.time_shop = true;
 				}
-				
-				time_all = data.data.speed.end_time;
-				var datae = new Date();
-				// 结束时间
-				if(parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000)<0){
-					self.time_title = "已结束";
-				}else{
-					self.time_title = "抢购中";
-					time_xian();
-				}
-				//开始时间
-				console.log();
-				var timestamp4 = new Date(parseInt(data.data.speed.start_time)*1000);//直接用 new Date(时间戳) 格式转化获得当前时间
-				if(parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000)<0){
-					self.times = "明天再来";
-					clearInterval(times);
-				}
-				if(parseInt(data.data.speed.start_time) - parseInt(datae.getTime()/1000)>=0){
-					self.times = "今天"+timestamp4.toTimeString().substr(0, 8)+"开抢";
-				}else{
-					var end_ = parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000);
-					minutes = parseInt(end_/60);
-					seconds = parseInt(end_%60);
-					// alert(theTime1+"-"+theTime);
-					if(minutes > 60) {
-					hours = parseInt(minutes/60);
-					minutes = parseInt(minutes%60);
-					}
-					if(hours > 24) {
-						data = parseInt(hours/24);
-						hours = parseInt(hours%24);
-					}
+				xian(self,data);
 
-
-					if(parseInt(hours)<10){
-						hours = "0"+parseInt(hours);
-					}
-					if(parseInt(minutes)<10){
-						minutes = "0"+parseInt(minutes);
-					}if(parseInt(seconds)<10){
-						seconds = "0" + parseInt(seconds);
-					}
-					self.times = "结束倒计时 "+hours+":"+minutes+":"+seconds
-
-				}
 				self.showMessage=true;
 				setItem("collection",data.data);
-				self.weight=parseInt(data.data.weight)
+				self.weight=parseInt(data.data.weight);
+				console.log(data.data.products_spec)
 				//如果没有规格 那商品的type类型为products
 				if(data.data.products_spec.length>0){
 					self.type='product'
@@ -813,7 +780,52 @@ var minutes,hours,seconds;
 			}
 		});
 	}
-	
+	function xian(self,data){
+		time_all = data.data.speed.end_time;
+		var datae = new Date();
+		// 结束时间
+		if(parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000)<0){
+			self.time_title = "已结束";
+		}else{
+			self.time_title = "抢购中";
+			time_xian();
+		}
+		//开始时间
+		console.log();
+		var timestamp4 = new Date(parseInt(data.data.speed.start_time)*1000);//直接用 new Date(时间戳) 格式转化获得当前时间
+		if(parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000)<0){
+			self.times = "明天再来";
+			clearInterval(times);
+		}
+		if(parseInt(data.data.speed.start_time) - parseInt(datae.getTime()/1000)>=0){
+			self.times = "今天"+timestamp4.toTimeString().substr(0, 8)+"开抢";
+		}else{
+			var end_ = parseInt(data.data.speed.end_time) - parseInt(datae.getTime()/1000);
+			minutes = parseInt(end_/60);
+			seconds = parseInt(end_%60);
+			// alert(theTime1+"-"+theTime);
+			if(minutes > 60) {
+				hours = parseInt(minutes/60);
+				minutes = parseInt(minutes%60);
+			}
+			if(hours > 24) {
+				data = parseInt(hours/24);
+				hours = parseInt(hours%24);
+			}
+
+
+			if(parseInt(hours)<10){
+				hours = "0"+parseInt(hours);
+			}
+			if(parseInt(minutes)<10){
+				minutes = "0"+parseInt(minutes);
+			}if(parseInt(seconds)<10){
+				seconds = "0" + parseInt(seconds);
+			}
+			self.times = "结束倒计时 "+hours+":"+minutes+":"+seconds
+
+		}
+	}
 	//限时购
 	
 function time_xian(){
@@ -890,7 +902,8 @@ function time_xian(){
 			alert("请选择商品规格");
 			return;
 		};
-		data1=id+":"+buyNums+":"+self.type
+		data1=id+":"+buyNums+":"+self.type;
+		console.log(data1);
 		mui.ajax({
 			data:{
 				goods:data1
@@ -901,7 +914,6 @@ function time_xian(){
 			timeout:10000,//超时时间设置为10秒；
 			success:function(data){
 				self.ajaxButton=true;
-				console.log(data);
 				if(data.code!=0){
 					alert(data.msg);
 					return false;
@@ -945,7 +957,6 @@ function time_xian(){
 //        定义商品图片的位置
 		pro=$(".select_photo").offset();
 		top=pro.top+cartPosition.top-scrollTop*2;
-		console.log(top);
 		//克隆div实现动画
 		cloneDiv=$(".select_photo").clone();
 		$(".select_photo").parent().append(cloneDiv);
@@ -960,11 +971,7 @@ function time_xian(){
 		});
 	}
 
-	function checkSize(_this,key,size){
-//		如果只有一个商品规格
-//		for(var i=0,j=_this.info.products.length;i<j;i++){
-//
-//		}
+	function checkSize(_this,key,size,name){
 		var l=_this.info.products_spec.length;
 		var temp=_this.info.products_spec[key].cho;
 		_this.info.products_spec[key].cho=size;
@@ -984,7 +991,6 @@ function time_xian(){
 					_this.info.products_spec[key].cho=temp;
 					alert("该商品库存不足")
 				}
-
 			 }
 		})
 	}

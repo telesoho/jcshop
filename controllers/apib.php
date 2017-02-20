@@ -484,4 +484,27 @@ class Apib extends IController{
 		$this->json_echo(self::$ERROR['TODO']);
 	}
 
+	public function testSubQuery() {
+		$subQuery = array(
+			'g1' => array(
+				'table' => 'goods g1',
+				'fields' => 'g1.*, gs.delivery_city, gs.duties_rate, gs.delivery_code, gs.ware_house_name',
+				'join' => "left join goods_supplier as gs on g1.supplier_id = gs.supplier_id and g1.sku_no = gs.sku_no",
+			), 
+		);
+		$query = new IQuery("order_goods AS og");
+		$query->where = "og.order_id = 1";
+		$query->subQueries = $subQuery;
+		$query->join = "LEFT JOIN @g1 as g ON g.id = og.goods_id ";
+		$query->fields = "g.sku_no, g.goods_no, g.name, g.ware_house_name,  g.content, g.delivery_code, g.supplier_id, g.delivery_city,g.duties_rate,"
+						."og.*";
+		common::print_b($query->getSql());
+	}
+
+	public function testApiSubQuery() {
+		// 带参数子查询测试
+		common::print_b(Api::run("getGoodsInfoBySkuNo2", 
+			array('params' => array("#sku_no#" => "4902806314946-1")))
+		);
+	}
 }

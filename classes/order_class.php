@@ -561,6 +561,7 @@ class Order_Class
 				$goodsArray['goods_array']  = IFilter::addSlash(JSON::encode($specArray));
 				$goodsArray['seller_id']    = $val['seller_id'];
 				$goodsArray['duties']       = $val['duties'];    // 关税
+                if (isset($val['share_no'])) $goodsArray['share_no'] = $val['share_no'];    // 分享码
 				$orderGoodsObj->setData($goodsArray);
 				$orderGoodsObj->add();
 			}
@@ -969,7 +970,7 @@ class Order_Class
 	{
 		$orderGoodsObj        = new IQuery('order_goods');
 		$orderGoodsObj->where = "order_id = ".$order_id;
-		$orderGoodsObj->fields = 'id,goods_array,goods_id,product_id,goods_nums';
+		$orderGoodsObj->fields = 'id,goods_array,goods_id,product_id,goods_nums,share_no';
 		$orderGoodsList = $orderGoodsObj->find();
 		$goodList = array();
 		foreach($orderGoodsList as $good)
@@ -977,6 +978,7 @@ class Order_Class
 			$temp 					= JSON::decode($good['goods_array']);
 			$temp['goods_nums'] 	= $good['goods_nums'];
 			$temp['goods_id'] 		= $good['goods_id'];
+			$temp['share_no'] 		= $good['share_no'];
 			$goodList[] = $temp;
 		}
 		return $goodList;

@@ -32,8 +32,8 @@
 					<div class="item" v-for="itemList in article[0].goods_list">
 						<a :href="itemList.url" class="locationA">
 							<div class="img"><img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
-							<div class="name hidewrap">{{itemList.name}}</div>
-							<div class="sellprice">¥{{itemList.sell_price}}</div>
+							<div class="name hidewrap" style="text-align: center">{{itemList.name}}</div>
+							<div class="sellprice" style="text-align: center">¥{{itemList.sell_price}}</div>
 						</a>
 					</div>
 				</div>
@@ -61,7 +61,7 @@
 						<a :href="item1.url" class="locationA" v-for="item1 in hotCat">
 							<div class="item" >
 								<img :dataimg="item1.image" alt=""  src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
-								<div class="name hidewrap">
+								<div class="name hidewrap" style="text-align: center">
 									{{item1.name}}
 								</div>
 							</div>
@@ -92,7 +92,7 @@
 							<img :dataimg="item2.img" alt=""
 								 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
 						</div>
-						<div class="content">
+						<div class="content" style="text-align: center">
 							<div class="name hidewrap">{{item2.name}}</div>
 							<div class="sellprice price">¥{{item2.sell_price}}</div>
 						</div>
@@ -141,7 +141,7 @@
 							<img :dataimg="ite1.img" alt=""
 								 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
 						</div>
-						<div class="content">
+						<div class="content" style="text-align: center">
 							<div class="name hidewrap">{{ite1.name}}</div>
 							<div class="sellprice price">¥{{ite1.sell_price}}</div>
 						</div>
@@ -168,8 +168,8 @@
 									<img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;"
 										 src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" />
 								</div>
-								<div class="name hidewrap">{{itemList.name}}</div>
-								<div class="sellprice">¥{{itemList.sell_price}}</div>
+								<div class="name hidewrap" style="text-align: center">{{itemList.name}}</div>
+								<div class="sellprice" style="text-align: center">¥{{itemList.sell_price}}</div>
 							</a>
 						</div>
 					</div>
@@ -197,17 +197,17 @@
 				<div class="item" v-for="ite3 in goods3">
 					<a :href="ite3.url"  class="locationA" >
 						<div class="img"><img :dataimg="ite3.img" alt="" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png"  class="samLazyImg" /></div>
-						<div class="name">{{ite3.name}}</div>
+						<div class="name" style="text-align: center">{{ite3.name}}</div>
 						<div class="box">
-							<div class="sellprice price">¥{{ite3.sell_price}}</div>
+							<div class="sellprice price" style="text-align: center">¥{{ite3.sell_price}}</div>
 						</div></a>
 				</div>
 			</div>
 		</section>
 	</section>
 	<footer-nav :state="0"></footer-nav>
+	<whether :state="true"></whether>
 </div>
-<div style="height:1.42rem;background:#f8f8f8"></div>
 <!--专辑分页模板-->
 <!--头信息结束-->
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
@@ -216,6 +216,7 @@
 <script src="/views/mobile/components/head_nav.js?v=<?php echo time(); ?>"></script>
 <!--//底部导航样式的引入-->
 <script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/Whether.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>

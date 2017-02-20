@@ -7,12 +7,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
     <title>个人中心</title>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>"/>
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.picker.min.css?v=<?php echo time(); ?>" />
-    <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.poppicker.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/personalCenter.css?v=<?php echo time(); ?>" />
 </head>
 <body>
@@ -21,26 +19,22 @@
         <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         <h1 class="mui-title">个人中心</h1>
     </header>-->
-    <section id="user_Info">
+    <section id="user_Info" v-cloak>
         <!--<cat-refresh :mes="showmessage"></cat-refresh>-->
     	<div class="headBox">
     		<div class="logo_img">
-    			<img v-if='info.head_ico == null' src="/views/mobile/skin/default/image/index/bd@2x.png" style="width: 100%;height: 3.1rem;"/>
-    			<img v-else :src="info.head_ico" style="width: 100%;height: 3.1rem;"/>
+    			<img  :src="info.head_ico?info.head_ico:'/views/mobile/skin/default/image/index/bd@2x.png'" style="width: 100%;height: 3.1rem;"/>
     		</div>
     		<div style="width: 100%;height: 100%;background: #000;opacity: 0.1;position: absolute;top: 0;left: 0;"></div>
 	        <div class="whiteBack" v-cloak>
-	            <img src="/views/mobile/skin/default/image/jmj/img/cat_logo.png" v-if='info.head_ico == null' />
-	            <img :src="info.head_ico" v-else />
+	            <img :src="info.head_ico?info.head_ico:'/views/mobile/skin/default/image/jmj/img/cat_logo.png'"  />
 	        </div>
 	        <div id="nameLogn" v-cloak>
-			    <div class="userName hidewrap" v-if="info.username == null">九猫家的小小猫</div>
-			    <div class="userName hidewrap" style="width:1.7rem;height: 0.5rem;" v-else>{{info.username}}</div>
+			    <div class="userName hidewrap" style="width:1.7rem;height: 0.5rem;">{{info.username?info.username:'九猫家的小小猫'}}</div>
 	        </div>
-	        <!--<div id="share_mon">
-	        	<p>90.00 <span>元</span></p>
-	        	
-	        </div>-->
+	        <div id="share_mon">
+	        	<p>{{info.u_balance?info.u_balance:'0.00'}}<span> 元</span></p>
+	        </div>
 	    </div>
         <footer-nav :state="4" :states="ucenterindex_st"></footer-nav>
     </section>
@@ -137,7 +131,7 @@
                 </div>
             </div>
         <!--								新增第四排						-->
-         <!--<div class="order" style="height: 1.5rem;">
+         <div class="order" style="height: 1.5rem;display: none">
                 <div class="mui-row">
                     <div class=" mui-col-xs-3 mui-col-sm-3" @click="favorite" style="text-align:center">
                         <a href="/site/favorite" class="locationA" style="width: 100%;height: 100%;">
@@ -145,12 +139,12 @@
                         <div class="mui-media-body">种草</div></a>
                     </div>
                     <div class="mui-col-xs-3 mui-col-sm-3" style="text-align:center">
-                        <a href="" class="" style="width: 100%;height: 100%;">
+                        <a href="/ucenter/share_money_detail" class="locationA" style="width: 100%;height: 100%;">
                         <div class="public__"><img src="/views/mobile/skin/default/image/index/share_.png" style="width: 0.47rem;"/></div>
                         <div class="mui-media-body">分享赚钱</div></a>
                     </div>
                 </div>
-            </div>-->
+            </div>
         <div style="height:1.3rem"></div>
             <!--<ul class="mui-table-view" style="margin-top: 25px;margin-bottom:0.7rem;">
                 <li class="mui-table-view-cell">

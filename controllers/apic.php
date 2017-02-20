@@ -8,7 +8,8 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '情人节7折活动还在进行哦~\n各位小仙女们赶紧添加喵酱个人微信jiumaojia001\n领取新人优惠券58元~ 老客也有优惠哦~\n折上折草鸡优惠哦~\n限时优惠咯~';
+	private $remark = 'こんばんは～晚上是护肤黄金时间哦~ 喵酱给小仙女们推荐到处断货Utena佑天兰黄金果冻保湿面膜，黄金级美容液果冻面膜，每片含33g美容液，质地浓稠保湿力强，多年Cosme大赏常年名列前茅~ 今晚20:00九猫家限时抢购价格超级优惠呢~快来变美美的吧~';
+	private $remark_goods_id = 19252;
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
@@ -19,7 +20,8 @@ class Apic extends IController{
 		$stream->setFormatter($formatter);
 		$this->log = new Logger('api');
 		$this->log->pushHandler($stream);
-		//        header("Content-type: application/json");
+
+		
 	}
 	
 	//---------------------------------------------------主要页面---------------------------------------------------
@@ -3346,8 +3348,9 @@ class Apic extends IController{
 		
 		$userObj = new IModel('user');
 		$where   = 'id = '.$user_id;
-		$userRow = $userObj->getObj($where, array('head_ico', 'username'));
-		
+		$userRow = $userObj->getObj($where, array('head_ico', 'username', 'balance'));
+		$userRow['u_balance'] = $userRow['balance'];
+		unset($userRow['balance']);
 		$memberObj = new IModel('member');
 		$where     = 'user_id = '.$user_id;
 		$memberRow = $memberObj->getObj($where);
@@ -3656,17 +3659,18 @@ OR (
     function all_member_message(){
         set_time_limit(0);
         $start             = IFilter::act(IReq::get('start'));
-        $user_query        = new IQuery('user as a');
-        $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
-        $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) > 48";
-        if ($start == 'test') $user_query->where = "a.id IN (24,51)";
-        $user_query->limit = 20000;
+        $user_query        = new IQuery('open_ids');
+        if ($start == 'test') {
+            $user_query->where = "open_id = 'orEYdw0X44crd6F3MOdXES6Hfpig'";
+        } else {
+            $user_query->limit = $start;
+        }
         $user_data         = $user_query->find();
         $i                 = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'],'remark'=>$this->remark], __FUNCTION__);
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'],'remark'=>$this->remark, 'remark_goods_id'=>$this->remark_goods_id], __FUNCTION__);
             if ($ret){
                 common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
                 $i++;
@@ -3674,8 +3678,8 @@ OR (
                 common::log_write(__FUNCTION__ . "信息推送****失败：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
             }
         }
-        wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>$start_time . '\n' . date('Y-m-d H:i:s',time()), 'info'=>"用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
-        $this->returnJson(['code'=>0, 'msg'=>'所有会员用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
+        wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>$start_time . '\n' . date('Y-m-d H:i:s',time()), 'info'=>$start . "用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
+        $this->returnJson(['code'=>0, 'msg'=>$start . '所有会员用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
     }
     function fourty_member_message(){
         set_time_limit(0);
@@ -3689,7 +3693,7 @@ OR (
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$this->remark], __FUNCTION__);
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>'喵~亲爱的，送您58元新用户优惠券，请添加喵酱个人微信：jiumaojia001 领取~加入VIP群第一时间享受最新优惠', 'remark_goods_id'=>false], __FUNCTION__);
 //            wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig','member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$remark], __FUNCTION__);
             if ($ret){
                 $i++;
@@ -3710,5 +3714,49 @@ OR (
 //        foreach ($open_id_arr as $v){
 //            wechats::send_message_template($v, 'ship', ['order_no'=>'2017052456', 'name'=>'商品名称', 'billcode'=>'23', 'remark'=>'喵~感谢您对九猫家的信任与支持！我们已经收到您的订单啦~ 日本供货商将在3-5个工作日完成配货哒，正常情况下10-15个工作日您将收到您买的宝贝，请耐心等待哦ฅ՞•ﻌ•՞ฅ~\n如果有任何订单退换货等问题请添加客服喵微信：\njiumaojia006；想要领取优惠券的小伙伴欢迎添加喵酱个人微信：jiumaojia001；更多优惠群里第一时间共享哦~么么哒~']);
 //        }
+    }
+
+    /**
+     * User: chenbo
+     * 分享赚
+     */
+    function share_money_detail(){
+        $data       = common::get_user_data($this->user['user_id']);
+        if (empty($data)){
+            $this->returnJson(['code'=>-1, 'msg'=>'获取用户信息失败', 'data'=>$data]);
+        } else {
+            $this->returnJson(['code'=>0, 'msg'=>'用户分享赚信息', 'data'=>$data]);
+        }
+        $this->data = $data;
+    }
+    function get_share_money(){
+        $share_money_query        = new IQuery('share_money');
+        $share_money_query->where = "user_id = " . $this->user['user_id'];
+        $data                     = $share_money_query->find();
+        $this->returnJson(['code'=>0, 'msg'=>'用户分享赚动态', 'data'=>$data]);
+    }
+    function test(){
+        $user_query = new IQuery('user');
+        $start             = IFilter::act(IReq::get('start'));
+        $data = $user_query->find();
+        $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => 1222, 'success'=>222]]);
+    }
+    function oauth_subscribe(){
+        $access_token = common::get_wechat_access_token();
+        $url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=$access_token&next_openid=orEYdw1wKmWJRbi4Nch9IFKHaIfM";
+        $data = common::curl_http($url);
+        $data = json_decode($data);
+        common::log_write($data->total . ':' . $data->count);
+        $open_ids_model = new IModel('open_ids');
+        foreach ($data->data->openid as $v){
+            $open_ids_model->setData(['open_id'=>$v]);
+            $ret = $open_ids_model->add();
+            if ($ret) {
+                continue;
+            } else {
+                var_dump($v);
+            }
+        }
+        var_dump($ret);
     }
 }

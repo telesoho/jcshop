@@ -72,10 +72,7 @@ var vm = new Vue({
             getOrderDetail(self);
         },
         getDelivery: function(eid){
-            Delivery(eid);
-            this.showContainer=true;
-            mui("#logistics").popover('show');
-            $('.mui-backdrop').hide();
+            window.location.href = "/ucenter/delivery/order_no/"+eid;
         },
         tuikuan:function(){
         	window.location.href="/ucenter/order_refunds?id="+statusOrder;
@@ -121,14 +118,4 @@ function GetRequest() {
         }
     }
     return theRequest;
-}
-function Delivery(id){
-    //获取物流信息
-    var urlVal = "/block/freight/id/"+id;
-    // urlVal = urlVal.replace("@id@", id);
-    $.get(urlVal,function(response){
-        var responseHtml=response.substring(response.indexOf('<div class="container">'),response.indexOf("</body>"));
-        console.log(responseHtml);
-        document.getElementById("div_text").innerHTML=responseHtml;
-    })
 }

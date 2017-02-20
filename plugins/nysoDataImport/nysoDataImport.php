@@ -10,7 +10,38 @@ class nysoDataImport extends pluginBase
 	private $exchange_rate_jp;	// 日币对人民币汇率
 	private $pluginDir;
 
-	private $msg = array('error'=>'', 'info' => '');
+	private $data = array('error' => '', 'info' => '');
+
+	// 订单状态 1生成订单,2支付订单,3取消订单(客户触发),4作废订单(管理员触发),5完成订单,6退款(订单完成后),7部分退款(订单完成后)
+	private static $nysoOrderStatus2JcOrderStatus = array (
+		'TRADE_STATUS_DELIVERY_WAIT' => 2,
+		'TRADE_STATUS_DELIVERY_FINISHED' => 5,
+		'TRADE_STATUS_FINISHED' => 5,
+	);
+
+	// searchOrder验证器
+	private	$order_validator = array(
+				"OrderTime" => array('isset', 'datetime:Y-m-d H:i:s'),
+				"ConsigneeName" => array('size:[1-20]'),
+				"ConsigneeMobile" => array('mobile'),
+				"IdCard" => array('isset','idcard'),
+				"Province" => array('isset','size:[2-40]'),
+				"City" => array('isset','size:[2-40]'),
+				"District" => array('size:[0-40]'),
+				"DetailedAddres" => array('size:[2-256]'),
+				"Remark" => array('size:[0-256]'),
+				"PostalTotal" => array('number'), //邮费
+				"OrderTotal" => array('isset','number'),// 订单总价(单位：元)
+				"SettleTotal" => array('isset', 'number'), //结算价
+				"DiscountTotal" => array('isset','number'), //优惠金额(单位：元)
+				"TaxFee" => array('isset','number'),// 总税额(单位：元)
+				"WmsName" => array('isset', 'size:[1-40]'),//供应商仓库名称
+				"OrderStatus" => array('regexp:(TRADE_STATUS_DELIVERY_WAIT|TRADE_STATUS_DELIVERY_FINISHED|TRADE_STATUS_FINISHED)'), // 订单状态
+				"PostId" => array('size[1-40]'),//运单号
+				"LogisticName" => array('size[1-40]'),//物流方式
+				"SendTime" => array('datetime:Y-m-d H:i:s'),//发货时间
+				'OrderItems' => array('isset','array:[1-]'),//订单商品明细
+			);
 
 	//注册事件
 	public function reg()
@@ -24,12 +55,12 @@ class nysoDataImport extends pluginBase
 		// 注册妮素登录画面
 		plugin::reg("onBeforeCreateAction@plugins@nyso_data_import",function(){
             self::controller()->nyso_data_import = function(){
-				$this->redirect("nysoDataImport");
+				$this->redirect("nysoDataImport", $this->data);
 			};
 		});
 
 		// 注册商品同步接口
-		plugin::reg("onBeforeCreateAction@plugins@nyso_goods_syn",function(){
+		plugin::reg("onBeforeCreateAction@nyso@nyso_goods_syn",function(){
             self::controller()->nyso_goods_syn = function(){
 				$this->pluginDir= $this->path();				
 				$this->nysoGoodsSyn();
@@ -37,26 +68,253 @@ class nysoDataImport extends pluginBase
 		});
 
 		// 注册库存同步接口
-		plugin::reg("onBeforeCreateAction@plugins@nyso_stock_syn",function(){
+		plugin::reg("onBeforeCreateAction@nyso@nyso_stock_syn",function(){
             self::controller()->nyso_stock_syn = function(){
-				$this->nysoStockSyn();
+				$this->nyso_stock_syn();
 			};
 		});
 
 		// 注册订单接口
-		plugin::reg("onBeforeCreateAction@plugins@nyso_order_syn",function(){
+		plugin::reg("onBeforeCreateAction@nyso@nyso_order_syn",function(){
             self::controller()->nyso_order_syn = function(){
-				$this->nysoOrderSyn();
+				$this->nyso_order_syn();
 			};
 		});
 
+		// 注册测试接口
+		plugin::reg("onBeforeCreateAction@nyso@nyso_api",function(){
+            self::controller()->nyso_api = function(){
+				// 初始化妮素平台接口
+				nysochina::init($this->config());
+
+				$api_name = IReq::get("api_name");
+				$req_json = IReq::get("req_json");
+				
+				$encoding = mb_detect_encoding($req_json, array("ASCII","GB2312","GBK","UTF-8"));
+				
+				if($encoding != "UTF-8") {
+					$req_json = iconv($encoding, 'UTF-8', $req_json); //将字符串的编码转到UTF-8
+				}
+
+				nysochina::$log->info("req_json", array($req_json));
+
+				$req = json_decode($req_json, true);
+
+				nysochina::$log->info("req", array($req));
+
+				if(json_last_error()) {
+					$this->exitJSON(json_last_error_msg());
+				}else {
+					try{
+						$output = nysochina::run($api_name, $req);
+					} catch(Exception $e) {
+						$this->exitJSON($e->getMessage());					
+					}
+					$this->exitJSON($output);
+				}
+			};
+		});
+
+		plugin::reg("onBeforeCreateAction@nyso@sup_goods_syn",function(){
+           self::controller()->sup_goods_syn = function(){
+				// 初始化妮素平台接口
+				nysochina::init($this->config());
+				$obj = Api::run("getGoodsInfoBySkuNo2", array('params' => array("#sku_no#" => "4902806314946-1")));
+				$this->exitJSON($obj);
+			};
+		});
+
+
+		plugin::reg("onBeforeCreateAction@nyso@run_api", function() {
+			self::controller()->run_api = function () {
+				// 初始化妮素平台接口
+				nysochina::init($this->config());
+				
+				$api_name = IReq::get("api_name");
+				if(!$api_name) {
+					$this->exitJSON("ERROR: api_name requried.");
+				}
+
+				$req_file = IReq::get("req_file");
+				$req_json = file_get_contents($req_file);
+
+				$encoding = mb_detect_encoding($req_json, array("ASCII","GB2312","GBK","UTF-8"));
+				
+				if($encoding != "UTF-8") {
+					$req_json = iconv($encoding, 'UTF-8', $req_json); //将字符串的编码转到UTF-8
+				}
+
+				if(nysochina::$config['debug'] == "true") {
+					nysochina::$log->info("req_json", array($api_name, $req_json));
+				}
+
+				$req = json_decode($req_json, true);
+
+				if(nysochina::$config['debug'] == "true") {
+					nysochina::$log->info("req", array($api_name, $req));
+				}
+
+				if(json_last_error()) {
+					$this->exitJSON(json_last_error_msg());
+				}else {
+					try{
+						$reqOutput = nysochina::run($api_name, $req);
+						$this->exitJSON($reqOutput);
+						switch($api_name) {
+						case "searchOrder":
+							$this->processSearchOrder($reqOutput);						
+							break;
+						case "orderDelivery":
+							break;
+						case "supGoodsSynchro":
+							break;
+						case "supStockSynchro":
+							break;
+						}
+					} catch(Exception $e) {
+						$this->exitJSON($e->getMessage());
+					}
+				}
+			};
+		});
+	}
+
+	private function processSearchOrder($reqOutput) {
+		$orders = $reqOutput['result']['Orders'];
+		foreach($orders as $order) {
+			$jcOrder = $this->nysoOrder2JcOrder($order);
+			if($jcOrder) {
+				// 保存订单
+				$this->saveJcOrder($jcOrder);
+			}
+		}
+	}
+
+	// 保存订单
+	private function saveJcOrder($jcOrder) {
+		$this->exitJSON($jcOrder);
+	}
+
+
+
+	// 妮素订单转换为九猫订单
+	private function nysoOrder2JcOrder($nysoOrder) {
+		$retMsg = array();
+		$jcOrder = array();
+
+		// 校验参数
+		$v = new Validator();
+		if(!$v->validate_array($nysoOrder, $this->order_validator))
+		{
+			nysochina::$log->err("验证失败", array(__LINE__, 'messages'=>$v->getErrMsg(), $nysoOrder));
+			print_r($v->getErrMsg());
+			return null;
+		}
+
+
+		$jcOrder['order_no'] = nysochina::getOrderId($nysoOrder);
+		$jcOrder['mobile'] = $nysoOrder['ConsigneeNumber'];
+		$jcOrder['accept_name'] = $nysoOrder['ConsigneeName'];
+		$jcOrder['sfz_num'] = $nysoOrder['IdCard'];
+
+
+		// 省
+		$area_ids = area::id($nysoOrder['Province'], $nysoOrder['City'], $nysoOrder['District']);
+
+		if(isset($area_ids[$nysoOrder['Province']])) {
+			$jcOrder['province'] = $area_ids[$nysoOrder['Province']];
+		} else {
+			$retMsg[] = "【省】". $nysoOrder['Province'] ."无法找到";
+		}
+		if(isset($area_ids[$nysoOrder['City']])) {
+			$jcOrder['city'] = $area_ids[$nysoOrder['City']];
+		} else {
+			$retMsg[] = "【市】". $nysoOrder['City'] ."无法找到";
+		}
+		if(isset($area_ids[$nysoOrder['District']])) {
+			$jcOrder['district'] = $area_ids[$nysoOrder['District']];
+		}
+		if($nysoOrder['District'] && !isset($area_ids[$nysoOrder['District']])){
+			$retMsg[] = "【地区】". $nysoOrder['District'] ."无法找到";
+		}
+
+		// 详细地址
+		$jcOrder['address'] = $nysoOrder["DetailedAddres"];
+
+		// 备注
+		$jcOrder['postscript'] = $nysoOrder["Remark"];
+		
+		// 邮费
+		$jcOrder['real_freight'] = $nysoOrder["PostalTotal"];
+
+		// 订单总价(单位：元)
+		$jcOrder['order_amount'] = $nysoOrder["OrderTotal"];
+
+		// 结算金额(单位：元)
+		$jcOrder['settle_total'] = $nysoOrder['SettleTotal'];
+
+		// 优惠金额(单位：元)
+		$jcOrder['promotions'] = $nysoOrder['DiscountTotal'];
+
+		// 关税税费
+		$jcOrder['duties'] = $nysoOrder["TaxFee"];
+
+		// 仓库名称
+		$jcOrder['ware_house_name'] = $nysoOrder['WmsName'];
+
+		// 订单状态
+		/*订单状态 1生成订单,2支付订单,3取消订单(客户触发),4作废订单(管理员触发),5完成订单,6退款(订单完成后),7部分退款(订单完成后)
+		TRADE_STATUS_DELIVERY_WAIT|TRADE_STATUS_DELIVERY_FINISHED|TRADE_STATUS_FINISHED
+		*/
+		$jcOrder['status'] = self::$nysoOrderStatus2JcOrderStatus[$nysoOrder['OrderStatus']];
+
+		// TODO: 如果存在运单校验运单
+		if($nysoOrder['PostId']) {
+			$jcOrder['delivery_doc.delivery_code'] = $nysoOrder['PostId'];	//运单单号
+			$jcOrder['delivery_doc.delivery_type'] = $nysoOrder['LogisticName'];	//物流方式
+			$jcOrder['delivery_doc.time'] = $nysoOrder['SendTime']; // 发货时间
+		}
+
+
+		// 处理订单中的商品
+		foreach($nysoOrder['OrderItems'] as $orderItem) {
+			$goodsObj = Api::run("getGoodsInfoBySkuNo", array("sku_no", $orderItem['SupGoodsNo']));
+			if($goodsObj) {
+				$jcGoodsOrder['goods_id'] = $goodsObj['goods_id'];
+				$jcGoodsOrder['product_id'] = $goodsObj['product_id'];
+				
+				$jcGoodsOrder['goods_nums'] = $orderItem['BuyQty'];
+				$jcGoodsOrder['real_price'] = $orderItem['BugPrice'];
+			}
+		}
+
+
+		return $jcOrder;
+	}
+
+    /**
+     * 输出JSON并退出
+     * @param $data
+     */
+	private function exitJSON($data){
+		header('Content-type: application/json');
+		echo json_encode($data);
+		exit();
+	}
+
+	/**
+	 * 打印信息并退出
+	 */
+	private function exitMSG($data) {
+		print_r($data);
+		exit();
 	}
 
 	/**
 	 * 妮素订单同步
 	 * 将包含妮素商品的订单同步到妮素平台，并设置同步标志
 	 */
-	private function nysoOrderSyn() {
+	private function nyso_order_syn() {
 		// 初始化妮素平台接口
 		nysochina::init($this->config());
 
@@ -72,13 +330,13 @@ class nysoDataImport extends pluginBase
 
 		if(count($jcOrderList) < 1) {
 			$this->info("没有发现妮素订单");
-			$this->redirect("nysoDataImport", $this->msg);		
+			$this->exitMSG($this->data);
 		}
 
 		foreach($jcOrderList as $jcOrder) {
 			try {
 				$nysoOrder = $this->toNysoOrder($jcOrder);
-				nysochina::addOrder($nysoOrder);
+				nysochina::run("AddOrder", $nysoOrder);
 				$orderDB = new IModel("order as o");
 				$updateOrder['supplier_syn_date'] = date('Y-m-d H:i:s', time());
 				$orderDB->setData($updateOrder);
@@ -91,7 +349,7 @@ class nysoDataImport extends pluginBase
 			}
 		}
 
-		$this->redirect("nysoDataImport", $this->msg);
+		$this->exitMSG($this->data);
 	}
 
 	/**
@@ -171,18 +429,23 @@ class nysoDataImport extends pluginBase
         $nysoOrder["Remark"] = "九猫家订单";							// 备注
 		$nysoOrder["PostalPrice"] = $jcOrder["payable_freight"];	// 邮费
         $nysoOrder["Favourable"] = "0";					        	// 优惠金额
-		$nysoOrder["Tax"] = $jcOrder["duties"];         				// 商品税费		
+		$nysoOrder["Tax"] = $jcOrder["duties"];         			// 商品税费		
 		$nysoOrder["GoodsPrice"] = $jcOrder["real_amount"]; 		// 货值
 		$nysoOrder["OrderPrice"] = $jcOrder["order_amount"];  		// 订单总价 用户实际交易金额
 
 
 		// 查询订单商品清单
+		$subQuery = array(
+			'g1' => array(
+				'table' => 'goods g1',
+				'fields' => 'g1.*, gs.delivery_city, gs.duties_rate, gs.delivery_code, gs.ware_house_name',
+				'join' => "left join goods_supplier as gs on g1.supplier_id = gs.supplier_id and g1.sku_no = gs.sku_no",
+			), 
+		);		
 		$query = new IQuery("order_goods AS og");
 		$query->where = "og.order_id =" . $jcOrder["id"];
-		$query->join = "LEFT JOIN " 
-						."(select g1.*, gs.delivery_city, gs.duties_rate, gs.delivery_code, gs.ware_house_name" 
-						." from goods AS g1 left join goods_supplier as gs on g1.supplier_id = gs.supplier_id and g1.sku_no = gs.sku_no) as g "
-						." ON g.id = og.goods_id ";
+		$query->subQueries = $subQuery;
+		$query->join = "LEFT JOIN @g1 as g ON g.id = og.goods_id ";
 		$query->fields = "g.sku_no, g.goods_no, g.name, g.ware_house_name,  g.content, g.delivery_code, g.supplier_id, g.delivery_city,g.duties_rate,"
 						."og.*";
 		$jcItemList    = $query->find();
@@ -295,8 +558,7 @@ class nysoDataImport extends pluginBase
 
 		//清理csv文件数据
 		IFile::rmdir($uploadCsvDir,true);
-		
-		$this->redirect("nysoDataImport");
+		$this->redirect("nysoDataImport", $data);
 	}
 
 	private function nysoGoodsCsvImport($zipDir, $imageDir) {
@@ -316,7 +578,6 @@ class nysoDataImport extends pluginBase
 			);
 
 		$goodsCsvHelper = new nysoGoodsCsvHelper($config);
-
 		
 		//从csv中解析数据
 		$collectData = $goodsCsvHelper->collect();
@@ -325,36 +586,6 @@ class nysoDataImport extends pluginBase
 		
 	}
 
-	// private function synNyso() {
-	// 	// 初始化妮素平台接口
-	// 	nysochina::init($this->config());
-		
-	// 	// 通过妮素接口取出商品数据
-	// 	$skus_str = IFilter::string(IReq::get('skus'));
-	// 	$skus = explode(",",$skus_str);
-
-	// 	$data["skus"] = $skus_str;
-
-	// 	try {
-	// 		$result = nysochina::getGoods($skus);
-	// 		$goodsList = json_decode($result);
-	// 	} catch(Exception $e) {
-	// 		$data["msg"] = $e->getMessage();
-	// 		$this->redirect("nysoDataImport", $data);
-	// 	}
-
-	// 	// 将妮素商品数据导入九猫系统
-	// 	$data['msg'] = "";
-	// 	foreach($goodsList as $goods) {
-	// 		try {
-	// 			$data['msg'] .= $this->saveGoods($goods);
-	// 		} catch(Exception $e) {
-	// 			$data['msg'] .= $e->getMessage();
-	// 			nysochina::$log->err($e->getMessage(), $goods);
-	// 		}
-	// 	}
-		
-	// }
 
 	// 将商品数据插入数据库
 	private function processGoodsData($collectData) {
@@ -394,7 +625,7 @@ class nysoDataImport extends pluginBase
 		$cateExtendDB    	= new IModel('category_extend');
 		$brandDB 		 	= new IModel('brand');
 		$commendDB			= new IModel('commend_goods');
-		
+
 		//默认图片路径
 		$default_img 		= 'upload/goods_pic/nopic.jpg';
 
@@ -422,7 +653,7 @@ class nysoDataImport extends pluginBase
 				$this->error("供应商货号sku_no不能为空：" . JSON::encode($val));
 				continue;
 			}
-		
+
 			// 商品JAN编码
 			$field = trim($val[$titleToCols['goods_no']]);
 			if(!$auto_syn && '' === $field) {
@@ -894,25 +1125,25 @@ class nysoDataImport extends pluginBase
 
 		$goods_obj = new IModel('goods');
 
-		$where = 'supplier_id = 1 and sku_no= "' . $stock->SkuNo . '"';
+		$where = 'supplier_id = 1 and sku_no= "' . $stock['SkuNo'] . '"';
 		$theGoods = $goods_obj->getObj($where);
 
 		if($theGoods) {
 			// 如果已经存在商品，则更新商品信息
-			$theGoods['store_nums'] = $stock->Quantity;	// 设置库存
+			$theGoods['store_nums'] = $stock["Quantity"];	// 设置库存
 			$goods_obj->setData($theGoods);
 			$goods_obj->update($where);
-			$this->info($stock->SkuNo . "库存跟新成功", $stock);
+			$this->info($stock['SkuNo'] . "库存跟新成功", $stock);
 		} else {
 			// 商品不存在，返回错误
-			$this->error($stock->SkuNo . "商品不存在" . $stock);
+			$this->error($stock['SkuNo'] . "商品不存在" . $stock);
 		}
 	}
 
 	/**
 	 * 妮素库存同步接口
 	 */
-	public function nysoStockSyn() {
+	public function nyso_stock_syn() {
 		// 初始化妮素平台接口
 		nysochina::init($this->config());
 		
@@ -925,8 +1156,7 @@ class nysoDataImport extends pluginBase
 		foreach($sku_no_list as $sku_no) {
 			try {
 				// 通过妮素接口取出商品库存数据
-				$result = nysochina::getStocks(array($sku_no['sku_no']));
-				$stockList = json_decode($result);
+				$stockList = nysochina::getStocks(array($sku_no['sku_no']));
 
 				// 将库存保存到九猫数据库
 				foreach($stockList as $stock) {
@@ -938,19 +1168,26 @@ class nysoDataImport extends pluginBase
 				continue;
 			}
 		}
-
-		$this->redirect("nysoDataImport", $this->msg);
+		$this->exitMSG($this->data);
 	}
 
 	// 输出INFO日志
 	protected function info($msg, $obj = null){
-		$this->msg['info'] .= $msg . "\r\n";
+		if(!isset($this->data['info']))
+		{
+			$this->data['info'] = "";
+		}		
+		$this->data['info'] .= $msg . "\r\n";
 		nysochina::$log->info($msg, array('obj'=>$obj));
 	}
 
 	// 输出错误日志
 	protected function error($msg, $obj = null){
-		$this->msg['error'] .= $msg . "\r\n";
+		if(!isset($this->data['error']))
+		{
+			$this->data['error'] = "";
+		}
+		$this->data['error'] .= $msg . "\r\n";
 		nysochina::$log->err($msg, array('obj' => $obj));
 	}
 
@@ -976,13 +1213,29 @@ class nysoDataImport extends pluginBase
 	public static function configName()
 	{
 		return 	array(
-			'nyso_server'     => array("name" => "服务器地址","type" => "text","pattern" => "required", "value"=>"http://121.41.84.251:9090"),
-			'nyso_userkey'     => array("name" => "UserKey","type" => "text","pattern" => "required", "value"=>"jiumaojiatest"),
+			'nyso_server'       => array("name" => "服务器地址","type" => "text","pattern" => "required", "value"=>"http://121.41.84.251:9090"),
 			'nyso_parenter'     => array("name" => "ParenterId","type" => "text","pattern" => "required", "value"=>"1161_651"),
+			'nyso_userkey'      => array("name" => "UserKey","type" => "text","pattern" => "required", "value"=>"jiumaojiatest"),
+			'nyso_supParenter'  => array("name" => "供货商ID","type" => "text","pattern" => "required", "value"=>"830"),
+			'nyso_supUserKey'   => array('name' => "供货商Key", "type" => "text", "pattern" => "required", "value" => "b7309622ccb4476db49102a4b89a5bea"),
+
+			// 妮素平台订单接口
 			"AddOrder" => array("name" => "订单新增接口","type" => "text","pattern" => "required", "value" => "/api/AddOrder.shtml"),
 			"PostSynchro" => array("name" => "运单同步接口","type" => "text","pattern" => "required", "value" => "/api/PostSynchro.shtml"),
 			"SkuSynchro" => array("name" => "商品同步接口","type" => "text","pattern" => "required", "value" => "/api/SkuSynchro.shtml"),
 			"StockSynchro" => array("name" => "库存同步接口","type" => "text","pattern" => "required", "value" => "/api/StockSynchro.shtml"),
+
+
+	        // 妮素平台供应商接口
+			"searchOrder" => array("name" => "供应商订单抓取接口","type" => "text","pattern" => "required", "value" => "/api/sup/searchOrder.shtml"),
+			"orderDelivery" => array("name" => "供应商订单发货接口","type" => "text","pattern" => "required", "value" => "/api/sup/orderDelivery.shtml"),
+			"supGoodsSynchro" => array("name" => "供应商商品同步接口","type" => "text","pattern" => "required", "value" => "/api/sup/supGoodsSynchro.shtml"),
+			"supStockSynchro" => array("name" => "供应商库存同步接口","type" => "text","pattern" => "required", "value" => "/api/sup/supStockSynchro.shtml"),
+
+
+			// 调试标志
+			"debug" => array("name" => "接口调试信息",
+				"type" => "select","value" => array("不输出调试信息" => "false", "输出调试信息" => "true")),
 		);
 	}	
 }

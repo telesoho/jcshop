@@ -258,6 +258,11 @@ class wechats
                }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['order_no'],$send_info['name'],$send_info['billcode']);
                 break;
             case 'member':
+                if ($send_info['remark_goods_id']){
+                    $url = IUrl::getHost()."/site/products/id/".$send_info['remark_goods_id'].'/t/1';
+                } else {
+                    $url = IUrl::getHost()."/site/index";
+                }
                 $params = sprintf('{
                    "touser":"%s",
                    "template_id":"%s",
@@ -280,7 +285,7 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,$template_array[$type],IUrl::getHost().'/site/index',$send_info['number'],$send_info['create_time'], $send_info['remark']);
+               }',$open_id,$template_array[$type],$url,$send_info['number'],$send_info['create_time'], $send_info['remark']);
                 break;
             case 'tip_coupon_expires':
                 $params = sprintf('{

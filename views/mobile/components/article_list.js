@@ -44,7 +44,7 @@ Vue.component('article-list', {
     <a href="#" @click="store(itemList)" >\
     <div class="img"><img :dataimg="itemList.img" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>\
     <div class="name hidewrap">{{itemList.name}}</div>\
-<div class="sellprice" style="font-size:0.26rem;">\
+<div class="sellprice" style="font-size:0.26rem;text-align: center">\
     <span style="font-size:0.2rem;color:#ff4aa0;margin-right:-0.08rem;">￥</span> {{itemList.sell_price}} </div>\
 </a>\
 <div class="singleline"></div>\

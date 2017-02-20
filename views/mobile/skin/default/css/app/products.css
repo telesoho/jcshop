@@ -72,21 +72,28 @@
     text-align: center;
 }
 .sell_price{
-    padding-left:2.95rem;
     position:relative;
     width:100%;
     font-weight: bold;
+    display: -webkit-flex;
+    justify-content: center;
+}
+.sell_price span{
+
 }
 .sell_price .act{
-    position: relative;
+    position: absolute;
     margin-left:0.1rem;
-    top:-0.1rem;
+    top:0.14rem;
+    left: 4.5rem;
     height:0.35rem;
     line-height: 0.35rem;
+    width: 1.86rem;
 }
 .sell_price .act img{
     position: absolute;
-    width:1.452rem;
+    left: 0;
+    width:1.62rem;
     height:0.35rem;
     z-index: 1;
 }
@@ -249,7 +256,6 @@
 #relatebrand .content .img img{
 	width: 1.56rem;
 	height: 1.56rem;
-	margin: 0.1rem;
 	display: block;
 	margin: 0.1rem auto;
 }
@@ -257,7 +263,7 @@
  	width: 2.4rem;
  	margin-left: 0.1rem;
  }
- #relatebrand .content ..content .item{
+ #relatebrand .content .content .item{
  	width: 2.4rem;
  }
  #relatebrand .content .item .img{
@@ -728,7 +734,6 @@
 }
 #backgrounds .tips{
 	width: 100%;
-	
 	position: absolute;
 	top: 40%;
 	left: 0;
@@ -763,4 +768,39 @@
 }
 #time_buy img{
 	margin-right: 0.39rem;
+}
+/*弹出*/
+.popup{
+    width:100%;
+    height:100%;
+    position: fixed;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    background:rgba(0,0,0,0.5);
+    z-index:9999;
+    overflow: hidden;
+}
+.popup .img1{
+    display: block;
+    text-align: center;
+    margin:2.5rem auto 0;
+    width:4.3rem;
+    height:4.3rem;
+}
+.popup .img2{
+    display: block;
+    text-align: center;
+    margin:0.5rem auto 0;
+    width:0.62rem;
+    height:0.62rem;
+}
+.popup .text{
+    width:100%;
+    text-align: center;
+    color:pink;
+    font-size:0.28rem;
+    margin-top:0.5rem;
+
 }

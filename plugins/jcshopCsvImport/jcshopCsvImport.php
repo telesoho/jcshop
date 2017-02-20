@@ -14,6 +14,8 @@ class jcshopCsvImport extends pluginBase
 	private $exchange_rate_jp;
 	private $imageDir;
 
+	private $goodsCsvHelper;
+
 	//注册事件
 	public function reg()
 	{
@@ -142,11 +144,11 @@ class jcshopCsvImport extends pluginBase
 			'exchange_rate_jp' => $this->exchange_rate_jp,
 			);
 
-		$goodsCsvHelper = new jcshopGoodsCsvHelper($config);
+		$this->goodsCsvHelper = new jcshopGoodsCsvHelper($config);
 
 		
 		//从csv中解析数据
-		$collectData = $goodsCsvHelper->collect();
+		$collectData = $this->goodsCsvHelper->collect();
 
 
 		$this->processGoodsData($collectData);
@@ -181,7 +183,7 @@ class jcshopCsvImport extends pluginBase
 			'content'    		=> '商品详情',
 			'reset_img'        	=> '重设图片',
 			'spec' 				=> '规格',
-			'spec_jp' 			=> '规格日文',			
+			'spec_jp' 			=> '规格日文',
 			'sku_no'			=> '规格编号',
 			'weight'     		=> '物流重量',
 			'name_jp'	 		=> '商品名称日文',
@@ -529,21 +531,24 @@ class jcshopCsvImport extends pluginBase
 
 			foreach($specs as $k => $spec) {
 				$spec_json = JSON::encode($spec['spec']);
-				$where = "goods_id=$goods_id and spec_array='$spec_json'"; 
+				$where = "goods_id=$goods_id and spec_array_id='$spec_json'"; 
 				$theProduct = $productsDB->getObj($where);
 
 				if($theProduct) {
 					// 更改
-					$product['spec_array'] = JSON::encode($spec['spec']);
-					$product['jp_price'] = isset($spec['jp_price'])?$spec['jp_price']:0;
-					$product['sell_price'] = isset($spec['sell_price'])?$spec['sell_price']:0;
+					$product['spec_array_id'] = JSON::encode($spec['spec']);
+					$product['spec_array'] = JSON::encode($this->goodsCsvHelper->specId2SpecVal($spec['spec']));
+					if($spec['jp_price']) {
+						$product['jp_price'] = $spec['jp_price'];
+					}
 					$productsDB->setData($product);
 					$productsDB->update($where);
 				} else {
 					// 增加记录
 					$product['products_no'] = "$goods_no-$k" ;
 					$product['goods_id'] = $goods_id;
-					$product['spec_array'] = JSON::encode($spec['spec']);
+					$product['spec_array_id'] = JSON::encode($spec['spec']);
+					$product['spec_array'] = JSON::encode($this->goodsCsvHelper->specId2SpecVal($spec['spec']));
 					$product['jp_price'] = isset($spec['jp_price'])?$spec['jp_price']:0;
 					$product['sell_price'] = isset($spec['sell_price'])?$spec['sell_price']:0;
 					$productsDB->setData($product);

@@ -83,13 +83,22 @@
 				<span>东京直邮</span>
 			</div>
 		</div>
-		<div class="goodsList" v-for="item in sell">
+		<div class="goodsList" v-for="item,key in sell">
 			<div class="boxItem" style="width:100%">
 				<div class="leftImg">
 					<img :src="item.img" alt=""  style="width:1.23rem;height:1.23rem"/>
 				</div>
 				<div class="right">
 					<div class="name">{{item.name}}</div>
+					<div class="size">
+						<span v-for="sizes,key in item.spec_array" style="font-size: 0.2rem;color: rgb(187, 187, 187);">
+							{{sizes}}<t v-if="key == '颜色'">色</t><t v-if="key == '尺寸'">码</t>
+							<span v-if=" key !='颜色' "  style="color: rgb(187, 187, 187);">
+								,
+							</span>
+						</span>
+					</div>
+
 					<div class="text">
 						<span class="sellprice">￥ {{item.sell_pri}}</span>
 						<span class="num">x {{item.count}}</span>

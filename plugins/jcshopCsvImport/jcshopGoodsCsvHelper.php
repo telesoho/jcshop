@@ -19,6 +19,7 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 
 	// 规格值数组
 	public $spec_vals = array();
+	public $spec_jp_vals = array();
 
 	// 规格表对象
 	public $spec_objs  = array();
@@ -75,10 +76,11 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 
 		// 读取数据库中的规格定义
 		$specDB = new IModel("spec");
+
 		foreach($spec_names as $spec_name) {
 			$this->spec_objs[$spec_name] = $specDB->getObj("name='$spec_name'");
 			
-			// 如果规格
+			// 如果规格不存在
 			if(!$this->spec_objs[$spec_name]) {
 				// 新增规格记录
 				$new_spec = array (
@@ -96,7 +98,7 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 			$this->spec_jp_vals[$spec_name] = common::spec_split($this->spec_objs[$spec_name]['value_jp']);
 			$this->spec_vals[$spec_name] = common::spec_split($this->spec_objs[$spec_name]['value']);
 		}
-
+		
 		// 处理规格值
 		foreach($specs as $key => $spec) {
 			$product = array();
@@ -132,12 +134,28 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 			$ret_val[$key] = $product;			
 		}
 
-		// common::print_b($spec_names);
-		// common::print_b($this->spec_objs);
-		// common::print_b($this->spec_vals);
-		// common::print_b($ret_val);
+
+		// 保存规格数组
+		foreach($this->spec_objs as $k => $s) {
+			$s['value'] = common::to_spec($this->spec_vals[$k]);
+			$s['value_jp'] = common::to_spec($this->spec_jp_vals[$k]);
+			$specDB->setData($s);
+			$specDB->update("id=" . $s['id']);
+		}
 
 		return $ret_val;
+	}
+
+	/**
+	 * 将[{"id":"6","type":"1","name":"color","value":14},{"id":"7","type":"1","name":"size","value":18}]
+	 * 转换为[{"id":"6","type":"1","name":"color","value":"黑"},{"id":"7","type":"1","name":"size","value":"L"}]
+	 */
+	public function specId2SpecVal($specs) {
+
+		foreach($specs as $key => $spec) {
+			$specs[$key]['value'] = $this->spec_vals[$spec['name']][$spec['value']];
+		}
+		return $specs;
 	}
 
 	//整合采集信息
@@ -145,19 +163,8 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 	{
 		// 拷贝商品详情页面图片
 		$this->copyDetailImage();
-		$ret =  parent::collect();
 
-		// 保存规格数组
-		// common::print_b($this->spec_objs);
-		// common::print_b($this->spec_vals);
-		// common::print_b($this->spec_jp_vals);
-		$specDB = new IModel("spec");
-		foreach($this->spec_objs as $k => $s) {
-			$s['value'] = common::to_spec($this->spec_vals[$k]);
-			$s['value_jp'] = common::to_spec($this->spec_jp_vals[$k]);
-			$specDB->setData($s);
-			$specDB->update("id=" . $s['id']);
-		}
+		$ret =  parent::collect();
 
 		return $ret;
 	}

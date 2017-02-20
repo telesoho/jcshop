@@ -1,10 +1,6 @@
 /**
  * Created by yb on 2016/11/29.
  */
-var Request = new Object();
-	Request = GetRequest();
-	var statusOrder=Request["id"];
-	tanchaun(statusOrder);
 	var times;
 	if($("#modalid-search").attr("class") == "false"){
 			time_xian();
@@ -58,7 +54,7 @@ var vm = new Vue({
         article_:[],
         //专区
         zhuan_index:[],
-        time_id:0
+        time_id:0,
     },
     computed: {
         searth_pla: function (){
@@ -142,18 +138,10 @@ var vm = new Vue({
             setItem("articlePage",1);
             window.location.href='/site/article_list'
         },
-//      fixToTop: function(){
-//          $("html,body").animate({scrollTop:0},0);
-//          return false;
-//      },
         collect:function(item,id_this){
             var self=this;
            collection(item,self,id_this);
         },
-//      showSearth: function(){
-//      	alert(1)
-//          getSearth();
-//      },
         // 跳转活动页面
         toActive: function(){
             window.location.href="/activity/christmas_grow";
@@ -316,7 +304,6 @@ function index_home(self){
         	//时间
         	var myDate = new Date();
         	var data_time = myDate.getTime();
-            
 			self.speed = data.data.speed;
 			if(self.speed == ""){
 				self.shop_time = false;
@@ -421,18 +408,6 @@ document.addEventListener("touchmove",function(ev){
 	}
 	
 })
-//document.addEventListener("touchend",function(ev){
-//	var scroll_s = ev.changedTouches[0].pageY;
-//	
-//	if(scroll_s -t>-20){
-//		vm.search_top = false;
-//  	vm.search_top_small = true;
-//	}
-//	if(scroll_s-t <= -20){
-//		vm.search_top = true;
-//		vm.search_top_small = false;
-//	}
-//})
 //上拉加载
 var stop=true;
 $(window).bind('scroll', function() {
@@ -446,13 +421,6 @@ $(window).bind('scroll', function() {
 //          pullupInfoRefresh(vm);
         }
     }
-//  if($(window).scrollTop()>100){
-//      $(".fix-toTop").show();
-//      $(".fix-toTop").css("position","fixed");
-//  }else{
-//      $(".fix-toTop").hide();
-//      $(".fix-toTop").css("position","fixed");
-//  }
 });
 function checkPause(obj){
     var self=obj;
@@ -518,40 +486,6 @@ var _hmt = _hmt || [];
     var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
 })();
-// 					弹	窗	处	理
-	function tanchaun(statusOrder){
-		if(statusOrder == 1){
-//			document.body.style.overflow="hidden";
-			$("#bgg").css({
-				"display":"block",
-				"overflow":"hidden"
-			})
-			$("#PopupWindow").css({
-				"display":"block",
-			});
-			$(document).on('touchmove',function(event) { event.preventDefault(); }, false);
-			$(".fix-nav").css({
-				"display":"none"
-			})
-		}
-		$("#guan").click(function(){
-            window.history.pushState({}, "九猫大百货", "/site/index");
-//			document.body.style.overflow=""
-			$("#bgg").css({
-				"display":"none",
-				"overflow":"hidden"
-			})
-			$("#PopupWindow").css({
-				"display":"none",
-			});
-			$(document).unbind('touchmove');
-			
-		})
-		//   点击去看看
-		$("#sess").click(function(){
-			window.location.href = "/site/ticket_list";
-		})
-	}
-    function removeSessionItem(key){
-        window.sessionStorage.removeItem(key);
-    }
+function removeSessionItem(key){
+	window.sessionStorage.removeItem(key);
+}

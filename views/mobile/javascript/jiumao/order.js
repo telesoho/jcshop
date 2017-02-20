@@ -2,6 +2,7 @@ var stop=true;
 var vm = new Vue({
     el: '#orderList',
     data: {
+        showloadding:true,
         // 头部数据处理
         orderClass:getItem("status"),
         headData:['全部','待支付','待发货','待收货','已完成'],
@@ -24,7 +25,8 @@ var vm = new Vue({
         leftClass:'showWrapper',
         rightClass:'hideWrapper',
         show_ping:false,
-        orderStatusText:[]
+        orderStatusText:[],
+        showBottom:false
     },
     computed: {
         // 读取和设置
@@ -87,6 +89,7 @@ var vm = new Vue({
             self.orderInfo=[];
             self.page=1;
             self.showMessage=false;
+            self.showButton=false;
             setItem('status',num);
             self.orderClass=num;
             getOrder(self);
@@ -95,9 +98,6 @@ var vm = new Vue({
             this.showImg=!this.showImg
         },
         getDelivery: function (id) {
-            // console.log(eid);
-            // this.showContainer = true;
-            // Delivery(eid);
             window.location.href = "/ucenter/delivery/order_no/"+id;
         },
         cancelOrder: function (url) {
@@ -163,6 +163,7 @@ function getOrder(self){
         type:'get',//HTTP请求类型
         timeout:10000,//超时时间设置为10秒；
         success:function(data){
+            self.showloadding=false;
             self.showMessage=true;
             data.data.map(function(item){
                 self.orderInfo.push(item);
@@ -171,6 +172,7 @@ function getOrder(self){
             	self.orderStatusText.push(item.orderStatusText)
             })
             if(data.data==''){
+                self.showBottom=true;
                 self.infoState=true;
                 stop=false;
             }else{
@@ -202,6 +204,7 @@ function pushHistory(statusOrder) {
 $(window).bind('scroll', function() {
     if ($(window).scrollTop() + $(window).height() +1000 >= $(document).height() && $(window).scrollTop() > 50) {
         if(stop==true){
+            vm.showloadding=false;
             stop=false;
             getOrder(vm);
         }

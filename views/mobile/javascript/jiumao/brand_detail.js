@@ -54,7 +54,10 @@ var em = new Vue({
 				$("#article_footer").hide()	
 			}
 		}
-		
+		lazyload.init({
+			anim:false,
+			selectorName:".samLazyImg"
+		});
 	},
 	 methods:{
 	 	

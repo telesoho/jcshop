@@ -51,9 +51,15 @@
 					<div class="left">
                         <a :href="item.url" class="classA">
                             <img :src="item.img" alt=""  style="width:1.2rem;height:1.2rem" />
-                            <div class="sellprice">
-                                ￥ {{item.sell_price}}
-                            </div>
+                            <div>
+								<div class="size" if="item.spec_array">
+									<span v-if=" item.spec_array.length>1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t v-if="key==0">色</t><t v-if="key==1">码</t><span v-if="key==0"> , </span></span>
+									<span v-if=" item.spec_array.length==1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t>色</t></span></span>
+								</div>
+								<div class="sellprice">
+									￥ {{item.sell_price}}
+								</div>
+							</div>
                         </a>
 					</div>
 					<div class="right">
@@ -115,6 +121,9 @@
 					item.totalPrice=(item.sell_price*item.count).toFixed(2);
                     item.url="/site/products?id="+item.goods_id;
 					item.newCount=item.count;
+					if(item.spec_array){
+						item.spec_array_two = JSON.parse(item.spec_array).reverse();
+					}
 				});
 				return  this.infoMessage.goodsList;
 			},
@@ -220,7 +229,6 @@ function getCartInfo(self){
 		type:'post',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
 		success:function(data){
-			console.log(data);
 			self.infoMessage=data.data;
 			self.showMessage=true;
 			setItem("condition_price",data.data.condition_price);

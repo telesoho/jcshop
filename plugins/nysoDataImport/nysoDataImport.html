@@ -2,19 +2,30 @@
     <div class="position"><span>插件管理</span><span>></span><span>插件</span><span>></span><span>妮素商品数据导入</span></div>
 </div>
 <div class="content_box">
-    <ul class="red_box">
-        <li>本插件用于同步妮素商品数据</li>
-        <li>1、默认的CSV文件编码不是UTF-8编码的，必须要先转换编码，利用工具另存为UTF-8格式</li>
-        <li>2、导入的CSV数据包必须是小于 {echo:IUpload::getMaxSize()} 的.ZIP压缩包，您可以通过修改php.ini中的 &lt;post_max_size&gt;和&lt;upload_max_filesize&gt;和&lt;memory_limit&gt;选项来修改上传数据包的大小</li>
-        <li>3、数据包里面一级目录必须包括goods.csv文件和与之对应的CSV图片文件夹，且两者的名字必须相同对应起来且必须是英文。</li>
-    </ul>
     <div class="content form_content">
+        <ul class="red_box">
+            <li>本插件用于同步妮素商品数据</li>
+            <li>1、默认的CSV文件编码不是UTF-8编码的，必须要先转换编码，利用工具另存为UTF-8格式</li>
+            <li>2、导入的CSV数据包必须是小于 {echo:IUpload::getMaxSize()} 的.ZIP压缩包，您可以通过修改php.ini中的 &lt;post_max_size&gt;和&lt;upload_max_filesize&gt;和&lt;memory_limit&gt;选项来修改上传数据包的大小</li>
+            <li>3、数据包里面一级目录必须包括goods.csv文件和与之对应的CSV图片文件夹，且两者的名字必须相同对应起来且必须是英文。</li>
+        </ul>
         <table class="form_table">
             <colgroup>
                 <col width="150px" />
                 <col />
             </colgroup>
             <form id='nysoGoodsForm' action='' method='post' enctype='multipart/form-data'>
+                <tr>
+                    <td>CSV数据类型</td>
+                    <td>
+                        <select name='csvType' pattern='required' class='auto'>
+                            <option value=''>请选择</option>
+                            <option selected value='nyso'>妮素商品数据包</option>
+                            <option selected value='jc'>九猫商品数据包</option>
+                        </select>
+                        <label>选择要导入的CSV数据格式</label>
+                    </td>
+                </tr>
                 <tr>
                     <th>商品</th>
                     <td>
@@ -43,13 +54,31 @@
                     </td>
                 </tr>
             </form>
+            <form id="apiForm" action='' method='post'>
             <tr>
-                <th>执行结果</th>
-                <td class="red_box">
-                    <pre>{$info}</pre>
-                    <pre><font color=red>{$error}</font></pre>
+                <th>接口测试</th>
+                <td >
+                    <select id="api_name" name="api_name" style="height:2.2em">
+                        <option value="AddOrder">AddOrder订单新增接口</option>
+                        <option value="PostSynchro">PostSynchro运单同步接口</option>                        
+                        <option value="SkuSynchro">SkuSynchro商品同步接口</option>
+                        <option value="StockSynchro">StockSynchro库存同步接口</option>                        
+                        <option value="searchOrder">searchOrder供应商订单抓取接口</option>
+                        <option value="orderDelivery">orderDelivery供应商订单发货接口</option>                        
+                        <option value="supGoodsSynchro">supGoodsSynchro供应商商品同步接口</option>
+                        <option value="supStockSynchro">supStockSynchro供应商库存同步接口</option>                        
+                    </select>
+                    <button class="submit" type="button" onclick="runApi();"><span>执行</span></button>
                 </td>
             </tr>
+            <tr>
+                <th>执行结果</th>
+                <td >
+                    <textarea name="req_json" title="执行参数" style="line-height:1.1em;height:180px;"></textarea>
+                    <textarea id="result" title="执行结果" style="line-height:1.1em;height:180px;">{$error}{$info}</textarea>
+                </td>
+            </tr>
+            </form>
         </table>
     </div>
 </div>
@@ -71,19 +100,33 @@
             alert('请上传csv数据包');
             return false;
         }
-        nysoGoodsForm.action = "{url:/plugins/nyso_goods_syn}";   
+        nysoGoodsForm.action = "{url:/nyso/nyso_goods_syn}";   
         document.getElementById("nysoGoodsForm").submit();
     }
 
     // 商品库存同步
     function stocksSyn() {
-        nysoStockForm.action = "{url:/plugins/nyso_stock_syn}";
+        nysoStockForm.action = "{url:/nyso/nyso_stock_syn}";
         document.getElementById("nysoStockForm").submit();
     }
 
     // 订单同步
     function ordersSyn() {
-        nysoOrderForm.action = "{url:/plugins/nyso_order_syn}";
+        nysoOrderForm.action = "{url:/nyso/nyso_order_syn}";
         document.getElementById("nysoOrderForm").submit();
     }
+
+    // 执行接口
+    function runApi() {
+        $.post("{url:/nyso/nyso_api}", $("#apiForm").serialize(),
+            function(data){
+                console.log("data", data);
+                if ( data instanceof Object) {
+                    $("#result").val(JSON.stringify(data, null, 2));
+                } else {
+                    $("#result").val(data);
+                }
+            }, "json"
+        );
+    }    
 </script>
