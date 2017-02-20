@@ -1,10 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="x5-orientation" content="portrait">
+    <title>场景馆</title>
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
+    <link rel="stylesheet" href="/views/mobile/skin/default/css/app/scene/scene_main.css?v=<?php echo time(); ?>" />
 </head>
 <body>
-
+<div id="scene">
+    <loadding :mes="showloadding"></loadding>
+    <ul>
+        <li v-for="item in info" class="scene_list" @click="toSceneDetail(item.id)">
+            <!--<img :src="item.cover" alt="" />-->
+            <img src="/views/mobile/skin/default/image/jmj/scene/example.png" alt="" class="scene_img" />
+            <div class="mark">
+                <div class="left">
+                    <img src="" alt="" />
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<script src="/views/mobile/javascript/vue.js"></script>
+<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/javascript/jquery.min.js"></script>
+<script type="text/javascript">
+     var vm = new Vue({
+         el:"#scene",
+         data:{
+           showloadding:true,
+           page:1,
+           info:[]
+         },
+         mounted:function(){
+             var _this=this;
+             _this.getInfoData();
+         },
+         methods:{
+             getInfoData:function(){
+                 var _this=this;
+                 $.ajax({
+                     data:{page:_this.page},
+                     url:"/apic/scene_list",
+                     dataType:'json',
+                     type:'get',
+                     success:function(res){
+                         _this.showloadding=false;
+                         _this.info=_this.info.concat(res.data);
+                     }
+                 })
+             },
+             toSceneDetail:function(id){
+                 window.location.href="/simple/scene_detail/id/"+id;
+             }
+         }
+     })
+</script>
 </body>
 </html>
+

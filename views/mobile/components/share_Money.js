@@ -26,7 +26,7 @@ Vue.component("sharemoney",{
 		methods:{
 			share_detail:function(key){
 				if(key == 1){
-					window.location.href = "/ucenter/shareMoneyDetail"
+					window.location.href = "/ucenter/share_money_detail"
 				}
 			}
 		}
