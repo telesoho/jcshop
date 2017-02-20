@@ -86,9 +86,10 @@ class xlobo
                 'Count' => $v['goods_nums'],
                 'Price' => $v['real_price']
             );
+            if ($k<3) $note_arr[] = $v['name'];
         }
         if (count($goods_arrays) > 10) return ['msg' => '该订单商品数量超过10件'];
-
+        $note_str = join(',', $note_arr);
         $goods_ids = join('',$goods_ids);
         $params = array(
             'BusinessNo' => $data['order_no'].$goods_ids,
@@ -97,7 +98,7 @@ class xlobo
 //            'IsRePacking' => 1,
 //            'IsPreTax' => 0,
             'IsReceiveTax' => '0',
-            'Comment' => $data['note'],
+            'Comment' => $note_str,
             'BuyersMessage' => null,
             'PackingType' => '1',
             'LogisticId' => '32',
@@ -106,7 +107,7 @@ class xlobo
             'IsContainTax' => '0',
             // 发件人信息
             'BillSenderInfo' => array(
-                'Name' => 'txcs',
+                'Name' => '',
                 'Address' => '',
                 'Phone' => '18658186871',
                 'OtherPhone' =>'18658186871'
