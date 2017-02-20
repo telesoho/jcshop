@@ -145,13 +145,13 @@ class nysoDataImport extends pluginBase
 				}
 
 				if(nysochina::$config['debug'] == "true") {
-					nysochina::$log->info("req_json", array($req_json));
+					nysochina::$log->info("req_json", array($api_name, $req_json));
 				}
 
 				$req = json_decode($req_json, true);
 
 				if(nysochina::$config['debug'] == "true") {
-					nysochina::$log->info("req", array($req));
+					nysochina::$log->info("req", array($api_name, $req));
 				}
 
 				if(json_last_error()) {
@@ -159,6 +159,7 @@ class nysoDataImport extends pluginBase
 				}else {
 					try{
 						$reqOutput = nysochina::run($api_name, $req);
+						$this->exitJSON($reqOutput);
 						switch($api_name) {
 						case "searchOrder":
 							$this->processSearchOrder($reqOutput);						
@@ -191,8 +192,7 @@ class nysoDataImport extends pluginBase
 
 	// 保存订单
 	private function saveJcOrder($jcOrder) {
-
-
+		$this->exitJSON($jcOrder);
 	}
 
 
@@ -1217,7 +1217,7 @@ class nysoDataImport extends pluginBase
 			'nyso_parenter'     => array("name" => "ParenterId","type" => "text","pattern" => "required", "value"=>"1161_651"),
 			'nyso_userkey'      => array("name" => "UserKey","type" => "text","pattern" => "required", "value"=>"jiumaojiatest"),
 			'nyso_supParenter'  => array("name" => "供货商ID","type" => "text","pattern" => "required", "value"=>"830"),
-			'nyso_supUserKey'   => array('name' => "供货商Key", "type" => "text", "pattern" => "required", "value" => "b306f5829b6045f8a10efacebcd5b5c1"),
+			'nyso_supUserKey'   => array('name' => "供货商Key", "type" => "text", "pattern" => "required", "value" => "b7309622ccb4476db49102a4b89a5bea"),
 
 			// 妮素平台订单接口
 			"AddOrder" => array("name" => "订单新增接口","type" => "text","pattern" => "required", "value" => "/api/AddOrder.shtml"),
