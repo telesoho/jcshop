@@ -92,16 +92,7 @@
 						</div>
 					</div>
 				</div>
-                <div class="flexbox empty_product" v-if="infoState">
-                <div class="img">
-                    <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" style="width:1.36rem;margin-top:0.6rem" alt=""/>
-                </div>
-                <div class="content" style="margin-top:0.3rem;margin-bottom:0.3rem;">
-                    <span style="color:#bbb" >~</span>
-                    <span style="color:#bbb">憋拉了，到底了</span>
-                    <span style="color:#bbb">~</span>
-                </div>
-            </div>
+			<whether :state="showBottom"></whether>
 			</div>
 	</div>
 </div>
@@ -111,5 +102,6 @@
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/javascript/jiumao/order.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/Whether.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

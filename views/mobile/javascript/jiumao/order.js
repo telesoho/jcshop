@@ -25,7 +25,8 @@ var vm = new Vue({
         leftClass:'showWrapper',
         rightClass:'hideWrapper',
         show_ping:false,
-        orderStatusText:[]
+        orderStatusText:[],
+        showBottom:false
     },
     computed: {
         // 读取和设置
@@ -88,6 +89,7 @@ var vm = new Vue({
             self.orderInfo=[];
             self.page=1;
             self.showMessage=false;
+            self.showButton=false;
             setItem('status',num);
             self.orderClass=num;
             getOrder(self);
@@ -170,6 +172,7 @@ function getOrder(self){
             	self.orderStatusText.push(item.orderStatusText)
             })
             if(data.data==''){
+                self.showBottom=true;
                 self.infoState=true;
                 stop=false;
             }else{
