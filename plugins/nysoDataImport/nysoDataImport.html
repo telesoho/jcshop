@@ -118,10 +118,14 @@
 
     // 执行接口
     function runApi() {
-        $("#result").val("");
         $.post("{url:/nyso/nyso_api}", $("#apiForm").serialize(),
             function(data){
-                $("#result").val(data);
+                console.log("data", data);
+                if ( data instanceof Object) {
+                    $("#result").val(JSON.stringify(data, null, 2));
+                } else {
+                    $("#result").val(data);
+                }
             }, "json"
         );
     }    

@@ -8,8 +8,8 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '工作一天辛苦啦~ 记得好好吃饭哦~ 要是胃不舒服问题就大啦~如果有小伙伴有这方面苦恼的话，喵酱给你推荐一个神器~ 太田胃散，日本口碑最好的胃药，木有之一，消化不良，食欲不振等问题都不在话下，8岁以上儿童就能食用！纯植物萃取，安全可靠，没有副作用！家中常备良药~今晚20:00九猫家限时抢有上新打折哦~快快来看看吧~';
-	private $remark_goods_id = 8128;
+	private $remark = 'こんばんは～晚上是护肤黄金时间哦~ 喵酱给小仙女们推荐到处断货Utena佑天兰黄金果冻保湿面膜，黄金级美容液果冻面膜，每片含33g美容液，质地浓稠保湿力强，多年Cosme大赏常年名列前茅~ 今晚20:00九猫家限时抢购价格超级优惠呢~快来变美美的吧~';
+	private $remark_goods_id = 19252;
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
@@ -3579,7 +3579,7 @@ OR (
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$this->remark, 'remark_goods_id'=>$this->remark_goods_id], __FUNCTION__);
+            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>'喵~亲爱的，送您58元新用户优惠券，请添加喵酱个人微信：jiumaojia001 领取~加入VIP群第一时间享受最新优惠', 'remark_goods_id'=>false], __FUNCTION__);
 //            wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig','member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$remark], __FUNCTION__);
             if ($ret){
                 $i++;
@@ -3626,5 +3626,23 @@ OR (
         $start             = IFilter::act(IReq::get('start'));
         $data = $user_query->find();
         $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => 1222, 'success'=>222]]);
+    }
+    function oauth_subscribe(){
+        $access_token = common::get_wechat_access_token();
+        $url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=$access_token&next_openid=";
+        $data = common::curl_http($url);
+        $data = json_decode($data);
+        common::log_write($data['total'] . ':' . $data['count']);
+        $open_ids_model = new IModel('open_ids');
+        foreach ($data['data']['openid'] as $v){
+            $open_ids_model->setData(['open_id'=>$v]);
+            $ret = $open_ids_model->add();
+            if ($ret) {
+                continue;
+            } else {
+                var_dump($v);
+            }
+        }
+        var_dump($ret);
     }
 }
