@@ -3543,11 +3543,9 @@ OR (
     function all_member_message(){
         set_time_limit(0);
         $start             = IFilter::act(IReq::get('start'));
-        $user_query        = new IQuery('user as a');
-        $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
-        $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) > 48";
+        $user_query        = new IQuery('open_ids');
         if ($start == 'test') {
-            $user_query->where = "a.id IN (24,51)";
+            $user_query->where = "open_id = 'orEYdw0X44crd6F3MOdXES6Hfpig'";
         } else {
             $user_query->limit = $start;
         }
@@ -3564,8 +3562,8 @@ OR (
                 common::log_write(__FUNCTION__ . "信息推送****失败：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
             }
         }
-        wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>$start_time . '\n' . date('Y-m-d H:i:s',time()), 'info'=>"用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
-        $this->returnJson(['code'=>0, 'msg'=>'所有会员用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
+        wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>$start_time . '\n' . date('Y-m-d H:i:s',time()), 'info'=>$start . "用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
+        $this->returnJson(['code'=>0, 'msg'=>$start . '所有会员用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
     }
     function fourty_member_message(){
         set_time_limit(0);
@@ -3629,12 +3627,12 @@ OR (
     }
     function oauth_subscribe(){
         $access_token = common::get_wechat_access_token();
-        $url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=$access_token&next_openid=";
+        $url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=$access_token&next_openid=orEYdw1wKmWJRbi4Nch9IFKHaIfM";
         $data = common::curl_http($url);
         $data = json_decode($data);
-        common::log_write($data['total'] . ':' . $data['count']);
+        common::log_write($data->total . ':' . $data->count);
         $open_ids_model = new IModel('open_ids');
-        foreach ($data['data']['openid'] as $v){
+        foreach ($data->data->openid as $v){
             $open_ids_model->setData(['open_id'=>$v]);
             $ret = $open_ids_model->add();
             if ($ret) {
