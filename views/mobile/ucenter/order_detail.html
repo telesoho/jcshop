@@ -132,24 +132,12 @@
 					<a :href="buttonurl.button1Url" class="locationA buttom_fixd buttom_fixd1">{{buttonurl.button1}}</a>
 				</template>
 				<a :href="buttonurl.button2Url" class="locationA buttom_fixd buttom_fixd2" :style="showstylealreadyComment?stylealreadyComment:''">{{buttonurl.button2}}</a>
-				
 			</div>
 		</template>
-		<section>
-			<!--物流弹出菜单-->
-			<div id="div_action" :class="showContainer?leftClass:rightClass">
-				<div class="head">
-					<span @click="showContainer=false">返回</span><span>查看物流</span>
-				</div>
-				<div id="div_text">
-
-				</div>
-			</div>
-		</section>
 	</section>
-    <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
-	<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-	<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+    <script src="/views/mobile/javascript/vue.js"></script>
+	<script src="/views/mobile/javascript/jquery.min.js"></script>
+	<script src="/views/mobile/javascript/mui.js"></script>
 	<script src="/views/mobile/javascript/jiumao/order_detail.js?v=<?php echo time(); ?>"></script>
 	<script type="text/javascript">
 	
