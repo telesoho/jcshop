@@ -7,7 +7,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="x5-orientation" content="portrait">
 		<title>每周上新</title>
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
 		<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
 		<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
 		<link rel="stylesheet" href="/views/mobile/skin/default/css/app/redesign/week_new.css?v=<?php echo time(); ?>" />
@@ -28,27 +28,18 @@
 		</header>
 		<section id="week_list" v-cloak>
 			<ul>
-				<li v-for="item in info" @click="week_shop(item.id)">
+				<li v-for="item in info" @click="week_shop(item.id)" style="text-align: center">
 					<div><img :dataimg="item.img" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg"  style="width: 2.64rem;"/></div>
 					<p>{{item.name}}</p>
 					<span>¥<span>{{item.sell_price}}</span></span>
 				</li>
 			</ul>
-			<div class="flexbox empty_product" style="" v-if="infoState">
-	        <div class="img">
-	                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
-	            </div>
-	            <div class="content">
-	                <span style="color:#fff">~</span>
-	                <span style="color:#fff">憋拉了，到底了</span>
-	                <span style="color:#fff">~</span>
-	            </div>
-	        </div>
-
+			<whether :state="showBottom"></whether>
 		</section>
-		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
-		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/jquery.min.js"></script>
+		<script src="/views/mobile/javascript/vue.js"></script>
+		<script src="/views/mobile/javascript/mui.js"></script>
+		<script src="/views/mobile/components/Whether.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 		<script type="text/javascript">
 		var Request = new Object();
@@ -60,7 +51,8 @@
         data: {
 	    	info:[],
 	    	page:1,
-	    	infoState:false
+	    	infoState:false,
+			showBottom:false
         },
         computed: {
         	
@@ -102,6 +94,7 @@
             	pushSession("week_new_info",self.info)
             	if(data.data == ""){
             		self.infoState=true;
+					self.showBottom=true;
             		stop = false;
             	}else{
             		self.infoState=false;

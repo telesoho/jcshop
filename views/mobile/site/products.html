@@ -13,6 +13,17 @@
 </head>
 <body>
 <section id="productInfo" v-cloak v-if="showMessage">
+    <!--弹窗-->
+    <div v-if="popup_state==1" class="popup"  @touchmove="stopEvent">
+        <div>
+            <img src="/views/mobile/skin/default/image/jmj/product/ttt.jpg" alt="" class="img1"/>
+            <div class="text">偷偷告诉你：添加喵酱微信：jiumaojia001<br/>
+                给你发独家优惠券哦^-^
+            </div>
+            <img src="/views/mobile/skin/default/image/jmj/icon/close.png" class="img2" @click.stop="close_Popup" />
+        </div>
+    </div>
+    <!--弹窗结束-->
 	<top_back_car :msg="car_count"></top_back_car>
 	<div id="pullrefresh1" class="v-container" v-if="showContainer1" @touchstart="firstContainerMoveStart" @touchmove="firstContainerMove" @touchend="endtouch1">
 		<span @click="share" style="display: inline-block;position: fixed;right: 0;top: 1.02rem;z-index: 999;"><img src="/views/mobile/skin/default/image/jmj/product/shareMoney.png" style="width: 1.07rem;"/></span>
@@ -359,12 +370,14 @@
 <script type="text/javascript" charset="utf-8">
 var minutes,hours,seconds;
 	var statusOrder="{echo:IReq::get('id')}";
+    var popup_state="{echo:IReq::get('t')}";
 	var time_all,times;
 	//记录访问位置的id
 	setItem("product",statusOrder);
 	var vm = new Vue({
 		el: '#productInfo',
 		data: {
+            popup_state:popup_state,
 			time_shop:false,
 			times:"",
 			time_title:"",
@@ -455,7 +468,7 @@ var minutes,hours,seconds;
 				return arr;
 			}
 		},
-		mounted: function(){
+		mounted: function(e){
 			var self=this;
 			getProductDetail(statusOrder,self);
 			car_shop_num(self);
@@ -479,6 +492,14 @@ var minutes,hours,seconds;
 			}
 		},
 		methods: {
+//		    弹窗状态处理
+            stopEvent:function(e){
+               e.preventDefault();
+            },
+            close_Popup:function(e){
+              e.preventDefault=false;
+              this.popup_state=null;
+            },
 			//进入限时购
 			time_buy:function(){
 				window.location.href = "/site/time_purchase"

@@ -10,7 +10,7 @@ function active(classname){
 	search_file.setAttribute("href",classname+date);
 	head.appendChild(search_file);
 }
-active("/views/mobile/componentsCss/search_nav_component.css")
+active("/views/mobile/componentsCss/search_nav_component.css");
 // 创建一个搜索的组件
 Vue.component('search-nav', {
     template:'<section class="search-header" id="homeHeader" style="position:fixed;z-index:1000">\

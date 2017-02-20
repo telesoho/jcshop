@@ -10,14 +10,11 @@
 		<title>
 			<?php echo !empty(ISession::get('shop_name')) ? ISession::get('shop_name') : '九猫大百货'?>
 		</title>
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css?v=<?php echo time(); ?>" />
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css?v=<?php echo time(); ?>" />
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>" />
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/app/jiumao.css?v=<?php echo time(); ?>" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/icons-extra.css" />
+		<link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
 		<link rel="stylesheet" href="/views/mobile/skin/default/css/app/siteIndex.css?v=<?php echo time(); ?>" />
-		<link rel="stylesheet" href="/views/mobile/skin/default/css/app/mao.css" />
 	</head>
-
 	<body>
 		<section id="indexInfo" v-cloak>
 			<!--		搜索样式展开 			-->
@@ -111,40 +108,6 @@
 					<!--<img src="/views/mobile/skin/default/image/jmj/home_redesign/play_index.png" class="index_play"/>-->
 				</div>
 			</div>
-			
-			<!--<div id="aaaa" style="width: 100%;background: #fff;padding:0.2rem 0;margin-top: 0.2rem;">
-				<img src="/views/mobile/skin/default/image/jmj/home_redesign/chunjie.png" style="width: 7.24rem;display: block;margin: 0 auto;"/>
-			</div>-->
-			
-			<!--							元旦							-->
-			<!--<div class="tips" style="margin-top:0.2rem;background:#fff ;padding:0 0.1rem;">
-        <img src="/views/mobile/skin/default/image/jmj/new_active/index/tip.png" alt=""  style="width:100%" />
-    </div>-->
-			<!--								活动								-->
-			<!--<div class="activity">
-        <div class="bg">
-            <img src="/views/mobile/skin/default/image/jmj/new_active/index/bottomleft.png" alt=""  style="width:0.74rem" class="bottomleft" />
-            <img src="/views/mobile/skin/default/image/jmj/new_active/index/bottomright.png" alt=""  style="width:0.74rem" class="bottomright" />
-        </div>
-        <div class="top">
-            <img src="/views/mobile/skin/default/image/jmj/new_active/index/middle.png" alt=""  style="width:2.98rem;height:0.64rem"  />
-        </div>
-        <div class="img flexbox">
-            <a class="img1 locationA" href="/activity/christmas_ticket">
-                <img src="/views/mobile/skin/default/image/jmj/new_active/index/pic1.png" alt="" />
-            </a>
-            <span class="img1 "  @click="toActive()">
-                <img src="/views/mobile/skin/default/image/jmj/new_active/index/pic2.png" alt="" />
-            </span>
-        </div>
-    </div>-->
-			<!--							限时购											-->
-			<!--<div id="" style="overflow: hidden;margin: 0.6rem 0;height: 1.4rem;">
-    	<div class="clock" >
-			<img src="/views/mobile/skin/default/image/jmj/article/time.png" style=" width:100%"/>
-		</div>
-    </div>-->
-
 			<!--							分类												-->
 			<div id="article_list">
 				<div class="hot_category">
@@ -157,26 +120,10 @@
 						<p class="line_f" style="font-size: 0.22rem;color: #b8b8b8;">ホットアイテム</p>
 					</div>
 					<ul>
-						<li><img @click="list_index(1)" src="/views/mobile/skin/default/image/jmj/home_redesign/1.png" style="width: 3.5rem;" /></li>
-						<li><img @click="list_index(2)" src="/views/mobile/skin/default/image/jmj/home_redesign/2.png" style="width: 3.5rem;" /></li>
-						<li><img @click="list_index(3)" src="/views/mobile/skin/default/image/jmj/home_redesign/3.png" style="width: 3.5rem;" /></li>
-						<li><img @click="list_index(4)" src="/views/mobile/skin/default/image/jmj/home_redesign/4.png" style="width: 3.5rem;" /></li>
-						<li><img @click="list_index(5)" src="/views/mobile/skin/default/image/jmj/home_redesign/5.png" style="width: 3.5rem;" /></li>
-						<li><img @click="list_index(6)" src="/views/mobile/skin/default/image/jmj/home_redesign/6.png" style="width: 3.5rem;" /></li>
-						<li><img @click="list_index(7)" src="/views/mobile/skin/default/image/jmj/home_redesign/7.png" style="width: 3.5rem;" /></li>
-						<li><img @click="list_index(8)" src="/views/mobile/skin/default/image/jmj/home_redesign/8.png" style="width: 3.5rem;" /></li>
-						<li><img @click="list_index(9)" src="/views/mobile/skin/default/image/jmj/home_redesign/9.png" style="width: 3.5rem;" /></li>
-						<li><img @click="list_index(10)" src="/views/mobile/skin/default/image/jmj/home_redesign/10.png" style="width: 3.5rem;" /></li>
-						<li><img @click="list_index(11)" src="/views/mobile/skin/default/image/jmj/home_redesign/11.png" style="width: 3.5rem;" /></li>
-						<li><img @click="list_index(12)" src="/views/mobile/skin/default/image/jmj/home_redesign/12.png" style="width: 3.5rem;" /></li>
+						<li v-for="key in 12">
+							<img :src="'/views/mobile/skin/default/image/jmj/home_redesign/'+key+'.png'"  @click="list_index(key)" style="width:3.5rem;" />
+						</li>
 					</ul>
-					<!--<div>
-						<div class="item_img">
-							<a href="#" @click="toArticle_list(item)" class="img" v-for="item in indexInfo.article_category_list.ac">
-								<img alt="" :src="item.image" class="samLazyImg" />
-							</a>
-						</div>
-					</div>-->
 				</div>
 			</div>
 			<!--							图文专辑											-->
@@ -237,19 +184,6 @@
 						</div>
 						<div class="xian_list" style="background:#f5f5f5 ;width:100%;height:0.2rem;"></div>
 					</div>
-					<!--<div class="link_zhuan">
-						<div class="left_link">
-							<img src="/views/mobile/skin/default/image/jmj/home_redesign/see.png" style="width: 0.42rem;"/>
-							<span>344</span>
-						</div>
-						<div class="center_link">
-							<img src="/views/mobile/skin/default/image/jmj/home_redesign/Thumb.png" style="width: 0.42rem;"/>
-							<span>20</span>
-						</div>
-						<div class="right_link">
-							<img src="/views/mobile/skin/default/image/jmj/home_redesign/share.png" style="width: 0.42rem;"/>
-						</div>
-					</div>-->
 				</div>
 				
 			</div>
@@ -261,26 +195,11 @@
 				</div>
 				<p class="index_kan" style="width:100%;text-align: center;">点击 , &nbsp; &nbsp;去 逛 逛 吧 </p>
 			</div>
-			<!--<section class="recommended line albumn_index" v-for="(item,key) in new_data" v-if="item.goods_num>2">
-				<article-list :item="item" :img1="img1" :img2="img2" @col="collect" :state="0"></article-list>
-			</section>-->
-			<!--<cat-refresh v-show="showCat"></cat-refresh>-->
-			<!--<div class="fix-toTop hide" @click="fixToTop">
-				<img src="/views/mobile/skin/default/image/jmj/icon/top-icon.png" alt="" />
 			</div>-->
 			<footer-nav :state="0" :states="index_st"></footer-nav>
 		</section>
-		<!--<div style="padding-bottom:2.42rem;background:#f8f8f8 ;z-index: 10;"></div>-->
-		<!--<div class="fix-nav">
-			<div class="img"><img src="/views/mobile/skin/default/image/jmj/icon/rmb.png" alt="" class="img-rmb" />
-				<div class="content">
-					<span>{echo:(new Config('site_config'))->exchange_rate_jp}</span>
-				</div>
-			</div>
-		</div>-->
-
-		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
-		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/jquery.min.js"></script>
+		<script src="/views/mobile/javascript/vue.js"></script>
 		<!--加载顶部导航-->
 		<script src="/views/mobile/components/head_nav.js?v=<?php echo time(); ?>"></script>
 		<!--article-list组件引入-->
@@ -289,9 +208,8 @@
 		<script src="/views/mobile/components/search_nav.js?v=<?php echo time(); ?>"></script>
 		<!--底部导航样式的引入-->
 		<script src="/views/mobile/components/footer_nav.js?v=<?php echo time(); ?>"></script>
-		<script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
-		<script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
-		<!--<script src="/views/mobile/javascript/time.js"></script>-->
+		<script src="/views/mobile/javascript/mui.js"></script>
+		<script src="/views/mobile/javascript/lazyload.js"></script>
 		<script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
 
@@ -316,34 +234,5 @@
 		</script>
 		{/if}
 		<script type="text/javascript" src="/views/mobile/javascript/jiumao/siteIndex.js?v=<?php echo time(); ?>"></script>
-		<script type="text/javascript">
-			//
-			//window.onload=function(){
-			//	var clock=document.getElementsByClassName("clock")[0];
-			//	var time=new Date();
-			//	var h=drawpointer(0.04,0.22,"#000",time.getHours()*30+time.getMinutes()*6/12);
-			//	var m=drawpointer(0.03,0.3,"#000",time.getMinutes()*6);
-			//	var s=drawpointer(0.02,0.38,"red",time.getSeconds()*6);
-			//	setInterval(function(){
-			//		var time=new Date();
-			//		h.style.WebkitTransform="rotate("+(time.getHours()*30+time.getMinutes()*6/12)+"deg)";
-			//		m.style.WebkitTransform="rotate("+time.getMinutes()*6+"deg)";
-			//		s.style.WebkitTransform="rotate("+time.getSeconds()*6+"deg)"
-			//	},1000);
-			//	
-			//	
-			//	function drawpointer(w,h,b,d){
-			//		var newdiv=document.createElement("div");
-			//	//                中间的圆
-			//		var newd=document.createElement("div");
-			////		newd.style.cssText="width:10px;height:10px;border-radius:50%;background:;position:absolute;left:0px;top:0px;"
-			//		newdiv.style.cssText="width:"+w+"rem;height:"+h+"rem;position:absolute;left:"+((7.48-w/100)/2)+"rem;top:"+(0.7-h)+"rem;background:"+b+";-webkit-transform:rotate("+d+"deg);-webkit-transform-origin:center bottom;";
-			//			clock.appendChild(newdiv);
-			//			clock.appendChild(newd);
-			//			return newdiv;
-			//		}
-			//	}
-		</script>
 	</body>
-
 </html>
