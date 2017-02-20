@@ -17,6 +17,23 @@
     width:100%;
     height:0.5rem;
     bottom:0.25rem;
-    border:1px solid red;
     display: -webkit-flex;
+}
+.scene_list .mark img{
+    width:0.4rem;
+    height:0.4rem;
+    position:relative;
+    top:0.05rem;
+    margin-left:0.3rem;
+}
+.scene_list .mark img:nth-last-of-type(1){
+    margin-left:0.4rem;
+}
+.scene_list .mark span{
+    height:0.5rem;
+    line-height:0.5rem;
+    display: inline-block;
+    color:rgba(255,255,255,0.7);
+    position: relative;
+    top:-0.05rem;
 }

@@ -15,11 +15,15 @@
     <loadding :mes="showloadding"></loadding>
     <ul>
         <li v-for="item in info" class="scene_list" @click="toSceneDetail(item.id)">
-            <!--<img :src="item.cover" alt="" />-->
-            <img src="/views/mobile/skin/default/image/jmj/scene/example.png" alt="" class="scene_img" />
+            <img :src="item.cover" alt="" class="scene_img" />
             <div class="mark">
                 <div class="left">
-                    <img src="" alt="" />
+                    <img src="/views/mobile/skin/default/image/jmj/scene/find.png" alt="" style="width:0.4rem" />
+                    <span>{{item.visit}}</span>
+                </div>
+                <div class="right">
+                    <img src="/views/mobile/skin/default/image/jmj/scene/like.png" alt="" style="width:0.4rem" />
+                    <span>{{item.praise}}</span>
                 </div>
             </div>
         </li>
@@ -34,7 +38,8 @@
          data:{
            showloadding:true,
            page:1,
-           info:[]
+           info:[],
+           stop:true
          },
          mounted:function(){
              var _this=this;
@@ -51,6 +56,12 @@
                      success:function(res){
                          _this.showloadding=false;
                          _this.info=_this.info.concat(res.data);
+                         if(res.data.length==0){
+                              _this.stop=false;
+                         }else{
+                              _this.stop=true;
+                             _this.page++;
+                         }
                      }
                  })
              },
@@ -59,6 +70,15 @@
              }
          }
      })
+     $(window).bind('scroll', function() {
+         if ($(window).scrollTop() + $(window).height() +100 >= $(document).height() && $(window).scrollTop() > 50) {
+             if(vm.stop==true){
+                 vm.showloadding=true;
+                 vm.stop=false;
+                 vm.getInfoData(vm);
+             }
+         }
+     });
 </script>
 </body>
 </html>
