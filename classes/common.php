@@ -492,7 +492,23 @@ class Common{
             return false;
         }
     }
-    
+
+    /**
+     * User: chenbo
+     *获取商品信息
+     * @param null $goods_id
+     * @param null $goods_no
+     * @return array
+     */
+    public  static  function get_goods_data($goods_id = null, $goods_no = null){
+        $goods_model = new IModel('goods');
+        if (!empty($goods_id)){
+            $where = 'id = ' . $goods_id;
+        } else {
+            $where = 'goods_no = "' . $goods_no . '"';
+        }
+        return $goods_model->getObj($where);
+    }
     /** 
     * @param String $var   要查找的变量 
     * @param Array  $scope 要搜寻的范围 

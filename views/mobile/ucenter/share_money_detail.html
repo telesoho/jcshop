@@ -94,6 +94,9 @@
             getData1:function(self){
                 setTimeout(function(){
                     self.showloadding=false;
+                    $.post('/apic/get_share_money',function (data) {
+                        console.log(data);
+                    })
                     var dat=[
                         {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
                         {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:80},

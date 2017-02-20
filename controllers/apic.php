@@ -8,8 +8,8 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '一天下来眼睛都很累啦~ 喵酱提醒你该滴滴眼药水~休息一下啦~ 小林制药隐形眼镜滴眼液，适用于长时间使用电脑、佩戴隐形眼镜引起的眼部干涩，眼疲劳，眼部分泌物过，视线模糊等眼部不适的问题~ 今早9:00九猫家限时抢价格超级优惠呢~快快来看看吧~';
-	private $remark_goods_id = 5900;
+	private $remark = '工作一天辛苦啦~ 记得好好吃饭哦~ 要是胃不舒服问题就大啦~如果有小伙伴有这方面苦恼的话，喵酱给你推荐一个神器~ 太田胃散，日本口碑最好的胃药，木有之一，消化不良，食欲不振等问题都不在话下，8岁以上儿童就能食用！纯植物萃取，安全可靠，没有副作用！家中常备良药~今晚20:00九猫家限时抢有上新打折哦~快快来看看吧~';
+	private $remark_goods_id = 8128;
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
@@ -3546,9 +3546,11 @@ OR (
         $user_query        = new IQuery('user as a');
         $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
         $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) > 48";
-        if ($start == 'test') $user_query->where = "a.id IN (24,51)";
-//        $user_query->limit = 20000;
-        $user_query->limit = $start;
+        if ($start == 'test') {
+            $user_query->where = "a.id IN (24,51)";
+        } else {
+            $user_query->limit = $start;
+        }
         $user_data         = $user_query->find();
         $i                 = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
@@ -3599,6 +3601,11 @@ OR (
 //            wechats::send_message_template($v, 'ship', ['order_no'=>'2017052456', 'name'=>'商品名称', 'billcode'=>'23', 'remark'=>'喵~感谢您对九猫家的信任与支持！我们已经收到您的订单啦~ 日本供货商将在3-5个工作日完成配货哒，正常情况下10-15个工作日您将收到您买的宝贝，请耐心等待哦ฅ՞•ﻌ•՞ฅ~\n如果有任何订单退换货等问题请添加客服喵微信：\njiumaojia006；想要领取优惠券的小伙伴欢迎添加喵酱个人微信：jiumaojia001；更多优惠群里第一时间共享哦~么么哒~']);
 //        }
     }
+
+    /**
+     * User: chenbo
+     * 分享赚
+     */
     function share_money_detail(){
         $data       = common::get_user_data($this->user['user_id']);
         if (empty($data)){
@@ -3607,5 +3614,17 @@ OR (
             $this->returnJson(['code'=>0, 'msg'=>'用户分享赚信息', 'data'=>$data]);
         }
         $this->data = $data;
+    }
+    function get_share_money(){
+        $share_money_query        = new IQuery('share_money');
+        $share_money_query->where = "user_id = " . $this->user['user_id'];
+        $data                     = $share_money_query->find();
+        $this->returnJson(['code'=>0, 'msg'=>'用户分享赚动态', 'data'=>$data]);
+    }
+    function test(){
+        $user_query = new IQuery('user');
+        $start             = IFilter::act(IReq::get('start'));
+        $data = $user_query->find();
+        $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => 1222, 'success'=>222]]);
     }
 }

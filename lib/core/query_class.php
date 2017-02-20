@@ -120,7 +120,7 @@ class IQuery
                 foreach($subq as $k => $v){
                     $q->$k = $v;
                 }
-    			$this->subQueries["@".$aname] = "(" . $q->getSql() . ") as " . $aname;
+    			$this->subQueries[$aname] = "(" . $q->getSql() . ")";
             }
 		}
 	}
@@ -249,10 +249,12 @@ class IQuery
     {
         $sql = "select $this->fields from $this->table $this->join $this->where $this->group $this->having $this->order";
         if($this->subQueries) {
+			// 把@key和@iwebshop_key替换为子查询SQL
             foreach($this->subQueries as $k => $q) {
 				$sql = strtr($sql, array(
-					$this->tablePre . $k => $q,
-					$k => $q,
+					"@" . $this->tablePre . $k => $q,	// setJoin时会把@key替换为@iwebshop_key
+					$this->tablePre . "@" . $k => $q,   // setTable会把@key替换为iwebshop_@key
+					"@" . $k => $q,
 				));
             }
         }

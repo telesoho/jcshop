@@ -183,7 +183,7 @@ class jcshopCsvImport extends pluginBase
 			'content'    		=> '商品详情',
 			'reset_img'        	=> '重设图片',
 			'spec' 				=> '规格',
-			'spec_jp' 			=> '规格日文',			
+			'spec_jp' 			=> '规格日文',
 			'sku_no'			=> '规格编号',
 			'weight'     		=> '物流重量',
 			'name_jp'	 		=> '商品名称日文',
