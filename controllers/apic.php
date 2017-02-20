@@ -8,7 +8,7 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = 'こんばんは～晚上是护肤黄金时间哦~ 喵酱给小仙女们推荐到处断货Utena佑天兰黄金果冻保湿面膜，黄金级美容液果冻面膜，每片含33g美容液，质地浓稠保湿力强，多年Cosme大赏常年名列前茅~ 今晚20:00九猫家限时抢购价格超级优惠呢~快来变美美的吧~';
+	private $remark = 'こんばんは～晚上是护肤黄金时间哦~ 喵酱给小仙女们推荐到处断货Utena佑天兰黄金果冻保湿面膜，黄金级美容液果冻面膜，每片含33g美容液，质地浓稠保湿力强，多年Cosme大赏常年名列前茅~ 今晚20:00九猫家限时抢购价格超级优惠呢~快来变美美的吧~赶紧戳下方详情~';
 	private $remark_goods_id = 19252;
 	function init(){
 		
@@ -3670,7 +3670,8 @@ OR (
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'],'remark'=>$this->remark, 'remark_goods_id'=>$this->remark_goods_id], __FUNCTION__);
+//            $ret = wechats::send_message_template($v['open_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'],'remark'=>$this->remark, 'remark_goods_id'=>$this->remark_goods_id], __FUNCTION__);
+            $ret = wechats::send_message_template($v['open_id'], 'member2', ['username'=>'美丽的小仙女', 'remark'=>$this->remark, 'time'=>'今天晚上20:00', 'remark_goods_id'=>$this->remark_goods_id], __FUNCTION__);
             if ($ret){
                 common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
                 $i++;
@@ -3736,10 +3737,14 @@ OR (
         $this->returnJson(['code'=>0, 'msg'=>'用户分享赚动态', 'data'=>$data]);
     }
     function test(){
-        $user_query = new IQuery('user');
-        $start             = IFilter::act(IReq::get('start'));
-        $data = $user_query->find();
-        $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => 1222, 'success'=>222]]);
+        $oauth_user_query = new IQuery('oauth_user');
+        $oauth_user_query->where = 'user_id in (24,19)';
+        $data = $oauth_user_query->find();
+        foreach ($data as $v){
+            echo $v['oauth_user_id'];
+            $ret = wechats::send_message_template($v['oauth_user_id'], 'member2', ['username'=>'****', 'remark'=>$this->remark, 'time'=>'今天晚上20:00', 'remark_goods_id'=>$this->remark_goods_id]);
+        }
+        var_dump($ret);
     }
     function oauth_subscribe(){
         $access_token = common::get_wechat_access_token();
@@ -3759,4 +3764,35 @@ OR (
         }
         var_dump($ret);
     }
+    function oauth_user_time(){
+        $open_ids_query = new IQuery('open_ids');
+        $open_ids_model = new IModel('open_ids');
+        $data           = $open_ids_query->find();
+        $access_token   = common::get_wechat_access_token();
+        foreach ($data as $k=>$v){
+            $open_id = $v['open_id'];
+            $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$access_token&openid=$open_id&lang=zh_CN";
+            $ret = common::curl_http($url);
+            $ret = json_decode($ret);
+            $open_ids_model->setData(['time'=>date('Y-m-d H:i:s', $ret->subscribe_time), 'username'=>$ret->nickname]);
+            $open_ids_model->update('id = ' . $v['id']);
+        }
+    }
+    function xlobo_single_status(){
+        $delivery_doc_query         = new IQuery('delivery_doc');
+        $delivery_doc_query->where  = "freight_id = 18 and time > 2017-02-15";
+        $delivery_doc_query->fields = 'delivery_code';
+        $data = $delivery_doc_query->find();
+        foreach ($data as $k=>$v){
+            $delivery_code = $v['delivery_code'];
+            if (strpos($delivery_code, 'DB') === 0){
+//                $ret = xlobo::get_logistic_info($delivery_code);
+//                var_dump($ret);
+                echo $delivery_code;
+            } else {
+                var_dump(strpos($delivery_code, 'DB'));
+            }
+        }
+    }
+
 }
