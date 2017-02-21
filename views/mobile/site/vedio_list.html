@@ -50,16 +50,7 @@
             </div>
         </div>
         <!--暂无更多专辑-->
-        <div class="flexbox empty_product" style="" v-if="infoState">
-            <div class="img">
-                <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
-            </div>
-            <div class="content" style="background:#eee">
-                <span style="color:#bbb">~</span>
-                <span style="color:#bbb">暂无更多专辑</span>
-                <span style="color:#bbb">~</span>
-            </div>
-        </div>
+        <whether :state="infoState"></whether>
     </section>
 <script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
@@ -68,6 +59,8 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
+<!--底部-->
+<script src="/views/mobile/components/Whether.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
 
 <!-- 微信分享 -->
