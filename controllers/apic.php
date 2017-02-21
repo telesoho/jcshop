@@ -2910,6 +2910,10 @@ class Apic extends IController{
 			$info['list'][$k]['cover'] = empty($v['cover']) ? '' : IWeb::$app->config['image_host'].'/'.$v['cover'];
 		}
 		
+		/* 观看次数增加 */
+		$modelScene->setData(array('visit' => 'visit+1'));
+		$modelScene->update('id='.$param['scene_id'], array('visit'));
+		
 		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $info));
 	}
 	/**
