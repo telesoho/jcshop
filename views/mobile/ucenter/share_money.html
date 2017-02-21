@@ -13,7 +13,7 @@
 </head>
 <body>
 	<div id="wrap_share">
-		<sharemoney :share="data_s" @click="share_detail"></sharemoney>
+		<sharemoney :share="data_s" @click="share_money_detail"></sharemoney>
 		<div id="instructions" >
 			<img src="/views/mobile/skin/default/image/buy_share/share_title.png"/>
 		</div>
@@ -66,8 +66,8 @@
 			updated:function(){
 			},
 			methods:{
-				share_detail:function(){
-					console.log(111);
+                share_money_detail:function(){
+					alert(1)
 				}
 			}
 			})
