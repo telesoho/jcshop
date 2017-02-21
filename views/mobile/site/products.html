@@ -62,10 +62,20 @@
 				<img src="/views/mobile/skin/default/image/jmj/product/timemore_pro.png" style="width: 0.13rem;"/>
 			</div>
             <section class="name-price">
-				<div class="name hideCamp4">{{info.name}}</div>
+				<!--有二级标题显示方法-->
+				<div class="name" v-if="info.name_de">
+					<h3>
+						<img src="/views/mobile/skin/default/image/jmj/product/leftQ.png" alt="" style="width:0.2rem;vertical-align: top" />
+						{{info.name_de}}
+						<img src="/views/mobile/skin/default/image/jmj/product/rightQ.png" alt="" style="width:0.2rem;vertical-align: top"/>
+					</h3>
+					<p class="hidewrap">{{info.name}}</p>
+				</div>
+				<div class="name hideCamp4" v-if="info.name_de==''">{{info.name}}</div>
+				<!--有二级标题显示方法-->
 				<div class="price">
 					<div class="sell_price flexstart">
-						<span style="font-size:0.26rem;color:#ff2f5c">¥&nbsp;</span>
+						<span style="font-size:0.26rem;color:#ff2f5c">￥&nbsp;</span>
 						<span style="font-size:0.46rem;color:#ff2f5c"> {{info.sell_price}}</span>
 						<div class="act">
 							<img src="/views/mobile/skin/default/image/jmj/product/re.png" alt="">
@@ -157,7 +167,7 @@
 										{{item.name}}
 									</div>
 									<div class="price hideCamp">
-										¥ {{item.sell_price}}
+										<span style="font-size:0.2rem;color:#ff2f5c">￥ </span>{{item.sell_price}}
 									</div>
 								</a>
 							</div>

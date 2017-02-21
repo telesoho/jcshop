@@ -114,7 +114,7 @@ class nysochina
 
     // 根据查询到的妮素订单生成订单号
     public static function getOrderId($nysoOrder) {
-        $orderTime = date_parse_from_format("Y-m-d H:i:s", $nysoOrder['OrderTime']);
+        $orderTime = date_create_from_format("Y-m-d H:i:s", $nysoOrder['OrderTime']);
         $mobile = $nysoOrder['ConsigneeNumber'];
         $orderId = "NS" . $orderTime->format("YmdHis") . substr($mobile, -4);
         return $orderId;

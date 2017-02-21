@@ -68,6 +68,18 @@
     text-align:center;
     line-height:0.5rem;
 }
+.name-price .name h3{
+    font-size:0.4rem;
+    color:#1f1f1f;
+    font-weight:bold;
+    text-align:center;
+}
+.name-price .name p{
+    margin-top:0.1rem;
+    font-size:0.26rem;
+    color:#484848;
+    text-align:center;
+}
 .name-price .price{
     text-align: center;
 }
@@ -89,6 +101,7 @@
     height:0.35rem;
     line-height: 0.35rem;
     width: 1.86rem;
+    text-align: center;
 }
 .sell_price .act img{
     position: absolute;
@@ -103,9 +116,8 @@
     font-size:0.2rem ;
     color:#fff;
     display: inline-block;
-    left:0.23rem;
+    left:-0.05rem;
     line-height: 0.35rem;
-
 }
 .cPrice{
     font-size:0.26rem;

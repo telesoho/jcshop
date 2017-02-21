@@ -8,8 +8,9 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = 'こんばんは～晚上是护肤黄金时间哦~ 喵酱给小仙女们推荐到处断货Utena佑天兰黄金果冻保湿面膜，黄金级美容液果冻面膜，每片含33g美容液，质地浓稠保湿力强，多年Cosme大赏常年名列前茅~ 今晚20:00九猫家限时抢购价格超级优惠呢~快来变美美的吧~';
-	private $remark_goods_id = 19252;
+	private $remark = '大家好~花王蒸汽眼罩竟！然！又参加限时秒了！！价格比上次还要划算啊~ 14片大包装才56.9元～ 1片折合人民币才4元~好划算好酷哦～早上9：00开始啦～么么哒~ 戳进来看一下哦~';
+	private $remark_goods_id = 9863;
+	private $time = '今天中午12:00';
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
@@ -3668,19 +3669,20 @@ OR (
      */
     function all_member_message(){
         set_time_limit(0);
-        $start             = IFilter::act(IReq::get('start'));
-        $user_query        = new IQuery('open_ids');
+        $start      = IFilter::act(IReq::get('start'));
+        $user_query = new IQuery('open_ids');
         if ($start == 'test') {
             $user_query->where = "open_id = 'orEYdw0X44crd6F3MOdXES6Hfpig'";
         } else {
             $user_query->limit = $start;
         }
-        $user_data         = $user_query->find();
-        $i                 = 0;
+        $user_data = $user_query->find();
+        $i         = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
+        $start_time2 = date('Y-m-d H:i:s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'],'remark'=>$this->remark, 'remark_goods_id'=>$this->remark_goods_id], __FUNCTION__);
+            $ret = wechats::send_message_template($v['open_id'], 'member2', ['username'=>$v['username'], 'remark'=>$this->remark, 'time'=>$this->time, 'remark_goods_id'=>$this->remark_goods_id], __FUNCTION__);
             if ($ret){
                 common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
                 $i++;
@@ -3688,7 +3690,7 @@ OR (
                 common::log_write(__FUNCTION__ . "信息推送****失败：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
             }
         }
-        wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>$start_time . '\n' . date('Y-m-d H:i:s',time()), 'info'=>$start . "用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
+        wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>'\n' . $start_time2 . '\n' . date('Y-m-d H:i:s',time()), 'info'=>$start . "用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
         $this->returnJson(['code'=>0, 'msg'=>$start . '所有会员用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
     }
     function fourty_member_message(){
@@ -3746,17 +3748,20 @@ OR (
         $this->returnJson(['code'=>0, 'msg'=>'用户分享赚动态', 'data'=>$data]);
     }
     function test(){
-        $user_query = new IQuery('user');
-        $start             = IFilter::act(IReq::get('start'));
-        $data = $user_query->find();
-        $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => 1222, 'success'=>222]]);
+        $oauth_user_query = new IQuery('oauth_user');
+        $oauth_user_query->where = 'user_id in (24,19)';
+        $data = $oauth_user_query->find();
+        foreach ($data as $v){
+            echo $v['oauth_user_id'];
+            $ret = wechats::send_message_template($v['oauth_user_id'], 'member2', ['username'=>'****', 'remark'=>$this->remark, 'time'=>'今天晚上20:00', 'remark_goods_id'=>$this->remark_goods_id]);
+        }
+        var_dump($ret);
     }
     function oauth_subscribe(){
         $access_token = common::get_wechat_access_token();
-        $url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=$access_token&next_openid=orEYdw1wKmWJRbi4Nch9IFKHaIfM";
+        $url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=$access_token&next_openid=";
         $data = common::curl_http($url);
         $data = json_decode($data);
-        common::log_write($data->total . ':' . $data->count);
         $open_ids_model = new IModel('open_ids');
         foreach ($data->data->openid as $v){
             $open_ids_model->setData(['open_id'=>$v]);
@@ -3764,9 +3769,74 @@ OR (
             if ($ret) {
                 continue;
             } else {
-                var_dump($v);
+                echo __LINE__;
+                return;
             }
         }
-        var_dump($ret);
+        $next_openid = $data->next_openid;
+        $url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=$access_token&next_openid=$next_openid";
+        $data = common::curl_http($url);
+        $data = json_decode($data);
+        $open_ids_model = new IModel('open_ids');
+        foreach ($data->data->openid as $v){
+            $open_ids_model->setData(['open_id'=>$v]);
+            $ret = $open_ids_model->add();
+            if ($ret) {
+                continue;
+            } else {
+                echo __LINE__;
+                return;
+            }
+        }
     }
+    function oauth_user_time(){
+        set_time_limit(0);
+        $open_ids_query = new IQuery('open_ids');
+        $open_ids_model = new IModel('open_ids');
+        $open_ids_query->limit = '15000,5000';
+        $data           = $open_ids_query->find();
+        $access_token   = common::get_wechat_access_token();
+        foreach ($data as $k=>$v){
+            $open_id = $v['open_id'];
+            $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$access_token&openid=$open_id&lang=zh_CN";
+            $ret = common::curl_http($url);
+            $ret = json_decode($ret);
+            $open_ids_model->setData(['time'=>date('Y-m-d H:i:s', $ret->subscribe_time), 'username'=>$ret->nickname]);
+            $open_ids_model->update('id = ' . $v['id']);
+        }
+    }
+    function oauth_user_time2(){
+        set_time_limit(0);
+        $open_ids_query = new IQuery('open_ids');
+        $open_ids_model = new IModel('open_ids');
+        $open_ids_query->where = 'username is null';
+        $open_ids_query->limit = 20000;
+        $data           = $open_ids_query->find();
+        $access_token   = common::get_wechat_access_token();
+        foreach ($data as $k=>$v){
+            $open_id = $v['open_id'];
+            $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$access_token&openid=$open_id&lang=zh_CN";
+            $ret = common::curl_http($url);
+            $ret = json_decode($ret);
+            $open_ids_model->setData(['time'=>date('Y-m-d H:i:s', $ret->subscribe_time), 'username'=>$ret->nickname]);
+            $open_ids_model->update('id = ' . $v['id']);
+        }
+    }
+    function xlobo_single_status(){
+        $delivery_doc_query         = new IQuery('delivery_doc');
+        $delivery_doc_query->where  = "freight_id = 18 and time > 2017-02-15";
+        $delivery_doc_query->fields = 'delivery_code';
+        $data = $delivery_doc_query->find();
+        foreach ($data as $k=>$v){
+            $delivery_code = $v['delivery_code'];
+            if (strpos($delivery_code, 'DB') === 0){
+//                $ret = xlobo::get_logistic_info($delivery_code);
+//                var_dump($ret);
+                echo $delivery_code;
+            } else {
+                var_dump(strpos($delivery_code, 'DB'));
+            }
+        }
+    }
+
 }

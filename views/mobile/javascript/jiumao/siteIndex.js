@@ -15,6 +15,11 @@ var vm = new Vue({
     el: '#indexInfo',
     data: {
         // components:{"Nav": Nav},
+        //4个正品
+        info_z_special:[{"img":"/views/mobile/skin/default/image/jmj/home_redesign/Brand_pavilion.png","title":"品牌馆"},
+        {"img":"/views/mobile/skin/default/image/jmj/home_redesign/scene_pavilion.png","title":"场景馆"},
+        {"img":"/views/mobile/skin/default/image/jmj/home_redesign/newproduct.png","title":"本周新品"},
+        {"img":"/views/mobile/skin/default/image/jmj/home_redesign/Authentic.png","title":"正品保证"}],
         showMessage:false,
         index_st:false,
         page:1,
@@ -177,13 +182,18 @@ var vm = new Vue({
     	Video_pro:function(){
     		window.location.href = "/site/vedio_list";
     	},
-    	Brand_pavilion:function(){
-    		window.location.href = "/site/sitemap?id=3";
-    	},
-    	newproduct:function(){
-    		removeSessionItem("week_new_page");
-			removeSessionItem("week_new_info");
-    		window.location.href = "/redesign/week_new";
+    	Brand_pavilion:function(key){
+    		if(key == 0){
+    			window.location.href = "/site/sitemap?id=3";
+    		}else if(key == 1){
+    			window.location.href = "/ucenter/error";
+    		}else if(key == 2){
+    			removeSessionItem("week_new_page");
+				removeSessionItem("week_new_info");
+	    		window.location.href = "/redesign/week_new";
+    		}else if(key == 3){
+    			window.location.href = "/site/ensure";
+    		}
     	},
     	guan:function(){
     		window.location.href = "/site/article_list";
@@ -191,12 +201,6 @@ var vm = new Vue({
     	wenzhang_pro:function(id){
     		console.log(id)
     		window.location.href = "/site/article_detail?id="+id;
-    	},
-    	zheng:function(){
-    		window.location.href = "/site/ensure";
-    	},
-    	scene_pavilion:function(){
-    		window.location.href = "/ucenter/error";
     	},
     	Timed_to_:function(){
     		window.location.href = "/site/time_purchase?id="+this.time_id;
