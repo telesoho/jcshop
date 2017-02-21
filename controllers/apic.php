@@ -9,8 +9,8 @@ class Apic extends IController{
 	private $log;
 	private $securityLogger;
 	private $remark = '大家好~花王蒸汽眼罩竟！然！又参加限时秒了！！价格比上次还要划算啊~ 14片大包装才56.9元～ 1片折合人民币才4元~好划算好酷哦～早上9：00开始啦～么么哒~ 戳进来看一下哦~';
-	private $remark_goods_id = 19252;
-//	private $time = '今天晚上20:00';
+	private $remark_goods_id = 9863;
+	private $time = '今天中午12:00';
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
@@ -3783,7 +3783,7 @@ OR (
         set_time_limit(0);
         $open_ids_query = new IQuery('open_ids');
         $open_ids_model = new IModel('open_ids');
-        $open_ids_query->limit = '5000,10000';
+        $open_ids_query->limit = '15000,5000';
         $data           = $open_ids_query->find();
         $access_token   = common::get_wechat_access_token();
         foreach ($data as $k=>$v){
