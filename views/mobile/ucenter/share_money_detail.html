@@ -24,7 +24,7 @@
             <li v-for="item in info1" class="box">
                 <div class="left">
                     <img :src="item.head_ico" alt=""/>
-                    <span>{{item.username}}</span></div>
+                    <span class="hidewrap">{{item.username}}</span></div>
                 <div class="right">
                     <span  class="s1">获得：</span>
                     <span style="" class="s2">
@@ -64,9 +64,9 @@
         data:{
             showBottom:false,
             data_s:{
-                "img":"/views/mobile/skin/default/image/buy_share/share_bg.png",
-                "youbalance":"0.00",
-                "nobalance":"0.00"
+                img:"/views/mobile/skin/default/image/buy_share/share_bg.png",
+                youbalance:"0.00",
+                nobalance:"0.00"
             },
             showloadding:true,
             state:1,//顶部导航的初始状态
@@ -87,6 +87,11 @@
             getData1:function(self){
                     self.showloadding=false;
                     $.post('/apic/get_share_money',{type:1,page:self.page1},function (data) {
+                        self.data_s={
+                            img:data.data.user_data.head_ico,
+                            youbalance:data.data.user_data.balance,
+                            nobalance:data.data.user_data.balance
+                        }
                         var dat = data.data.type_data;
                         self.info1=self.info1.concat(dat);
                         self.page1++;
