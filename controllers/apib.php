@@ -56,7 +56,7 @@ class Apib extends IController{
      */
 	private function exitJSON($data){
 		header('Content-type: application/json');
-		echo json_encode($data);
+		echo JSON::encode($data);
 		exit();
 	}
 
@@ -484,6 +484,49 @@ class Apib extends IController{
 		$this->json_echo(self::$ERROR['TODO']);
 	}
 
+	public function TranslateSpec() {
+		set_time_limit(0);
+		ini_set("max_execution_time",0);
+		$count = 0;
+		$specDict = array();
+		$query = new IModel("spec");
+		$specObjs = $query->query();
+		foreach($specObjs as $specObj) {
+			$specDict[$specObj['id']] = common::spec_split($specObj['value']);
+		}
+		$productsDB = new IModel("products");
+
+		$ret = $productsDB->getObj("","max(id) as maxid, min(id) as minid");
+		$maxid = intVal($ret['maxid']);
+		$minid = intVal($ret['minid']);
+		$window_size = 1000;
+
+		for($top_id = $minid + $window_size, $bottom_id = $minid; $bottom_id <= $maxid; $bottom_id += $window_size, $top_id += $window_size) {
+			$products_list = $productsDB->query("id < $top_id and id >= $bottom_id", "id, spec_array, spec_array_id");
+			foreach($products_list as $products) {
+				$spec_array = $this->translate($products['spec_array_id'], $specDict);
+				$spec_array_db = JSON::encode(JSON::decode($products['spec_array']));
+				if($spec_array_db!== $spec_array) {
+					$count ++;
+					$products['spec_array'] = $spec_array;
+					$productsDB->setData($products);
+					$productsDB->update("id=" . $products['id']);
+				}
+			} 
+		}
+		echo "{$count}个规格翻译完毕";
+	}
+
+	// from [{"id":"1","type":"1","name":"color","value":0},{"id":"2","type":"1","name":"size","value":0}]
+	// to [{"id":"1","type":"1","name":"color","value":"黑"},{"id":"2","type":"1","name":"size","value":"L"}]
+	protected function translate($spec_array_id, $specDict) {
+		$spec_array_val = JSON::decode($spec_array_id, true);
+		foreach($spec_array_val as $key => &$spec) {
+			$spec['value'] = $specDict[$spec['id']][$spec['value']];
+		}
+		return JSON::encode($spec_array_val);
+	}
+
 	public function testSubQuery() {
 		$subQuery = array(
 			'g1' => array(
@@ -506,5 +549,45 @@ class Apib extends IController{
 		common::print_b(Api::run("getGoodsInfoBySkuNo2", 
 			array('params' => array("#sku_no#" => "4902806314946-1")))
 		);
+	}
+
+
+	public function testGoodsProducts() {
+
+		// 'query' => array(
+		// 	'name'   => 'goods as go',
+		// 	'where'  => 'go.id = #id# and go.is_del = 0',
+		// 	'join'	 => 'left join goods_supplier as gs on go.supplier_id = gs.supplier_id and go.sku_no = gs.sku_no',
+		// 	'fields' => 'go.name,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,'
+		// 				.'gs.duties_rate,gs.ware_house_name,gs.supplier_id,gs.delivery_code',
+		// 	'type'   => 'row',
+		// )
+		$sku_no = IReq::get("sku_no");
+
+		$subQueries = array(
+			'gp' => array(
+				'table' => 'goods as g',
+				'join' => "left join @prod as p on g.id = p.goods_id",
+				'fields' => 'ifnull(p.products_no, g.sku_no) as sku_no, ifnull(p.weight, g.weight) as weight, ifnull(p.store_nums, g.store_nums) as store_nums,'
+							.'ifnull(p.sell_price, g.sell_price) as sell_price, ifnull(p.market_price, g.market_price) as market_price,'
+							.'ifnull(p.jp_price, g.jp_price) as jp_price,'
+							.'ifnull(p.cost_price, g.cost_price) as cost_price,'
+							.'g.name, g.id as goods_id,g.img, g.point, g.exp, g.goods_no, p.id as products_id, g.seller_id, g.supplier_id, g.is_del',
+			),
+			'prod' => array(
+				'table' => 'products as p',
+				'where' => "products_no = '$sku_no'",
+			),
+		);
+		$query = new IQuery("@gp as gp");
+		$query->subQueries = $subQueries;
+		$query->join = 'left join goods_supplier as gs on gp.supplier_id = gs.supplier_id and gp.sku_no = gs.sku_no';
+		$query->fields = 'gp.*, gs.duties_rate,gs.ware_house_name,gs.supplier_id,gs.delivery_code';
+		$query->where = "gp.sku_no = '$sku_no'";
+
+		$result = $query->find();
+
+		$this->exitJSON($result);
+
 	}
 }

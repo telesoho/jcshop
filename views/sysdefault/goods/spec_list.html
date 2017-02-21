@@ -5,6 +5,7 @@
 		<a href="javascript:void(0)" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
 		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
 		<a href="javascript:void(0)"><button class="operating_btn" type="button" onclick="location.href='{url:/goods/spec_recycle_list}'"><span class="recycle">回收站</span></button></a>
+		<a href="javascript:void(0)"><button class="operating_btn" type="button" onclick="doTranslate();"><span class="refresh">翻译</span></button></a>
 	</div>
 </div>
 <div class="content">
@@ -67,6 +68,7 @@ function addNewSpec(spec_id)
 	url = url.replace('@spec_id@',spec_id?spec_id:0);
 
 	art.dialog.open(url,{
+		width:"1024px",
 		id:'addSpecWin',
 	    title:'规格设置',
 	    okVal:'确定',
@@ -87,4 +89,16 @@ function addNewSpec(spec_id)
 	    }
 	});
 }
+// 翻译
+function doTranslate()
+{
+	var url = '{url:/apib/TranslateSpec}';
+
+	art.dialog.open(url,{
+		id:'addSpecWin',
+	    title:'规格设置',
+	    okVal:'确定'
+	});
+}
+
 </script>
