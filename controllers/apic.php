@@ -3818,31 +3818,8 @@ OR (
                 $open_ids_model->update('open_id = "'.$open_id.'"') && $restore_user_num++;
             }
         }
-        $update_user_info = $this->update_open_ids_user($access_token);
         $update_user_info = $this->unsubscribe($access_token);
         $this->returnJson(['code'=>0, 'msg'=>'用户', 'data'=>['新增用户'=>$new_user_num, '信息更新'=>$update_user_info, '重新关注'=>$restore_user_num]]);
-    }
-
-    /**
-     * User: chenbo
-     * 更新关注用户的信息
-     */
-    function update_open_ids_user($access_token){
-        set_time_limit(0);
-        $open_ids_query = new IQuery('open_ids');
-        $open_ids_model = new IModel('open_ids');
-        $open_ids_query->where = 'username="" or username is null';
-        $data           = $open_ids_query->find();
-        $i = 0;
-        foreach ($data as $k=>$v){
-            $open_id = $v['open_id'];
-            $url     = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$access_token&openid=$open_id&lang=zh_CN";
-            $ret     = common::curl_http($url);
-            $ret     = json_decode($ret);
-            $open_ids_model->setData(['time'=>date('Y-m-d H:i:s', $ret->subscribe_time), 'username'=>$ret->nickname]);
-            $open_ids_model->update('id = ' . $v['id']) && $i++;
-        }
-        return $i;
     }
 
     function unsubscribe($access_token){
@@ -3860,10 +3837,10 @@ OR (
                 $open_ids_model->setData(['is_subscribe'=>0]);
                 $ret = $open_ids_model->update('open_id = "'.$open_id.'"');
                 $ret && $x++;
-            } else {
+            } elseif(empty($v['username'])) {
                 $open_ids_model = new IModel('open_ids');
                 $open_ids_model->setData(['time'=>date('Y-m-d H:i:s', $ret->subscribe_time), 'username'=>$ret->nickname]);
-                $open_ids_model->update('id = ' . $v['id']) && $y++;
+                $open_ids_model->update('open_id = "'.$open_id.'"') && $y++;
             }
         }
         return ['取关数量'=>$x, '信息更新数量'=>$y];
