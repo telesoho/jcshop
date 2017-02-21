@@ -186,7 +186,7 @@ var vm = new Vue({
     		if(key == 0){
     			window.location.href = "/site/sitemap?id=3";
     		}else if(key == 1){
-    			window.location.href = "/ucenter/error";
+    			window.location.href = "/simple/scene";
     		}else if(key == 2){
     			removeSessionItem("week_new_page");
 				removeSessionItem("week_new_info");
