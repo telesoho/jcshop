@@ -234,3 +234,6 @@ body{
 .relateContainer .item .price{
     padding:0 0.2rem 0.2rem;
 }
+#vedioList .contents{
+	background: #eee;
+}

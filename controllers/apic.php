@@ -8,8 +8,10 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = 'こんばんは～晚上是护肤黄金时间哦~ 喵酱给小仙女们推荐到处断货Utena佑天兰黄金果冻保湿面膜，黄金级美容液果冻面膜，每片含33g美容液，质地浓稠保湿力强，多年Cosme大赏常年名列前茅~ 今晚20:00九猫家限时抢购价格超级优惠呢~快来变美美的吧~';
-	private $remark_goods_id = 19252;
+	private $remark = '天气越来越热啦~赶紧来备个囤个防晒吧~推荐来自乐敦的防晒霜，涂上去冰冰凉，保湿度很好呢~夏天用很清凉~白菜防晒首推！晚上限时抢只要41.9元~赶紧戳下方详情吧~';
+	private $remark_goods_id = 7492;
+//	private $time = '今天中午12:00';
+	private $time = '今天晚上22:00';
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
@@ -523,7 +525,7 @@ class Apic extends IController{
 	 */
 	public function order_activity(){
 		$param   = $this->checkData(array(
-			array('goods', 'string', 1, '商品格式<商品ID:数量:类型[goods商品-product货品]>多个商品用英文逗号分割'),
+			array('goods', 'string', 1, '商品格式<商品ID:数量>多个商品用英文逗号分割'),
 			array('activity_id', 'int', 1, '活动ID'),
 			array('colse', 'int', 0, '是否结算[0否-1是]'),
 			array('address_id', 'int', 0, '收货地址'),
@@ -534,7 +536,7 @@ class Apic extends IController{
 		$goodsIdPay = array(); //购买的商品ID
 		foreach(explode(',', trim($param['goods'], ',')) as $k => $v){
 			$goods = explode(':', $v);
-			if(count($goods)!=3)
+			if(count($goods)!=2)
 				$this->returnJson(array('code' => '001002', 'msg' => $this->errorInfo['001002'])); //参数错误
 			if(in_array($goods[0], $goodsIdPay))
 				$this->returnJson(array('code' => '002038', 'msg' => $this->errorInfo['002038'])); //商品重复
@@ -556,7 +558,7 @@ class Apic extends IController{
 		$queryGoods         = new IQuery('activity_bag_goods AS m');
 		$queryGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
 		$queryGoods->where  = 'g.is_del=0 AND m.pid='.$param['activity_id'];
-		$queryGoods->fields = 'g.id,g.name,g.img,g.store_nums,m.num';
+		$queryGoods->fields = 'g.id AS goods_id,g.name,g.img,g.store_nums,g.img,g.weight,m.num';
 		$queryGoods->group  = 'g.id';
 		$listGoods          = $queryGoods->find();
 		if(empty($listGoods))
@@ -566,10 +568,19 @@ class Apic extends IController{
 		
 		$data['goods_list'] = array();
 		foreach($listGoods as $k => $v){
-			if(in_array($v['id'], $goodsIdPay)){
-				$data['goods_list'][] = $v;
+			if(in_array($v['goods_id'], $goodsIdPay)){
 				if($v['store_nums']<$v['num'])
-					$this->returnJson(array('code' => '007002', 'msg' => '“'.$v['name'].'”商品库存不足')); //库存不足
+					$this->returnJson(array('code' => '007002', 'msg' => '“'.$v['name'].'”库存不足')); //库存不足
+				
+				$data['goods_list'][] = array_merge($v,array(
+					'goods_id',
+					'reduce',
+					'product_id' => 0,
+					'count' => $v['num'],
+					'seller_id' => 0, //商家ID
+					'duties' => 0, //关税
+				));
+				
 			}
 		}
 		if(count($goodsList)!=count($data['goods_list']))
@@ -2866,8 +2877,8 @@ class Apic extends IController{
 		));
 		$user_id = $this->tokenCheck();
 		/* 获取数据 */
-		$modelScene = new IModel('scene as m,user as u');
-		$info       = $modelScene->getObj('u.id=m.user_id AND status=1 AND m.id='.$param['scene_id'], 'm.id,m.title,m.content,m.img,m.visit,u.username,u.head_ico');
+		$modelScene = new IModel('scene');
+		$info       = $modelScene->getObj('status=1 AND id='.$param['scene_id'], 'id,title,content,img,visit');
 		if(empty($info)) $this->returnJson(array('code' => '012001', 'msg' => $this->errorInfo['012001']));
 		$info['img'] = empty($info['img']) ? '' : IWeb::$app->config['image_host'].'/'.$info['img'];
 		//喜欢/没兴趣
@@ -2899,6 +2910,10 @@ class Apic extends IController{
 		foreach($info['list'] as $k => $v){
 			$info['list'][$k]['cover'] = empty($v['cover']) ? '' : IWeb::$app->config['image_host'].'/'.$v['cover'];
 		}
+		
+		/* 观看次数增加 */
+		$modelScene->setData(array('visit' => 'visit+1'));
+		$modelScene->update('id='.$param['scene_id'], array('visit'));
 		
 		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $info));
 	}
@@ -3658,27 +3673,30 @@ OR (
      */
     function all_member_message(){
         set_time_limit(0);
-        $start             = IFilter::act(IReq::get('start'));
-        $user_query        = new IQuery('open_ids');
+        $start      = IFilter::act(IReq::get('start'));
+        $user_query = new IQuery('open_ids');
         if ($start == 'test') {
-            $user_query->where = "open_id = 'orEYdw0X44crd6F3MOdXES6Hfpig'";
+            $user_query->where = "open_id in ('orEYdw0X44crd6F3MOdXES6Hfpig','orEYdw9QmiBSIXWa-zrTbJc091L4','orEYdw5QShdxdphix7TxAgqxljVI')";
         } else {
             $user_query->limit = $start;
         }
-        $user_data         = $user_query->find();
-        $i                 = 0;
+        $user_data = $user_query->find();
+        $i         = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
+        $start_time2 = date('Y-m-d H:i:s', time());
         foreach ($user_data as $k=>$v){
-            $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'],'remark'=>$this->remark, 'remark_goods_id'=>$this->remark_goods_id], __FUNCTION__);
+            $username = empty($v['username']) ? '美丽的小仙女' : $v['username'];
+            $ret = wechats::send_message_template($v['open_id'], 'member2', ['username'=>$username, 'remark'=>$this->remark, 'time'=>$this->time, 'remark_goods_id'=>$this->remark_goods_id], __FUNCTION__);
             if ($ret){
-                common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
+                common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'all_member_message_success'.$start_time);
                 $i++;
             } else {
-                common::log_write(__FUNCTION__ . "信息推送****失败：" . $v['username'], 'ERROR', 'all_member_message'.$start_time);
+                common::log_write(__FUNCTION__ . "信息推送****失败：" . $v['username'], 'ERROR', 'all_member_message_error'.$start_time);
             }
         }
-        wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>$start_time . '\n' . date('Y-m-d H:i:s',time()), 'info'=>$start . "用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
+        wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>'\n' . $start_time2 . '\n' . date('Y-m-d H:i:s',time()), 'info'=>$start . "用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
+        common::log_write($start . "用户总数".count($user_data).';推送成功:'.$i, 'INFO', 'crontab_message_all'.$start_time);
         $this->returnJson(['code'=>0, 'msg'=>$start . '所有会员用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
     }
     function fourty_member_message(){
@@ -3687,22 +3705,22 @@ OR (
         $user_query        = new IQuery('user as a');
         $user_query->join  = 'left join oauth_user as b on a.id=b.user_id';
         $user_query->where = "HOUR (TIMEDIFF(NOW(), datetime)) < 48";
-        if ($start == 'test') $user_query->where = "a.id IN (24,51)";
+        if ($start == 'test') $user_query->where = "a.id IN (24,19,30)";
         $user_data         = $user_query->find();
         $i = 0;
         if (empty($start)) $this->returnJson(['code'=>-1, 'msg'=>'start参数没有提供', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
         $start_time = date('Y-m-d-H-i-s', time());
         foreach ($user_data as $k=>$v){
             $ret = wechats::send_message_template($v['oauth_user_id'],'member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>'喵~亲爱的，送您58元新用户优惠券，请添加喵酱个人微信：jiumaojia001 领取~加入VIP群第一时间享受最新优惠', 'remark_goods_id'=>false], __FUNCTION__);
-//            wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig','member',['number'=>1000000+$v['id'],'create_time'=>$v['datetime'], 'remark'=>$remark], __FUNCTION__);
             if ($ret){
                 $i++;
-                common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'fourty_member_message'.$start_time);
+                common::log_write(__FUNCTION__ . "信息推送成功：" . $v['username'], 'ERROR', 'fourty_member_message_success'.$start_time);
             } else {
-                common::log_write(__FUNCTION__ . "信息推送****失败：" . $v['username'], 'ERROR', 'fourty_member_message'.$start_time);
+                common::log_write(__FUNCTION__ . "信息推送****失败：" . $v['username'], 'ERROR', 'fourty_member_message_error'.$start_time);
             }
         }
         wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>$start_time . '\n' . date('Y-m-d H:i:s',time()), 'info'=>"用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
+        common::log_write($start . "用户总数".count($user_data).';推送成功:'.$i, 'INFO', 'crontab_message_fourty'.$start_time);
         $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => count($user_data), 'success'=>$i]]);
     }
     function order_message(){
@@ -3710,10 +3728,6 @@ OR (
         $user_data = ['a','d'];
         $i = 1;
         wechats::send_message_template('orEYdw0X44crd6F3MOdXES6Hfpig', 'project', ['type'=>__FUNCTION__, 'time'=>$start_time . '\n' . date('Y-m-d H:i:s',time()), 'info'=>"用户总数".count($user_data).';推送成功:'.$i], __FUNCTION__);
-//        $open_id_arr = ['orEYdw5QShdxdphix7TxAgqxljVI', 'orEYdw0X44crd6F3MOdXES6Hfpig'];
-//        foreach ($open_id_arr as $v){
-//            wechats::send_message_template($v, 'ship', ['order_no'=>'2017052456', 'name'=>'商品名称', 'billcode'=>'23', 'remark'=>'喵~感谢您对九猫家的信任与支持！我们已经收到您的订单啦~ 日本供货商将在3-5个工作日完成配货哒，正常情况下10-15个工作日您将收到您买的宝贝，请耐心等待哦ฅ՞•ﻌ•՞ฅ~\n如果有任何订单退换货等问题请添加客服喵微信：\njiumaojia006；想要领取优惠券的小伙伴欢迎添加喵酱个人微信：jiumaojia001；更多优惠群里第一时间共享哦~么么哒~']);
-//        }
     }
 
     /**
@@ -3721,42 +3735,135 @@ OR (
      * 分享赚
      */
     function share_money_detail(){
-        $data       = common::get_user_data($this->user['user_id']);
-        if (empty($data)){
-            $this->returnJson(['code'=>-1, 'msg'=>'获取用户信息失败', 'data'=>$data]);
-        } else {
-            $this->returnJson(['code'=>0, 'msg'=>'用户分享赚信息', 'data'=>$data]);
+        $user_id = $this->user['user_id'];
+        $user_data = common::get_user_data($user_id);
+        $type = IFilter::act(IReq::get('type'), 'int');
+        if ($type === 1){ //已经到账
+
+        } elseif ($type === 2){//未到帐
+            $order_goods_query         = new IQuery('order_goods as a');
+            $order_goods_query->fields = 'b.order_no,a.goods_nums,a.goods_price,a.share_no,c.id,c.username,c.head_ico';
+            $order_goods_query->join   = 'left join order as b on a.order_id=b.id left join user as c on b.user_id=c.id';
+//            $order_goods_query->where  = "share_no like '" . $user_id . "_%'";
+            $type_data                 = $order_goods_query->find();
         }
+        $this->returnJson(['code'=>0, 'msg'=>'用户分享赚信息', 'data'=>['user_data'=>$user_data, 'type_data'=>$type_data]]);
         $this->data = $data;
     }
     function get_share_money(){
-        $share_money_query        = new IQuery('share_money');
-        $share_money_query->where = "user_id = " . $this->user['user_id'];
-        $data                     = $share_money_query->find();
-        $this->returnJson(['code'=>0, 'msg'=>'用户分享赚动态', 'data'=>$data]);
+        $user_id   = $this->user['user_id'];
+        $user_data = common::get_user_data($user_id);
+        $type      = IFilter::act(IReq::get('type'), 'int');
+        $page      = IFilter::act(IReq::get('page'), 'int');
+        $type_data = null;
+        if ($type === 1){ //已经到账
+            $order_goods_query           = new IQuery('order_goods as a');
+            $order_goods_query->fields   = 'b.order_no,a.goods_nums,FORMAT(a.goods_price*0.07, 2) as goods_price,a.share_no,c.id,c.username,c.head_ico';
+            $order_goods_query->join     = 'left join order as b on a.order_id=b.id left join user as c on b.user_id=c.id';
+            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
+            $order_goods_query->page     = $page;
+            $order_goods_query->pagesize = 7;
+            $type_data                   = $order_goods_query->find();
+        } elseif ($type === 2){//未到帐
+            $order_goods_query           = new IQuery('order_goods as a');
+            $order_goods_query->fields   = 'b.order_no,a.goods_nums,FORMAT(a.goods_price*0.07, 2) as goods_price,a.share_no,c.id,c.username,c.head_ico';
+            $order_goods_query->join     = 'left join order as b on a.order_id=b.id left join user as c on b.user_id=c.id';
+            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
+            $order_goods_query->page     = $page;
+            $order_goods_query->pagesize = 7;
+            $type_data                   = $order_goods_query->find();
+        }
+        $this->returnJson(['code'=>0, 'msg'=>'用户分享赚信息', 'data'=>['user_data'=>$user_data, 'type_data'=>$type_data]]);
     }
     function test(){
-        $user_query = new IQuery('user');
-        $start             = IFilter::act(IReq::get('start'));
-        $data = $user_query->find();
-        $this->returnJson(['code'=>0, 'msg'=>'48小时内关注的用户', 'data'=>['user_number' => 1222, 'success'=>222]]);
-    }
-    function oauth_subscribe(){
-        $access_token = common::get_wechat_access_token();
-        $url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=$access_token&next_openid=orEYdw1wKmWJRbi4Nch9IFKHaIfM";
-        $data = common::curl_http($url);
-        $data = json_decode($data);
-        common::log_write($data->total . ':' . $data->count);
-        $open_ids_model = new IModel('open_ids');
-        foreach ($data->data->openid as $v){
-            $open_ids_model->setData(['open_id'=>$v]);
-            $ret = $open_ids_model->add();
-            if ($ret) {
-                continue;
-            } else {
-                var_dump($v);
-            }
+        $oauth_user_query = new IQuery('oauth_user');
+        $oauth_user_query->where = 'user_id in (24,19)';
+        $data = $oauth_user_query->find();
+        foreach ($data as $v){
+            echo $v['oauth_user_id'];
+            $ret = wechats::send_message_template($v['oauth_user_id'], 'member2', ['username'=>'****', 'remark'=>$this->remark, 'time'=>'今天晚上20:00', 'remark_goods_id'=>$this->remark_goods_id]);
         }
         var_dump($ret);
     }
+    function oauth_subscribe(){
+        set_time_limit(0);
+        $access_token     = common::get_wechat_access_token();
+        $url              = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=$access_token&next_openid=";
+        $data             = common::curl_http($url);
+        $data             = json_decode($data);
+        $open_ids_model   = new IModel('open_ids');
+        $new_user_num     = 0;
+        $restore_user_num = 0;
+        foreach ($data->data->openid as $open_id){
+            $temp    = $open_ids_model->getObj("open_id = '$open_id'");
+            if (empty($temp)){
+                $open_ids_model->setData(['open_id'=>$open_id]);
+                $open_ids_model->add() && $new_user_num++;
+            } elseif($temp['is_subscribe'] === 0){
+                $open_ids_model->setData(['is_subscribe'=>1]);
+                $open_ids_model->update('open_id = "'.$open_id.'"') && $restore_user_num++;
+            }
+        }
+        $next_openid = $data->next_openid;
+        $url         = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=$access_token&next_openid=$next_openid";
+        $data        = common::curl_http($url);
+        $data        = json_decode($data);
+        foreach ($data->data->openid as $open_id){
+            $temp    = $open_ids_model->getObj("open_id = '$open_id'");
+            if (empty($temp)){
+                $open_ids_model->setData(['open_id'=>$open_id]);
+                $open_ids_model->add() && $new_user_num++;
+            } elseif($temp['is_subscribe'] === 0){
+                $open_ids_model->setData(['is_subscribe'=>1]);
+                $open_ids_model->update('open_id = "'.$open_id.'"') && $restore_user_num++;
+            }
+        }
+        $update_user_info = $this->unsubscribe($access_token);
+        $this->returnJson(['code'=>0, 'msg'=>'用户', 'data'=>['新增用户'=>$new_user_num, '信息更新'=>$update_user_info, '重新关注'=>$restore_user_num]]);
+    }
+
+    function unsubscribe($access_token){
+        $open_ids_query = new IQuery('open_ids');
+        $data = $open_ids_query->find();
+        $x = 0;
+        $y = 0;
+        foreach ($data as $k=>$v){
+            $open_id = $v['open_id'];
+            $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$access_token&openid=$open_id&lang=zh_CN";
+            $ret = common::curl_http($url);
+            $ret = json_decode($ret);
+            if ($ret->subscribe === 0){
+                $open_ids_model = new IModel('open_ids');
+                $open_ids_model->setData(['is_subscribe'=>0]);
+                $ret = $open_ids_model->update('open_id = "'.$open_id.'"');
+                $ret && $x++;
+            } elseif(empty($v['username'])) {
+                $open_ids_model = new IModel('open_ids');
+                $open_ids_model->setData(['time'=>date('Y-m-d H:i:s', $ret->subscribe_time), 'username'=>$ret->nickname]);
+                $open_ids_model->update('open_id = "'.$open_id.'"') && $y++;
+            }
+        }
+        return ['取关数量'=>$x, '信息更新数量'=>$y];
+    }
+    /**
+     * User: chenbo
+     * 贝海物流信息拆解
+     */
+    function xlobo_single_status(){
+        $delivery_doc_query         = new IQuery('delivery_doc');
+        $delivery_doc_query->where  = "freight_id = 18 and time > 2017-02-15";
+        $delivery_doc_query->fields = 'delivery_code';
+        $data = $delivery_doc_query->find();
+        foreach ($data as $k=>$v){
+            $delivery_code = $v['delivery_code'];
+            if (strpos($delivery_code, 'DB') === 0){
+//                $ret = xlobo::get_logistic_info($delivery_code);
+//                var_dump($ret);
+                echo $delivery_code;
+            } else {
+                var_dump(strpos($delivery_code, 'DB'));
+            }
+        }
+    }
+
 }

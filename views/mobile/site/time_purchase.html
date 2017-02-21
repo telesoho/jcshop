@@ -156,7 +156,8 @@
 	var attr2 = []
 	var Request = new Object();
     Request = GetRequest();
-    var statusOrder=Request["id"];
+//  var statusOrder=Request["id"];
+	var statusOrder="";
 	console.log(statusOrder);
 	
     var vm= new Vue({
@@ -231,6 +232,7 @@
         },
         mounted: function(){
         	var self = this;
+        	ibdex_time();
 			time_xian(self);
         },
         methods: {
@@ -251,6 +253,25 @@
         },
 
     })
+    function ibdex_time(){
+    	$.ajax({
+    		type:"get",
+    		url:"/apic/index",
+    		dataType:'json',
+    		async:true,
+    		success:function(data){
+    			console.log(data.data.speed);
+    			var dates = new Date();
+    			dates = parseInt(dates.getTime()/1000)
+    			console.log(dates-data.data.speed.start_time);
+    			if(data.data.speed.start_time<=dates<=data.data.speed.end_time){
+      				 statusOrder=Request["id"];
+    			}else{
+    				statusOrder = '';
+    			}
+    		}
+    	});
+    }
     function time_xian(self,num){
     	 mui.ajax('/apic/activity_speed_list', {
 	        dataType: 'json',
@@ -263,6 +284,7 @@
 	        	self.nows = data.data.now;
 				var dd = new Date();
 		        var tt =dd.getTime()/1000;
+		        console.log(self.nows)
 	        	for(var i =0;i<data.data.time_list.length;i++){
 					if( self.nows == data.data.time_list[0].id){
 		        		self.initState = 0;

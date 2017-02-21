@@ -1,0 +1,39 @@
+#scene ul{
+    margin-top:0.2rem;
+}
+.scene_list{
+    width:100%;
+    height:4.16rem;
+    overflow: hidden;
+    position: relative;
+}
+.scene_img{
+    width:7.5rem;
+    height:4.16rem;
+    border-bottom:1px solid #fff;
+}
+.scene_list .mark{
+    position:absolute;
+    width:100%;
+    height:0.5rem;
+    bottom:0.17rem;
+    display: -webkit-flex;
+}
+.scene_list .mark img{
+    width:0.4rem;
+    height:0.4rem;
+    position:relative;
+    top:0.05rem;
+    margin-left:0.3rem;
+}
+.scene_list .mark img:nth-last-of-type(1){
+    margin-left:0.4rem;
+}
+.scene_list .mark span{
+    height:0.5rem;
+    line-height:0.5rem;
+    display: inline-block;
+    color:rgba(255,255,255,1);
+    position: relative;
+    top:-0.05rem;
+}

@@ -259,9 +259,9 @@ class wechats
                 break;
             case 'member':
                 if ($send_info['remark_goods_id']){
-                    $url = IUrl::getHost()."/site/products/id/".$send_info['remark_goods_id'].'/t/1';
+                    $url_info = IUrl::getHost()."/site/products/id/".$send_info['remark_goods_id'].'/t/1';
                 } else {
-                    $url = IUrl::getHost()."/site/index";
+                    $url_info = IUrl::getHost()."/site/index";
                 }
                 $params = sprintf('{
                    "touser":"%s",
@@ -285,7 +285,41 @@ class wechats
                                "color":"#173177"
                            }
                    }
-               }',$open_id,$template_array[$type],$url,$send_info['number'],$send_info['create_time'], $send_info['remark']);
+               }',$open_id,$template_array[$type],$url_info,$send_info['number'],$send_info['create_time'], $send_info['remark']);
+                break;
+            case 'member2':
+                $url_info = IUrl::getHost()."/site/products/id/".$send_info['remark_goods_id'].'/t/1';
+                $params = sprintf('{
+                   "touser":"%s",
+                   "template_id":"%s",
+                   "url":"%s",            
+                   "data":{
+                           "first": {
+                               "value":"喵~ 九猫家限时抢快开始啦！",
+                               "color":"#173177"
+                           },
+                           "keyword1":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "keyword2":{
+                               "value":"九猫家限时抢",
+                               "color":"#173177"
+                           },
+                           "keyword3":{
+                               "value":"%s",
+                               "color":"#173177"
+                           },
+                           "keyword4":{
+                               "value":"戳下方详情~",
+                               "color":"#173177"
+                           },
+                           "remark": {
+                               "value":"%s",
+                               "color":"#173177"
+                           }
+                   }
+               }',$open_id,$template_array[$type],$url_info,$send_info['username'],$send_info['time'], $send_info['remark']);
                 break;
             case 'tip_coupon_expires':
                 $params = sprintf('{
