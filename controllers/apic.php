@@ -524,7 +524,7 @@ class Apic extends IController{
 	 */
 	public function order_activity(){
 		$param   = $this->checkData(array(
-			array('goods', 'string', 1, '商品格式<商品ID:数量:类型[goods商品-product货品]>多个商品用英文逗号分割'),
+			array('goods', 'string', 1, '商品格式<商品ID:数量>多个商品用英文逗号分割'),
 			array('activity_id', 'int', 1, '活动ID'),
 			array('colse', 'int', 0, '是否结算[0否-1是]'),
 			array('address_id', 'int', 0, '收货地址'),
@@ -535,7 +535,7 @@ class Apic extends IController{
 		$goodsIdPay = array(); //购买的商品ID
 		foreach(explode(',', trim($param['goods'], ',')) as $k => $v){
 			$goods = explode(':', $v);
-			if(count($goods)!=3)
+			if(count($goods)!=2)
 				$this->returnJson(array('code' => '001002', 'msg' => $this->errorInfo['001002'])); //参数错误
 			if(in_array($goods[0], $goodsIdPay))
 				$this->returnJson(array('code' => '002038', 'msg' => $this->errorInfo['002038'])); //商品重复
@@ -557,7 +557,7 @@ class Apic extends IController{
 		$queryGoods         = new IQuery('activity_bag_goods AS m');
 		$queryGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
 		$queryGoods->where  = 'g.is_del=0 AND m.pid='.$param['activity_id'];
-		$queryGoods->fields = 'g.id,g.name,g.img,g.store_nums,m.num';
+		$queryGoods->fields = 'g.id AS goods_id,g.name,g.img,g.store_nums,g.img,g.weight,m.num';
 		$queryGoods->group  = 'g.id';
 		$listGoods          = $queryGoods->find();
 		if(empty($listGoods))
@@ -567,10 +567,19 @@ class Apic extends IController{
 		
 		$data['goods_list'] = array();
 		foreach($listGoods as $k => $v){
-			if(in_array($v['id'], $goodsIdPay)){
-				$data['goods_list'][] = $v;
+			if(in_array($v['goods_id'], $goodsIdPay)){
 				if($v['store_nums']<$v['num'])
-					$this->returnJson(array('code' => '007002', 'msg' => '“'.$v['name'].'”商品库存不足')); //库存不足
+					$this->returnJson(array('code' => '007002', 'msg' => '“'.$v['name'].'”库存不足')); //库存不足
+				
+				$data['goods_list'][] = array_merge($v,array(
+					'goods_id',
+					'reduce',
+					'product_id' => 0,
+					'count' => $v['num'],
+					'seller_id' => 0, //商家ID
+					'duties' => 0, //关税
+				));
+				
 			}
 		}
 		if(count($goodsList)!=count($data['goods_list']))
@@ -2867,8 +2876,8 @@ class Apic extends IController{
 		));
 		$user_id = $this->tokenCheck();
 		/* 获取数据 */
-		$modelScene = new IModel('scene as m,user as u');
-		$info       = $modelScene->getObj('u.id=m.user_id AND status=1 AND m.id='.$param['scene_id'], 'm.id,m.title,m.content,m.img,m.visit,u.username,u.head_ico');
+		$modelScene = new IModel('scene');
+		$info       = $modelScene->getObj('status=1 AND id='.$param['scene_id'], 'id,title,content,img,visit');
 		if(empty($info)) $this->returnJson(array('code' => '012001', 'msg' => $this->errorInfo['012001']));
 		$info['img'] = empty($info['img']) ? '' : IWeb::$app->config['image_host'].'/'.$info['img'];
 		//喜欢/没兴趣
@@ -2900,6 +2909,10 @@ class Apic extends IController{
 		foreach($info['list'] as $k => $v){
 			$info['list'][$k]['cover'] = empty($v['cover']) ? '' : IWeb::$app->config['image_host'].'/'.$v['cover'];
 		}
+		
+		/* 观看次数增加 */
+		$modelScene->setData(array('visit' => 'visit+1'));
+		$modelScene->update('id='.$param['scene_id'], array('visit'));
 		
 		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $info));
 	}

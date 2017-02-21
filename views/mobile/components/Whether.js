@@ -13,7 +13,7 @@ Vue.component("whether",{
             <div class="img">\
                 <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>\
             </div>\
-            <div class="content">\
+            <div class="content contents">\
                 <span style="color:#bbb">~</span>\
                 <span style="color:#bbb">憋拉了，到底了</span>\
                 <span style="color:#bbb">~</span>\

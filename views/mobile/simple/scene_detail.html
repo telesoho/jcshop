@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/scene/scene.css?v=<?php echo time(); ?>" />
 </head>
 <body>
-<div id="scene_detail">
+<div id="scene_detail" v-cloak>
     <!--头部定位-->
     <div class="head">
         <div class="backImg">
@@ -20,7 +20,7 @@
         </div>
         <a href="/simple/cart" id="cart" class="locationA">
             <div class="img">
-                <div class="mark flexbox">{{car_count}}</div>
+                <div class="mark flexbox" v-cloak>{{car_count}}</div>
                 <img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />
             </div>
         </a>
@@ -29,10 +29,10 @@
     <div style="height:0.72rem;"></div>
     <!--场景馆-->
     <div class="sceneDetail">
-        <!--<img :src="sceneInfo.img" alt=""  style="width:100%"/>-->
-        <img src="/views/mobile/skin/default/image/jmj/img/scene_test.png" style="width:100%" alt="" />
+        <img :src="sceneInfo.img" alt=""  style="width:100%"/>
+        <!--<img src="/views/mobile/skin/default/image/jmj/img/scene_test.png" style="width:100%" alt="" />-->
          <p v-for="item in sceneInfo.goods_list" class="goods" @click="buyGoods(item.id)" :style="item.style"></p>
-        <div class="cho flexbox">
+        <div class="cho flexbox" v-cloak>
             <div class="lik like" @click="choLike(1)">
                 <img src="/views/mobile/skin/default/image/jmj/scene/good.png" alt="" />
                 <p>喜欢</p>
@@ -48,10 +48,10 @@
     <!--场景馆弹窗-->
     <section :id="'select_product'+item.id" class="mui-popover mui-popover-action mui-popover-bottom" v-for="item in sceneInfo.goods_list">
         <div class="header box">
-            <img :src="item.img?item.img:'http://m.jiumaojia.com/pic/thumb/img/upload@_@goods_pic@_@mainPic@_@4901301236210@_@0_https___images-na.ssl-images-amazon.com_images_I_61eh8uI8ekL._SX355_.jpg@_@w@_@500@_@h@_@500'" alt=""  :class="'goodsimg goodsimg'+item.id" />
+            <img :src="item.img" alt=""  :class="'goodsimg goodsimg'+item.id" />
             <img src="/views/mobile/skin/default/image/jmj/scene/copy.png" alt="" class="xximg" @click="delModal(item.id)" />
         </div>
-        <div class="article box">
+        <div class="article box" v-cloak>
             <div class="left hideCamp">{{item.name}}</div>
             <div class="right"><span>￥</span><span style="font-weight:bold">{{item.sell_price}}</span></div>
         </div>
