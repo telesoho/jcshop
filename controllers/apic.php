@@ -3750,26 +3750,26 @@ OR (
         $this->data = $data;
     }
     function get_share_money(){
-        $user_id = $this->user['user_id'];
+        $user_id   = $this->user['user_id'];
         $user_data = common::get_user_data($user_id);
-        $type = IFilter::act(IReq::get('type'), 'int');
-        $page = IFilter::act(IReq::get('page'), 'int');
+        $type      = IFilter::act(IReq::get('type'), 'int');
+        $page      = IFilter::act(IReq::get('page'), 'int');
         if ($type === 1){ //已经到账
-            $order_goods_query         = new IQuery('order_goods as a');
-            $order_goods_query->fields = 'b.order_no,a.goods_nums,a.goods_price*0.07 as goods_price,a.share_no,c.id,c.username,c.head_ico';
-            $order_goods_query->join   = 'left join order as b on a.order_id=b.id left join user as c on b.user_id=c.id';
-//            $order_goods_query->where  = "share_no like '" . $user_id . "_%'";
-            $order_goods_query->page = $page;
-            $order_goods_query->pagesize = 5;
-            $type_data                 = $order_goods_query->find();
+            $order_goods_query           = new IQuery('order_goods as a');
+            $order_goods_query->fields   = 'b.order_no,a.goods_nums,FORMAT(a.goods_price*0.07, 2) as goods_price,a.share_no,c.id,c.username,c.head_ico';
+            $order_goods_query->join     = 'left join order as b on a.order_id=b.id left join user as c on b.user_id=c.id';
+            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
+            $order_goods_query->page     = $page;
+            $order_goods_query->pagesize = 7;
+            $type_data                   = $order_goods_query->find();
         } elseif ($type === 2){//未到帐
-            $order_goods_query         = new IQuery('order_goods as a');
-            $order_goods_query->fields = 'b.order_no,a.goods_nums,a.goods_price*0.07,a.share_no,c.id,c.username,c.head_ico';
-            $order_goods_query->join   = 'left join order as b on a.order_id=b.id left join user as c on b.user_id=c.id';
-//            $order_goods_query->where  = "share_no like '" . $user_id . "_%'";
-            $order_goods_query->page = $page;
-            $order_goods_query->pagesize = 5;
-            $type_data                 = $order_goods_query->find();
+            $order_goods_query           = new IQuery('order_goods as a');
+            $order_goods_query->fields   = 'b.order_no,a.goods_nums,FORMAT(a.goods_price*0.07, 2) as goods_price,a.share_no,c.id,c.username,c.head_ico';
+            $order_goods_query->join     = 'left join order as b on a.order_id=b.id left join user as c on b.user_id=c.id';
+            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
+            $order_goods_query->page     = $page;
+            $order_goods_query->pagesize = 7;
+            $type_data                   = $order_goods_query->find();
         }
         $this->returnJson(['code'=>0, 'msg'=>'用户分享赚信息', 'data'=>['user_data'=>$user_data, 'type_data'=>$type_data]]);
     }
