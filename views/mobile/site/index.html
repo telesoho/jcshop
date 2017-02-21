@@ -82,22 +82,9 @@
 			<!--						4个正品										-->
 			<div id="z_special" style="margin-top: 0.2rem;">
 				<ul>
-					<li @click="Brand_pavilion">
-						<img src="/views/mobile/skin/default/image/jmj/home_redesign/Brand_pavilion.png" style="width: 1.2rem;" />
-						<p>品牌馆</p>
-					</li>
-					<li @click="scene_pavilion">
-						<img src="/views/mobile/skin/default/image/jmj/home_redesign/scene_pavilion.png" style="width: 1.2rem;" />
-						<p>场景馆</p>
-					</li>
-					<li @click="newproduct">
-						<img src="/views/mobile/skin/default/image/jmj/home_redesign/newproduct.png" style="width: 1.2rem;" />
-						<p>本周新品</p>
-					</li>
-	
-					<li @click="zheng">
-						<img src="/views/mobile/skin/default/image/jmj/home_redesign/Authentic.png" style="width: 1.2rem;" />
-						<p>正品保证</p>
+					<li @click="Brand_pavilion(key)" v-for="item,key in info_z_special">
+						<img :src="item.img" style="width: 1.2rem;" />
+						<p>{{item.title}}</p>
 					</li>
 				</ul>
 			</div>
@@ -105,7 +92,6 @@
 			<div id="Video_special" style="padding-top:0.2rem ;">
 				<div class="img_play">
 					<img @click="Video_pro" class="img_video" src="/views/mobile/skin/default/image/jmj/home_redesign/video.png" style="width: 7rem;display: block;margin: auto;" />
-					<!--<img src="/views/mobile/skin/default/image/jmj/home_redesign/play_index.png" class="index_play"/>-->
 				</div>
 			</div>
 			<!--							分类												-->

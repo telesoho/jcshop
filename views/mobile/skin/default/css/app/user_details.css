@@ -91,20 +91,20 @@ li{
   position: relative;
 }
 .after:after,.after:before {
-  border: 10px solid transparent;
-  border-bottom: 10px solid #fff;
+  border: 0.2rem solid transparent;
+  border-bottom: 0.2rem solid #fff;
   width: 0;
   height: 0;
   position: absolute;
-  top: -0.22rem;
+  top: -0.20rem;
   right: 0.43rem;
   content: ' '
 }
 .after:before {
   border-bottom-color: #E2E2E2;
-  right: -10px;
+  right: -0.1rem;
   position: absolute;
-  top: -0.24rem;
+  top: -0.23rem;
   right: 0.43rem;
 }
 
