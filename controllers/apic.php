@@ -2878,7 +2878,6 @@ class Apic extends IController{
 		/* 获取数据 */
 		$modelScene = new IModel('scene');
 		$info       = $modelScene->getObj('status=1 AND id='.$param['scene_id'], 'id,title,content,img,visit');
-		$this->returnJson(array('data'=>$info));
 		if(empty($info)) $this->returnJson(array('code' => '012001', 'msg' => $this->errorInfo['012001']));
 		$info['img'] = empty($info['img']) ? '' : IWeb::$app->config['image_host'].'/'.$info['img'];
 		//喜欢/没兴趣
