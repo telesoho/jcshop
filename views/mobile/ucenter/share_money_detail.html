@@ -89,7 +89,7 @@
                     self.showloadding=false;
                     $.post('/apic/get_share_money',function (data) {
                         console.log(data);
-                    })
+                    });
                     var dat=[
                         {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
                         {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:80},
@@ -136,10 +136,12 @@
             changeState:function(num){
                 var self=this;
                 self.state=num;
-                self.showBottom=false;
                 if(self.state===2&&self.page2===1)
-                {   self.showloadding=true;
-                    self.getData2(self)};
+                {
+                    self.showBottom=false;
+                    self.showloadding=true;
+                    self.getData2(self)
+                }
             }
         }
     })
@@ -161,6 +163,7 @@
             if(vm.stop1==true){
                 vm.stop1=false;
                 vm.showloadding=true;
+                vm.showBottom=false;
                 vm.getData1(vm)
             }
         }
@@ -168,6 +171,7 @@
     function scroll2(vm){
         if(vm.stop2==true){
             vm.stop2=false;
+            vm.showBottom=false;
             vm.showloadding=true;
             vm.getData2(vm)
         }

@@ -29,8 +29,8 @@
     <div style="height:0.72rem;"></div>
     <!--场景馆-->
     <div class="sceneDetail">
-        <!--<img :src="sceneInfo.img" alt=""  style="width:100%"/>-->
-        <img src="/views/mobile/skin/default/image/jmj/img/scene_test.png" style="width:100%" alt="" />
+        <img :src="sceneInfo.img" alt=""  style="width:100%"/>
+        <!--<img src="/views/mobile/skin/default/image/jmj/img/scene_test.png" style="width:100%" alt="" />-->
          <p v-for="item in sceneInfo.goods_list" class="goods" @click="buyGoods(item.id)" :style="item.style"></p>
         <div class="cho flexbox">
             <div class="lik like" @click="choLike(1)">
