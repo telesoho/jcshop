@@ -23,13 +23,13 @@
         <ul class="share_money" v-if="state==1">
             <li v-for="item in info1" class="box">
                 <div class="left">
-                    <img :src="item.img" alt=""/>
-                    <span>{{item.name}}</span></div>
+                    <img :src="item.head_ico" alt=""/>
+                    <span>{{item.username}}</span></div>
                 <div class="right">
                     <span  class="s1">获得：</span>
                     <span style="" class="s2">
                         <span class="s3">￥</span>
-                        <span class="s4">{{item.pri}}</span>
+                        <span class="s4">{{item.goods_price}}</span>
                     </span>
                 </div>
             </li>
@@ -37,13 +37,13 @@
         <ul class="share_money" v-if="state==2">
             <li v-for="item in info2" class="box">
                 <div class="left">
-                    <img :src="item.img" alt=""/>
-                    <span>{{item.name}}</span></div>
+                    <img :src="item.head_ico" alt=""/>
+                    <span>{{item.username}}</span></div>
                 <div class="right">
                     <span  class="s1">待获得：</span>
                     <span style="" class="s2">
                         <span class="s3">￥</span>
-                        <span class="s4">{{item.pri}}</span>
+                        <span class="s4">{{item.goods_price}}</span>
                     </span>
                 </div>
             </li>
@@ -65,8 +65,8 @@
             showBottom:false,
             data_s:{
                 "img":"/views/mobile/skin/default/image/buy_share/share_bg.png",
-                "youbalance":"100.00",
-                "nobalance":"60.00"
+                "youbalance":"0.00",
+                "nobalance":"0.00"
             },
             showloadding:true,
             state:1,//顶部导航的初始状态
@@ -85,53 +85,33 @@
         },
         methods:{
             getData1:function(self){
-                setTimeout(function(){
                     self.showloadding=false;
-                    $.post('/apic/get_share_money',function (data) {
-                        console.log(data);
+                    $.post('/apic/get_share_money',{type:1,page:self.page1},function (data) {
+                        var dat = data.data.type_data;
+                        self.info1=self.info1.concat(dat);
+                        self.page1++;
+                        self.stop1=true;
+                        if(data.data.type_data.length===0){
+                            self.infoState1=true;
+                            self.showBottom=true;
+                            self.stop1=false;
+                        }
                     })
-                    var dat=[
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:80},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:80},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
-                    ]
-                    self.info1=self.info1.concat(dat);
-                    self.page1++;
-                    self.stop1=true;
-                    if(self.page1===4){
-                        self.infoState1=true;
-                        self.showBottom=true;
-                        self.stop1=false;
-                    }
-                },500)
+
             },
             getData2:function(self){
-                setTimeout(function(){
                     self.showloadding=false;
-                    var dat=[
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小三",pri:8},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小三",pri:70},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小三",pri:8},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小三",pri:8},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:80},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
-                        {img:"/views/mobile/skin/default/image/buy_share/share_bg.png",name:"王小二",pri:8},
-                    ]
+                $.post('/apic/get_share_money',{type:2,page:self.page2},function (data) {
+                    var dat = data.data.type_data;
                     self.info2=self.info2.concat(dat)
                     self.page2++;
                     self.stop2=true;
-                    if(self.page2===3){
+                    if(data.data.type_data.length===0){
                         self.infoState2=true;
                         self.stop2=false;
                         self.showBottom=true;
                     }
-                },500)
+                })
             },
             changeState:function(num){
                 var self=this;
@@ -157,7 +137,7 @@
          }
     });
     function scroll1(vm){
-        if ($(window).scrollTop() + $(window).height() +200 >= $(document).height() && $(window).scrollTop() > 50) {
+        if ($(window).scrollTop() + $(window).height() +100 >= $(document).height() && $(window).scrollTop() > 50) {
             if(vm.stop1==true){
                 vm.stop1=false;
                 vm.showloadding=true;
