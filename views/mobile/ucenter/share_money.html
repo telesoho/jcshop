@@ -50,7 +50,8 @@
 			"img":"",
 			"youbalance":"0.00",
 			"nobalance":"0.00",
-			"key":"1"
+			"key":"1",
+            info:[]
 		}
 		 var vm= new Vue({
 			el:'#wrap_share',
@@ -61,7 +62,12 @@
 				
 			},
 			mounted:function(){
-				
+			    var self = this;
+				$.post('/apic/get_share_money',function (data) {
+                    console.log(data);
+                    data_s.img = data.data.user_data.head_ico;
+                    data_s.youbalance = data.data.user_data.balance;
+                })
 			},
 			updated:function(){
 			},
@@ -69,6 +75,7 @@
                 share_money_detail:function(){
 					alert(1)
 				}
+
 			}
 			})
 	</script>

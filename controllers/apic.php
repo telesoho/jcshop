@@ -8,9 +8,10 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '大家好~花王蒸汽眼罩竟！然！又参加限时秒了！！价格比上次还要划算啊~ 14片大包装才56.9元～ 1片折合人民币才4元~好划算好酷哦～早上9：00开始啦～么么哒~ 戳进来看一下哦~';
-	private $remark_goods_id = 9863;
-	private $time = '今天中午12:00';
+	private $remark = '天气越来越热啦~赶紧来备个囤个防晒吧~推荐来自乐敦的防晒霜，涂上去冰冰凉，保湿度很好呢~夏天用很清凉~白菜防晒首推！晚上限时抢只要41.9元~赶紧戳下方详情吧~';
+	private $remark_goods_id = 7492;
+//	private $time = '今天中午12:00';
+	private $time = '今天晚上22:00';
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
@@ -3754,6 +3755,7 @@ OR (
         $user_data = common::get_user_data($user_id);
         $type      = IFilter::act(IReq::get('type'), 'int');
         $page      = IFilter::act(IReq::get('page'), 'int');
+        $type_data = null;
         if ($type === 1){ //已经到账
             $order_goods_query           = new IQuery('order_goods as a');
             $order_goods_query->fields   = 'b.order_no,a.goods_nums,FORMAT(a.goods_price*0.07, 2) as goods_price,a.share_no,c.id,c.username,c.head_ico';
