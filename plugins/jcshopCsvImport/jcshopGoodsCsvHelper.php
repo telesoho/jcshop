@@ -21,6 +21,9 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 	public $spec_vals = array();
 	public $spec_jp_vals = array();
 
+	// 规格名
+	public $spec_names = array('color' => '颜色','size' => '尺寸');
+
 	// 规格表对象
 	public $spec_objs  = array();
 
@@ -62,22 +65,22 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 		// 从JSON中解析规格
 		$specs = json_decode($content, true);
 
-		
-		// 如果有规格名定义,则读取规格名
-		$spec_names = array();
-		if(isset($specs[self::SPEC_NAME_KEYS])) {
-			$spec_names = $specs[SPEC_NAME_KEYS];
-			// 从规格值数组中删除规格定义
-			unset($specs[self::SPEC_NAME_KEYS]);
-		} else {
-			// 没有规格名定义，则设定默认的规格名color，size
-			$spec_names = array('color','size');
-		}
+
+		// // 如果有规格名定义,则读取规格名
+		// $this->spec_names = array();
+		// if(isset($specs[self::SPEC_NAME_KEYS])) {
+		// 	$spec_names = $specs[SPEC_NAME_KEYS];
+		// 	// 从规格值数组中删除规格定义
+		// 	unset($specs[self::SPEC_NAME_KEYS]);
+		// } else {
+		// 	// 没有规格名定义，则设定默认的规格名color，size
+		// 	$spec_names = array('color' => '颜色','size' => '尺寸');
+		// }
 
 		// 读取数据库中的规格定义
 		$specDB = new IModel("spec");
 
-		foreach($spec_names as $spec_name) {
+		foreach($this->spec_names as $spec_name => $spec_show_name) {
 			$this->spec_objs[$spec_name] = $specDB->getObj("name='$spec_name'");
 			
 			// 如果规格不存在
@@ -85,7 +88,7 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 				// 新增规格记录
 				$new_spec = array (
 					'name' => $spec_name,
-					'note' => '导入数据自动增加',
+					'note' => $spec_show_name,
 					'value' => '',
 					'value_jp' => '',
 				);
@@ -99,7 +102,8 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 			$this->spec_vals[$spec_name] = common::spec_split($this->spec_objs[$spec_name]['value']);
 		}
 		
-		// 处理规格值
+		
+		// 处理规格值 输出为：[{"id":"6","type":"1","name":"color","value":14},{"id":"7","type":"1","name":"size","value":18}]
 		foreach($specs as $key => $spec) {
 			$product = array();
 			$skuProps = array();
@@ -148,12 +152,13 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 
 	/**
 	 * 将[{"id":"6","type":"1","name":"color","value":14},{"id":"7","type":"1","name":"size","value":18}]
-	 * 转换为[{"id":"6","type":"1","name":"color","value":"黑"},{"id":"7","type":"1","name":"size","value":"L"}]
+	 * 转换为[{"id":"6","type":"1","name":"颜色","value":"黑"},{"id":"7","type":"1","name":"尺寸","value":"L"}]
 	 */
 	public function specId2SpecVal($specs) {
 
 		foreach($specs as $key => $spec) {
 			$specs[$key]['value'] = $this->spec_vals[$spec['name']][$spec['value']];
+			$specs[$key]['name'] = $this->spec_names[$spec['name']];
 		}
 		return $specs;
 	}

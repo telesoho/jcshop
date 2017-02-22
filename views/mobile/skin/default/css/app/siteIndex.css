@@ -300,6 +300,7 @@ li{
 	width: 100%;
 	margin-top: 0.2rem;
 	padding-bottom:0.2rem ;
+	height: 3.4rem;
 }
 #Video_special h1{
 	height: 0.9rem;
@@ -320,7 +321,52 @@ li{
 #Video_special .img_play{
 	display: block;
 	position: relative;
+	height: 2.9rem;
 }
+#Video_special .img_play .img_video{
+	width: 7rem;
+	display: block;
+	margin: auto;
+	position: absolute;
+	left: 0.25rem;
+	
+}
+#Video_special .img_play .sss_bg{
+	position: absolute;
+	z-index: 3;
+	left: 0.25rem;
+	width: 7rem;
+	height: 3rem;
+	background: rgba(0,0,0,0.2);
+}
+/*#Video_special .img_play .img_video:nth-of-type(1){
+	z-index: 2;
+	animation:name1 2s linear infinite;
+}
+@-webkit-keyframes name1{
+	0%{z-index: 2;}
+	100%{z-index: 1;}
+
+}
+#Video_special .img_play .img_video:nth-of-type(2){
+	z-index: 1;
+	animation:name2 2s linear infinite;
+}
+@-webkit-keyframes name2{
+	0%{z-index: 1;}
+	100%{z-index: 2;}
+}
+#Video_special .img_play .img_video:nth-of-type(3){
+	z-index: 1;
+	animation:name3 1s 1s linear infinite;
+}
+@-webkit-keyframes name3{
+	0%{z-index: 2;}
+	50%{z-index: 1;}
+	100%{z-index:2;}
+}*/
+
+
 /*#Video_special .img_play .index_play{
 	position: absolute;
 	top: 50%;

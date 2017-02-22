@@ -60,6 +60,11 @@ var vm = new Vue({
         //专区
         zhuan_index:[],
         time_id:0,
+        vedio:["/views/mobile/skin/default/image/jmj/home_redesign/001.jpg",
+        	"/views/mobile/skin/default/image/jmj/home_redesign/002.jpg",
+        	"/views/mobile/skin/default/image/jmj/home_redesign/003.jpg"
+        ],
+        vodio_detail:""
     },
     computed: {
         searth_pla: function (){
@@ -108,6 +113,7 @@ var vm = new Vue({
             getArticle_category_list(self);
         }index_home(self);
         time_xian();
+        vodio(self)
     },
     updated:function() {
         // 页面加载完成执行的函数;
@@ -285,6 +291,15 @@ function getArticle_category_list(self){
     });
 }
 
+function vodio(self){
+	var page = 0;
+	
+	sss = setInterval(function(){
+	page=(page+1)%3;
+//	self.vodio_detail=;
+	$(".img_video").attr("src",self.vedio[page])
+	},400);
+}
 function index_home(self){
 	mui.ajax('/apic/index', {
         dataType: 'json',
@@ -299,7 +314,6 @@ function index_home(self){
         		}if(item.is_favorite == 0){
         			item.num_color = false;
         		}
-        		
         	})
         	self.zhuan_index = data.data.pro_list;
         	//商品
@@ -329,6 +343,8 @@ function index_home(self){
 					seconds = "0"+seconds;
 				}if(minutes<10){
 					minutes = "0"+minutes;
+				}if(hours<10){
+					hours = "0"+hours;
 				}
 				
 				document.getElementById("timer_hhh").innerHTML = hours;
@@ -376,8 +392,9 @@ function time_xian(self){
 				seconds = "0"+seconds;
 			}if(minutes<10){
 				minutes = "0"+minutes;
+			}if(hours<10){
+				hours = "0"+hours;
 			}
-			console.log(hours,minutes,seconds)
 			document.getElementById("timer_hhh").innerHTML = hours;
 			document.getElementById("timer_mmm").innerHTML = minutes;
 			document.getElementById("timer_sss").innerHTML = seconds
