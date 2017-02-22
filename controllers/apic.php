@@ -1258,7 +1258,7 @@ class Apic extends IController{
 	}
 	
 	/**
-	 * 砍价
+	 * 进行砍价
 	 */
 	public function activity_bargain_start(){
 		/* 获取参数 */
@@ -1319,7 +1319,7 @@ class Apic extends IController{
 	}
 	
 	/**
-	 * 秒杀商品列表
+	 * 限时购、秒杀商品列表
 	 */
 	public function activity_speed_list(){
 		/* 接收参数 */
@@ -1329,19 +1329,6 @@ class Apic extends IController{
 			array('page', 'int', 0, '分页编号'),
 		));
 		/* 秒杀时间段列表 */
-//		$time               = strtotime(date('Y-m-d', time()));
-//		$querySpeed         = new IQuery('activity_speed');
-//		$querySpeed->where  = 'type='.$param['type'].' AND status=1 AND start_time>='.$time;
-//		$querySpeed->fields = 'id,start_time,end_time';
-//		$querySpeed->order  = 'start_time ASC';
-//		$querySpeed->limit  = 3;
-//		$listSpeed          = $querySpeed->find();
-//		if(!empty($listSpeed)){
-//			foreach($listSpeed as $k => $v){
-//				$listSpeed[$k]['conduct'] = $v['start_time']<=time() ? ($v['end_time']<time() ? 3 : 2) : 1; //1未开始-2正在进行-3已结束
-//				$param['time_id']         = empty($param['time_id']) ? $v['id'] : $param['time_id'];
-//			}
-//		}
 		$modelSpeed = new IModel('activity_speed');
 		$listSpeed1 = $modelSpeed->query('type='.$param['type'].' AND status=1 AND start_time<='.time(),'id,start_time,end_time','start_time DESC',1);
 		$listSpeed2 = $modelSpeed->query('type='.$param['type'].' AND status=1 AND start_time>'.time(),'id,start_time,end_time','start_time ASC',2);
