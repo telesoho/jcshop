@@ -358,7 +358,27 @@ class Apic extends IController{
 		foreach($data['goodsList'] as $k => $v){
 			$data['goodsList'][$k]['img'] = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/120/h/120");
 		}
-		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $data));
+		$temp_a = [];
+        array_walk($data['goodsList'],function ($value, $key) use (&$temp_a) {
+            $temp_a["supplier_id_".$value['supplier_id']][] = $value;
+        });
+        $temp_b = [];
+        foreach ($temp_a as $k=>$v){
+            $temp_b[]['goodsList'] = $v;
+        }
+//        common::print_b($temp_b);
+        foreach ($temp_b as $k=>$v){
+            $temp_b[$k]['count'] = count($v);
+            $temp_final_sum = 0;
+            foreach ($v['goodsList'] as $x=>$y){
+                $temp_final_sum += $y['sell_price'];
+            }
+            $temp_b[$k]['final_sum'] = $temp_final_sum;
+            $temp_b[$k]['ware_type'] = $v['goodsList'][0]['supplier_id'];
+            $temp_b[$k]['ware_house_name'] = $v['goodsList'][0]['ware_house_name'];
+            $temp_b[$k]['ware_house_name'] = empty($temp_b[$k]['ware_house_name']) ? '九猫家' : $temp_b[$k]['ware_house_name'];
+        }
+		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $temp_b));
 	}
 	
 	/**
@@ -3817,6 +3837,7 @@ OR (
         $url         = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=$access_token&next_openid=$next_openid";
         $data        = common::curl_http($url);
         $data        = json_decode($data);
+        $update_user_info = 0;
         foreach ($data->data->openid as $open_id){
             $temp    = $open_ids_model->getObj("open_id = '$open_id'");
             if (empty($temp)){
@@ -3838,9 +3859,9 @@ OR (
         $y = 0;
         foreach ($data as $k=>$v){
             $open_id = $v['open_id'];
-            $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$access_token&openid=$open_id&lang=zh_CN";
-            $ret = common::curl_http($url);
-            $ret = json_decode($ret);
+            $url     = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$access_token&openid=$open_id&lang=zh_CN";
+            $ret     = common::curl_http($url);
+            $ret     = json_decode($ret);
             if ($ret->subscribe === 0){
                 $open_ids_model = new IModel('open_ids');
                 $open_ids_model->setData(['is_subscribe'=>0]);
