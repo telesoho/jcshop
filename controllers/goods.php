@@ -662,6 +662,7 @@ class Goods extends IController implements adminAuthorization
 			'name'      => '',
 			'type'      => '',
 			'value'     => '',
+			'value_jp'  => '',			
 			'note'      => '',
 			'seller_id' => $seller_id,
 		);

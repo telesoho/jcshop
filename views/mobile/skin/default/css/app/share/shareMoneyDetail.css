@@ -41,14 +41,19 @@ ul.share_money li .left img{
     vertical-align: middle;
 }
 ul.share_money li .left span{
+    display: inline-block;
+    width:3rem;
     font-size:0.28rem;
     color:#474747;
+}
+ul.share_money li .right{
+    width:2.6rem;
 }
 ul.share_money li .right .s1{
     font-size:0.28rem;color:#b8b8b8
 }
 ul.share_money li .right .s2{
-    display: inline-block;width:0.9rem;text-align: center
+    display: inline-block;width:1.4rem;text-align: center
 }
 ul.share_money li .right .s3{
     font-size:0.24rem;color:#ff5959

@@ -24,20 +24,20 @@
 				<p>最热分享</p>
 			</h1>
 			<ul>
-				<li>
-					<div class="shop_img">
-						<img src=""/>
-					</div>
-					<div class="shop_title">
-						<p>算得上是所所所所所所所萨达四大四大所是的发送到发送到所少时诵诗书</p>
-						<div class="price_">
-							<span>赚 ¥<span>7</span></span>
-							<span>九猫价: ¥100.00</span>
-							<span>开始分享</span>
-						</div>
-					</div>
-					
-				</li>
+				<!--<li>-->
+					<!--<div class="shop_img">-->
+						<!--<img src=""/>-->
+					<!--</div>-->
+					<!--<div class="shop_title">-->
+						<!--<p>算得上是所所所所所所所萨达四大四大所是的发送到发送到所少时诵诗书</p>-->
+						<!--<div class="price_">-->
+							<!--<span>赚 ¥<span>7</span></span>-->
+							<!--<span>九猫价: ¥100.00</span>-->
+							<!--<span>开始分享</span>-->
+						<!--</div>-->
+					<!--</div>-->
+					<!---->
+				<!--</li>-->
 			</ul>
 		</section>
 	</div>
@@ -48,9 +48,10 @@
 	<script type="text/javascript">
 		var data_s = {
 			"img":"",
-			"youbalance":"100.00",
-			"nobalance":"60.00",
-			"key":"1"
+			"youbalance":"0.00",
+			"nobalance":"0.00",
+			"key":"1",
+            info:[]
 		}
 		 var vm= new Vue({
 			el:'#wrap_share',
@@ -61,7 +62,12 @@
 				
 			},
 			mounted:function(){
-				
+			    var self = this;
+				$.post('/apic/get_share_money',function (data) {
+                    console.log(data);
+                    data_s.img = data.data.user_data.head_ico;
+                    data_s.youbalance = data.data.user_data.balance;
+                })
 			},
 			updated:function(){
 			},
@@ -69,6 +75,7 @@
                 share_money_detail:function(){
 					alert(1)
 				}
+
 			}
 			})
 	</script>
