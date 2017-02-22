@@ -188,42 +188,6 @@
 							</div>
 						</td>
 					</tr>
-					<!--<tr>-->
-						<!--<th>商品类型：</th>-->
-						<!--<td>-->
-							<!--<label class='attr'><input type="radio" name="type" value="1" checked onchange="page.changeType(this);"> 通常商品</label>-->
-							<!--<label class='attr'><input type="radio" name="type" value="2" onchange="page.changeType(this);"> 礼包商品</label>-->
-						<!--</td>-->
-					<!--</tr>-->
-					<!--<tr id="dataType" {if:empty($form) || $form['type']!=2}style="display:none;"{/if}>-->
-						<!--<th>礼包商品：</th>-->
-						<!--<td class="datalist">-->
-							<!--{if:!empty($form) && $form['type']==2}-->
-			                    <!--{query:name=goods_bag -->
-			                        <!--where=goods_id eq $form[id] -->
-			                        <!--fields=id,goods_no,num -->
-			                        <!--limit=50 -->
-			                        <!--order=id asc}-->
-								<!--<fieldset style="width:500px;" class="datainfo">-->
-									<!--<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>-->
-									<!--<label>商品货号：<input name="bag_no[]" type="text" value="{$item['goods_no']}" /></label>-->
-									<!--<label>商品数量：<input name="bag_num[]" type="text" value="{$item['num']}" pattern="int" style="width:20px;"/></label>-->
-								<!--</fieldset>-->
-								<!--{/query}-->
-							<!--{else:}-->
-								<!--<fieldset style="width:500px;" class="datainfo">-->
-									<!--<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>-->
-									<!--<label>商品货号：<input name="bag_no[]" type="text" value="" /></label>-->
-									<!--<label>商品数量：<input name="bag_num[]" type="text" value="1" pattern="int" style="width:20px;"/></label>-->
-								<!--</fieldset>-->
-								<!--<fieldset style="width:500px;" class="datainfo">-->
-									<!--<legend ><input type="button" value="+" style="border:none;border-radius:20%;" onclick="page.datalistAdd(this);" />　<input type="button" value="-" style="border:none;border-radius:20%;" onclick="page.datalistDel(this);" /></legend>-->
-									<!--<label>商品货号：<input name="bag_no[]" type="text" value="" /></label>-->
-									<!--<label>商品数量：<input name="bag_num[]" type="text" value="1" pattern="int" style="width:20px;"/></label>-->
-								<!--</fieldset>-->
-							<!--{/if}-->
-						<!--</td>-->
-					<!--</tr>-->
 					<tr>
 						<th>商品模型：</th>
 						<td>

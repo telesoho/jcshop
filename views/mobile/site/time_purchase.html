@@ -158,7 +158,6 @@
     Request = GetRequest();
 //  var statusOrder=Request["id"];
 	var statusOrder="";
-	console.log(statusOrder);
 	
     var vm= new Vue({
         el:'#timePurchasePage',
@@ -260,10 +259,9 @@
     		dataType:'json',
     		async:true,
     		success:function(data){
-    			console.log(data.data.speed);
+//  			console.log(data.data.pro_list);
     			var dates = new Date();
     			dates = parseInt(dates.getTime()/1000)
-    			console.log(dates-data.data.speed.start_time);
     			if(data.data.speed.start_time<=dates<=data.data.speed.end_time){
       				 statusOrder=Request["id"];
     			}else{
@@ -284,7 +282,7 @@
 	        	self.nows = data.data.now;
 				var dd = new Date();
 		        var tt =dd.getTime()/1000;
-		        console.log(self.nows)
+		        console.log(data.data.time_list)
 	        	for(var i =0;i<data.data.time_list.length;i++){
 					if( self.nows == data.data.time_list[0].id){
 		        		self.initState = 0;
@@ -293,7 +291,6 @@
 		        	}else if(self.nows == data.data.time_list[2].id){
 		        		self.initState = 2;
 		        	}
-		        	console.log(vm.initState)
 		        	if(vm.initState == 0){
 		        		vm.info0 = data.data.goods_list;
 		        	}else if(vm.initState == 1){
@@ -305,6 +302,7 @@
 		        	}
 	        		var timestamp4 = new Date(parseInt(data.data.time_list[i].start_time)*1000);//直接用 new Date(时间戳) 格式转化获得当前时间
 					vm.head[i].time = timestamp4.toTimeString().substr(0, 8); 
+					console.log(vm.head[i].time)
 					vm.head[i].now =  data.data.time_list[i].conduct;
 					vm.head[i].id =  data.data.time_list[i].id;
 					if(data.data.time_list[i].start_time<tt){
