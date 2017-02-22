@@ -471,7 +471,10 @@ class Apic extends IController{
 		));
 		//必须为登录用户
 		$user_id = isset($this->user['user_id'])&&!empty($this->user['user_id']) ? $this->user['user_id'] : $this->returnJson(array('code'=>'001001','msg'=>$this->errorInfo['001001']));;
-        $ware_house_id = IFilter::act(IReq::get('ware_house_id'), 'int');
+        //货舱
+		$ware_house_id = IFilter::act(IReq::get('ware_house_id'), 'int');
+		$ware_house_model = new IModel('ware_house');
+		$data['ware_house_name'] = $ware_house_model->getObj("id = $ware_house_id")['ware_house_name'];
         //计算商品
 		$countSumObj = new CountSum($user_id);
 		$result      = $countSumObj->cart_count($param['id'], $param['type'], $param['num'], '','',$ware_house_id);
