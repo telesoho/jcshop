@@ -358,9 +358,11 @@ class Apic extends IController{
 		foreach($data['goodsList'] as $k => $v){
 			$data['goodsList'][$k]['img'] = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/120/h/120");
 		}
+
+//		common::print_b($data);
 		$temp_a = [];
         array_walk($data['goodsList'],function ($value, $key) use (&$temp_a) {
-            $temp_a["supplier_id_".$value['supplier_id']][] = $value;
+            $temp_a["ware_house_id_".$value['ware_house_id']][] = $value;
         });
         $temp_b = [];
         foreach ($temp_a as $k=>$v){
@@ -374,10 +376,10 @@ class Apic extends IController{
                 $temp_final_sum += $y['sell_price']*$y['count'];
             }
             $temp_b[$k]['final_sum'] = $temp_final_sum;
-            $temp_b[$k]['ware_type'] = $v['goodsList'][0]['supplier_id'];
-            $temp_b[$k]['ware_house_name'] = $v['goodsList'][0]['ware_house_name'];
-            $temp_b[$k]['ware_house_name'] = empty($temp_b[$k]['ware_house_name']) ? '九猫家' : $temp_b[$k]['ware_house_name'];
+            $temp_b[$k]['ware_house_id'] = $v['goodsList'][0]['ware_house_id'];
+            $temp_b[$k]['ware_house_name'] = $v['goodsList'][0]['ware_name'];
         }
+//        common::print_b($temp_b);
 		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $temp_b));
 	}
 	
@@ -419,7 +421,7 @@ class Apic extends IController{
 		//加入未被清空的商品信息
         $goods_query = new IQuery('goods');
         array_walk($goods_data,function ($v,$k) use($goods_query, $type, $cartObj) {
-            $goods_query->where = 'id = '. $v['goods_id'] . ' and supplier_id = ' . $type . ' and sku_no "' .  $v['sku_no'] . '"';
+            $goods_query->where = 'id = '. $v['goods_id'] . ' and ware_house_id = ' . $type;
             $goods_data = $goods_query->find();
             empty($goods_data) && $temp[] = [$v['goods_id'], $v['count']];
             !empty($temp) && array_map(function ($v) use($cartObj) {
@@ -466,14 +468,13 @@ class Apic extends IController{
 			array('num','string',0,'商品数量'),
 			array('code','int',0,'优惠券码'),
 			array('ticket_aid','int',0,'优惠券ID'),
-			array('ware_type','int',0,'货仓编号'),
 		));
 		//必须为登录用户
 		$user_id = isset($this->user['user_id'])&&!empty($this->user['user_id']) ? $this->user['user_id'] : $this->returnJson(array('code'=>'001001','msg'=>$this->errorInfo['001001']));;
-		
-		//计算商品
+        $ware_house_id = IFilter::act(IReq::get('ware_house_id'), 'int');
+        //计算商品
 		$countSumObj = new CountSum($user_id);
-		$result      = $countSumObj->cart_count($param['id'], $param['type'], $param['num'], $param['ware_type']);
+		$result      = $countSumObj->cart_count($param['id'], $param['type'], $param['num'], '','',$ware_house_id);
 		if($countSumObj->error) $this->returnJson(array('code'=>'0','msg'=>$countSumObj->error));
 		
 		//获取收货地址
@@ -525,7 +526,6 @@ class Apic extends IController{
 		foreach($data['payment'] as $key => $value){
 			$data['payment'][$key]['paymentprice'] = CountSum::getGoodsPaymentPrice($value['id'], $data['sum']);
 		}
-		common::print_b($data['goodsList']);
 		//商品展示
 		foreach($data['goodsList'] as $key => $value){
 			if(isset($value['spec_array'])) $data['goodsList'][$key]['spec_array'] = Block::show_spec($value['spec_array']);
@@ -568,7 +568,7 @@ class Apic extends IController{
 			array('address_id', 'int', 0, '收货地址'),
 		));
 		$user_id = $this->tokenCheck();
-		
+
 		$goodsList  = array(); //商品列表
 		$goodsIdPay = array(); //购买的商品ID
 		foreach(explode(',', trim($param['goods'], ',')) as $k => $v){
