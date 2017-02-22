@@ -186,9 +186,9 @@ class CountSum
 	    		//购物车中的商品数据
 	    		$goodsIdStr = join(',',$buyInfo['goods']['id']);
 				$goodsQuery = new IQuery('goods as go');
-				$goodsQuery->where = 'go.id in ('.$goodsIdStr.')';
+				$goodsQuery->where = 'go.id in ('.$goodsIdStr.') and supplier';
 				$goodsQuery->join = ' LEFT JOIN goods_supplier as gs ON go.supplier_id = gs.supplier_id and go.sku_no = gs.sku_no ';
-				$goodsQuery->fields = 'go.name,go.cost_price,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,go.supplier_id,gs.ware_house_name,gs.duties_rate';
+				$goodsQuery->fields = 'go.name,go.cost_price,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,go.supplier_id,gs.ware_house_name,gs.sku_no,gs.duties_rate';
 				$goodsList = $goodsQuery->find();
 
 				/* 计算活动商品价格 */
@@ -319,7 +319,7 @@ class CountSum
 	}
 
 	//购物车计算
-	public function cart_count($id = '',$type = '',$buy_num = 1,$promo='',$active_id='')
+	public function cart_count($id = '',$type = '',$buy_num = 1,$promo='',$active_id='', $ware_type="")
 	{
 		//单品购买
 		if($id && $type)
