@@ -538,9 +538,18 @@ class jcshopCsvImport extends pluginBase
 					// 更改
 					$product['spec_array_id'] = JSON::encode($spec['spec']);
 					$product['spec_array'] = JSON::encode($this->goodsCsvHelper->specId2SpecVal($spec['spec']));
-					if($spec['jp_price']) {
-						$product['jp_price'] = $spec['jp_price'];
+					if(isset($spec['jp_price']) && $spec['jp_price']) {
+						$product['jp_price'] = IFilter::act($spec['jp_price'],'float');;
+						$sell_price = $product['jp_price'] / $this->exchange_rate_jp;
+						$product['sell_price']  = $sell_price;
+						if ($sell_price <= 200) {
+							$product['market_price']  = $product['sell_price'] * 2 ;
+						} else {
+							$product['market_price']  = $product['sell_price']* 1.5 ;
+						}
 					}
+					$product['store_nums'] = 5;
+					$product['weight'] = 100;					
 					$productsDB->setData($product);
 					$productsDB->update($where);
 				} else {
@@ -549,8 +558,19 @@ class jcshopCsvImport extends pluginBase
 					$product['goods_id'] = $goods_id;
 					$product['spec_array_id'] = JSON::encode($spec['spec']);
 					$product['spec_array'] = JSON::encode($this->goodsCsvHelper->specId2SpecVal($spec['spec']));
-					$product['jp_price'] = isset($spec['jp_price'])?$spec['jp_price']:0;
-					$product['sell_price'] = isset($spec['sell_price'])?$spec['sell_price']:0;
+					if(isset($spec['jp_price']) && $spec['jp_price']) {
+						$product['jp_price'] = IFilter::act($spec['jp_price'],'float');;
+						$sell_price = $product['jp_price'] / $this->exchange_rate_jp;
+						$product['sell_price']  = $sell_price;
+						if ($sell_price <= 200) {
+							$product['market_price']  = $product['sell_price'] * 2 ;
+						} else {
+							$product['market_price']  = $product['sell_price']* 1.5 ;
+						}
+					}
+					$product['store_nums'] = 5;
+					$product['weight'] = 100;
+					
 					$productsDB->setData($product);
 					$productsDB->add();
 				}
