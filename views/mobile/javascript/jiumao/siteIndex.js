@@ -313,17 +313,10 @@ function index_home(self){
 				self.shop_time = false;
 			}
 			_time = self.speed.end_time
-			all_time = self.speed.end_time-parseInt(data_time/1000);
-//			if(all_time<=0){
-//				shop_time = false;
-//			}else{
-//				shop_time = true;
-//			}
-			// alert(theTime);
+			all_time = _time-parseInt(data_time/1000);
 			if(all_time > 60) { 
 				minutes = parseInt(all_time/60); 
 				seconds = parseInt(all_time%60); 
-				// alert(theTime1+"-"+theTime); 
 				if(minutes > 60) { 
 				hours = parseInt(minutes/60); 
 				minutes = parseInt(minutes%60); 
@@ -336,12 +329,11 @@ function index_home(self){
 					seconds = "0"+seconds;
 				}if(minutes<10){
 					minutes = "0"+minutes;
-				}if(hours<10){
-					hours = "0"+hours;
 				}
-				self.hours = hours;
-				self.minutes = minutes;
-				self.seconds = seconds;
+				
+				document.getElementById("timer_hhh").innerHTML = hours;
+				document.getElementById("timer_mmm").innerHTML = minutes;
+				document.getElementById("timer_sss").innerHTML = seconds
        		}
         },
     });
@@ -353,7 +345,6 @@ function index_home(self){
 function time_xian(self){
 	var self = self
 	times = setInterval(function(self){
-		
 		var myDate = new Date();
 		var data_time = myDate.getTime();
 		if( _time-parseInt(data_time/1000)<0 ){
@@ -362,38 +353,34 @@ function time_xian(self){
 		}
 		
 		var all_time1 = _time-parseInt(data_time/1000);
+		
 		if(all_time1<=0){
 			shop_time = false;
 		}else{
 			shop_time = true;
 		}
+		
 		if(all_time1 > 60) { 
 			minutes = parseInt(all_time1/60); 
 			seconds = parseInt(all_time1%60); 
+			} 
 			if(minutes > 60) { 
 			hours = parseInt(minutes/60); 
-			minutes = parseInt(minutes%60); 
+			minutes = parseInt(minutes%60); }
 			if(hours>24) {
 				data = parseInt(hours/24);
 				hours = parseInt(hours%24);
 			}
-			
+//			
 			if(seconds<10){
 				seconds = "0"+seconds;
 			}if(minutes<10){
 				minutes = "0"+minutes;
-			}if(hours<10){
-				hours = "0"+hours;
 			}
-//			self.hours = hours;
-//			self.minutes = minutes;
-//			self.seconds = seconds;
+			console.log(hours,minutes,seconds)
 			document.getElementById("timer_hhh").innerHTML = hours;
 			document.getElementById("timer_mmm").innerHTML = minutes;
 			document.getElementById("timer_sss").innerHTML = seconds
-			} 
-//			
-		}
 		},1000)
 }
 
