@@ -264,8 +264,6 @@ class Goods extends IController implements adminAuthorization
 			die('请确认表单提交正确');
 		}
 		/* 自定义更新 */
-		$bag_no 					= $_POST['bag_no']; //礼包商品编码
-		$bag_num 					= $_POST['bag_num']; //礼包商品数量
 		$cosme_rank 				= $_POST['cosme_rank']; //cosme排名
 		
 		//初始化商品数据
