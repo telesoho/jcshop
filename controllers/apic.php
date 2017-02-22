@@ -8,10 +8,10 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '小姐姐我用了一个冬天都不觉得油腻的DHC润唇膏总算到货啦！抹抹嘴后超级滋润但不会像抹过猪油，敲清凉~17:00限时福利为你省下50块~';
-	private $remark_goods_id = 7851;
-	private $time = '今天中午12:00';
-//	private $time = '今天晚上22:00';
+	private $remark = '宝宝们让我挑的平价眼影终于搞活动啦！Kate骨干眼影BR-2，铁皮代表我的心！要这个色得赶紧收了，22:00限时特惠打对折啊！';
+	private $remark_goods_id = 14316;
+//	private $time = '今天中午12:00';
+	private $time = '今天晚上22:00';
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
