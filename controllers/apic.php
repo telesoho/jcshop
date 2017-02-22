@@ -8,10 +8,10 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '天气越来越热啦~赶紧来备个囤个防晒吧~推荐来自乐敦的防晒霜，涂上去冰冰凉，保湿度很好呢~夏天用很清凉~白菜防晒首推！晚上限时抢只要41.9元~赶紧戳下方详情吧~';
-	private $remark_goods_id = 7492;
-//	private $time = '今天中午12:00';
-	private $time = '今天晚上22:00';
+	private $remark = '小姐姐我用了一个冬天都不觉得油腻的DHC润唇膏总算到货啦！抹抹嘴后超级滋润但不会像抹过猪油，敲清凉~17:00限时福利为你省下50块~';
+	private $remark_goods_id = 7851;
+	private $time = '今天中午12:00';
+//	private $time = '今天晚上22:00';
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
