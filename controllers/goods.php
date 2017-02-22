@@ -264,28 +264,16 @@ class Goods extends IController implements adminAuthorization
 			die('请确认表单提交正确');
 		}
 		/* 自定义更新 */
-		$bag_no 					= $_POST['bag_no']; //礼包商品编码
-		$bag_num 					= $_POST['bag_num']; //礼包商品数量
 		$cosme_rank 				= $_POST['cosme_rank']; //cosme排名
 		
 		//初始化商品数据
 		unset($_POST['id']);
 		unset($_POST['callback']);
-		unset($_POST['bag_no'], $_POST['bag_num'], $_POST['cosme_type'], $_POST['cosme_rank']);
+		unset($_POST['cosme_type'], $_POST['cosme_rank']);
 
 		$goodsObject 				= new goods_class();
 		$goods_id 					=$goodsObject->update($id,$_POST);
 		
-		/* 礼包商品 */
-		if($_POST['type'] == 2){
-			$model 					= new IModel('goods_bag');
-			$model->del('goods_id='.$goods_id);
-			foreach ($bag_no as $k => $v){
-				$data 				= array('goods_id'=>$goods_id,'goods_no'=>$bag_no[$k],'num'=>$bag_num[$k]);
-				$model->setData($data);
-				$model->add();
-			}
-		}
 		/* cosme排行榜 */
 		$modelCosme 				= new IModel('cosme');
 		foreach($cosme_rank as $k => $v){

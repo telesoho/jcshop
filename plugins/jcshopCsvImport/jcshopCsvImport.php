@@ -526,33 +526,36 @@ class jcshopCsvImport extends pluginBase
 			}
 
 			// 处理日文规格
-			$specs = $val[$titleToCols['spec_jp']];
+			$specs = $val[$titleToCols['spec_jp']]; //已经解析好的规格数组
 			$productsDB = new IModel("products");
 
 			foreach($specs as $k => $spec) {
-				$spec_json = JSON::encode($spec['spec']);
-				$where = "goods_id=$goods_id and spec_array_id='$spec_json'"; 
+				$spec_id = $spec['spec'];
+				$spec_id_json = JSON::encode($spec_id);
+				$where = "goods_id=$goods_id and spec_array_id='$spec_id_json'"; 
 				$theProduct = $productsDB->getObj($where);
 
 				if($theProduct) {
 					// 更改
+					$product = $theProduct;
 					$product['spec_array_id'] = JSON::encode($spec['spec']);
 					$product['spec_array'] = JSON::encode($this->goodsCsvHelper->specId2SpecVal($spec['spec']));
 					if(isset($spec['jp_price']) && $spec['jp_price']) {
-						$product['jp_price'] = IFilter::act($spec['jp_price'],'float');;
+						$product['jp_price'] = IFilter::act($spec['jp_price'],'float');						
 						$sell_price = $product['jp_price'] / $this->exchange_rate_jp;
-						$product['sell_price']  = $sell_price;
+						$product['sell_price']  = $theProduct['sell_price']?$theProduct['sell_price']:$sell_price;
 						if ($sell_price <= 200) {
-							$product['market_price']  = $product['sell_price'] * 2 ;
+							$product['market_price']  = $theProduct['market_price']?$theProduct['market_price']:$product['sell_price'] * 2 ;
 						} else {
-							$product['market_price']  = $product['sell_price']* 1.5 ;
+							$product['market_price']  = $theProduct['market_price']?$theProduct['market_price']:$product['sell_price']* 1.5 ;
 						}
 					}
-					$product['store_nums'] = 5;
-					$product['weight'] = 100;					
+					$product['store_nums'] = $theProduct['store_nums']?$theProduct['store_nums']:5;
+					$product['weight'] = $theProduct['weight']?$theProduct['weight']:100;
 					$productsDB->setData($product);
-					$productsDB->update($where);
+					$productsDB->update("id=" . $theProduct['id']);
 				} else {
+					$product = array();
 					// 增加记录
 					$product['products_no'] = "$goods_no-$k" ;
 					$product['goods_id'] = $goods_id;
@@ -570,7 +573,7 @@ class jcshopCsvImport extends pluginBase
 					}
 					$product['store_nums'] = 5;
 					$product['weight'] = 100;
-					
+
 					$productsDB->setData($product);
 					$productsDB->add();
 				}

@@ -15,7 +15,7 @@
 </head>
 <body>
 <div id="cart_info">
-	<template v-if="showMessage && infoMessage.goodsList.length==0" v-cloak>
+	<template v-if="showMessage && infoMessage.length==0" v-cloak>
 		<section class="nodata">
 			<div class="emptyCart">
 				<img src="/views/mobile/skin/default/image/jmj/icon/cat_car.png" alt="" style="width:1.94rem;height:1.33rem;"/>
@@ -31,64 +31,64 @@
 		<header v-if="showMessage">
 			<a href="http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=100000021&idx=1&sn=5fdb0e149001831242d616090c0ad549&chksm=6b23f0d65c5479c03816d4d8b04cec7635847914686a023dbc2a1d0e17f1012e7d4d9fee59bf&scene=0#wechat_redirect" class="classA"><img src="/views/mobile/skin/default/image/jmj/cart/cart-banner.png" alt="" style="width:100%"  /></a>
 		</header>
-		<div class="goodsInfo"  :style="newGoods.length==1?bottom_check:''">
-			<div class="top">
-				<img src="/views/mobile/skin/default/image/jmj/cart/plane.png" alt="" style="width:0.37rem;height:0.37rem;"/>
-				<span>东京直邮</span>
-			</div>
-			<div class="ware" v-for="item in newGoods">
-				<div class="box head-name">
-					<a :href="item.url" class="classA">
-						<div class="name">
-							{{item.name}}
-						</div>
-					</a>
-					<div class="del flexbox" @click='removeCart(item)'>
-						<img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt="" style="width:0.36rem;height:0.39rem;" />
-					</div>
+		<section v-for="newGoods in goods"  v-if="showMessage">
+			<div class="goodsInfo"  :style="newGoods.length==1?bottom_check:''">
+				<div class="top">
+					<img src="/views/mobile/skin/default/image/jmj/cart/plane.png" alt="" style="width:0.37rem;height:0.37rem;"/>
+					<span>{{newGoods.ware_house_name}}</span>
 				</div>
-                <div class="box middle">
-					<div class="left">
-                        <a :href="item.url" class="classA">
-                            <img :src="item.img" alt=""  style="width:1.2rem;height:1.2rem" />
-                            <div>
-								<div class="size" if="item.spec_array">
-									<span v-if=" item.spec_array.length>1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t v-if="key==0">色</t><t v-if="key==1">码</t><span v-if="key==0"> , </span></span>
-									<span v-if=" item.spec_array.length==1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t>色</t></span></span>
-								</div>
-								<div class="sellprice">
-									￥ {{item.sell_price}}
-								</div>
+				<div class="ware" v-for="item in newGoods.goodsList">
+					<div class="box head-name">
+						<a :href="item.url" class="classA">
+							<div class="name">
+								{{item.name}}
 							</div>
-                        </a>
+						</a>
+						<div class="del flexbox" @click='removeCart(item,newGoods.goodsList)'>
+							<img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt="" style="width:0.36rem;height:0.39rem;" />
+						</div>
 					</div>
-					<div class="right">
-						<img :src="item.count==1?imgReduce:imgReduceA" alt="" style="width:0.5rem;height:0.5rem;" class="reduce" @click="reduceCount(item)" />
-						<input type="number"  v-model="item.newCount"  @change="cartCountF(item)"/>
-						<img :src="imgAdd" alt="" style="width:0.5rem;height:0.5rem;" class="add" @click="addCount(item)"/>
+					<div class="box middle">
+						<div class="left">
+							<a :href="item.url" class="classA">
+								<img :src="item.img" alt=""  style="width:1.2rem;height:1.2rem" />
+								<div>
+									<div class="size" if="item.spec_array">
+										<span v-if=" item.spec_array.length>1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t v-if="key==0">色</t><t v-if="key==1">码</t><span v-if="key==0"> , </span></span>
+										<span v-if=" item.spec_array.length==1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t>色</t></span></span>
+									</div>
+									<div class="sellprice">
+										￥ {{item.sell_price}}
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="right">
+							<img :src="item.count==1?imgReduce:imgReduceA" alt="" style="width:0.5rem;height:0.5rem;" class="reduce" @click="reduceCount(item,newGoods)" />
+							<input type="number"  v-model="item.newCount"  @change="cartCountF(item,newGoods)"/>
+							<img :src="imgAdd" alt="" style="width:0.5rem;height:0.5rem;" class="add" @click="addCount(item,newGoods)"/>
+						</div>
 					</div>
-				</div>
-				<div class="bottom box">
-
+					<div class="bottom box"></div>
 				</div>
 			</div>
-		</div>
-		<div class="cal" v-if="showMessage">
-			<div class="calPrice box">
-				<div class="text1">
-					<span class="txt">合计: </span>
-					<span class="pri">￥ {{infoMessage.final_sum}}</span>
-				</div>
-				<div>
-					<span class="delAll" @click="delAll">全部删除</span>
-					<a  href="{url:/simple/cart2}"  class="toPay classA">结算({{infoMessage.count}})</a>
-				</div>
+			<div class="cal" v-if="showMessage">
+				<div class="calPrice box">
+					<div class="text1">
+						<span class="txt">合计: </span>
+						<span class="pri">￥ {{newGoods.final_sum}}</span>
+					</div>
+					<div>
+						<span class="delAll" @click="delAll">全部删除</span>
+						<a  href="{url:/simple/cart2}"  class="toPay classA">结算({{newGoods.count}})</a>
+					</div>
 
+				</div>
+				<a href="#" class="condition_price" @click="freeShipp">
+					{{freeShipping}}
+				</a>
 			</div>
-			<a href="#" class="condition_price" @click="freeShipp">
-				{{freeShipping}}
-			</a>
-		</div>
+		</section>
 	</template>
 	<footer-nav :state="3" :states="cart_st"></footer-nav>
 </div>
@@ -104,9 +104,7 @@
 		data: {
 			showMessage:false,
 			cart_st:false,
-			infoMessage:{
-				goodsList:[]
-			},
+			infoMessage:[],
 			imgReduce:'/views/mobile/skin/default/image/jmj/cart/reduce.png',
 			imgReduceA:'/views/mobile/skin/default/image/jmj/cart/ruduceable.png',
 			imgAdd:'/views/mobile/skin/default/image/jmj/cart/add.png',
@@ -116,30 +114,21 @@
 		},
 		computed: {
 			// 读取和设置
-			newGoods: function() {
-				this.infoMessage.goodsList.map(function(item){
-					item.totalPrice=(item.sell_price*item.count).toFixed(2);
-                    item.url="/site/products?id="+item.goods_id;
-					item.newCount=item.count;
-					if(item.spec_array){
-						item.spec_array_two = JSON.parse(item.spec_array).reverse();
-					}
-				});
-				return  this.infoMessage.goodsList;
+			goods: function() {
+				this.infoMessage.map(function(item_goodsList){
+					item_goodsList.goodsList.map(function(item){
+						item.totalPrice=(item.sell_price*item.count).toFixed(2);
+						item.url="/site/products?id="+item.goods_id;
+						item.newCount=item.count;
+						if(item.spec_array){
+							item.spec_array_two = JSON.parse(item.spec_array).reverse();
+						}
+					});
+				})
+				return  this.infoMessage;
 			},
 			freeShipping:function(){
-//				if(this.infoMessage.sum>this.infoMessage.condition_price){
-//                    this.free_ok=false;
-//					return "我们帮你免邮费了,去逛逛";
-//				}else{
-					return "去凑单";
-//				}
-			},
-			totalPrice:function(){
-
-			},
-			totalCount:function(){
-
+				return "去凑单";
 			}
 		},
 		mounted: function(){
@@ -153,7 +142,7 @@
 				var self = this;
 				getCartInfo(self);
 			},
-			cartCountF:function(item){
+			cartCountF:function(item,obj){
 				var newCount=item.newCount;
 				var self=this;
 				var diff;
@@ -168,20 +157,20 @@
 				diff=item.newCount-item.count;
 				if(this.state){
 					self.state=false;
-					cartCount(item,diff,self);
+					cartCount(item,diff,obj,this);
 				}
 			},
-			reduceCount:function(item){
+			reduceCount:function(item,obj){
                 var self=this;
 				if(item.count-1<=0){
                     item.count=1;
 				}
 				if(item.count>1&&this.state){
                     self.state=false;
-					cartCount(item,-1,self);
+					cartCount(item,-1,obj,this);
 				}
 			},
-			addCount:function(item){
+			addCount:function(item,obj){
 			    var self=this;
 				if(item.count>=item.store_nums){
 					item.count=item.store_nums;
@@ -189,13 +178,13 @@
 				}
 				if(item.count<item.store_nums&&self.state){
                     this.state=false;
-					cartCount(item,1,self);
+					cartCount(item,1,obj,this);
 				}
 			},
-			removeCart: function(item){
+			removeCart: function(item,obj){
 				clear_pull()
 				var self=this;
-				removeCartByJSON(self,item)
+				removeCartByJSON(self,item,obj)
 			},
 			freeShipp:function(){
 				window.location.href = "/site/index"
@@ -236,7 +225,7 @@ function getCartInfo(self){
 	});
 }
 //购物车数量改动计算
-function cartCount(item,diff,self) {
+function cartCount(item,diff,obj,self) {
     var goods_id = item.product_id > 0 ? item.product_id : item.goods_id;
     var goods_type = item.product_id > 0 ? "product" : "goods";
     //更新购物车中此商品的数量
@@ -247,8 +236,8 @@ function cartCount(item,diff,self) {
         "random": Math.random()
     }, function (content) {
         item.count=parseInt(item.count)+diff;
-        self.infoMessage.final_sum=(parseFloat(self.infoMessage.final_sum)+parseFloat(item.sell_price)*diff).toFixed(2);
-        self.infoMessage.count=parseInt(self.infoMessage.count)+diff;
+		obj.final_sum=(parseFloat(obj.final_sum)+parseFloat(item.sell_price)*diff).toFixed(2);
+		obj.count=parseInt(obj.count)+diff;
         self.state=true;
         if (content.isError == true) {
             alert(content.message);
@@ -259,7 +248,7 @@ function cartCount(item,diff,self) {
     })
 }
 //移除购物车
-function removeCartByJSON(self,item) {
+function removeCartByJSON(self,item,obj) {
 	var goods_id = item.product_id > 0 ? item.product_id : item.goods_id;
 	var goods_type = item.product_id > 0 ? "product" : "goods";
 	var btnArray = ['取消', '移除'];
@@ -270,10 +259,10 @@ function removeCartByJSON(self,item) {
 				"type": goods_type,
 				"random": Math.random()
 			}, function () {
-                self.infoMessage.final_sum=(self.infoMessage.final_sum-item.totalPrice).toFixed(2);
-                self.infoMessage.count-=item.count;
-				var index=self.newGoods.indexOf(item);
-				self.newGoods.splice(index,1);
+				obj.final_sum=(obj.final_sum-item.totalPrice).toFixed(2);
+				obj.count-=item.count;
+				var index=obj.indexOf(item);
+				obj.splice(index,1);
 			});
 		} else {
 
