@@ -31,7 +31,7 @@
 		<header v-if="showMessage">
 			<a href="http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=100000021&idx=1&sn=5fdb0e149001831242d616090c0ad549&chksm=6b23f0d65c5479c03816d4d8b04cec7635847914686a023dbc2a1d0e17f1012e7d4d9fee59bf&scene=0#wechat_redirect" class="classA"><img src="/views/mobile/skin/default/image/jmj/cart/cart-banner.png" alt="" style="width:100%"  /></a>
 		</header>
-		<section v-for="newGoods in goods"  style="margin-top:0.2rem;" v-if="showMessage">
+		<section v-for="newGoods in goods"  v-if="showMessage">
 			<div class="goodsInfo"  :style="newGoods.length==1?bottom_check:''">
 				<div class="top">
 					<img src="/views/mobile/skin/default/image/jmj/cart/plane.png" alt="" style="width:0.37rem;height:0.37rem;"/>
