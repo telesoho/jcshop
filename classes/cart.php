@@ -485,8 +485,8 @@ class Cart extends IInterceptorBase
 		{
 			$goodsArray = array();
 
-			$goodsObj   = new IModel('goods');
-			$goodsData  = $goodsObj->query('id in ('.join(",",$goodsIdArray).')','id,name,img,sell_price');
+			$goodsObj   = new IModel('goods as a left join iwebshop_goods_supplier as b on a.supplier_id=b.supplier_id and a.sku_no=b.sku_no');
+			$goodsData  = $goodsObj->query('id in ('.join(",",$goodsIdArray).')','a.id,a.name,a.img,a.sell_price,a.supplier_id,a.sku_no,b.ware_house_name');
 			foreach($goodsData as $goodsVal)
 			{
 				$goodsArray[$goodsVal['id']] = $goodsVal;
@@ -499,6 +499,9 @@ class Cart extends IInterceptorBase
 					$result['goods']['data'][$key]['img']        = Thumb::get($goodsArray[$val['goods_id']]['img'],120,120);
 					$result['goods']['data'][$key]['name']       = $goodsArray[$val['goods_id']]['name'];
 					$result['goods']['data'][$key]['sell_price'] = $goodsArray[$val['goods_id']]['sell_price'];
+					$result['goods']['data'][$key]['supplier_id'] = $goodsArray[$val['goods_id']]['supplier_id'];
+					$result['goods']['data'][$key]['sku_no'] = $goodsArray[$val['goods_id']]['sku_no'];
+					$result['goods']['data'][$key]['ware_house_name'] = $goodsArray[$val['goods_id']]['ware_house_name'];
 
 					//购物车中的金额累加
 					$result['sum']   += $goodsArray[$val['goods_id']]['sell_price'] * $val['count'];
