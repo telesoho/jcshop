@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="x5-orientation" content="portrait">
-    <title>场景馆title</title>
+    <title>场景馆</title>
     <link rel="stylesheet" href="/views/mobile/skin/default/css/mui.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/common.css" />
     <link rel="stylesheet" href="/views/mobile/skin/default/css/app/scene/scene.css?v=<?php echo time(); ?>" />
@@ -14,7 +14,7 @@
 <body>
 <div id="scene_detail" v-cloak>
     <!--头部定位-->
-    <div class="head">
+    <!--<div class="head">
         <div class="backImg">
             <img src="/views/mobile/skin/default/image/jmj/product/back.png" alt="" style="width:0.43rem" @click="back"/>
         </div>
@@ -25,7 +25,13 @@
             </div>
         </a>
         <a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>
-    </div>
+    </div>-->
+    
+    
+    <top_back_car :msg="car_count"></top_back_car>
+    
+    
+    
     <div style="height:0.72rem;"></div>
     <!--场景馆-->
     <div class="sceneDetail">
@@ -116,6 +122,7 @@
 <script src="/views/mobile/javascript/vue.js"></script>
 <script src="/views/mobile/javascript/mui.js"></script>
 <script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+<script src="/views/mobile/components/top_back.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script type="text/javascript">
     var eid="{echo:IReq::get('id')}";
