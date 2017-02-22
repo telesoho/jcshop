@@ -360,10 +360,10 @@ class goods_class
 	public function edit($id)
 	{
 		$id = IFilter::act($id,'int');
-		$goodsWhere = " id = {$id} ";
+		$goodsWhere = " g.id = {$id} ";
 		if($this->seller_id)
 		{
-			$goodsWhere .= " and seller_id = ".$this->seller_id;
+			$goodsWhere .= " and g.seller_id = ".$this->seller_id;
 		}
 
 		//获取商品
