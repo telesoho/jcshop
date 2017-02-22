@@ -1311,19 +1311,30 @@ class Apic extends IController{
 			array('page', 'int', 0, '分页编号'),
 		));
 		/* 秒杀时间段列表 */
-		$time               = strtotime(date('Y-m-d', time()));
-		$querySpeed         = new IQuery('activity_speed');
-		$querySpeed->where  = 'type='.$param['type'].' AND status=1 AND start_time>='.$time;
-		$querySpeed->fields = 'id,start_time,end_time';
-		$querySpeed->order  = 'start_time ASC';
-		$querySpeed->limit  = 3;
-		$listSpeed          = $querySpeed->find();
+//		$time               = strtotime(date('Y-m-d', time()));
+//		$querySpeed         = new IQuery('activity_speed');
+//		$querySpeed->where  = 'type='.$param['type'].' AND status=1 AND start_time>='.$time;
+//		$querySpeed->fields = 'id,start_time,end_time';
+//		$querySpeed->order  = 'start_time ASC';
+//		$querySpeed->limit  = 3;
+//		$listSpeed          = $querySpeed->find();
+//		if(!empty($listSpeed)){
+//			foreach($listSpeed as $k => $v){
+//				$listSpeed[$k]['conduct'] = $v['start_time']<=time() ? ($v['end_time']<time() ? 3 : 2) : 1; //1未开始-2正在进行-3已结束
+//				$param['time_id']         = empty($param['time_id']) ? $v['id'] : $param['time_id'];
+//			}
+//		}
+		$modelSpeed = new IModel('activity_speed');
+		$listSpeed1 = $modelSpeed->query('type='.$param['type'].' AND status=1 AND start_time<='.time(),'id,start_time,end_time','start_time DESC',1);
+		$listSpeed2 = $modelSpeed->query('type='.$param['type'].' AND status=1 AND start_time>'.time(),'id,start_time,end_time','start_time ASC',2);
+		$listSpeed = array_merge($listSpeed1,$listSpeed2);
 		if(!empty($listSpeed)){
 			foreach($listSpeed as $k => $v){
 				$listSpeed[$k]['conduct'] = $v['start_time']<=time() ? ($v['end_time']<time() ? 3 : 2) : 1; //1未开始-2正在进行-3已结束
-				$param['time_id']         = empty($param['time_id']) ? $v['id'] : $param['time_id'];
 			}
 		}
+		$param['time_id']     = empty($param['time_id']) ? $listSpeed[0]['id'] : $param['time_id'];
+		
 		/* 秒杀商品列表 */
 		$queryGoods           = new IQuery('activity_speed_access AS m');
 		$queryGoods->join     = 'LEFT JOIN goods AS g ON g.id=m.goods_id LEFT JOIN activity_speed AS s ON s.id=m.pid';
