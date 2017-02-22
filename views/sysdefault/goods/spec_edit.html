@@ -11,7 +11,7 @@
 {js:artTemplate}
 <script type='text/javascript' src="{theme:javascript/admin.js}"></script>
 </head>
-<body style="width:600px;min-height:400px;">
+<body style="width:1024px;min-height:400px;">
 <div class="pop_win">
 	<form action='{url:/goods/spec_update}' method='post' id='specForm' name='specForm'>
 		<table class="form_table" style="width:95%">
@@ -45,12 +45,14 @@
 						<thead>
 							<tr>
 								<th>{if:$type==2}规格图片{else:}规格值{/if}</th>
+								<th>规格值日文</th>
 								<th>操作</th>
 							</tr>
 						</thead>
 						<tbody id='spec_box'>
 							{set:$specValue=$value?JSON::decode($value):array()}
-							{foreach:$items=$specValue}
+							{set:$specValueJp=$value_jp?JSON::decode($value_jp):array()}
+							{foreach:items=$specValue key=$key item=$item}
 							<tr class='td_c'>
 								<td>
 									{if:$type==1}
@@ -60,6 +62,11 @@
 									{if:$type==2}
 									<div class="imgbox"><img class="img_border" src='{webroot:$item}' width='50px' height='50px' /></div>
 									<input type="hidden" name="value[]" value="{$item}" /><button type="button" class="btn"><span>选择图片</span></button>
+									{/if}
+								</td>
+								<td>
+									{if:$type==1}
+									<input type="text" class="normal" name="value_jp[]" value="{$specValueJp[$key]}" pattern="required" />
 									{/if}
 								</td>
 								<td>
