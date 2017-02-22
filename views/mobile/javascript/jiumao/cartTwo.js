@@ -4,6 +4,7 @@
 setItem("cart2url",location.href);
 var addr=true;//判断用户是否提供地址
 var Request = new Object();
+console.log(ware_house_id);
 Request = GetRequest();
 //页面加载动画的调用
 $(window).load(function(){
@@ -161,6 +162,7 @@ function getCart2Info(self){
             id:Request["id"]?Request["id"]:'',
             num:Request["num"]?Request["num"]:'',
             type:Request["type"]?Request["type"]:'',
+            ware_house_id:ware_house_id ? ware_house_id:''
         },
         dataType:'json',//服务器返回json格式数据
         type:'get',//HTTP请求类型
