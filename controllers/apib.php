@@ -484,6 +484,7 @@ class Apib extends IController{
 		$this->json_echo(self::$ERROR['TODO']);
 	}
 
+	// 翻译规格名称
 	public function TranslateSpec() {
 		set_time_limit(0);
 		ini_set("max_execution_time",0);
@@ -492,7 +493,9 @@ class Apib extends IController{
 		$query = new IModel("spec");
 		$specObjs = $query->query();
 		foreach($specObjs as $specObj) {
-			$specDict[$specObj['id']] = common::spec_split($specObj['value']);
+			$specDict[$specObj['id']] = array();
+			$specDict[$specObj['id']]['value'] = common::spec_split($specObj['value']);
+			$specDict[$specObj['id']]['note'] = $specObj['note'];
 		}
 		$productsDB = new IModel("products");
 
@@ -520,9 +523,14 @@ class Apib extends IController{
 	// from [{"id":"1","type":"1","name":"color","value":0},{"id":"2","type":"1","name":"size","value":0}]
 	// to [{"id":"1","type":"1","name":"color","value":"黑"},{"id":"2","type":"1","name":"size","value":"L"}]
 	protected function translate($spec_array_id, $specDict) {
+		if(!$spec_array_id) {
+			return "";
+		}
 		$spec_array_val = JSON::decode($spec_array_id, true);
 		foreach($spec_array_val as $key => &$spec) {
-			$spec['value'] = $specDict[$spec['id']][$spec['value']];
+			$vid = $spec['value'];
+			$spec['value'] = $specDict[$spec['id']]['value'][$vid];
+			$spec['name'] = $specDict[$spec['id']]['note'];
 		}
 		return JSON::encode($spec_array_val);
 	}

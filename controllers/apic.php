@@ -3789,7 +3789,7 @@ OR (
             $order_goods_query           = new IQuery('order_goods as a');
             $order_goods_query->fields   = 'b.order_no,a.goods_nums,FORMAT(a.goods_price*0.07, 2) as goods_price,a.share_no,c.id,c.username,c.head_ico';
             $order_goods_query->join     = 'left join order as b on a.order_id=b.id left join user as c on b.user_id=c.id';
-            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
+//            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
             $order_goods_query->page     = $page;
             $order_goods_query->pagesize = 7;
             $type_data                   = $order_goods_query->find();
@@ -3797,7 +3797,7 @@ OR (
             $order_goods_query           = new IQuery('order_goods as a');
             $order_goods_query->fields   = 'b.order_no,a.goods_nums,FORMAT(a.goods_price*0.07, 2) as goods_price,a.share_no,c.id,c.username,c.head_ico';
             $order_goods_query->join     = 'left join order as b on a.order_id=b.id left join user as c on b.user_id=c.id';
-            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
+//            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
             $order_goods_query->page     = $page;
             $order_goods_query->pagesize = 7;
             $type_data                   = $order_goods_query->find();
