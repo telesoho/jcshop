@@ -8,10 +8,10 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '宝宝们让我挑的平价眼影终于搞活动啦！Kate骨干眼影BR-2，铁皮代表我的心！要这个色得赶紧收了，22:00限时特惠打对折啊！';
+	private $remark = '小伙伴给我推荐的史上最最最安全防晒！来自珂润的纯物理防晒，0添加敏感肌也能安心使用~小仙女们你最安全的防护！12:00限时抢只要天猫一半的价格啊！';
 	private $remark_goods_id = 14316;
-//	private $time = '今天中午12:00';
-	private $time = '今天晚上22:00';
+	private $time = '今天中午12:00';
+//	private $time = '今天晚上22:00';
 	function init(){
 		
 		$dateFormat = "Y-m-d h:i:s";
@@ -1280,7 +1280,7 @@ class Apic extends IController{
 	}
 	
 	/**
-	 * 砍价
+	 * 进行砍价
 	 */
 	public function activity_bargain_start(){
 		/* 获取参数 */
@@ -1341,7 +1341,7 @@ class Apic extends IController{
 	}
 	
 	/**
-	 * 秒杀商品列表
+	 * 限时购、秒杀商品列表
 	 */
 	public function activity_speed_list(){
 		/* 接收参数 */
@@ -1351,19 +1351,6 @@ class Apic extends IController{
 			array('page', 'int', 0, '分页编号'),
 		));
 		/* 秒杀时间段列表 */
-//		$time               = strtotime(date('Y-m-d', time()));
-//		$querySpeed         = new IQuery('activity_speed');
-//		$querySpeed->where  = 'type='.$param['type'].' AND status=1 AND start_time>='.$time;
-//		$querySpeed->fields = 'id,start_time,end_time';
-//		$querySpeed->order  = 'start_time ASC';
-//		$querySpeed->limit  = 3;
-//		$listSpeed          = $querySpeed->find();
-//		if(!empty($listSpeed)){
-//			foreach($listSpeed as $k => $v){
-//				$listSpeed[$k]['conduct'] = $v['start_time']<=time() ? ($v['end_time']<time() ? 3 : 2) : 1; //1未开始-2正在进行-3已结束
-//				$param['time_id']         = empty($param['time_id']) ? $v['id'] : $param['time_id'];
-//			}
-//		}
 		$modelSpeed = new IModel('activity_speed');
 		$listSpeed1 = $modelSpeed->query('type='.$param['type'].' AND status=1 AND start_time<='.time(),'id,start_time,end_time','start_time DESC',1);
 		$listSpeed2 = $modelSpeed->query('type='.$param['type'].' AND status=1 AND start_time>'.time(),'id,start_time,end_time','start_time ASC',2);
