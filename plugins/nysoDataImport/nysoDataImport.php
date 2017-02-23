@@ -67,14 +67,14 @@ class nysoDataImport extends pluginBase
 			};
 		});
 
-		// 注册库存同步接口
+		// 注册妮素商品库存同步接口
 		plugin::reg("onBeforeCreateAction@nyso@nyso_stock_syn",function(){
             self::controller()->nyso_stock_syn = function(){
 				$this->nyso_stock_syn();
 			};
 		});
 
-		// 注册订单接口
+		// 注册妮素订单同步接口
 		plugin::reg("onBeforeCreateAction@nyso@nyso_order_syn",function(){
             self::controller()->nyso_order_syn = function(){
 				$this->nyso_order_syn();
@@ -327,6 +327,9 @@ class nysoDataImport extends pluginBase
 	 * 将包含妮素商品的订单同步到妮素平台，并设置同步标志
 	 */
 	private function nyso_order_syn() {
+		set_time_limit(0);
+		ini_set("max_execution_time",0);
+
 		// 初始化妮素平台接口
 		nysochina::init($this->config());
 
@@ -361,7 +364,7 @@ class nysoDataImport extends pluginBase
 			}
 		}
 
-		$this->exitMSG($this->data);
+		$this->exitJSON($this->data);
 	}
 
 	/**
@@ -1081,37 +1084,6 @@ class nysoDataImport extends pluginBase
 				}
 
 			}
-
-			// // 更新供应商表
-			// if($goodsSupplierObj && $goodsSupplierApi) {
-			// 	// 商品已经存在，更新表数据
-			// 	$updateData = $goodsSupplierApi;
-
-			// 	$goodsSupplierDB->setData($updateData);
-
-			// 	$where = "supplier_id = $supplier_id and sku_no = '$sku_no'";
-			// 	$qret = $goodsSupplierDB->update($where);
-
-			// 	if( $qret === false) {
-			// 		$this->error($where . ":" . JSON::encode($updateData));
-			// 		continue;
-			// 	}
-			// } else {
-			// 	// 商品不存在，插入表数据
-			// 	$insertData = $goodsSupplierApi;
-
-			// 	$insertData['sku_no'] = $sku_no;
-			// 	$insertData['supplier_id'] = $supplier_id;
-
-			// 	$goodsSupplierDB->setData($insertData);
-			// 	$qret = $goodsSupplierDB->add();
-
-			// 	if(false === $qret){
-			// 		$this->error("插入数据错误:" . JSON::encode($insertData));
-			// 		continue;
-			// 	}
-			// }
-			
 		}
 	}
 
@@ -1177,35 +1149,6 @@ class nysoDataImport extends pluginBase
 		return $this->nyso2jcGoodsSupplier($goodsList[0]);
 	}
 
-	// /**
-	//  * @brief 保存商品数据
-	//  * @param $goods
-	//  */
-	// protected function saveGoods($goods) {
-	// 	$jcGoods = $this->nyso2jcshopGoods($goods);
-
-	// 	$goodsObj = new IModel('goods');
-
-	// 	$where = 'supplier_id = 1 and sku_no= "' . $goods->SkuNo . '"';
-	// 	$theGoods = $goodsObj->getObj($where);
-
-	// 	if($theGoods) {
-	// 		// 如果已经存在商品，则更新商品信息
-	// 		$updateData = array_merge($theGoods, $jcGoods);
-	// 		$updateData['is_del'] = '3';	// 下架
-	// 		$goodsObj->setData($updateData);
-	// 		$goodsObj->update($where);
-	// 		$this->info($goods->SkuNo . "更新商品成功" , $updateData);
-	// 	} else {
-	// 		// 商品不存在，则新增该商品
-	// 		$newData = $jcGoods;
-	// 		$newData['is_del'] = '2';	// 下架
-	// 		$goodsObj->setData($newData);
-	// 		$goodsObj->add();
-	// 		$this->info($goods->SkuNo . "新增商品成功" , $newData);
-	// 	}
-	// }
-
 	/**
 	 * 同步商品库存
 	 * @param $stock 商品库存
@@ -1233,6 +1176,9 @@ class nysoDataImport extends pluginBase
 	 * 妮素库存同步接口
 	 */
 	public function nyso_stock_syn() {
+		set_time_limit(0);
+		ini_set("max_execution_time",0);
+
 		// 初始化妮素平台接口
 		nysochina::init($this->config());
 		
@@ -1257,7 +1203,7 @@ class nysoDataImport extends pluginBase
 				continue;
 			}
 		}
-		$this->exitMSG($this->data);
+		$this->exitJSON($this->data);
 	}
 
 	// 输出INFO日志

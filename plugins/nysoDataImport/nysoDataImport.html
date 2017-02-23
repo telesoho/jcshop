@@ -106,18 +106,41 @@
 
     // 商品库存同步
     function stocksSyn() {
-        nysoStockForm.action = "{url:/nyso/nyso_stock_syn}";
-        document.getElementById("nysoStockForm").submit();
+        var myDialog = art.dialog({title: '商品库存正在同步...'});// 初始化一个带有loading图标的空对话框
+        jQuery.ajax({
+            url: '{url:/nyso/nyso_stock_syn}',
+            success: function (data) {
+                console.log("data", data);
+                if ( data instanceof Object) {
+                    $("#result").val(JSON.stringify(data, null, 2));
+                } else {
+                    $("#result").val(data);
+                }
+                myDialog.close();
+            }
+        });
     }
 
     // 订单同步
     function ordersSyn() {
-        nysoOrderForm.action = "{url:/nyso/nyso_order_syn}";
-        document.getElementById("nysoOrderForm").submit();
+        var myDialog = art.dialog({title: '正在同步妮素订单...'});// 初始化一个带有loading图标的空对话框
+        jQuery.ajax({
+            url: '{url:/nyso/nyso_order_syn}',
+            success: function (data) {
+                console.log("data", data);
+                if ( data instanceof Object) {
+                    $("#result").val(JSON.stringify(data, null, 2));
+                } else {
+                    $("#result").val(data);
+                }
+                myDialog.close();
+            }
+        });        
     }
 
     // 执行接口
     function runApi() {
+        var myDialog = art.dialog({title: '执行中...'});// 初始化一个带有loading图标的空对话框
         $.post("{url:/nyso/nyso_api}", $("#apiForm").serialize(),
             function(data){
                 console.log("data", data);
@@ -126,6 +149,7 @@
                 } else {
                     $("#result").val(data);
                 }
+                myDialog.close();
             }, "json"
         );
     }    
