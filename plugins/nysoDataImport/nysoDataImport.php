@@ -905,7 +905,7 @@ class nysoDataImport extends pluginBase
 			$field = trim($val[$titleToCols['reset_img']]);
 			if('' !== $field) {
 				$barcode = $goodsSupplierObj['barcode'];
-				$goodsImgDir = $this->imageDir . "\/nyso_pics\/" . $barcode;
+				$goodsImgDir = $this->imageDir . "/nyso_pics/" . $barcode;
 
 				if(is_dir($goodsImgDir)) {
 
