@@ -340,11 +340,11 @@ function index_home(self){
 					hours = parseInt(hours%24)
 				}
 				if(seconds<10){
-					seconds = "0"+seconds;
+					seconds = "0"+parseInt(seconds);
 				}if(minutes<10){
-					minutes = "0"+minutes;
+					minutes = "0"+parseInt(minutes);
 				}if(hours<10){
-					hours = "0"+hours;
+					hours = "0"+parseInt(hours);
 				}
 				
 				document.getElementById("timer_hhh").innerHTML = hours;
@@ -389,11 +389,11 @@ function time_xian(self){
 			}
 //			
 			if(seconds<10){
-				seconds = "0"+seconds;
+				seconds = "0"+parseInt(seconds);
 			}if(minutes<10){
-				minutes = "0"+minutes;
+				minutes = "0"+parseInt(minutes);
 			}if(hours<10){
-				hours = "0"+hours;
+				hours = "0"+parseInt(hours);
 			}
 			document.getElementById("timer_hhh").innerHTML = hours;
 			document.getElementById("timer_mmm").innerHTML = minutes;
