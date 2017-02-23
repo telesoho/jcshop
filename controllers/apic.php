@@ -8,8 +8,8 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '小姐姐我用了一个冬天都不觉得油腻的DHC润唇膏总算到货啦！抹抹嘴后超级滋润但不会像抹过猪油，敲清凉~17:00限时福利为你省下50块~';
-	private $remark_goods_id = 7851;
+	private $remark = '网红闺蜜给我推荐的史上最最最安全防晒！来自珂润的纯物理防晒（就是反射紫外线啦），0添加敏感肌也能安心使用~小仙女们你最安全的防护！12:00限时抢只要天猫一半的价格啊！';
+	private $remark_goods_id = 18944;
 	private $time = '今天中午12:00';
 //	private $time = '今天晚上22:00';
 	function init(){
@@ -358,9 +358,11 @@ class Apic extends IController{
 		foreach($data['goodsList'] as $k => $v){
 			$data['goodsList'][$k]['img'] = IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$v['img']."/w/120/h/120");
 		}
+
+//		common::print_b($data);
 		$temp_a = [];
         array_walk($data['goodsList'],function ($value, $key) use (&$temp_a) {
-            $temp_a["supplier_id_".$value['supplier_id']][] = $value;
+            $temp_a["ware_house_id_".$value['ware_house_id']][] = $value;
         });
         $temp_b = [];
         foreach ($temp_a as $k=>$v){
@@ -371,13 +373,13 @@ class Apic extends IController{
             $temp_b[$k]['count'] = count($v);
             $temp_final_sum = 0;
             foreach ($v['goodsList'] as $x=>$y){
-                $temp_final_sum += $y['sell_price'];
+                $temp_final_sum += $y['sell_price']*$y['count'];
             }
             $temp_b[$k]['final_sum'] = $temp_final_sum;
-            $temp_b[$k]['ware_type'] = $v['goodsList'][0]['supplier_id'];
-            $temp_b[$k]['ware_house_name'] = $v['goodsList'][0]['ware_house_name'];
-            $temp_b[$k]['ware_house_name'] = empty($temp_b[$k]['ware_house_name']) ? '九猫家' : $temp_b[$k]['ware_house_name'];
+            $temp_b[$k]['ware_house_id'] = $v['goodsList'][0]['ware_house_id'];
+            $temp_b[$k]['ware_house_name'] = $v['goodsList'][0]['ware_name'];
         }
+//        common::print_b($temp_b);
 		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $temp_b));
 	}
 	
@@ -406,10 +408,27 @@ class Apic extends IController{
 	 */
 	public function cart_clear(){
 		$param = $this->checkData(array());
-		/* 清空购物车 */
+        $type      = IFilter::act(IReq::get('type'), 'string');
+
+        //获取当前购物车中的数据
+        $cartObj = new Cart();
+        $data     = $cartObj->getMyCart();
+        if(is_string($data)) $this->returnJson(array('code' => '-1', 'msg' => $data));
+        $goods_data = $data['goods']['data'];
+        /* 清空购物车 */
 		$user_id = $this->tokenCheck();
-		$cartObj = new Cart();
 		$cartObj->clear();
+		//加入未被清空的商品信息
+        $goods_query = new IQuery('goods');
+        array_walk($goods_data,function ($v,$k) use($goods_query, $type, $cartObj) {
+            $goods_query->where = 'id = '. $v['goods_id'] . ' and ware_house_id = ' . $type;
+            $goods_data = $goods_query->find();
+            empty($goods_data) && $temp[] = [$v['goods_id'], $v['count']];
+            !empty($temp) && array_map(function ($v) use($cartObj) {
+                $cartObj->add($v[0], $v[1]);
+            }, $temp);
+        });
+
 		$this->returnJson(array('code'=>'0','msg'=>'ok'));
 	}
 	
@@ -452,10 +471,13 @@ class Apic extends IController{
 		));
 		//必须为登录用户
 		$user_id = isset($this->user['user_id'])&&!empty($this->user['user_id']) ? $this->user['user_id'] : $this->returnJson(array('code'=>'001001','msg'=>$this->errorInfo['001001']));;
-		
-		//计算商品
+        //货舱
+		$ware_house_id = IFilter::act(IReq::get('ware_house_id'), 'int');
+		$ware_house_model = new IModel('ware_house');
+		$data['ware_house_name'] = $ware_house_model->getObj("id = $ware_house_id")['ware_house_name'];
+        //计算商品
 		$countSumObj = new CountSum($user_id);
-		$result      = $countSumObj->cart_count($param['id'], $param['type'], $param['num']);
+		$result      = $countSumObj->cart_count($param['id'], $param['type'], $param['num'], '','',$ware_house_id);
 		if($countSumObj->error) $this->returnJson(array('code'=>'0','msg'=>$countSumObj->error));
 		
 		//获取收货地址
@@ -549,7 +571,7 @@ class Apic extends IController{
 			array('address_id', 'int', 0, '收货地址'),
 		));
 		$user_id = $this->tokenCheck();
-		
+
 		$goodsList  = array(); //商品列表
 		$goodsIdPay = array(); //购买的商品ID
 		foreach(explode(',', trim($param['goods'], ',')) as $k => $v){
@@ -1258,7 +1280,7 @@ class Apic extends IController{
 	}
 	
 	/**
-	 * 砍价
+	 * 进行砍价
 	 */
 	public function activity_bargain_start(){
 		/* 获取参数 */
@@ -1319,7 +1341,7 @@ class Apic extends IController{
 	}
 	
 	/**
-	 * 秒杀商品列表
+	 * 限时购、秒杀商品列表
 	 */
 	public function activity_speed_list(){
 		/* 接收参数 */
@@ -1329,19 +1351,6 @@ class Apic extends IController{
 			array('page', 'int', 0, '分页编号'),
 		));
 		/* 秒杀时间段列表 */
-//		$time               = strtotime(date('Y-m-d', time()));
-//		$querySpeed         = new IQuery('activity_speed');
-//		$querySpeed->where  = 'type='.$param['type'].' AND status=1 AND start_time>='.$time;
-//		$querySpeed->fields = 'id,start_time,end_time';
-//		$querySpeed->order  = 'start_time ASC';
-//		$querySpeed->limit  = 3;
-//		$listSpeed          = $querySpeed->find();
-//		if(!empty($listSpeed)){
-//			foreach($listSpeed as $k => $v){
-//				$listSpeed[$k]['conduct'] = $v['start_time']<=time() ? ($v['end_time']<time() ? 3 : 2) : 1; //1未开始-2正在进行-3已结束
-//				$param['time_id']         = empty($param['time_id']) ? $v['id'] : $param['time_id'];
-//			}
-//		}
 		$modelSpeed = new IModel('activity_speed');
 		$listSpeed1 = $modelSpeed->query('type='.$param['type'].' AND status=1 AND start_time<='.time(),'id,start_time,end_time','start_time DESC',1);
 		$listSpeed2 = $modelSpeed->query('type='.$param['type'].' AND status=1 AND start_time>'.time(),'id,start_time,end_time','start_time ASC',2);
@@ -3705,7 +3714,7 @@ OR (
         $start      = IFilter::act(IReq::get('start'));
         $user_query = new IQuery('open_ids');
         if ($start == 'test') {
-            $user_query->where = "open_id in ('orEYdw0X44crd6F3MOdXES6Hfpig','orEYdw9QmiBSIXWa-zrTbJc091L4','orEYdw5QShdxdphix7TxAgqxljVI')";
+            $user_query->where = "open_id in ('orEYdw0X44crd6F3MOdXES6Hfpig','orEYdw9QmiBSIXWa-zrTbJc091L4','orEYdw5QShdxdphix7TxAgqxljVI','orEYdw9QmiBSIXWa-zrTbJc091L4')";
         } else {
             $user_query->limit = $start;
         }
@@ -3789,7 +3798,7 @@ OR (
             $order_goods_query           = new IQuery('order_goods as a');
             $order_goods_query->fields   = 'b.order_no,a.goods_nums,FORMAT(a.goods_price*0.07, 2) as goods_price,a.share_no,c.id,c.username,c.head_ico';
             $order_goods_query->join     = 'left join order as b on a.order_id=b.id left join user as c on b.user_id=c.id';
-            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
+//            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
             $order_goods_query->page     = $page;
             $order_goods_query->pagesize = 7;
             $type_data                   = $order_goods_query->find();
@@ -3797,7 +3806,7 @@ OR (
             $order_goods_query           = new IQuery('order_goods as a');
             $order_goods_query->fields   = 'b.order_no,a.goods_nums,FORMAT(a.goods_price*0.07, 2) as goods_price,a.share_no,c.id,c.username,c.head_ico';
             $order_goods_query->join     = 'left join order as b on a.order_id=b.id left join user as c on b.user_id=c.id';
-            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
+//            $order_goods_query->where    = "share_no like '" . $user_id . "_%'";
             $order_goods_query->page     = $page;
             $order_goods_query->pagesize = 7;
             $type_data                   = $order_goods_query->find();

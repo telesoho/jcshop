@@ -23,7 +23,7 @@ class Block extends IController
 		$inventoryTime   = $configJmj->inventory_time; //库存更新时间间隔
 		$inventoryNum    = $configJmj->inventory_num; //库存更新数量
 		$resetInventory  = $configSite->reset_inventory; //最后更新库存时间
-		
+
 		/* 自动更新库存 */
 		if(empty($resetInventory) || (time()-$resetInventory>=$inventoryTime)){
 			$modelGoods = new IModel('goods');
@@ -31,7 +31,7 @@ class Block extends IController
 			$modelGoods->update('is_del=0 and store_nums<"'.$inventoryNum.'"');
 			$configSite->write(array('reset_inventory'=>time())); //写入最后更新时间
 		}
-		
+
 		/* 订单自动完成（已发货） */
 		$modelOrder = new IModel('order');
 		$where      = 'pay_type!=0 AND status=2 AND pay_status=1 AND distribution_status=1 AND if_del=0 AND pay_time<="'.date('Y-m-d H:i:s', time()-$orderClearTime).'"';
@@ -48,7 +48,7 @@ class Block extends IController
 				}
 			}
 		}
-		
+
 		/* 订单自动关闭（未付款） */
 		$modelOrder = new IModel('order');
 		$where      = 'pay_type!=0 AND status=1 AND pay_status=0 AND distribution_status=0 AND if_del=0 AND create_time<="'.date('Y-m-d H:i:s', time()-$orderCancelTime).'"';
@@ -61,6 +61,21 @@ class Block extends IController
 					order_class::resetOrderProp($v['id']); //还原重置订单所使用的道具
 				}
 			}
+		}
+		
+		/* 限时购自动售完 */
+		$modelSpeed = new IModel('activity_speed AS m,activity_speed_access AS a');
+		$where = 'm.id=a.pid AND m.`type`=1 AND m.`status`=1 AND m.`start_time`<'.(time()-(3*60*60)).' AND m.`end_time`>='.time();
+		$field = 'm.id,a.goods_id';
+		$listSpeed = $modelSpeed->query($where,$field,'',100);
+		if(!empty($listSpeed)){
+			$goodsId = array();
+			foreach($listSpeed as $k => $v){
+				$goodsId[] = $v['goods_id'];
+			}
+			$modelGoods = new IModel('goods');
+			$modelGoods->setData(array('store_nums'=>0));
+			$modelGoods->update('id IN ('.implode(',',$goodsId).')');
 		}
 		
 	}

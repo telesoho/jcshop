@@ -104,7 +104,7 @@ class CountSum
 	 * @active_id int 活动ID
 	 * @return array or bool
 	 */
-	public function goodsCount($buyInfo,$promo='',$active_id='')
+	public function goodsCount($buyInfo,$promo='',$active_id='',$ware_house_id='')
 	{
 		$this->sum           = 0;       //原始总额(优惠前)
 		$this->final_sum     = 0;       //应付总额(优惠后)
@@ -186,9 +186,9 @@ class CountSum
 	    		//购物车中的商品数据
 	    		$goodsIdStr = join(',',$buyInfo['goods']['id']);
 				$goodsQuery = new IQuery('goods as go');
-				$goodsQuery->where = 'go.id in ('.$goodsIdStr.')';
-				$goodsQuery->join = ' LEFT JOIN goods_supplier as gs ON go.supplier_id = gs.supplier_id and go.sku_no = gs.sku_no ';
-				$goodsQuery->fields = 'go.name,go.cost_price,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,go.supplier_id,gs.ware_house_name,gs.duties_rate';
+				$goodsQuery->where = empty($ware_house_id) ? 'go.id in ('.$goodsIdStr.')' : 'go.id in ('.$goodsIdStr.') and go.ware_house_id = ' . $ware_house_id;
+				$goodsQuery->join = ' LEFT JOIN goods_supplier as gs ON go.supplier_id = gs.supplier_id and go.sku_no = gs.sku_no LEFT JOIN ware_house as wa on go.ware_house_id=wa.id ';
+				$goodsQuery->fields = 'go.name,go.cost_price,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,go.supplier_id,gs.ware_house_name,gs.sku_no,gs.duties_rate,wa.ware_house_name,go.ware_house_id,wa.ware_house_name as ware_name';
 				$goodsList = $goodsQuery->find();
 
 				/* 计算活动商品价格 */
@@ -319,7 +319,7 @@ class CountSum
 	}
 
 	//购物车计算
-	public function cart_count($id = '',$type = '',$buy_num = 1,$promo='',$active_id='')
+	public function cart_count($id = '',$type = '',$buy_num = 1,$promo='',$active_id='', $ware_house_id="")
 	{
 		//单品购买
 		if($id && $type)
@@ -347,7 +347,8 @@ class CountSum
 	    	$cartObj = new Cart();
 	    	$buyInfo = $cartObj->getMyCart();
 		}
-    	return $this->goodsCount($buyInfo,$promo,$active_id);
+
+    	return $this->goodsCount($buyInfo,$promo,$active_id,$ware_house_id);
     }
 
 	// 生成訂單Key

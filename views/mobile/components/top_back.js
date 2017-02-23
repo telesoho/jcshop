@@ -14,13 +14,13 @@ Vue.component("top_back_car",{
         <div class="backImg">\
 			<img src="/views/mobile/skin/default/image/jmj/product/back.png" alt="" style="width:0.43rem" @click="back"/>\
 		</div>\
-		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>\
 		<a href="/simple/cart" id="cart" class="locationA">\
 			<div class="img">\
 				<div class="mark flexbox">{{msg}}</div>\
 				<img src="/views/mobile/skin/default/image/jmj/product/cart.png" alt="" style="width:0.55rem" />\
 			</div>\
 		</a>\
+		<a href="/site/index" class="home locationA"><img src="/views/mobile/skin/default/image/jmj/product/home.png" alt="" style="width:0.55rem" /></a>\
     </div>',
     props:["msg"],
     methods:{

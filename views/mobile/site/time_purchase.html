@@ -12,6 +12,15 @@
 </head>
 <body>
 <section id="timePurchasePage" v-cloak>
+    <div v-if="popup_state==1" class="popup"  @touchmove="stopEvent">
+        <div>
+            <img src="/views/mobile/skin/default/image/jmj/product/ttt.jpg" alt="" class="img1"/>
+            <div class="text">偷偷告诉你：添加喵酱微信：jiumaojia001<br/>
+                给你发独家优惠券哦^-^
+            </div>
+            <img src="/views/mobile/skin/default/image/jmj/icon/close.png" class="img2" @click.stop="close_Popup" />
+        </div>
+    </div>
     <loadding :mes="showloadding"></loadding>
       <header class="headerTitle flexbox" v-cloak>
           <div :class="initState==key?class2:class1" v-for="(item,key) in head" @click="changeState(key,item,item.id)">
@@ -162,6 +171,7 @@
     var vm= new Vue({
         el:'#timePurchasePage',
         data:{
+            popup_state:Request["t"],
             showloadding:false,//是否显示加载动画
 //            头部处理
 //          head:[{time:'',tip:'明天再来',now:0},
@@ -235,11 +245,18 @@
 			time_xian(self);
         },
         methods: {
+//            弹窗状态处理
+            stopEvent:function(e){
+                e.preventDefault();
+             },
+            close_Popup:function(e){
+                e.preventDefault=false;
+                this.popup_state=null;
+            },
             changeState: function(num,item,id){
                this.initState = num;
                	statusOrder = id;     	
                 time_xian(self,num);
-                
             },
             ToBuy: function(obj,info,key){
             	console.log(key)

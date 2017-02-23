@@ -154,6 +154,16 @@
 				<tr>
 					<th>详细介绍:</th><td><textarea name="description" rows="5"></textarea></td>
 				</tr>
+                <tr>
+                    <th>货仓选择:</th>
+                    <td>
+                        <select name="ware_house_id" pattern="required">
+                            {foreach:items = $this->ware_house_data}
+                                <option value="{$item['id']}">{$item['ware_house_name']}</option>
+                            {/foreach}
+                        </select>
+                    </td>
+                </tr>
 				<tr>
 					<th></th><td><button type="submit" class="submit"><span>保 存</span></button></td>
 				</tr>
