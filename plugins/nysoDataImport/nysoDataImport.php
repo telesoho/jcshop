@@ -52,18 +52,18 @@ class nysoDataImport extends pluginBase
 			Menu::$menu["插件"]["插件管理"][$link] = $this->name();
 		});
 
-		// 注册妮素登录画面
+		// 注册妮素平台接口画面
 		plugin::reg("onBeforeCreateAction@plugins@nyso_data_import",function(){
             self::controller()->nyso_data_import = function(){
 				$this->redirect("nysoDataImport", $this->data);
 			};
 		});
 
-		// 注册商品同步接口
-		plugin::reg("onBeforeCreateAction@nyso@nyso_goods_syn",function(){
+		// 注册妮素商品同步接口
+		plugin::reg("onBeforeCreateAction@plugins@nyso_goods_syn",function(){
             self::controller()->nyso_goods_syn = function(){
 				$this->pluginDir= $this->path();				
-				$this->nysoGoodsSyn();
+				$this->nyso_goods_syn();
 			};
 		});
 
@@ -81,7 +81,7 @@ class nysoDataImport extends pluginBase
 			};
 		});
 
-		// 注册测试接口
+		// 妮素API测试接口
 		plugin::reg("onBeforeCreateAction@nyso@nyso_api",function(){
             self::controller()->nyso_api = function(){
 				// 初始化妮素平台接口
@@ -107,8 +107,9 @@ class nysoDataImport extends pluginBase
 				}else {
 					try{
 						$output = nysochina::run($api_name, $req);
+						nysochina::$log->info("output", array($output));						
 					} catch(Exception $e) {
-						$this->exitJSON($e->getMessage());					
+						$this->exitJSON($e->getMessage());
 					}
 					$this->exitJSON($output);
 				}
@@ -136,6 +137,9 @@ class nysoDataImport extends pluginBase
 				}
 
 				$req_file = IReq::get("req_file");
+				if(!$req_file) {
+					$this->exitJSON("ERROR: req_file requried.");
+				}
 				$req_json = file_get_contents($req_file);
 
 				$encoding = mb_detect_encoding($req_json, array("ASCII","GB2312","GBK","UTF-8"));
@@ -159,7 +163,6 @@ class nysoDataImport extends pluginBase
 				}else {
 					try{
 						$reqOutput = nysochina::run($api_name, $req);
-						$this->exitJSON($reqOutput);
 						switch($api_name) {
 						case "searchOrder":
 							$this->processSearchOrder($reqOutput);						
@@ -181,8 +184,10 @@ class nysoDataImport extends pluginBase
 
 	private function processSearchOrder($reqOutput) {
 		$orders = $reqOutput['result']['Orders'];
-		foreach($orders as $order) {
+		foreach($orders as $key => $order) {
+			nysochina::$log->info("妮素订单", array($key => $order));
 			$jcOrder = $this->nysoOrder2JcOrder($order);
+			nysochina::$log->info("转换后九猫订单", array($key => $jcOrder));
 			if($jcOrder) {
 				// 保存订单
 				$this->saveJcOrder($jcOrder);
@@ -278,13 +283,20 @@ class nysoDataImport extends pluginBase
 
 		// 处理订单中的商品
 		foreach($nysoOrder['OrderItems'] as $orderItem) {
-			$goodsObj = Api::run("getGoodsInfoBySkuNo", array("sku_no", $orderItem['SupGoodsNo']));
+			// 1. 根据商品sku_no查询对应商品
+			$goodsObj = Api::run("getGoodsInfoBySkuNo", array("#sku_no#", $orderItem['SupGoodsNo']));
 			if($goodsObj) {
 				$jcGoodsOrder['goods_id'] = $goodsObj['goods_id'];
 				$jcGoodsOrder['product_id'] = $goodsObj['product_id'];
 				
 				$jcGoodsOrder['goods_nums'] = $orderItem['BuyQty'];
 				$jcGoodsOrder['real_price'] = $orderItem['BugPrice'];
+
+
+			} else {
+				// 商品不存在，出错返回NULL
+				nysochina::$log->err("验证失败", array(__LINE__, 'messages'=>"订单商品不存在", $orderItem));
+				return null;
 			}
 		}
 
@@ -495,9 +507,9 @@ class nysoDataImport extends pluginBase
 	}
 
 	/**
-	 *  商品数据同步
+	 *  妮素商品数据导入/同步
 	 */
-	public function nysoGoodsSyn() {
+	public function nyso_goods_syn() {
 		set_time_limit(0);
 		ini_set("max_execution_time",0);
 
@@ -558,6 +570,7 @@ class nysoDataImport extends pluginBase
 
 		//清理csv文件数据
 		IFile::rmdir($uploadCsvDir,true);
+		$data['info'] = "导入完毕";
 		$this->redirect("nysoDataImport", $data);
 	}
 
@@ -588,7 +601,7 @@ class nysoDataImport extends pluginBase
 
 
 	// 将商品数据插入数据库
-	private function processGoodsData($collectData) {
+	private function processGoodsData($p_collect_data) {
 
 		$titleToCols = array(
 			'brand.name' 	 	=> '品牌名',
@@ -618,13 +631,14 @@ class nysoDataImport extends pluginBase
 		);
 
 		//实例化商品
-		$goodsObject     	= new IModel('goods');
+		$goodsDB     		= new IModel('goods');
 		$goodsSupplierDB    = new IModel('goods_supplier');
 		$photoRelationDB 	= new IModel('goods_photo_relation');
 		$photoDB         	= new IModel('goods_photo');
 		$cateExtendDB    	= new IModel('category_extend');
 		$brandDB 		 	= new IModel('brand');
 		$commendDB			= new IModel('commend_goods');
+		$wareHouseDB 		= new IModel('ware_house');
 
 		//默认图片路径
 		$default_img 		= 'upload/goods_pic/nopic.jpg';
@@ -634,7 +648,7 @@ class nysoDataImport extends pluginBase
 		nysochina::init($this->config());
 		
 		//插入商品表
-		foreach($collectData as $key => $val)
+		foreach($p_collect_data as $key => $val)
 		{
 
 			// 供应商编号
@@ -654,88 +668,111 @@ class nysoDataImport extends pluginBase
 				continue;
 			}
 
-			// 商品JAN编码
-			$field = trim($val[$titleToCols['goods_no']]);
-			if(!$auto_syn && '' === $field) {
-				$this->error("不设定自动同步标志时商品JAN编码不能为空：" . JSON::encode($val));
-				continue;
-			}
-			
-			$goods_no = IFilter::act($field, "string", 20);
+			$goodsSupplierObj = array();
+			$wareHouseObj = array();
 
+			// 自动同步，则先根据sku_no从妮素平台读取商品数据
 			if($auto_syn) {
 				// 从接口读取商品
 				try{
-					$goodsSupplierData = $this->getGoodsFromApi($sku_no);
+					$goodsSupplierApi = $this->getGoodsFromApi($sku_no);
 				} catch(Exception $e) {
 					$this->error('从妮素API读取数据失败[' . $sku_no . ']：'. $e->getMessage());
 					continue;
 				}
-
-				$goods_no = $goodsSupplierData['goods_no'];
-
-				$the_goods_supplier = $goodsSupplierDB->getObj("supplier_id = 1 and sku_no = '". $sku_no . "'");
-
-				if($the_goods_supplier) {
-					// 商品已经存在，更新表数据
-					$updateData = $goodsSupplierData;
-
-					$goodsSupplierDB->setData($updateData);
-					
-					$where = "supplier_id = 1 and sku_no = '". $sku_no . "'";
-
-					$qret = $goodsSupplierDB->update($where);
-
-					if( $qret === false) {
-						$this->error($where . ":" . JSON::encode($updateData));
-						continue;
+				// $jcGoodsSupplierData = array(
+				// 	'barcode' 			=> $goods['BarCode'],		// 条形码
+				// 	'supplier_id'	 	=> '1',						// 妮素固定为1
+				// 	'sku_no' 			=> $goods['SkuNo'],			// 商品SKU
+				// 	'sku_name' 			=> $goods['SkuName'],		// 商品名
+				// 	'details'			=> $goods['Details'],		// 商品详情
+				// 	'settle_price'		=> $goods['SettlePrice'],	// 结算价格
+				// 	'retail_price'  	=> 	$goods['RetailPrice'],	// 参考价
+				// 	'sale_type'			=> $goods['SaleType'],		// 销售类型
+				// 	'weight'			=> $goods['Weight'],		// 重量
+				// 	'delivery_code'		=> $goods['DeliveryCode'],	// 发货方式：1-报税区 2-香港直邮 4-日本直邮
+				// 	'duties_rate'   	=> $goods['Rate'],			// 税率,非保税区这个字段为0
+				// 	'delivery_city' 	=> $goods['DeliveryCity'],	// 发货地
+				// 	'ware_house_name' 	=> $goods['WareHouseName'], // 仓库名
+				// );
+				
+				if($goodsSupplierApi) 
+				{
+					// 更新供应商货品表
+					$where = "supplier_id = $supplier_id and sku_no = '$sku_no'";
+					$goodsSupplierObj = $goodsSupplierDB->getObj($where);
+					if($goodsSupplierObj) {
+						// 将API读取的数据保存到数据库
+						$goodsSupplierDB->setData($goodsSupplierApi);
+						$goodsSupplierDB->update("supplier_id = $supplier_id and sku_no = '$sku_no'");
+					} else {
+						$goodsSupplierDB->setData($goodsSupplierApi);
+						$goodsSupplierDB->add("supplier_id = $supplier_id and sku_no = '$sku_no'");
 					}
-					
-				} else {
-					// 商品不存在，插入表数据
-					$insertData = $goodsSupplierData;
 
-					$insertData['sku_no'] = $sku_no;
-
-					$goodsSupplierDB->setData($insertData);
-					$qret = $goodsSupplierDB->add();
-
-					if(false === $qret){
-						$this->error("Insert error:" . JSON::encode($insertData));
-						continue;
+					// 数据库里没有对应的仓库名，则增加该仓库
+					$wareHouseName = $goodsSupplierApi['ware_house_name'];
+					$supplierId = $goodsSupplierApi['supplier_id'];
+					$wareHouseObj = $wareHouseDB->getObj("supplier_id=$supplier_id and ware_house_name='$wareHouseName'");
+					if(!$wareHouseObj) {
+						$newWareHouse = array();
+						$newWareHouse['ware_house_name'] = $wareHouseName;
+						$newWareHouse['supplier_id'] = $supplierId;
+						$wareHouseDB->setData($newWareHouse);
+						$newWareHouse['id'] = $wareHouseDB->add();
+						$wareHouseObj = $newWareHouse;
 					}
+
+					// 计算商品表数据
+					$calGoodsData = $this->calGoodsFromSupplierData($goodsSupplierApi);
 				}
-
-			} else {
-				// 从供应商表中读取妮素商品数据
-				$goodsSupplierData = $goodsSupplierDB->getObj("supplier_id = 1 and sku_no = '". $sku_no);
 			}
 
-			// 计算商品表数据
-			$calGoodsData = $this->calGoodsFromSupplierData($goodsSupplierData);
+			if(!$goodsSupplierObj) {
+				$where = "supplier_id = $supplier_id and sku_no = '$sku_no'";
+				$goodsSupplierObj = $goodsSupplierDB->getObj($where);
+				if(!$goodsSupplierObj) {
+					$this->error("商品数据在数据库中不存在:$where");
+					continue;
+				}				
+			}
+
+			if(!$wareHouseObj) {
+				$wareHouseName = $goodsSupplierObj['ware_house_name'];
+				$where = "supplier_id=$supplier_id and ware_house_name='$wareHouseName'";
+				$wareHouseObj = $wareHouseDB->getObj($where);
+				if(!$goodsSupplierObj) {
+					$this->error("仓库数据不存在:$where");
+					continue;
+				}
+			}
+
+			// 查询商品是否存在, 如果商品存在，则$goodsObj是该商品记录，否则为false
+			$goodsObj = $goodsDB->getObj($where);
 
 			//处理CSV数据
 			$theCsvData = array(
 				'seller_id'    => $this->seller_id,
 			);
 			
-			$theCsvData['goods_no'] = $goods_no;
+			$theCsvData['sku_no'] = $sku_no;
 			$theCsvData['supplier_id'] = $supplier_id;
-
 
 			// 品牌名
 			$field = trim($val[$titleToCols['brand.name']]);
 			if('' !== $field) {
 				$brandName = IFilter::act($field, "string");
-				$brandObj = $brandDB->getObj("name = '" . $brandName . "'" );
+				$brandObj = $brandDB->getObj("name = '$brandName'" );
 				if($brandObj) {
 					$theCsvData['brand_id'] = $brandObj['id'];
 				}
 			}
-
-			// 查询商品是否存在, 如果商品存在，则$the_goods是该商品记录，否则为false
-			$where = "goods_no = ". "'". $goods_no . "' and supplier_id = 1"; // supplier_id = 1：妮素
-			$the_goods = $goodsObject->getObj($where);
+			
+			// 商品JAN编码
+			$field = trim($val[$titleToCols['goods_no']]);
+			if('' !== $field) {
+				$theCsvData['goods_no'] = IFilter::act($field, "string", 20);
+			}
 
 			// 如果商品名称不为空，则修改商品名
 			$field = trim($val[$titleToCols['name']]);
@@ -779,7 +816,7 @@ class nysoDataImport extends pluginBase
 
 
 			//处理商品关键词
-			$tag 					= trim($val[$titleToCols['tag']]);
+			$tag = trim($val[$titleToCols['tag']]);
 			if($tag != ''){
 				$theCsvData['search_words'] = ','.$tag.',';
 				keywords::add($tag);
@@ -807,7 +844,7 @@ class nysoDataImport extends pluginBase
 			$field = trim($val[$titleToCols['name_jp']], '"\' ');
 			if('' !== $field) {
 				$theCsvData['name_jp'] = IFilter::act($field, "string");
-				if(!isset($theCsvData['name']) && ($the_goods?'' == $the_goods['name']:true)) {
+				if(!isset($theCsvData['name']) && ($goodsObj?'' == $goodsObj['name']:true)) {
 					$theCsvData['name'] = $theCsvData['name_jp'];
 				}
 			}
@@ -816,7 +853,7 @@ class nysoDataImport extends pluginBase
 			$field = trim($val[$titleToCols['content_jp']], '"\' ');
 			if('' !== $field) {
 				$theCsvData['content_jp'] = IFilter::addSlash($field);
-				if(!isset($theCsvData['content']) && ($the_goods?'' == $the_goods['content']:true)) {
+				if(!isset($theCsvData['content']) && ($goodsObj?'' == $goodsObj['content']:true)) {
 					$theCsvData['content'] = $theCsvData['content_jp'];
 				}
 			}
@@ -859,14 +896,16 @@ class nysoDataImport extends pluginBase
 			if('' !== $field) {
 				$theCsvData['is_zh_content'] = IFilter::act($field, 'bool');
 			}
-			
+
 			// 主图
-			$mainPic = array();			
+			$mainPic = array();
+			// 详情图
+			$contentPic = array();
 
 			$field = trim($val[$titleToCols['reset_img']]);
 			if('' !== $field) {
-
-				$goodsImgDir = $this->imageDir . "/" . "mainPic" . "/" . $goods_no;
+				$barcode = $goodsSupplierObj['barcode'];
+				$goodsImgDir = $this->imageDir . "\/nyso_pics\/" . $barcode;
 
 				if(is_dir($goodsImgDir)) {
 
@@ -877,7 +916,13 @@ class nysoDataImport extends pluginBase
 						if($file != '.' && $file != '..'){
 							$source_file =  $goodsImgDir . "/" . $file;
 							if(is_file($source_file)) {
-								$mainPic[] = $source_file;
+								if(strpos($file, "_pr_")) {
+									// 商品详情图
+									$contentPic[] = $source_file;
+								} else {
+									// 商品轮播图
+									$mainPic[] = $source_file;
+								}
 							}
 						}
 					}
@@ -894,42 +939,55 @@ class nysoDataImport extends pluginBase
 
 			$theGoodsData = array();
 
-			if($auto_syn) {
+			if(isset($calGoodsData)) {
 				// 如果自动同步则合并根据供应商表数据填写出的商品表数据
 				$theGoodsData = array_merge($calGoodsData, $theCsvData);
 			} else {
 				$theGoodsData = $theCsvData;
 			}
 
-			if( $the_goods ) {
+			//  设置商品详情图
+			if($contentPic) {
+				$content = $theGoodsData['content'];
+				foreach($contentPic as $pic) {
+					// 如果该图片在详情中没有，则将该链接增加到详情中
+					if(strpos($content, $pic) === false)
+					{
+						$content .= '<p><img src="/' . $pic . '" alt="" /></p>';
+					}
+				}
+				$theGoodsData['content'] = $content;
+			}
+
+			if($goodsObj) {
 				// 商品已经存在
 				// 更新GOODS表数据
 				$updateData = $theGoodsData;
 
-				$updateData['goods_no'] = $goods_no;
+				$updateData['sku_no'] = $sku_no;
 
-				$goodsObject->setData($theGoodsData);
+				$goodsDB->setData($theGoodsData);
 				
-				$where = "goods_no = ". "'". $goods_no . "'";
-
-				$qret = $goodsObject->update($where);
+				$where = "supplier_id = $supplier_id and sku_no = '$sku_no'";
+				$qret = $goodsDB->update($where);
 
 				if( $qret === false) {
 					$this->error($where . ":" . JSON::encode($updateData));
 					continue;
 				}
 				
-				$goods_id = $the_goods["id"];
+				$goods_id = $goodsObj["id"];
 
 			} else {
 				// 商品不存在
 				// 插入GOODS表数据
 				$insertData = $theGoodsData;
 
-				$insertData['goods_no'] = $goods_no;
+				$insertData['sku_no'] = $sku_no;
+				$insertData['supplier_id'] = $supplier_id;
 
-				$goodsObject->setData($insertData);
-				$goods_id = $goodsObject->add();
+				$goodsDB->setData($insertData);
+				$goods_id = $goodsDB->add();
 
 				if(false === $goods_id){
 					$this->error("Insert error:" . JSON::encode($insertData));
@@ -971,7 +1029,7 @@ class nysoDataImport extends pluginBase
 
 				foreach($cids as $cid) {
 					// 查询商品是否与分类关联
-					$ret = $cateExtendDB->get_count('goods_id =' . $goods_id . ' and category_id =' . $cid);
+					$ret = $cateExtendDB->get_count("goods_id =$goods_id and category_id =$cid");
 					if($ret == 0) {
 						// 将商品与分类关联
 						$cateExtendDB->setData(array('goods_id' => $goods_id,'category_id' => $cid));
@@ -985,18 +1043,18 @@ class nysoDataImport extends pluginBase
 			if('' !== $field) {
 				// 如果已经存在图片，则处理商品图片关联
 				if($mainPic) {
-					$photoRelationDB->del('goods_id = '.$goods_id);
+					$photoRelationDB->del("goods_id = $goods_id");
 					foreach($mainPic as $photoFile) {
 						if(!is_file($photoFile))
 						{
 							continue;
 						}
 						$md5Code = md5_file($photoFile);
-						$photoRow= $photoDB->getObj('id = "'.$md5Code.'"');
+						$photoRow= $photoDB->getObj("id = '$md5Code'");
 						if(!$photoRow || !is_file($photoRow['img']))
 						{
 							// 如果数据库中找不到对应的图片或者原来的图片已经不存在
-							$photoDB->del('id = "'.$md5Code.'"');
+							$photoDB->del("id = '$md5Code'");
 							$photoDB->setData(array("id" => $md5Code,"img" => $photoFile));
 							$photoDB->add();
 						}
@@ -1021,7 +1079,39 @@ class nysoDataImport extends pluginBase
 					}
 					
 				}
+
 			}
+
+			// // 更新供应商表
+			// if($goodsSupplierObj && $goodsSupplierApi) {
+			// 	// 商品已经存在，更新表数据
+			// 	$updateData = $goodsSupplierApi;
+
+			// 	$goodsSupplierDB->setData($updateData);
+
+			// 	$where = "supplier_id = $supplier_id and sku_no = '$sku_no'";
+			// 	$qret = $goodsSupplierDB->update($where);
+
+			// 	if( $qret === false) {
+			// 		$this->error($where . ":" . JSON::encode($updateData));
+			// 		continue;
+			// 	}
+			// } else {
+			// 	// 商品不存在，插入表数据
+			// 	$insertData = $goodsSupplierApi;
+
+			// 	$insertData['sku_no'] = $sku_no;
+			// 	$insertData['supplier_id'] = $supplier_id;
+
+			// 	$goodsSupplierDB->setData($insertData);
+			// 	$qret = $goodsSupplierDB->add();
+
+			// 	if(false === $qret){
+			// 		$this->error("插入数据错误:" . JSON::encode($insertData));
+			// 		continue;
+			// 	}
+			// }
+			
 		}
 	}
 
@@ -1032,19 +1122,19 @@ class nysoDataImport extends pluginBase
 	 */
 	private function nyso2jcGoodsSupplier($goods) {
 		$jcGoodsSupplierData = array(
-			'goods_no' 			=> $goods->BarCode,			// 条形码
+			'barcode' 			=> $goods['BarCode'],		// 条形码
 			'supplier_id'	 	=> '1',						// 妮素固定为1
-			'sku_no' 			=> $goods->SkuNo,			// 商品SKU
-			'sku_name' 			=> $goods->SkuName,			// 商品名
-			'details'			=> $goods->Details,			// 商品详情
-			'settle_price'		=> $goods->SettlePrice,		// 结算价格
-			'retail_price'  	=> 	$goods->RetailPrice,	// 参考价
-			'sale_type'			=> $goods->SaleType,		// 销售类型
-			'weight'			=> $goods->Weight,			// 重量
-			'delivery_code'		=> $goods->DeliveryCode,	// 发货方式：1-报税区 2-香港直邮 4-日本直邮
-			'duties_rate'   	=> $goods->Rate,			// 税率,非保税区这个字段为0
-			'delivery_city' 	=> $goods->DeliveryCity,	// 发货地
-			'ware_house_name' 	=> $goods->WareHouseName, 	// 仓位名
+			'sku_no' 			=> $goods['SkuNo'],			// 商品SKU
+			'sku_name' 			=> $goods['SkuName'],		// 商品名
+			'details'			=> $goods['Details'],		// 商品详情
+			'settle_price'		=> $goods['SettlePrice'],	// 结算价格
+			'retail_price'  	=> 	$goods['RetailPrice'],	// 参考价
+			'sale_type'			=> $goods['SaleType'],		// 销售类型
+			'weight'			=> $goods['Weight'],		// 重量
+			'delivery_code'		=> $goods['DeliveryCode'],	// 发货方式：1-报税区 2-香港直邮 4-日本直邮
+			'duties_rate'   	=> $goods['Rate'],			// 税率,非保税区这个字段为0
+			'delivery_city' 	=> $goods['DeliveryCity'],	// 发货地
+			'ware_house_name' 	=> $goods['WareHouseName'], // 仓库名
 		);
 
 		return $jcGoodsSupplierData;
@@ -1057,7 +1147,7 @@ class nysoDataImport extends pluginBase
 	 */
 	private function calGoodsFromSupplierData($goodsSupplierData) {
 		$goodsData = array(
-			'goods_no'			=> $goodsSupplierData['goods_no'],			// 商品JAN
+			'goods_no'			=> $goodsSupplierData['barcode'],			// 商品JAN
 			'name'				=> $goodsSupplierData['sku_name'],			// 商品名
 			'content' 			=> $goodsSupplierData['details'],			// 商品详情
 			'weight' 			=> $goodsSupplierData['weight'],			// 重量
@@ -1081,8 +1171,7 @@ class nysoDataImport extends pluginBase
 	protected function getGoodsFromApi($sku_no) {
 		// 通过妮素接口取出商品数据
 
-		$result = nysochina::getGoods(array($sku_no));
-		$goodsList = json_decode($result);
+		$goodsList = nysochina::getGoods(array($sku_no));
 
 		// 将妮素商品数据转换为JCSHOP商品数据
 		return $this->nyso2jcGoodsSupplier($goodsList[0]);
@@ -1095,24 +1184,24 @@ class nysoDataImport extends pluginBase
 	// protected function saveGoods($goods) {
 	// 	$jcGoods = $this->nyso2jcshopGoods($goods);
 
-	// 	$goods_obj = new IModel('goods');
+	// 	$goodsObj = new IModel('goods');
 
 	// 	$where = 'supplier_id = 1 and sku_no= "' . $goods->SkuNo . '"';
-	// 	$theGoods = $goods_obj->getObj($where);
+	// 	$theGoods = $goodsObj->getObj($where);
 
 	// 	if($theGoods) {
 	// 		// 如果已经存在商品，则更新商品信息
 	// 		$updateData = array_merge($theGoods, $jcGoods);
 	// 		$updateData['is_del'] = '3';	// 下架
-	// 		$goods_obj->setData($updateData);
-	// 		$goods_obj->update($where);
+	// 		$goodsObj->setData($updateData);
+	// 		$goodsObj->update($where);
 	// 		$this->info($goods->SkuNo . "更新商品成功" , $updateData);
 	// 	} else {
 	// 		// 商品不存在，则新增该商品
 	// 		$newData = $jcGoods;
 	// 		$newData['is_del'] = '2';	// 下架
-	// 		$goods_obj->setData($newData);
-	// 		$goods_obj->add();
+	// 		$goodsObj->setData($newData);
+	// 		$goodsObj->add();
 	// 		$this->info($goods->SkuNo . "新增商品成功" , $newData);
 	// 	}
 	// }
@@ -1123,16 +1212,16 @@ class nysoDataImport extends pluginBase
 	 */
 	protected function updateStock($stock) {
 
-		$goods_obj = new IModel('goods');
+		$goodsObj = new IModel('goods');
 
 		$where = 'supplier_id = 1 and sku_no= "' . $stock['SkuNo'] . '"';
-		$theGoods = $goods_obj->getObj($where);
+		$theGoods = $goodsObj->getObj($where);
 
 		if($theGoods) {
 			// 如果已经存在商品，则更新商品信息
 			$theGoods['store_nums'] = $stock["Quantity"];	// 设置库存
-			$goods_obj->setData($theGoods);
-			$goods_obj->update($where);
+			$goodsObj->setData($theGoods);
+			$goodsObj->update($where);
 			$this->info($stock['SkuNo'] . "库存跟新成功", $stock);
 		} else {
 			// 商品不存在，返回错误

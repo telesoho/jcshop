@@ -123,7 +123,7 @@ class Block extends IController
 
 		$table_name = 'goods as go';
 		$join 		= 'left join supplier as s on go.supplier_id = s.id '
-					  .'left join goods_supplier as gs on go.goods_no = gs.goods_no and go.supplier_id = gs.supplier_id';
+					  .'left join goods_supplier as gs on go.sku_no = gs.sku_no and go.supplier_id = gs.supplier_id';
 		$fields     = 'go.id as goods_id,go.name,go.img,go.store_nums,go.goods_no,go.sell_price,go.spec_array,go.is_del,gs.duties_rate,'
 					  .'concat_ws(" ", s.supplier_name, gs.ware_house_name) AS supplier_name';
 
