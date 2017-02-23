@@ -104,6 +104,8 @@ class System extends IController implements adminAuthorization
 		$this->areaList  = $areaList;
 		$this->data_info = $data;
 		$this->area      = $areaData;
+		$ware_house_query = new IQuery('ware_house');
+		$this->ware_house_data = $ware_house_query->find();
         $this->redirect('delivery_edit');
 	}
 
@@ -214,6 +216,8 @@ class System extends IController implements adminAuthorization
         //最低保价
         $low_price = IFilter::act(IReq::get('low_price'),'float');
 
+        $ware_house_id = IFilter::act(IReq::get('ware_house_id'),'int');
+
         $data = array(
         	'name'         => $name,
         	'type'         => $type,
@@ -232,6 +236,7 @@ class System extends IController implements adminAuthorization
         	'description'  => $description,
         	'save_rate'    => $save_rate,
         	'low_price'    => $low_price,
+        	'ware_house_id'    => $ware_house_id,
         );
 
         //如果选择指定地区配送就必须要选择地区

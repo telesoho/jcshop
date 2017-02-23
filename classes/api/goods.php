@@ -195,13 +195,14 @@ class APIGoods{
 	 * @param int $is_delivery 是否包邮[0正常计算-1包邮-2不包邮]
 	 * @return int
 	 */
-	public function goodsDelivery($data, $key = 'id', $is_delivery = 0){
+	public function goodsDelivery($data, $key = 'id', $is_delivery = 0, $delivery_id = 0){
 		$goods1 = array('money' => 0, 'weight' => 0, 'count' => 0); //满减商品
 		$goods2 = array('money' => 0, 'weight' => 0, 'count' => 0); //不包邮商品
 		
 		/* 判断商品是否包邮 */
 		$data = Api::run('goodsActivity', $data, $key);
 		foreach($data as $k => $v){
+		    $temp[$v['ware_house_id']] = $v['ware_house_id'];
 			if($v['delivery']==1){
 				$goods1['money'] += ($v['sell_price']-$v['reduce'])*$v['count'];
 				$goods1['weight'] += $v['weight']*$v['count'];
@@ -212,14 +213,20 @@ class APIGoods{
 				$goods2['count']++;
 			}
 		}
+		if (count($temp) > 1) IError::show_normal('结算的商品不属于同一个货仓');
 		
 		/* 包邮金额 */
 		$condition_price = (new Config('jmj_config'))->condition_price; //包邮金额，[0=全场无条件包邮,-1=关闭包邮]
 		
 		/* 物流运费规则 */
-		$delivery = Api::run('getDeliveryList');
-		$delivery = $delivery[0];
-		
+		$delivery_data = Api::run('getDeliveryList');
+//		$delivery = $delivery[0];
+		array_walk($delivery_data,function ($v, $k) use(&$delivery,$temp) {
+		   if ($v['ware_house_id'] == array_keys($temp)[0]) {
+		       $delivery = $v;
+           }
+        });
+
 		/* 计算邮费 */
 		if($condition_price==0 || $is_delivery==1 || ($goods1['count']==0 && $goods2['count']==0)){ //全场包邮
 			$deliveryPrice = 0;
