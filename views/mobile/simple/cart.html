@@ -31,7 +31,7 @@
 		<header v-if="showMessage">
 			<a href="http://mp.weixin.qq.com/s?__biz=MzI3MzQ3NTc1Ng==&mid=100000021&idx=1&sn=5fdb0e149001831242d616090c0ad549&chksm=6b23f0d65c5479c03816d4d8b04cec7635847914686a023dbc2a1d0e17f1012e7d4d9fee59bf&scene=0#wechat_redirect" class="classA"><img src="/views/mobile/skin/default/image/jmj/cart/cart-banner.png" alt="" style="width:100%"  /></a>
 		</header>
-		<section v-for="newGoods in goods"  v-if="showMessage">
+		<section v-for="(newGoods,key1) in goods" v-if="showMessage">
 			<div class="goodsInfo"  :style="newGoods.length==1?bottom_check:''">
 				<div class="top">
 					<img src="/views/mobile/skin/default/image/jmj/cart/plane.png" alt="" style="width:0.37rem;height:0.37rem;"/>
@@ -44,7 +44,7 @@
 								{{item.name}}
 							</div>
 						</a>
-						<div class="del flexbox" @click='removeCart(item,newGoods.goodsList)'>
+						<div class="del flexbox" @click='removeCart(item,newGoods)'>
 							<img src="/views/mobile/skin/default/image/jmj/icon/del_w.png" alt="" style="width:0.36rem;height:0.39rem;" />
 						</div>
 					</div>
@@ -79,8 +79,8 @@
 						<span class="pri">￥ {{newGoods.final_sum}}</span>
 					</div>
 					<div>
-						<span class="delAll" @click="delAll">全部删除</span>
-						<a  href="{url:/simple/cart2}"  class="toPay classA">结算({{newGoods.count}})</a>
+						<span class="delAll" @click="delAll(newGoods.ware_house_id,key1)">全部删除</span>
+						<a  :href="'/simple/cart2/ware_house_id/'+newGoods.ware_house_id"  class="toPay classA">结算({{newGoods.count}})</a>
 					</div>
 
 				</div>
@@ -189,14 +189,13 @@
 			freeShipp:function(){
 				window.location.href = "/site/index"
 			},
-			delAll:function(){
+			delAll:function(ware_house_id,type_index){
 				var self=this;
 				var btnArray = ['取消', '移除'];
 				mui.confirm('您确定要清空购物车吗？', '清空购物车', btnArray, function (e) {
 					if (e.index == 1) {
-						$.getJSON("{url:/apic/cart_clear}", function (res) {
-							console.log(res);
-							self.infoMessage.goodsList=[];
+						$.getJSON("{url:/apic/cart_clear}",{type:ware_house_id} ,function (res) {
+							self.infoMessage.splice(type_index,1);
 						});
 					}
 				})
