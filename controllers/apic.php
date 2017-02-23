@@ -8,8 +8,8 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '小伙伴给我推荐的史上最最最安全防晒！来自珂润的纯物理防晒，0添加敏感肌也能安心使用~小仙女们你最安全的防护！12:00限时抢只要天猫一半的价格啊！';
-	private $remark_goods_id = 14316;
+	private $remark = '网红闺蜜给我推荐的史上最最最安全防晒！来自珂润的纯物理防晒（就是反射紫外线啦），0添加敏感肌也能安心使用~小仙女们你最安全的防护！12:00限时抢只要天猫一半的价格啊！';
+	private $remark_goods_id = 18944;
 	private $time = '今天中午12:00';
 //	private $time = '今天晚上22:00';
 	function init(){
@@ -3714,7 +3714,7 @@ OR (
         $start      = IFilter::act(IReq::get('start'));
         $user_query = new IQuery('open_ids');
         if ($start == 'test') {
-            $user_query->where = "open_id in ('orEYdw0X44crd6F3MOdXES6Hfpig','orEYdw9QmiBSIXWa-zrTbJc091L4','orEYdw5QShdxdphix7TxAgqxljVI')";
+            $user_query->where = "open_id in ('orEYdw0X44crd6F3MOdXES6Hfpig','orEYdw9QmiBSIXWa-zrTbJc091L4','orEYdw5QShdxdphix7TxAgqxljVI','orEYdw9QmiBSIXWa-zrTbJc091L4')";
         } else {
             $user_query->limit = $start;
         }
