@@ -370,11 +370,13 @@ class Apic extends IController{
         }
 //        common::print_b($temp_b);
         foreach ($temp_b as $k=>$v){
-            $temp_b[$k]['count'] = count($v);
             $temp_final_sum = 0;
+            $count = 0;
             foreach ($v['goodsList'] as $x=>$y){
                 $temp_final_sum += $y['sell_price']*$y['count'];
+                $count += $y['count'];
             }
+            $temp_b[$k]['count'] = $count;
             $temp_b[$k]['final_sum'] = $temp_final_sum;
             $temp_b[$k]['ware_house_id'] = $v['goodsList'][0]['ware_house_id'];
             $temp_b[$k]['ware_house_name'] = $v['goodsList'][0]['ware_name'];
