@@ -774,10 +774,12 @@ var minutes,hours,seconds;
 				console.log(data.data);
 				if(data.data.speed == ""){
 					self.time_shop = false;
+					clearInterval(times);
 				}else{
 					self.time_shop = true;
+					xian(self,data);
 				}
-				xian(self,data);
+				
 
 				self.showMessage=true;
 				setItem("collection",data.data);
