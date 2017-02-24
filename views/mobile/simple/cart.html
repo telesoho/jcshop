@@ -258,10 +258,15 @@ function removeCartByJSON(self,item,obj) {
 				"type": goods_type,
 				"random": Math.random()
 			}, function () {
+				console.log(obj)
 				obj.final_sum=(obj.final_sum-item.totalPrice).toFixed(2);
 				obj.count-=item.count;
-				var index=obj.indexOf(item);
-				obj.splice(index,1);
+				var index=obj.goodsList.indexOf(item);
+				obj.goodsList.splice(index,1);
+				var type_index=self.infoMessage.indexOf(obj);
+				if(obj.goodsList.length===0){
+					self.infoMessage.splice(type_index,1);
+				}
 			});
 		} else {
 

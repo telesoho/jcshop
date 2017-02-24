@@ -60,7 +60,7 @@ section:nth-of-type(1){
     display: -webkit-flex;
 }
 .goodsInfo .ware .left .size{
-    width:3.4rem;
+    width:3rem;
     margin-top: 0.5rem;
     padding-left: 0.05rem;
 }
