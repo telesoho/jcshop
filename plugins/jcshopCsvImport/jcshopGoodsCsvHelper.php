@@ -155,7 +155,6 @@ class jcshopGoodsCsvHelper extends jcshopPacketHelperAbstract
 	 * 转换为[{"id":"6","type":"1","name":"颜色","value":"黑"},{"id":"7","type":"1","name":"尺寸","value":"L"}]
 	 */
 	public function specId2SpecVal($specs) {
-
 		foreach($specs as $key => $spec) {
 			$specs[$key]['value'] = $this->spec_vals[$spec['name']][$spec['value']];
 			$specs[$key]['name'] = $this->spec_names[$spec['name']];
