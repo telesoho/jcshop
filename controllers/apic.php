@@ -8,7 +8,7 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '网红闺蜜给我推荐的史上最最最安全防晒！来自珂润的纯物理防晒（就是反射紫外线啦），0添加敏感肌也能安心使用~小仙女们你最安全的防护！12:00限时抢只要天猫一半的价格啊！';
+	private $remark = '周末休息时间~也给你的眼睛做做SPA~ 限时抢眼药水专场！全场22.9起！市面上最火都有哦~ 不要压抑自己买买买！';
 	private $remark_goods_id = 18944;
 	private $time = '今天中午12:00';
 //	private $time = '今天晚上22:00';
