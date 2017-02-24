@@ -847,41 +847,40 @@ var minutes,hours,seconds;
 function time_xian(){
 	times = setInterval(function(){
 		var myDate = new Date();
+		
 		var data_time = myDate.getTime();
 		var all_time1 = parseInt(time_all)-parseInt(data_time/1000);
 		if(all_time1<=0){
 			self.times = "明天再来";
 			clearInterval(tims)
 		}
+		console.log(all_time1)
 		if(all_time1 > 60) { 
 			minutes = parseInt(all_time1/60); 
 			seconds = parseInt(all_time1%60); 
 			// alert(theTime1+"-"+theTime); 
 			if(minutes > 60) { 
-			hours = parseInt(minutes/60); 
-			minutes = parseInt(minutes%60); 
-			if(hours>24) {
-				data = parseInt(hours/24);
-				hours = parseInt(hours%24);
-			}
+				hours = parseInt(minutes/60); 
+				minutes = parseInt(minutes%60); 
+				if(hours>24) {
+					data = parseInt(hours/24);
+					hours = parseInt(hours%24);
+				}
 			
-			if(seconds<10){
-				seconds = "0"+seconds;
-			}if(minutes<10){
-				minutes = "0"+minutes;
-			}if(hours<10){
-				hours = "0"+hours;
+				
 			}
-			if(document.getElementById("time_shop_buy")){
-				document.getElementById("time_shop_buy").innerHTML = "结束倒计时 "+hours+":"+minutes+":"+seconds;
+			if(parseInt(seconds)<10){
+				seconds = "0"+parseInt(seconds);
+			}if(parseInt(minutes)<10){
+				minutes = "0"+parseInt(minutes);
+			}if(parseInt(hours)<10){
+				hours = "0"+parseInt(hours);
 			}
-			else{
-				return;
-			}
-//			console.log(vm.times)
-			} 
-			
+		}else{
+			minutes = "00";
+			hours = "00";
 		}
+		document.getElementById("time_shop_buy").innerHTML = "结束倒计时 "+hours+":"+minutes+":"+seconds;
 		},1000)
 }
 	function Collection1(obj){
