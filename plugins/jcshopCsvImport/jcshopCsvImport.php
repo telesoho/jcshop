@@ -232,6 +232,7 @@ class jcshopCsvImport extends pluginBase
 				$this->error("规格编号为空：" . JSON::encode($val));
 				continue;				
 			}
+			$theData['sku_no'] = $field;
 			
 			$goods_no = IFilter::act($field, "string", 20);
 			$theData['goods_no'] = $goods_no;
@@ -575,7 +576,13 @@ class jcshopCsvImport extends pluginBase
 				} else {
 					$product = array();
 					// 增加记录
-					$product['products_no'] = "$goods_no-$k" ;
+					
+					// 第一个SKU的products_no默认为goods_no
+					if($k != 0) {
+						$product['products_no'] = "$goods_no-$k" ;
+					} else {
+						$product['products_no'] = "$goods_no" ;
+					}
 					$product['goods_id'] = $goods_id;
 					$product['spec_array_id'] = JSON::encode($spec['spec']);
 					$product['spec_array'] = JSON::encode($this->goodsCsvHelper->specId2SpecVal($spec['spec']));
