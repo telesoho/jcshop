@@ -2229,20 +2229,23 @@ class Apic extends IController{
 			$cids             = array();
 			foreach($listCat as $k => $v)
 				$cids[] = $v['id'];
-			$queryGoods                = new IQuery('goods AS m');
-			$queryGoods->join          = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
-			$queryGoods->where         = 'm.is_del=0 AND c.category_id IN ('.implode(',', $cids).')';
-			$queryGoods->fields        = 'm.id,m.name,m.sell_price,m.market_price,m.jp_price,m.img';
-			$queryGoods->order         = 'm.sale DESC,m.visit DESC';
-			$queryGoods->group         = 'm.id';
-			$queryGoods->limit         = 10;
-			$dataGoods['related_list'] = $queryGoods->find();
-			if(!empty($dataGoods['related_list'])){
-				$dataGoods['related_list'] = Api::run('goodsActivity', $dataGoods['related_list']);
-				foreach($dataGoods['related_list'] as $k => $v){
-					$dataGoods['related_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$v['img'].'/w/500/h/500');
+			if(!empty($cids)){
+				$queryGoods                = new IQuery('goods AS m');
+				$queryGoods->join          = 'LEFT JOIN category_extend AS c ON c.goods_id=m.id';
+				$queryGoods->where         = 'm.is_del=0 AND c.category_id IN ('.implode(',', $cids).')';
+				$queryGoods->fields        = 'm.id,m.name,m.sell_price,m.market_price,m.jp_price,m.img';
+				$queryGoods->order         = 'm.sale DESC,m.visit DESC';
+				$queryGoods->group         = 'm.id';
+				$queryGoods->limit         = 10;
+				$dataGoods['related_list'] = $queryGoods->find();
+				if(!empty($dataGoods['related_list'])){
+					$dataGoods['related_list'] = Api::run('goodsActivity', $dataGoods['related_list']);
+					foreach($dataGoods['related_list'] as $k => $v){
+						$dataGoods['related_list'][$k]['img'] = empty($v['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl('/pic/thumb/img/'.$v['img'].'/w/500/h/500');
+					}
 				}
 			}
+			
 		}
 		
 		/* 是否参与限时活动（限时购） */
