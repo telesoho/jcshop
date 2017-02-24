@@ -56,11 +56,16 @@
 					</div>
 				</div>
 			</section>
+			
+			
 			<div id="time_buy" v-if="time_shop" @click="time_buy">
 				<p>{{time_title}}</p>
 				<div><span id="time_shop_buy">{{times}}</span></div>
 				<img src="/views/mobile/skin/default/image/jmj/product/timemore_pro.png" style="width: 0.13rem;"/>
 			</div>
+			
+			
+			
             <section class="name-price">
 				<!--有二级标题显示方法-->
 				<div class="name" v-if="info.name_de">
@@ -817,20 +822,21 @@ var minutes,hours,seconds;
 			if(minutes > 60) {
 				hours = parseInt(minutes/60);
 				minutes = parseInt(minutes%60);
-			}
-			if(hours > 24) {
-				data = parseInt(hours/24);
-				hours = parseInt(hours%24);
-			}
-
-
-			if(parseInt(hours)<10){
-				hours = "0"+parseInt(hours);
-			}
-			if(parseInt(minutes)<10){
-				minutes = "0"+parseInt(minutes);
-			}if(parseInt(seconds)<10){
-				seconds = "0" + parseInt(seconds);
+				if(hours > 24) {
+					data = parseInt(hours/24);
+					hours = parseInt(hours%24);
+				}
+				
+				if(parseInt(hours)<10){
+					hours = "0"+parseInt(hours);
+				}
+				if(parseInt(minutes)<10){
+					minutes = "0"+parseInt(minutes);
+				}if(parseInt(seconds)<10){
+					seconds = "0" + parseInt(seconds);
+				}
+			}else{
+				hours = "00"
 			}
 			self.times = "结束倒计时 "+hours+":"+minutes+":"+seconds
 
