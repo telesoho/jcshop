@@ -215,6 +215,7 @@ class goods_class
 					'market_price' => $postData['_market_price'][$key],
 					'sell_price' => $postData['_sell_price'][$key],
 					'cost_price' => $postData['_cost_price'][$key],
+					'jp_price' => $postData['_jp_price'][$key],
 					'weight' => $postData['_weight'][$key],
 					'spec_array' => "[".join(',',$postData['_spec_array'][$key])."]"
 				);

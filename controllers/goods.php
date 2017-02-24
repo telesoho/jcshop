@@ -275,22 +275,25 @@ class Goods extends IController implements adminAuthorization
 		$goods_id 					=$goodsObject->update($id,$_POST);
 		
 		/* cosme排行榜 */
-		$modelCosme 				= new IModel('cosme');
-		foreach($cosme_rank as $k => $v){
-			if( !empty($v) ){
-				$info 				= $modelCosme->getObj('goods_id='.$goods_id.' AND type='.$k);
-				if(!empty($info)){
-					$modelCosme->setData(array('rank'=>$v));
-					$modelCosme->update('id='.$info['id']);
+		if(!empty($cosme_rank)){
+			$modelCosme 				= new IModel('cosme');
+			foreach($cosme_rank as $k => $v){
+				if( !empty($v) ){
+					$info 				= $modelCosme->getObj('goods_id='.$goods_id.' AND type='.$k);
+					if(!empty($info)){
+						$modelCosme->setData(array('rank'=>$v));
+						$modelCosme->update('id='.$info['id']);
+					}else{
+						$modelCosme->setData(array('goods_id'=>$goods_id,'type'=>$k,'rank'=>$v));
+						$modelCosme->add();
+					}
 				}else{
-					$modelCosme->setData(array('goods_id'=>$goods_id,'type'=>$k,'rank'=>$v));
-					$modelCosme->add();
+					$info 				= $modelCosme->getObj('goods_id='.$goods_id.' AND type='.$k);
+					if( !empty($info) ) $modelCosme->del('id='.$info['id']);
 				}
-			}else{
-				$info 				= $modelCosme->getObj('goods_id='.$goods_id.' AND type='.$k);
-				if( !empty($info) ) $modelCosme->del('id='.$info['id']);
 			}
 		}
+		
 
 		//记录日志
 		$logObj = new log('db');
