@@ -402,18 +402,36 @@ class jcshopCsvImport extends pluginBase
 				}
 			}
 
+			// 设置详情图
+			$contentPic = $mainPic;
+
+			//  设置商品详情图
+			if($contentPic) {
+				if(isset($theData['content'])){
+					$content = $theData['content'];
+				} else if($the_goods) {
+					$content = $the_goods['content'];
+				} else {
+					$content = "";
+				}
+				foreach($contentPic as $pic) {
+					// 如果该图片在详情中没有，则将该链接增加到详情中
+					if(strpos($content, $pic) === false)
+					{
+						$content .= '<p><img src="/' . $pic . '" alt="" /></p>';
+					}
+				}
+				$theData['content'] = $content;
+			}
 
 			if( $the_goods ) {
 				// 商品已经存在
 				// 更新GOODS表数据
 				$updateData = $theData;
 
-				$updateData['goods_no'] = $goods_no;
-
 				$goodsObject->setData($theData);
 				
-				$where = "goods_no = ". "'". $goods_no . "'";
-
+				$where = "id = ". $the_goods['id'];
 				$qret = $goodsObject->update($where);
 
 				if( $qret === false) {
