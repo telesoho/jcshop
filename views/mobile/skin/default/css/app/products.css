@@ -95,7 +95,7 @@
 }
 .sell_price .act{
     position: absolute;
-    margin-left:0.1rem;
+    margin-left:0.2rem;
     top:0.14rem;
     left: 4.5rem;
     height:0.35rem;
@@ -537,7 +537,7 @@
 弹出框加入购物车
 **/
 .select_box{width:100%;background: #fff;}
-.select_top{width:100%;height:1.7rem;background:#fff;padding:0 0.35rem;}
+.select_top{width:100%;height:1.3rem;background:#fff;padding:0 0.35rem;}
 .select_photo{width:1.98rem;height:1.98rem;overflow:hidden;background:#fff;border:0.01rem solid #eee;position:absolute;top:-0.7rem;left:0.35rem;vertical-align:middle;text-align:center;padding:0.2rem;}
 .select_photo img{width:100%;height:auto;}
 .select_top_right{float:left;width:100%;padding:0.3rem 0}
@@ -597,11 +597,17 @@
 .select_size .size{
     padding:0 0.2rem;
     border-bottom:1px solid #eee;
+    position:relative;
 }
 .select_size .size h4{
-    margin-top:0.19rem;
+    margin-top:0.1rem;
     font-size:0.3rem;
     color:#646464;
+}
+.select_size .size .cho_size{
+    max-height:2.2rem;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling : touch;
 }
 .select_size .size span{
     display: inline-block;
@@ -609,10 +615,10 @@
     line-height:0.54rem;
     border-radius:0.04rem;
     background:#f5f5f5;
-    font-size:0.26rem;
+    font-size:0.22rem;
     color:#646464;
-    padding:0 0.29rem;
-    margin:0.23rem 0.3rem 0.23rem 0;
+    padding:0 0.1rem;
+    margin:0.1rem 0.3rem 0.08rem 0;
 }
 .select_size .size span.active{
     background:#ff5959;
@@ -623,7 +629,7 @@
     width:100%;
     overflow:hidden;
     background:#fff;
-    padding:0.36rem 0.31rem 0.53rem;
+    padding:0.1rem 0.31rem 0.33rem;
 }
 .select_h3{
     font-size:0.3rem;
@@ -637,7 +643,7 @@
     border:1px solid #d3d3d3;
     position:relative;
     margin-right:0.41rem;
-    top:0.2rem;
+    top:0.1rem;
 }
 .select_center_a input{
     display: inline-block;
@@ -815,4 +821,28 @@
     font-size:0.28rem;
     margin-top:0.5rem;
 
+}
+/*制作滚动条*/
+.scrollbar_size{
+    position: absolute;
+    right:0;
+    bottom:0;
+    width:1rem;
+    height:2.2rem;
+}
+.scroll_line{
+    position: absolute;
+    top:0;
+    left:0.6rem;
+    width:0.04rem;
+    height:2.2rem;
+    background:#eee;
+}
+.scroll_bar{
+    position:absolute;
+    top:0;
+    left:0.46rem;
+    width:0.32rem;
+    /*height:0.5rem;*/
+    background:#eee;
 }

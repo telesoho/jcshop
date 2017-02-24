@@ -287,8 +287,12 @@
 			<div class="select_size" v-if="info.products_spec.length>0">
 				 <div class="size" v-for="(item,key) in info.products_spec">
 						<h4>{{item.name}}</h4>
-					 	<div class="cho_size">
+					 	<div class="cho_size" @touchstart="beginStart"  @touchmove="moveTouch" @touchend="endStart(key)" :id="'cho_size'+key">
 							<span  @click="changeSize(key,item1,item.name)" v-for="item1 in item.list" :class="item.cho==item1?'active':''">{{item1}}</span>
+							<div class="scrollbar_size" v-if="item.showbar">
+								<div class="scroll_line"></div>
+								<div class="scroll_bar"></div>
+							</div>
 						</div>
 				 </div>
 			</div>
@@ -441,7 +445,10 @@ var minutes,hours,seconds;
 //			用户选择产品颜色  尺码
 			type:'goods',
 			choId:false,
-			goodsnum:1
+			goodsnum:1,
+//			颜色尺码弹窗滚动函数需要的参数
+			scrollY1:0,
+			scrollY2:0,
 		},
 		computed: {
 			showLastImg:function(){
@@ -505,6 +512,21 @@ var minutes,hours,seconds;
 			if(this.checkScroll1){
 				$(window).scrollTop(0)
 			}
+			this.info.products_spec.map(function(item,key) {
+				var eid = $("#cho_size" + key);
+				if (eid.height()) {
+					item.height = eid.height();
+					item.docHeight = eid[0].scrollHeight;
+					if (item.height<item.docHeight) {
+						console.log(item.docHeight-item.height)
+						item.showbar = true;
+					$(".scroll_bar").eq(key).css('height',item.height*(item.height/item.docHeight)+"px")
+					} else {
+						item.showbar = false;
+					}
+					console.log(item.showbar)
+				}
+			})
 		},
 		methods: {
 //		    弹窗状态处理
@@ -515,6 +537,41 @@ var minutes,hours,seconds;
               e.preventDefault=false;
               this.popup_state=null;
             },
+			//开始touch
+			beginStart:function(e){
+				this.scrollY1=Number(e.touches[0].pageY);
+				this.scrollY2=0;
+			},
+			moveTouch:function(e){
+				this.scrollY2=Number(e.touches[0].pageY);
+			},
+			endStart:function(key,e){
+				//防止自滚
+				this.scrollY2=this.scrollY2?this.scrollY2:this.scrollY1;
+				var len = this.scrollY2-this.scrollY1;
+				var eid=$("#cho_size"+key);
+				var height=eid.height();
+				var docHeight=eid[0].scrollHeight;
+				var scrollTop=eid.scrollTop();
+				var num=docHeight/height;
+				console.log(num);
+				if(len<-20&&(scrollTop+height)<docHeight){
+					this.info.products_spec[key].scrollBarHeight+=height/num;
+					if((this.info.products_spec[key].scrollBarHeight+$(".scroll_bar").eq(key).height())>height){
+						this.info.products_spec[key].scrollBarHeight=height-$(".scroll_bar").eq(key).height()
+					}
+					eid.animate({scrollTop:scrollTop+height},200)
+					$(".scroll_bar").eq(key).animate({top:this.info.products_spec[key].scrollBarHeight},200)
+				}
+				if(len>20){
+					this.info.products_spec[key].scrollBarHeight-=height/num;
+					if(this.info.products_spec[key].scrollBarHeight<0){
+						this.info.products_spec[key].scrollBarHeight=0;
+					}
+					eid.animate({scrollTop:scrollTop-height},200);
+					$(".scroll_bar").eq(key).animate({top:this.info.products_spec[key].scrollBarHeight},200)
+				}
+			},
 			//进入限时购
 			time_buy:function(){
 				window.location.href = "/site/time_purchase"
@@ -779,8 +836,6 @@ var minutes,hours,seconds;
 					self.time_shop = true;
 					xian(self,data);
 				}
-				
-
 				self.showMessage=true;
 				setItem("collection",data.data);
 				self.weight=parseInt(data.data.weight);
@@ -790,7 +845,9 @@ var minutes,hours,seconds;
 					self.type='product'
 				}
 				data.data.products_spec.map(function(item){
+					item.showbar=false;
 					item.cho=false;
+					item.scrollBarHeight=0;
 				});
 				self.info=data.data;
 				self.relateArticle=data.data.article_list;
