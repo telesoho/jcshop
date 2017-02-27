@@ -100,7 +100,7 @@ class xlobo
             'IsReceiveTax' => '0',
             'Comment' => $note_str,
             'BuyersMessage' => null,
-            'PackingType' => '1',
+            'PackingType' => '2',
             'LogisticId' => '32',
 //            'LogisticVersion' => date('Y-m-d H:i:s', time()),
             'LineTypeId' => '1',

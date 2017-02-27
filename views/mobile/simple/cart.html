@@ -54,8 +54,8 @@
 								<img :src="item.img" alt=""  style="width:1.2rem;height:1.2rem" />
 								<div>
 									<div class="size hideCamp" if="item.spec_array">
-										<span v-if=" item.spec_array.length>1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t v-if="key==0">色</t><t v-if="key==1">码</t><span v-if="key==0"> , </span></span>
-										<span v-if=" item.spec_array.length==1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t>色</t></span></span>
+										<span v-if=" item.spec_array.length>1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t v-if="key==0"></t><t v-if="key==1"></t><span v-if="key==0"> , </span></span>
+										<span v-if=" item.spec_array.length==1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t></t></span></span>
 									</div>
 									<div class="sellprice">
 										￥ {{item.sell_price}}
