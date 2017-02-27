@@ -606,8 +606,8 @@
 }
 .select_size .size .cho_size{
     max-height:2.2rem;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling : touch;
+    overflow-y: hidden;
+    /*-webkit-overflow-scrolling : touch;*/
 }
 .select_size .size span{
     display: inline-block;
