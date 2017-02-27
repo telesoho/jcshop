@@ -53,7 +53,7 @@
 							<a :href="item.url" class="classA">
 								<img :src="item.img" alt=""  style="width:1.2rem;height:1.2rem" />
 								<div>
-									<div class="size" if="item.spec_array">
+									<div class="size hideCamp" if="item.spec_array">
 										<span v-if=" item.spec_array.length>1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t v-if="key==0">色</t><t v-if="key==1">码</t><span v-if="key==0"> , </span></span>
 										<span v-if=" item.spec_array.length==1 " v-for="sizes,key in item.spec_array_two">{{sizes.value}}<t>色</t></span></span>
 									</div>
@@ -258,10 +258,15 @@ function removeCartByJSON(self,item,obj) {
 				"type": goods_type,
 				"random": Math.random()
 			}, function () {
+				console.log(obj)
 				obj.final_sum=(obj.final_sum-item.totalPrice).toFixed(2);
 				obj.count-=item.count;
-				var index=obj.indexOf(item);
-				obj.splice(index,1);
+				var index=obj.goodsList.indexOf(item);
+				obj.goodsList.splice(index,1);
+				var type_index=self.infoMessage.indexOf(obj);
+				if(obj.goodsList.length===0){
+					self.infoMessage.splice(type_index,1);
+				}
 			});
 		} else {
 

@@ -403,7 +403,8 @@ class Simple extends IController
 		$final_sum     		= 0;
 		foreach($orderData as $orderKey => $goodsResult)
 		{
-			list($seller_id, $supplier_id, $ware_house_name) = CountSum::parseOrderKey($orderKey);
+		    $supplier_values = CountSum::parseOrderKey($orderKey);
+			list($seller_id, $supplier_id, $ware_house_name) = $supplier_values;
 			
 			//====================================
 			/* 使用优惠券 */
@@ -421,7 +422,7 @@ class Simple extends IController
 			/* 计算邮费 */
 			$goodsResult['deliveryPrice'] = Api::run('goodsDelivery',$goodsResult['goodsResult']['goodsList'],'goods_id',$goodsResult['is_delivery']);
 			//====================================
-			
+
 			//生成的订单数据
 			$dataArray = array(
 				'order_no'            => Order_Class::createOrderNum(),
@@ -489,6 +490,12 @@ class Simple extends IController
 				
 				//订单购买类型
 				'type_source' 		  => empty($gid) ? 2 : 1, //1单个商品购买-2购物车购买
+
+                //supplier
+				'supplier_id' 		  => $supplier_id,
+
+                //duties
+                'duties' => $orderData[join('.',$supplier_values)]['duties']
 			);
 
 			//获取红包减免金额
@@ -540,6 +547,7 @@ class Simple extends IController
 
 			//生成订单插入order表中
 			$orderObj  = new IModel('order');
+
 			$orderObj->setData($dataArray);
 			$order_id = $orderObj->add();
 

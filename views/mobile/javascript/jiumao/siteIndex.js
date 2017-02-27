@@ -346,7 +346,6 @@ function index_home(self){
 				}if(hours<10){
 					hours = "0"+parseInt(hours);
 				}
-				
 				document.getElementById("timer_hhh").innerHTML = hours;
 				document.getElementById("timer_mmm").innerHTML = minutes;
 				document.getElementById("timer_sss").innerHTML = seconds
