@@ -153,6 +153,7 @@
 									<%item = templateData[item]%>
 									<tr class='td_c'>
 										<td><input class="small" name="_goods_no[<%=i%>]" type="text" value="<%=item['goods_no'] ? item['goods_no'] : item['products_no']%>" /></td>
+										<input type='hidden' name="_specArrayId[<%=i%>]" value="<%=item['spec_array_id']%>" />										
 										<%var isProduct = false;%>
 										<%var specArrayList = parseJSON(item['spec_array'])%>
 										<%for(var result in specArrayList){%>
