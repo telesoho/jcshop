@@ -600,14 +600,15 @@
     position:relative;
 }
 .select_size .size h4{
-    margin-top:0.1rem;
+    margin-top:0.2rem;
+    margin-bottom:0.1rem;
     font-size:0.3rem;
     color:#646464;
 }
 .select_size .size .cho_size{
     max-height:2.2rem;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling : touch;
+    overflow-y: hidden;
+    /*-webkit-overflow-scrolling : touch;*/
 }
 .select_size .size span{
     display: inline-block;
@@ -635,6 +636,7 @@
     font-size:0.3rem;
     color:#646464;
     padding-left:0.1rem;
+    margin: 0.1rem 0;
 }
 .select_center_a{
     width:1.93rem;

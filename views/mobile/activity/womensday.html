@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+    	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>3.7女生节</title>
+		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
+		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/womensday.css?v=<?php echo time(); ?>"/>
+	</head>
+	<body>
+		<div id="wrap" v-cloak>
+		
+		<header id="wom">
+			<img src="/views/mobile/skin/default/image/jmj/active_womensday/01.png" width="100%"/>
+		</header>
+		<aside>
+			<h1>
+				<p>
+					<img src="/views/mobile/skin/default/image/jmj/active_womensday/huaban.png" style="width: 0.35rem"/>
+					<t>想怎么画就怎么化</t>
+					<t>没有丑宝宝，只有懒宝宝</t>
+				</p>
+				<span @click="wom_detail(1)">更多</span>
+			</h1>
+			<ul>
+				<li v-for="item in info1" @click="producted(item.id)">
+					<div>
+						<img :src="item.img"/>
+					</div>
+					<p>{{item.name}}</p>
+					<span class="span1">¥ <span>{{item.sell_price}}</span></span>
+					<img src="/views/mobile/skin/default/image/jmj/active_womensday/logo.png" class="logo"/>
+				</li>
+			</ul>
+		</aside>
+		<aside>
+			<h1>
+				<p>
+					<img src="/views/mobile/skin/default/image/jmj/active_womensday/huazhuang.png" style="width: 0.29rem"/>
+					<t>护肤要从仙女宝宝抓起</t>
+					<t>我爱护肤皮肤好好o(≧v≦)o~~！</t>
+				</p>
+				<span @click="wom_detail(2)">更多</span>
+			</h1>
+			<ul>
+				<li v-for = "item in info2" @click="producted(item.id)">
+					<div>
+						<img :src="item.img"/>
+					</div>
+					<p>{{item.name}}</p>
+					<span class="span1">¥ <span>{{item.sell_price}}</span></span>
+					<img src="/views/mobile/skin/default/image/jmj/active_womensday/logo.png" class="logo"/>
+				</li>
+			</ul>
+		</aside>
+		<aside>
+			<h1>
+				<p>
+					<img src="/views/mobile/skin/default/image/jmj/active_womensday/meiti.png" style="width: 0.28rem"/>
+					<t>我除了爱美，大概就爱瘦了</t>
+					<t>离夏天不远啦！一起来把冬天储存的脂肪减掉吧(￣︶￣)</t>
+				</p>
+				<span @click="wom_detail(3)">更多</span>
+			</h1>
+			<ul>
+				<li v-for = "item in info3" @click="producted(item.id)">
+					<div>
+						<img :src="item.img"/>
+					</div>
+					<p>{{item.name}}</p>
+					<span class="span1">¥ <span>{{item.sell_price}}</span></span>
+					<img src="/views/mobile/skin/default/image/jmj/active_womensday/logo.png" class="logo"/>
+				</li>
+			</ul>
+		</aside>
+		<aside>
+			<h1>
+				<p class="public_titles">
+					<img src="/views/mobile/skin/default/image/jmj/active_womensday/meis.png" style="width: 0.42rem"/>
+					<t>有美食的时候，原则是什么？</t>
+					<t>o(*≧▽≦)ツ今天追剧的搭档就是你了！！喵呜~！</t>
+				</p>
+				<span @click="wom_detail(4)">更多</span>
+			</h1>
+			<ul>
+				<li v-for="item in info4" @click="producted(item.id)">
+					<div>
+						<img :src="item.img"/>
+					</div>
+					<p>{{item.name}}</p>
+					<span class="span1">¥ <span>{{item.sell_price}}</span></span>
+					<img src="/views/mobile/skin/default/image/jmj/active_womensday/logo.png" class="logo"/>
+				</li>
+			</ul>
+		</aside>
+			<whether :state="true"></whether>
+		</div>
+		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/components/Whether.js?v=<?php echo time(); ?>"></script>
+		<script type="text/javascript">
+			var vm = new Vue({
+				el:"#wrap",
+				data:{
+					info1:[],
+					info2:[],
+					info3:[],
+					info4:[]
+				},
+				computed:{
+					
+				},
+				mounted:function(){
+					var self = this;
+					womensday1(self);
+					womensday2(self);
+					womensday3(self);
+					womensday4(self);
+				},
+				methods:{
+					producted:function(id){
+						window.location.href = "/site/products?id="+id;
+					},
+					wom_detail:function(id){
+						removeSessionItem("info")
+						window.location = "/activity/womensday_datail?id="+id
+					}
+				}
+			})
+			function womensday1(self){
+				$.ajax({
+					type:"get",
+					dataType:"json",
+					url:"/apic/goods_list",
+					data:{
+						aid:9,
+						cid:134,
+						pagesize:4
+					},
+					async:true,
+					success:function(data){
+						console.log(data);
+						self.info1 = data.data
+					}
+				});
+			}
+			function womensday2(self){
+				$.ajax({
+					type:"get",
+					dataType:"json",
+					url:"/apic/goods_list",
+					data:{
+						aid:9,
+						cid:126,
+						pagesize:4
+					},
+					async:true,
+					success:function(data){
+						self.info2 = data.data;
+					}
+				});
+			}
+			function womensday3(self){
+				$.ajax({
+					type:"get",
+					dataType:"json",
+					url:"/apic/goods_list",
+					data:{
+						aid:9,
+						cid:186,
+						pagesize:4
+					},
+					async:true,
+					success:function(data){
+						self.info3 = data.data;	
+					}
+				});
+			}
+			function womensday4(self){
+				$.ajax({
+					type:"get",
+					dataType:"json",
+					url:"/apic/goods_list",
+					data:{
+						aid:9,
+						cid:7,
+						pagesize:4
+					},
+					async:true,
+					success:function(data){
+						self.info4 = data.data;
+					}
+				});
+			}
+		 function removeSessionItem(key){
+	        window.sessionStorage.removeItem(key);
+	    }
+		</script>
+	</body>
+</html>

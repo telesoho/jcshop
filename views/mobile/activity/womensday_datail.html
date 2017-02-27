@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+    	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
+		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/womensday.css?v=<?php echo time(); ?>"/>
+	</head>
+	<body>
+		<div id="wrap_detail" v-cloak>
+		<!--<loadding :mes="true"></loadding>-->
+		<header id="detail_">
+			<div class="left_top top_img"><img src="/views/mobile/skin/default/image/jmj/active_womensday/left_.png" style="width: 1.8rem;"/></div>
+			<div class="public_title">
+				<img :src="objext_date.img" :style="objext_title.style"/>
+					<t>{{objext_title.title1}}</t>
+					<t>{{objext_title.title2}}</t>
+				</div>
+			<div class="right_top top_img"><img src="/views/mobile/skin/default/image/jmj/active_womensday/right_.png" style="width: 2.07rem;"/></div>
+		</header>
+		<section>
+			<ul>
+				<li v-for="item in info" @click="products_(item.id)">
+					<div>
+						<img :src="item.img"/>
+					</div>
+					<p>{{item.name}}</p>
+					<span class="span1">¥ <span>{{item.sell_price}}</span></span>
+					<img src="/views/mobile/skin/default/image/jmj/active_womensday/logo.png" class="logo"/>
+				</li>
+			</ul>
+		</section>
+		<whether :state="stateobject"></whether>	
+		</div>
+		<script src="/views/mobile/javascript/vue.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/components/Whether.js?v=<?php echo time(); ?>"></script>
+		<script src="/views/mobile/components/loadding.js?v=<?php echo time(); ?>"></script>
+		<script type="text/javascript">
+		var Request = new Object();
+	    Request = objectid();
+	    var statusOrder=parseInt(Request["id"]);
+//		objext_date要穿的参数
+		var objext_date={
+			cid:"",
+			aid:"9",
+			page:1
+		}
+//		objext_title前端获取要改变的数据
+		var objext_title={
+			img:"",
+			title:"",
+			title1:"",
+			title2:""
+		}
+			var vm = new Vue({
+				el:"#wrap_detail",
+				data:{
+					objext_date:objext_date,
+					objext_title:objext_title,
+					info : [],
+					stateobject:false
+				},
+				computed:{
+					
+				},
+				mounted:function(){
+					var self = this;
+					a_detail();
+					if(getSession("info")){
+						self.info = getSession("info")
+					}else{
+						self.info = []
+						wom_detail(self);
+					}
+					
+				},
+				updated:function(){
+					document.title = this.objext_title.title;
+					setTimeout(function(){
+						vm.stateobject = true;
+					},500)
+				},
+				methods:{
+					products_:function(id){
+						console.log(id);
+						window.location.href = "/site/products?id="+id;
+					}
+				}
+			})
+			
+			//ajax 请求获取数据
+			function wom_detail(self){
+				$.ajax({
+					type:"get",
+					dataType:"json",
+					url:"/apic/goods_list",
+					data:self.objext_date,
+					async:true,
+					success:function(data){
+						document.title = self.objext_title.title;
+						data.data.map(function(item){
+							self.info.push(item);
+						})
+						self.stateobject = true;
+						pushSession("info",self.info);
+					}
+				});
+			};
+	
+	//通过switch判断上一个页面跳转过来对应的id ==> 对应的响应的数据
+			function a_detail(){
+				switch (statusOrder)
+					{
+					case 1:
+					  	objext_date.cid=126;
+					  	objext_title.img="/views/mobile/skin/default/image/jmj/active_womensday/huaban.png";
+					   	objext_title.title="想怎么画就怎么化";
+					   	objext_title.title1="想怎么画就怎么化";
+					   	objext_title.title2="没有丑宝宝，只有懒宝宝";
+					   	objext_title.style = "width: 0.35rem"
+					  break;
+					  
+					case 2:
+					  objext_title.img="/views/mobile/skin/default/image/jmj/active_womensday/huazhuang.png";
+					  objext_title.title="护肤要从仙女宝宝抓起";
+					  objext_title.title1="护肤要从仙女宝宝抓起";
+					  objext_title.title2="我爱护肤皮肤好好o(≧v≦)o~~！";
+					  objext_date.cid=134;
+					  objext_title.style="width: 0.29rem"
+					  break;
+					  case 3:
+					  objext_title.img="/views/mobile/skin/default/image/jmj/active_womensday/meiti.png";
+					  objext_title.title="我除了爱美，大概就爱瘦了";
+					  objext_title.title1="我除了爱美，大概就爱瘦了";
+					  objext_title.title2="离夏天不远啦！一起来把冬天储存的脂肪减掉吧(￣︶￣)";
+					  objext_date.cid=186;
+					  objext_title.style = "width: 0.28rem"
+					  break;
+					  case 4:
+					  objext_title.img="/views/mobile/skin/default/image/jmj/active_womensday/meis.png";
+					  objext_title.title="有美食的时候，原则是什么？";
+					  objext_title.title1="有美食的时候，原则是什么？";
+					  objext_title.title2="o(*≧▽≦)ツ今天追剧的搭档就是你了！！喵呜~！";
+					  objext_date.cid=7;
+					  objext_title.style = "width: 0.42rem"
+					  break;
+					default:
+					  break;
+					}
+			}
+			//下拉加载
+			$(window).bind("scroll",function(){
+				if($(window).scrollTop()+$(window).height()>$(document).height() && $(window).scrollTop()>25){
+					console.log($(window).scrollTop())
+				}
+			})
+			//使用缓存记录商品位置
+			 function pushSession(key,value){
+		        var val=JSON.stringify(value)?JSON.stringify(value):[];
+		        if(window.sessionStorage){
+		            sessionStorage.setItem(key,val);
+		        }else{
+		            console.log("无法使用缓存");
+		            return "";
+		        }
+		    }
+		    function getSession(key){
+		        if(window.sessionStorage){
+		            var state=sessionStorage.getItem(key)?sessionStorage.getItem(key):0;
+		            return JSON.parse(state);
+		        }else{
+		            console.log("无法使用缓存");
+		            return "";
+		        }
+		    }
+		   
+    
+			//获取传过来的id参数
+			function objectid(){
+				var id1 = location.search;	
+				var objects = new Object();
+				if(id1.indexOf("?")!=-1){
+					var id2 = id1.substr(1);
+					var id3 = id2.split("&");
+					console.log()
+					for(var i = 0;i<id3.length;i++){
+						objects[id3[i].split("=")[0]]=unescape(id3[i].split("=")[1]);
+					}
+				}
+				return objects;
+			}
+		</script>
+	</body>
+</html>
