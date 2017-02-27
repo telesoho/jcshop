@@ -913,8 +913,9 @@ class nysoDataImport extends pluginBase
 			//处理CSV数据
 			$theCsvData = array(
 				'seller_id'    => $this->seller_id,
+				'ware_house_id' => $wareHouseObj['id'],
 			);
-			
+
 			$theCsvData['sku_no'] = $sku_no;
 			$theCsvData['supplier_id'] = $supplier_id;
 
@@ -951,7 +952,7 @@ class nysoDataImport extends pluginBase
 				if ($sell_price <= 200) {
 					$theCsvData['market_price']  = $theCsvData['sell_price'] * 2 ;
 				} else {
-					$theCsvData['market_price']  = $theCsvData['sell_price']* 1.5 ;					
+					$theCsvData['market_price']  = $theCsvData['sell_price']* 1.5 ;
 				}
 			}
 			
