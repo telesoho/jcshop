@@ -42,6 +42,7 @@ class nysochina
         "PostSynchro"       =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
         "SkuSynchro"        =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
         "StockSynchro"      =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
+        "AddOrderKafkaTemp" =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
         "searchOrder"       =>  array("partner" => "nyso_supParenter", "key" => "nyso_supUserKey"),
         "orderDelivery"     =>  array("partner" => "nyso_supParenter", "key" => "nyso_supUserKey"),
         "supGoodsSynchro"   =>  array("partner" => "nyso_supParenter", "key" => "nyso_supUserKey"),
@@ -59,6 +60,7 @@ class nysochina
         "PostSynchro"       =>  "/api/PostSynchro.shtml",
         "SkuSynchro"        =>  "/api/SkuSynchro.shtml",
         "StockSynchro"      =>  "/api/StockSynchro.shtml",
+        "AddOrderKafkaTemp" =>  "/api/AddOrderKafkaTemp.shtml",
 
         // 妮素供应商平台接口
         "searchOrder"       =>  "/api/sup/searchOrder.shtml",

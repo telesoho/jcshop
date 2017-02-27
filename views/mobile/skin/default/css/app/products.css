@@ -600,7 +600,8 @@
     position:relative;
 }
 .select_size .size h4{
-    margin-top:0.1rem;
+    margin-top:0.2rem;
+    margin-bottom:0.1rem;
     font-size:0.3rem;
     color:#646464;
 }
@@ -635,6 +636,7 @@
     font-size:0.3rem;
     color:#646464;
     padding-left:0.1rem;
+    margin: 0.1rem 0;
 }
 .select_center_a{
     width:1.93rem;

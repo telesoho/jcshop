@@ -1,0 +1,160 @@
+body,html{
+	background: #f5f5f5;
+}
+li{
+	list-style: none;
+}
+#wom{
+	overflow: hidden;
+}
+#wom img{
+	display: block;
+}
+aside{
+	background: #fff;
+	overflow: hidden;
+}
+aside h1{
+	height: 1.5rem;
+	display: -webkit-flex;
+	position: relative;
+	-webkit-align-items: center;
+	-webkit-justify-content: center;
+}
+aside h1 p{
+	height: 1rem;
+	text-align: center;
+}
+aside h1 p t:nth-of-type(1){
+	font-size:0.32rem;
+	color:#11c1e1;
+}
+aside h1 p t:nth-of-type(2){
+	opacity:0.6;
+	font-size:0.26rem;
+	color:#11c1e1;
+	display: block;
+	margin-top: 0.2rem;
+}
+aside h1 span{
+	font-size:0.28rem;
+	color:#698dd7;
+	margin-right: 0.5rem;
+	position: absolute;
+	right: -0.2rem;
+	top: 0.3rem;
+}
+ul{
+	margin-top:0.05rem ;
+	background: #f5f5f5;
+	display: -webkit-flex;
+	-webkit-justify-content: space-between;
+	flex-wrap: wrap;
+	padding-top: 0.1rem;
+}
+ul li{
+	background: #fff;
+	width: 3.7rem;
+	height: 4.56rem;
+	margin-bottom: 0.1rem;
+	overflow: hidden;
+	position: relative;
+}
+ul li div{
+	width: 100%;
+	height: 3.5rem;
+	display: -webkit-flex;
+	-webkit-justify-content: center;
+	-webkit-align-items: center;
+}
+ul li div img{
+	width: 2.9rem;
+	height: 2.9rem;
+	text-align: center;
+}
+ul li p{
+	margin-top: 0.1rem;
+	width: 3.33rem;
+	margin-left: 0.15rem;
+	font-size:0.24rem;
+	color:#0f0f0f;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+ ul li .span1{
+	display: block;
+	margin-top: 0.11rem;
+	margin-left: 0.15rem;
+	font-size:0.24rem;
+	color:#ff2f5c;
+	font-weight: 700;
+}
+ul li .span1 span{
+	font-family:HelveticaNeue;
+	font-size:0.36rem;
+	color:#ff2f5c;
+	text-align:left;
+	font-weight: 700;
+}
+ul li .logo{
+	width: 1.2rem;
+	position: absolute;
+	top: 0.1rem;
+	left: 0.14rem;
+}
+aside{
+  position: relative;
+}
+aside h1 span:after, aside h1 span:before {
+  border: 0.13rem solid transparent;
+  border-left: 0.13rem solid #fff;
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 0.08rem;
+  right: -0.3rem;
+  content: ' '
+}
+
+aside h1 span:before {
+  border-left-color: #698dd7;
+  right: -0.32rem;
+}
+
+/*详情*/
+#detail_{
+	height: 1.86rem;
+	width: 100%;
+	background: #fff;
+	position: relative;
+	overflow: hidden;
+}
+#detail_ .public_title{
+	height: 1rem;
+	text-align: center;
+	margin-top: 0.6rem;
+}
+#detail_ .public_title t:nth-of-type(1){
+	font-size:0.32rem;
+	color:#11c1e1;
+}
+#detail_ .public_title t:nth-of-type(2){
+	opacity:0.6;
+	font-size:0.26rem;
+	color:#11c1e1;
+	display: block;
+	margin-top: 0.2rem;
+}
+#detail_ .top_img{
+	position: absolute;
+	width: 1.8rem;
+	top: 0.8rem;
+}
+#detail_ .left_top{
+	left: 0.17rem;
+}
+#detail_ .right_top{
+	left: 5.33rem;
+	width: 2.7rem;
+}

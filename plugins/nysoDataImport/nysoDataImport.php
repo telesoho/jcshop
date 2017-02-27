@@ -7,6 +7,8 @@
 class nysoDataImport extends pluginBase
 {
 
+	const NYSO_SUPPLIER_ID = 1;
+	const NYSO_ORDER_PRE = "JM-";
 	private $exchange_rate_jp;	// 日币对人民币汇率
 	private $pluginDir;
 
@@ -78,6 +80,58 @@ class nysoDataImport extends pluginBase
 		plugin::reg("onBeforeCreateAction@nyso@nyso_order_syn",function(){
             self::controller()->nyso_order_syn = function(){
 				$this->nyso_order_syn();
+			};
+		});
+
+		// 注册妮素运单同步接口
+		plugin::reg("onBeforeCreateAction@nyso@nyso_post_syn",function(){
+            self::controller()->nyso_post_syn = function(){
+				$this->nyso_post_syn();
+			};
+		});
+
+		// 注册妮素订单同步接口
+		plugin::reg("onBeforeCreateAction@nyso@nyso_order_asyn",function(){
+            self::controller()->nyso_order_asyn = function(){
+				$this->nyso_order_syn();
+			};
+		});
+
+		plugin::reg("onBeforeCreateAction@nyso@OrderAsynNotify", function(){
+			self::controller()->OrderAsynNotify = function() {
+				// 初始化妮素平台接口
+				nysochina::init($this->config());
+
+				$param = $this->getRequestParam("OrderAsynNotify");
+				// 订单流水号
+				$orderNo = $param['OrderNo'];
+				/*
+				0000	成功
+				9004	消息解析失败
+						具体错误信息
+				9999	参数不能为空
+						具体错误信息
+				*/
+				$code = $param['Code'];
+				$message = $param['Message'];
+				
+				if($code === "0000") {
+					try{
+						$orderDB = new IModel("order as o");
+						$updateOrder['supplier_syn_date'] = date('Y-m-d H:i:s', time());
+						$orderDB->setData($updateOrder);
+						$orderDB->update("order_no = '$orderNo'");
+					}catch(Exception $e) {
+						$this->error($e->getMessage(), $param);
+						$ret = array("Success" => false);
+						$this->exitJSON($ret);
+					}
+				} else {
+					$this->error($message, $param);
+				}
+
+				$ret = array("Success" => true);
+				$this->exitJSON($ret);
 			};
 		});
 
@@ -180,6 +234,67 @@ class nysoDataImport extends pluginBase
 				}
 			};
 		});
+	}
+
+
+
+	/**
+	 * 输出错误日志，并以JSON形式返回错误结果
+	 */
+	private function exitError($errMsg, $context = array()) {
+		$this->error($errMsg, $context);
+		$this->exitJSON($this->data);
+	}
+
+	// 计算token
+	private function toToken($parenter_key, $api_name, $param) {
+		//当前系统时间：格式为yyyy-MM-dd
+        $dateStr = date("Y-m-d");
+		$paramContent = json_encode($param);
+        $tokenStr = $parenter_key . $dateStr . $api_name . $paramContent;
+
+        $token = strtoupper(md5($tokenStr));
+		return $token;
+	}
+	
+	/**
+	 * 取出查询参数
+	 * @param $validators 校验器
+	 * @return 查询参数数组
+	 */
+	private function getRequestParam($api_name, $validators = array()) {
+		// 取出请求头
+		$headers = apache_request_headers();
+		if(!isset($headers['interfacename']) || !isset($headers['token'])) {
+			$this->exitError("接口验证失败", array(__LINE__, $headers));
+		}
+
+		// 接口验证
+		$interfacename = $headers['interfacename'];
+		if($api_name !== $this->interfacename) {
+			$this->exitError("接口验证失败", array(__LINE__, $headers));
+		}
+
+		$parenter_key = $result['partner_key'];
+
+		// 验证token
+		$token = $headers['token'];
+
+		// 取出请求内容
+		$param = @file_get_contents('php://input');
+		$genToken = $this->toToken($partner_key, $interfacename, $param);
+		if($token !== $genToken) {
+			$this->exitError("接口验证失败", array(__LINE__, $genToken, $headers));
+		}
+		
+		$paramContent = json_decode($param, true);
+		$v = new Validator();
+		if(!$v->validate_array($paramContent, $validators))
+		{
+			$this->exitError("参数验证失败", array(__LINE__, "messages" => $v->getErrMsg(), $paramContent, $headers));
+		}
+
+		return $paramContent;
 	}
 
 	private function processSearchOrder($reqOutput) {
@@ -310,7 +425,7 @@ class nysoDataImport extends pluginBase
      */
 	private function exitJSON($data){
 		header('Content-type: application/json');
-		echo json_encode($data);
+		echo JSON::encode($data);
 		exit();
 	}
 
@@ -357,6 +472,47 @@ class nysoDataImport extends pluginBase
 				$orderDB->setData($updateOrder);
 				$orderDB->update("id=" . $jcOrder['id']);
 				$this->info($jcOrder['order_no'] . "订单同步成功", $jcOrder);
+			} 
+			catch(Exception $e) {
+				$this->error($e->getMessage() . "=>" .$jcOrder['order_no'], $jcOrder);
+				continue;
+			}
+		}
+
+		$this->exitJSON($this->data);
+	}
+
+
+	/**
+	 * 异步方式添加妮素订单
+	 * 将包含妮素商品的订单同步到妮素平台，并设置同步标志
+	 */
+	private function nyso_order_asyn() {
+		set_time_limit(0);
+		ini_set("max_execution_time",0);
+
+		// 初始化妮素平台接口
+		nysochina::init($this->config());
+
+		$query         = new IQuery('order AS o');
+		$query->join   = 'LEFT JOIN areas AS a1 ON o.province = a1.area_id '
+						.'LEFT JOIN areas AS a2 ON o.city = a2.area_id '
+						.'LEFT JOIN areas AS a3 ON o.area = a3.area_id '
+						.'LEFT JOIN user AS u on o.user_id = u.id';
+		$query->where  = 'o.supplier_id = 1 and isnull(supplier_syn_date) and pay_status = 1';
+		$query->fields = 'a1.area_name as province_name, a2.area_name as city_name, a3.area_name as area_name,'
+						.'u.sfz_name as payer_name, u.sfz_num as payer_id_card, o.*';
+		$jcOrderList   = $query->find();
+
+		if(count($jcOrderList) < 1) {
+			$this->info("没有发现妮素订单");
+			$this->exitMSG($this->data);
+		}
+
+		foreach($jcOrderList as $jcOrder) {
+			try {
+				$nysoOrder = $this->toNysoOrder($jcOrder);
+				nysochina::run("AddOrderKafkaTemp", $nysoOrder);
 			} 
 			catch(Exception $e) {
 				$this->error($e->getMessage() . "=>" .$jcOrder['order_no'], $jcOrder);
@@ -425,7 +581,7 @@ class nysoDataImport extends pluginBase
 	private function toNysoOrder($jcOrder) {
 		$nysoOrder = array();
 
-		$orderNo = "JC-". $jcOrder["order_no"];					// 订单号形式："JC-" + 九猫商城订单号
+		$orderNo = self::NYSO_ORDER_PRE . $jcOrder["order_no"];					// 订单号形式："JM-" + 九猫商城订单号
         $nysoOrder["OrderNo"] = $orderNo;						// 订单号
 		$nysoOrder["OrderTime"] = date("YmdHis",strtotime($jcOrder["pay_time"]));	// 下单时间
         $nysoOrder["PayType"] = $this->toNysoPayType($jcOrder["pay_type"]);		// 支付方式
@@ -751,6 +907,7 @@ class nysoDataImport extends pluginBase
 			}
 
 			// 查询商品是否存在, 如果商品存在，则$goodsObj是该商品记录，否则为false
+			$where = "supplier_id = $supplier_id and sku_no = '$sku_no'";
 			$goodsObj = $goodsDB->getObj($where);
 
 			//处理CSV数据
@@ -951,7 +1108,11 @@ class nysoDataImport extends pluginBase
 
 			//  设置商品详情图
 			if($contentPic) {
-				$content = $theGoodsData['content'];
+				if(isset($theGoodsData['content'])){
+					$content = $theGoodsData['content'];
+				} else {
+					$content = "";
+				}
 				foreach($contentPic as $pic) {
 					// 如果该图片在详情中没有，则将该链接增加到详情中
 					if(strpos($content, $pic) === false)
@@ -1021,15 +1182,6 @@ class nysoDataImport extends pluginBase
 				// 查找与分类名相同的分类ID
 				$cids = $this->getCategoryIds($field, $this->seller_id);
 
-				// 如果用户选择了分类，则查找需要追加的分类
-				if($this->category)
-				{
-					foreach($this->category as $catId)
-					{
-						$cids[] = $catId;
-					}
-				}
-
 				foreach($cids as $cid) {
 					// 查询商品是否与分类关联
 					$ret = $cateExtendDB->get_count("goods_id =$goods_id and category_id =$cid");
@@ -1086,7 +1238,19 @@ class nysoDataImport extends pluginBase
 			}
 		}
 	}
+	// 取得$seller_id与$parent_id类目下相同的类目名的所有类目ID
+	private function getCategoryIds($name, $seller_id, $goods_id=null, $parent_id=null) {
 
+		$ret = [];
+		$category = new IModel('category');
+
+		$theCat = $category->query('name ="' . $name . '" and seller_id=' . $seller_id);
+		foreach($theCat as $catId){
+			$ret[] = $catId['id']; 
+		}
+
+		return $ret;
+	}
 	/**
 	 * 将妮素商品数据转换为jcshop商品数据
 	 * @param $goods 妮素商品数据
@@ -1206,6 +1370,142 @@ class nysoDataImport extends pluginBase
 		$this->exitJSON($this->data);
 	}
 
+	// 妮素运单同步
+	public function nyso_post_syn() {
+		set_time_limit(0);
+		ini_set("max_execution_time",0);
+
+		// 初始化妮素平台接口
+		nysochina::init($this->config());
+		
+		// 读取所有已经推到妮素平台，但还没有运单信息的妮素订单
+		$orderQuery = new IQuery("order");
+		$orderQuery->where = "not ISNULL(supplier_syn_date) and distribution_status = 0 and status = 2 and supplier_id = " . self::NYSO_SUPPLIER_ID;
+		$orderQuery->fields = "order_no";
+		$orders = $orderQuery->find();
+		$nysoOrders = array();
+		foreach($orders as $order) {
+			$nysoOrders[] = self::NYSO_ORDER_PRE . $order['order_no'];
+		}
+
+		if(!$nysoOrders) {
+			$this->info("没有找到需要同步的妮素云单");
+			// 以JSON形式输出执行结果
+			$this->exitJSON($this->data);			
+		}
+
+		try {
+			// 通过妮素运单API读取指定订单的运单信息
+			$nysoPosts = nysochina::getPosts($nysoOrders);
+		}
+		catch (Exception $e) {
+			$this->error( $e->getMessage(),$nysoOrders);
+			// 以JSON形式输出执行结果
+			$this->exitJSON($this->data);			
+		}
+
+		// 对每个运单做如下处理
+		foreach($nysoPosts as $post){
+			try {			
+				// 将妮素运单数据转换为九猫运单数据
+				$deliveryDoc = $this->nysoPost2DeliveryDoc($post);
+			}
+			catch (Exception $e) {
+				$this->error($e->getMessage(),$post);
+				continue;
+			}
+		}
+
+		// 以JSON形式输出执行结果
+		$this->exitJSON($this->data);		
+	}
+
+	// 将妮素运单数据转换为九猫运单数据
+	//     {
+	//         "SendDate":"2016-10-20 12:00:00.0",
+	//         "PostNo":"807896321329",
+	//         "OrderNo":"JM-2014O20610196365",
+	//         "PostCode":"yuantong", // 圆通
+	//     }
+	protected function nysoPost2DeliveryDoc($nysoPost) {
+		$jcOrderNo = $nysoPost['OrderNo'];
+		$orderDB = new IModel("order");
+		$orderObj = $orderDB->getObj("order_no = '$jcOrderNo' and supplier_id = 1 ");
+
+
+		$freightId = $this->nysoPostCodet2freightId($nysoPost['PostCode']);
+		$deliveryDocData = array();
+
+		$deliveryDocData['order_id'] = $orderObj['id'];
+		$deliveryDocData['user_id'] = $orderObj['user_id'];
+		$deliveryDocData['name'] = $orderObj['accept_name'];
+		$deliveryDocData['postcode'] = $orderObj['postcode'];
+		$deliveryDocData['telphone'] = $orderObj['telphone'];
+		$deliveryDocData['country'] = $orderObj['country'];
+		$deliveryDocData['province'] = $orderObj['province'];
+		$deliveryDocData['city'] = $orderObj['city'];
+		$deliveryDocData['area'] = $orderObj['area'];
+		$deliveryDocData['address'] = $orderObj['address'];
+
+		$deliveryDocData['mobile'] = $orderObj['mobile'];
+		$deliveryDocData['time'] = $nysoPost['SendDate'];	// 货单发送时间	
+		$deliveryDocData['freight'] = $orderObj['real_freight'];
+		$deliveryDocData['delivery_code'] = $nysoPost['PostNo'];	// 物流单号
+		$deliveryDocData['delivery_type'] = 5;				// 物流方式 对应deliver表的：1号货仓
+		$deliveryDocData['note'] = $orderObj['postscript'];
+		$deliveryDocData['freight_id'] = $freightId;
+
+
+		// 将九猫运单数据保存到 delivery_doc
+		// $orderDB = new IModel("order");
+		$deliveryDocDB = new IModel("delivery_doc");
+		$deliveryDocObj = $deliveryDocDB->getObj("order_id = " . $deliveryDocData['order_id'] . " and '" . $deliveryDocData['delivery_code'] ."'");
+
+		if($deliveryDocObj) {
+			$deliveryDocDB->setData($deliveryDocData);
+			$deliveryDocDB->update("id=" . $deliveryDocObj['id']);
+		} else {
+			$deliveryDocDB->setData($deliveryDocData);
+			$deliveryDocDB->add();
+		}
+
+		// 修改order表
+		$orderObj['supplier_syn_date'] =  $nysoPost['nysoPost'];	// 发货日期
+		$orderObj['distribution_status'] = '1'; //配送状态 0：未发送,1：已发送,2：部分发送
+		$orderDB->setData($orderObj);
+		$orderDB->update("id = ". $orderObj['id']);
+
+	}
+
+	// 将妮素PostCode转为对应的快递公司ID
+	protected function nysoPostCodet2freightId($nysoPostCode) {
+		$nysoPostCode = array(
+			"shentong" => "STO",//申通
+			"yunda" => "YD",//韵达
+			"yuantong" => "YTO",//圆通
+			"zhongtong" => "ZTO",//中通
+			"ems" => "EMS",//EMS
+			"shunfeng" => "SF",//顺丰
+			"huitongkuaidi" => "HTKY",//百世快递
+			"youzheng" => "YZPY",//中国邮政 邮政平邮/小包
+			"debangwuliu" => "DBL",//德邦
+			"guotongkuaidi" => "GTO",//国通
+			"kuaiyuntong" => "ZTKY",//快运通 中铁快运
+		);
+		if(!isset($nysoPostCode[$nysoPostCode]))
+		{
+			return 0;
+		}
+
+		$freightType = $nysoPostCode[$nysoPostCode];
+		$freightCompanyDB = new IModel("freight_company");
+		$freightCompanyObj = $freightCompanyDB->getObj("freight_type = '$freightType'");
+		if(!$freightCompanyObj) {
+			return 0;
+		}
+		return $freightCompanyObj['id'];
+	}
+
 	// 输出INFO日志
 	protected function info($msg, $obj = null){
 		if(!isset($this->data['info']))
@@ -1259,7 +1559,7 @@ class nysoDataImport extends pluginBase
 			"PostSynchro" => array("name" => "运单同步接口","type" => "text","pattern" => "required", "value" => "/api/PostSynchro.shtml"),
 			"SkuSynchro" => array("name" => "商品同步接口","type" => "text","pattern" => "required", "value" => "/api/SkuSynchro.shtml"),
 			"StockSynchro" => array("name" => "库存同步接口","type" => "text","pattern" => "required", "value" => "/api/StockSynchro.shtml"),
-
+	        "AddOrderKafkaTemp" =>  array("name" => "异步新增订单接口","type" => "text","pattern" => "required", "value" => "/api/AddOrderKafkaTemp.shtml"),
 
 	        // 妮素平台供应商接口
 			"searchOrder" => array("name" => "供应商订单抓取接口","type" => "text","pattern" => "required", "value" => "/api/sup/searchOrder.shtml"),
