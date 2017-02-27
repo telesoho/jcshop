@@ -74,7 +74,7 @@
 						{{info.name_de}}
 						<img src="/views/mobile/skin/default/image/jmj/product/rightQ.png" alt="" style="width:0.2rem;vertical-align: top"/>
 					</h3>
-					<p class="hidewrap">{{info.name}}</p>
+					<p class="hideCamp4">{{info.name}}</p>
 				</div>
 				<div class="name hideCamp4" v-if="info.name_de==''">{{info.name}}</div>
 				<!--有二级标题显示方法-->
@@ -417,7 +417,6 @@ var minutes,hours,seconds;
 					img:''
 				}]
 			},
-			sssssss:[],
 			weight:"",
 			relateArticle:[],
 			img1:'/views/mobile/skin/default/image/jmj/product/remove.png',
@@ -837,8 +836,6 @@ var minutes,hours,seconds;
 			timeout:10000,//超时时间设置为10秒；
 			success:function(data){
 				//轮播图展示页面
-				console.log(data.data);
-				self.sssssss = data;
 				if(data.data.speed == ""){
 					self.time_shop = false;
 					clearInterval(times);
