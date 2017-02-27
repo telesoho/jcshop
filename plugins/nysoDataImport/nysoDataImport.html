@@ -106,7 +106,7 @@
 
     // 商品库存同步
     function stocksSyn() {
-        var myDialog = art.dialog({title: '商品库存正在同步...'});// 初始化一个带有loading图标的空对话框
+        var myDialog = art.dialog({content: '正在同步妮素库存...', lock: true});// 初始化一个带有loading图标的空对话框
         jQuery.ajax({
             url: '{url:/nyso/nyso_stock_syn}',
             success: function (data) {
@@ -123,7 +123,7 @@
 
     // 订单同步
     function ordersSyn() {
-        var myDialog = art.dialog({title: '正在同步妮素订单...'});// 初始化一个带有loading图标的空对话框
+        var myDialog = art.dialog({content: '正在同步妮素订单...', lock: true});// 初始化一个带有loading图标的空对话框
         jQuery.ajax({
             url: '{url:/nyso/nyso_order_syn}',
             success: function (data) {
@@ -138,9 +138,26 @@
         });        
     }
 
+    // 运单同步
+    function postsSyn() {
+        var myDialog = art.dialog({content: '正在同步运单...', lock: true});// 初始化一个带有loading图标的空对话框
+        jQuery.ajax({
+            url: '{url:/nyso/nyso_post_syn}',
+            success: function (data) {
+                console.log("data", data);
+                if ( data instanceof Object) {
+                    $("#result").val(JSON.stringify(data, null, 2));
+                } else {
+                    $("#result").val(data);
+                }
+                myDialog.close();
+            }
+        });
+    }
+
     // 执行接口
     function runApi() {
-        var myDialog = art.dialog({title: '执行中...'});// 初始化一个带有loading图标的空对话框
+        var myDialog = art.dialog({content: '执行中...', lock: true});// 初始化一个带有loading图标的空对话框
         $.post("{url:/nyso/nyso_api}", $("#apiForm").serialize(),
             function(data){
                 console.log("data", data);

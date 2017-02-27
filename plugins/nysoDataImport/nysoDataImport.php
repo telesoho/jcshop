@@ -7,6 +7,8 @@
 class nysoDataImport extends pluginBase
 {
 
+	const NYSO_SUPPLIER_ID = 1;
+	const NYSO_ORDER_PRE = "JM-";
 	private $exchange_rate_jp;	// 日币对人民币汇率
 	private $pluginDir;
 
@@ -78,6 +80,13 @@ class nysoDataImport extends pluginBase
 		plugin::reg("onBeforeCreateAction@nyso@nyso_order_syn",function(){
             self::controller()->nyso_order_syn = function(){
 				$this->nyso_order_syn();
+			};
+		});
+
+		// 注册妮素运单同步接口
+		plugin::reg("onBeforeCreateAction@nyso@nyso_post_syn",function(){
+            self::controller()->nyso_post_syn = function(){
+				$this->nyso_post_syn();
 			};
 		});
 
@@ -425,7 +434,7 @@ class nysoDataImport extends pluginBase
 	private function toNysoOrder($jcOrder) {
 		$nysoOrder = array();
 
-		$orderNo = "JC-". $jcOrder["order_no"];					// 订单号形式："JC-" + 九猫商城订单号
+		$orderNo = self::NYSO_ORDER_PRE . $jcOrder["order_no"];					// 订单号形式："JM-" + 九猫商城订单号
         $nysoOrder["OrderNo"] = $orderNo;						// 订单号
 		$nysoOrder["OrderTime"] = date("YmdHis",strtotime($jcOrder["pay_time"]));	// 下单时间
         $nysoOrder["PayType"] = $this->toNysoPayType($jcOrder["pay_type"]);		// 支付方式
@@ -751,6 +760,7 @@ class nysoDataImport extends pluginBase
 			}
 
 			// 查询商品是否存在, 如果商品存在，则$goodsObj是该商品记录，否则为false
+			$where = "supplier_id = $supplier_id and sku_no = '$sku_no'";
 			$goodsObj = $goodsDB->getObj($where);
 
 			//处理CSV数据
@@ -951,7 +961,11 @@ class nysoDataImport extends pluginBase
 
 			//  设置商品详情图
 			if($contentPic) {
-				$content = $theGoodsData['content'];
+				if(isset($theGoodsData['content'])){
+					$content = $theGoodsData['content'];
+				} else {
+					$content = "";
+				}
 				foreach($contentPic as $pic) {
 					// 如果该图片在详情中没有，则将该链接增加到详情中
 					if(strpos($content, $pic) === false)
@@ -1021,15 +1035,6 @@ class nysoDataImport extends pluginBase
 				// 查找与分类名相同的分类ID
 				$cids = $this->getCategoryIds($field, $this->seller_id);
 
-				// 如果用户选择了分类，则查找需要追加的分类
-				if($this->category)
-				{
-					foreach($this->category as $catId)
-					{
-						$cids[] = $catId;
-					}
-				}
-
 				foreach($cids as $cid) {
 					// 查询商品是否与分类关联
 					$ret = $cateExtendDB->get_count("goods_id =$goods_id and category_id =$cid");
@@ -1086,7 +1091,19 @@ class nysoDataImport extends pluginBase
 			}
 		}
 	}
+	// 取得$seller_id与$parent_id类目下相同的类目名的所有类目ID
+	private function getCategoryIds($name, $seller_id, $goods_id=null, $parent_id=null) {
 
+		$ret = [];
+		$category = new IModel('category');
+
+		$theCat = $category->query('name ="' . $name . '" and seller_id=' . $seller_id);
+		foreach($theCat as $catId){
+			$ret[] = $catId['id']; 
+		}
+
+		return $ret;
+	}
 	/**
 	 * 将妮素商品数据转换为jcshop商品数据
 	 * @param $goods 妮素商品数据
@@ -1204,6 +1221,120 @@ class nysoDataImport extends pluginBase
 			}
 		}
 		$this->exitJSON($this->data);
+	}
+
+	// 妮素运单同步
+	public function nyso_post_syn() {
+		set_time_limit(0);
+		ini_set("max_execution_time",0);
+
+		// 初始化妮素平台接口
+		nysochina::init($this->config());
+		
+		// 读取所有已经推到妮素平台，但还没有运单信息的妮素订单
+		$orderQuery = new IQuery("order");
+		$orderQuery->where = "not ifnull(supplier_syn_date) and distribution_status = 0 and status = 2 and supplier_id = " . self::NYSO_SUPPLIER_ID;
+		$orderQuery->fields = "order_no";
+		$orders = $orderQuery->find();
+		$nysoOrders = array();
+		foreach($orders as $order) {
+			$nysoOrders[] = self::NYSO_ORDER_PRE . $order['order_no'];
+		}
+
+		// 通过妮素运单API读取指定订单的运单信息
+		$nysoPosts = nysochina::getPosts($nysoOrders);
+
+		// 对每个运单做如下处理
+		foreach($nysoPosts as $post){
+			// 将妮素运单数据转换为九猫运单数据
+			$deliveryDoc = $this->nysoPost2DeliveryDoc($post);
+
+
+		}
+
+		// 以JSON形式输出执行结果
+		$this->exitJSON($this->data);		
+	}
+
+	// 将妮素运单数据转换为九猫运单数据
+	//     {
+	//         "SendDate":"2016-10-20 12:00:00.0",
+	//         "PostNo":"807896321329",
+	//         "OrderNo":"JM-2014O20610196365",
+	//         "PostCode":"yuantong", // 圆通
+	//     }
+	protected function nysoPost2DeliveryDoc($nysoPost) {
+
+
+		$jcOrderNo = $nysoPost['OrderNo'];
+		$orderDB = new IModel("order");
+		$orderObj = $orderDB->getObj("order_no = '$jcOrderNo'");
+		if(!$orderObj) {
+			return null;
+		}
+
+
+		$freightId = $this->nysoPostCodet2freightId($nysoPost['PostCode']);
+		$deliveryDocData = array();
+
+		$deliveryDocData['order_id'] = $orderObj['id'];
+		$deliveryDocData['user_id'] = $orderObj['user_id'];
+		$deliveryDocData['name'] = $orderObj['accept_name'];
+		$deliveryDocData['postcode'] = $orderObj['postcode'];
+		$deliveryDocData['telphone'] = $orderObj['telphone'];
+		$deliveryDocData['country'] = $orderObj['country'];
+		$deliveryDocData['province'] = $orderObj['province'];
+		$deliveryDocData['city'] = $orderObj['city'];
+		$deliveryDocData['area'] = $orderObj['area'];
+		$deliveryDocData['address'] = $orderObj['address'];
+
+		$deliveryDocData['mobile'] = $orderObj['mobile'];
+		$deliveryDocData['time'] = $nysoPost['SendDate'];	// 货单发送时间	
+		$deliveryDocData['freight'] = $orderObj['real_freight'];
+		$deliveryDocData['delivery_code'] = $nysoPost['PostNo'];	// 物流单号
+		$deliveryDocData['delivery_type'] = 5;				// 物流方式 对应deliver表的：1号货仓
+		$deliveryDocData['note'] = $orderObj['postscript'];
+		$deliveryDocData['freight_id'] = $freightId;
+
+
+		// 将九猫运单数据保存到 delivery_doc和order表
+		// $orderDB = new IModel("order");
+		$deliveryDocDB = new IModel("delivery_doc");
+		$deliveryDocDB->getObj("order_id = " . $deliveryDocData['order_id'] . " and '" . $deliveryDocData['delivery_code']);
+
+
+
+		return $deliveryDocData;
+
+	}
+
+	// 将妮素PostCode转为对应的快递公司ID
+	protected function nysoPostCodet2freightId($nysoPostCode) {
+		$nysoPostCode = array(
+			"shentong" => "STO",//申通
+			"yunda" => "YD",//韵达
+			"yuantong" => "YTO",//圆通
+			"zhongtong" => "ZTO",//中通
+			"ems" => "EMS",//EMS
+			"shunfeng" => "SF",//顺丰
+			"huitongkuaidi" => "HTKY",//百世快递
+			"youzheng" => "YZPY",//中国邮政 邮政平邮/小包
+			"debangwuliu" => "DBL",//德邦
+			"guotongkuaidi" => "GTO",//国通
+			"kuaiyuntong" => "ZTKY",//快运通 中铁快运
+		);
+		if(!isset($nysoPostCode[$nysoPostCode]))
+		{
+			return 0;
+		}
+
+		$freightType = $nysoPostCode[$nysoPostCode];
+		$freightCompanyDB = new IModel("freight_company");
+		$freightCompanyObj = $freightCompanyDB->getObj("freight_type = '$freightType'");
+		if(!$freightCompanyObj) {
+			return 0;
+		}
+		return $freightCompanyObj['id'];
 	}
 
 	// 输出INFO日志
