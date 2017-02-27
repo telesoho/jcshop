@@ -1233,7 +1233,7 @@ class nysoDataImport extends pluginBase
 		
 		// 读取所有已经推到妮素平台，但还没有运单信息的妮素订单
 		$orderQuery = new IQuery("order");
-		$orderQuery->where = "not ifnull(supplier_syn_date) and distribution_status = 0 and status = 2 and supplier_id = " . self::NYSO_SUPPLIER_ID;
+		$orderQuery->where = "not ISNULL(supplier_syn_date) and distribution_status = 0 and status = 2 and supplier_id = " . self::NYSO_SUPPLIER_ID;
 		$orderQuery->fields = "order_no";
 		$orders = $orderQuery->find();
 		$nysoOrders = array();
@@ -1241,15 +1241,32 @@ class nysoDataImport extends pluginBase
 			$nysoOrders[] = self::NYSO_ORDER_PRE . $order['order_no'];
 		}
 
-		// 通过妮素运单API读取指定订单的运单信息
-		$nysoPosts = nysochina::getPosts($nysoOrders);
+		if(!$nysoOrders) {
+			$this->info("没有找到需要同步的妮素云单");
+			// 以JSON形式输出执行结果
+			$this->exitJSON($this->data);			
+		}
+
+		try {
+			// 通过妮素运单API读取指定订单的运单信息
+			$nysoPosts = nysochina::getPosts($nysoOrders);
+		}
+		catch (Exception $e) {
+			$this->error( $e->getMessage(),$nysoOrders);
+			// 以JSON形式输出执行结果
+			$this->exitJSON($this->data);			
+		}
 
 		// 对每个运单做如下处理
 		foreach($nysoPosts as $post){
-			// 将妮素运单数据转换为九猫运单数据
-			$deliveryDoc = $this->nysoPost2DeliveryDoc($post);
-
-
+			try {			
+				// 将妮素运单数据转换为九猫运单数据
+				$deliveryDoc = $this->nysoPost2DeliveryDoc($post);
+			}
+			catch (Exception $e) {
+				$this->error($e->getMessage(),$post);
+				continue;
+			}
 		}
 
 		// 以JSON形式输出执行结果
@@ -1264,14 +1281,9 @@ class nysoDataImport extends pluginBase
 	//         "PostCode":"yuantong", // 圆通
 	//     }
 	protected function nysoPost2DeliveryDoc($nysoPost) {
-
-
 		$jcOrderNo = $nysoPost['OrderNo'];
 		$orderDB = new IModel("order");
-		$orderObj = $orderDB->getObj("order_no = '$jcOrderNo'");
-		if(!$orderObj) {
-			return null;
-		}
+		$orderObj = $orderDB->getObj("order_no = '$jcOrderNo' and supplier_id = 1 ");
 
 
 		$freightId = $this->nysoPostCodet2freightId($nysoPost['PostCode']);
@@ -1297,14 +1309,24 @@ class nysoDataImport extends pluginBase
 		$deliveryDocData['freight_id'] = $freightId;
 
 
-		// 将九猫运单数据保存到 delivery_doc和order表
+		// 将九猫运单数据保存到 delivery_doc
 		// $orderDB = new IModel("order");
 		$deliveryDocDB = new IModel("delivery_doc");
-		$deliveryDocDB->getObj("order_id = " . $deliveryDocData['order_id'] . " and '" . $deliveryDocData['delivery_code']);
+		$deliveryDocObj = $deliveryDocDB->getObj("order_id = " . $deliveryDocData['order_id'] . " and '" . $deliveryDocData['delivery_code'] ."'");
 
+		if($deliveryDocObj) {
+			$deliveryDocDB->setData($deliveryDocData);
+			$deliveryDocDB->update("id=" . $deliveryDocObj['id']);
+		} else {
+			$deliveryDocDB->setData($deliveryDocData);
+			$deliveryDocDB->add();
+		}
 
-
-		return $deliveryDocData;
+		// 修改order表
+		$orderObj['supplier_syn_date'] =  $nysoPost['nysoPost'];	// 发货日期
+		$orderObj['distribution_status'] = '1'; //配送状态 0：未发送,1：已发送,2：部分发送
+		$orderDB->setData($orderObj);
+		$orderDB->update("id = ". $orderObj['id']);
 
 	}
 
