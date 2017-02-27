@@ -118,7 +118,7 @@ class Apic extends IController{
 		$pro_array = array(
 			array('cid' => 126, 'title' => '美妆', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/126.png'),
 			array('cid' => 134, 'title' => '个护', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/134.png'),
-			array('cid' => 2, 'title' => '健康', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/2.png'),
+			array('cid' => 186, 'title' => '健康', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/2.png'),
 		);
 		$pro_list  = array();
 		foreach($pro_array as $v){
@@ -183,7 +183,7 @@ class Apic extends IController{
 				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/tui.png'; //腿毛推荐
 				break;
 			case 4: //健康
-				$cid           = 2; //居家药品
+				$cid           = 186; //健康生活
 				$aid           = 16; //专辑分类
 				$data['title'] = 'RURU推荐';
 				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/ruru.png'; //RURU推荐
@@ -566,12 +566,13 @@ class Apic extends IController{
 	public function order_activity(){
 		$param   = $this->checkData(array(
 			array('goods', 'string', 1, '商品格式<商品ID:数量>多个商品用英文逗号分割'),
+			array('type','int',1,'活动类型'),
 			array('activity_id', 'int', 1, '活动ID'),
 			array('colse', 'int', 0, '是否结算[0否-1是]'),
 			array('address_id', 'int', 0, '收货地址'),
 		));
 		$user_id = $this->tokenCheck();
-
+		
 		$goodsList  = array(); //商品列表
 		$goodsIdPay = array(); //购买的商品ID
 		foreach(explode(',', trim($param['goods'], ',')) as $k => $v){
@@ -583,48 +584,101 @@ class Apic extends IController{
 			$goodsIdPay[] = $goods[0];
 			$goodsList[]  = $goods;
 		}
-		/* 活动详情 */
-		$modelBag = new IModel('activity_bag');
-		$infoBag  = $modelBag->getObj('id='.$param['activity_id']);
-		if(!empty($infoBag))
-			$this->returnJson(array('code' => '002030', 'msg' => $this->errorInfo['002030'])); //活动礼包不存在
-		if($infoBag['status']==0)
-			$this->returnJson(array('code' => '002017', 'msg' => $this->errorInfo['002017'])); //活动已被禁用
-		if($infoBag['start_time']>time())
-			$this->returnJson(array('code' => '002018', 'msg' => $this->errorInfo['002018'])); //活动未开始
-		if($infoBag['end_time']<time())
-			$this->returnJson(array('code' => '002019', 'msg' => $this->errorInfo['002019'])); //活动已结束
-		/* 活动包含的商品 */
-		$queryGoods         = new IQuery('activity_bag_goods AS m');
-		$queryGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
-		$queryGoods->where  = 'g.is_del=0 AND m.pid='.$param['activity_id'];
-		$queryGoods->fields = 'g.id AS goods_id,g.name,g.img,g.store_nums,g.img,g.weight,m.num';
-		$queryGoods->group  = 'g.id';
-		$listGoods          = $queryGoods->find();
-		if(empty($listGoods))
-			$this->returnJson(array('code' => '002039', 'msg' => $this->errorInfo['002039'])); //活动商品不存在
-		if($infoBag['nums']=='0' && count($goodsList)!=count($listGoods))
-			$this->returnJson(array('code' => '002040', 'msg' => $this->errorInfo['002040'])); //购买数量不准确
 		
-		$data['goods_list'] = array();
-		foreach($listGoods as $k => $v){
-			if(in_array($v['goods_id'], $goodsIdPay)){
-				if($v['store_nums']<$v['num'])
-					$this->returnJson(array('code' => '007002', 'msg' => '“'.$v['name'].'”库存不足')); //库存不足
+		switch($param['type']){
+			//礼包商品
+			case 1:
+				/* 活动详情 */
+				$modelBag = new IModel('activity_bag');
+				$infoBag  = $modelBag->getObj('id='.$param['activity_id']);
+				if(!empty($infoBag))
+					$this->returnJson(array('code' => '002030', 'msg' => $this->errorInfo['002030'])); //活动礼包不存在
+				if($infoBag['status']==0)
+					$this->returnJson(array('code' => '002017', 'msg' => $this->errorInfo['002017'])); //活动已被禁用
+				if($infoBag['start_time']>time())
+					$this->returnJson(array('code' => '002018', 'msg' => $this->errorInfo['002018'])); //活动未开始
+				if($infoBag['end_time']<time())
+					$this->returnJson(array('code' => '002019', 'msg' => $this->errorInfo['002019'])); //活动已结束
+				/* 活动包含的商品 */
+				$queryGoods         = new IQuery('activity_bag_goods AS m');
+				$queryGoods->join   = 'LEFT JOIN goods AS g ON g.id=m.goods_id';
+				$queryGoods->where  = 'g.is_del=0 AND m.pid='.$param['activity_id'];
+				$queryGoods->fields = 'g.id AS goods_id,g.name,g.img,g.store_nums,g.img,g.weight,m.num';
+				$queryGoods->group  = 'g.id';
+				$listGoods          = $queryGoods->find();
+				if(empty($listGoods))
+					$this->returnJson(array('code' => '002039', 'msg' => $this->errorInfo['002039'])); //活动商品不存在
+				if($infoBag['nums']=='0' && count($goodsList)!=count($listGoods))
+					$this->returnJson(array('code' => '002040', 'msg' => $this->errorInfo['002040'])); //购买数量不准确
 				
-				$data['goods_list'][] = array_merge($v,array(
-					'goods_id',
-					'reduce',
-					'product_id' => 0,
-					'count' => $v['num'],
-					'seller_id' => 0, //商家ID
-					'duties' => 0, //关税
-				));
+				$data['goods_list'] = array();
+				foreach($listGoods as $k => $v){
+					if(in_array($v['goods_id'], $goodsIdPay)){
+						if($v['store_nums']<$v['num'])
+							$this->returnJson(array('code' => '007002', 'msg' => '“'.$v['name'].'”库存不足')); //库存不足
+						
+						$data['goods_list'][] = array_merge($v,array(
+							'goods_id',
+							'reduce',
+							'product_id' => 0,
+							'count' => $v['num'],
+							'seller_id' => 0, //商家ID
+							'duties' => 0, //关税
+						));
+						
+					}
+				}
+				if(count($goodsList)!=count($data['goods_list']))
+					$this->returnJson(array('code' => '002040', 'msg' => $this->errorInfo['002040'])); //购买数量不准确
+				$data['totle_money'] = $infoBag['price'];
+				break;
+			//秒杀
+			case 2:
+				foreach($goodsList as $k => $v){
+					//商品详情
+					$modelGoods = new IModel('goods');
+					$infoGoods  = $modelGoods->getObj('id='.$v['goods_id'], 'id as goods_id,name,goods_no,img,sell_price,purchase_price,weight,store_nums');
+					//校验
+					if($infoGoods['store_nums']<$v['nums']) $this->returnJson(array('code'=>'007002','msg'=>$this->errorInfo['007002'])); //商品库存不足
+					$query         = new IQuery('activity_speed AS m');
+					$query->join   = 'LEFT JOIN activity_speed_access AS a ON a.pid=m.id '.
+						'LEFT JOIN goods AS g ON g.id=a.goods_id';
+					$query->where  = 'g.is_del=0 AND m.type=2 AND m.status=1 AND a.goods_id='.$v['goods_id'];
+					$query->fields = 'g.name,g.img,a.id,a.goods_id,g.sell_price,g.purchase_price,a.sell_price AS now_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
+					$query->limit  = 1;
+					$info          = $query->find();
+					if(empty($info)) $this->returnJson(array('code'=>'006002','msg'=>'"'.$infoGoods['name'].'"未参与活动'));
+					$info               = $info[0];
+					if($info['start_time']>time()) $this->returnJson(array('code'=>'006002','msg'=>'"'.$infoGoods['name'].'"活动未开始'));
+					if($info['end_time']<time()) $this->returnJson(array('code'=>'006002','msg'=>'"'.$infoGoods['name'].'"活动已结束'));
+					$queryOrder         = new IQuery('order AS m');
+					$queryOrder->join   = 'LEFT JOIN order_goods AS g ON g.order_id=m.id';
+					$queryOrder->fields = 'count(*) AS sum';
+					$where              = 'm.pay_status=1 AND m.pay_time>="'.date('Y-m-d H:i:s', $info['start_time']).'" AND m.pay_time<="'.date('Y-m-d H:i:s', $info['end_time']).'" AND g.goods_id='.$info['goods_id'];
+					//限购数量已售完
+					$queryOrder->where = $where;
+					$sum               = $queryOrder->find();
+					if($sum[0]['sum']>$info['nums']+$v['nums']) $this->returnJson(array('code'=>'006003','msg'=>'"'.$infoGoods['name'].'"剩余数量不足'));
+					//当前用户已购完
+					if($info['quota']>0){
+						$queryOrder->where = $where.' AND m.user_id='.$user_id;
+						$sum               = $queryOrder->find();
+						if($sum[0]['sum']>$info['quota']+$v['nums']) $this->returnJson(array('code'=>'006003','msg'=>'您已超出"'.$infoGoods['name'].'"限购数量'));
+					}
+					$info['img']          = empty($info['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$info['img']."/w/500/h/500");
+					$info['count']         = $v['nums']; //商品数量
+					$info['product_id'] = 0; //货号
+					$info['seller_id']  = 0; //卖家ID
+					$info['reduce']     = $info['sell_price']-$info['now_price']; //优惠金额
+					
+					$data['goods_list'][] = $info;
+					$data['totle_money'] += $info['now_price']*$v['nums'];
+				}
+				break;
+			default:
+				$this->returnJson(array('code'=>'007001','msg'=>$this->errorInfo['007001']));
 				
-			}
 		}
-		if(count($goodsList)!=count($data['goods_list']))
-			$this->returnJson(array('code' => '002040', 'msg' => $this->errorInfo['002040'])); //购买数量不准确
 		
 		/* 收货地址 */
 		$modelAddress         = new IModel('address');
@@ -656,11 +710,11 @@ class Apic extends IController{
 			'user_id'         => $user_id,
 			'pay_type'        => 13, //微信支付
 			'distribution'    => 1, //配送方式
-			'payable_amount'  => $infoBag['price'], //商品价格
-			'real_amount'     => $infoBag['price'], //实付商品价格
+			'payable_amount'  => $data['totle_money'], //商品价格
+			'real_amount'     => $data['totle_money'], //实付商品价格
 			'payable_freight' => $data['delivery_money'], //运费价格
 			'real_freight'    => $data['delivery_money'], //实付运费价格
-			'order_amount'    => $infoBag['price']+$data['delivery_money'], //订单总价
+			'order_amount'    => $data['totle_money']+$data['delivery_money'], //订单总价
 			'accept_name'     => $dataAdr['accept_name'], //收货人姓名
 			'postcode'        => $dataAdr['zip'], //邮编
 			'province'        => $dataAdr['province'], //省ID
@@ -683,131 +737,6 @@ class Apic extends IController{
 		/* 数据返回 */
 		$this->returnJson(array('code' => '0', 'msg' => 'ok', 'data' => $order_id));
 	}
-	
-	/**
-	 * 活动商品订单结算
-	 */
-	public function order_activity1(){
-		/* 接收参数 */
-		$pargam               = array(
-			'goods_list' => IReq::get('goods_list'), //商品{[{'goods_id':1,'nums':2},{'goods_id':3,'nums':1}]}
-			'colse'      => IFilter::act(IReq::get('colse'), 'int'), //是否结算
-			'atype'      => IFilter::act(IReq::get('atype'), 'int'), //活动类型[1秒杀]
-			'address_id' => IFilter::act(IReq::get('address_id'), 'int'), //收货地址ID
-		);
-		$user_id              = !isset($this->user['user_id']) || empty($this->user['user_id']) ? $this->json_echo(apiReturn::go('001001')) : $this->user['user_id'];
-//		echo $pargam['goods_list'];
-		$pargam['goods_list'] = json_decode($pargam['goods_list'], true);
-//		var_dump($pargam['goods_list']) ;exit();
-		if(empty($pargam['goods_list']) || empty($pargam['atype'])) $this->json_echo(apiReturn::go('001002'));
-		$data['goods_list']  = array();
-		$data['totle_money'] = 0;
-		
-		//活动类型
-		switch($pargam['atype']){
-			case 1: //秒杀
-				foreach($pargam['goods_list'] as $k => $v){
-					//商品详情
-					$modelGoods = new IModel('goods');
-					$infoGoods  = $modelGoods->getObj('id='.$v['goods_id'], 'id as goods_id,name,goods_no,img,sell_price,purchase_price,weight,store_nums');
-					//校验
-					if($infoGoods['store_nums']<$v['nums']) $this->json_echo(apiReturn::go('007002')); //商品库存不足
-					$query         = new IQuery('activity_speed AS m');
-					$query->join   = 'LEFT JOIN activity_speed_access AS a ON a.pid=m.id '.
-						'LEFT JOIN goods AS g ON g.id=a.goods_id';
-					$query->where  = 'g.is_del=0 AND m.type=2 AND m.status=1 AND a.goods_id='.$v['goods_id'];
-					$query->fields = 'g.name,g.img,a.id,a.goods_id,g.sell_price,g.purchase_price,a.sell_price AS now_price,a.nums,a.quota,a.delivery,m.type,m.start_time,m.end_time';
-					$query->limit  = 1;
-					$info          = $query->find();
-					if(empty($info)) $this->json_echo(apiReturn::go('006002', '', '"'.$infoGoods['name'].'"未参与活动'));
-					$info               = $info[0];
-					if($info['start_time']>time()) $this->json_echo(apiReturn::go('002018', '', '"'.$infoGoods['name'].'"活动未开始'));
-					if($info['end_time']<time()) $this->json_echo(apiReturn::go('002019', '', '"'.$infoGoods['name'].'"活动已结束'));
-					$queryOrder         = new IQuery('order AS m');
-					$queryOrder->join   = 'LEFT JOIN order_goods AS g ON g.order_id=m.id';
-					$queryOrder->fields = 'count(*) AS sum';
-					$where              = 'm.pay_status=1 AND m.pay_time>="'.date('Y-m-d H:i:s', $info['start_time']).'" AND m.pay_time<="'.date('Y-m-d H:i:s', $info['end_time']).'" AND g.goods_id='.$info['goods_id'];
-					//限购数量已售完
-					$queryOrder->where = $where;
-					$sum               = $queryOrder->find();
-					if($sum[0]['sum']>$info['nums']+$v['nums']) $this->json_echo(apiReturn::go('006003', '', '"'.$infoGoods['name'].'"剩余数量不足'));
-					//当前用户已购完
-					if($info['quota']>0){
-						$queryOrder->where = $where.' AND m.user_id='.$user_id;
-						$sum               = $queryOrder->find();
-						if($sum[0]['sum']>$info['quota']+$v['nums']) $this->json_echo(apiReturn::go('006003', '', '您已超出"'.$infoGoods['name'].'"限购数量'));
-					}
-					$info['img']          = empty($info['img']) ? '' : IWeb::$app->config['image_host'].IUrl::creatUrl("/pic/thumb/img/".$info['img']."/w/500/h/500");
-					$info['count']         = $v['nums']; //商品数量
-					$info['product_id'] = 0; //货号
-					$info['seller_id']  = 0; //卖家ID
-					$info['reduce']     = $info['sell_price']-$info['now_price']; //优惠金额
-					
-					$data['goods_list'][] = $info;
-					$data['totle_money'] += $info['now_price']*$v['nums'];
-				}
-				break;
-			default:
-				$this->json_echo(apiReturn::go('007001'));
-		}
-		
-		/* 收货地址 */
-		$modelAddress         = new IModel('address');
-		$data['address_list'] = $modelAddress->query('user_id='.$user_id, "*", "is_default desc");
-		foreach($data['address_list'] as $k => $v){
-			$temp   = area::name($v['province'], $v['city'], $v['area']);
-			$temp_k = array_keys($temp);
-			if(isset($temp[$v['province']]) && isset($temp[$v['city']]) && isset($temp[$v['area']])){
-				$data['address_list'][$k]['province_val'] = in_array($v['province'], $temp_k) ? $temp[$v['province']] : '';
-				$data['address_list'][$k]['city_val']     = in_array($v['city'], $temp_k) ? $temp[$v['city']] : '';
-				$data['address_list'][$k]['area_val']     = in_array($v['area'], $temp_k) ? $temp[$v['area']] : '';
-			}
-		}
-		$data['delivery_money'] = 0; //邮费
-		
-		/* 如果是订单确认，到这里结束 */
-		if($pargam['colse']!=1) $this->json_echo(apiReturn::go('0', $data));
-		
-		/* 开始生成订单 */
-		//查询收货地址
-		$modelAdr = new IModel('address');
-		$dataAdr  = $modelAdr->getObj('id='.$pargam['address_id'].' AND user_id='.$user_id);
-		if(empty($dataAdr)) $this->json_echo(apiReturn::go('005001')); //收货地址不存在
-		//生成的订单数据
-		$dataArray = array(
-			'order_no'        => Order_Class::createOrderNum(),
-			'user_id'         => $user_id,
-			'pay_type'        => 13, //微信支付
-			'distribution'    => 1, //配送方式
-			'payable_amount'  => $data['totle_money'], //商品价格
-			'real_amount'     => $data['totle_money'], //实付商品价格
-			'payable_freight' => $data['delivery_money'], //运费价格
-			'real_freight'    => $data['delivery_money'], //实付运费价格
-			'order_amount'    => $data['totle_money'], //订单总价
-			'accept_name'     => $dataAdr['accept_name'], //收货人姓名
-			'postcode'        => $dataAdr['zip'], //邮编
-			'province'        => $dataAdr['province'], //省ID
-			'city'            => $dataAdr['city'], //市ID
-			'area'            => $dataAdr['area'], //区ID
-			'address'         => $dataAdr['address'], //详细地址
-			'mobile'          => $dataAdr['mobile'], //手机
-			'pay_time'        => time(), //付款时间
-			'create_time'     => time(),
-			'note' => '活动商品购买',
-			'type_source' => 1, //单个商品购买
-		);
-		//订单写入
-		$modelOrder = new IModel('order');
-		$modelOrder->setData($dataArray);
-		$order_id = $modelOrder->add();
-		if(!$order_id) $this->json_echo(apiReturn::go('003006'));
-		//订单商品写入
-		$orderInstance = new Order_Class();
-		$orderInstance->insertOrderGoods($order_id, array('goodsList' => $data['goods_list']));
-		/* 数据返回 */
-		$this->json_echo(apiReturn::go('0',array('order_id'=>$order_id)));
-	}
-	
 	
 	/**
 	 * ---------------------------------------------------优惠券---------------------------------------------------*
@@ -2075,6 +2004,7 @@ class Apic extends IController{
 	 */
 	public function goods_list(){
 		$param = $this->checkData(array(
+			array('pagesize','int',0,'每页数据条数'),
 			array('page', 'int', 0, '分页编号'),
 			array('aid', 'int', 0, '活动ID'),
 			array('bid', 'string', 0, '品牌ID'),
@@ -2289,7 +2219,7 @@ class Apic extends IController{
 				$name2 = '腿毛推荐';
 				break;
 			case 4:
-				$cid   = goods_class::catChild(2);
+				$cid   = goods_class::catChild(186);
 				$name1 = '健康';
 				$name2 = '昔君推荐';
 				break;
