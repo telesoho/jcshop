@@ -535,6 +535,75 @@ class Apib extends IController{
 		return JSON::encode($spec_array_val);
 	}
 
+	/**
+	 * 把商品主图追加到内容后
+	 */
+	public function addContentImages() {
+		$basePath = dirname(dirname(__FILE__));
+		$req_file = IReq::get("req_file");
+		if(!$req_file) {
+			$this->exitJSON("ERROR: req_file requried.");
+		}
+
+		$realFile = $basePath . DIRECTORY_SEPARATOR . "batch" . DIRECTORY_SEPARATOR . $req_file; 
+
+		$req_json = file_get_contents($realFile);
+
+		$encoding = mb_detect_encoding($req_json, array("ASCII","GB2312","GBK","UTF-8"));
+			
+		if($encoding != "UTF-8") {
+			$req_json = iconv($encoding, 'UTF-8', $req_json); //将字符串的编码转到UTF-8
+		}
+
+		$req = JSON::decode($req_json, true);
+		
+		$query = new IQuery("goods_photo_relation as gpr");
+		$query->join = "left join goods_photo as gp on gp.id = gpr.photo_id";
+		$query->fields = "gp.img";
+
+		$goodsDB = new IModel("goods");
+		$dolist = array();
+
+		foreach($req['GoodsIds'] as $goods_id) {
+
+			$goodsObj = $goodsDB->getObj("id=$goods_id");
+			if(!$goodsObj) {
+				continue;
+			}
+
+			$query->where = "gpr.goods_id = $goods_id";
+			$result = $query->find();
+			if(!$result) {
+				continue;
+			}
+
+
+			// 设置详情图
+			$contentPic = $result;
+
+			//  设置商品详情图
+			if($contentPic) {
+				$content = $goodsObj['content'];
+
+				foreach($contentPic as $pic) {
+					// 如果该图片在详情中没有，则将该链接增加到详情中
+					$pic = $pic['img'];
+					if(strpos($content, $pic) === false)
+					{
+						$content .= '<p><img src="/' . $pic . '" alt="" /></p>';
+					}
+				}
+				$goodsObj['content'] = $content;
+			}
+
+			$goodsDB->setData($goodsObj);
+			$goodsDB->update("id=$goods_id");
+			$dolist[] = $goods_id;
+		}
+
+		$this->exitJSON($dolist);
+	}
+
 	public function testSubQuery() {
 		$subQuery = array(
 			'g1' => array(
