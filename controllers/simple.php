@@ -464,7 +464,7 @@ class Simple extends IController
 				'taxes'               => $goodsResult['taxPrice'],
 
 				//优惠价格
-				'promotions'          => $goodsResult['proReduce'] + $goodsResult['reduce'],
+				'promotions'          => $goodsResult['proReduce'],
 
 				//订单应付总额
 				'order_amount'        => $goodsResult['sum']+$goodsResult['deliveryPrice'],//$goodsResult['orderAmountPrice'],

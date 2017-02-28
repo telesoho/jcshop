@@ -1,33 +1,33 @@
 body{
-    background:#eee;
+    background:#f5f5f5;
 }
+/*	视频顶部导航	*/
 .headnav{
-    margin-top:-0.04rem;
     background:#fff;
-    height:0.68rem;
-    line-height: 0.64rem;
+    height:2rem;
     width:100%;
     overflow: hidden;
-    position: relative;
+}
+.headnav .mart{
+	width: 100%;
+	overflow: hidden;
+	height: 1.9rem;
 }
 .headnav ul{
-    position: absolute;
     width:100%;
-    height:0.676rem;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow-x:scroll ;
+    height: 2.2rem;
     display: -webkit-flex;
     display: -webkit-box;
     -webkit-flex-wrap: nowrap;
 }
 .headnav li{
-    display: block;
-    padding:0 0.32rem;
+	margin-left: 0.18rem;
     list-style: none;
-    font-size:0.26rem;
-    color:#4d4d4d;
-    text-align: center;
-    border-bottom: none;
+    width: 2.88rem;
+}
+.headnav li:last-child{
+	margin-right: 0.6rem;
 }
 .headnav li.active{
     color:#ff5959;
@@ -35,12 +35,15 @@ body{
 }
 #vedioList .content{
     margin-top:0.2rem;
-    background:#fff;
+    background:#f5f5f5;
 }
 #vedioList .content .item{
     width:100%;
-    height:3rem;
-    padding:0.2rem 0.2rem 0;
+    height:3.9rem;
+    background: #fff;
+    padding-top:0.31rem ;
+    /*padding:0.2rem 0.2rem 0;*/
+   margin-top: 0.1rem;
 }
 #vedioList .content .item .img{
     position: relative;
@@ -55,11 +58,12 @@ body{
 }
 #vedioList .content .item .img .bg{
     top:0;
-    left:0;
+    left:50%;
+    margin-left: -3.55rem;
     position: absolute;
     background:rgba(0,0,0,.2);
     z-index:2;
-    width:100%;
+    width:7.1rem;
     height:2.8rem;
     border-radius:0.1rem ;
 }
@@ -72,46 +76,47 @@ body{
     z-index:4
 }
 #vedioList .content .item .img .dis{
-    position:absolute;
-    bottom:0.2rem;
     width:7.1rem;
-    padding:0 0.2rem;
-    font-size:0.32rem;
-    line-height: 0.32rem;
-    z-index:4
+    /*padding:0 0.2rem;*/
+    /*font-size:0.32rem;*/
+   height: 0.76rem;
+   position: relative;
+   display: -webkit-flex;
+   -webkit-align-items: center;
 }
 #vedioList .content .item .img .dis .distribution{
     width:5.3rem;
-    color:#fff;
-    height:0.32rem;
-    z-index:4;
+    color:#1f1f1f;
     font-size:0.28rem;
+    padding-left:0.2rem;
 }
 #vedioList .content .item .img .dis .watch {
     /*width:1.2rem;*/
     padding-right:0.3rem;
-    height:0.32rem;
+    height:0.37rem;
     border-radius: 0.05rem;
     background:rgba(0,0,0,.3);
-    z-index:4
+    position: relative;
+    display: -webkit-flex;
+    -webkit-align-items: center;
 }
 #vedioList .content .item .img .dis .watch img{
     position:relative;
     left:0.1rem;
-    top:0.03rem;
+    top:-0.02rem;
 }
 #vedioList .content .item .img .dis .watch span{
     font-size:0.2rem;
     color:#fff;
     line-height: 0.32rem;
-    position:relative;
-    top:-0.02rem;
-    left:0.05rem;
+    position: relative;
+    top: -0.02rem;
+    left: 0.15rem;
 }
 .collection{
     position: absolute;
     top:0.2rem;
-    right:0.2rem;
+    right:0.4rem;
     height:0.32rem;
     line-height:0.32rem;
     z-index:4
@@ -235,5 +240,41 @@ body{
     padding:0 0.2rem 0.2rem;
 }
 #vedioList .contents{
-	background: #eee;
+	background: #f5f5f5;
+}
+
+
+/*改版*/
+.banner{
+	margin-top: 0.2rem;
+	width: 100%;
+	height: 1rem;
+	background: #fff;
+	display: -webkit-flex;
+	-webkit-justify-content: center;
+	-webkit-align-items: center;
+}
+.banner img{
+	width: 0.4rem;
+}
+.banner p{
+	margin-left: 0.12rem;
+	font-size:0.32rem;
+	color:#1f1f1f;
+}
+/*空商品样式*/
+.empty_product img{
+  width:0.73rem;
+  margin-top:0.65rem;
+}
+.empty_product .content{
+  margin-top:0.25rem;
+  margin-bottom:0.65rem;
+  width:100%;
+  text-align:center;
+  font-size:0.28rem;
+
+}
+.empty_product .content span{
+  color:#bbbbbb;
 }
