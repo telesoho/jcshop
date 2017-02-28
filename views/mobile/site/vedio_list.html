@@ -33,21 +33,21 @@
             <div class="item" v-for="(item,key) in contentInfo">
                 <div class="img" @click="linkTo(item.id)">
                     <img :src="item.img" alt="" style="display:block;width:7.1rem;margin:0 auto;height:2.8rem;border-radius:0.1rem;" class="bgimg"/>
-                    <div class="bg"></div>
+                    <!--<div class="bg"></div>-->
                     <div class="play">
                         <img src="/views/mobile/skin/default/image/jmj/icon/play_icon.png" alt="" style="width:0.9rem;" />
                     </div>
                     <div class="dis box">
                         <p class="hidewrap distribution">{{item.title}}</p>
-                        <div class="watch">
+                        <!--<div class="watch">
                             <img src="/views/mobile/skin/default/image/jmj/vedio/find.png" alt="" style="width:0.24rem" />
                             <span>{{item.hits}}</span>
-                        </div>
+                        </div>-->
                     </div>
-                    <div class="collection" @click.stop="collection(item,key)">
+                    <!--<div class="collection" @click.stop="collection(item,key)">
                         <img :src="!item.is_collect?src1:src2" style="width:0.32rem" alt="" />
                         <span :style="!item.is_collect?color1:color2">{{item.collect}}</span>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>
@@ -135,7 +135,7 @@ $this->wechat->jsApiSDK();
                 self.page=1;
                 removeItem("vedioData");
                 removeItem("vedioDataPage");
-                self.getData(self);
+                self.getData(self);		
             },
             linkTo:function(id){
                 window.location.href="/site/vedio_detail/id/"+id;
