@@ -7,6 +7,8 @@
 class nysoDataImport extends pluginBase
 {
 
+	const CALLBACK_OK = array("success" => true);
+	const CALLBACK_NG  = array("success" => false);
 	const NYSO_SUPPLIER_ID = 1;
 	const NYSO_ORDER_PRE = "JM-";
 	private $exchange_rate_jp;	// 日币对人民币汇率
@@ -76,13 +78,6 @@ class nysoDataImport extends pluginBase
 			};
 		});
 
-		// 注册妮素订单同步接口
-		plugin::reg("onBeforeCreateAction@nyso@nyso_order_syn",function(){
-            self::controller()->nyso_order_syn = function(){
-				$this->nyso_order_syn();
-			};
-		});
-
 		// 注册妮素运单同步接口
 		plugin::reg("onBeforeCreateAction@nyso@nyso_post_syn",function(){
             self::controller()->nyso_post_syn = function(){
@@ -90,7 +85,7 @@ class nysoDataImport extends pluginBase
 			};
 		});
 
-		// 注册妮素订单同步接口
+		// 注册妮素异步订单同步接口
 		plugin::reg("onBeforeCreateAction@nyso@nyso_order_asyn",function(){
             self::controller()->nyso_order_asyn = function(){
 				$this->nyso_order_asyn();
@@ -125,15 +120,15 @@ class nysoDataImport extends pluginBase
 						$orderDB->update("order_no = '$orderNo'");
 					}catch(Exception $e) {
 						$this->error($e->getMessage(), $param);
-						$this->exitJSON(array("Success" => false));
+						$this->exitJSON(self::CALLBACK_NG);
 					}
 				} else {
 					$this->error("妮素返回订单错误信息", $param);
-					$this->exitJSON(array("Success" => false));
+					$this->exitJSON(self::CALLBACK_NG);
 				}
 
 				$this->info("妮素订单处理完毕", $param);
-				$this->exitJSON(array("Success" => true));
+				$this->exitJSON(self::CALLBACK_OK);
 			};
 		});
 
@@ -257,7 +252,7 @@ class nysoDataImport extends pluginBase
         $token = strtoupper(md5($tokenStr));
 		return $token;
 	}
-	
+
 	/**
 	 * 取出查询参数
 	 * @param $validators 校验器
@@ -265,20 +260,21 @@ class nysoDataImport extends pluginBase
 	 */
 	private function getRequestParam($api_name, $validators = array()) {
 
+
 		$partner_key = nysochina::getApiKey($api_name);
 		
 		// 取出请求头
 		$headers = apache_request_headers();
 		if(!isset($headers['interfacename']) || !isset($headers['token'])) {
 			$this->error("接口验证失败", array(__LINE__, $headers));
-			$this->exitJSON(array('Success' => false));			
+			$this->exitJSON(self::CALLBACK_NG);			
 		}
 
 		// 接口验证
 		$interfacename = $headers['interfacename'];
 		if($api_name != $interfacename) {
 			$this->error("接口验证失败", array(__LINE__,$api_name, $headers));
-			$this->exitJSON(array('Success' => false));
+			$this->exitJSON(self::CALLBACK_NG);
 		}
 
 		$token = strtoupper($headers['token']);
@@ -288,7 +284,7 @@ class nysoDataImport extends pluginBase
 		$genToken = $this->toToken($partner_key, $interfacename, $param);
 		if($token !== $genToken) {
 			$this->error("接口验证失败", array(__LINE__, $genToken, $headers, $param));
-			$this->exitJSON(array('Success' => false));
+			$this->exitJSON(self::CALLBACK_NG);
 		}
 		
 		$paramContent = JSON::decode($param, true);
@@ -296,7 +292,7 @@ class nysoDataImport extends pluginBase
 		if(!$v->validate_array($paramContent, $validators))
 		{
 			$this->error("参数验证失败", array(__LINE__, "messages" => $v->getErrMsg(), $paramContent, $headers));
-			$this->exitJSON(array('Success' => false));
+			$this->exitJSON(self::CALLBACK_NG);
 		}
 
 		return $paramContent;
@@ -442,51 +438,6 @@ class nysoDataImport extends pluginBase
 		exit();
 	}
 
-	/**
-	 * 妮素订单同步
-	 * 将包含妮素商品的订单同步到妮素平台，并设置同步标志
-	 */
-	private function nyso_order_syn() {
-		set_time_limit(0);
-		ini_set("max_execution_time",0);
-
-		// 初始化妮素平台接口
-		nysochina::init($this->config());
-
-		$query         = new IQuery('order AS o');
-		$query->join   = 'LEFT JOIN areas AS a1 ON o.province = a1.area_id '
-						.'LEFT JOIN areas AS a2 ON o.city = a2.area_id '
-						.'LEFT JOIN areas AS a3 ON o.area = a3.area_id '
-						.'LEFT JOIN user AS u on o.user_id = u.id';
-		$query->where  = 'o.supplier_id = 1 and isnull(supplier_syn_date) and pay_status = 1';
-		$query->fields = 'a1.area_name as province_name, a2.area_name as city_name, a3.area_name as area_name,'
-						.'u.sfz_name as payer_name, u.sfz_num as payer_id_card, o.*';
-		$jcOrderList   = $query->find();
-
-		if(count($jcOrderList) < 1) {
-			$this->info("没有发现妮素订单");
-			$this->exitMSG($this->data);
-		}
-
-		foreach($jcOrderList as $jcOrder) {
-			try {
-				$nysoOrder = $this->toNysoOrder($jcOrder);
-				nysochina::run("AddOrder", $nysoOrder);
-				$orderDB = new IModel("order as o");
-				$updateOrder['supplier_syn_date'] = date('Y-m-d H:i:s', time());
-				$orderDB->setData($updateOrder);
-				$orderDB->update("id=" . $jcOrder['id']);
-				$this->info($jcOrder['order_no'] . "订单同步成功", $jcOrder);
-			} 
-			catch(Exception $e) {
-				$this->error($e->getMessage() . "=>" .$jcOrder['order_no'], $jcOrder);
-				continue;
-			}
-		}
-
-		$this->exitJSON($this->data);
-	}
-
 
 	/**
 	 * 异步方式添加妮素订单
@@ -510,7 +461,7 @@ class nysoDataImport extends pluginBase
 		$jcOrderList   = $query->find();
 
 		if(count($jcOrderList) < 1) {
-			$this->info("没有发现妮素订单");
+			$this->info("没有发现需要同步的妮素订单");
 			$this->exitMSG($this->data);
 		}
 
@@ -1393,19 +1344,21 @@ class nysoDataImport extends pluginBase
 		
 		// 读取所有已经推到妮素平台，但还没有运单信息的妮素订单
 		$orderQuery = new IQuery("order");
-		$orderQuery->where = "not ISNULL(supplier_syn_date) and distribution_status = 0 and status = 2 and supplier_id = " . self::NYSO_SUPPLIER_ID;
+		$orderQuery->where = "not ISNULL(supplier_syn_date) and distribution_status = 0 and if_del <> 1 and status = 2 and supplier_id = " . self::NYSO_SUPPLIER_ID;
 		$orderQuery->fields = "order_no";
 		$orders = $orderQuery->find();
+		
+		if(!$orders) {
+			$this->info("没有找到需要同步的妮素云单");
+			// 以JSON形式输出执行结果
+			$this->exitJSON($this->data);
+		}
+
 		$nysoOrders = array();
 		foreach($orders as $order) {
 			$nysoOrders[] = self::NYSO_ORDER_PRE . $order['order_no'];
 		}
 
-		if(!$nysoOrders) {
-			$this->info("没有找到需要同步的妮素云单");
-			// 以JSON形式输出执行结果
-			$this->exitJSON($this->data);			
-		}
 
 		try {
 			// 通过妮素运单API读取指定订单的运单信息
@@ -1417,11 +1370,14 @@ class nysoDataImport extends pluginBase
 			$this->exitJSON($this->data);			
 		}
 
+
 		// 对每个运单做如下处理
+		$orderNos = array();
 		foreach($nysoPosts as $post){
 			try {			
 				// 将妮素运单数据转换为九猫运单数据
-				$deliveryDoc = $this->nysoPost2DeliveryDoc($post);
+				$orderNos[] = $this->nysoPost2DeliveryDoc($post);
+
 			}
 			catch (Exception $e) {
 				$this->error($e->getMessage(),$post);
@@ -1430,7 +1386,9 @@ class nysoDataImport extends pluginBase
 		}
 
 		// 以JSON形式输出执行结果
-		$this->exitJSON($this->data);		
+		$size = count($orderNos);
+		$this->info("有{$size}个订单的运单同步成功", $orderNos);		
+		$this->exitJSON($this->data);
 	}
 
 	// 将妮素运单数据转换为九猫运单数据
@@ -1441,7 +1399,7 @@ class nysoDataImport extends pluginBase
 	//         "PostCode":"yuantong", // 圆通
 	//     }
 	protected function nysoPost2DeliveryDoc($nysoPost) {
-		$jcOrderNo = $nysoPost['OrderNo'];
+		$jcOrderNo = str_replace(self::NYSO_ORDER_PRE, "", $nysoPost['OrderNo']);
 		$orderDB = new IModel("order");
 		$orderObj = $orderDB->getObj("order_no = '$jcOrderNo' and supplier_id = 1 ");
 
@@ -1483,16 +1441,17 @@ class nysoDataImport extends pluginBase
 		}
 
 		// 修改order表
-		$orderObj['supplier_syn_date'] =  $nysoPost['nysoPost'];	// 发货日期
+		$orderObj['supplier_syn_date'] =  $nysoPost['SendDate'];	// 发货日期
 		$orderObj['distribution_status'] = '1'; //配送状态 0：未发送,1：已发送,2：部分发送
 		$orderDB->setData($orderObj);
 		$orderDB->update("id = ". $orderObj['id']);
 
+		return $jcOrderNo;
 	}
 
 	// 将妮素PostCode转为对应的快递公司ID
 	protected function nysoPostCodet2freightId($nysoPostCode) {
-		$nysoPostCode = array(
+		$nysoPostCodeDef = array(
 			"shentong" => "STO",//申通
 			"yunda" => "YD",//韵达
 			"yuantong" => "YTO",//圆通
@@ -1505,12 +1464,12 @@ class nysoDataImport extends pluginBase
 			"guotongkuaidi" => "GTO",//国通
 			"kuaiyuntong" => "ZTKY",//快运通 中铁快运
 		);
-		if(!isset($nysoPostCode[$nysoPostCode]))
+		if(!isset($nysoPostCodeDef[$nysoPostCode]))
 		{
 			return 0;
 		}
 
-		$freightType = $nysoPostCode[$nysoPostCode];
+		$freightType = $nysoPostCodeDef[$nysoPostCode];
 		$freightCompanyDB = new IModel("freight_company");
 		$freightCompanyObj = $freightCompanyDB->getObj("freight_type = '$freightType'");
 		if(!$freightCompanyObj) {
