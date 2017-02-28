@@ -93,7 +93,7 @@ class nysoDataImport extends pluginBase
 		// 注册妮素订单同步接口
 		plugin::reg("onBeforeCreateAction@nyso@nyso_order_asyn",function(){
             self::controller()->nyso_order_asyn = function(){
-				$this->nyso_order_syn();
+				$this->nyso_order_asyn();
 			};
 		});
 
@@ -104,7 +104,8 @@ class nysoDataImport extends pluginBase
 
 				$param = $this->getRequestParam("OrderAsynNotify");
 				// 订单流水号
-				$orderNo = $param['OrderNo'];
+				$orderNo = str_replace(slef::NYSO_ORDER_PRE, "", $param['OrderNo']);
+
 				/*
 				0000	成功
 				9004	消息解析失败
@@ -123,15 +124,13 @@ class nysoDataImport extends pluginBase
 						$orderDB->update("order_no = '$orderNo'");
 					}catch(Exception $e) {
 						$this->error($e->getMessage(), $param);
-						$ret = array("Success" => false);
-						$this->exitJSON($ret);
+						$this->exitJSON(array("Success" => false));
 					}
 				} else {
-					$this->error($message, $param);
+					$this->error("妮素订单处理错误", $param);
 				}
 
-				$ret = array("Success" => true);
-				$this->exitJSON($ret);
+				$this->exitJSON(array("Success" => true));
 			};
 		});
 
@@ -598,11 +597,18 @@ class nysoDataImport extends pluginBase
         $nysoOrder["DetailedAddres"] = $jcOrder["address"];			// 收货详细地址信息
 
         $nysoOrder["Remark"] = "九猫家订单";							// 备注
-		$nysoOrder["PostalPrice"] = $jcOrder["payable_freight"];	// 邮费
-        $nysoOrder["Favourable"] = "0";					        	// 优惠金额
-		$nysoOrder["Tax"] = $jcOrder["duties"];         			// 商品税费		
-		$nysoOrder["GoodsPrice"] = $jcOrder["real_amount"]; 		// 货值
-		$nysoOrder["OrderPrice"] = $jcOrder["order_amount"];  		// 订单总价 用户实际交易金额
+
+		$nysoOrder["PostalPrice"] = $jcOrder["real_freight"];		// 邮费
+		$nysoOrder["Tax"] = $jcOrder["duties"];         			// 商品税费
+		$nysoOrder["GoodsPrice"] = $jcOrder["payable_amount"]; 		// 货值
+		if(floatVal($jcOrder['order_amount']) === 0) {
+			$nysoOrder["Favourable"] = $jcOrder["promotions"];			// 优惠金额
+			$nysoOrder["OrderPrice"] = $jcOrder["order_amount"];  		// 订单总价 用户实际交易金额
+		} else {
+			// 由于妮素平台不允许订单金额为0的订单,把订单总价设定为应付邮费
+			$nysoOrder["Favourable"] = 0;			// 优惠金额
+			$nysoOrder["OrderPrice"] = $nysoOrder["GoodsPrice"] + $nysoOrder["Tax"] + $nysoOrder["PostalPrice"];    // 订单总价 为 应付邮费
+		}
 
 
 		// 查询订单商品清单
@@ -612,7 +618,7 @@ class nysoDataImport extends pluginBase
 				'fields' => 'g1.*, gs.delivery_city, gs.duties_rate, gs.delivery_code, gs.ware_house_name',
 				'join' => "left join goods_supplier as gs on g1.supplier_id = gs.supplier_id and g1.sku_no = gs.sku_no",
 			), 
-		);		
+		);
 		$query = new IQuery("order_goods AS og");
 		$query->where = "og.order_id =" . $jcOrder["id"];
 		$query->subQueries = $subQuery;
@@ -630,7 +636,7 @@ class nysoDataImport extends pluginBase
 			$item["SkuNo"] = $jcItem["sku_no"];						// 商品编码
 			$item["BuyQuantity"] = $jcItem["goods_nums"];			// 购买数量
 			$item["Tax"] = $jcItem["duties"];						// 商品关税税费 已经算过数量，单位：元
-			$item["BuyPrice"] = $jcItem["real_price"];  			// 未算过数量的购买商品时的单价
+			$item["BuyPrice"] = $jcItem["goods_price"];  			// 未算过数量的购买商品时的单价
 
 			// 验证订单是否合法
 			if($jcItem["supplier_id"] !== "1") {
