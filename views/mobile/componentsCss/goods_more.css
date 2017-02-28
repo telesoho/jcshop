@@ -174,8 +174,9 @@ body{
 #category_third{
     display:-webkit-flex;
     -webkit-flex-wrap:wrap;
-    -webkit-justify-content: flex-start;
-    /*margin:0.3rem 0.1rem 0 0.19rem;*/
+    -webkit-justify-content: space-between;
+    padding:0.3rem 0.1rem 0 0.19rem;
+    overflow: hidden;
 
 }
 #category_third .product_item{
