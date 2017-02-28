@@ -1025,7 +1025,7 @@ function time_xian(){
 			return;
 		};
 		//普通购买
-		var url = "/simple/cart2?id="+id+"&num="+buyNums+"&type="+self.type;
+		var url = "/simple/cart2?id="+id+"&num="+buyNums+"&type="+self.type+"&ware_house_id="+self.info.ware_house_id;
 		//页面跳转
 		window.location.href = url;
 	}

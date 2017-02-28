@@ -2031,7 +2031,7 @@ class Apic extends IController{
 		
 		/* 商品详情 */
 		$modelGoods = new IModel('goods as a left join iwebshop_goods_supplier as b on a.supplier_id=b.supplier_id and a.sku_no = b.sku_no');
-		$fields     = 'id,name,name_de,goods_no,brand_id,sell_price,purchase_price,original_price,jp_price,market_price,store_nums,a.weight,img,content,b.delivery_code,a.supplier_id';
+		$fields     = 'id,name,name_de,goods_no,brand_id,sell_price,purchase_price,original_price,jp_price,market_price,store_nums,a.weight,img,content,b.delivery_code,a.supplier_id,a.ware_house_id';
 		$dataGoods  = $modelGoods->getObj('is_del=0 AND id='.$param['id'], $fields);
 		if(empty($dataGoods)) $this->returnJson(array('code' => '006001', 'msg' => $this->errorInfo['006001'])); //商品不存在
 		/* 计算活动商品价格 */
