@@ -43,6 +43,7 @@ class nysochina
         "SkuSynchro"        =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
         "StockSynchro"      =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
         "AddOrderKafkaTemp" =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
+        "OrderAsynNotify"   =>  array("partner" => "nyso_parenter", "key" => "nyso_userkey"),
         "searchOrder"       =>  array("partner" => "nyso_supParenter", "key" => "nyso_supUserKey"),
         "orderDelivery"     =>  array("partner" => "nyso_supParenter", "key" => "nyso_supUserKey"),
         "supGoodsSynchro"   =>  array("partner" => "nyso_supParenter", "key" => "nyso_supUserKey"),
@@ -186,7 +187,7 @@ class nysochina
 	}
 
     public static function getApiKey($apiName) {
-        $apiKey = self::$config[self::$apiKey[$apiname]['key']];
+        $apiKey = self::$config[self::$apiKey[$apiName]['key']];
         return $apiKey;
     }
 
