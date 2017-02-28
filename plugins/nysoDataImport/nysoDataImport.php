@@ -103,8 +103,9 @@ class nysoDataImport extends pluginBase
 				nysochina::init($this->config());
 
 				$param = $this->getRequestParam("OrderAsynNotify");
+
 				// 订单流水号
-				$orderNo = str_replace(slef::NYSO_ORDER_PRE, "", $param['OrderNo']);
+				$orderNo = str_replace(self::NYSO_ORDER_PRE, "", $param['OrderNo']);
 
 				/*
 				0000	成功
@@ -127,9 +128,11 @@ class nysoDataImport extends pluginBase
 						$this->exitJSON(array("Success" => false));
 					}
 				} else {
-					$this->error("妮素订单处理错误", $param);
+					$this->error("妮素返回订单错误信息", $param);
+					$this->exitJSON(array("Success" => false));
 				}
 
+				$this->info("妮素订单处理完毕", $param);
 				$this->exitJSON(array("Success" => true));
 			};
 		});
@@ -246,11 +249,10 @@ class nysoDataImport extends pluginBase
 	}
 
 	// 计算token
-	private function toToken($parenter_key, $api_name, $param) {
+	private function toToken($partner_key, $api_name, $param) {
 		//当前系统时间：格式为yyyy-MM-dd
         $dateStr = date("Y-m-d");
-        $tokenStr = $parenter_key . $dateStr . $api_name . $param;
-		$this->info($tokenStr);
+        $tokenStr = $partner_key . $dateStr . $api_name . $param;
 
         $token = strtoupper(md5($tokenStr));
 		return $token;
@@ -262,6 +264,9 @@ class nysoDataImport extends pluginBase
 	 * @return 查询参数数组
 	 */
 	private function getRequestParam($api_name, $validators = array()) {
+
+		$partner_key = nysochina::getApiKey($api_name);
+		
 		// 取出请求头
 		$headers = apache_request_headers();
 		if(!isset($headers['interfacename']) || !isset($headers['token'])) {
@@ -276,9 +281,6 @@ class nysoDataImport extends pluginBase
 			$this->exitJSON(array('Success' => false));
 		}
 
-		$partner_key = nysochina::getApiKey($api_name);
-
-		// 验证token
 		$token = strtoupper($headers['token']);
 
 		// 取出请求内容
@@ -289,7 +291,7 @@ class nysoDataImport extends pluginBase
 			$this->exitJSON(array('Success' => false));
 		}
 		
-		$paramContent = json_decode($param, true);
+		$paramContent = JSON::decode($param, true);
 		$v = new Validator();
 		if(!$v->validate_array($paramContent, $validators))
 		{
