@@ -7,13 +7,15 @@
 class nysoDataImport extends pluginBase
 {
 
-	const CALLBACK_OK = array("success" => true);
-	const CALLBACK_NG  = array("success" => false);
 	const NYSO_SUPPLIER_ID = 1;
 	const NYSO_ORDER_PRE = "JM-";
+	private static $CALLBACK_OK = array("success" => true);
+	private static $CALLBACK_NG  = array("success" => false);
+
 	private $exchange_rate_jp;	// 日币对人民币汇率
 	private $pluginDir;
 
+	
 	private $data = array('error' => '', 'info' => '');
 
 	// 订单状态 1生成订单,2支付订单,3取消订单(客户触发),4作废订单(管理员触发),5完成订单,6退款(订单完成后),7部分退款(订单完成后)
@@ -120,15 +122,15 @@ class nysoDataImport extends pluginBase
 						$orderDB->update("order_no = '$orderNo'");
 					}catch(Exception $e) {
 						$this->error($e->getMessage(), $param);
-						$this->exitJSON(self::CALLBACK_NG);
+						$this->exitJSON(self::$CALLBACK_NG);
 					}
 				} else {
 					$this->error("妮素返回订单错误信息", $param);
-					$this->exitJSON(self::CALLBACK_NG);
+					$this->exitJSON(self::$CALLBACK_NG);
 				}
 
 				$this->info("妮素订单处理完毕", $param);
-				$this->exitJSON(self::CALLBACK_OK);
+				$this->exitJSON(self::$CALLBACK_OK);
 			};
 		});
 
@@ -267,14 +269,14 @@ class nysoDataImport extends pluginBase
 		$headers = apache_request_headers();
 		if(!isset($headers['interfacename']) || !isset($headers['token'])) {
 			$this->error("接口验证失败", array(__LINE__, $headers));
-			$this->exitJSON(self::CALLBACK_NG);			
+			$this->exitJSON(self::$CALLBACK_NG);			
 		}
 
 		// 接口验证
 		$interfacename = $headers['interfacename'];
 		if($api_name != $interfacename) {
 			$this->error("接口验证失败", array(__LINE__,$api_name, $headers));
-			$this->exitJSON(self::CALLBACK_NG);
+			$this->exitJSON(self::$CALLBACK_NG);
 		}
 
 		$token = strtoupper($headers['token']);
@@ -284,7 +286,7 @@ class nysoDataImport extends pluginBase
 		$genToken = $this->toToken($partner_key, $interfacename, $param);
 		if($token !== $genToken) {
 			$this->error("接口验证失败", array(__LINE__, $genToken, $headers, $param));
-			$this->exitJSON(self::CALLBACK_NG);
+			$this->exitJSON(self::$CALLBACK_NG);
 		}
 		
 		$paramContent = JSON::decode($param, true);
@@ -292,7 +294,7 @@ class nysoDataImport extends pluginBase
 		if(!$v->validate_array($paramContent, $validators))
 		{
 			$this->error("参数验证失败", array(__LINE__, "messages" => $v->getErrMsg(), $paramContent, $headers));
-			$this->exitJSON(self::CALLBACK_NG);
+			$this->exitJSON(self::$CALLBACK_NG);
 		}
 
 		return $paramContent;
