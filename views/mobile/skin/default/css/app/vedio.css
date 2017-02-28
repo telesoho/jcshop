@@ -11,12 +11,12 @@ body{
 .headnav .mart{
 	width: 100%;
 	overflow: hidden;
-	height: 1.8rem;
+	height: 1.9rem;
 }
 .headnav ul{
     width:100%;
     overflow-x:scroll ;
-    height: 2rem;
+    height: 2.2rem;
     display: -webkit-flex;
     display: -webkit-box;
     -webkit-flex-wrap: nowrap;
@@ -25,7 +25,9 @@ body{
 	margin-left: 0.18rem;
     list-style: none;
     width: 2.88rem;
-    height: 1.7rem;
+}
+.headnav li:last-child{
+	margin-right: 0.6rem;
 }
 .headnav li.active{
     color:#ff5959;
@@ -91,10 +93,12 @@ body{
 #vedioList .content .item .img .dis .watch {
     /*width:1.2rem;*/
     padding-right:0.3rem;
-    height:0.32rem;
+    height:0.37rem;
     border-radius: 0.05rem;
     background:rgba(0,0,0,.3);
     position: relative;
+    display: -webkit-flex;
+    -webkit-align-items: center;
 }
 #vedioList .content .item .img .dis .watch img{
     position:relative;

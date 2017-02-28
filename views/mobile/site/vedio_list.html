@@ -24,7 +24,7 @@
         <div class="headnav">
         	<div class="mart">
 	            <ul id="scrollContainer">
-	                <li v-for="item in headNav" @click="changeState(item)" :class="activeState===item.id?active:''" :id="'con'+item.id"><img :src="item.image" style="width: 2.88rem;"/></li>
+	                <li v-for="item in headNav" @click="changeState(item)" :class="activeState===item.id?active:''" :id="'con'+item.id"><img :src="'/views/mobile/skin/default/image/jmj/vedio/'+item.id+'.png'" style="width: 2.88rem;"/></li>
 	            </ul>
             </div>
         </div>
