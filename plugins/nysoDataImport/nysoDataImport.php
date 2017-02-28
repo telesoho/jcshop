@@ -276,7 +276,7 @@ class nysoDataImport extends pluginBase
 			$this->exitJSON(array('Success' => false));
 		}
 
-		$parenter_key = nysochina::getApiKey($api_name);
+		$partner_key = nysochina::getApiKey($api_name);
 
 		// 验证token
 		$token = strtoupper($headers['token']);
