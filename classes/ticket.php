@@ -168,7 +168,8 @@ class ticket{
 				return array('code'=>'002006','msg'=>'优惠券码类型不存在');
 		}
 		/* 计算商品优惠后价格 */
-		$data['goodsResult']['goodsList'] = self::goodsPrice($data['goodsResult']['goodsList'], $data['final_sum']-$data['sum'], $data['final_sum']);
+		$data['proReduce']                = $data['final_sum']-$data['sum'];
+		$data['goodsResult']['goodsList'] = self::goodsPrice($data['goodsResult']['goodsList'], $data['proReduce'], $data['final_sum']);
 		
 		return array('code'=>'0','msg'=>'ok','data'=>$data);
 	}
@@ -226,7 +227,8 @@ class ticket{
 				return array('code'=>'002012','msg'=>'优惠券类型不存在');
 		}
 		/* 计算商品优惠后价格 */
-		$data['goodsResult']['goodsList'] = self::goodsPrice($data['goodsResult']['goodsList'], $data['final_sum']-$data['sum'], $data['final_sum']);
+		$data['proReduce']                = $data['final_sum']-$data['sum'];
+		$data['goodsResult']['goodsList'] = self::goodsPrice($data['goodsResult']['goodsList'], $data['proReduce'], $data['final_sum']);
 		
 		/* 优惠券改为已使用 */
 		$model_ticket = new IModel('activity_ticket_access');

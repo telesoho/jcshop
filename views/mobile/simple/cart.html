@@ -34,7 +34,7 @@
 		<section v-for="(newGoods,key1) in goods" v-if="showMessage">
 			<div class="goodsInfo"  :style="newGoods.length==1?bottom_check:''">
 				<div class="top">
-					<img src="/views/mobile/skin/default/image/jmj/cart/plane.png" alt="" style="width:0.37rem;height:0.37rem;"/>
+					<img :src="'/views/mobile/skin/default/image/jmj/cart/'+newGoods.ware_house_id+'.png'" style="width:0.37rem;height:0.37rem;"/>
 					<span>{{newGoods.ware_house_name}}</span>
 				</div>
 				<div class="ware" v-for="item in newGoods.goodsList">

@@ -17,22 +17,25 @@
     <section id="vedioList" v-cloak>
         <loadding :mes="showloadding"></loadding>
         <div class="banner">
-            <img src="/views/mobile/skin/default/image/jmj/vedio/banner.png" alt="" style="width:100%" />
+            <img src="/views/mobile/skin/default/image/jmj/vedio/sitemap.png"/>
+            <p>热门分类</p>
         </div>
         <!--视频的顶部导航-->
         <div class="headnav">
-            <ul id="scrollContainer">
-                <li v-for="item in headNav" @click="changeState(item)" :class="activeState===item.id?active:''" :id="'con'+item.id">{{item.name}}</li>
-            </ul>
+        	<div class="mart">
+	            <ul id="scrollContainer">
+	                <li v-for="item in headNav" @click="changeState(item)" :class="activeState===item.id?active:''" :id="'con'+item.id"><img :src="item.image" style="width: 2.88rem;"/></li>
+	            </ul>
+            </div>
         </div>
         <!--视频的专辑列表页面-->
         <div class="content" v-if="contentInfo.length" style="padding-bottom:0.2rem">
             <div class="item" v-for="(item,key) in contentInfo">
                 <div class="img" @click="linkTo(item.id)">
-                    <img :src="item.img" alt="" style="width:100%;height:2.8rem;border-radius:0.1rem;" class="bgimg"/>
+                    <img :src="item.img" alt="" style="display:block;width:7.1rem;margin:0 auto;height:2.8rem;border-radius:0.1rem;" class="bgimg"/>
                     <div class="bg"></div>
                     <div class="play">
-                        <img src="/views/mobile/skin/default/image/jmj/vedio/play2.png" alt="" style="width:0.88rem;" />
+                        <img src="/views/mobile/skin/default/image/jmj/icon/play_icon.png" alt="" style="width:0.9rem;" />
                     </div>
                     <div class="dis box">
                         <p class="hidewrap distribution">{{item.title}}</p>
@@ -49,7 +52,16 @@
             </div>
         </div>
         <!--暂无更多专辑-->
-        <whether :state="infoState"></whether>
+        <div class="flexbox empty_product" v-if="infoState">
+            <div class="img">
+                <img src="/views/mobile/skin/default/image/jmj/icon/cat_vodeo.png" style="width: 0.76rem;"/>
+            </div>
+            <div class="content contents">
+                <!--<span style="color:#bbb">~</span>-->
+                <span style="color:#bbb">别拉了，到底了</span>
+                <!--<span style="color:#bbb">~</span>-->
+            </div>
+       </div>
     </section>
 <script src="/views/mobile/javascript/jquery.min.js"></script>
 <script src="/views/mobile/javascript/vue.js"></script>
@@ -58,8 +70,6 @@
 <script src="/views/mobile/javascript/mui.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/lazyload.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/common.js?v=<?php echo time(); ?>"></script>
-<!--底部-->
-<script src="/views/mobile/components/Whether.js?v=<?php echo time(); ?>"></script>
 <script src="/views/mobile/javascript/jiumao/wechat.js?v=<?php echo time(); ?>"></script>
 
 <!-- 微信分享 -->
@@ -90,7 +100,7 @@ $this->wechat->jsApiSDK();
             showloadding:true,//加载动画控制函数
             activeState:0,//导航的初始选中状态
             page:1, //初始的页数
-            active:"active",//导航的激活状态
+//          active:"active",//导航的激活状态
              headNav:[],
              contentInfo:[],
 //            收藏视频的数据
@@ -184,7 +194,7 @@ $this->wechat->jsApiSDK();
                     success:function(data){
                         self.showloadding=false;
                         //在获取的数组前面插入全部心得
-                        data.data.cat_list.unshift({id:0,name:"全部视频"})
+//                      data.data.cat_list.unshift({id:0,name:"全部视频"})
                         self.headNav=data.data.cat_list;
                         //处理所获取的视频列表数据
                         if(data.data.video_list){
