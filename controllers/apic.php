@@ -8,7 +8,7 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '周末休息时间~也给你的眼睛做做SPA~ 限时抢眼药水专场！全场22.9起！市面上最火都有哦~ 不要压抑自己买买买！';
+	private $remark = 'COSME大赏日系超高人气面膜专场，全场面膜7折起~限时抢购12:00开始哟~';
 	private $remark_goods_id = 18944;
 	private $time = '今天中午12:00';
 //	private $time = '今天晚上22:00';
@@ -3575,6 +3575,7 @@ class Apic extends IController{
         $order_query->fields = 'a.*,b.delivery_code,b.delivery_type';
         $order_query->where  = "order_no = $order_no";
         $data                = $order_query->find();
+        $delivery_code       = $data[0]['delivery_code'];
         if (empty($data)){
             common::log_write($order_query->getSql(), 'ERROR','logistic');
             $this->returnJson(array('code' => '-1', 'msg' => '订单未发货', 'data' => null));
@@ -3587,7 +3588,7 @@ class Apic extends IController{
         $ret            = array_map(function ($v) {
             return (array)$v;
         }, $billStatusList);
-        $this->returnJson(array('code' => '0', 'msg' => '查询物流信息成功', 'data' => ['type' => 'xlobo', 'name'=>'贝海国际物流', 'order_no' => $order_no, 'data' => $ret]));
+        $this->returnJson(array('code' => '0', 'msg' => '查询物流信息成功', 'data' => ['type' => 'xlobo', 'name'=>'贝海国际物流', 'order_no' => $order_no, 'data' => $ret, 'delivery_code'=>$delivery_code]));
     }
 
     /**
