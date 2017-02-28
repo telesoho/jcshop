@@ -126,7 +126,7 @@
     function ordersSyn() {
         var myDialog = art.dialog({content: '正在同步妮素订单...', lock: true});// 初始化一个带有loading图标的空对话框
         jQuery.ajax({
-            url: '{url:/nyso/nyso_order_syn}',
+            url: '{url:/nyso/nyso_order_asyn}',
             success: function (data) {
                 console.log("data", data);
                 if ( data instanceof Object) {
@@ -136,14 +136,14 @@
                 }
                 myDialog.close();
             }
-        });        
+        });
     }
 
     // 运单同步
     function postsSyn() {
         var myDialog = art.dialog({content: '正在同步运单...', lock: true});// 初始化一个带有loading图标的空对话框
         jQuery.ajax({
-            url: '{url:/nyso/nyso_post_asyn}',
+            url: '{url:/nyso/nyso_post_syn}',
             success: function (data) {
                 console.log("data", data);
                 if ( data instanceof Object) {

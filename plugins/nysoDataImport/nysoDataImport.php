@@ -249,8 +249,8 @@ class nysoDataImport extends pluginBase
 	private function toToken($parenter_key, $api_name, $param) {
 		//当前系统时间：格式为yyyy-MM-dd
         $dateStr = date("Y-m-d");
-		$paramContent = json_encode($param);
-        $tokenStr = $parenter_key . $dateStr . $api_name . $paramContent;
+        $tokenStr = $parenter_key . $dateStr . $api_name . $param;
+		$this->info($tokenStr);
 
         $token = strtoupper(md5($tokenStr));
 		return $token;
@@ -265,32 +265,36 @@ class nysoDataImport extends pluginBase
 		// 取出请求头
 		$headers = apache_request_headers();
 		if(!isset($headers['interfacename']) || !isset($headers['token'])) {
-			$this->exitError("接口验证失败", array(__LINE__, $headers));
+			$this->error("接口验证失败", array(__LINE__, $headers));
+			$this->exitJSON(array('Success' => false));			
 		}
 
 		// 接口验证
 		$interfacename = $headers['interfacename'];
-		if($api_name !== $this->interfacename) {
-			$this->exitError("接口验证失败", array(__LINE__, $headers));
+		if($api_name != $interfacename) {
+			$this->error("接口验证失败", array(__LINE__,$api_name, $headers));
+			$this->exitJSON(array('Success' => false));
 		}
 
-		$parenter_key = $result['partner_key'];
+		$parenter_key = nysochina::getApiKey($api_name);
 
 		// 验证token
-		$token = $headers['token'];
+		$token = strtoupper($headers['token']);
 
 		// 取出请求内容
 		$param = @file_get_contents('php://input');
 		$genToken = $this->toToken($partner_key, $interfacename, $param);
 		if($token !== $genToken) {
-			$this->exitError("接口验证失败", array(__LINE__, $genToken, $headers));
+			$this->error("接口验证失败", array(__LINE__, $genToken, $headers, $param));
+			$this->exitJSON(array('Success' => false));
 		}
 		
 		$paramContent = json_decode($param, true);
 		$v = new Validator();
 		if(!$v->validate_array($paramContent, $validators))
 		{
-			$this->exitError("参数验证失败", array(__LINE__, "messages" => $v->getErrMsg(), $paramContent, $headers));
+			$this->error("参数验证失败", array(__LINE__, "messages" => $v->getErrMsg(), $paramContent, $headers));
+			$this->exitJSON(array('Success' => false));
 		}
 
 		return $paramContent;
