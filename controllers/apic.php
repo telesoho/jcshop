@@ -8,7 +8,7 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '周末休息时间~也给你的眼睛做做SPA~ 限时抢眼药水专场！全场22.9起！市面上最火都有哦~ 不要压抑自己买买买！';
+	private $remark = 'COSME大赏日系超高人气面膜专场，全场面膜7折起~限时抢购12:00开始哟~';
 	private $remark_goods_id = 18944;
 	private $time = '今天中午12:00';
 //	private $time = '今天晚上22:00';

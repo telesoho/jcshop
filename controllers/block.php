@@ -78,6 +78,7 @@ class Block extends IController
 			$modelGoods->update('id IN ('.implode(',',$goodsId).')');
 		}
 		
+		common::dblog('autoRun ok!');
 	}
 
  	/**
