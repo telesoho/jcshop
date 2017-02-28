@@ -150,6 +150,7 @@ class goods_class
 		$goodsUpdateData['jp_price']     = isset($postData['_jp_price'])     ? current($postData['_jp_price'])     : 0;
 		$goodsUpdateData['weight']       = isset($postData['_weight'])       ? current($postData['_weight'])       : 0;
 
+
 		//处理商品
 		$goodsDB = new IModel('goods');
 		if($id)
@@ -217,7 +218,8 @@ class goods_class
 					'cost_price' => $postData['_cost_price'][$key],
 					'jp_price' => $postData['_jp_price'][$key],
 					'weight' => $postData['_weight'][$key],
-					'spec_array' => "[".join(',',$postData['_spec_array'][$key])."]"
+					'spec_array' => "[".join(',',$postData['_spec_array'][$key])."]",
+					'spec_array_id' => $postData['_specArrayId'][$key],
 				);
 				$productsDB->setData($productsData);
 				$productIdArray[$key] = $productsDB->add();
