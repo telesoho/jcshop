@@ -93,7 +93,7 @@ class nysoDataImport extends pluginBase
 		// 注册妮素订单同步接口
 		plugin::reg("onBeforeCreateAction@nyso@nyso_order_asyn",function(){
             self::controller()->nyso_order_asyn = function(){
-				$this->nyso_order_syn();
+				$this->nyso_order_asyn();
 			};
 		});
 
@@ -104,7 +104,8 @@ class nysoDataImport extends pluginBase
 
 				$param = $this->getRequestParam("OrderAsynNotify");
 				// 订单流水号
-				$orderNo = $param['OrderNo'];
+				$orderNo = str_replace(slef::NYSO_ORDER_PRE, "", $param['OrderNo']);
+
 				/*
 				0000	成功
 				9004	消息解析失败
@@ -123,15 +124,13 @@ class nysoDataImport extends pluginBase
 						$orderDB->update("order_no = '$orderNo'");
 					}catch(Exception $e) {
 						$this->error($e->getMessage(), $param);
-						$ret = array("Success" => false);
-						$this->exitJSON($ret);
+						$this->exitJSON(array("Success" => false));
 					}
 				} else {
-					$this->error($message, $param);
+					$this->error("妮素订单处理错误", $param);
 				}
 
-				$ret = array("Success" => true);
-				$this->exitJSON($ret);
+				$this->exitJSON(array("Success" => true));
 			};
 		});
 
@@ -250,8 +249,8 @@ class nysoDataImport extends pluginBase
 	private function toToken($parenter_key, $api_name, $param) {
 		//当前系统时间：格式为yyyy-MM-dd
         $dateStr = date("Y-m-d");
-		$paramContent = json_encode($param);
-        $tokenStr = $parenter_key . $dateStr . $api_name . $paramContent;
+        $tokenStr = $parenter_key . $dateStr . $api_name . $param;
+		$this->info($tokenStr);
 
         $token = strtoupper(md5($tokenStr));
 		return $token;
@@ -266,32 +265,36 @@ class nysoDataImport extends pluginBase
 		// 取出请求头
 		$headers = apache_request_headers();
 		if(!isset($headers['interfacename']) || !isset($headers['token'])) {
-			$this->exitError("接口验证失败", array(__LINE__, $headers));
+			$this->error("接口验证失败", array(__LINE__, $headers));
+			$this->exitJSON(array('Success' => false));			
 		}
 
 		// 接口验证
 		$interfacename = $headers['interfacename'];
-		if($api_name !== $this->interfacename) {
-			$this->exitError("接口验证失败", array(__LINE__, $headers));
+		if($api_name != $interfacename) {
+			$this->error("接口验证失败", array(__LINE__,$api_name, $headers));
+			$this->exitJSON(array('Success' => false));
 		}
 
-		$parenter_key = $result['partner_key'];
+		$parenter_key = nysochina::getApiKey($api_name);
 
 		// 验证token
-		$token = $headers['token'];
+		$token = strtoupper($headers['token']);
 
 		// 取出请求内容
 		$param = @file_get_contents('php://input');
 		$genToken = $this->toToken($partner_key, $interfacename, $param);
 		if($token !== $genToken) {
-			$this->exitError("接口验证失败", array(__LINE__, $genToken, $headers));
+			$this->error("接口验证失败", array(__LINE__, $genToken, $headers, $param));
+			$this->exitJSON(array('Success' => false));
 		}
 		
 		$paramContent = json_decode($param, true);
 		$v = new Validator();
 		if(!$v->validate_array($paramContent, $validators))
 		{
-			$this->exitError("参数验证失败", array(__LINE__, "messages" => $v->getErrMsg(), $paramContent, $headers));
+			$this->error("参数验证失败", array(__LINE__, "messages" => $v->getErrMsg(), $paramContent, $headers));
+			$this->exitJSON(array('Success' => false));
 		}
 
 		return $paramContent;
@@ -598,11 +601,18 @@ class nysoDataImport extends pluginBase
         $nysoOrder["DetailedAddres"] = $jcOrder["address"];			// 收货详细地址信息
 
         $nysoOrder["Remark"] = "九猫家订单";							// 备注
-		$nysoOrder["PostalPrice"] = $jcOrder["payable_freight"];	// 邮费
-        $nysoOrder["Favourable"] = "0";					        	// 优惠金额
-		$nysoOrder["Tax"] = $jcOrder["duties"];         			// 商品税费		
-		$nysoOrder["GoodsPrice"] = $jcOrder["real_amount"]; 		// 货值
-		$nysoOrder["OrderPrice"] = $jcOrder["order_amount"];  		// 订单总价 用户实际交易金额
+
+		$nysoOrder["PostalPrice"] = $jcOrder["real_freight"];		// 邮费
+		$nysoOrder["Tax"] = $jcOrder["duties"];         			// 商品税费
+		$nysoOrder["GoodsPrice"] = $jcOrder["payable_amount"]; 		// 货值
+		if(floatVal($jcOrder['order_amount']) === 0) {
+			$nysoOrder["Favourable"] = $jcOrder["promotions"];			// 优惠金额
+			$nysoOrder["OrderPrice"] = $jcOrder["order_amount"];  		// 订单总价 用户实际交易金额
+		} else {
+			// 由于妮素平台不允许订单金额为0的订单,把订单总价设定为应付邮费
+			$nysoOrder["Favourable"] = 0;			// 优惠金额
+			$nysoOrder["OrderPrice"] = $nysoOrder["GoodsPrice"] + $nysoOrder["Tax"] + $nysoOrder["PostalPrice"];    // 订单总价 为 应付邮费
+		}
 
 
 		// 查询订单商品清单
@@ -612,7 +622,7 @@ class nysoDataImport extends pluginBase
 				'fields' => 'g1.*, gs.delivery_city, gs.duties_rate, gs.delivery_code, gs.ware_house_name',
 				'join' => "left join goods_supplier as gs on g1.supplier_id = gs.supplier_id and g1.sku_no = gs.sku_no",
 			), 
-		);		
+		);
 		$query = new IQuery("order_goods AS og");
 		$query->where = "og.order_id =" . $jcOrder["id"];
 		$query->subQueries = $subQuery;
@@ -630,7 +640,7 @@ class nysoDataImport extends pluginBase
 			$item["SkuNo"] = $jcItem["sku_no"];						// 商品编码
 			$item["BuyQuantity"] = $jcItem["goods_nums"];			// 购买数量
 			$item["Tax"] = $jcItem["duties"];						// 商品关税税费 已经算过数量，单位：元
-			$item["BuyPrice"] = $jcItem["real_price"];  			// 未算过数量的购买商品时的单价
+			$item["BuyPrice"] = $jcItem["goods_price"];  			// 未算过数量的购买商品时的单价
 
 			// 验证订单是否合法
 			if($jcItem["supplier_id"] !== "1") {

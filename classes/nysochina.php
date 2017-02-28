@@ -185,6 +185,11 @@ class nysochina
 		exit();
 	}
 
+    public static function getApiKey($apiName) {
+        $apiKey = self::$config[self::$apiKey[$apiname]['key']];
+        return $apiKey;
+    }
+
     /*===================================================================================
      * 私有函数
      *==================================================================================*/
