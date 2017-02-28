@@ -504,7 +504,7 @@ class nysoDataImport extends pluginBase
 						.'LEFT JOIN areas AS a2 ON o.city = a2.area_id '
 						.'LEFT JOIN areas AS a3 ON o.area = a3.area_id '
 						.'LEFT JOIN user AS u on o.user_id = u.id';
-		$query->where  = 'o.supplier_id = 1 and isnull(supplier_syn_date) and pay_status = 1';
+		$query->where  = 'o.supplier_id = 1 and isnull(supplier_syn_date) and pay_status = 1 and if_del <> 1';
 		$query->fields = 'a1.area_name as province_name, a2.area_name as city_name, a3.area_name as area_name,'
 						.'u.sfz_name as payer_name, u.sfz_num as payer_id_card, o.*';
 		$jcOrderList   = $query->find();
