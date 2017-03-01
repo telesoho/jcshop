@@ -3650,7 +3650,7 @@ OR (
         $start      = IFilter::act(IReq::get('start'));
         $user_query = new IQuery('open_ids');
         if ($start == 'test') {
-            $user_query->where = "open_id in ('orEYdw0X44crd6F3MOdXES6Hfpig','orEYdw9QmiBSIXWa-zrTbJc091L4','orEYdw5QShdxdphix7TxAgqxljVI','orEYdw9QmiBSIXWa-zrTbJc091L4')";
+            $user_query->where = "open_id in ('orEYdw0X44crd6F3MOdXES6Hfpig','orEYdw5QShdxdphix7TxAgqxljVI','orEYdw9QmiBSIXWa-zrTbJc091L4')";
         } else {
             $user_query->limit = $start;
         }
