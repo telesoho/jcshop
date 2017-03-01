@@ -8,7 +8,7 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = 'COSME大赏日系超高人气面膜专场，全场面膜7折起~限时抢购12:00开始哟~';
+	private $remark = '日系开架护肤专场明色/千妇恋也上限时抢啦~彩妆护肤统统都有~抄底价31.9起';
 	private $remark_goods_id = 18944;
 	private $time = '今天中午12:00';
 //	private $time = '今天晚上22:00';
