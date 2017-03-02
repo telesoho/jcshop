@@ -34,13 +34,13 @@ class IQuery
      */
 	public function __construct($name)
 	{
-		$this->tablePre = IWeb::$app->config['DB']['tablePre'];
+		$this->tablePre = "iwebshop_";
 		if(is_array($name)) {
             $this->subQueries = $name;
 		} else {
 			$this->table = $name;
 		}
-		$this->dbo=IDBFactory::getDB();
+		/// $this->dbo=IDBFactory::getDB();
 	}
     /**
      * @brief 给表添加表前缀
@@ -48,6 +48,13 @@ class IQuery
      */
 	public function setTable($name)
 	{
+		$re = '/\s+(union)\s+/i';
+		if(preg_match($re, $name, $matches))
+		{
+			// 如果包含有union，不做处理
+			$this->sql['table'] = $name;
+			return ;
+		}		
 		if(strpos($name,',') === false)
 		{
 			$this->sql['table']= $this->tablePre.trim($name);
@@ -85,7 +92,7 @@ class IQuery
     }
 	/**
 	 * @brief 设置子查询
-	 * @param &$query 子查询IQuery
+	 * @param $query 子查询IQuery
 	 */
 	public function setSubQueries($query)
 	{
@@ -220,7 +227,7 @@ class IQuery
 
 	/**
 	 * @brief 获取原生态的SQL
-	 * @return sql语句
+	 * @return string sql语句
 	 */
     public function getSql()
     {
@@ -266,17 +273,32 @@ $subQuery = array(
 
 // print $query->getSql();
 
-$subQuery = array(
-    'g1' => array(
-        'table' => 'goods g1',
-        'fields' => 'g1.*, gs.delivery_city, gs.duties_rate, gs.delivery_code, gs.ware_house_name',
-        'join' => "left join goods_supplier as gs on g1.supplier_id = gs.supplier_id and g1.sku_no = gs.sku_no",
-    ), 
-);		
-$query = new IQuery("order_goods AS og");
-$query->where = "og.order_id = 1";
-$query->subQueries = $subQuery;
-$query->join = "LEFT JOIN @g1 as g ON g.id = og.goods_id ";
-$query->fields = "g.sku_no, g.goods_no, g.name, g.ware_house_name,  g.content, g.delivery_code, g.supplier_id, g.delivery_city,g.duties_rate,"
-                ."og.*";
+// $subQuery = array(
+//     'g1' => array(
+//         'table' => 'goods g1',
+//         'fields' => 'g1.*, gs.delivery_city, gs.duties_rate, gs.delivery_code, gs.ware_house_name',
+//         'join' => "left join goods_supplier as gs on g1.supplier_id = gs.supplier_id and g1.sku_no = gs.sku_no",
+//     ), 
+// );		
+// $query = new IQuery("order_goods AS og");
+// $query->where = "og.order_id = 1";
+// $query->subQueries = $subQuery;
+// $query->join = "LEFT JOIN @g1 as g ON g.id = og.goods_id ";
+// $query->fields = "g.sku_no, g.goods_no, g.name, g.ware_house_name,  g.content, g.delivery_code, g.supplier_id, g.delivery_city,g.duties_rate,"
+//                 ."og.*";
+// print $query->getSql();
+
+
+$query = new IQuery("(@a union all @b) as ab");
+$query->subQueries = array(
+	'a' => array(
+		'table' => 'goods g1',
+		'where' => 'id >2 and id < 10',
+	),
+	'b' => array(
+		'table' => 'goods g1',
+		'where' => 'id > 10 and id < 100',
+	)
+);
+
 print $query->getSql();
