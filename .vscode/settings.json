@@ -1,0 +1,18 @@
+// 既定の設定とユーザー設定を上書きするには、このファイル内に設定を挿入します
+{
+    // PHP の実行可能ファイルをポイントします。
+    "php.validate.executablePath": "C:/xampp/php/php.exe",
+    "code-runner.executorMap": {
+        "javascript": "node",
+        "php": "C:/xampp/php/php.exe",
+        "python": "python",
+        ".html": "\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\""
+    },
+    "editor.fontSize": 16,
+    "editor.mouseWheelZoom": true,
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/runtime": true
+    }  
+}

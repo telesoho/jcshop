@@ -57,7 +57,7 @@ return array(
 		)
 	),
 
-	// 取九猫商品数据，包含products
+	// 取九猫商品数据，包含products表
 	'getGoodsInfoBySkuNo2' => array(
 		'query' => array(
 			'name' => '@sa as sg',

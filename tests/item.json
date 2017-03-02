@@ -1,0 +1,420 @@
+// SkuSynchro
+ReqJSON {
+    "ReqType": "2",
+    "SkuReqs": [
+        "FAN5852",
+        "MUJ8358",
+        "XHX3265"
+    ]
+}
+ReturnJSON
+    [{
+        "DeliveryCity": "杭州",
+        "BarCode": "4908049268312",
+        "SettlePrice": 142.00,
+        "Details": "日本原装，杭州保税区发货。FANCL胶原蛋白粉末含专利「三肽胶原蛋白」，分子极细，极易被吸收。有助扩大肌肤储水空间、提升肌肤弹性。 还添加了苹果多酚，对抗紫外线伤害能力大大加强，有效减少肌肤胶原蛋白流失，预防光老化所引起的肌肤干燥及衰老问题，让你重拾柔滑嫩肌。一盒30支，一日一支，放在包包里随时随地都能喝，简直不要太方便！",
+        "WareHouseName": "保税1仓",
+        "SaleType": 0,
+        "DeliveryCode": 1,
+        "Weight": 140.00,
+        "SkuNo": "FAN5852",
+        "RetailPrice": 202.00,
+        "Rate": 0.1190,
+        "SkuName": "FANCL/芳珂 HTC胶原蛋白粉 30日"
+    }, {
+        "DeliveryCity": "杭州",
+        "BarCode": "4548076448358",
+        "SettlePrice": 41.00,
+        "Details": "无印良品家的护肤品，对于品质可以绝对放心。本款乳液不含酒精、防腐剂、香料、色素、矿物油。添加葡萄柚籽、马齿苋等精华，可以赋予肌肤润泽保护，对于干燥敏感肌，使用感也是非常湿润。虽然瓶身很大一瓶，超级实惠，但是瓶口却是小口设计，便于控制用量。共有清爽型和滋润型两款可选。搭配无印良品的化妆水一起使用更保湿哦。",
+        "WareHouseName": "保税1仓",
+        "SaleType": 0,
+        "DeliveryCode": 1,
+        "Weight": 230.00,
+        "SkuNo": "MUJ8358",
+        "RetailPrice": 72.00,
+        "Rate": 0.1190,
+        "SkuName": "MUJI/无印良品 敏感肌用乳液清爽型 200ml"
+    }, {
+        "DeliveryCity": "杭州",
+        "BarCode": "4560314703265",
+        "SettlePrice": 35.00,
+        "Details": "Reveur是无硅洗发水开山鼻祖， 尽管现在各大洗护品牌都有推出无硅洗发水，但Reveur始终是无硅美发产品的第一品牌，自推出以来一直独占Cosme洗护首位。紫色的Reveur是养润保湿型，适合发质干枯毛躁的MM。配合三种改善干枯暗哑发质的“大地精华成分”和十四种“天然萃取润发成分”深入发丝内部补充水分，改善秀发干枯毛躁。洗发水自带酸甜果浆和清新的花香，配合Reveur护发素使用，更有惊艳效果。",
+        "WareHouseName": "保税1仓",
+        "SaleType": 0,
+        "DeliveryCode": 1,
+        "Weight": 601.00,
+        "SkuNo": "XHX3265",
+        "RetailPrice": 65.00,
+        "Rate": 0.1190,
+        "SkuName": "Reveur 无硅洗发水 紫色（黑标） 500ml"
+    }]
+
+
+// AddOrder
+{
+    "api": "http://121.41.84.251:9090/api/AddOrder.shtml",
+    "param": {
+        "OrderNo": "JC-20170117192809155316",
+        "OrderTime": "20170117192809",
+        "PayType": "2",
+        "PayNo": "",
+        "Nick": "",
+        "ConsigneeNumber": "13667787838",
+        "ConsigneeName": "谭文洪",
+        "PayerName": "陈波",
+        "IdCard": "330727199206290417",
+        "Province": "北京市",
+        "City": "市辖区",
+        "District": "110101",
+        "DetailedAddres": "中关村",
+        "Remark": "九猫家订单",
+        "PostalPrice": "70.00",
+        "Favourable": "0",
+        "Tax": "0.00",
+        "GoodsPrice": "541.00",
+        "OrderPrice": "576.00",
+        "OrderItems": [{
+            "SkuNo": "FAN5852",
+            "BuyQuantity": "2",
+            "Tax": 48.08,
+            "BuyPrice": "202.00"
+        }, {
+            "SkuNo": "MUJ8358",
+            "BuyQuantity": "1",
+            "Tax": 8.57,
+            "BuyPrice": "72.00"
+        }, {
+            "SkuNo": "XHX3265",
+            "BuyQuantity": "1",
+            "Tax": 7.74,
+            "BuyPrice": "65.00"
+        }],
+        "DeliveryType": "1"
+    },
+    "header": ["parenter:1161_651", "interfacename:AddOrder", "token:7254000391FF28AE49FFBE6E7379D38B"]
+}
+
+{
+    "api": "http://121.41.84.251:9090/api/AddOrder.shtml",
+    "param": {
+        "OrderNo": "JC-20170122161916794638",
+        "OrderTime": "19700101080000",
+        "PayType": "2",
+        "PayNo": "",
+        "Nick": "",
+        "ConsigneeNumber": "13632323232",
+        "ConsigneeName": "谭文洪",
+        "PayerName": "谭文洪",
+        "IdCard": null,
+        "Province": "北京市",
+        "City": "市辖区",
+        "District": "110101",
+        "DetailedAddres": "啊啊啊吧",
+        "Remark": "九猫家订单",
+        "PostalPrice": "85.00",
+        "Favourable": "0",
+        "Tax": "0.00",
+        "GoodsPrice": "202.00",
+        "OrderPrice": "311.04",
+        "OrderItems": [{
+            "SkuNo": "MUJ8358",
+            "BuyQuantity": "1",
+            "Tax": "8.57",
+            "BuyPrice": "72.00"
+        }, {
+            "SkuNo": "XHX3265",
+            "BuyQuantity": "2",
+            "Tax": "15.47",
+            "BuyPrice": "65.00"
+        }],
+        "DeliveryType": "1"
+    },
+    "header": ["parenter:1161_651", "interfacename:AddOrder", "token:4A3CEDB6AE8CB9BBC4200ECB95A41D98"]
+}
+
+
+{
+    "ConsigneeName": "王彬",
+    "OrderTime": "20161016122450",
+    "GoodsPrice": 100.0,
+    "PostalPrice": 15.0,
+    "Duities": 11.9,
+    "IdCard": "450104197403192016",
+    "Province": "浙江省",
+    "ConsigneeMobile": "13667787890",
+    "City": "杭州市",
+    "DetailedAddres": "浙商财富中心四号楼506",
+    "PayerName": "王彬",
+    "PayNo": "sadadad",
+    "DeliveryType": "1",
+    "District": "西湖区",
+    "Favourable": 12,
+    "OrderNo": "NS-20161128175723",
+    "OrderItems": [{
+            "BuyPrice": "100",
+            "SkuNo": "NS10023",
+            "BuyQuantity": "1",
+            "Tax": "11.9"
+        },
+        {
+            "BuyPrice": "100",
+            "SkuNo": "NS10023",
+            "BuyQuantity": "1",
+            "Tax": "11.9"
+        }
+    ],
+    "Remark": "测试",
+    "OrderPrice": 114.9,
+    "PayType": "1",
+    "Nick": "王彬"
+}
+
+// supGoodsSynchro
+{
+    "SupGoods": {
+        "Brand": "山本汉方",
+        "Description": "和光堂 mama-style 孕妇叶酸糖 78g",
+        "BarCode": "4987244182098",
+        "SettlePrice": 52.32,
+        "Type": "美妆护肤",
+        "TypeTwo": "",
+        "Life": "2年",
+        "Origin": "日本",
+        "WmsName": "九猫_保税区",
+        "GoodsName": "和光堂 mama-style 孕妇叶酸糖 78g",
+        "Manufacturer": "方柯会社",
+        "Weight": 78,
+        "Nnit": "90g",
+        "SupGoodsNo": "JM000000-4987244182098",
+        "Rate": 0.119,
+        "NetContent": 50.1,
+        "MiddPicUrl": "http://m.jiumaojia.com/upload/goods_pic/mainPic/4987244182098/0_https___images-na.ssl-images-amazon.com_images_I_51LtdiFan2L._SY355_.jpg",
+        "DispalyPicUrls": [
+            "http://m.jiumaojia.com/upload/goods_pic/mainPic/4987244182098/0_https___images-na.ssl-images-amazon.com_images_I_51LtdiFan2L._SY355_.jpg",
+            "http://m.jiumaojia.com/upload/goods_pic/mainPic/4987244182098/0_https___images-na.ssl-images-amazon.com_images_I_51LtdiFan2L._SY355_.jpg"
+        ],
+        "DetailPicUrls": [
+            "http://m.jiumaojia.com/upload/goods_pic/mainPic/4987244182098/0_https___images-na.ssl-images-amazon.com_images_I_51LtdiFan2L._SY355_.jpg",
+            "http://m.jiumaojia.com/upload/goods_pic/mainPic/4987244182098/0_https___images-na.ssl-images-amazon.com_images_I_51LtdiFan2L._SY355_.jpg"
+        ]
+    }
+}
+
+{
+    "SupGoods": {
+        "Brand": "山本汉方",
+        "Description": "ALLIE隔离防晒霜在12、14年均获得日本美容权威COSME大赏防晒类NO.1。",
+        "BarCode": "123132131231111",
+        "SettlePrice": 52.32,
+        "Type": "美妆护肤",
+        "TypeTwo": "卸妆/去角质",
+        "Origin": "日本",
+        "Life": "2年",
+        "WmsName": "nick_保税区",
+        "GoodsName": "供应商接口测试商品",
+        "Manufacturer": "方柯会社",
+        "Weight": 50.8,
+        "Nnit": "90g",
+        "SupGoodsNo": "sup-g123",
+        "Rate": 0.119,
+        "NetContent": 50.1
+    }
+}
+
+
+{
+    "SupGoods": {
+        "Brand": "山本汉方",
+        "Description": "和光堂 mama-style 孕妇叶酸糖 78g",
+        "BarCode": "4987244182098",
+        "SettlePrice": 52.32,
+        "Type": "美妆护肤",
+        "Life": "2年",
+        "Origin": "日本",
+        "WmsName": "九猫_保税区",
+        "GoodsName": "和光堂 mama-style 孕妇叶酸糖 78g",
+        "Manufacturer": "方柯会社",
+        "Weight": 78,
+        "Nnit": "90g",
+        "SupGoodsNo": "JM000000-4987244182098",
+        "Rate": 0.119,
+        "NetContent": 50.1,
+        "MiddPicUrl": "",
+        "DispalyPicUrls": [],
+        "DetailPicUrls": []
+    }
+}
+
+
+{
+    "api": "http://121.41.84.251:9090/api/sup/supGoodsSynchro.shtml",
+    "param": {
+        "SupGoods": {
+            "Brand": "山本汉方",
+            "Description": "和光堂 mama-style 孕妇叶酸糖 78g",
+            "BarCode": "4987244182098",
+            "SettlePrice": 52.32,
+            "Type": "美妆护肤",
+            "Life": "2年",
+            "Origin": "日本",
+            "WmsName": "九猫_保税区",
+            "GoodsName": "和光堂 mama-style 孕妇叶酸糖 78g",
+            "Manufacturer": "方柯会社",
+            "Weight": 78,
+            "Nnit": "90g",
+            "SupGoodsNo": "JM000000-4987244182098",
+            "Rate": 0.119,
+            "NetContent": 50.1,
+            "MiddPicUrl": "",
+            "DispalyPicUrls": [],
+            "DetailPicUrls": []
+        }
+    },
+    "header": ["parenter:1161_651", "interfacename:supGoodsSynchro", "token:2DC020D1ECB69BC4DAF2F4BF2F3021B0"],
+    "info": "",
+    "response": ""
+}
+
+{
+    "success": true,
+    "validate": "00000",
+    "message": "成功",
+    "result": {
+        "Orders": [{
+            "OrderTime": "2016-11-22 14:01:46",
+            "ConsigneeName": "卢雅倩",
+            "PostalTotal": 0,
+            "OrderStatus": "TRADE_STATUS_FINISHED",
+            "DiscountTotal": 0,
+            "SendTime": "2016-12-01 14:18:01",
+            "IdCard": "330727199108202241",
+            "PostId": null,
+            "WmsName": "香港仓",
+            "Province": "浙江省",
+            "ConsigneeNumber": "15268612207",
+            "City": "杭州市",
+            "SettleTotal": 550,
+            "DetailedAddres": "浙江省杭州市下城区绍兴路161号野风现代中心南楼2216室",
+            "District": "下城区",
+            "OrderTotal": 550,
+            "LogisticName": "圆通快递",
+            "OrderItems": [{
+                "BuyPrice": 550,
+                "SupGoodsNo": "zzb079",
+                "BuyQty": 1
+            }],
+            "TaxFee": 0,
+            "Remark": ""
+        }, {
+            "OrderTime": "2016-11-23 13:42:42",
+            "ConsigneeName": "李墨",
+            "PostalTotal": 0,
+            "OrderStatus": "TRADE_STATUS_FINISHED",
+            "DiscountTotal": 0,
+            "SendTime": "2016-12-01 14:17:31",
+            "IdCard": "362430198808230061",
+            "PostId": null,
+            "WmsName": "香港仓",
+            "Province": "湖南省",
+            "ConsigneeNumber": "18676789952",
+            "City": "长沙市",
+            "SettleTotal": 265,
+            "DetailedAddres": "湖南省长沙市岳麓区梅溪湖梅溪新秀一期3栋502",
+            "District": "岳麓区",
+            "OrderTotal": 265,
+            "LogisticName": "圆通快递",
+            "OrderItems": [{
+                "BuyPrice": 265,
+                "SupGoodsNo": "zzb099",
+                "BuyQty": 1
+            }],
+            "TaxFee": 0,
+            "Remark": ""
+        }],
+        "TotalResults": 2
+    }
+}
+
+{
+    "obj": {
+        "province_name": "浙江省",
+        "city_name": "杭州市",
+        "area_name": "滨江区",
+        "payer_name": "陈波",
+        "payer_id_card": "330727199207290427",
+        "id": "1090",
+        "order_no": "20170227171831762460",
+        "user_id": "24",
+        "pay_type": "13",
+        "distribution": "1",
+        "status": "2",
+        "pay_status": "1",
+        "distribution_status": "0",
+        "accept_name": "陈波",
+        "postcode": "",
+        "telphone": "",
+        "country": null,
+        "province": "330000",
+        "city": "330100",
+        "area": "330108",
+        "address": "南环路2930号泰林大厦6楼",
+        "mobile": "18142005882",
+        "payable_amount": "26.00",
+        "real_amount": "0.00",
+        "payable_freight": "35.00",
+        "real_freight": "0.00",
+        "pay_time": "2017-02-27 17:18:31",
+        "send_time": null,
+        "create_time": "2017-02-27 17:18:31",
+        "completion_time": null,
+        "invoice": "0",
+        "postscript": "",
+        "note": "",
+        "if_del": "0",
+        "insured": "0.00",
+        "pay_fee": "0.00",
+        "invoice_title": "",
+        "taxes": "0.00",
+        "promotions": "26.00",
+        "discount": "0.00",
+        "order_amount": "0.00",
+        "prop": null,
+        "accept_time": "任意",
+        "exp": "0",
+        "point": "0",
+        "type": "0",
+        "trade_no": null,
+        "takeself": "0",
+        "checkcode": null,
+        "active_id": "0",
+        "seller_id": "0",
+        "is_checkout": "0",
+        "is_shop_checkout": "0",
+        "is_recommender_checkout": null,
+        "ticket_did": "1054",
+        "type_source": "1",
+        "ticket_aid": "0",
+        "color_status": null,
+        "supplier_syn_date": null,
+        "supplier_id": "1",
+        "duties": "3.09",
+        "sfz_num": "330727199206290417",
+        "sfz_image1": "upload/sfz_image/14872273043271.jpg",
+        "sfz_image2": "upload/sfz_image/14872273056072.jpg"
+    }
+}
+
+{
+    "obj": [269, {
+        "Host": "m.jiumaojia.com",
+        "Connection": "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Encoding": "gzip, deflate, sdch",
+        "Accept-Language": "ja,zh-CN;q=0.8,zh;q=0.6",
+        "Cookie": "OUTFOX_SEARCH_USER_ID_NCOO=1736260033.547374; bdshare_firstime=1479802855205; 66166___439468_KS_66166___439468=d52d6b4cbeef46dfa1e3d549ae2ba57b; Hm_lvt_d2ad3676e7aee829748ccde95d3e4d1a=1487725902,1487812269,1488116663,1488252382; Hm_lpvt_d2ad3676e7aee829748ccde95d3e4d1a=1488252382; iweb_lastInfo=a995d8d6803896b555MDA1MDA1NjQwN2AxMm5kNGszMWozYjlnYjkyOjNlOzknZnJhYHcvZ3JjZXJfbGl1cyxzbGh0Ym4lMkdlZHRfcW1hdGZqJjREJi9zZGByYG0mNUJmb21wbG1wbm9pX3xgbWUlNUEoKXRlZ3VjaCE1RmNyZWJ0ZV93bGllJTBELC1zbGV6Y2glNUVjcmFhfWVfdGttZllhaGYmNUQoLXNlaXJmayUxQmNybGB2ZV98aWVtXnN0YXNxJjVBKC9wY2Z6ZWglNEpkaXJ8cmlicHNpZ25dc3NjdHV0LDVDKS90ZWF6YmkmNUJrZXxwbHVkdyA1RSskRzktOzwlODglRTYlRDMlRDIvdmNlcmRtLTdKb3JsZXFWZ2lmdG50JTZELyZybWhyZm0gNUpwZnlfc3RhcnJwJTxNKS51ZWZ3Z2gnNUB4YX9admpsZVZlbmUkNUcqLHNlZHJjaCU9Rndhfl98YG1lX3NxZnRzJTNDLy93ZWVyY2gmNUJzZmtgX3RsbWYnNU0rJ3NlYXJkaCUxQnp0YXR3cyYzQCk; PHPSESSID=ma841qqfdavgj25qcinideaul7; iweb_admin_name=fb1d5bd0a12e64cfe5MDUwOTU5MDkwNzUwMjtnMWBjMWg2NDY4MTdhOTY9ODFmZ25gbg; iweb_admin_pwd=8d9a52ee936fd1d6ebMDI5NzkwMjYwMjViYmJhZDBkYjUxM2ZlZmM2N2NjMWViZDZtMTNqZGNgYzgyNDgxZDxkYTI5OWRlOWYzZGE2YA; iweb_admin_role_name=68941dc33bb0bf6b4cMDA0MzcwMTAyNWQ6NDFqND41Y2UxYWM3NzUzMjE2bGTtsIHhuq%2Fuq6jkkIbskZA; iweb_username=874282498a9b28495dMTIwMzAyNTMwMjhiYjA4bGVlMWc4ZDg5MWpgOTk3Mzd0fmg; iweb_safecode=ffbc4d55ad370f85a0MTgwMDA4ODkwMG5hOWo6MTc8MmNiN2MzYWQzNzg2MmE3YWFmMzg8amU3Y2kxMDg2MDMxbWdjY2xjZmU4YWM%2BYg; iweb_user_pwd=7e6f43a693807d8e22MDAwNTkwMDA1MGFrPmoxODRiMTBlMDIxMWZqMTk3NTdjP2E%2BODQ1MzY5Nzg2MGViN2VlY2NlODQ3M2JkMD9iNQ"
+    }]
+
+    
+}
