@@ -8,7 +8,7 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = 'COSME大赏日系超高人气面膜专场，全场面膜7折起~限时抢购12:00开始哟~';
+	private $remark = '日系开架护肤专场明色/千妇恋也上限时抢啦~彩妆护肤统统都有~抄底价31.9起';
 	private $remark_goods_id = 18944;
 	private $time = '今天中午12:00';
 //	private $time = '今天晚上22:00';
@@ -3650,7 +3650,7 @@ OR (
         $start      = IFilter::act(IReq::get('start'));
         $user_query = new IQuery('open_ids');
         if ($start == 'test') {
-            $user_query->where = "open_id in ('orEYdw0X44crd6F3MOdXES6Hfpig','orEYdw9QmiBSIXWa-zrTbJc091L4','orEYdw5QShdxdphix7TxAgqxljVI','orEYdw9QmiBSIXWa-zrTbJc091L4')";
+            $user_query->where = "open_id in ('orEYdw0X44crd6F3MOdXES6Hfpig','orEYdw5QShdxdphix7TxAgqxljVI','orEYdw9QmiBSIXWa-zrTbJc091L4')";
         } else {
             $user_query->limit = $start;
         }
