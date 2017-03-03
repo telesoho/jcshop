@@ -295,7 +295,7 @@ class Apib extends IController{
 	*		"PayType": "1",
 	*		"Nick": "王彬"
 	*	}
-	* @return
+	* @return array 九猫订单
 	*/
 	private function toJcOrder($reqOrder) {
 		$jcshopOrder = array();
@@ -623,8 +623,8 @@ class Apib extends IController{
 
 	public function testApiSubQuery() {
 		// 带参数子查询测试
-		common::print_b(Api::run("getGoodsInfoBySkuNo2", 
-			array('params' => array("#sku_no#" => "4902806314946-1")))
+		common::print_b(Api::run("getGoodsProductsInfoBySkuNo", 
+			array('params' => array("#sku_no#" => "DHC7700BS", "#supplier_id#" => 1)))
 		);
 	}
 

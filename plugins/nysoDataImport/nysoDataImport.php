@@ -94,6 +94,7 @@ class nysoDataImport extends pluginBase
 			};
 		});
 
+		// 异步订单同步事件
 		plugin::reg("onBeforeCreateAction@nyso@OrderAsynNotify", function(){
 			self::controller()->OrderAsynNotify = function() {
 				// 初始化妮素平台接口
@@ -101,7 +102,7 @@ class nysoDataImport extends pluginBase
 
 				$param = $this->getRequestParam("OrderAsynNotify");
 
-				// 订单流水号
+				// 订单流水号，去除妮素订单前缀
 				$orderNo = str_replace(self::NYSO_ORDER_PRE, "", $param['OrderNo']);
 
 				/*
@@ -181,6 +182,9 @@ class nysoDataImport extends pluginBase
 
 		plugin::reg("onBeforeCreateAction@nyso@run_api", function() {
 			self::controller()->run_api = function () {
+				set_time_limit(0);
+				ini_set("max_execution_time",0);
+
 				// 初始化妮素平台接口
 				nysochina::init($this->config());
 				
@@ -236,14 +240,23 @@ class nysoDataImport extends pluginBase
 	}
 
 
-
 	/**
-	 * 输出错误日志，并以JSON形式返回错误结果
+	 * 处理妮素供应商订单
 	 */
-	private function exitError($errMsg, $context = array()) {
-		$this->error($errMsg, $context);
-		$this->exitJSON($this->data);
+	private function processSearchOrder($reqOutput) {
+		$orders = $reqOutput['result']['Orders'];
+		foreach($orders as $key => $order) {
+			nysochina::$log->info("妮素订单", array($key => $order));
+			$jcOrder = $this->nysoOrder2JcOrder($order);
+
+			if($jcOrder) {
+				// 保存订单
+				nysochina::$log->info("转换后九猫订单", array($key => $jcOrder));
+				$this->saveJcOrder($jcOrder);
+			}
+		}
 	}
+
 
 	// 计算token
 	private function toToken($partner_key, $api_name, $param) {
@@ -258,7 +271,7 @@ class nysoDataImport extends pluginBase
 	/**
 	 * 取出查询参数
 	 * @param $validators 校验器
-	 * @return 查询参数数组
+	 * @return array 查询参数数组
 	 */
 	private function getRequestParam($api_name, $validators = array()) {
 
@@ -300,19 +313,6 @@ class nysoDataImport extends pluginBase
 		return $paramContent;
 	}
 
-	private function processSearchOrder($reqOutput) {
-		$orders = $reqOutput['result']['Orders'];
-		foreach($orders as $key => $order) {
-			nysochina::$log->info("妮素订单", array($key => $order));
-			$jcOrder = $this->nysoOrder2JcOrder($order);
-			nysochina::$log->info("转换后九猫订单", array($key => $jcOrder));
-			if($jcOrder) {
-				// 保存订单
-				$this->saveJcOrder($jcOrder);
-			}
-		}
-	}
-
 	// 保存订单
 	private function saveJcOrder($jcOrder) {
 		$this->exitJSON($jcOrder);
@@ -320,7 +320,11 @@ class nysoDataImport extends pluginBase
 
 
 
-	// 妮素订单转换为九猫订单
+	/**
+	 * 妮素订单转换为九猫订单
+	 * @param $nysoOrder 妮素订单数据
+	 * @return array 九猫订单数组
+	 */
 	private function nysoOrder2JcOrder($nysoOrder) {
 		$retMsg = array();
 		$jcOrder = array();
@@ -334,8 +338,7 @@ class nysoDataImport extends pluginBase
 			return null;
 		}
 
-
-		$jcOrder['order_no'] = nysochina::getOrderId($nysoOrder);
+		$jcOrder['order_no'] = nysochina::getOrderNo($nysoOrder);
 		$jcOrder['mobile'] = $nysoOrder['ConsigneeNumber'];
 		$jcOrder['accept_name'] = $nysoOrder['ConsigneeName'];
 		$jcOrder['sfz_num'] = $nysoOrder['IdCard'];
@@ -402,14 +405,15 @@ class nysoDataImport extends pluginBase
 		// 处理订单中的商品
 		foreach($nysoOrder['OrderItems'] as $orderItem) {
 			// 1. 根据商品sku_no查询对应商品
-			$goodsObj = Api::run("getGoodsInfoBySkuNo", array("#sku_no#", $orderItem['SupGoodsNo']));
+			$goodsObj = Api::run("getGoodsProductsInfoBySkuNo", 
+				array('params' => array("#sku_no#" => $orderItem['SupGoodsNo'], "#supplier_id#" => 1)));
+
 			if($goodsObj) {
 				$jcGoodsOrder['goods_id'] = $goodsObj['goods_id'];
 				$jcGoodsOrder['product_id'] = $goodsObj['product_id'];
 				
 				$jcGoodsOrder['goods_nums'] = $orderItem['BuyQty'];
 				$jcGoodsOrder['real_price'] = $orderItem['BugPrice'];
-
 
 			} else {
 				// 商品不存在，出错返回NULL
@@ -420,6 +424,16 @@ class nysoDataImport extends pluginBase
 
 
 		return $jcOrder;
+	}
+
+
+
+	/**
+	 * 输出错误日志，并以JSON形式返回错误结果
+	 */
+	private function exitError($errMsg, $context = array()) {
+		$this->error($errMsg, $context);
+		$this->exitJSON($this->data);
 	}
 
     /**
@@ -534,7 +548,7 @@ class nysoDataImport extends pluginBase
 	/**
 	 * 将九猫订单转为妮素订单
 	 * @param $jcOrder 九猫订单
-	 * @return 妮素订单
+	 * @return array 妮素订单
 	 */
 	private function toNysoOrder($jcOrder) {
 		$nysoOrder = array();
@@ -1220,7 +1234,7 @@ class nysoDataImport extends pluginBase
 	/**
 	 * 将妮素商品数据转换为jcshop商品数据
 	 * @param $goods 妮素商品数据
-	 * @return jcshop商品数据
+	 * @return array jcshop商品数据
 	 */
 	private function nyso2jcGoodsSupplier($goods) {
 		$jcGoodsSupplierData = array(
@@ -1245,7 +1259,7 @@ class nysoDataImport extends pluginBase
 	/**
 	 * 根据供应商数据填写对应的Goods表数据
 	 * @param $goodsSupplierData goods_supplier表数据
-	 * @return goods表数据
+	 * @return array goods表数据
 	 */
 	private function calGoodsFromSupplierData($goodsSupplierData) {
 		$goodsData = array(
@@ -1268,7 +1282,7 @@ class nysoDataImport extends pluginBase
 	/**
 	 * 通过妮素API读取商品数据
 	 * @param $sku_no 妮素商品货号
-	 * @return goods_supplier表数据, goods表数据
+	 * @return array goods_supplier表数据, goods表数据
 	 */
 	protected function getGoodsFromApi($sku_no) {
 		// 通过妮素接口取出商品数据
