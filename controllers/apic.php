@@ -3793,7 +3793,7 @@ OR (
                 $open_ids_model->update('open_id = "'.$open_id.'"') && $restore_user_num++;
             }
         }
-        $update_user_info = $this->unsubscribe($access_token);
+//        $update_user_info = $this->unsubscribe($access_token);
         $this->returnJson(['code'=>0, 'msg'=>'用户', 'data'=>['新增用户'=>$new_user_num, '信息更新'=>$update_user_info, '重新关注'=>$restore_user_num]]);
     }
 
