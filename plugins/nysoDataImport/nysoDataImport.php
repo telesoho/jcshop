@@ -1275,6 +1275,10 @@ class nysoDataImport extends pluginBase
 
 		$goodsList = nysochina::getGoods(array($sku_no));
 
+		if(!$goodsList) {
+			throw new Exception("从妮素读取{$sku_no}商品数据失败");
+		}
+
 		// 将妮素商品数据转换为JCSHOP商品数据
 		return $this->nyso2jcGoodsSupplier($goodsList[0]);
 	}

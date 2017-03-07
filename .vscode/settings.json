@@ -1,0 +1,11 @@
+// 既定の設定とユーザー設定を上書きするには、このファイル内に設定を挿入します
+{
+    // PHP の実行可能ファイルをポイントします。
+    "editor.fontSize": 16,
+    "editor.mouseWheelZoom": true,
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/runtime": true
+    }  
+}

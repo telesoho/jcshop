@@ -71,6 +71,14 @@ class IQuery
      */
 	public function setTable($name)
 	{
+		$re = '/\s+(union)\s+/i';
+		// 如果包含有union，不做处理		
+		if(preg_match($re, $name, $matches))
+		{
+			$this->sql['table'] = $name;
+			return ;
+		}
+
 		if(strpos($name,',') === false)
 		{
 			$this->sql['table']= $this->tablePre.trim($name);
@@ -108,7 +116,7 @@ class IQuery
     }
 	/**
 	 * @brief 设置子查询
-	 * @param &$query 子查询IQuery
+	 * @param $query 子查询IQuery
 	 */
 	public function setSubQueries($query)
 	{
@@ -243,7 +251,7 @@ class IQuery
 
 	/**
 	 * @brief 获取原生态的SQL
-	 * @return sql语句
+	 * @return string sql语句
 	 */
     public function getSql()
     {
