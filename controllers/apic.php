@@ -477,6 +477,7 @@ class Apic extends IController{
 		$ware_house_id = IFilter::act(IReq::get('ware_house_id'), 'int');
 		$ware_house_model = new IModel('ware_house');
 		$data['ware_house_name'] = $ware_house_model->getObj("id = $ware_house_id")['ware_house_name'];
+		$data['ware_house_id'] = $ware_house_id;
         //计算商品
 		$countSumObj = new CountSum($user_id);
 		$result      = $countSumObj->cart_count($param['id'], $param['type'], $param['num'], '','',$ware_house_id);
