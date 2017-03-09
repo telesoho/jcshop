@@ -484,8 +484,9 @@ class nysoDataImport extends pluginBase
 		foreach($jcOrderList as $jcOrder) {
 			try {
 				$nysoOrder = $this->toNysoOrder($jcOrder);
-				nysochina::run("AddOrderKafkaTemp", $nysoOrder);
-			} 
+				$ret = nysochina::run("AddOrderKafkaTemp", $nysoOrder);
+				$this->info("同步消息已经发送", $ret);
+			}
 			catch(Exception $e) {
 				$this->error($e->getMessage() . "=>" .$jcOrder['order_no'], $jcOrder);
 				continue;
