@@ -563,8 +563,8 @@ class nysoDataImport extends pluginBase
 		$nysoOrder["ConsigneeNumber"] = $jcOrder["mobile"];		// 收货人电话
 		$nysoOrder["ConsigneeName"] = $jcOrder["accept_name"];		// 收货人姓名
 
-        $nysoOrder["PayerName"] = $jcOrder["payer_name"];			// 支付人姓名 支付人用于报关，不填默认为收货人
-		$nysoOrder["IdCard"] = $jcOrder["payer_id_card"];			// 支付人身份证号
+        $nysoOrder["PayerName"] = $jcOrder["accept_name"];			// 支付人姓名 统一使用收货人姓名
+		$nysoOrder["IdCard"] = $jcOrder["sfz_num"];					// 支付人身份证号 统一使用收货人身份证
         $nysoOrder["Province"] = $jcOrder["province_name"];			// 省
         $nysoOrder["City"] = $jcOrder["city_name"];					// 城市
         $nysoOrder["District"] = $jcOrder["area"];					// 区
@@ -1504,8 +1504,8 @@ class nysoDataImport extends pluginBase
 		if(!isset($this->data['info']))
 		{
 			$this->data['info'] = "";
-		}		
-		$this->data['info'] .= $msg . "\r\n";
+		}
+		$this->data['info'] .= JSON::encode(array('msg' => $msg, 'obj'=>$obj));
 		nysochina::$log->info($msg, array('obj'=>$obj));
 	}
 
@@ -1515,7 +1515,7 @@ class nysoDataImport extends pluginBase
 		{
 			$this->data['error'] = "";
 		}
-		$this->data['error'] .= $msg . "\r\n";
+		$this->data['error'] .= JSON::encode(array('msg' => $msg, 'obj'=>$obj));
 		nysochina::$log->err($msg, array('obj' => $obj));
 	}
 
