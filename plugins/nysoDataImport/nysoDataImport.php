@@ -1454,18 +1454,28 @@ class nysoDataImport extends pluginBase
 		$deliveryDocObj = $deliveryDocDB->getObj("order_id = " . $deliveryDocData['order_id'] . " and '" . $deliveryDocData['delivery_code'] ."'");
 
 		if($deliveryDocObj) {
+			$deliveryId = $deliveryDocObj['id'];
 			$deliveryDocDB->setData($deliveryDocData);
 			$deliveryDocDB->update("id=" . $deliveryDocObj['id']);
 		} else {
 			$deliveryDocDB->setData($deliveryDocData);
-			$deliveryDocDB->add();
+			$deliveryId = $deliveryDocDB->add();
 		}
 
 		// 修改order表
-		$orderObj['supplier_syn_date'] =  $nysoPost['SendDate'];	// 发货日期
+		// $orderObj['supplier_syn_date'] =  $nysoPost['SendDate'];	
+		$orderObj['send_time'] = $nysoPost['SendDate']; // 发货日期
 		$orderObj['distribution_status'] = '1'; //配送状态 0：未发送,1：已发送,2：部分发送
 		$orderDB->setData($orderObj);
 		$orderDB->update("id = ". $orderObj['id']);
+
+		// 修改order_goods表
+		$orderId = $orderObj['id'];
+		$orderGoodsDB = new IModel("order_goods");
+		$orderGoodsData['is_send'] = "1"; // 是否已发货 0:未发货;1:已发货;2:已经退货
+		$orderGoodsData['delivery_id'] = $deliveryId; // 配送单ID
+		$orderGoodsDB->setData($orderGoodsData);
+		$orderGoodsDB->update("order_id = $orderId");		
 
 		return $jcOrderNo;
 	}
