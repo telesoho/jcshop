@@ -72,6 +72,26 @@ return array(
 				),
 		)
 	),
+	
+	'getGoodsProductsInfoBySkuNo' => array(
+		'query' => array(
+			'name' => '(@g union all @p) gp',
+			'subQueries' => array(
+				'g' => array(
+					'table'  => 'goods as g',
+					'join'   => 'left join products as p on g.id = p.goods_id',
+					'where'  => 'p.id is null and g.sku_no = "#sku_no#" and g.supplier_id = #supplier_id#',
+					'fields' => 'g.sku_no as sku_no, g.id as goods_id, p.id as product_id,  g.name',
+					),
+				'p' => array(
+					'table'  => 'products as p',
+					'where'  => 'p.products_no = "#sku_no#"',
+					'join'	 => 'join goods as g on g.id = p.goods_id and g.supplier_id = #supplier_id#',
+					'fields' => 'p.products_no as sku_no, g.id as goods_id, p.id as product_id, g.name',
+					),
+				),
+		)
+	),
 
     //取商品数据通过商品编号
     'getGoodsInfoByGoodsNO' => array(

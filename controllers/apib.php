@@ -295,7 +295,7 @@ class Apib extends IController{
 	*		"PayType": "1",
 	*		"Nick": "王彬"
 	*	}
-	* @return
+	* @return array 九猫订单
 	*/
 	private function toJcOrder($reqOrder) {
 		$jcshopOrder = array();
@@ -537,8 +537,12 @@ class Apib extends IController{
 
 	/**
 	 * 把商品主图追加到内容后
+	 * 参考batch/add_contnet_img.json
 	 */
 	public function addContentImages() {
+		set_time_limit(0);
+		ini_set("max_execution_time",0);
+
 		$basePath = dirname(dirname(__FILE__));
 		$req_file = IReq::get("req_file");
 		if(!$req_file) {
@@ -550,7 +554,7 @@ class Apib extends IController{
 		$req_json = file_get_contents($realFile);
 
 		$encoding = mb_detect_encoding($req_json, array("ASCII","GB2312","GBK","UTF-8"));
-			
+
 		if($encoding != "UTF-8") {
 			$req_json = iconv($encoding, 'UTF-8', $req_json); //将字符串的编码转到UTF-8
 		}
@@ -623,8 +627,8 @@ class Apib extends IController{
 
 	public function testApiSubQuery() {
 		// 带参数子查询测试
-		common::print_b(Api::run("getGoodsInfoBySkuNo2", 
-			array('params' => array("#sku_no#" => "4902806314946-1")))
+		common::print_b(Api::run("getGoodsProductsInfoBySkuNo", 
+			array('params' => array("#sku_no#" => "DHC7700BS", "#supplier_id#" => 1)))
 		);
 	}
 

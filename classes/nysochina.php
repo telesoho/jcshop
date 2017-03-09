@@ -107,7 +107,7 @@ class nysochina
      * 妮素API的统一调用接口
      * @param $api_name 接口名称
      * @param $req 接口参数
-     * @return 妮素API返回的JSON结果
+     * @return string 妮素API返回的JSON结果
      * @throw  Exception
      */
     public static function run($api_name, $req) {
@@ -115,12 +115,17 @@ class nysochina
         return self::doQuery($url, $req, "" , $api_name);
     }
 
-    // 根据查询到的妮素订单生成订单号
-    public static function getOrderId($nysoOrder) {
+    /**
+     * 根据查询到的妮素订单生成九猫的订单号
+     * @param $nysoOrder 妮素订单
+     * @return string 九猫形式的订单编号
+     */
+    public static function getOrderNo($nysoOrder) {
         $orderTime = date_create_from_format("Y-m-d H:i:s", $nysoOrder['OrderTime']);
         $mobile = $nysoOrder['ConsigneeNumber'];
-        $orderId = "NS" . $orderTime->format("YmdHis") . substr($mobile, -4);
-        return $orderId;
+        // 妮素订单编号 = NS + 下单时间(YmdHis) + 手机号后4位
+        $orderNo = "NS" . $orderTime->format("YmdHis") . substr($mobile, -4);
+        return $orderNo;
     }
 
 
@@ -253,7 +258,7 @@ class nysochina
 	 *            发送请求的 URL
 	 * @param paramContent
 	 *            请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
-	 * @return 所代表远程资源的响应结果
+	 * @return string 所代表远程资源的响应结果
 	 */
 	private static function jsonPost($url, $paramContent, $header) {
         $ch = curl_init();
