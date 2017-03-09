@@ -484,8 +484,9 @@ class nysoDataImport extends pluginBase
 		foreach($jcOrderList as $jcOrder) {
 			try {
 				$nysoOrder = $this->toNysoOrder($jcOrder);
-				nysochina::run("AddOrderKafkaTemp", $nysoOrder);
-			} 
+				$ret = nysochina::run("AddOrderKafkaTemp", $nysoOrder);
+				$this->info("同步消息已经发送", $ret);
+			}
 			catch(Exception $e) {
 				$this->error($e->getMessage() . "=>" .$jcOrder['order_no'], $jcOrder);
 				continue;
@@ -562,8 +563,8 @@ class nysoDataImport extends pluginBase
 		$nysoOrder["ConsigneeNumber"] = $jcOrder["mobile"];		// 收货人电话
 		$nysoOrder["ConsigneeName"] = $jcOrder["accept_name"];		// 收货人姓名
 
-        $nysoOrder["PayerName"] = $jcOrder["payer_name"];			// 支付人姓名 支付人用于报关，不填默认为收货人
-		$nysoOrder["IdCard"] = $jcOrder["payer_id_card"];			// 支付人身份证号
+        $nysoOrder["PayerName"] = $jcOrder["accept_name"];			// 支付人姓名 统一使用收货人姓名
+		$nysoOrder["IdCard"] = $jcOrder["sfz_num"];					// 支付人身份证号 统一使用收货人身份证
         $nysoOrder["Province"] = $jcOrder["province_name"];			// 省
         $nysoOrder["City"] = $jcOrder["city_name"];					// 城市
         $nysoOrder["District"] = $jcOrder["area"];					// 区
@@ -1453,18 +1454,28 @@ class nysoDataImport extends pluginBase
 		$deliveryDocObj = $deliveryDocDB->getObj("order_id = " . $deliveryDocData['order_id'] . " and '" . $deliveryDocData['delivery_code'] ."'");
 
 		if($deliveryDocObj) {
+			$deliveryId = $deliveryDocObj['id'];
 			$deliveryDocDB->setData($deliveryDocData);
 			$deliveryDocDB->update("id=" . $deliveryDocObj['id']);
 		} else {
 			$deliveryDocDB->setData($deliveryDocData);
-			$deliveryDocDB->add();
+			$deliveryId = $deliveryDocDB->add();
 		}
 
 		// 修改order表
-		$orderObj['supplier_syn_date'] =  $nysoPost['SendDate'];	// 发货日期
+		// $orderObj['supplier_syn_date'] =  $nysoPost['SendDate'];	
+		$orderObj['send_time'] = $nysoPost['SendDate']; // 发货日期
 		$orderObj['distribution_status'] = '1'; //配送状态 0：未发送,1：已发送,2：部分发送
 		$orderDB->setData($orderObj);
 		$orderDB->update("id = ". $orderObj['id']);
+
+		// 修改order_goods表
+		$orderId = $orderObj['id'];
+		$orderGoodsDB = new IModel("order_goods");
+		$orderGoodsData['is_send'] = "1"; // 是否已发货 0:未发货;1:已发货;2:已经退货
+		$orderGoodsData['delivery_id'] = $deliveryId; // 配送单ID
+		$orderGoodsDB->setData($orderGoodsData);
+		$orderGoodsDB->update("order_id = $orderId");		
 
 		return $jcOrderNo;
 	}
@@ -1503,8 +1514,8 @@ class nysoDataImport extends pluginBase
 		if(!isset($this->data['info']))
 		{
 			$this->data['info'] = "";
-		}		
-		$this->data['info'] .= $msg . "\r\n";
+		}
+		$this->data['info'] .= JSON::encode(array('msg' => $msg, 'obj'=>$obj));
 		nysochina::$log->info($msg, array('obj'=>$obj));
 	}
 
@@ -1514,7 +1525,7 @@ class nysoDataImport extends pluginBase
 		{
 			$this->data['error'] = "";
 		}
-		$this->data['error'] .= $msg . "\r\n";
+		$this->data['error'] .= JSON::encode(array('msg' => $msg, 'obj'=>$obj));
 		nysochina::$log->err($msg, array('obj' => $obj));
 	}
 
