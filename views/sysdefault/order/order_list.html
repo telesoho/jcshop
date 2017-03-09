@@ -45,6 +45,12 @@
 				<option value="7">部分退款</option>
 			</select>
 
+            <select name="search[supplier]" class="auto">
+                <option value="">商户</option>
+                <option value="0">九猫家</option>
+                <option value="1">妮素</option>
+            </select>
+
 			<!-- <select class="auto" name="search[name]">
 				<option value="">订单条件</option>
 				<option value="accept_name">收件人姓名</option>
@@ -85,6 +91,7 @@
 			<colgroup>
 				<col width="30px" />
 				<col width="130px" />
+				<col width="30px" />
 				<col width="70px" />
 				<col width="75px" />
 				<col width="75px" />
@@ -100,6 +107,7 @@
 				<tr>
 					<th>选择</th>
 					<th>订单号</th>
+					<th>商户</th>
 					<th>收货人</th>
 					<th>支付状态</th>
 					<th>发货状态</th>
@@ -117,6 +125,7 @@
 				<tr style="background-color: <?php if(!empty($item['color_status'])) echo $color[$item['color_status']];?>;">
 					<td><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
 					<td title="{$item['order_no']}" name="orderStatusColor{$item['status']}">{$item['order_no']}</td>
+					<td title="{$item['supplier_name']}">{$item['supplier_name']}</td>
 					<td title="{$item['accept_name']}">{$item['accept_name']}</td>
 					<td name="payStatusColor{$item['pay_status']}">{echo:Order_Class::getOrderPayStatusText($item)}</td>
 					<td name="disStatusColor{$item['distribution_status']}">{echo:Order_Class::getOrderDistributionStatusText($item)}</td>

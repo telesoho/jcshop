@@ -920,7 +920,7 @@ class Order extends IController implements adminAuthorization
 		//拼接sql
 		$orderHandle = new IQuery('order as o');
 		$orderHandle->order  = "o.id desc";
-		$orderHandle->fields = "o.*,d.name as distribute_name,p.name as payment_name";
+		$orderHandle->fields = "o.*,d.name as distribute_name,p.name as payment_name,s.supplier_name";
 		$orderHandle->page   = $page;
 		$orderHandle->where  = $where;
 		$orderHandle->join   = $join;
