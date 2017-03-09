@@ -63,7 +63,7 @@ class Apib extends IController{
 	/**
 	 * 取出查询参数
 	 * @param $validators 校验器
-	 * @return 查询参数数组
+	 * @return array 查询参数数组
 	 */
 	private function getRequestParam($api_name, $validators = array()) {
 		// 取出请求头
