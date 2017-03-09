@@ -79,8 +79,8 @@
 	<div class="part2" v-cloak>
 		<div class="goodsInfo">
 			<div class="top">
-				<img src="/views/mobile/skin/default/image/jmj/cart/plane.png" alt="" style="width:0.37rem;height:0.37rem;"/>
-				<span>{{infoMessage.ware_house_name}}</span>
+                <img :src="'/views/mobile/skin/default/image/jmj/cart/'+infoMessage.ware_house_id+'.png'" style="width:0.37rem;height:0.37rem;"/>
+                <span>{{infoMessage.ware_house_name}}</span>
 			</div>
 		</div>
 		<div class="goodsList" v-for="item,key in sell">

@@ -477,6 +477,7 @@ class Apic extends IController{
 		$ware_house_id = IFilter::act(IReq::get('ware_house_id'), 'int');
 		$ware_house_model = new IModel('ware_house');
 		$data['ware_house_name'] = $ware_house_model->getObj("id = $ware_house_id")['ware_house_name'];
+		$data['ware_house_id'] = $ware_house_id;
         //计算商品
 		$countSumObj = new CountSum($user_id);
 		$result      = $countSumObj->cart_count($param['id'], $param['type'], $param['num'], '','',$ware_house_id);
@@ -3793,7 +3794,7 @@ OR (
                 $open_ids_model->update('open_id = "'.$open_id.'"') && $restore_user_num++;
             }
         }
-        $update_user_info = $this->unsubscribe($access_token);
+//        $update_user_info = $this->unsubscribe($access_token);
         $this->returnJson(['code'=>0, 'msg'=>'用户', 'data'=>['新增用户'=>$new_user_num, '信息更新'=>$update_user_info, '重新关注'=>$restore_user_num]]);
     }
 

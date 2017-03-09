@@ -8,10 +8,57 @@
 		<title>3.7女生节</title>
 		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/common.css?v=<?php echo time(); ?>"/>
 		<link rel="stylesheet" type="text/css" href="/views/mobile/skin/default/css/app/womensday.css?v=<?php echo time(); ?>"/>
+        <style>
+            /*弹出*/
+            .popup{
+                width:100%;
+                height:100%;
+                position: fixed;
+                left:0;
+                right:0;
+                top:0;
+                bottom:0;
+                background:rgba(0,0,0,0.5);
+                z-index:9999;
+                overflow: hidden;
+            }
+            .popup .img1{
+                display: block;
+                text-align: center;
+                margin:2.5rem auto 0;
+                width:4.3rem;
+                height:4.3rem;
+            }
+            .popup .img2{
+                display: block;
+                text-align: center;
+                margin:0.5rem auto 0;
+                width:0.62rem;
+                height:0.62rem;
+            }
+            .popup .text{
+                width:100%;
+                text-align: center;
+                color:pink;
+                font-size:0.28rem;
+                margin-top:0.5rem;
+
+            }
+        </style>
 	</head>
 	<body>
 		<div id="wrap" v-cloak>
-		
+            <!--弹窗-->
+            <div v-if="popup_state==1" class="popup"  @touchmove="stopEvent">
+                <div>
+                    <img src="/views/mobile/skin/default/image/jmj/product/ttt.jpg" alt="" class="img1"/>
+                    <div class="text">偷偷告诉你：添加喵酱微信：jiumaojia001<br/>
+                        给你发独家优惠券哦^-^
+                    </div>
+                    <img src="/views/mobile/skin/default/image/jmj/icon/close.png" class="img2" @click.stop="close_Popup" />
+                </div>
+            </div>
+            <!--弹窗结束-->
 		<header id="wom">
 			<img src="/views/mobile/skin/default/image/jmj/active_womensday/01.png" width="100%"/>
 		</header>
@@ -31,7 +78,7 @@
 					</div>
 					<p>{{item.name}}</p>
 					<span class="span1">¥ <span>{{item.sell_price}}</span></span>
-					<img src="/views/mobile/skin/default/image/jmj/active_womensday/logo.png" class="logo"/>
+					<img src="/views/mobile/skin/default/image/jmj/active_womensday/logo1.png" class="logo"/>
 				</li>
 			</ul>
 		</aside>
@@ -101,13 +148,15 @@
 		<script src="/views/mobile/javascript/jquery.min.js?v=<?php echo time(); ?>"></script>
 		<script src="/views/mobile/components/Whether.js?v=<?php echo time(); ?>"></script>
 		<script type="text/javascript">
+            var popup_state="{echo:IReq::get('t')}";
 			var vm = new Vue({
 				el:"#wrap",
 				data:{
 					info1:[],
 					info2:[],
 					info3:[],
-					info4:[]
+					info4:[],
+                    popup_state:popup_state
 				},
 				computed:{
 					
@@ -120,6 +169,14 @@
 					womensday4(self);
 				},
 				methods:{
+                    //		    弹窗状态处理
+                    stopEvent:function(e){
+                        e.preventDefault();
+                    },
+                    close_Popup:function(e){
+                        e.preventDefault=false;
+                        this.popup_state=null;
+                    },
 					producted:function(id){
 						window.location.href = "/site/products?id="+id;
 					},
