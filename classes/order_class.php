@@ -1018,6 +1018,11 @@ class Order_Class
 			$pay_status = IFilter::act($search['pay_status'], 'int');
 			$where .= " and o.pay_status = ".$pay_status;
 		}
+        //支付状态
+        if(isset($search['supplier']) && $search['supplier'] !== ''){
+            $supplier_status = IFilter::act($search['supplier'], 'int');
+            $where .= " and s.id = ".$supplier_status;
+        }
 		//发货状态
 		if(isset($search['distribution_status']) && $search['distribution_status'] !== ''){
 			$distribution_status = IFilter::act($search['distribution_status'], 'int');
