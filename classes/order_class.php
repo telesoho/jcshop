@@ -992,6 +992,7 @@ class Order_Class
 	public static function getSearchCondition($search){
 		$join  = "LEFT JOIN delivery AS d ON o.distribution=d.id ".
 			"LEFT JOIN payment AS p ON o.pay_type=p.id ".
+			"LEFT JOIN supplier AS s ON o.supplier_id=s.id ".
 			"LEFT JOIN user AS u ON u.id=o.user_id";
 		$where = "if_del = 0";
 		

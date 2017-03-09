@@ -1702,7 +1702,7 @@ class Order extends IController implements adminAuthorization
 		//拼接sql
 		$orderHandle = new IQuery('order as o');
 		$orderHandle->order  = "o.id desc";
-		$orderHandle->fields = "o.*,d.name as distribute_name,p.name as payment_name";
+		$orderHandle->fields = "o.*,d.name as distribute_name,p.name as payment_name,s.supplier_name";
 		$orderHandle->join   = $join;
 		$orderHandle->where  = $where;
 		$orderList = $orderHandle->find();
@@ -1710,6 +1710,7 @@ class Order extends IController implements adminAuthorization
 		$strTable ='<table width="500" border="1">';
 		$strTable .= '<tr>';
 		$strTable .= '<td style="text-align:center;font-size:12px;width:120px;">订单编号</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;width:120px;">订单类型</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="100">日期</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">收货人</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">收货地址</td>';
@@ -1731,6 +1732,7 @@ class Order extends IController implements adminAuthorization
 		foreach($orderList as $k => $v){
 			$strTable .= '<tr>';
 			$strTable .= '<td style="text-align:center;font-size:12px;">&nbsp;'.$v['order_no'].'</td>';
+			$strTable .= '<td style="text-align:center;font-size:12px;">&nbsp;'.$v['supplier_name'].'</td>';
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$v['create_time'].' </td>';
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$v['accept_name'].' </td>';
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.join('&nbsp;',area::name($v['province'],$v['city'],$v['area'])).$v['address'].' &nbsp; </td>';
