@@ -537,8 +537,12 @@ class Apib extends IController{
 
 	/**
 	 * 把商品主图追加到内容后
+	 * 参考batch/add_contnet_img.json
 	 */
 	public function addContentImages() {
+		set_time_limit(0);
+		ini_set("max_execution_time",0);
+
 		$basePath = dirname(dirname(__FILE__));
 		$req_file = IReq::get("req_file");
 		if(!$req_file) {
@@ -550,7 +554,7 @@ class Apib extends IController{
 		$req_json = file_get_contents($realFile);
 
 		$encoding = mb_detect_encoding($req_json, array("ASCII","GB2312","GBK","UTF-8"));
-			
+
 		if($encoding != "UTF-8") {
 			$req_json = iconv($encoding, 'UTF-8', $req_json); //将字符串的编码转到UTF-8
 		}
