@@ -3841,5 +3841,16 @@ OR (
             }
         }
     }
-
+    function goods_es(){
+        set_time_limit(0);
+        $goods_query = new IQuery('goods');
+        $goods_query->fields = 'id,name,sell_price,content';
+        $goods_query->limit = "5000,20000";
+        $data = $goods_query->find();
+        $curl = new \Curl\Curl();
+        foreach ($data as $k=>$v){
+            $data = $curl->put('http://101.201.232.15:32790/goods/goods/'.$v['id'],json_encode(['id'=>$v['id'], 'name'=>$v['name'], 'sell_price'=>$v['sell_price'],'content'=>$v['content']]));
+        }
+        var_dump($data);
+    }
 }

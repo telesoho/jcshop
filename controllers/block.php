@@ -33,21 +33,21 @@ class Block extends IController
 		}
 
 		/* 订单自动完成（已发货） */
-		$modelOrder = new IModel('order');
-		$where      = 'pay_type!=0 AND status=2 AND pay_status=1 AND distribution_status=1 AND if_del=0 AND pay_time<="'.date('Y-m-d H:i:s', time()-$orderClearTime).'"';
-		$field      = 'id,order_no';
-		$listOrder  = $modelOrder->query($where, $field, '', 100);
-		if(!empty($listOrder)){
-			foreach($listOrder as $k => $v){
-				$modelOrder->setData(array('status' => 5, 'completion_time' => ITime::getDateTime()));
-				if($modelOrder->update("id = ".$v['id'])){
-					//确认收货后进行支付
-					Order_Class::updateOrderStatus($v['order_no']);
-					//增加用户评论商品机会
-					Order_Class::addGoodsCommentChange($v['id']);
-				}
-			}
-		}
+//		$modelOrder = new IModel('order');
+//		$where      = 'pay_type!=0 AND status=2 AND pay_status=1 AND distribution_status=1 AND if_del=0 AND pay_time<="'.date('Y-m-d H:i:s', time()-$orderClearTime).'"';
+//		$field      = 'id,order_no';
+//		$listOrder  = $modelOrder->query($where, $field, '', 100);
+//		if(!empty($listOrder)){
+//			foreach($listOrder as $k => $v){
+//				$modelOrder->setData(array('status' => 5, 'completion_time' => ITime::getDateTime()));
+//				if($modelOrder->update("id = ".$v['id'])){
+//					//确认收货后进行支付
+//					Order_Class::updateOrderStatus($v['order_no']);
+//					//增加用户评论商品机会
+//					Order_Class::addGoodsCommentChange($v['id']);
+//				}
+//			}
+//		}
 
 		/* 订单自动关闭（未付款） */
 		$modelOrder = new IModel('order');
