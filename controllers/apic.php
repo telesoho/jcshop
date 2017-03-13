@@ -3618,7 +3618,7 @@ class Apic extends IController{
 							$retData['StartTime'] = $data['time'];
 							$retData['Operator'] = "";
 							$retData['Status'] = $data['station'];
-							$retData['StatusDetail'] = "";
+							$retData['StatusDetail'] = $data['station'];
 							return $retData;
 						}, $result['data']);
 
@@ -3646,7 +3646,7 @@ class Apic extends IController{
 							'StartTime' => $freightData['send_time'],
 							'Operator' => "",
 							'Status' => "无法自动获取物流信息",
-							'StatusDetail' => "请您手动到该物流公司网站输入物流单号查询：" . $freightData['url'],
+							'StatusDetail' => "无法自动获取物流信息,请您手动到该物流公司网站输入物流单号查询：" . $freightData['url'],
 						)
 					);
 					$this->returnJson(array(
