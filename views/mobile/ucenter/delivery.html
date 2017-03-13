@@ -77,12 +77,9 @@
                 data:{order_no:order_no},
                 success:function (data) {
 //                    console.log(data.data);
-                    if(data.data.type == "xlobo"){
-                        self.info = data.data;
-                        console.log(self.info.name);
-                        self.info1 =  self.info.data.reverse()
-                    }
-
+					self.info = data.data;
+					console.log(self.info.name);
+					self.info1 =  self.info.data.reverse()
                 }
             })
         }
