@@ -3572,8 +3572,9 @@ class Apic extends IController{
     function get_logistic_info(){
         $order_no            = IFilter::act(IReq::get('order_no'));
         $order_query         = new IQuery('order as a');
-        $order_query->join   = 'left join delivery_doc as b on a.id = b.order_id';
-        $order_query->fields = 'a.*,b.delivery_code,b.delivery_type';
+        $order_query->join   = 'left join delivery_doc as b on a.id = b.order_id '
+							   .'left join freight_company as c on c.id = b.freight_id';
+        $order_query->fields = 'a.*,b.delivery_code,b.delivery_type,c.api,c.freight_name,c.freight_type,c.url';
         $order_query->where  = "order_no = $order_no";
         $data                = $order_query->find();
         $delivery_code       = $data[0]['delivery_code'];
@@ -3581,15 +3582,87 @@ class Apic extends IController{
             common::log_write($order_query->getSql(), 'ERROR','logistic');
             $this->returnJson(array('code' => '-1', 'msg' => '订单未发货', 'data' => null));
         }
-        xlobo::init();
-        $data           = xlobo::get_logistic_info([$data[0]['delivery_code']])[0];
-        $billCode       = $data->BillCode;
-        $businessNo     = $data->BusinessNo;
-        $billStatusList = $data->BillStatusList;
-        $ret            = array_map(function ($v) {
-            return (array)$v;
-        }, $billStatusList);
-        $this->returnJson(array('code' => '0', 'msg' => '查询物流信息成功', 'data' => ['type' => 'xlobo', 'name'=>'贝海国际物流', 'order_no' => $order_no, 'data' => $ret, 'delivery_code'=>$delivery_code]));
+		$freightData = current($data);
+		switch($freightData['api'])
+		{
+			case 'xlobo':
+				xlobo::init();
+				$data           = xlobo::get_logistic_info([$data[0]['delivery_code']])[0];
+				$billCode       = $data->BillCode;
+				$businessNo     = $data->BusinessNo;
+				$billStatusList = $data->BillStatusList;
+				$ret            = array_map(function ($v) {
+					return (array)$v;
+				}, $billStatusList);
+				$this->returnJson(array(
+					'code' => '0',
+					'msg' => '查询物流信息成功',
+					'data' => [
+						'type' => 'xlobo',
+						'name'=>'贝海国际物流',
+						'order_no' => $order_no,
+						'data' => $ret,
+						'delivery_code'=>$delivery_code]
+					)
+				);
+				break;
+			case 'hqepay':
+				// 华强物流查询接口
+				$freightData = current($data);
+				if($freightData['freight_type'] && $freightData['delivery_code'])
+				{
+					$result = freight_facade::line($freightData['freight_type'],$freightData['delivery_code']);
+					if(isset($result['result']) && $result['result'] == 'success')
+					{
+						$ret            = array_map(function ($data) {
+							$retData['StartTime'] = $data['time'];
+							$retData['Operator'] = "";
+							$retData['Status'] = $data['station'];
+							$retData['StatusDetail'] = "";
+							return $retData;
+						}, $result['data']);
+
+						$this->returnJson(array(
+							'code' => '0',
+							'msg' => '查询物流信息成功',
+							'data' => [
+								'type' => $freightData['api'],
+								'name'=> $freightData['freight_name'],
+								'order_no' => $order_no,
+								'data' => $ret,
+								'delivery_code'=>$freightData['delivery_code']
+							])
+						);
+					}
+				}
+				break;
+			case '':
+				// 没有API接口
+				$freightData = current($data);
+				if($freightData['freight_type'] && $freightData['delivery_code'])
+				{
+					$retData = array(
+						array(
+							'StartTime' => $freightData['send_time'],
+							'Operator' => "",
+							'Status' => "无法自动获取物流信息",
+							'StatusDetail' => "请您手动到该物流公司网站输入物流单号查询：" . $freightData['url'],
+						)
+					);
+					$this->returnJson(array(
+						'code' => '0',
+						'msg' => '查询物流信息成功',
+						'data' => [
+							'type' => $freightData['api'],
+							'name'=> $freightData['freight_name'],
+							'order_no' => $order_no,
+							'data' => $retData,
+							'delivery_code'=>$freightData['delivery_code']
+						])
+					);
+				}
+				break;			
+		}
     }
 
     /**
