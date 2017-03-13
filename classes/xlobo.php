@@ -103,7 +103,7 @@ class xlobo
             'PackingType' => '2',
             'LogisticId' => '32',
 //            'LogisticVersion' => date('Y-m-d H:i:s', time()),
-            'LineTypeId' => '1',
+            'LineTypeId' => $_POST['signal_type'],
             'IsContainTax' => '0',
             // 发件人信息
             'BillSenderInfo' => array(
