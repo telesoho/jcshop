@@ -59,7 +59,7 @@ class xlobo
         $sign = md5(base64_encode(strtolower(self::$SecretKey . json_encode($data) . self::$SecretKey)));
         return $sign;
     }
-    public static function create_logistic_single($order_id, $sendgoods){
+    public static function create_logistic_single($order_id, $sendgoods, $signal_type){
         $order_query = new IQuery('order as a');
         $order_query->join = ' LEFT JOIN user AS c ON a.user_id = c.id';
         $order_query->where = 'a.id = ' . $order_id;
@@ -103,7 +103,7 @@ class xlobo
             'PackingType' => '2',
             'LogisticId' => '32',
 //            'LogisticVersion' => date('Y-m-d H:i:s', time()),
-            'LineTypeId' => $_POST['signal_type'],
+            'LineTypeId' => $signal_type,
             'IsContainTax' => '0',
             // 发件人信息
             'BillSenderInfo' => array(
