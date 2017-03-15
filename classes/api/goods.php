@@ -213,7 +213,7 @@ class APIGoods{
 				$goods2['count']++;
 			}
 		}
-//		if (count($temp) > 1) IError::show_normal('结算的商品不属于同一个货仓');
+		if (count($temp) > 1) IError::show_normal('结算的商品不属于同一个货仓');
 		
 		/* 包邮金额 */
 		$condition_price = (new Config('jmj_config'))->condition_price; //包邮金额，[0=全场无条件包邮,-1=关闭包邮]
