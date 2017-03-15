@@ -8,7 +8,7 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '小仙女~你们等超久的酵素团来啦~瘦十斤只花59.9！帮助减肥棒棒哒~ 赶紧戳详情看看哟！';
+	private $remark = '让你变得草鸡温柔的染眉膏专场来咯~ Kiss Me家王牌染眉膏~ 让你变成小甜心~ 限时抢购39.9！';
 	private $remark_goods_id = 18944;
 	private $time = '今天中午12:00';
 //	private $time = '今天晚上22:00';
