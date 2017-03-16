@@ -8,7 +8,7 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '让你变得草鸡温柔的染眉膏专场来咯~ Kiss Me家王牌染眉膏~ 让你变成小甜心~ 限时抢购39.9！';
+	private $remark = '大眼睛的秘密！Koji专场！睫毛膏眼线笔都给你包了！ 抄底价40.9起啊';
 	private $remark_goods_id = 18944;
 	private $time = '今天中午12:00';
 //	private $time = '今天晚上22:00';
