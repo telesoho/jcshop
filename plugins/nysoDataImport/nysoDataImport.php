@@ -119,6 +119,7 @@ class nysoDataImport extends pluginBase
 					try{
 						$orderDB = new IModel("order as o");
 						$updateOrder['supplier_syn_date'] = date('Y-m-d H:i:s', time());
+						$updateOrder['supplier_syn_memo'] = $message;
 						$orderDB->setData($updateOrder);
 						$orderDB->update("order_no = '$orderNo'");
 					}catch(Exception $e) {
@@ -126,6 +127,11 @@ class nysoDataImport extends pluginBase
 						$this->exitJSON(self::$CALLBACK_NG);
 					}
 				} else {
+					// 记录订单错误
+					$orderDB = new IModel("order as o");
+					$updateOrder['supplier_syn_memo'] = $message;
+					$orderDB->setData($updateOrder);
+					$orderDB->update("order_no = '$orderNo'");
 					$this->error("妮素返回订单错误信息", $param);
 					$this->exitJSON(self::$CALLBACK_NG);
 				}
