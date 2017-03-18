@@ -289,7 +289,7 @@ class wechats
                 break;
             case 'member2':
                 $url_info = IUrl::getHost()."/site/products/id/".$send_info['remark_goods_id'].'/t/1';
-                $url_info = 'http://m.jiumaojia.com/site/time_purchase?id=50&t=1';
+                $url_info = 'http://m.jiumaojia.com/site/time_purchase?id=92&t=1';
                 $params = sprintf('{
                    "touser":"%s",
                    "template_id":"%s",

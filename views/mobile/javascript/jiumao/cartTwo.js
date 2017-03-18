@@ -29,6 +29,7 @@ var vm = new Vue({
             ],
             ticket:{}
         },
+        ware_house_id:ware_house_id,
         error:'',
         showButton:true,
         img1:'/views/mobile/skin/default/image/jmj/cart/red.png',
@@ -136,7 +137,7 @@ var vm = new Vue({
                 this.codeMessage.map(function(it){
                     it.cho=false;
                 })
-                choCouponInfo(self,item);
+                choCouponInfo(self,item,ware_house_id);
             }
         }
     }
@@ -257,8 +258,9 @@ function getCouponInfo(obj,val) {
 }
 
 //	获取用户选择优惠券的信息
-function choCouponInfo(self,item) {
-    mui.ajax('/apic/cart2',{
+function choCouponInfo(self,item,ware_house_id) {
+    var url ='/apic/cart2/ware_house_id/'+ware_house_id
+    mui.ajax(url,{
         data:{
             id:Request["id"]?Request["id"]:'',
             num:Request["num"]?Request["num"]:'',

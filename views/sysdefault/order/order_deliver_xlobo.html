@@ -29,6 +29,7 @@
 			<colgroup>
 				<col />
 				<col width="80px" />
+				<col width="80px" />
 				<col width="130px" />
 				<col width="30px" />
 				<col width="30px" />
@@ -37,6 +38,7 @@
 			<thead>
 				<tr>
 					<th>商品名称</th>
+					<th>商品类别</th>
 					<th>商品价格</th>
 					<th>商品进货价格</th>
 					<th>商品编码</th>
@@ -56,6 +58,15 @@
 						{set:$goodsRow = JSON::decode($item['goods_array'])}
 						{$goodsRow['name']} &nbsp;&nbsp; {$goodsRow['value']}
 					</td>
+					<td>
+                        <?php
+                        $category_extend_query = new IQuery('category_extend as a');
+                        $category_extend_query->join = 'left join category as b on a.category_id=b.id';
+                        $category_extend_query->where ='a.goods_id = ' . $item['goods_id'];
+                        $data = $category_extend_query->find();
+                        echo $data[0]['name'];
+                        ?>
+                    </td>
 					<td>{$item['real_price']}</td>
 					<td>{$item['purchase_price']}</td>
 					<td>{$item['goods_no']}</td>
@@ -115,6 +126,14 @@
 				</tr>
 				<tr>
 					<th>保价费用:</th><td align="left">￥{$insured}</td>
+					<th>快件方式:</th>
+                    <td align="left">
+                        <select name="signal_type" pattern="required" alt="快件方式">
+                            <option value="">快件方式</option>
+                            <option value="3">电商快件</option>
+                            <option value="1">个人件</option>
+                        </select>
+                    </td>
 				</tr>
 				<tr>
 					<th>收货人姓名:</th><td align="left"><input type="text" class="small" name="name" value="{$accept_name}" pattern="required"/></td>

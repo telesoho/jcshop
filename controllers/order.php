@@ -641,13 +641,15 @@ class Order extends IController implements adminAuthorization
 
         //发送的商品关联
         $sendgoods = IFilter::act(IReq::get('sendgoods'));
+        $signal_type = IFilter::act(IReq::get('signal_type'));
+        if (empty($signal_type)) IError::show_normal('快件方式未选择');
         $order_goods_model = new IModel('order_goods');
         foreach ($sendgoods as $k=>$v){
             $ret = $order_goods_model->getObj('id =' . $v);
             if (empty($ret)) IError::show_normal($v . '信息不存在');
             $sendgoodsXlobo[] = $ret['goods_id'];
         }
-        $ret = xlobo::create_logistic_single($order_id, $sendgoodsXlobo);
+        $ret = xlobo::create_logistic_single($order_id, $sendgoodsXlobo, $signal_type);
         if (isset($ret->Succeed) && $ret->Succeed){
             $billcode = $ret->Result->BillCode;
             $_POST['delivery_code'] = $billcode;

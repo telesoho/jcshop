@@ -8,7 +8,7 @@ class Apic extends IController{
 	//    public $layout='site_mini';
 	private $log;
 	private $securityLogger;
-	private $remark = '小仙女~你们等超久的酵素团来啦~瘦十斤只花59.9！帮助减肥棒棒哒~ 赶紧戳详情看看哟！';
+	private $remark = '大眼睛的秘密！Koji专场！睫毛膏眼线笔都给你包了！ 抄底价40.9起啊';
 	private $remark_goods_id = 18944;
 	private $time = '今天中午12:00';
 //	private $time = '今天晚上22:00';
@@ -3916,13 +3916,24 @@ OR (
     }
     function goods_es(){
         set_time_limit(0);
-        $goods_query = new IQuery('goods');
-        $goods_query->fields = 'id,name,sell_price,content';
-        $goods_query->limit = "5000,20000";
+        $goods_query = new IQuery('user as a');
+        $goods_query->join = 'left join member as b on a.id=b.user_id';
+        $goods_query->fields = 'a.id,a.username,head_ico,a.sfz_num,sfz_image1,sfz_image2,b.time';
+        $goods_query->limit = "0,20000";
         $data = $goods_query->find();
         $curl = new \Curl\Curl();
         foreach ($data as $k=>$v){
-            $data = $curl->put('http://101.201.232.15:32790/goods/goods/'.$v['id'],json_encode(['id'=>$v['id'], 'name'=>$v['name'], 'sell_price'=>$v['sell_price'],'content'=>$v['content']]));
+            $data = $curl->put('http://101.201.232.15:32790/logstash-user/user/'.$v['id'],json_encode(
+                [
+                    'id'=>$v['id'],
+                    'username'=>$v['username'],
+                    'head_ico'=>$v['head_ico'],
+                    'sfz_num'=>$v['sfz_num'],
+                    'sfz_image1'=>$v['sfz_image1'],
+                    'sfz_image2'=>$v['sfz_image2'],
+                    'date'=>date(DATE_ISO8601, strtotime($v['time']))
+                ]
+            ));
         }
         var_dump($data);
     }
