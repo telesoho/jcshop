@@ -1785,7 +1785,7 @@ class Order extends IController implements adminAuthorization
 					$strGoods['goods_nums'] 	.= $v1['goods_nums'].'<br />';
 					$strGoods['real_price'] 	.= $v1['real_price'].'<br />';
 				}
-				$strGoods['name'] 			.= $v1['name'].'<br />';
+				$strGoods['name'] 			.= $v1['name']. " " . $v1['value']. '<br />';
 				$strGoods['name_jp'] 		.= $info[0]['name_jp'].'<br />';
 				$strGoods['is_send_name'] 	.= (isset($textIsSend[$v1['is_send']]) ? $textIsSend[$v1['is_send']] : '未知').'<br />';
 			}
