@@ -377,15 +377,31 @@ class CountSum
     {
     	//根据【商家+供货商+仓库】对商品进行分组
     	$sellerGoods = array();
+		$shareDutiesRate = array(); // 均摊税率
     	foreach($goodsResult['goodsList'] as $key => $val)
     	{
 			$groupKey = self::genOrderKey($val['seller_id'],$val['supplier_id'],$val['ware_house_name']);
 			if(!isset($sellerGoods[$groupKey]))
     		{
     			$sellerGoods[$groupKey] = array();
+				$shareDutiesRate[$groupKey] = array();
+				$shareDutiesRate[$groupKey]['sum'] = 0;
+				$shareDutiesRate[$groupKey]['shareDutiesRate'] = 0;
     		}
     		$sellerGoods[$groupKey][] = $val;
+			$shareDutiesRate[$groupKey]['sum'] += $val['sum'];
     	}
+
+		// 计算均摊税率
+    	foreach($sellerGoods as $groupKey => $item)
+    	{
+			$theSum = $shareDutiesRate[$groupKey]['sum'];
+			// 计算商品关税均摊税率 =(商品A总价/商品总价)*商品A税率+(商品B总价/商品总价)*商品B税率
+			foreach($item as $key => $val) {
+				$sdr = floatval($val['sum'])/$theSum * $val['duties_rate'] ;
+				$shareDutiesRate[$groupKey]['shareDutiesRate'] += $sdr;
+			}
+		}
 
 		$cartObj = new Cart();
     	foreach($sellerGoods as $groupKey => $item)
@@ -440,6 +456,7 @@ class CountSum
 	    		'insuredPrice'      => $deliveryList['protect_price'],
 	    		'taxPrice'          => $is_invoice == true ? $sellerData['tax'] : 0, // 增值税税金
 				'dutiesPrice'       => $sellerData['duties'],		// 关税税金
+				'shareDutiesRate'   => $shareDutiesRate[$groupKey]['shareDutiesRate'], // 关税均摊税率
 	    		'paymentPrice'      => $payment_id != 0 ? self::getGoodsPaymentPrice($payment_id,$sellerData['final_sum']) : 0,
 	    		'goodsResult'       => $sellerData,
 	    		'orderAmountPrice'  => 0,

@@ -800,7 +800,11 @@ class Order extends IController implements adminAuthorization
 			$dataArray['order_amount']   = $goodsResult['orderAmountPrice'];
 			$dataArray['exp']            = $goodsResult['exp'];
 			$dataArray['point']          = $goodsResult['point'];
-			$dataArray['duties']         = $goodsResult['dutiesPrice'];
+			
+			// 订单关税费 = 商品总税费 + 运费均摊税 - 优惠均摊税
+			$shareDuties = $dataArray['real_freight'] * $goodsResult['shareDutiesRate']; 
+			$dataArray['duties']         = $goodsResult['dutiesPrice'] + $shareDuties;
+			
 
 			// 供应商ID
 			$dataArray['supplier_id']    = $supplier_id;
