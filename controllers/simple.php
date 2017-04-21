@@ -422,6 +422,10 @@ class Simple extends IController
 			/* 计算邮费 */
 			$goodsResult['deliveryPrice'] = Api::run('goodsDelivery',$goodsResult['goodsResult']['goodsList'],'goods_id',$goodsResult['is_delivery']);
 			//====================================
+			
+			// 订单关税费 = 商品总税费 + 运费均摊税 - 优惠均摊税
+			$shareDuties = $goodsResult['deliveryPrice'] * $goodsResult['shareDutiesRate']; 
+			$duties         = $goodsResult['dutiesPrice'] + $shareDuties;
 
 			//生成的订单数据
 			$dataArray = array(
@@ -495,7 +499,7 @@ class Simple extends IController
 				'supplier_id' 		  => $supplier_id,
 
                 //duties
-                'duties' => $orderData[join('.',$supplier_values)]['duties']
+                'duties' 			  => $duties
 			);
 
 			//获取红包减免金额
