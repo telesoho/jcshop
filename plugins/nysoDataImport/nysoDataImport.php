@@ -1343,7 +1343,7 @@ class nysoDataImport extends pluginBase
 		$query = new IQuery("goods as go");
 		$query->fields = "go.sku_no";
 		$query->where = "go.supplier_id = 1 and go.stock_asyn_time is null or now() - go.stock_asyn_time > 7200 ";
-		$query->pagesize = 1;
+		$query->pagesize = 100;
 		$query->page = 1;
 
 		do {
