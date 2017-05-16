@@ -490,7 +490,7 @@ class nysoDataImport extends pluginBase
 		foreach($jcOrderList as $jcOrder) {
 			try {
 				$nysoOrder = $this->toNysoOrder($jcOrder);
-				$ret = nysochina::run("AddOrderKafkaTemp", $nysoOrder);
+				$ret = nysochina::run("AddOrderAsync", $nysoOrder);
 				$this->info("同步消息已经发送", $ret);
 			}
 			catch(Exception $e) {
@@ -581,6 +581,7 @@ class nysoDataImport extends pluginBase
 		$nysoOrder["PostalPrice"] = $jcOrder["real_freight"];		// 邮费
 		$nysoOrder["Tax"] = $jcOrder["duties"];         			// 商品税费
 		$nysoOrder["GoodsPrice"] = $jcOrder["payable_amount"]; 		// 货值
+		$nysoOrder['IsAllowSplit'] = 0;								// 0-不允许拆单 1-允许拆单
 		if(floatVal($jcOrder['order_amount']) === 0) {
 			$nysoOrder["Favourable"] = $jcOrder["promotions"];			// 优惠金额
 			$nysoOrder["OrderPrice"] = $jcOrder["order_amount"];  		// 订单总价 用户实际交易金额
@@ -1318,8 +1319,9 @@ class nysoDataImport extends pluginBase
 		if($theGoods) {
 			// 如果已经存在商品，则更新商品信息
 			$theGoods['store_nums'] = $stock["Quantity"];	// 设置库存
+			$theGoods['stock_asyn_time'] = 'now()'; 
 			$goodsObj->setData($theGoods);
-			$goodsObj->update($where);
+			$goodsObj->update($where, array('stock_asyn_time'));
 			$this->info($stock['SkuNo'] . "库存跟新成功", $stock);
 		} else {
 			// 商品不存在，返回错误
@@ -1340,24 +1342,34 @@ class nysoDataImport extends pluginBase
 		// 从数据库取出所有妮素商品
 		$query = new IQuery("goods as go");
 		$query->fields = "go.sku_no";
-		$query->where = "go.supplier_id = 1";
-		$sku_no_list = $query->find();
+		$query->where = "go.supplier_id = 1 and go.stock_asyn_time is null or now() - go.stock_asyn_time > 7200 ";
+		$query->pagesize = 1;
+		$query->page = 1;
 
-		foreach($sku_no_list as $sku_no) {
-			try {
-				// 通过妮素接口取出商品库存数据
-				$stockList = nysochina::getStocks(array($sku_no['sku_no']));
+		do {
+			$skus = [];
+			$sku_no_list = $query->find();
+			foreach($sku_no_list as $sku_no) {
+				$skus[] = $sku_no['sku_no'];
+			}
+			if($skus) {
+				try {
+					// 通过妮素接口取出商品库存数据
+					$stockList = nysochina::getStocks($skus);
 
-				// 将库存保存到九猫数据库
-				foreach($stockList as $stock) {
-					$this->updateStock($stock);
+					// 将库存保存到九猫数据库
+					foreach($stockList as $stock) {
+						$this->updateStock($stock);
+					}
+				}
+				catch (Exception $e) {
+					$this->error($e->getMessage(),$skus);
+					continue;
 				}
 			}
-			catch (Exception $e) {
-				$this->error( $sku_no['sku_no'] . $e->getMessage(),$sku_no);
-				continue;
-			}
-		}
+		}while($query->page++ < $query->paging->totalpage);
+
+		// 返回执行结果
 		$this->exitJSON($this->data);
 	}
 
@@ -1376,7 +1388,7 @@ class nysoDataImport extends pluginBase
 		$orders = $orderQuery->find();
 		
 		if(!$orders) {
-			$this->info("没有找到需要同步的妮素云单");
+			$this->info("没有找到需要同步的妮素运单");
 			// 以JSON形式输出执行结果
 			$this->exitJSON($this->data);
 		}
@@ -1568,7 +1580,7 @@ class nysoDataImport extends pluginBase
 			"PostSynchro" => array("name" => "运单同步接口","type" => "text","pattern" => "required", "value" => "/api/PostSynchro.shtml"),
 			"SkuSynchro" => array("name" => "商品同步接口","type" => "text","pattern" => "required", "value" => "/api/SkuSynchro.shtml"),
 			"StockSynchro" => array("name" => "库存同步接口","type" => "text","pattern" => "required", "value" => "/api/StockSynchro.shtml"),
-	        "AddOrderKafkaTemp" =>  array("name" => "异步新增订单接口","type" => "text","pattern" => "required", "value" => "/api/AddOrderKafkaTemp.shtml"),
+	        "AddOrderAsync" =>  array("name" => "异步新增订单接口","type" => "text","pattern" => "required", "value" => "/api/AddOrderAsync.shtml"),
 
 	        // 妮素平台供应商接口
 			"searchOrder" => array("name" => "供应商订单抓取接口","type" => "text","pattern" => "required", "value" => "/api/sup/searchOrder.shtml"),
