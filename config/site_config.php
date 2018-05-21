@@ -25,7 +25,7 @@
   'commission' => '',
   'store_num_warning' => '1',
   'reg_option' => '0',
-  'index_slide' => 'a:5:{i:0;a:3:{s:4:"name";s:6:"正品";s:3:"url";s:23:"http://haibaobei-ec.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831282.jpg";}i:1;a:3:{s:4:"name";s:12:"万种商品";s:3:"url";s:23:"http://haibaobei-ec.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831882.jpg";}i:2;a:3:{s:4:"name";s:12:"日本直邮";s:3:"url";s:23:"http://haibaobei-ec.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831212.jpg";}i:3;a:3:{s:4:"name";s:12:"挑到花眼";s:3:"url";s:23:"http://haibaobei-ec.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831873.jpg";}i:4;a:3:{s:4:"name";s:12:"海宝贝卧底";s:3:"url";s:23:"http://haibaobei-ec.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831939.jpg";}}',
+  'index_slide' => 'a:5:{i:0;a:3:{s:4:"name";s:6:"正品";s:3:"url";s:20:"http://haibaobei.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831282.jpg";}i:1;a:3:{s:4:"name";s:12:"万种商品";s:3:"url";s:20:"http://haibaobei.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831882.jpg";}i:2;a:3:{s:4:"name";s:12:"日本直邮";s:3:"url";s:20:"http://haibaobei.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831212.jpg";}i:3;a:3:{s:4:"name";s:12:"挑到花眼";s:3:"url";s:20:"http://haibaobei.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831873.jpg";}i:4;a:3:{s:4:"name";s:12:"九猫卧底";s:3:"url";s:20:"http://haibaobei.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831939.jpg";}}',
   'logo' => 'upload/2016/11/04/20161104104034474.png',
   'guide_name' => 
   array (
@@ -35,7 +35,7 @@
   ),
   'guide_link' => 
   array (
-    0 => 'http://haibaobei-ec.com',
+    0 => 'http://haibaobei.com',
     1 => 'systemadmin/index',
     2 => 'seller/index',
   ),
