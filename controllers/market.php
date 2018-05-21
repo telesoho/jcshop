@@ -539,7 +539,7 @@ class Market extends IController implements adminAuthorization
 			$this->promotionRow = $promotionQuery;
 			$this->temp_ids = $temp_ids;
 		}
-//		var_dump($this->promotionRow);
+		// var_dump($this->promotionRow);
 		$this->redirect('pro_speed_edit');
 	}
 
@@ -549,7 +549,7 @@ class Market extends IController implements adminAuthorization
         $condition_new   = IFilter::act(IReq::get('condition','post'));
         $award_value_new = IFilter::act(IReq::get('award_value','post'));
         $user_group  = IFilter::act(IReq::get('user_group','post'));
-        $temp_ids  = IFilter::act(IReq::get('temp_ids','post'));
+		$temp_ids  = IFilter::act(IReq::get('temp_ids','post'));
         for ($i=0;$i<count($condition_new);$i++){
             $condition = $condition_new[$i];
             $award_value = $award_value_new[$i];
@@ -585,7 +585,7 @@ class Market extends IController implements adminAuthorization
 
             $proObj = new IModel('promotion');
             $proObj->setData($dataArray);
-            if($temp_ids[$i])
+            if($temp_ids && $temp_ids[$i])
             {
                 $where = 'id = '.$temp_ids[$i];
                 $proObj->update($where);

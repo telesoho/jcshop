@@ -33,7 +33,14 @@ class Site extends IController
             ISession::set('is_first',true);
         }
 //		$this->index_slide = Api::run('getBannerList');
-		$this->redirect('index');
+        //必须为登录用户
+        if($this->user['user_id'] == null)
+        {
+			$this->redirect('/simple/login');
+        } else {
+			$this->redirect('index');
+		}
+		// $this->redirect('index');
 	}
 
 	//[首页]商品搜索

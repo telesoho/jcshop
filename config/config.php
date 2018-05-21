@@ -12,18 +12,18 @@
     array (
       0 => 
       array (
-        'host' => '192.168.0.172:32771',
+        'host' => 'localhost:3306',
         'user' => 'root',
-        'passwd' => '123456',
-        'name' => 'jmj',
+        'passwd' => '',
+        'name' => 'jmj_dev',
       ),
     ),
     'write' => 
     array (
-      'host' => '192.168.0.172:32771',
+      'host' => 'localhost:3306',
       'user' => 'root',
-      'passwd' => '123456',
-      'name' => 'jmj',
+      'passwd' => '',
+      'name' => 'jmj_dev',
     ),
   ),
   'interceptor' => 
@@ -57,7 +57,7 @@
   'dbbackup' => 'backup/database',
   'sqlLog' => '0',
   'sqlDebug' => '0',
-  'safe' => 'cookie',
+  'safe' => 'session',
   'lang' => 'zh_sc',
   'debug' => '2',
   'configExt' => 
@@ -66,5 +66,5 @@
   ),
   'encryptKey' => '693db335771319c04d195cca4f907fa9',
   'authorizeCode' => '201610093145',
-  'image_host' => 'http://m.jiumaojia.com',
+  'image_host' => 'http://haibaobei-ec.com',
 )?>

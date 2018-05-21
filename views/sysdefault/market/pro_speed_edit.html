@@ -38,7 +38,7 @@
 						<ul class='attr_list clearfix'>
 							<li><label class='attr'><input type='checkbox' name='user_group' value='all' onchange='select_all();' />全部</label></li>
 							{query:name=user_group}
-							<li><label class='attr'><input type='checkbox' {if:in_array($item['id'],explode(',',$this->promotionRow['user_group']))}checked=checked{/if} name='user_group[]' value='{$item['id']}' />{$item['group_name']}</label></li>
+							<li><label class='attr'><input type='checkbox' {if:in_array($item['id'],explode(',',$this->promotionRow[0]['user_group']))}checked=checked{/if} name='user_group[]' value='{$item['id']}' />{$item['group_name']}</label></li>
 							{/query}
 						</ul>
 						<label>* 此限时抢购允许参加的用户组</label>

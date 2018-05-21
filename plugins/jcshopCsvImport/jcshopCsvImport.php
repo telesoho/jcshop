@@ -100,7 +100,7 @@ class jcshopCsvImport extends pluginBase
 		}
 
 		if($this->csvType !== "jcshop") {
-			die("请选择九猫商品数据包");
+			die("请选商品数据包");
 		}
 
 
@@ -529,7 +529,7 @@ class jcshopCsvImport extends pluginBase
 	 */
 	public static function name()
 	{
-		return "九猫商品数据导入";
+		return "jcshop商品数据导入";
 	}
 
 	/**
@@ -538,6 +538,6 @@ class jcshopCsvImport extends pluginBase
 	 */
 	public static function description()
 	{
-		return "九猫CSV数据包直接导入到iWebShop系统中，管理后台可以用";
+		return "jcshop CSV数据包直接导入到iWebShop系统中，管理后台可以用";
 	}
 }
