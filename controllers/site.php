@@ -34,7 +34,7 @@ class Site extends IController
         }
 //		$this->index_slide = Api::run('getBannerList');
         //必须为登录用户
-        if($this->user['user_id'] == null && ！IClient::isWechat())
+        if($this->user['user_id'] == null)
         {
 			$this->redirect('/simple/login');
         } else {
