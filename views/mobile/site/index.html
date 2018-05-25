@@ -282,7 +282,7 @@
                         <% for(var m=0; m<dat.goods_list.length; m++){%>
                         <% var goodsitem =dat.goods_list[m] %>
                         <div class="item">
-                            <a href="index.php?controller=site&action=products&id=<%=goodsitem.id %>" class="locationA">
+                            <a href="index.php?controller=site&action=products&id=<%=goodsitem.goods_id %>" class="locationA">
                                 <div class="img"><img dataimg="<%=goodsitem.img %>" alt="" style="width:1.8rem;height:1.8rem;" src="/views/mobile/skin/default/image/jmj/product/ware_lazy.png" alt="" class="samLazyImg" /></div>
                                 <div class="name hidewrap"><%=goodsitem.name %></div>
                                 <div class="sellprice">￥ <%=goodsitem.sell_price %></div>
