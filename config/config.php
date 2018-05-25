@@ -15,7 +15,7 @@
         'host' => 'localhost:3306',
         'user' => 'root',
         'passwd' => '',
-        'name' => 'jmj',
+        'name' => 'jmj_dev',
       ),
     ),
     'write' => 
@@ -23,7 +23,7 @@
       'host' => 'localhost:3306',
       'user' => 'root',
       'passwd' => '',
-      'name' => 'jmj',
+      'name' => 'jmj_dev',
     ),
   ),
   'interceptor' => 
