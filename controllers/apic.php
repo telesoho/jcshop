@@ -1033,7 +1033,7 @@ class Apic extends IController
         $article = new IQuery('relation as r');
         $article->join = 'left join goods as go on r.goods_id = go.id';
         $article->where = sprintf('go.is_del = 0 and r.article_id = %s and go.id is not null', $article_id);
-        $article->fields = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.sell_price';
+        $article->fields = 'go.goods_no as goods_no,go.id as goods_id,go.img,go.name,go.market_price,go.sell_price';
         $article->page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
         $article->pagesize = 1000;
         $relationList = $article->find();
