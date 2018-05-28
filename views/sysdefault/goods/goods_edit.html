@@ -2,6 +2,7 @@
 {js:my97date}
 {set:$swfloadObject = new Swfupload();$swfloadObject->show($this->admin['admin_name'],$this->admin['admin_pwd']);}
 {js:artTemplate}
+{js:qrcode}
 
 <div class="headbar clearfix">
 	<div class="position"><span>商品</span><span>></span><span>商品管理</span><span>></span><span>商品编辑</span></div>
@@ -304,6 +305,21 @@
 				<table class="form_table">
 					<col width="150px" />
 					<col />
+					<tr>
+						<th>二维码</th>
+						<td>
+							<input hidden id='qrcode_url_template' class='nomal' disabled value='{echo:IWeb::$app->config["qrcode_url_template"]}'/>
+							<input hidden id='product_id' value="{echo: $form['id']}" disabled/>
+							<select class="auto" name="qrcode_seller_id"  onchange="create_qrcode(this.value)">
+								<option value="0">商城平台自营 </option>
+								{query:name=seller where=is_del eq 0}
+								<option value="{$item['id']}">{$item['true_name']}-{$item['seller_name']}</option>
+								{/query}
+							</select><br>
+							<textarea disabled id="qrcode_url">{echo:IWeb::$app->config["qrcode_url_template"]}</textarea>
+							<div id="qrcode"></div>
+						</td>
+					</tr>
 					<tr>
 						<th>SEO关键词：</th><td><input class="normal" name="keywords" type="text" value="" /></td>
 					</tr>
@@ -794,6 +810,27 @@ var page = {
 			// page.loading = false;
 		},'json');
 	}
+}
+
+
+seller_id = 0;
+qrcode_url_template = document.getElementById('qrcode_url_template').value;
+product_id = document.getElementById('product_id').value;
+qrcode_url = qrcode_url_template;
+qrcode_url = qrcode_url.replace(/\{\{product_id\}\}/, product_id);
+qrcode_url = qrcode_url.replace(/\{\{seller_id\}\}/, seller_id);
+document.getElementById('qrcode_url').value = qrcode_url;
+qrcode = new QRCode(document.getElementById("qrcode"), qrcode_url);
+
+function create_qrcode(seller_id) {
+	qrcode_url_template = document.getElementById('qrcode_url_template').value;
+	product_id = document.getElementById('product_id').value;
+	qrcode_url = qrcode_url_template;
+	qrcode_url = qrcode_url.replace(/\{\{product_id\}\}/, product_id);
+	qrcode_url = qrcode_url.replace(/\{\{seller_id\}\}/, seller_id);
+	document.getElementById('qrcode_url').value = qrcode_url;
+	qrcode.clear();
+	qrcode.makeCode(qrcode_url); // make another code.
 }
 
 </script>

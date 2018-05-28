@@ -69,6 +69,10 @@ class IJSPackage
 			'js' => 'jquerySlider/jquery.bxslider.min.js',
 			'css' => 'jquerySlider/jquery.bxslider.css',
 		),
+
+		'qrcode' => array(
+			'js' => 'qrcode/qrcode.js',
+		),
 	);
 
 	/**
