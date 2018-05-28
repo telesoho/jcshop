@@ -25,7 +25,7 @@ class Swfupload
 
 echo <<< OEF
 	<script type="text/javascript" src="{$this->path}swfupload.js"></script>
-	<script type="text/javascript" src="{$this->path}handlers.js"></script>
+	<script type="text/javascript" src="{$this->path}handlers.js?v1.0"></script>
 OEF;
 	}
 

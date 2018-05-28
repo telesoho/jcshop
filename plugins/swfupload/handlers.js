@@ -3,7 +3,8 @@ var MAX_UPLOAD_HEIGHT = 8000;
 
 function preLoad() {
 	if (!this.support.loading) {
-		alert("您的flash player版本过低，请先更新版本");
+		// alert("您的flash player版本过低，请先更新版本");
+		console.log('您的flash player版本过低，请先更新版本');
 		return false;
 	}
 }
