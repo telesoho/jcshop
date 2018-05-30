@@ -15,7 +15,7 @@
         'host' => 'localhost:3306',
         'user' => 'root',
         'passwd' => '',
-        'name' => 'jmj_dev',
+        'name' => 'jmj',
       ),
     ),
     'write' => 
@@ -23,7 +23,7 @@
       'host' => 'localhost:3306',
       'user' => 'root',
       'passwd' => '',
-      'name' => 'jmj_dev',
+      'name' => 'jmj',
     ),
   ),
   'interceptor' => 
@@ -67,5 +67,6 @@
   'encryptKey' => '693db335771319c04d195cca4f907fa9',
   'authorizeCode' => '201610093145',
   'image_host' => 'http://haibaobei-ec.com',
+  'cdn_host' => 'http://media.haibaobei-ec.com',
   'qrcode_url_template' => 'http://haibaobei-ec.com/site/index.php?controller=site&amp;action=products&amp;id={{product_id}}&amp;seller_id={{seller_id}}',
 )?>
