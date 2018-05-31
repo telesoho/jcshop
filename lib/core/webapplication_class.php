@@ -55,6 +55,7 @@ class IWebApplication extends IApplication
 		}
 
 		$this->clientType = IClient::getDevice();
+		$this->clientType = IClient::MOBILE;
 		ini_set('default_charset','UTF-8');
 		ini_set('upload_tmp_dir',$this->getRuntimePath());
 		ini_set('session.save_path',$this->basePath.'backup');
