@@ -55,7 +55,7 @@
   'timezone' => 'Etc/GMT-8',
   'upload' => 'upload',
   'dbbackup' => 'backup/database',
-  'sqlLog' => '0',
+  'sqlLog' => '1',
   'sqlDebug' => '0',
   'safe' => 'session',
   'lang' => 'zh_sc',
@@ -67,4 +67,6 @@
   'encryptKey' => '693db335771319c04d195cca4f907fa9',
   'authorizeCode' => '201610093145',
   'image_host' => 'http://haibaobei-ec.com',
+  'cdn_host' => 'http://media.haibaobei-ec.com',
+  'qrcode_url_template' => 'http://haibaobei-ec.com/site/index.php?controller=site&amp;action=products&amp;id={{product_id}}&amp;seller_id={{seller_id}}',
 )?>

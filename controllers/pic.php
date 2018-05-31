@@ -160,16 +160,23 @@ class Pic extends IController
 				return;
 			}
 
-			$fileExt   = pathinfo($thumbSrc, PATHINFO_EXTENSION);
-			$cacheTime = 31104000;
-			$passMtime = gmdate('D, d M Y H:i:s',time() + $cacheTime).' GMT';
+			// 如果配置文件中有cdn_host加速域名定义者转向CDN加速
+			if(isset(IWeb::$app->config['cdn_host'])) {
+				$cdn_host = IWeb::$app->config['cdn_host'];
+				header("Location: $cdn_host/$thumbSrc", true, 301);			
+				exit;
+			} else {
+				$fileExt   = pathinfo($thumbSrc, PATHINFO_EXTENSION);
+				$cacheTime = 31104000;
+				$passMtime = gmdate('D, d M Y H:i:s',time() + $cacheTime).' GMT';
 
-			header('Pragma: cache');
-			header('Cache-Control: max-age='.$cacheTime);
- 			header('Expires: '.$passMtime);
- 			header('Content-type: image/'.$fileExt);
- 			header("Etag: ".md5($mixData));
-			readfile($thumbSrc);
+				header('Pragma: cache');
+				header('Cache-Control: max-age='.$cacheTime);
+				header('Expires: '.$passMtime);
+				header('Content-type: image/'.$fileExt);
+				header("Etag: ".md5($mixData));
+				readfile($thumbSrc);
+			}
 		}
 	}
 }

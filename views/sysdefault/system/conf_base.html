@@ -416,6 +416,28 @@
 				</tr>
 
 				<tr>
+					<th>二维码链接模板</th>
+					<td>
+						<textarea name='qrcode_url_template' class='normal' empty ></textarea>
+						<label>设置二维码链接模板,可以使用变量：{{seller_id}}和{{product_id}}</label>
+					</td>
+				</tr>
+
+				<tr>
+					<th>图片服务器</th>
+					<td><input type='text' name='image_host' class='normal' empty />
+						<label>可以为图片处理设定专用的图片服务器地址，没有专用图片服务器的话，则与网站域名保持一致即可</label>
+					</td>
+				</tr>
+
+				<tr>
+					<th>CDN加速域名</th>
+					<td><input type='text' name='cdn_host' class='normal' empty />
+						<label>访问静态图片图片的CDN域名，用于加速图片显示</label>
+					</td>
+				</tr>
+	
+				<tr>
 					<th></th>
 					<td>
 						<button class="submit" type='submit'><span>保存系统设置</span></button>
@@ -437,13 +459,6 @@
 						<label>将已上架不足5件的商品重置为5</label>
 					</td>
 				</tr>
-				
-				<!-- <tr>
-					<th></th>
-					<td>
-						<button class="submit" type='submit'><span>保存系统设置</span></button>
-					</td>
-				</tr> -->
 			</table>
 		</form>
 
