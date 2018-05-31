@@ -54,7 +54,8 @@ class IWebApplication extends IApplication
 			throw new IException("the APP basePath illegal");
 		}
 
-		$this->clientType = IClient::getDevice();
+		// $this->clientType = IClient::getDevice();
+		// 强制MOBILE模式
 		$this->clientType = IClient::MOBILE;
 		ini_set('default_charset','UTF-8');
 		ini_set('upload_tmp_dir',$this->getRuntimePath());
