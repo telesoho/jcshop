@@ -116,9 +116,12 @@ class Apic extends IController{
 		
 		/* 推荐专区 */
 		$pro_array = array(
-			array('cid' => 126, 'title' => '美妆', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/126.png'),
-			array('cid' => 134, 'title' => '个护', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/134.png'),
-			array('cid' => 186, 'title' => '健康', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/2.png'),
+			array('cid' => 126, 'title' => '美妆', 'banner' => IWeb::$app->config['image_host'].'/upload/2016/11/10/20161110133544798.jpg'),
+			array('cid' => 134, 'title' => '个护', 'banner' => IWeb::$app->config['image_host'].'/upload/2016/11/10/20161110133544798.jpg'),
+			array('cid' => 186, 'title' => '健康', 'banner' => IWeb::$app->config['image_host'].'/upload/2016/11/10/20161110133544798.jpg'),
+			// array('cid' => 126, 'title' => '美妆', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/126.png'),
+			// array('cid' => 134, 'title' => '个护', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/134.png'),
+			// array('cid' => 186, 'title' => '健康', 'banner' => IWeb::$app->config['image_host'].'/upload/pro_list/2.png'),
 		);
 		$pro_list  = array();
 		foreach($pro_array as $v){
@@ -164,31 +167,31 @@ class Apic extends IController{
 		
 		/* 分类 */
 		switch($param['tid']){
-			case 1: //药妆
+			case 126: //药妆
 				$cid           = 126; //个性美妆
 				$aid           = 15; //专辑分类
 				$data['title'] = '狗子推荐';
 				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/gou.png'; //狗子推荐
 				break;
-			case 2: //个护
+			case 134: //个护
 				$cid           = 134; //基础护肤
 				$aid           = 18; //专辑分类
 				$data['title'] = '死鱼推荐';
 				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/siyu.png'; //死鱼推荐
 				break;
-			case 3: //宠物
+			case 6: //宠物
 				$cid           = 6; //宠物用品
 				$aid           = 17; //专辑分类
 				$data['title'] = '腿毛推荐';
 				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/tui.png'; //腿毛推荐
 				break;
-			case 4: //健康
+			case 2: //健康
 				$cid           = 186; //健康生活
 				$aid           = 16; //专辑分类
 				$data['title'] = 'RURU推荐';
 				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/ruru.png'; //RURU推荐
 				break;
-			case 5: //零食
+			case 7: //零食
 				$cid           = 7; //日式美食
 				$aid           = 19; //专辑分类
 				$data['title'] = 'K哥推荐';
@@ -2206,27 +2209,27 @@ class Apic extends IController{
 		
 		/* 商品分类 */
 		switch($tid){
-			case 1:
+			case 126:
 				$cid   = goods_class::catChild(126);
 				$name1 = '药妆';
 				$name2 = '狗子推荐';
 				break;
-			case 2:
+			case 134:
 				$cid   = goods_class::catChild(134);
 				$name1 = '个护';
 				$name2 = '奶瓶推荐';
 				break;
-			case 3:
+			case 6:
 				$cid   = goods_class::catChild(6);
 				$name1 = '宠物';
 				$name2 = '腿毛推荐';
 				break;
-			case 4:
+			case 186:
 				$cid   = goods_class::catChild(186);
 				$name1 = '健康';
 				$name2 = '昔君推荐';
 				break;
-			case 5:
+			case 7:
 				$cid   = goods_class::catChild(7);
 				$name1 = '零食';
 				$name2 = '一哥推荐';

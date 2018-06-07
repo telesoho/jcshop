@@ -13,7 +13,7 @@ return array(
 	'production'            => false, //false开发环境，true生产环境
 	'auth_key_data'         => 'k+_b}yC2Hx~:uZ/O=a9g-0{6^B|LhfwFlG@I?1MY', //默认数据加密KEY
 	'auth_key_user'         => '&17@:iY$0?(twB]kru)46J^!9l;.,Z5oE[bI_QmA', //默认密码加密KEY
-	'xlobo'                 => false, //false开发环境，true生产环境
+	'xlobo'                 => 'none', //none: 不使用 dev:开发环境，production:生产环境
 	'order_clear_time'      => 30*24*60*60, //订单自动确认时间
 	'order_cancel_time'     => 2*60*60, //订单自动关闭时间
 	'inventory_time'        => 24*60*60, //库存自动更新时间间隔

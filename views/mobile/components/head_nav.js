@@ -27,31 +27,31 @@ var HEADERINFOR={
             name:'药妆',
             img1:'/views/mobile/skin/default/image/jmj/new_active/index/31.png',
             img2:'/views/mobile/skin/default/image/jmj/new_active/index/30.png',
-            url:'/site/pro_list?cat=1'
+            url:'/site/pro_list?cat=126'
         },
         {
             name:'个护',
             img1:'/views/mobile/skin/default/image/jmj/new_active/index/41.png',
             img2:'/views/mobile/skin/default/image/jmj/new_active/index/40.png',
-            url:'/site/pro_list?cat=2'
+            url:'/site/pro_list?cat=134'
         },
         {
             name:'宠物',
             img1:'/views/mobile/skin/default/image/jmj/new_active/index/51.png',
             img2:'/views/mobile/skin/default/image/jmj/new_active/index/50.png',
-            url:'/site/pro_list?cat=3'
+            url:'/site/pro_list?cat=6'
         },
         {
             name:'健康',
             img1:'/views/mobile/skin/default/image/jmj/new_active/index/61.png',
             img2:'/views/mobile/skin/default/image/jmj/new_active/index/60.png',
-            url:'/site/pro_list?cat=4'
+            url:'/site/pro_list?cat=2'
         },
         {
             name:'零食',
             img1:'/views/mobile/skin/default/image/jmj/new_active/index/71.png',
             img2:'/views/mobile/skin/default/image/jmj/new_active/index/70.png',
-            url:'/site/pro_list?cat=5'
+            url:'/site/pro_list?cat=7'
         },
     ],
 }

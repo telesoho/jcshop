@@ -174,7 +174,9 @@ function getCart2Info(self){
             self.infoMessage=data.data;
             self.showMessage=true;
             if(data.data.payment.length==0){
-                self.infoMessage.payment[0].id=1;
+                self.infoMessage.payment = [
+                    {id:1}
+                ]
             }
             document.body.style.overflow = 'auto';
         },

@@ -198,7 +198,7 @@ class Common{
         } else {
             $log_path = __DIR__ . '/../backup/logs/b2b2c/' . $file;
         }
-        if (!file_exists($log_path)) mkdir($log_path);
+        if (!file_exists($log_path)) mkdir($log_path, 0777, true);
         switch ($type){
             case 'DEBUG':
                 $log->pushHandler(new StreamHandler($log_path . '/DEBUG-'.date('Y-m-d').'.log', Logger::DEBUG));

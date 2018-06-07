@@ -155,8 +155,8 @@ class Block extends IController
 		//分类筛选
 		if($cat_id)
 		{
-			$table_name .= ' ,category_extend as ca ';
-			$where      .= " and ca.category_id = {$cat_id} and go.id = ca.goods_id ";
+			$join .= ' left join category_extend as ca on go.id = ca.goods_id ';
+			$where .= " and ca.category_id = {$cat_id} ";
 		}
 
 		//获取商品数据

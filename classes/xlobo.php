@@ -13,19 +13,24 @@ class xlobo
     private static $SecretKey;
     private static $AccessToken;
     private static $ServerUrl;
+    private static $enable;
 
     public static function init(){
         $site_config = new Config('site_config');
-        if ($site_config->xlobo){
+        if ($site_config->xlobo == "production"){
             self::$APPKEY      = '16cc3c0e-76b5-4085-83a1-0c2bc3478ee3';
             self::$SecretKey   = 'APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==';
             self::$AccessToken = 'AD30N4p75N4UKcG0lGwiXXAUGTD60PSbFGoaw9R84s7QoXuv8XhBTad3yO3yiUS+rw==';
             self::$ServerUrl   = 'http://bill.open.xlobo.com/api/router/rest';
-        } else {
+            self::$enable = true;
+        } else if($site_config->xlobo == "dev") {
             self::$APPKEY      = '68993573-E38D-4A8A-A263-055C401F9369';
             self::$SecretKey   = 'APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==';
             self::$AccessToken = 'ACiYUZ6aKC48faYFD6MpvbOf73BdE9OV5g15q1A6Ghs+i/XIawq/9RHJCzc6Y3UNxA==';
             self::$ServerUrl   = 'http://116.228.41.2:8082/api/router/rest';
+            self::$enable = true;
+        } else {
+            self::$enable = false;
         }
     }
 
@@ -60,6 +65,9 @@ class xlobo
         return $sign;
     }
     public static function create_logistic_single($order_id, $sendgoods, $signal_type){
+        if(!self::$enable){
+            return [];
+        }        
         $order_query = new IQuery('order as a');
         $order_query->join = ' LEFT JOIN user AS c ON a.user_id = c.id';
         $order_query->where = 'a.id = ' . $order_id;
@@ -151,6 +159,9 @@ class xlobo
      * @return string
      */
     public static function get_logistic_single_a4($billcodes_array){
+        if(!self::$enable){
+            return [];
+        }        
         $billcodes_array = array_unique($billcodes_array);
         $params = array(
             'BillCodes' => $billcodes_array
@@ -188,6 +199,9 @@ class xlobo
      * @return string
      */
     public static function add_idcard($sfz_name, $phone, $sfz_num, $sfz_image1_path, $sfz_image2_path, $billcode = null){
+        if(!self::$enable){
+            return null;
+        }
         $sfz_image1 = base64_encode(file_get_contents(__DIR__ . '/../' .$sfz_image1_path));
         $sfz_image2 = base64_encode(file_get_contents(__DIR__ . '/../' .$sfz_image2_path));
         $data = array(
@@ -216,6 +230,9 @@ class xlobo
      * @return string
      */
     public static function get_catalogue(){
+        if(!self::$enable){
+            return [];
+        }
         $ret = self::requests('xlobo.catalogue.get',[]);
         $ret = $ret->Result->Categorys;
         return $ret;
@@ -274,6 +291,9 @@ class xlobo
         }
     }
     public static function get_goods_store($goods_no){
+        if(!self::$enable){
+            return [];
+        }
         $ret = self::requests('xlobo.fbx.queryinventorybysku', ['BusinessNo'=>'','SkuNos'=>$goods_no]);
         if ($ret->ErrorCount > 0){
             $info = print_r($ret->ErrorInfoList, true);

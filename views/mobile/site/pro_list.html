@@ -17,7 +17,7 @@
 <div id="prolistInfo">
 	<head-nav :state="sta"></head-nav>
 	<!--随机专辑-->
-	<section class="recommended line albumn_index" v-cloak style="margin-top:0">
+	<section v-if="article.len > 0" class="recommended line albumn_index" v-cloak style="margin-top:0">
 		<a :href="article[0].url" class="locationA">
 			<div class="content">
 				<div class="img">
@@ -150,7 +150,7 @@
 			</div>
 		</div>
 		<!--随机专辑-->
-		<section class="recommended line albumn_index" v-cloak>
+		<section v-if="article.len > 1" class="recommended line albumn_index" v-cloak>
 			<a :href="article[1].url" class="locationA">
 				<div class="content">
 					<div class="img">

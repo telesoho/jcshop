@@ -499,7 +499,7 @@ class Goods extends IController implements adminAuthorization
 		{
 			$categoryObj = new IModel('category');
 			$this->categoryRow = $categoryObj->getObj('id = '.$category_id);
-            xlobo::init();
+			xlobo::init();
 			$this->xloboCategoryRow = xlobo::get_catalogue();
 		}
 		$this->redirect('category_edit');
@@ -628,13 +628,15 @@ class Goods extends IController implements adminAuthorization
 			$data = $goods->sortdata($tb_category->query(false,'*','sort desc'));
 			$isCache ? $cacheObj->set('sortdata',$data) : "";
 		}
-		xlobo::init();
-        $this->category = xlobo::get_catalogue();
-        foreach ($data as $k=>$v){
-            foreach ($this->category as $key=>$value){
-                if ($v['xlobo'] == $value->CategoryID) $data[$k]['xlobo'] = $value->CategoryCnName;
-            }
-        }
+		if(0) {
+			xlobo::init();
+			$this->category = xlobo::get_catalogue();
+			foreach ($data as $k=>$v){
+				foreach ($this->category as $key=>$value){
+					if ($v['xlobo'] == $value->CategoryID) $data[$k]['xlobo'] = $value->CategoryCnName;
+				}
+			}
+		}
 		$this->data['category'] = $data;
 		$this->setRenderData($this->data);
 		$this->redirect('category_list',false);

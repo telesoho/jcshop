@@ -48,8 +48,7 @@ var FOOTERINFOR={
             img2:'/views/mobile/skin/default/image/jmj/new_active/index/my.png',
             url:'/ucenter/index'
         },
-    ],
-    state:0
+    ]
 }
 Vue.component('footer-nav', {
     data:function(){

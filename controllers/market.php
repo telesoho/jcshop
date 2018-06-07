@@ -49,7 +49,7 @@ class Market extends IController implements adminAuthorization
 					case 1:
 						$list[$k]['type_format'] = '满减券';
 						$rule                    = explode(',', $v['rule']);
-						$list[$k]['content']     = '满'.$rule[0].'减'.$rule[1].'优惠券';
+						$list[$k]['content']     = '' ;// '满'.$rule[0].'减'.$rule[1].'优惠券';
 						break;
 					case 2:
 						$list[$k]['type_format'] = '无门槛券';
