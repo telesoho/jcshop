@@ -1,0 +1,66 @@
+<div class="headbar">
+    <div class="position"><span>插件管理</span><span>></span><span>插件</span><span>></span><span>妮素商品数据导入</span></div>
+</div>
+<div class="content_box">
+    <div class="content form_content">
+        <ul class="red_box">
+            <li>本插件用于测试贝海OpenApi接口</li>
+        </ul>
+        <table class="form_table">
+            <colgroup>
+                <col width="150px" />
+                <col />
+            </colgroup>
+            <form id="apiForm" action='' method='post'>
+            <tr>
+                <th>接口测试</th>
+                <td >
+                    <select id="api_name" name="api_name" style="height:2.2em">
+                        <option value="xlobo.status.get">物流信息接口[xlobo.status.get]</option>
+                    </select>
+                    <button class="submit" type="button" onclick="runApi();"><span>执行</span></button>
+                </td>
+            </tr>
+            <tr>
+                <th>执行参数</th>
+                <td >
+                    <textarea name="req_json" title="执行参数" style="line-height:1.1em;height:180px;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>执行结果</th>
+                <td >
+                    <textarea id="result" title="执行结果" style="line-height:1.1em;height:180px;">{$error}{$info}</textarea>
+                </td>
+            </tr>
+            </form>
+        </table>
+    </div>
+</div>
+<script type='text/javascript'>
+
+    $("#nysoGoodsForm").on({
+        drop:function(e){  //拖后放
+            e.preventDefault();
+            //jquery的file要去e.originalEvent里面拿
+            var files = e.originalEvent.dataTransfer.files;
+            $('[name="csvPacket"]').val(file);
+        }
+    });
+
+    // 执行接口
+    function runApi() {
+        var myDialog = art.dialog({content: '执行中...', lock: true});// 初始化一个带有loading图标的空对话框
+        $.post("{url:/plugins/xlobo_run}", $("#apiForm").serialize(),
+            function(data){
+                console.log("data", data);
+                if ( data instanceof Object) {
+                    $("#result").val(JSON.stringify(data, null, 2));
+                } else {
+                    $("#result").val(data);
+                }
+                myDialog.close();
+            }, "json"
+        );
+    }    
+</script>

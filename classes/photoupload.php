@@ -14,7 +14,7 @@
  */
 class PhotoUpload
 {
-	private $dir         = 'upload'; //图片存储的目录名称
+	private static $dir         = 'upload'; //图片存储的目录名称
 	private $iterance    = true;     //防止图片重复提交开关
 	private $thumbWidth  = array();  //缩略图宽度
 	private $thumbHeight = array();  //缩略图高度
@@ -38,7 +38,7 @@ class PhotoUpload
 	 */
 	public static function hashDir()
 	{
-		$dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : $this->dir;
+		$dir  = isset(IWeb::$app->config['upload']) ? IWeb::$app->config['upload'] : self::$dir;
 		$dir .= '/'.date('Y/m/d');
 		return $dir;
 	}
@@ -58,7 +58,7 @@ class PhotoUpload
 	 */
 	public function setDir($dir)
 	{
-		$this->dir = $dir;
+		self::$dir = $dir;
 	}
 
 	/**
@@ -153,7 +153,7 @@ class PhotoUpload
 	/**
 	 * @brief 图片信息入库
 	 * @param array $insertData 要插入数据
-	 		  object $photoObj  图库对象
+*			object $photoObj  图库对象
 	 */
 	private function insert($insertData,$photoObj)
 	{

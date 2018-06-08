@@ -1,5 +1,6 @@
 {
     "require": {
-        "monolog/monolog": "^1.21"
+        "monolog/monolog": "^1.21",
+        "php-curl-class/php-curl-class": "^8.1"
     }
 }
