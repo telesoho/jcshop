@@ -1237,7 +1237,7 @@ class Apic extends IController{
 			$this->json_echo(apiReturn::go('006001'));
 		$infoGoods = $infoGoods[0];
 		if($infoGoods['status']!=1)
-			$this->json_echo(apiReturn::go('002017')); //活动未开始
+			$this->json_echo(apiReturn::go('002017')); //活动已被禁用
 		if($infoGoods['start_time']>time())
 			$this->json_echo(apiReturn::go('002018')); //活动未开始
 		if($infoGoods['end_time']<time())
