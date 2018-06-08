@@ -45,7 +45,7 @@ var HEADERINFOR={
             name:'健康',
             img1:'/views/mobile/skin/default/image/jmj/new_active/index/61.png',
             img2:'/views/mobile/skin/default/image/jmj/new_active/index/60.png',
-            url:'/site/pro_list?cat=2'
+            url:'/site/pro_list?cat=3'
         },
         {
             name:'零食',

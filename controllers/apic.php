@@ -185,8 +185,8 @@ class Apic extends IController{
 				$data['title'] = '腿毛推荐';
 				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/tui.png'; //腿毛推荐
 				break;
-			case 2: //健康
-				$cid           = 186; //健康生活
+			case 3: //健康
+				$cid           = 136; //健康生活
 				$aid           = 16; //专辑分类
 				$data['title'] = 'RURU推荐';
 				$data['pic']   = IWeb::$app->config['image_host'].'/views/mobile/skin/default/image/jmj/product/ruru.png'; //RURU推荐

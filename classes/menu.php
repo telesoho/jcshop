@@ -69,8 +69,8 @@ class Menu
         	),
 			'物流管理'=>array(
 				'/order/inventory_list' => '入库记录',
-				'/order/delivery_list' => '已配送记录',
-				'/order/xlobo' => '贝海面单',
+				'/order/delivery_list' => '已配送记录（未）',
+				'/order/xlobo' => '贝海面单（未）',
 			),
         	'单据管理'=>array(
              	'/order/order_collection_list'  => '收款单',
@@ -123,7 +123,7 @@ class Menu
 				'/market/bill_list' => '货款结算申请',
 			),
 			'用户行为统计'=>array(
-				'/market/user_record_list' => '用户浏览记录',
+				'/market/user_record_list' => '用户浏览记录(未)',
 			),
 		),
 
@@ -160,7 +160,7 @@ class Menu
         		'/system/right_list' => '权限资源'
         	),
         	'开发'=>array(
-        		'/system/error_list' => '错误日志',
+        		'/system/error_list' => '错误日志(未)',
         	),
 		),
 

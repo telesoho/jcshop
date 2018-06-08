@@ -178,11 +178,11 @@ var vm = new Vue({
     	zhuan_pro:function(item){
     		console.log(item.title)
     		if(item.title == "个护"){
-    			window.location.href = "/site/pro_list?cat=2";
+    			window.location.href = "/site/pro_list?cat=134";
     		}else if(item.title == "美妆"){
-    			window.location.href = "/site/pro_list?cat=1";
+    			window.location.href = "/site/pro_list?cat=126";
     		}else if(item.title == "健康"){
-    			window.location.href = "/site/pro_list?cat=4";
+    			window.location.href = "/site/pro_list?cat=3";
     		}
     	},
     	Video_pro:function(){

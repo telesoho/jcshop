@@ -157,7 +157,7 @@ class Site extends IController{
 				$this->pic   = 'tui';
 				$this->title = '腿毛推荐';
 				break;
-			case 2:
+			case 3:
 				$this->name  = '健康'; //居家药品
 				$this->ac_id = 16;
 				$this->pic   = 'xi';
