@@ -83,6 +83,7 @@
 	$("ul[name='topMenu']>li:contains('"+topItem+"')").addClass("selected");
 
 	var leftItem = "{echo:IUrl::getUri()}";
+	leftItem = leftItem.replace(/\/$/, "");
 	$("ul[name='leftMenu']>li a[href^='"+leftItem+"']").parent().addClass("selected");
 	</script>
 </body>
