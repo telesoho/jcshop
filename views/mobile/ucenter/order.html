@@ -109,9 +109,9 @@
 								<a href="#" class="button" @click="getDelivery(item.goodslist[0].delivery_id)">{{item.button1}}</a>
 								<a :href="item.button2Url" class="locationA button">{{item.button2}}</a>
 							</div>
-							<div class="right" v-if="item.orderStatusVal==6">
+							<!-- <div class="right" v-if="item.orderStatusVal==6">
 								<a :href="item.button1Url" class="locationA button">{{item.button1}}</a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 					<div style="height:0.2rem;background:#fff" v-if="showMessage && orderInfo_new.state0.length>0"></div>
@@ -295,9 +295,9 @@
 						</a>
 						<div class="orderToDo box">
 							<div class="left">应付金额：<span style="color:#f3026a;margin-left:0.1rem;">¥{{item.order_amount}}</span></div>
-							<div class="right">
+							<!-- <div class="right">
 								<a :href="item.button1Url" class="locationA button">{{item.button1}}</a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 					<div style="height:0.2rem;background:#fff" v-if="showMessage && orderInfo_new.state4.length>0"></div>
