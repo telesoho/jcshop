@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @brief 妮素商品导入插件
+ * @brief 贝海OpenAPI接口
  * @author twh
- * @date 2017/1/13
+ * @date 2018/6/8
  */
 class xlobo_open_api extends pluginBase
 {
