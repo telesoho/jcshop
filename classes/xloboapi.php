@@ -18,10 +18,7 @@ class xloboapi
         'client_secret'     =>  "APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==",
         'client_id'         =>  "68993573-E38D-4A8A-A263-055C401F9369",
         'version'           => '1.0',
-        'sign'              => '70da2949ce84f7d9fb0297cd33ee6ae6',
-
-        // 是否输出调试信息
-        "debug"             => "false"
+        "log_level"         => "WARNING"
     );
 
     public static $log ;
@@ -45,12 +42,12 @@ class xloboapi
         self::$log->useMicrosecondTimestamps(true);
         $log_path = __DIR__ . '/../backup/logs/xlobo_open_api';
         if (!file_exists($log_path)) mkdir($log_path);
-
+        
         $dateFormat = "Y-m-d H:i:s.u";
         $output = "[%datetime%] %level_name%:%message% %context%\n";
         $formatter = new LineFormatter($output, $dateFormat);
         
-        $stream = new StreamHandler($log_path . '/'.date('Y-m-d').'.log');
+        $stream = new StreamHandler($log_path . '/'.date('Y-m-d').'.log', $config['log_level']);
         $stream->setFormatter($formatter);
         self::$log->pushHandler($stream);
 
@@ -71,7 +68,7 @@ class xloboapi
             'v'            => self::$config['version'],
             'msg_param'    => json_encode($data),
             'client_id'    => self::$config['client_id'],
-            'sign'         => self::$config['sign'],
+            'sign'         => $sign,
             'access_token' => self::$config['access_token']
         );
         $curl->setHeader('Content-Type', 'application/x-www-form-urlencoded; charset=GBK');
@@ -86,9 +83,7 @@ class xloboapi
             throw new Exception(print_r($ret, true) . print_r($params, true));
         }
 
-        if(self::$config['debug'] == 'true') {
-            self::$log->debug($url, $params, $ret);
-        }
+        self::$log->debug($url, $params, $ret);
         return $ret;
     }
 
@@ -97,9 +92,12 @@ class xloboapi
      */
     private static function sign($data)
     {
-        $content = strtolower(self::$config['sign'] . json_encode($data) . self::$config['sign']);
-        self::$log->info($content);
+        $json_data = json_encode($data);
+        $client_secret = self::$config['client_secret'];
+        $content = strtolower($client_secret . $json_data . $client_secret);
+        self::$log->debug("content", array($content));
         $sign = md5(base64_encode($content));
+        self::$log->debug("sign", array($sign));
         return $sign;
     }
 };
