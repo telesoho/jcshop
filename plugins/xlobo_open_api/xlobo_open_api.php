@@ -1,4 +1,6 @@
 <?php
+require_once  __DIR__ . '/../vendor/autoload.php';
+use Monolog\Logger;
 
 /**
  * @brief 贝海OpenAPI接口
@@ -28,11 +30,13 @@ class xlobo_open_api extends pluginBase
 		});
 
 		// 获取物流信息
-		plugin::reg("onBeforeCreateAction@plugins@get_logistic_info",function(){
-            self::controller()->get_logistic_info = function(){
-				$this->pluginDir= $this->path();
-				$billcodes_array = IReq::get('billcodes');
-				xloboapi::get_logistic_info($billcodes_array);
+		plugin::reg("onBeforeCreateAction@plugins@xlobo_logistic_info",function(){
+            self::controller()->xlobo_logistic_info = function(){
+				$billcodes_array = explode(",", IReq::get('billcodes'));
+				$params = array(
+					'BillCodes' => $billcodes_array
+				);
+				$this->run('xlobo.status.get', $params);
 			};
 		});
 
@@ -42,35 +46,47 @@ class xlobo_open_api extends pluginBase
 		{
 			self::controller()->xlobo_run = function() 
 			{
-				// 初始化妮素平台接口
-				xloboapi::init($this->config());
 				$api_name = IReq::get("api_name");
 				$req_json = IReq::get("req_json");
-				$encoding = mb_detect_encoding($req_json, array("ASCII","GB2312","GBK","UTF-8"));
+		
+				$req = $this->json_decode($req_json);
 
-				if($encoding != "GBK") {
-					$req_json = iconv($encoding, 'GBK', $req_json); //将字符串的编码转到UTF-8
-				}
-
-				xloboapi::$log->info("req_json", array($req_json));
-
-				$req = json_decode($req_json, true);
-
-				xloboapi::$log->info("req", array($req));
-
-				if(json_last_error()) {
-					$this->exitJSON(json_last_error_msg());
-				}else {
-					try{
-						$output = xloboapi::requests($api_name, $req);
-						xloboapi::$log->info("output", array($output));
-					} catch(Exception $e) {
-						$this->exitJSON($e->getMessage());
-					}
-					$this->exitJSON($output);
-				}
+				$this->run($api_name, $req);
 			};
 		});
+	}
+
+	private function json_decode($req_json) {
+		$encoding = mb_detect_encoding($req_json, array("ASCII","GB2312","GBK","UTF-8"));
+
+		if($encoding != "GBK") {
+			$req_json = iconv($encoding, 'GBK', $req_json); //将字符串的编码转到GBK
+		}
+
+		$req = json_decode($req_json, true);
+
+		if(json_last_error()) {
+			$this->exitJSON(json_last_error_msg());
+		}
+
+		return $req;
+	}
+
+	/**
+	 * 运行贝海接口
+	 */
+	private function run($api_name, $req) {
+		try{
+			// 初始化平台接口
+			xloboapi::init($this->config());
+			xloboapi::$log->debug("req", $req);
+			$output = xloboapi::requests($api_name, $req);
+			xloboapi::$log->debug("output", array($output));
+			$this->exitJSON($output);
+		} catch(Exception $e) {
+			xloboapi::$log->error("执行接口出错", array($e->getMessage()));
+			$this->exitJSON($e->getMessage());
+		}
 	}
 
 	/**
@@ -146,11 +162,21 @@ class xlobo_open_api extends pluginBase
 			'client_secret'      => array("name" => "client_secret","type" => "text","pattern" => "required", "value"=>"APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w=="),
 			'client_id'      => array("name" => "client_id","type" => "text","pattern" => "required", "value"=>"68993573-E38D-4A8A-A263-055C401F9369"),
 			'version'  => array("name" => "version","type" => "text","pattern" => "required", "value"=>"1.0"),
-			'sign'   => array('name' => "sign", "type" => "text", "pattern" => "required", "value" => "70da2949ce84f7d9fb0297cd33ee6ae6"),
 
-			// 调试标志
-			"debug" => array("name" => "接口调试信息",
-				"type" => "select","value" => array("不输出调试信息" => "false", "输出调试信息" => "true")),
+			"log_level" => array(
+				"name" => "日志输出级别",
+				"type" => "select",
+				"value" => array(
+					"DEBUG (100): Detailed debug information." => Logger::DEBUG,
+					"INFO (200): Interesting events. Examples: User logs in, SQL logs." => Logger::INFO,
+					"NOTICE (250): Normal but significant events." => Logger::NOTICE,
+					"WARNING (300): Exceptional occurrences that are not errors." => Logger::WARNING,
+					"ERROR (400): Runtime errors" => Logger::ERROR,
+					"CRITICAL (500): Critical conditions. " => Logger::CRITICAL,
+					"ALERT (550): Action must be taken immediately" => Logger::ALERT,
+					"EMERGENCY (600): Emergency: system is unusable." => Logger::EMERGENCY
+				),
+			)
 		);
 	}	
 }
