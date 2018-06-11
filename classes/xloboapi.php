@@ -18,7 +18,7 @@ class xloboapi
         'client_secret'     =>  "APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==",
         'client_id'         =>  "68993573-E38D-4A8A-A263-055C401F9369",
         'version'           => '1.0',
-        "log_level"         => "WARNING"
+        "log_level"         => Logger::INFO
     );
 
     public static $log ;

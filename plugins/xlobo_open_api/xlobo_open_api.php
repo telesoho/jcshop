@@ -166,6 +166,7 @@ class xlobo_open_api extends pluginBase
 			"log_level" => array(
 				"name" => "日志输出级别",
 				"type" => "select",
+				'default' => Logger::INFO,
 				"value" => array(
 					"DEBUG (100): Detailed debug information." => Logger::DEBUG,
 					"INFO (200): Interesting events. Examples: User logs in, SQL logs." => Logger::INFO,
