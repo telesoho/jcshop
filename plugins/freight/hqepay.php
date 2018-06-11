@@ -6,25 +6,27 @@
  * @date 2014-18-18 9:34:18
  * @version 0.6
  */
-
+require_once __DIR__ . '/freight_inter.php';
 /**
  * @class Hqepay
  * @brief Line的协议接口
  */
-class Hqepay implements freight_inter
+class hqepay implements freight_inter
 {
 	private $appid  = '1232779';
 	private $appkey = 'ac45f461-8c1a-4518-87b1-bb8e835a2f9d';
+	private $submitUrl = 'http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx';
 
 	/**
 	 * @brief 构造函数从配置中获取id和key
 	 * @param $id string 物流接口id码
 	 * @param $key string 物流接口key码
 	 */
-	public function __construct($id,$key)
+	public function __construct($config)
 	{
-		$this->appid  = $id ? $id : '1232779';
-		$this->appkey = $key ? $key : 'ac45f461-8c1a-4518-87b1-bb8e835a2f9d';
+		$this->appid  = isset($config['appid']) ? $config['appid'] : '1232779';
+		$this->appkey = isset($config['appkey']) ? $config['appkey'] : 'ac45f461-8c1a-4518-87b1-bb8e835a2f9d';
+		$this->submitUrl = isset($config['url']) ? $config['url'] : 'http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx';
 	}
 
 	/**
@@ -33,7 +35,7 @@ class Hqepay implements freight_inter
 	 */
 	public function getSubmitUrl()
 	{
-		return 'http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx';
+		return $this->submitUrl;
 	}
 
 	/**

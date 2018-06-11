@@ -15,6 +15,7 @@ class freight_facade
 {
 	//使用的物流接口
 	public static $freightInterface = 'hqepay';
+	CONST XLOBO = 'XLOBO'; 			// 贝海国际速递
 
 	/**
 	 * @brief 开始快递跟踪
@@ -23,8 +24,13 @@ class freight_facade
 	 */
 	public static function line($ShipperCode,$LogisticCode)
 	{
-		if( $freightObj = self::createObject() )
-		{
+		if ($ShipperCode == self::XLOBO) {
+			self::$freightInterface = "xloboapi";
+		} else {
+			self::$freightInterface = "hqepay";
+		}
+
+		if( $freightObj = self::createObject() ) {
 			return $freightObj->line($ShipperCode,$LogisticCode);
 		}
 	}
@@ -41,33 +47,10 @@ class freight_facade
 		//配置参数
 		$siteConfig = new Config('site_config');
 
-		switch(self::$freightInterface)
-		{
-			default:
-			{
-				include($basePath.'hqepay.php');
-				return new Hqepay($siteConfig->freightid,$siteConfig->freightkey);
-			}
-		}
+		// 加载接口类
+		require_once($basePath . self::$freightInterface . '.php');
+
+		// 读取配置文件信息，并创建接口对象
+		return new self::$freightInterface($siteConfig->getInfo()[self::$freightInterface]);
 	}
-}
-
-/**
- * @brief 物流开发接口
- */
-interface freight_inter
-{
-	/**
-	 * @brief 物流快递轨迹查询
-	 * @param $ShipperCode string 物流公司快递号
-	 * @param $LogisticCode string 快递单号
-	 */
-	public function line($ShipperCode,$LogisticCode);
-
-	/**
-	 * @brief 处理返回数据统一数据格式
-	 * @param $result 结果处理
-	 * @return array 通用的结果集 array('result' => 'success或者fail','data' => array( array('time' => '时间','station' => '地点'),......),'reason' => '失败原因')
-	 */
-	public function response($result);
 }

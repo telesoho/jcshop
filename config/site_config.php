@@ -40,4 +40,21 @@
     2 => 'seller/index',
   ),
   'exchange_rate_jp' => '15.26',
+
+  // hqepay 华强物流接口配置
+  'hqepay' => array (
+    'appid' => '1351283',
+    'appkey' => '0cf12ee6-b42d-4856-a8e3-e57618180303',
+    'url' => 'http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx',
+  ),
+
+  // 贝海国际快递接口配置
+  'xloboapi' => array (
+    'api_server'        =>  "http://114.80.87.216:8082/api/router/rest",
+    'access_token'      =>  "ACiYUZ6aKC48faYFD6MpvbOf73BdE9OV5g15q1A6Ghs+i/XIawq/9RHJCzc6Y3UNxA==",
+    'client_secret'     =>  "APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==",
+    'client_id'         =>  "68993573-E38D-4A8A-A263-055C401F9369",
+    'version'           => '1.0',
+    "log_level"         => 200
+  ),
 )?>
