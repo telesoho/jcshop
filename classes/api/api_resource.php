@@ -568,6 +568,7 @@ return array(
 		'query' => array(
 			'name' => 'delivery',
 			'where'=> 'is_delete = 0 and status = 1',
+			'order' => 'sort ASC'
 		)
 	),
 	//获取文章关联的商品
