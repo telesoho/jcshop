@@ -13,21 +13,18 @@ class xlobo
     private static $SecretKey;
     private static $AccessToken;
     private static $ServerUrl;
+    private static $version;
     private static $enable;
 
     public static function init(){
-        $site_config = new Config('site_config');
-        if ($site_config->xlobo == "production"){
-            self::$APPKEY      = '16cc3c0e-76b5-4085-83a1-0c2bc3478ee3';
-            self::$SecretKey   = 'APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==';
-            self::$AccessToken = 'AD30N4p75N4UKcG0lGwiXXAUGTD60PSbFGoaw9R84s7QoXuv8XhBTad3yO3yiUS+rw==';
-            self::$ServerUrl   = 'http://bill.open.xlobo.com/api/router/rest';
-            self::$enable = true;
-        } else if($site_config->xlobo == "dev") {
-            self::$APPKEY      = '68993573-E38D-4A8A-A263-055C401F9369';
-            self::$SecretKey   = 'APvYM8Mt5Xg1QYvker67VplTPQRx28Qt/XPdY9D7TUhaO3vgFWQ71CRZ/sLZYrn97w==';
-            self::$AccessToken = 'ACiYUZ6aKC48faYFD6MpvbOf73BdE9OV5g15q1A6Ghs+i/XIawq/9RHJCzc6Y3UNxA==';
-            self::$ServerUrl   = 'http://116.228.41.2:8082/api/router/rest';
+        $conf = new Config('jmj_config');
+        if (isset($conf->xlobo)){
+            $xlobo = $conf->xlobo;
+            self::$APPKEY      = $xlobo['APPKEY'];
+            self::$SecretKey   = $xlobo['SecretKey'];
+            self::$AccessToken = $xlobo['AccessToken'];
+            self::$ServerUrl   = $xlobo['ServerUrl'];
+            self::$version     = $xlobo['version'];
             self::$enable = true;
         } else {
             self::$enable = false;
@@ -40,7 +37,7 @@ class xlobo
         $curl = new \Curl\Curl();
         $params = array(
             'method'       => $method,
-            'v'            => '1.0',
+            'v'            => self::version,
             'msg_param'    => json_encode($data),
             'client_id'    => self::$APPKEY,
             'sign'         => $sign,
