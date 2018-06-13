@@ -155,13 +155,13 @@ function productClass(goods_id,user_id,promo,active_id)
 	}
 
 	/**
-	 * @brief 根据新浪地区接口获取当前所在地的运费
+	 * @brief 根据搜狐接口获取当前所在地的运费
 	 */
 	this.initLocalArea = function()
 	{
 		//根据IP查询所在地
-		$.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js',function(){
-			var ipAddress = remote_ip_info['province'];
+		$.getScript('http://pv.sohu.com/cityjson?ie=utf-8',function(){
+			var ipAddress = returnCitySN['cip'];
 
 			//根据接口返回的数据查找与iWebShop系统匹配的地区
 			$.getJSON(creatUrl("block/searchProvince"),{'province':ipAddress,'random':Math.random},function(json)
