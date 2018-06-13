@@ -25,7 +25,7 @@
   'commission' => '',
   'store_num_warning' => '1',
   'reg_option' => '0',
-  'index_slide' => 'a:5:{i:0;a:3:{s:4:"name";s:6:"正品";s:3:"url";s:20:"http://haibaobei.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831282.jpg";}i:1;a:3:{s:4:"name";s:12:"万种商品";s:3:"url";s:20:"http://haibaobei.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831882.jpg";}i:2;a:3:{s:4:"name";s:12:"日本直邮";s:3:"url";s:20:"http://haibaobei.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831212.jpg";}i:3;a:3:{s:4:"name";s:12:"挑到花眼";s:3:"url";s:20:"http://haibaobei.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831873.jpg";}i:4;a:3:{s:4:"name";s:12:"九猫卧底";s:3:"url";s:20:"http://haibaobei.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831939.jpg";}}',
+  'index_slide' => 'a:5:{i:0;a:3:{s:4:"name";s:6:"正品";s:3:"url";s:23:"http://haibaobei-ec.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831282.jpg";}i:1;a:3:{s:4:"name";s:12:"万种商品";s:3:"url";s:23:"http://haibaobei-ec.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831882.jpg";}i:2;a:3:{s:4:"name";s:12:"日本直邮";s:3:"url";s:23:"http://haibaobei-ec.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831212.jpg";}i:3;a:3:{s:4:"name";s:12:"挑到花眼";s:3:"url";s:23:"http://haibaobei-ec.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831873.jpg";}i:4;a:3:{s:4:"name";s:12:"九猫卧底";s:3:"url";s:23:"http://haibaobei-ec.com";s:3:"img";s:39:"upload/2016/11/04/20161104093831939.jpg";}}',
   'logo' => 'upload/2016/11/04/20161104104034474.png',
   'guide_name' => 
   array (
@@ -40,14 +40,12 @@
     2 => 'seller/index',
   ),
   'exchange_rate_jp' => '15.26',
-
-  // hqepay 华强物流接口配置
-  'hqepay' => array (
+  'hqepay' => 
+  array (
     'appid' => '1351283',
     'appkey' => '0cf12ee6-b42d-4856-a8e3-e57618180303',
     'url' => 'http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx',
   ),
-
   // 贝海国际快递接口配置
   'xloboapi' => array (
     'api_server'        =>  "http://bill.open.xlobo.com/api/router/rest",
