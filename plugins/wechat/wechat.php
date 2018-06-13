@@ -19,9 +19,9 @@ class wechat extends pluginBase
 
 	//配置数组
 	public $config = array(
-		'wechat_Token'     => 'jiumaojia',
-		'wechat_AppID'     => 'wxf84e1ada0f3eab92',
-		'wechat_AppSecret' => 'e34b8fbde2c0f1aa8ab2aa081ff34b18',
+		'wechat_Token'     => 'haibaobei',
+		'wechat_AppID'     => 'wxd71e6c23b164f17f',
+		'wechat_AppSecret' => 'da1171e49396ded30cd47376e5083514',
 		'wechat_AutoLogin' => '',
 		'wechat_jsApiSDK'  => '',
 	);
@@ -602,9 +602,8 @@ class wechat extends pluginBase
  
 海宝贝是提供官方直供、东京直邮的跨境电商平台，我们承诺全场100%正品，同时为您提供更具优势的价格。
  
-立刻点击下方“海宝贝大百货”逛逛逛吧~！
- 
-偷偷告诉你：添加海宝贝个人微信：jiumaojia001 加入海宝贝VIP群，群里不定期发放优惠券哦~');
+立刻点击下方“海宝贝商城”逛逛逛吧~！
+');
 
 			}
 			break;
@@ -650,8 +649,7 @@ class wechat extends pluginBase
 海宝贝是提供官方直供、东京直邮的跨境电商平台，我们承诺全场100%正品，同时为您提供更具优势的价格。
  
 立刻点击下方“海宝贝商城”逛逛逛吧~！
- 
-偷偷告诉你：添加海宝贝个人微信：haibaobei001 加入海宝贝VIP群，群里不定期发放优惠券哦~
+
 ');
 			}
 		}

@@ -16,7 +16,7 @@
 <body>
 <!--loading页开始-->
 <div id="loading">
-    <div class="spinner">
+    <!-- <div class="spinner">
         <div class="spinner-container container1">
             <div class="circle1"></div>
             <div class="circle2"></div>
@@ -35,7 +35,7 @@
             <div class="circle3"></div>
             <div class="circle4"></div>
         </div>
-    </div>
+    </div> -->
 </div>
 <!--loading页结束-->
 <!--下拉刷新容器-->
@@ -100,38 +100,38 @@
     </div>
 </section>
 <script id="articleItem" type="text/html">
-    <%if(data.length){%>
-    <% for(var i=0; i<data.length; i++){%>
-    <% var dat =data[i] %>
-        <div class="item">
-            <a href="index.php?controller=site&action=products&id=<%=dat.goods_id %>">
-                <!--<div class="box1">-->
-                    <div class="img"><img class="imgWare" src="<%=dat.img %>" alt=""/></div>
-                    <div class="text">
-                        <div class="name"><%=dat.name %></div>
-                        <div class="box">
-                            <div class="price">
-                                <div class="sellprice price1">国内价: ￥<%=dat.market_price %></div>
-                                <div class="sellprice price2">海宝贝价: ￥<%=dat.sell_price %></div>
+    <%if(data.length) {%>
+        <% for(var i=0; i<data.length; i++){%>
+            <%var dat =data[i] %>
+            <div class="item">
+                <a href="index.php?controller=site&action=products&id=<%=dat.goods_id %>">
+                    <!--<div class="box1">-->
+                        <div class="img"><img class="imgWare" src="<%=dat.img %>" alt=""/></div>
+                        <div class="text">
+                            <div class="name"><%=dat.name %></div>
+                            <div class="box">
+                                <div class="price">
+                                    <div class="sellprice price1">国内价: ￥<%=dat.market_price %></div>
+                                    <div class="sellprice price2">海宝贝价: ￥<%=dat.sell_price %></div>
+                                </div>
+                                <div class="buy">立即购买</div>
                             </div>
-                            <div class="buy">立即购买</div>
                         </div>
-                    </div>
-                <!--</div>-->
-            </a>
-        </div>
-    <%}%>
-    <%}else{%>
-       <div class="flexbox empty_product" style="width:100%;">
+                    <!--</div>-->
+                </a>
+            </div>
+        <% }%>
+    <%} else {%>
+        <div class="flexbox empty_product" style="width:100%;">
             <div class="img">
                 <img src="/views/mobile/skin/default/image/jmj/icon/nomore.png" alt=""/>
             </div>
-           <div class="content">
-               <span>~</span>
-               <span>憋拉了，到底了</span>
-               <span>~</span>
-           </div>
-       </div>
+            <div class="content">
+                <span>~</span>
+                <span>憋拉了，到底了</span>
+                <span>~</span>
+            </div>
+        </div>
     <%}%>
 </script>
 <script src="/views/mobile/javascript/template-native.js"></script>
@@ -231,7 +231,7 @@
 </script>
 <?php if(isset($this->wechat)){ $this->wechat->config['wechat_jsApiSDK']=1; $this->wechat->jsApiSDK();?>
 <script>
-    //    wx.config({debug:true})
+    wx.config({debug:true})
     articleRow = <?php if(isset($this->articleRow)) echo json_encode($this->articleRow); ?>
 
     articleRow.link = "<?php echo IWeb::$app->config['image_host'] . '/site/article_detail/id/'; ?>"+articleRow.id;
