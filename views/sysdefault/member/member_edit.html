@@ -39,6 +39,14 @@
 						</td>
 					</tr>
 					<tr>
+						<th>推荐商户：
+							<td>
+								{query:name=seller where=id eq $this->userInfo['seller_id']}
+									{$item['true_name']}
+								{/query}
+							</td>
+						</tr>					
+					<tr>
 						<th>姓名：</th>
 						<td><input class="normal" name="true_name" type="text" value="" /><label>真实姓名</label></td>
 					</tr>

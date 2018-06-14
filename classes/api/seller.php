@@ -27,4 +27,31 @@ class APISeller
 		$query->page  = $page;
 		return $query;
 	}
+
+	public function getUserInfo($id)
+	{
+		$query = new IModel('user');
+		$info  = $query->getObj("id=".$id);
+		return $info;
+	}
+
+	/**
+	 * 如果链接中有seller_id_QR参数，以及当前登录用户没有seller_id(推荐商家)
+	 * 则登录当前登录用户，否则不做任何处理
+	 * @param seller_id_QR
+	 */
+	public function checkAndSetSeller() {
+		// 判断是否是通过扫描二维码进入（链接中包含seller_id_QR参数）
+		$seller_id = IFilter::act(IReq::get('seller_id_QR'), 'int');
+		$user_id = IWeb::$app->getController()->user['user_id'];
+		if($seller_id && $user_id) {
+			$userInfo = $this->getUserInfo($user_id);
+			if($userInfo && !$userInfo['seller_id']) {
+				$sellerInfo = $this->getSellerInfo($seller_id);
+				$user = new IModel('user');
+				$user->setData(array('seller_id' => $seller_id));
+				$user->update("id = $user_id");
+			}
+		}
+	}
 }

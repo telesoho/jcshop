@@ -11,6 +11,7 @@
 					<option value="m.true_name">姓名</option>
 					<option value="m.mobile">手机</option>
 					<option value="m.email">Email</option>
+					<option value='u.seller_id'>推荐商户</option>
 				</select>
 				<input class="small" name="keywords" type="text" value="{$keywords}" />
 				<button class="btn" type="submit"><span class="sch">搜 索</span></button>
@@ -31,7 +32,8 @@
 			<colgroup>
 				<col width="30px" />
 				<col width="120px" />
-				<col width="80px" />
+				<col width="40px" />
+				<col width="120"/>
 				<col width="80px" />
 				<col width="50px" />
 				<col width="140px"/>
@@ -48,6 +50,7 @@
 					<th>选择</th>
 					<th>用户名</th>
 					<th>会员等级</th>
+					<th>推荐商户</th>
 					<th>姓名</th>
 					<th>性别</th>
 					<th>Email</th>
@@ -62,11 +65,12 @@
 
 			<tbody>
 				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
-				{query: name=user as u join=left join member as m on m.user_id eq u.id fields=m.*,u.username where=m.status neq 2 and $where order=m.user_id desc page=$page}
+				{query: name=user as u join=left join member as m on m.user_id eq u.id left join seller as s on u.seller_id eq s.id fields=m.*,u.username, s.true_name as seller_name where=m.status neq 2 and $where order=m.user_id desc page=$page}
 				<tr>
 					<td><input name="check[]" type="checkbox" value="{$item['user_id']}" /></td>
 					<td title="{echo:htmlspecialchars($item['username'])}">{$item['username']}</td>
 					<td title="{$group[$item['group_id']]}">{$group[$item['group_id']]}</td>
+					<td title="{$item['seller_name']}">{$item['seller_name']}</td>
 					<td title="{echo:htmlspecialchars($item['true_name'])}">{$item['true_name']}</td>
 					<td>{if:$item['sex']=='1'}男{else:}女{/if}</td>
 					<td title="{echo:htmlspecialchars($item['email'])}">{$item['email']}</td>

@@ -218,10 +218,15 @@ return array(
 	'getSellerInfo'=>array(
 	   'file' => 'seller.php','class' => 'APISeller'
 	),
-	//取得商户列表
-	'getSellerInfo'=>array(
-	   'file' => 'seller.php','class' => 'APISeller'
+
+	'getUserInfo' => array(
+		'file' => 'seller.php','class' => 'APISeller'
 	),
+
+	'checkAndSetSeller' =>  array(
+		'file' => 'seller.php','class' => 'APISeller'
+	),
+
 	//取得VIP商户列表
 	'getVipSellerList'=>array(
 	    'query'=>array(
@@ -602,4 +607,6 @@ return array(
 	'getFavorite' => array(
 		'file' => 'ucenter.php','class' => 'APIUcenter'
 	),
+
+
 );
