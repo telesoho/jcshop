@@ -13,10 +13,10 @@
 			<li>
 				<input type="submit" class="input_submit" value="立即登录">
 			</li>
-			<li>
+			<!-- <li>
 				<a href="{url:simple/reg}" class="link fl">快速注册</a>
 				<a href="{url:simple/find_password}" class="link fr">找回密码</a>
-			</li>
+			</li> -->
 			{set:$items=Api::run('getOauthList')}
 			{if:$items}
 			<li>
