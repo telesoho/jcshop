@@ -594,4 +594,104 @@ class Util
 
 		return implode(" and ", $where);
 	}
+
+
+	/**
+	 * 用户检索
+	 * @param array $search 条件数组
+	 * @return string 拼接的WHERE条件语句
+	 */
+	public static function userSearch($search)
+	{
+		if (!$search)
+		{
+			return '';
+		}
+		$where = array();
+
+		// 用户名
+		if(isset($search['username']))
+		{
+			$username = IFilter::act($search['username'], 'string');
+			if ('' != $username)
+			{
+				$where[] = "u.name like '%".$username."%' ";
+			}
+		}
+
+		// 身份证姓名
+		if (isset($search['sfz_name']) && !empty($search['sfz_name']))
+		{
+			$sfz_name = IFilter::act($search['sfz_name'], 'string');
+			if ('' != $sfz_name)
+			{
+				$where[] = "u.sfz_name like '%".$sfz_name."%' ";
+			}
+		}
+
+		// 身份证号码
+		if (isset($search['sfz_id']) && !empty($search['sfz_id']))
+		{
+			$sfz_id = IFilter::act($search['sfz_id'], 'string');
+			if ('' != $sfz_id)
+			{
+				$where[] = "u.sfz_id='$sfz_id' ";
+			}
+		}
+
+		// 创建时间
+		if (isset($search['create_time_start']) && '' != $search['create_time_start'])
+		{
+			$create_time_start = IFilter::act($search['create_time_start'], 'string');
+			// 验证日期
+			$is_check_create_time_start = ITime::checkDateTime($create_time_start);
+		}
+		else
+		{
+			$is_check_create_time_start = false;
+		}
+		if (isset($search['create_time_end']) && '' != $search['create_time_end'])
+		{
+			$create_time_end = IFilter::act($search['create_time_end'], 'string');
+			// 验证日期
+			$is_check_create_time_end = ITime::checkDateTime($create_time_end);
+		}
+		else
+		{
+			$is_check_create_time_end = false;
+		}
+		if ($is_check_create_time_start && $is_check_create_time_end)
+		{
+			if ($create_time_start == $create_time_end)
+			{
+				$where[] = "u.create_time between '".$create_time_start." 00:00:00' and '".$create_time_start." 23:59:59' ";
+			}
+			else
+			{
+				$difference = ITime::getDiffSec($create_time_start.' 00:00:00', $create_time_end.' 00:00:00');
+				if (0 < $difference)
+				{
+					$where[] = "u.create_time between '".$create_time_end." 00:00:00' and '".$create_time_start." 23:59:59' ";
+				}
+				else
+				{
+					$where[] = "u.create_time between '".$create_time_start." 00:00:00' and '".$create_time_end." 23:59:59' ";
+				}
+			}
+		}
+		elseif ($is_check_create_time_start && false == $is_check_create_time_end)
+		{
+			$where[] = "u.create_time between '".$create_time_start." 00:00:00' and '".$create_time_start." 23:59:59' ";
+		}
+		elseif (false == $is_check_create_time_start && $is_check_create_time_end)
+		{
+			$where[] = "u.create_time between '".$create_time_end." 00:00:00' and '".$create_time_end." 23:59:59' ";
+		}
+		else
+		{
+			// 无效条件
+		}
+
+		return implode(" and ", $where);
+	}	
 }

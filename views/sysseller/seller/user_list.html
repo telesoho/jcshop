@@ -1,0 +1,108 @@
+{js:my97date}
+<article class="module width_full">
+	<header>
+		<h3 class="tabs_involved">已推荐用户</h3>
+		<ul class="tabs">
+			<li><input type="button" class="alt_btn" onclick="filterResult();" value="检索" /></li>
+			<li><input type="button" class="alt_btn" onclick="selectAll('id[]');" value="全选" /></li>
+			<li><input type="button" class="alt_btn" onclick="window.open('{url:/seller/user_report/?$searchParam}');" value="导出Excel" /></li>
+		</ul>
+	</header>
+
+	<form action="{url:/seller/goods_del}" method="post" name="goodsForm">
+		<table class="tablesorter" cellspacing="0">
+			<colgroup>
+				<col width="25px" />
+				<col width="150px" />
+				<col width="150px" />
+				<col width="70px" />
+				<col width="70px" />
+				<col width="70px" />
+			</colgroup>
+
+			<thead>
+				<tr>
+					<th class="header"></th>
+					<th class="header">用户名</th>
+					<th class="header">真实姓名</th>
+					<th class="header">身份证号码</th>
+                    <th class="header">加入时间</th>
+                    <th class="header">已消费金额</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{foreach:items = $this->userHandle->find()}
+				<tr>
+					<td><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+					<td>{$item['username']}</td>
+					<td>{$item['sfz_name']}</td>
+                    <td>{$item['sfz_num']}</td>
+                    <td>{$item['create_time']}</td>
+                    <td>{$item['order_amount']}</td>
+				</tr>
+				{/foreach}
+			</tbody>
+		</table>
+	</form>
+	{$this->userHandle->getPageBar()}
+</article>
+
+<script type="text/html" id="filterTemplate">
+<form action="{url:/}" method="get" name="filterForm">
+	<input type='hidden' name='controller' value='seller' />
+	<input type='hidden' name='action' value='user_list' />
+
+	<div class="module_content">
+		<fieldset>
+		<label>用户名</label>
+		<input name="search[username]" value="" type="text" />
+
+		<label>真实姓名</label>
+		<input name="search[sfz_name]" value="" type="text" />
+
+        <label>身份证号</label>
+		<input name="search[sfz_num]" value="" type="text" />
+
+		<label>加入时间</label>
+		<div class="box">
+			<input name="search[create_time_start]" value="" type="text" class="small" onfocus="WdatePicker()" /> ——
+			<input name="search[create_time_end]" value="" type="text" class="small" onfocus="WdatePicker()" />
+		</div>
+		</fieldset>
+	</div>
+</form>
+</script>
+
+<script type="text/javascript">
+//检索商品
+function filterResult()
+{
+	var goodsHeadHtml = template.render('filterTemplate');
+	art.dialog(
+	{
+		"init":function()
+		{
+			var filterPost = {echo:JSON::encode(IReq::get('search'))};
+			var formObj = new Form('filterForm');
+			for(var index in filterPost)
+			{
+				formObj.setValue("search["+index+"]",filterPost[index]);
+			}
+		},
+		"title":"检索条件",
+		"content":goodsHeadHtml,
+		"okVal":"立即检索",
+		"ok":function(iframeWin, topWin)
+		{
+			iframeWin.document.forms[0].submit();
+		}
+	});
+}
+
+//upload csv file callback
+function artDialogCallback(message)
+{
+	message ? alert(message) : window.location.reload();
+}
+</script>

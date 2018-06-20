@@ -322,4 +322,14 @@ class statistics
 		$propCount = $propObj->getObj($where,'count(*) as count');
 		return $propCount['count'];
 	}
+
+	/**
+	 * 商家推荐用户数统计
+	 */
+	public static function recommendUserCount($seller_id) {
+		$userObj   = new IModel('user');
+		$where     = "`seller_id` = $seller_id";
+		$userCount = $userObj->getObj($where,'count(*) as count');
+		return $userCount['count'];
+	}
 }

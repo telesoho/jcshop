@@ -9,6 +9,7 @@
 			<tbody>
 				<tr>
 					<td>商品总数量：<a href="{url:/seller/goods_list}">{echo:statistics::goodsCount($this->seller['seller_id'])} 件</a></td>
+					<td>推荐用户数量：<a href="{url:/seller/user_list}">{echo:statistics::recommendUserCount($this->seller['seller_id'])} 人</a></td>
 					<td>待回复咨询：<a href="{url:/seller/refer_list}">{echo:statistics::referWaitCount($this->seller['seller_id'])} 条</a></td>
 					<td>商品评论数：<a href="{url:/seller/comment_list}">{echo:statistics::commentCount($this->seller['seller_id'])} 条</a></td>
 					<td>退款申请：<a href="{url:/seller/refundment_list}">{echo:statistics::refundsCount($this->seller['seller_id'])} 条</a></td>

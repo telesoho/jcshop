@@ -17,6 +17,7 @@ class menuSeller
 			"/seller/account" => "销售额统计",
 			"/seller/order_goods_list" => "货款明细列表",
 			"/seller/bill_list" => "货款结算申请",
+			"/seller/user_list" => "推荐用户表"
 		),
 
 		"商品模块" => array(

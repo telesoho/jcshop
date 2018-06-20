@@ -1374,4 +1374,94 @@ class Seller extends IController implements sellerAuthorization
 		}
 		$this->redirect('refer_list');
 	}
+
+	/**
+	 * 推荐用户列表
+	 */
+	public function user_list()
+	{
+		$seller_id = $this->seller['seller_id'];
+
+		// 获取用户列表
+		$searchArray = Util::getUrlParam('search');
+		$searchParam = http_build_query($searchArray);
+		$condition = Util::userSearch(IReq::get('search'));
+		$where = "u.seller_id='$seller_id' ";
+		$where .= $condition ? " and ".$condition : "";
+		$join = " left join order as o on o.user_id = u.id ";
+		$group = "o.user_id";
+		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+
+		$userHandle = new IQuery('user as u');
+		$userHandle->order  = "u.create_time desc";
+		$userHandle->fields = "distinct u.id, u.username, u.seller_id, u.head_ico, u.sfz_num, u.sfz_name, u.create_time, sum(o.order_amount) as order_amount";
+		$userHandle->where  = $where;
+		$userHandle->join = $join;
+		$userHandle->group = $group;
+		$userHandle->page	= $page;
+
+		$this->userHandle = $userHandle;
+
+		$user_info = array();
+		$user_info['seller_id'] = $seller_id;
+		$user_info['searchParam'] = $searchParam;
+		$this->setRenderData($user_info);
+
+		$this->redirect('user_list');
+	}
+
+
+	/**
+	 * 生成推荐用户报表
+	 */
+	public function user_report()
+	{
+		$seller_id = $this->seller['seller_id'];
+
+		// 获取用户列表
+		$searchArray = Util::getUrlParam('search');
+		$searchParam = http_build_query($searchArray);
+		$condition = Util::userSearch(IReq::get('search'));
+		$where = "u.seller_id='$seller_id' ";
+		$where .= $condition ? " and ".$condition : "";
+		$join = " left join order as o on o.user_id = u.id ";
+		$group = "o.user_id";
+
+		$userHandle = new IQuery('user as u');
+		$userHandle->order  = "u.create_time desc";
+		$userHandle->fields = "distinct u.id, u.username, u.seller_id, u.head_ico, u.sfz_num, u.sfz_name, u.create_time, sum(o.order_amount) as order_amount";
+		$userHandle->where  = $where;
+		$userHandle->join = $join;
+		$userHandle->group = $group;
+
+		$this->userHandle = $userHandle;
+
+		$userList = $userHandle->find();
+
+		//构建 Excel table;
+		$strTable ='<table width="500" border="1">';
+		$strTable .= '<tr>';
+		$strTable .= '<td style="text-align:center;font-size:12px;">用户名</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="160">真实姓名</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="60">身份证号</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="60">加入时间</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="60">已消费金额</td>';
+		$strTable .= '</tr>';
+
+		foreach($userList as $k=>$val){
+			$strTable .= '<tr>';
+			$strTable .= '<td style="text-align:center;font-size:12px;">&nbsp;'.$val['username'].'</td>';
+			$strTable .= '<td style="text-align:center;font-size:12px;&nbsp;">'.$val['sfz_name'].' </td>';
+			$strTable .= '<td style="text-align:center;font-size:12px;&nbsp;">'.$val['sfz_num'].' </td>';
+			$strTable .= '<td style="text-align:center;font-size:12px;&nbsp;">'.$val['create_time'].' </td>';
+			$strTable .= '<td style="text-align:right;font-size:12px;">'.$val['order_amount'].' </td>';
+			$strTable .= '</tr>';
+		}
+		$strTable .='</table>';
+		unset($userList);
+		$reportObj = new report();
+		$reportObj->setFileName('seller_user');
+		$reportObj->toDownload($strTable);
+		exit();
+	}	
 }
