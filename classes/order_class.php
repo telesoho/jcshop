@@ -993,6 +993,15 @@ class Order_Class
 			}
 		}
 
+		// 配送方式筛选
+		if(isset($search['delivery_id']))
+		{
+			$delivery_id = IFilter::act($search['delivery_id']);
+			if($delivery_id != "") {
+				$where .= " and d.id = $delivery_id ";
+			}
+		}
+
 		if(isset($search['pay_status']) && $search['pay_status'] !== '')
 		{
 			$pay_status = IFilter::act($search['pay_status'], 'int');

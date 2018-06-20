@@ -696,6 +696,7 @@ class Order extends IController implements adminAuthorization
 
 		$this->search      = $search;
 		$this->orderHandle = $orderHandle;
+		$this->delivery    = Api::run("getDeliveryList");
 
 		$this->redirect("order_list");
     }

@@ -32,6 +32,13 @@
 				<option value="2">部分发货</option>
 			</select>
 
+			<select name="search[delivery_id]" class="auto">
+					<option value="">选择配送方式</option>
+					{foreach:items = $this->delivery}
+						<option value="{$item['id']}">{$item['name']}</option>
+					{/foreach}
+			</select>
+	
 			<select name="search[status]" class="auto">
 				<option value="">选择订单状态</option>
 				<option value="1">新订单</option>
