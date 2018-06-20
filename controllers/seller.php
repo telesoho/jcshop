@@ -1388,13 +1388,13 @@ class Seller extends IController implements sellerAuthorization
 		$condition = Util::userSearch(IReq::get('search'));
 		$where = "u.seller_id='$seller_id' ";
 		$where .= $condition ? " and ".$condition : "";
-		$join = " left join order as o on o.user_id = u.id ";
+		$join = " left join order as o on o.user_id = u.id and o.status = 5";
 		$group = "o.user_id";
 		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
 
 		$userHandle = new IQuery('user as u');
 		$userHandle->order  = "u.create_time desc";
-		$userHandle->fields = "distinct u.id, u.username, u.seller_id, u.head_ico, u.sfz_num, u.sfz_name, u.create_time, sum(o.order_amount) as order_amount";
+		$userHandle->fields = "distinct u.id, u.username, u.seller_id, u.head_ico, u.sfz_num, u.sfz_name, u.create_time, IFNULL(sum(o.order_amount),0) as order_amount";
 		$userHandle->where  = $where;
 		$userHandle->join = $join;
 		$userHandle->group = $group;
