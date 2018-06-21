@@ -41,9 +41,11 @@
 					<tr>
 						<th>推荐商户：
 							<td>
+							{if:$this->userInfo['seller_id']}
 								{query:name=seller where=id eq $this->userInfo['seller_id']}
 									{$item['true_name']}
 								{/query}
+							{/if}
 							</td>
 						</tr>					
 					<tr>
