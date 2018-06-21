@@ -345,10 +345,12 @@ function index_home(self){
 					minutes = "0"+parseInt(minutes);
 				}if(hours<10){
 					hours = "0"+parseInt(hours);
-				}
-				document.getElementById("timer_hhh").innerHTML = hours;
-				document.getElementById("timer_mmm").innerHTML = minutes;
-				document.getElementById("timer_sss").innerHTML = seconds
+                }
+                if (document.getElementById("timer_hhh")) {
+                    document.getElementById("timer_hhh").innerHTML = hours;
+                    document.getElementById("timer_mmm").innerHTML = minutes;
+                    document.getElementById("timer_sss").innerHTML = seconds
+                }
        		}
         },
     });
@@ -394,9 +396,11 @@ function time_xian(self){
 			}if(hours<10){
 				hours = "0"+parseInt(hours);
 			}
-			document.getElementById("timer_hhh").innerHTML = hours;
-			document.getElementById("timer_mmm").innerHTML = minutes;
-			document.getElementById("timer_sss").innerHTML = seconds
+            if (document.getElementById("timer_hhh") ){
+                document.getElementById("timer_hhh").innerHTML = hours;
+                document.getElementById("timer_mmm").innerHTML = minutes;
+                document.getElementById("timer_sss").innerHTML = seconds
+            }
 		},1000)
 }
 
