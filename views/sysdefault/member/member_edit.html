@@ -117,8 +117,10 @@ $(function(){
 		formObj.init({echo:JSON::encode($this->userInfo)});
 
 		{if:$this->userInfo['area']}
-		{set:$area = explode(',',trim($this->userInfo['area'],','))}
-		areaInstance.init({"province":"{$area[0]}","city":"{$area[1]}","area":"{$area[2]}"});
+			{set:$area = explode(',',trim($this->userInfo['area'],','))}
+			areaInstance.init({"province":"{$area[0]}","city":"{$area[1]}","area":"{$area[2]}"});
+		{else:}
+			areaInstance.init();
 		{/if}
 	{else:}
 		areaInstance.init();
