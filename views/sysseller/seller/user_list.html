@@ -13,8 +13,9 @@
 		<table class="tablesorter" cellspacing="0">
 			<colgroup>
 				<col width="25px" />
-				<col width="150px" />
-				<col width="150px" />
+				<col width="70px" />
+				<col width="70px" />
+				<col width="70px" />
 				<col width="70px" />
 				<col width="70px" />
 				<col width="70px" />
@@ -26,7 +27,8 @@
 					<th class="header">用户名</th>
 					<th class="header">真实姓名</th>
 					<th class="header">身份证号码</th>
-                    <th class="header">加入时间</th>
+                    <th class="header">注册时间</th>
+                    <th class="header">推荐人备注</th>
                     <th class="header">已消费金额</th>
 				</tr>
 			</thead>
@@ -38,7 +40,8 @@
 					<td>{$item['username']}</td>
 					<td>{$item['sfz_name']}</td>
                     <td>{$item['sfz_num']}</td>
-                    <td>{$item['create_time']}</td>
+					<td>{$item['time']}</td>
+					<td>{$item['recommender_memo']}</td>
                     <td>{$item['order_amount']}</td>
 				</tr>
 				{/foreach}
@@ -63,6 +66,9 @@
 
         <label>身份证号</label>
 		<input name="search[sfz_num]" value="" type="text" />
+		
+		<label>推荐人</label>
+		<input name="search[recommender_memo]" value="" type="text" />
 
 		<label>加入时间</label>
 		<div class="box">

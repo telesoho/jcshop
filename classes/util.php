@@ -639,6 +639,16 @@ class Util
 			}
 		}
 
+		// 推荐人备注
+		if (isset($search['recommender_memo']) && !empty($search['recommender_memo']))
+		{
+			$recommender_memo = IFilter::act($search['recommender_memo'], 'string');
+			if ('' != $recommender_memo)
+			{
+				$where[] = "m.recommender_memo LIKE '%$recommender_memo%' ";
+			}
+		}
+
 		// 创建时间
 		if (isset($search['create_time_start']) && '' != $search['create_time_start'])
 		{
