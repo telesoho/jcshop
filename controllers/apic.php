@@ -2554,7 +2554,7 @@ class Apic extends IController{
 				//收藏人数
 				$queryFavorite->where    = 'aid='.$v['id'];
 				$count                    = $queryFavorite->find();
-				$list[$k]['favorite_num'] = $count[0]['num'];
+				$list[$k]['favorite_num'] = $count? $count[0]['num']: 0;
 				//当前用户是否已收藏
 				if(!empty($this->user['user_id'])){
 					$queryFavorite->where = 'aid='.$v['id'].' and user_id='.$this->user['user_id'];
@@ -2567,7 +2567,7 @@ class Apic extends IController{
 				//相关商品数量
 				$queryGoodsCount->where = 'm.is_del=0 and r.article_id='.$v['id'];
 				$count                    = $queryGoodsCount->find();
-				$list[$k]['goods_num']    = $count[0]['num'];
+				$list[$k]['goods_num']    = $count ? $count[0]['num'] : 0;
 				//相关商品列表
 				$queryGoods->where = 'm.is_del=0 and r.article_id='.$v['id'];
 				$list[$k]['list']   = $queryGoods->find();
